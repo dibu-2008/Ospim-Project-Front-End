@@ -16,7 +16,7 @@ const AppRouter = () => {
               <Route path="login" element={<LoginPage/>}/>
               <Route path="register" element={<RegisterPage/>}/>
               <Route path="dashboard" element={
-                <PrivateRoute>
+                <PrivateRoute path="dashboard">
                   {/* DashboardPage es el children */}
                   <DashboardPage/>
                 </PrivateRoute>
