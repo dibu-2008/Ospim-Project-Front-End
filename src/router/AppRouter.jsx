@@ -1,7 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import {
-  HomePage, 
   LoginPage,
   RegisterPage, 
   DashboardPage} from "../pages";
@@ -12,7 +11,6 @@ const AppRouter = () => {
     <>
         <Routes>
             <Route path="/" element={<NavBar/>}>
-              <Route index element={<HomePage/>}/>
               <Route path="login" element={<LoginPage/>}/>
               <Route path="register" element={<RegisterPage/>}/>
               <Route path="dashboard" element={
