@@ -17,7 +17,8 @@ const NavBar = () => {
     <>
       <header>
         <h1>
-          <Link to="/">Ospim</Link>
+          {/* Cambie / por /login */}
+          <Link to="/login">Ospim</Link>
         </h1>
 
         {

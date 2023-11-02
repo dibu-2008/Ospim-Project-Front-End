@@ -3,11 +3,13 @@ import { useFormLoginCompany } from "../hooks/useFormLoginCompany"
 
 const RegisterPage = () => {
 
-  // Recorda que le cambiaste todas las propiedades al custonHook de useFormLoginCompany
+  // Recorda que le cambiaste todas las propiedades al custonHook de useFormLoginCompany ya esta
+
+  // Crear el form como debe de ser para resgistar empresa
 
   const navigate = useNavigate();
 
-  const { name, email, password, OnInputChange, OnResetForm } = useFormLoginCompany({
+  const { name, email, password, OnInputChangeLoginCompany, OnResetFormLoginCompany } = useFormLoginCompany({
     name: '',
     email: '',
     password: ''
@@ -25,51 +27,57 @@ const RegisterPage = () => {
       }
     })
 
-    OnResetForm()
+    OnResetFormLoginCompany()
   }
 
   return (
-    <div className="wrapper">
-      <form onSubmit={onRegister}>
-        <h1>Registrarse</h1>
-        <div className="input-group">
-          <input
-            type="text"
-            name="name"
-            id="name"
-            value={name}
-            onChange={OnInputChange}
-            required
-            autoComplete="off" />
-          <label htmlFor="name">Nombre: </label>
+    <div className="wrapper_container">
+      <div className="wrapper">
+        <div className="contenedor_form">
+          <form onSubmit={onRegister}>
+            <h1 className="title_register">Registro</h1>
+            <div className="input-group">
+              <input
+                type="text"
+                name="name"
+                id="name"
+                value={name}
+                onChange={OnInputChangeLoginCompany}
+                required
+                autoComplete="off" 
+                placeholder="Nombre"/>
+            </div>
+            {/********************************************************/}
+            <div className="input-group">
+              <input
+                type="email"
+                name="email"
+                id="email"
+                value={email}
+                onChange={OnInputChangeLoginCompany}
+                required
+                autoComplete="off" 
+                placeholder="E-mail"/>
+              
+            </div>
+            {/********************************************************/}
+            <div className="input-group">
+              <input
+                type="password"
+                name="password"
+                id="password"
+                value={password}
+                onChange={OnInputChangeLoginCompany}
+                required
+                autoComplete="off"
+                placeholder="Password"/>
+            </div>
+            <button 
+            style={{ marginTop: '10px' }} 
+            className="btn_ingresar">REGISTRARSE</button>
+          </form>
         </div>
-        {/********************************************************/}
-        <div className="input-group">
-          <input
-            type="email"
-            name="email"
-            id="email"
-            value={email}
-            onChange={OnInputChange}
-            required
-            autoComplete="off" />
-          <label htmlFor="email">Email: </label>
-        </div>
-        {/********************************************************/}
-        <div className="input-group">
-          <input
-            type="password"
-            name="password"
-            id="password"
-            value={password}
-            onChange={OnInputChange}
-            required
-            autoComplete="off" />
-          <label htmlFor="password">Password: </label>
-        </div>
-
-        <button>Iniciar Sesión</button>
-      </form>
+      </div>
     </div>
   )
 }
