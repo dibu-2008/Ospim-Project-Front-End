@@ -1,10 +1,12 @@
 import { Route, Routes } from "react-router-dom";
+import { Navigate } from "react-router";
 import NavBar from "../components/NavBar";
 import {
   LoginPage,
   RegisterPage, 
   DashboardPage} from "../pages";
 import PrivateRoute from "./PrivateRoute";
+import { RegisterCompany } from "../pages/RegisterCompany";
 
 const AppRouter = () => {
   return (
@@ -19,6 +21,8 @@ const AppRouter = () => {
                   <DashboardPage/>
                 </PrivateRoute>
               }/>
+              <Route path="registercompany" element={<RegisterCompany/>}/>
+              <Route index element={<Navigate to="/login" />} />
             </Route>
         </Routes>
     </>

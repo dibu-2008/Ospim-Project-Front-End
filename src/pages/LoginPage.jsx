@@ -46,11 +46,16 @@ const LoginPage = () => {
         passwordLoginInternalUser
       }
     })
-
   }
 
   const onInternalUserClick = () => {
     setShowInternalUserForm(!showInternalUserForm)
+  }
+
+  const redirectToRegister = () => {
+    navigate('/registercompany', {
+      replace: true
+    })
   }
 
   return (
@@ -150,7 +155,9 @@ const LoginPage = () => {
                 <div className="input-group btn_form_botton">
                   <div className="container_btn_pass_firt">
                     <a>Recupero de Contraseña</a>
-                    <a>Ingreso por primera vez</a>
+                    <a
+                      onClick={redirectToRegister}
+                    >Ingreso por primera vez</a>
                   </div>
                   <a
                     onClick={onInternalUserClick}
