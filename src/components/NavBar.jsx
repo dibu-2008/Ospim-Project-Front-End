@@ -1,4 +1,6 @@
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { ButtonOutlinedComponent } from "./ButtonOutlinedComponent";
+
 
 const NavBar = () => {
 
@@ -16,16 +18,23 @@ const NavBar = () => {
   return (
     <>
       <header>
-        <h1>
-          {/* Cambie / por /login */}
-          <Link to="/login">Ospim</Link>
-        </h1>
+        <div>
+          <h2><Link to="/login">UOMA</Link></h2>
+          <h2><Link to="/login">OSPIM</Link></h2>
+          <h2><Link to="/login">AMTIMA</Link></h2>
+        </div>
 
         {
           state?.logged ? (
             <div className="user">
               <span className="username">{state?.name}</span>
-              <button className="btn-logout" onClick={onLogout}>Cerrar Sesión</button>
+              <ButtonOutlinedComponent
+                styles={{
+                  backgrounColor:'red !important'
+                }}
+                name={'Cerrar Sesión'}
+                onClick={onLogout}
+              />
             </div>
           ) : (
             <nav>

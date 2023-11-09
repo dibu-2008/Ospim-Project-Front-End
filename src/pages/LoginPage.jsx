@@ -3,6 +3,11 @@ import { useFormLoginCompany } from "../hooks/useFormLoginCompany.js"
 import { useState } from "react"
 import { useFormLoginInternalUser } from "../hooks/useFormLoginInternalUser.js";
 
+// Material UI
+import { InputComponent } from "../components/InputComponent.jsx";
+import { ButtonComponent } from "../components/ButtonComponent.jsx";
+
+
 const LoginPage = () => {
 
   const navigate = useNavigate();
@@ -35,7 +40,7 @@ const LoginPage = () => {
     OnResetFormLoginCompany()
   }
 
-  const onLoginInternalUser = (e)=>{
+  const onLoginInternalUser = (e) => {
     e.preventDefault()
 
     navigate('/dashboard', {
@@ -61,6 +66,7 @@ const LoginPage = () => {
   return (
 
     <div className="wrapper_container">
+
       <div className="wrapper">
         {
           showInternalUserForm ? (
@@ -69,43 +75,42 @@ const LoginPage = () => {
                 <h1>Usuario Interno</h1>
                 <h3>Iniciar sesión</h3>
                 <div className="input-group">
-                  <input
+                  <InputComponent
                     type="text"
                     name="user"
                     id="user"
                     value={user}
                     onChange={OnInputChangeLoginInternalUser}
-                    required
                     autoComplete="off"
-                    placeholder="Usuario" />
-
+                    variant="filled"
+                    label="Usuario"
+                  />
                 </div>
-                {/********************************************************/}
                 <div className="input-group">
-                  <input
+                  <InputComponent
                     type="password"
                     name="passwordLoginInternalUser"
                     id="passwordLoginInternalUser"
                     value={passwordLoginInternalUser}
                     onChange={OnInputChangeLoginInternalUser}
-                    required
                     autoComplete="off"
-                    placeholder="Contraseña" />
+                    variant="filled"
+                    label="Contraseña"
+                  />
                 </div>
-                <button
-                  style={{ marginTop: '81px' }} 
-                  className="btn_ingresar">INGRESAR</button>
-              </form>
-              <div className="x">
-                <div className="input-group btn_form_botton">
-                  <div className="container_btn_pass_firt">
-                    <a>Recupero de Contraseña</a>
-                  </div>
+                <ButtonComponent
+                  styles={{
+                    marginTop: '157px',
+                  }}
+                  name={'INGRESAR'}
+                />
+                <div className="container_btn_pass_firts">
+                  <a>Recupero de Contraseña</a>
                   <a
                     onClick={onInternalUserClick}
                   >Usuario Empresa</a>
                 </div>
-              </div>
+              </form>
             </div>
           ) : (
             <div className="contenedor_form">
@@ -113,7 +118,7 @@ const LoginPage = () => {
                 <h1>Usuario Empresas</h1>
                 <h3>Iniciar sesión</h3>
                 <div className="input-group">
-                  <input
+                  <InputComponent
                     type="text"
                     name="cuit"
                     id="cuit"
@@ -121,12 +126,12 @@ const LoginPage = () => {
                     onChange={OnInputChangeLoginCompany}
                     required
                     autoComplete="off"
-                    placeholder="CUIT" />
+                    variant="filled"
+                    label="CUIT" />
 
                 </div>
-                {/********************************************************/}
                 <div className="input-group">
-                  <input
+                  <InputComponent
                     type="passwordLoginCompany"
                     name="passwordLoginCompany"
                     id="passwordLoginCompany"
@@ -134,11 +139,11 @@ const LoginPage = () => {
                     onChange={OnInputChangeLoginCompany}
                     required
                     autoComplete="off"
-                    placeholder="Contraseña" />
+                    variant="filled"
+                    label="Contraseña" />
                 </div>
-                {/********************************************************/}
                 <div className="input-group">
-                  <input
+                  <InputComponent
                     type="text"
                     name="codigoVerificacion"
                     id="codigoVerificacion"
@@ -146,25 +151,29 @@ const LoginPage = () => {
                     onChange={OnInputChangeLoginCompany}
                     required
                     autoComplete="off"
-                    placeholder="Código de verificación" />
+                    variant="filled"
+                    label="Código de verificación" />
                 </div>
-
-                <button className="btn_ingresar">INGRESAR</button>
-              </form>
-              <div className="x">
-                <div className="input-group btn_form_botton">
-                  <div className="container_btn_pass_firt">
+                <ButtonComponent
+                  styles={{
+                    marginTop: '81px',
+                  }}
+                  name={'INGRESAR'}
+                />
+                <div className="container_btn_pass_firts_2">
+                  <div className="children_one_btn_pass_firts_2">
                     <a>Recupero de Contraseña</a>
                     <a
                       onClick={redirectToRegister}
                     >Ingreso por primera vez</a>
                   </div>
-                  <a
-                    onClick={onInternalUserClick}
-                  >Usuario Interno</a>
-                </div>
-              </div>
 
+                </div>
+                <a
+                  className="internal_user"
+                  onClick={onInternalUserClick}
+                >Usuario Interno</a>
+              </form>
             </div>
           )
         }

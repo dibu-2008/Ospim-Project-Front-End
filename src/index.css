@@ -11,8 +11,6 @@
 }
 
 html {
-	/* background: linear-gradient(180deg, #a7b9f4, #4847c3); */
-	/* background: linear-gradient(180deg, #18365D00 60%, #18365D6b 100%); */
 	height: 100vh;
 	width: 100%;
 }
@@ -23,15 +21,23 @@ body {
 
 header {
 	display: flex;
+	position: sticky;
+	top: 0;
 	justify-content: space-between;
 	align-items: center;
 	padding: 25px;
-	background-color: #18365D;
+	background-color: #1A76D2;
 	color: #fff;
 	min-width: 600px;
 }
 
-h1 a {
+header div {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+}
+
+h2 a {
 	text-decoration: none;
 	color: #fff;
 }
@@ -48,6 +54,148 @@ nav a {
 	color: #fff;
 }
 
+/* LOGIN STYLES */
+.wrapper_container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 100vh;
+}
+
+.wrapper {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background-color: #fff;
+	width: 600px;
+	margin: 0 auto;
+	height: 584px;
+	border-radius: 10px;
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.153);
+}
+
+.contenedor_form {
+	width: 90%;
+	height: 90%;
+}
+
+
+.contenedor_form h1 {
+	font-size: 48px;
+	font-weight: 700;
+	height: 56.25px;
+	width: 500px;
+	color: #1A76D2;
+	text-align: center;
+}
+
+.contenedor_form h3 {
+	font-weight: 400;
+	font-size: 32px;
+	height: 35.5px;
+	color: #1A76D2;
+	margin-bottom: 10px;
+}
+
+form {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	margin-left: 64px;
+	margin-right: 64px;
+	height: 100%;
+}
+
+.input-group {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	margin: 10px 0;
+	text-align: center;
+} 
+
+.container_btn_pass_firts{
+	margin-top: 25px;
+}
+
+.container_btn_pass_firts a{
+	display: block;
+	text-align: center;
+	color: #1A76D2;
+}
+
+.container_btn_pass_firts_2{
+	margin-top: 25px;
+	width: 100%;
+}
+
+.children_one_btn_pass_firts_2{
+	display: flex;
+	justify-content: space-between;
+	color: #1A76D2;
+}
+
+.internal_user {
+	margin: 0 auto;
+	width: 100%;
+	text-align: center;
+	color: #1A76D2;
+}
+
+/* REGISTER COMPANY */
+.container_dashboard_register_company {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: center;
+	height: 100vh;
+}
+
+.container_dashboard_register_company h1{
+	font-size: 48px;
+	font-weight: 700;
+	height: 56.25px;
+	width: 500px;
+	color: #1A76D2;
+	text-align: center;
+	margin-top: 80px;
+	margin-bottom: 10px;
+}
+
+.container_dashboard_register_company h3 {
+	font-weight: 400;
+	font-size: 32px;
+	height: 35.5px;
+	color: #1A76D2;
+	margin-bottom: 10px;
+}
+
+/* .form_register_company {
+	
+}
+ */
+.container_dashboard_register_company
+.input-group {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	margin: 10px 0;
+	text-align: center;
+} 
+
+
+
+
+
+
+
+
+
+
+/* 
+ 
 .username {
 	color: #fff;
 }
@@ -136,7 +284,7 @@ form {
 	border: none;
 	border: 1px solid #18365D;
 	padding-left: 10px;
-	/* Aplicar el padding en el estado normal */
+	
 	outline: none;
 	box-shadow: 0 0 0 2px #18365D;
 	color: #18365D;
@@ -190,7 +338,7 @@ form {
 }
 
 
-/* Estilos de Register company */
+
 
 main {
 	display: flex;
@@ -198,6 +346,7 @@ main {
 	justify-content: center;
 	align-items: flex-start;
 	margin-top: 40px;
+	height: auto;
 }
 
 .container_dashboard_register_company h1 {
@@ -210,51 +359,6 @@ main {
 	color: #18365D;
 }
 
-
-
-/* .form_dashboard_register_company{
-	position: relative;
-}
-.form-content{
-	position: fixed;
-	margin-top: 20px;
-}  */
-/* 
-#react-select-3-placeholder {
-
-	color: #18365D;
-	font-weight: 500;
-}
-
-.css-b62m3t-container {
-	border: 3px solid #18365D;
-	height: 55px;
-	width: 100%;
-	border-radius: 10px;
-}
-
-.css-13cymwt-control {
-	border-color: transparent !important;
-	border-radius: 4px !important;
-	border-style: solid !important;
-	height: 100%;
-}
-
-.css-t3ipsp-control {
-	border-color: transparent !important;
-	border-radius: 4px !important;
-	border-style: solid !important;
-	height: 100%;
-}
-
-.css-1u9des2-indicatorSeparator {
-	background-color: #18365D !important;
-}
-
-.css-1xc3v61-indicatorContainer {
-	color: #18365D !important;
-} */
-
 .probando {
 	display: flex;
 	justify-content: space-around;
@@ -262,15 +366,8 @@ main {
 
 }
 
-/* .probando input{
-	border: none;
-	width: 70%;
-}
-.probando .x {
-	width: 30%;
-}  */
 
-/*width: 472px;*/
+
 
 .input-group .probando {
 	font-weight: 400;
@@ -281,7 +378,7 @@ main {
 	border: none;
 	border: 1px solid #18365D;
 	padding-left: 10px;
-	/* Aplicar el padding en el estado normal */
+
 	outline: none;
 	box-shadow: 0 0 0 2px #18365D;
 	color: #18365D;
@@ -342,3 +439,4 @@ main {
 	border-radius: 5px;
 	padding: 10px;
 }
+ */

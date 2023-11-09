@@ -1,104 +1,105 @@
 import { useState } from "react";
-import { TiArrowSortedDown } from "react-icons/ti";
+import { InputComponent } from "../components/InputComponent";
 
 const DashboardPage = () => {
 
-  const [ramosVisible, setRamosVisible] = useState(true);
-
-  const toggleRamosVisibility = () => {
-    setRamosVisible(!ramosVisible);
-  };
+  const onInputChangeRegisterCompany = ()=>{
+    console.log("sfsdfd")
+  }
 
   return (
     <main>
       <div className="container_dashboard_register_company">
-        <h1
-          style={{
-            marginBottom: '5px'
-          }}
-        >Bienvenidos a OSPIM</h1>
         <form className="form_register_company">
-          <h2
-            style={{
-              marginBottom: '10px'
-            }}
-          >Formulario de registro</h2>
+        <h1>Bienvenidos a OSPIM</h1>
+          <h3>Formulario de registro</h3>
           <div className="input-group">
-            <input
+            <InputComponent
               type="text"
-              name="cuit"
-              placeholder="CUIT"
-              autoComplete="off"
+              name="cuit" // provisorio
+              id="ciut" // provisorio
+              value="" // provisorio
+              onChange={onInputChangeRegisterCompany} // provisorio
+              autoComplete="off" // provisorio
+              variant="filled"
+              label="CIUT"
             />
           </div>
           <div className="input-group">
-            <input
+            <InputComponent
               type="text"
               name="razonSocial"
-              placeholder="Razon Social"
+              id="razonSocial"
+              value="" 
+              onChange={onInputChangeRegisterCompany} 
               autoComplete="off"
+              variant="filled"
+              label="Razón Social"
             />
           </div>
           <div className="input-group">
-            <input
+            <InputComponent
               type="email"
               name="email"
-              placeholder="Correo electrónico principal"
+              value="" 
+              onChange={onInputChangeRegisterCompany} 
               autoComplete="off"
+              variant="filled"
+              label="E-mail"
             />
           </div>
           <div className="input-group">
-            <input
+            <InputComponent
               type="password"
               name="password"
-              placeholder="Contraseña"
+              value="" 
+              onChange={onInputChangeRegisterCompany} 
               autoComplete="off"
+              variant="filled"
+              label="Contraseña"
             />
           </div>
           <div className="input-group">
-            <input
+            <InputComponent
               type="password"
               name="password"
-              placeholder="Repetir contraseña"
+              value="" 
+              onChange={onInputChangeRegisterCompany} 
               autoComplete="off"
+              variant="filled"
+              label="Repetir Contraseña"
             />
           </div>
           <div className="input-group">
-            <input
+            <InputComponent
               type="phone"
               name="phone"
-              placeholder="Teléfono principal"
+              value="" 
+              onChange={onInputChangeRegisterCompany} 
               autoComplete="off"
+              variant="filled"
+              label="Teléfono principal"
             />
           </div>
           <div className="input-group">
-            <input
+            <InputComponent
               type="phone"
               name="phone"
-              placeholder="WhatsApp"
+              value="" 
+              onChange={onInputChangeRegisterCompany} 
               autoComplete="off"
+              variant="filled"
+              label="WhatsApp"
             />
           </div>
-          <div className="input-group">
-            <div className="probando">
-              <div className="input">
-                Seleccione un ramo
-              </div>
-              <span
-                onClick={toggleRamosVisibility}
-              >
-                <TiArrowSortedDown />
-              </span>
-            </div>
-            <div className="select-content">
-              <div className={ramosVisible ? 'ramos' : 'ramos_visible'}>
-                <ul>
-                  <li>Primer ramo</li>
-                  <li>Segundo ramo</li>
-                  <li>Tercer ramo</li>
-                </ul>
-              </div>
-            </div>
+          <div 
+            
+            className="input-group"
+            style={{
+              position: 'relative'
+            }}
+            >
+
           </div>
           <p style={{
             marginTop: '5px',
