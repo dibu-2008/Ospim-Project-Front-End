@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { InputComponent } from "../components/InputComponent";
 import { ButtonComponent } from "../components/ButtonComponent";
+import { TextField } from "@mui/material";
+import InputAdornment from "@mui/material/InputAdornment";
+import SearchIcon from "@mui/icons-material/Search";
 
 const DashboardPage = () => {
   const onInputChangeRegisterCompany = () => {
@@ -101,22 +104,49 @@ const DashboardPage = () => {
           <p
             style={{
               marginTop: "5px",
-              width: "500px",
               color: "#18365D",
             }}
           >
             Domicilios declarados: (Para completar el registro, deberá agregar
             por lo menos el Domicilio Fiscal)
           </p>
-          <ButtonComponent
-            styles={{
-              marginTop: "30px",
-              width: "500px",
-              marginBottom: "30px",
+          <div
+            className="flex-container"
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              width: "100%",
+              marginBlock: "30px",
             }}
-            className="btn_ingresar"
-            name="AGREGAR"
-          ></ButtonComponent>
+          >
+            <ButtonComponent
+              styles={{
+                width: "150px",
+              }}
+              className="btn_ingresar"
+              name="AGREGAR"
+            ></ButtonComponent>
+
+            <TextField
+              type="search"
+              name="search"
+              value=""
+              onChange={onInputChangeRegisterCompany}
+              autoComplete="off"
+              variant="outlined"
+              label="Buscar"
+              sx={{
+                width: "150px",
+              }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </div>
         </form>
       </div>
     </main>

@@ -108,12 +108,20 @@ form {
   height: 100%;
 }
 
+.form_register_company {
+  width: 100%;
+  margin: 80px 0px;
+  padding-inline: 64px;
+  align-items: flex-start;
+}
+
 .input-group {
   display: flex;
   flex-direction: column;
   width: 100%;
   margin: 10px 0;
   text-align: center;
+  max-width: 500px;
 }
 
 .container_btn_pass_firts {
@@ -156,10 +164,9 @@ form {
   font-size: 48px;
   font-weight: 700;
   height: 56.25px;
-  width: 500px;
+  width: 100%;
   color: #1a76d2;
   text-align: center;
-  margin-top: 80px;
   margin-bottom: 10px;
 }
 
@@ -169,6 +176,8 @@ form {
   height: 35.5px;
   color: #1a76d2;
   margin-bottom: 10px;
+  width: 100%;
+  text-align: center;
 }
 
 /* .form_register_company {
