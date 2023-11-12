@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { InputComponent } from "../components/InputComponent";
 import { ButtonComponent } from "../components/ButtonComponent";
+import { AddressTable } from "../components/AddressTable";
 import { TextField } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
@@ -147,6 +148,7 @@ const DashboardPage = () => {
               }}
             />
           </div>
+          <AddressTable />
         </form>
       </div>
     </main>
