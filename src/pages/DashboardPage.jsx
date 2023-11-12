@@ -1,17 +1,17 @@
 import { useState } from "react";
 import { InputComponent } from "../components/InputComponent";
+import { ButtonComponent } from "../components/ButtonComponent";
 
 const DashboardPage = () => {
-
-  const onInputChangeRegisterCompany = ()=>{
-    console.log("sfsdfd")
-  }
+  const onInputChangeRegisterCompany = () => {
+    console.log("sfsdfd");
+  };
 
   return (
     <main>
       <div className="container_dashboard_register_company">
         <form className="form_register_company">
-        <h1>Bienvenidos a OSPIM</h1>
+          <h1>Bienvenidos a OSPIM</h1>
           <h3>Formulario de registro</h3>
           <div className="input-group">
             <InputComponent
@@ -30,8 +30,8 @@ const DashboardPage = () => {
               type="text"
               name="razonSocial"
               id="razonSocial"
-              value="" 
-              onChange={onInputChangeRegisterCompany} 
+              value=""
+              onChange={onInputChangeRegisterCompany}
               autoComplete="off"
               variant="filled"
               label="Razón Social"
@@ -41,8 +41,8 @@ const DashboardPage = () => {
             <InputComponent
               type="email"
               name="email"
-              value="" 
-              onChange={onInputChangeRegisterCompany} 
+              value=""
+              onChange={onInputChangeRegisterCompany}
               autoComplete="off"
               variant="filled"
               label="E-mail"
@@ -52,8 +52,8 @@ const DashboardPage = () => {
             <InputComponent
               type="password"
               name="password"
-              value="" 
-              onChange={onInputChangeRegisterCompany} 
+              value=""
+              onChange={onInputChangeRegisterCompany}
               autoComplete="off"
               variant="filled"
               label="Contraseña"
@@ -63,8 +63,8 @@ const DashboardPage = () => {
             <InputComponent
               type="password"
               name="password"
-              value="" 
-              onChange={onInputChangeRegisterCompany} 
+              value=""
+              onChange={onInputChangeRegisterCompany}
               autoComplete="off"
               variant="filled"
               label="Repetir Contraseña"
@@ -74,8 +74,8 @@ const DashboardPage = () => {
             <InputComponent
               type="phone"
               name="phone"
-              value="" 
-              onChange={onInputChangeRegisterCompany} 
+              value=""
+              onChange={onInputChangeRegisterCompany}
               autoComplete="off"
               variant="filled"
               label="Teléfono principal"
@@ -85,33 +85,38 @@ const DashboardPage = () => {
             <InputComponent
               type="phone"
               name="phone"
-              value="" 
-              onChange={onInputChangeRegisterCompany} 
+              value=""
+              onChange={onInputChangeRegisterCompany}
               autoComplete="off"
               variant="filled"
               label="WhatsApp"
             />
           </div>
-          <div 
-            
+          <div
             className="input-group"
             style={{
-              position: 'relative'
+              position: "relative",
             }}
-            >
-
-          </div>
-          <p style={{
-            marginTop: '5px',
-            width: '480px',
-            color: '#18365D',
-          }}>Domicilios declarados: (Para completar el registro, deberá agregar por lo menos el Domicilio Fiscal)</p>
-          <button
-            style={{ 
-              marginTop: '30px', 
-              width: '460px'
+          ></div>
+          <p
+            style={{
+              marginTop: "5px",
+              width: "500px",
+              color: "#18365D",
             }}
-            className="btn_ingresar">AGREGAR</button>
+          >
+            Domicilios declarados: (Para completar el registro, deberá agregar
+            por lo menos el Domicilio Fiscal)
+          </p>
+          <ButtonComponent
+            styles={{
+              marginTop: "30px",
+              width: "500px",
+              marginBottom: "30px",
+            }}
+            className="btn_ingresar"
+            name="AGREGAR"
+          ></ButtonComponent>
         </form>
       </div>
     </main>
