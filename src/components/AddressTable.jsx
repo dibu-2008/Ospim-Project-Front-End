@@ -7,9 +7,21 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import FullFeaturedCrudGrid from "./TablePrueba";
+import DataGridDemo from "./GridColDef";
+
 const columns = [
-  { id: "name", label: "", minWidth: 50 },
-  { id: "tipo", label: "Tipo", minWidth: 70 },
+  {
+    id: "name",
+    label: "name",
+    minWidth: 50
+  },
+  {
+    id: "tipo",
+    label: "Tipo",
+    minWidth: 70
+  },
   {
     id: "provincia",
     label: "Provincia",
@@ -57,46 +69,71 @@ const columns = [
   },
 ];
 
-const rows = ["fila1", "fila2", "fila3"];
+const rows = [];
 
-export const AddressTable = () => {
+export const AddressTable = ({ tableCompany }) => {
+
+  const addRow = () => {
+    console.log("addRow");
+  }
+
+
   return (
-    <Paper sx={{ width: "100%", overflow: "hidden" }}>
-      <TableContainer sx={{ maxHeight: 440 }}>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align="left"
-                  style={{ minWidth: column.minWidth }}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => {
-              return (
-                <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                  {columns.map((column) => {
-                    const value = row[column.id];
-                    return (
-                      <TableCell key={column.id}>
-                        {column.format && typeof value === "number"
-                          ? column.format(value)
-                          : value}
-                      </TableCell>
-                    );
-                  })}
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Paper>
+    <>
+      <p
+        style={{
+          marginTop: "5px",
+          marginBottom: "15px",
+          color: "#18365D",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        Domicilios declarados: (Para completar el registro, deberá agregar
+        por lo menos el Domicilio Fiscal)
+      </p>
+      <FullFeaturedCrudGrid />
+      <DataGridDemo/>
+      {/* <Paper sx={{ width: "100%", overflow: "hidden" }}>
+        <TableContainer sx={{ maxHeight: 440 }}>
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                {columns.map((column) => (
+                  <TableCell
+                    key={column.id}
+                    align="left"
+                    style={{ minWidth: column.minWidth }}
+                  >
+                    {column.label}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((row) => {
+                const randomNumber = Math.floor(Math.random() * 1000000);
+                return (
+                  <TableRow hover role="checkbox" tabIndex={-1} key={randomNumber}//key={row.code}//>
+                    {columns.map((column) => {
+
+                      const value = row[column.id];
+
+                      return (
+                        <TableCell key={column.id}>
+                          {column.format && typeof value === "number"
+                            ? column.format(value)
+                            : value}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper> */}
+    </>
   );
 };

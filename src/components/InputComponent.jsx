@@ -3,17 +3,16 @@ import TextField from '@mui/material/TextField';
 
 export const InputComponent = (props) => {
 
-    const { type, name, id, value, onChange, autocomplete, variant, label} = props;
+    const { type, name, value, onChange, autocomplete, variant, label} = props;
 
     return (
         <TextField
           type={type}
           name={name}
-          id={id}
           value={value}
           onChange={onChange}
           autoComplete={autocomplete}
-          variant={variant}
+          /* variant={variant} */
           label={label}
           sx={{}}
         />

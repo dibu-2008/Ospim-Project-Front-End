@@ -96,7 +96,7 @@ nav a {
   font-size: 32px;
   height: 35.5px;
   color: #1a76d2;
-  margin-bottom: 10px;
+  margin-bottom: 50px;
 }
 
 form {
@@ -125,10 +125,14 @@ form {
 }
 
 .container_btn_pass_firts {
-  margin-top: 25px;
+	width: 100%;
+	margin-top: 25px;
+	display: flex;
+	justify-content: space-between;
 }
 
 .container_btn_pass_firts a {
+	cursor: pointer;
   display: block;
   text-align: center;
   color: #1a76d2;

@@ -1,16 +1,17 @@
+import { DashboardPage } from './pages'
 import AppRouter from './router/AppRouter'
 import { AppTheme } from './theme'
 
 
 function App() {
 
-  return( 
+  return (
     <>
-    <AppTheme>
-      <AppRouter />
-    </AppTheme>
+      <AppTheme>
+        <AppRouter />
+      </AppTheme>
     </>
-    )
+  )
 }
 
 export default App

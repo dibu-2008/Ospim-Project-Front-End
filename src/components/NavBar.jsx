@@ -4,15 +4,18 @@ import { ButtonOutlinedComponent } from "./ButtonOutlinedComponent";
 
 const NavBar = () => {
 
-  // Me imprime los datos que le paso por el state
-  // logged: true
-  // name: "Luis"
-  // email: "luis@gmail"
   const { state } = useLocation();
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
+
+  if (state)
+    localStorage.setItem('state', JSON.stringify(state))
+
+  const localState = localStorage.getItem('state')
+  const localStateParse = JSON.parse(localState)
 
   const onLogout = () => {
     navigate('/login', { replace: true })
+    localStorage.removeItem('state')
   }
 
   return (
@@ -25,13 +28,10 @@ const NavBar = () => {
         </div>
 
         {
-          state?.logged ? (
+          localStateParse?.logged ? (
             <div className="user">
-              <span className="username">{state?.name}</span>
+              {/* <span className="username">{state?.name}</span> */}
               <ButtonOutlinedComponent
-                styles={{
-                  backgrounColor:'red !important'
-                }}
                 name={'Cerrar Sesión'}
                 onClick={onLogout}
               />

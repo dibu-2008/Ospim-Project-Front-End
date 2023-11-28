@@ -1,6 +1,6 @@
 import Button from '@mui/material/Button';
 
-export const ButtonComponent = ({styles,name}) => { 
+export const ButtonComponent = ({ styles, name }) => { 
     return (
     <Button 
         variant='contained'

@@ -1,7 +1,9 @@
+import axios from "axios";
 import { useNavigate } from "react-router-dom"
 import { useFormLoginCompany } from "../hooks/useFormLoginCompany.js"
 import { useState } from "react"
 import { useFormLoginInternalUser } from "../hooks/useFormLoginInternalUser.js";
+
 
 // Material UI
 import { InputComponent } from "../components/InputComponent.jsx";
@@ -22,12 +24,14 @@ const LoginPage = () => {
     passwordLoginInternalUser: ''
   })
 
-  const [showInternalUserForm, setShowInternalUserForm] = useState(false);
+  const [showInternalUserForm, setShowInternalUserForm] = useState(true);
+  const [showVerificationForm, setShowVerificationForm] = useState(false);
+  const [verificationCode, setVerificationCode] = useState('');
 
   const onLoginCompany = (e) => {
     e.preventDefault()
 
-    navigate('/dashboard', {
+    navigate('/dashboard/inicio', {
       replace: true,
       state: {
         logged: true,
@@ -40,21 +44,72 @@ const LoginPage = () => {
     OnResetFormLoginCompany()
   }
 
-  const onLoginInternalUser = (e) => {
+  const onLoginInternalUser = async (e) => {
+    e.preventDefault();
+
+    try {
+      const url = 'http://localhost:3000/login';
+      const response = await axios.get(url);
+
+      if (response.data[0].usuario === user && response.data[0].clave === passwordLoginInternalUser) {
+
+        setShowInternalUserForm(false);
+        setShowVerificationForm(true);
+
+        setTimeout(() => {
+          alert('123456')
+        }, 1000);
+
+        return;
+      }
+
+    } catch (error) {
+      console.error('Error en la solicitud:', error);
+    }
+
+    OnResetFormLoginInternalUser();
+  };
+
+
+
+  const onLoginInternalUser2 = async (e) => {
+
     e.preventDefault()
 
-    navigate('/dashboard', {
-      replace: true,
-      state: {
-        logged: true,
-        user,
-        passwordLoginInternalUser
-      }
-    })
-  }
+    try {
+      const url = 'http://127.0.0.1:8400/sigeco/auth/login';
+      const data = {
+        usuario: user,
+        clave: passwordLoginInternalUser,
+      };
 
-  const onInternalUserClick = () => {
-    setShowInternalUserForm(!showInternalUserForm)
+      const response = await axios.post(url, data, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      // Manejar la respuesta aquí
+      const { token, tokenRefresco } = response.data;
+      console.log('Token:', token);
+      console.log('Token de refresco:', tokenRefresco);
+
+      // Navegar a '/dashboard' después de una respuesta exitosa
+      navigate('/dashboard', {
+        replace: true,
+        state: {
+          logged: true,
+          user: data.usuario,  // Puedes utilizar el usuario proporcionado en la solicitud
+          // O podrías usar la respuesta del servidor si es necesario: user: response.data.usuario,
+          passwordLoginInternalUser: data.clave,
+        },
+      });
+
+    } catch (error) {
+      console.error('Error al realizar la solicitud:', error);
+    }
+
+    OnResetFormLoginInternalUser();
   }
 
   const redirectToRegister = () => {
@@ -63,13 +118,35 @@ const LoginPage = () => {
     })
   }
 
+  const onVerificationCodeChange = (e) => {
+    setVerificationCode(e.target.value);
+  }
+
+  const onVerificationCodeSubmit = (e) => {
+    e.preventDefault();
+
+    if (+(verificationCode) === 12345) {
+
+      navigate('/dashboard/inicio', {
+        replace: true,
+        state: {
+          logged: true,
+          user,
+          passwordLoginInternalUser,
+        },
+      });
+    } else {
+      alert('Código de verificación incorrecto');
+    }
+
+  }
+
   return (
 
     <div className="wrapper_container">
 
       <div className="wrapper">
-        {
-          showInternalUserForm ? (
+        { showInternalUserForm && (
             <div className="contenedor_form">
               <form onSubmit={onLoginInternalUser}>
                 <h1>Usuario Interno</h1>
@@ -82,7 +159,7 @@ const LoginPage = () => {
                     value={user}
                     onChange={OnInputChangeLoginInternalUser}
                     autoComplete="off"
-                    variant="filled"
+                    /* variant="filled" */
                     label="Usuario"
                   />
                 </div>
@@ -94,7 +171,43 @@ const LoginPage = () => {
                     value={passwordLoginInternalUser}
                     onChange={OnInputChangeLoginInternalUser}
                     autoComplete="off"
-                    variant="filled"
+                    /* variant="filled" */
+                    label="Contraseña"
+                  />
+                </div>
+                <ButtonComponent
+                  styles={{
+                    marginTop: '120px',
+                  }}
+                  name={'SIGUIENTE'}
+                />
+                <div className="container_btn_pass_firts">
+                  <a>Recupero de Contraseña</a>
+                  <a
+                      onClick={redirectToRegister}
+                    >Ingreso por primera vez</a>
+                </div>
+              </form>
+            </div>
+        )}
+        { showVerificationForm && (
+            <div className="contenedor_form">
+              <h1>Ingrese el numero de 6 digitos</h1>
+              <form onSubmit={onVerificationCodeSubmit}>
+                <div
+                  className="input-group"
+                  style={{
+                    marginTop: '150px'
+                  }}
+                >
+                  <InputComponent
+                    type="number"
+                    name="verificationCode"
+                    id="verificationCode"
+                    value={verificationCode}
+                    onChange={onVerificationCodeChange}
+                    autoComplete="off"
+                   // variant="filled"
                     label="Contraseña"
                   />
                 </div>
@@ -104,80 +217,10 @@ const LoginPage = () => {
                   }}
                   name={'INGRESAR'}
                 />
-                <div className="container_btn_pass_firts">
-                  <a>Recupero de Contraseña</a>
-                  <a
-                    onClick={onInternalUserClick}
-                  >Usuario Empresa</a>
-                </div>
               </form>
+
             </div>
-          ) : (
-            <div className="contenedor_form">
-              <form onSubmit={onLoginCompany}>
-                <h1>Usuario Empresas</h1>
-                <h3>Iniciar sesión</h3>
-                <div className="input-group">
-                  <InputComponent
-                    type="text"
-                    name="cuit"
-                    id="cuit"
-                    value={cuit}
-                    onChange={OnInputChangeLoginCompany}
-                    required
-                    autoComplete="off"
-                    variant="filled"
-                    label="CUIT" />
-
-                </div>
-                <div className="input-group">
-                  <InputComponent
-                    type="passwordLoginCompany"
-                    name="passwordLoginCompany"
-                    id="passwordLoginCompany"
-                    value={passwordLoginCompany}
-                    onChange={OnInputChangeLoginCompany}
-                    required
-                    autoComplete="off"
-                    variant="filled"
-                    label="Contraseña" />
-                </div>
-                <div className="input-group">
-                  <InputComponent
-                    type="text"
-                    name="codigoVerificacion"
-                    id="codigoVerificacion"
-                    value={codigoVerificacion}
-                    onChange={OnInputChangeLoginCompany}
-                    required
-                    autoComplete="off"
-                    variant="filled"
-                    label="Código de verificación" />
-                </div>
-                <ButtonComponent
-                  styles={{
-                    marginTop: '81px',
-                  }}
-                  name={'INGRESAR'}
-                />
-                <div className="container_btn_pass_firts_2">
-                  <div className="children_one_btn_pass_firts_2">
-                    <a>Recupero de Contraseña</a>
-                    <a
-                      onClick={redirectToRegister}
-                    >Ingreso por primera vez</a>
-                  </div>
-
-                </div>
-                <a
-                  className="internal_user"
-                  onClick={onInternalUserClick}
-                >Usuario Interno</a>
-              </form>
-            </div>
-          )
-        }
-
+        )}
       </div>
     </div>
 
