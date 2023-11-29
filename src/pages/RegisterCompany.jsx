@@ -2,16 +2,26 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { InputComponent } from "../components/InputComponent";
 import { ButtonComponent } from "../components/ButtonComponent";
-import { AddressTable } from "../components/AddressTable";
 import { TextField } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
 import { useFormRegisterCompany } from "../hooks/useFormRegisterCompany";
 import { SelectComponent } from "../components/SelectComponent";
+import { AddressTable } from "../components/AddressTable";
+import Box from '@mui/material/Box';
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
+import { v4 as uuidv4 } from 'uuid';
+
 
 export const RegisterCompany = () => {
 
-  const [tableCompany, setTableCompany] = useState([]);
+  const [search, setSearch] = useState('');
+  const [companiesDto, setCompaniesDto] = useState({});
+  const [additionalEmail, setAddionalEmail] = useState([]);
+  const [emailAlternativos, setEmailAlternativos] = useState([]);
+  const [additionalPhone, setAdditionalPhone] = useState([]);
+  const [phoneAlternativos, setPhoneAlternativos] = useState([]);
 
   const {
     cuit, razonSocial, email,
@@ -30,49 +40,27 @@ export const RegisterCompany = () => {
     ramos: '',
   })
 
-
-  const getAllCompanies = async () => {
-    try {
-      const url = 'http://localhost:3000/empresas';
-      const response = await axios.get(url);
-      setTableCompany(response.data);
-    } catch (error) {
-      console.error("Error en la obtencion de las empresas: " + error);
-    }
-  }
-
-  useEffect(() => {
-    //getAllCompanies();
-  }, [])
-
-
   const OnSubmitRegisterCompany = async (e) => {
     e.preventDefault()
 
-    console.log(cuit, razonSocial, email, password, repeatPassword, phone, whatsapp, ramos);
-
-    // Peticion post a http://localhost:8400/empresas
-    try {
-
-      const url = 'http://localhost:3000/empresas';
-      const response = await axios.post(url, {
-        cuit,
-        razonSocial,
-        email,
-        password,
-        repeatPassword,
-        phone,
-        whatsapp,
-        ramos,
-      });
-
-      if (response.status === 201) {
-        alert('Empresa registrada con exito')
-      }
-
-    } catch (error) {
-      console.error("Error en el registro de la empresa: " + error);
+    const empresasDto = {
+      cuit,
+      razonSocial,
+      email,
+      emailAlternativos,
+      password,
+      repeatPassword,
+      phone,
+      phoneAlternativos,
+      whatsapp,
+      ramos,
     }
+
+    setCompaniesDto(empresasDto);
+
+    // Limpiar y ocultar los inputs de email y telefonos alternativos
+    setAddionalEmail([]);
+    setEmailAlternativos([]);
 
     OnResetFormRegisterCompany()
   }
@@ -86,14 +74,38 @@ export const RegisterCompany = () => {
     })
   }
 
-  const onInputChangeRegisterCompany_2 = (e) => {
-    console.log(e.target.value);
+  const onInputChangeSearchCompany = ({ target }) => {
+
+    const { name, value } = target;
+
+    setSearch(value);
+
+  }
+
+  const handleAddEmail = () => {
+    const values = [...additionalEmail];
+    const newEmail = { email: "", id: uuidv4() };
+    values.push(newEmail);
+    setEmailAlternativos([...emailAlternativos, newEmail])
+    setAddionalEmail(values);
+
+  }
+
+  const handleAddPhone = () => {
+    const values = [...additionalPhone];
+    const newPhone = { phone: "", id: uuidv4() };
+    values.push(newPhone);
+    setPhoneAlternativos([...phoneAlternativos, newPhone])
+    setAdditionalPhone(values);
   }
 
   return (
     <main>
       <div className="container_dashboard_register_company">
         <form
+          sx={{
+            backgroundColor: '#000',
+          }}
           onSubmit={OnSubmitRegisterCompany}
           className="form_register_company">
           <h1>Bienvenidos a OSPIM</h1>
@@ -101,11 +113,11 @@ export const RegisterCompany = () => {
           <div className="input-group">
             <InputComponent
               type="text"
-              name="cuit" // provisorio
-              id="ciut" // provisorio
-              value={cuit} // provisorio
-              onChange={OnInputChangeRegisterCompany} // provisorio
-              autoComplete="off" // provisorio
+              name="cuit"
+              id="ciut"
+              value={cuit}
+              onChange={OnInputChangeRegisterCompany}
+              autoComplete="off"
               variant="filled"
               label="CUIT"
             />
@@ -132,7 +144,44 @@ export const RegisterCompany = () => {
               variant="filled"
               label="E-mail"
             />
+            <Box sx={{
+              '& > :not(style)': { m: 1 },
+              position: 'absolute',
+              marginTop: '0px',
+              marginLeft: '505px',
+            }}>
+              <Fab
+                size="small"
+                color="primary" aria-label="add"
+                onClick={handleAddEmail}
+              >
+                <AddIcon />
+              </Fab>
+            </Box>
           </div>
+          {
+            additionalEmail.map((input) => (
+              <div className="input-group" key={input.id}>
+                <InputComponent
+                  type="text"
+                  name={`additionalEmail_${input.id}`}
+                  autoComplete="off"
+                  variant="filled"
+                  label="Correo Electrónico Adicional"
+                  value={input.email}
+                  onChange={(e) => {
+                    const values = [...additionalEmail];
+                    values.map((item) => {
+                      if (item.id === input.id) {
+                        item.email = e.target.value;
+                      }
+                    });
+                    setEmailAlternativos(values);
+                  }}
+                />
+              </div>
+            ))
+          }
           <div className="input-group">
             <InputComponent
               type="password"
@@ -165,7 +214,44 @@ export const RegisterCompany = () => {
               variant="filled"
               label="Teléfono principal"
             />
+            <Box sx={{
+              '& > :not(style)': { m: 1 },
+              position: 'absolute',
+              marginTop: '0px',
+              marginLeft: '505px',
+            }}>
+              <Fab
+                size="small"
+                color="primary" aria-label="add"
+                onClick={handleAddPhone}
+              >
+                <AddIcon />
+              </Fab>
+            </Box>
           </div>
+          {
+            additionalPhone.map((input) => (
+              <div className="input-group" key={input.id}>
+                <InputComponent
+                  type="text"
+                  name={`phoneAdditional_${input.id}`}
+                  autoComplete="off"
+                  variant="filled"
+                  label="Teléfono Adicional"
+                  value={input.phone}
+                  onChange={(e) => {
+                    const values = [...additionalPhone];
+                    values.map((item) => {
+                      if (item.id === input.id) {
+                        item.phone = e.target.value;
+                      }
+                    });
+                    setPhoneAlternativos(values);
+                  }}
+                />
+              </div>
+            ))
+          }
           <div className="input-group">
             <InputComponent
               type="phone"
@@ -212,12 +298,12 @@ export const RegisterCompany = () => {
               className="btn_ingresar"
               name="AGREGAR"
             ></ButtonComponent>
-            
+
             <TextField
               type="search"
               name="search"
-              value=""
-              onChange={onInputChangeRegisterCompany_2}
+              value={search}
+              onChange={onInputChangeSearchCompany}
               autoComplete="off"
               variant="outlined"
               label="Buscar"
@@ -233,8 +319,20 @@ export const RegisterCompany = () => {
               }}
             />
           </div>
+          <p
+            style={{
+              marginTop: "5px",
+              marginBottom: "15px",
+              color: "#18365D",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            Domicilios declarados: (Para completar el registro, deberá agregar
+            por lo menos el Domicilio Fiscal)
+          </p>
           <AddressTable
-            tableCompany={tableCompany}
+            companiesDto={companiesDto}
           />
         </form>
       </div>

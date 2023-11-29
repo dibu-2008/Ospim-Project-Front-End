@@ -70,47 +70,46 @@ const LoginPage = () => {
     OnResetFormLoginInternalUser();
   };
 
-
-
   const onLoginInternalUser2 = async (e) => {
 
     e.preventDefault()
 
     try {
-      const url = 'http://127.0.0.1:8400/sigeco/auth/login';
-      const data = {
+
+      // Hacer la peticion aqui
+      const response = await axios.post('http://localhost:3001/login', {
         usuario: user,
         clave: passwordLoginInternalUser,
-      };
-
-      const response = await axios.post(url, data, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
       });
 
-      // Manejar la respuesta aquí
       const { token, tokenRefresco } = response.data;
+
+      if(token && tokenRefresco) {
+        setShowInternalUserForm(false);
+        setShowVerificationForm(true);
+
+        setTimeout(() => {
+          alert('123456')
+        }, 1000);
+      }
+
+      // Puedes hacer lo que necesites con los tokens
       console.log('Token:', token);
       console.log('Token de refresco:', tokenRefresco);
 
-      // Navegar a '/dashboard' después de una respuesta exitosa
-      navigate('/dashboard', {
-        replace: true,
-        state: {
-          logged: true,
-          user: data.usuario,  // Puedes utilizar el usuario proporcionado en la solicitud
-          // O podrías usar la respuesta del servidor si es necesario: user: response.data.usuario,
-          passwordLoginInternalUser: data.clave,
-        },
-      });
+      // También puedes almacenar los tokens en el estado, contexto, o donde sea necesario
+      // setToken(token);
+      // setRefreshToken(tokenRefresco);
+
 
     } catch (error) {
-      console.error('Error al realizar la solicitud:', error);
+      console.error('Error en la solicitud:', error);
     }
 
     OnResetFormLoginInternalUser();
   }
+
+
 
   const redirectToRegister = () => {
     navigate('/registercompany', {
@@ -125,7 +124,7 @@ const LoginPage = () => {
   const onVerificationCodeSubmit = (e) => {
     e.preventDefault();
 
-    if (+(verificationCode) === 12345) {
+    if (+(verificationCode) === 123456) {
 
       navigate('/dashboard/inicio', {
         replace: true,
@@ -146,80 +145,80 @@ const LoginPage = () => {
     <div className="wrapper_container">
 
       <div className="wrapper">
-        { showInternalUserForm && (
-            <div className="contenedor_form">
-              <form onSubmit={onLoginInternalUser}>
-                <h1>Usuario Interno</h1>
-                <h3>Iniciar sesión</h3>
-                <div className="input-group">
-                  <InputComponent
-                    type="text"
-                    name="user"
-                    id="user"
-                    value={user}
-                    onChange={OnInputChangeLoginInternalUser}
-                    autoComplete="off"
-                    /* variant="filled" */
-                    label="Usuario"
-                  />
-                </div>
-                <div className="input-group">
-                  <InputComponent
-                    type="password"
-                    name="passwordLoginInternalUser"
-                    id="passwordLoginInternalUser"
-                    value={passwordLoginInternalUser}
-                    onChange={OnInputChangeLoginInternalUser}
-                    autoComplete="off"
-                    /* variant="filled" */
-                    label="Contraseña"
-                  />
-                </div>
-                <ButtonComponent
-                  styles={{
-                    marginTop: '120px',
-                  }}
-                  name={'SIGUIENTE'}
+        {showInternalUserForm && (
+          <div className="contenedor_form">
+            <form onSubmit={onLoginInternalUser2}>
+              <h1>Usuario Interno</h1>
+              <h3>Iniciar sesión</h3>
+              <div className="input-group">
+                <InputComponent
+                  type="text"
+                  name="user"
+                  id="user"
+                  value={user}
+                  onChange={OnInputChangeLoginInternalUser}
+                  autoComplete="off"
+                  /* variant="filled" */
+                  label="Usuario"
                 />
-                <div className="container_btn_pass_firts">
-                  <a>Recupero de Contraseña</a>
-                  <a
-                      onClick={redirectToRegister}
-                    >Ingreso por primera vez</a>
-                </div>
-              </form>
-            </div>
+              </div>
+              <div className="input-group">
+                <InputComponent
+                  type="password"
+                  name="passwordLoginInternalUser"
+                  id="passwordLoginInternalUser"
+                  value={passwordLoginInternalUser}
+                  onChange={OnInputChangeLoginInternalUser}
+                  autoComplete="off"
+                  /* variant="filled" */
+                  label="Contraseña"
+                />
+              </div>
+              <ButtonComponent
+                styles={{
+                  marginTop: '120px',
+                }}
+                name={'SIGUIENTE'}
+              />
+              <div className="container_btn_pass_firts">
+                <a>Recupero de Contraseña</a>
+                <a
+                  onClick={redirectToRegister}
+                >Ingreso por primera vez</a>
+              </div>
+            </form>
+          </div>
         )}
-        { showVerificationForm && (
-            <div className="contenedor_form">
-              <h1>Ingrese el numero de 6 digitos</h1>
-              <form onSubmit={onVerificationCodeSubmit}>
-                <div
-                  className="input-group"
-                  style={{
-                    marginTop: '150px'
-                  }}
-                >
-                  <InputComponent
-                    type="number"
-                    name="verificationCode"
-                    id="verificationCode"
-                    value={verificationCode}
-                    onChange={onVerificationCodeChange}
-                    autoComplete="off"
-                   // variant="filled"
-                    label="Contraseña"
-                  />
-                </div>
-                <ButtonComponent
-                  styles={{
-                    marginTop: '157px',
-                  }}
-                  name={'INGRESAR'}
+        {showVerificationForm && (
+          <div className="contenedor_form">
+            <h1>Ingrese el numero de 6 digitos</h1>
+            <form onSubmit={onVerificationCodeSubmit}>
+              <div
+                className="input-group"
+                style={{
+                  marginTop: '150px'
+                }}
+              >
+                <InputComponent
+                  type="number"
+                  name="verificationCode"
+                  id="verificationCode"
+                  value={verificationCode}
+                  onChange={onVerificationCodeChange}
+                  autoComplete="off"
+                  // variant="filled"
+                  label="Contraseña"
                 />
-              </form>
+              </div>
+              <ButtonComponent
+                styles={{
+                  marginTop: '157px',
+                }}
+                name={'INGRESAR'}
+              />
+            </form>
 
-            </div>
+          </div>
         )}
       </div>
     </div>

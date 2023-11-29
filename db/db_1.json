@@ -1,0 +1,65 @@
+{
+  "login": [
+    {
+      "id": 1,
+      "usuario": "admin",
+      "clave": "prueba123"
+    },
+    {
+      "usuario": "admin_2",
+      "clave": "prueba123"
+    }
+  ],
+  "tokens": [
+    {
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQSflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+      "token_refresh": "0987654321"
+    }
+  ],
+  "empresas": [
+    {
+      "razonsocial": "Empresas de Agro Nro1",
+      "cuit": "20949118682",
+      "clave": "123",
+      "email": "AgroNro1@gmail.com",
+      "telefono": "123456787",
+      "whatsapp": "1234567876",
+      "telefonosAlternativos": [],
+      "emailAlternativos": [
+        {
+          "email": "AgroNro2@gmail.com",
+          "id": "2c12d0da-9196-4aec-acde-7a4ce02d56b2"
+        },
+        {
+          "email": "AgroNro3@gmail.com",
+          "id": "bdb1c373-66a5-40ba-af2e-4028cd9f5bc1"
+        }
+      ],
+      "domicilios": [
+        {
+          "tipo": "Fiscal",
+          "provincia": "Santa Fe",
+          "localidad": "LOS NOGALES",
+          "calle": "ancun",
+          "piso": "2",
+          "depto": "3",
+          "oficina": "12",
+          "cp": "1234",
+          "planta": "Planta 1"
+        },
+        {
+          "tipo": "Fiscal",
+          "provincia": "Corrientes",
+          "localidad": "EMPEDRADO",
+          "calle": "gdffgfd",
+          "piso": "5",
+          "depto": "3",
+          "oficina": "10",
+          "cp": "3445",
+          "planta": "Planta 2"
+        }
+      ],
+      "id": 1
+    }
+  ]
+}
