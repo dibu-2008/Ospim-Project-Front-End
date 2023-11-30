@@ -8,6 +8,7 @@ import {
 } from "../pages";
 import PrivateRoute from "./PrivateRoute";
 import { RegisterCompany } from "../pages/RegisterCompany";
+import { Feriados } from "../pages/pages_dashboard/Feriados";
 
 const HomePage = () => <div>Contenido de la página de inicio</div>;
 const DDJJPage = () => {
@@ -68,6 +69,7 @@ const AppRouter = () => {
             </PrivateRoute>
           }>
             <Route path="inicio" index element={<HomePage />} />
+            <Route path="feriados" element={<Feriados />} />
             <Route path="ddjj" element={<DDJJPage />} />
             <Route path="boletas" element={<BoletasPage />} />
             <Route path="pagos" element={<PagosPage />} />

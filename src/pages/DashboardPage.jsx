@@ -24,6 +24,7 @@ const DashboardPage = () => {
         }}
       >
         <BottomNavigationAction label="Inicio" icon={<HomeIcon />} component={Link} to="./inicio" />
+        <BottomNavigationAction label="Feriados" icon={<LibraryBooksIcon />} component={Link} to="./feriados" />
         <BottomNavigationAction label="DDJJ" icon={<LibraryBooksIcon />} component={Link} to="./ddjj" />
         <BottomNavigationAction label="Boletas" icon={<StyleIcon />} component={Link} to="./boletas" />
         <BottomNavigationAction label="Pagos" icon={<AccountBalanceWalletIcon />} component={Link} to="./pagos" />
