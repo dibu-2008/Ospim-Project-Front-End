@@ -5,6 +5,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
+
 import {
     GridRowModes,
     DataGrid,
@@ -196,7 +197,10 @@ export const AddressTable = ({ companiesDto }) => {
     const handleRegisterCompany = async () => {
 
         try {
-            const response = await axios.post('http://localhost:3000/empresas', userCompaniesSend)
+
+            const backendUrl = import.meta.env.VITE_BACKEND_URL;
+            console.log(backendUrl)
+            const response = await axios.post( `${backendUrl}/empresas`, userCompaniesSend)
             console.log(response);
 
             // Marcamos el registro como completo

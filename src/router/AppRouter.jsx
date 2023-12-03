@@ -9,49 +9,9 @@ import {
 import PrivateRoute from "./PrivateRoute";
 import { RegisterCompany } from "../pages/RegisterCompany";
 import { Feriados } from "../pages/pages_dashboard/Feriados";
+import { DeclaracionesJuradas } from "../pages/pages_dashboard/DeclaracionesJuradas";
+import { Inicio } from "../pages/pages_dashboard/Inicio";
 
-const HomePage = () => <div>Contenido de la página de inicio</div>;
-const DDJJPage = () => {
-  return (
-    <div style={{
-      margin: '0 auto',
-      display: 'flex',
-      justifyContent: 'space-around',
-      alignItems: 'center',
-      flexDirection: 'column',
-      width: '100%',
-      marginTop: '2rem'
-    }}>
-
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-around',
-          alignItems: 'center',
-          width: '80%',
-          height: '100px',
-        }}
-      >
-
-        <h2>Presentar</h2>
-        <h2>Mis DDJJ</h2>
-      </div>
-
-
-      <div
-        style={{
-          height: '100px',
-          width: '80%',
-          border: '1px solid black',
-          borderRadius: '10px',
-        }}
-      >
-        <h3>Periodo</h3>
-      </div>
-
-    </div>
-  )
-};
 const BoletasPage = () => <div>Contenido de la página de boletas</div>;
 const PagosPage = () => <div>Contenido de la página de pagos</div>;
 const MisDatosPage = () => <div>Contenido de la página de mis datos</div>;
@@ -68,9 +28,9 @@ const AppRouter = () => {
               <DashboardPage />
             </PrivateRoute>
           }>
-            <Route path="inicio" index element={<HomePage />} />
+            <Route path="inicio" index element={<Inicio />} />
             <Route path="feriados" element={<Feriados />} />
-            <Route path="ddjj" element={<DDJJPage />} />
+            <Route path="ddjj" element={<DeclaracionesJuradas />} />
             <Route path="boletas" element={<BoletasPage />} />
             <Route path="pagos" element={<PagosPage />} />
             <Route path="misdatos" element={<MisDatosPage />} />

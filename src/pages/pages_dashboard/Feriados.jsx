@@ -7,6 +7,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
+import CheckIcon from '@mui/icons-material/Check';
+import { IconButton } from '@mui/material';
 import {
     GridRowModes,
     DataGrid,
@@ -26,13 +28,15 @@ import { TextField } from '@mui/material';
 const initialRows = [];
 
 function EditToolbar(props) {
+
     const { setRows, setRowModesModel } = props;
 
 
     const handleClick = () => {
+
         const id = randomId();
-       
-        setRows((oldRows) => [...oldRows, { id, fecha: '', descripcion: '', isNew: true }]);
+
+        setRows((oldRows) => [...oldRows, { id, fecha: '', descripcion: '', isNew: true, filaNueva: true }]);
         setRowModesModel((oldModel) => ({
             ...oldModel,
             [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
@@ -52,6 +56,7 @@ function EditToolbar(props) {
 export function Feriados() {
     const [rows, setRows] = useState(initialRows);
     const [rowModesModel, setRowModesModel] = useState({});
+    // Cuando Modificamos o agregamos una fila, se guarda en este estado y podemos ver los valores en la consola para luego mandarlos al backend y bbdd
     const [modifiedRows, setModifiedRows] = useState([]);
 
     const handleRowEditStop = (params, event) => {
@@ -70,10 +75,23 @@ export function Feriados() {
     };
 
 
-    const handleDeleteClick = (id) => () => {
-        setRows(rows.filter((row) => row.id !== id));
+    const handleDeleteClick = (id) => async () => {
+        try {
+            // Get the date associated with the row being deleted
+            const dateToDelete = rows.find((row) => row.id === id)?.fecha;
 
+            // Remove the row from the state
+            setRows((prevRows) => prevRows.filter((row) => row.id !== id));
+
+            // Send a request to delete the date in the backend
+            await axios.delete(`http://localhost:3000/feriados/${id}`);
+
+            console.log(`Row with ID ${id} and date ${dateToDelete} deleted.`);
+        } catch (error) {
+            console.error('Error deleting row:', error);
+        }
     };
+
 
     const handleCancelClick = (id) => () => {
         setRowModesModel({
@@ -105,31 +123,101 @@ export function Feriados() {
 
                 // Inicializa las filas con los datos obtenidos
                 setRows(response.data.map((item, index) => ({ id: index + 1, ...item })));
+
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
             });
     }, [])
 
+    const guardarFila = async (rowData) => {
+        
+        if(rowData.filaNueva){
+
+            console.log("FILA NUEVA")
+            console.log(rowData);
+            /* const newFeriado = {
+                fecha: rowData.fecha,
+                descripcion: rowData.descripcion,
+            };
+    
+            try {
+                const response = await axios.post('http://localhost:3000/feriados', newFeriado);
+                console.log(response);
+            } catch (error) {
+                console.error(error);
+            } */
+
+        }else{
+
+            console.log("FILA VIEJA EDITADA")
+            console.log(rowData);
+
+            /* const updatedFeriado = {
+                fecha: rowData.fecha,
+                descripcion: rowData.descripcion,
+            };
+
+            try {
+                const response = await axios.put(`http://localhost:3000/feriados/${rowData.id}`, updatedFeriado);
+                console.log(response);
+            } catch (error) {
+                console.error(error);
+            } */
+        }
+    }
+
+    /* const handleSendHoliday = async () => {
+
+        const id = rows.length;
+
+        const newId = rows.length;
+
+        const newFecha = modifiedRows[0].fecha;
+        const newDescripcion = modifiedRows[0].descripcion;
+
+        const newFeriado = {
+
+            id: newId,
+            fecha: newFecha,
+            descripcion: newDescripcion,
+        };
+
+        console.log(newFeriado);
+
+        try {
+            const response = await axios.post('http://localhost:3000/feriados', newFeriado);
+            console.log(response);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     useEffect(() => {
         if (modifiedRows.length > 0) {
-           modifiedRows.forEach((row)=>{
-            console.log(row)
-           })
+
+            console.log("fila nueva numero: " + rows.length);
+            handleSendHoliday();
         }
     }, [modifiedRows]);
+ */
+
 
     const columns = [
         {
             field: 'fecha',
             headerName: 'Fecha',
             width: 280,
-            editable: true, // La fecha no es editable
+            type: 'date',
+            editable: true,
             valueFormatter: (params) => {
-                // Formatear la fecha a año-mes-dia
                 const date = new Date(params.value);
-                return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+
+                date.setDate(date.getDate() + 1);
+
+                return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
             },
+
         },
         {
             field: 'descripcion',
@@ -140,7 +228,7 @@ export function Feriados() {
         {
             field: 'actions',
             type: 'actions',
-            headerName: 'Actions',
+            headerName: 'Edición',
             width: 100,
             cellClassName: 'actions',
             getActions: ({ id }) => {
@@ -149,7 +237,7 @@ export function Feriados() {
                 if (isInEditMode) {
                     return [
                         <GridActionsCellItem
-                            icon={<SaveIcon />}
+                            icon={<CheckIcon />}
                             label="Save"
                             sx={{
                                 color: 'primary.main',
@@ -181,7 +269,22 @@ export function Feriados() {
                         color="inherit"
                     />,
                 ];
+
+
             },
+        },
+        {
+            field: 'save',
+            headerName: 'Guardar',
+            width: 120,
+            renderCell: (params) => (
+                <IconButton
+                    color="primary"
+                    onClick={() => guardarFila(params.row)}
+                >
+                    <SaveIcon />
+                </IconButton>
+            ),
         },
     ];
 

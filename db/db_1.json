@@ -47,84 +47,56 @@
   ],
   "feriados": [
     {
+      "id": 1,
       "fecha": "2023-01-01T00:00:00.000Z",
       "descripcion": "Año Nuevo"
     },
     {
+      "id": 2,
       "fecha": "2023-02-14T00:00:00.000Z",
       "descripcion": "Día de San Valentín"
     },
     {
+      "id": 3,
       "fecha": "2023-04-01T00:00:00.000Z",
       "descripcion": "Día de los Inocentes"
     },
     {
+      "id": 4,
       "fecha": "2023-05-01T00:00:00.000Z",
       "descripcion": "Día del Trabajo"
     },
     {
+      "id": 5,
       "fecha": "2023-07-04T00:00:00.000Z",
       "descripcion": "Día de la Independencia"
     },
     {
+      "id": 6,
       "fecha": "2023-09-15T00:00:00.000Z",
       "descripcion": "Día de la Independencia de México"
+    }
+  ],
+  "pruebas": [
+    {
+      "id": 1,
+      "name": "Grace Fleming",
+      "age": 31
     },
     {
-      "fecha": "2023-10-31T00:00:00.000Z",
-      "descripcion": "Halloween"
+      "id": 2,
+      "name": "Eugene Bowers",
+      "age": 35
     },
     {
-      "fecha": "2023-11-24T00:00:00.000Z",
-      "descripcion": "Acción de Gracias"
+      "id": 3,
+      "name": "Claudia Ortega",
+      "age": 35
     },
     {
-      "fecha": "2023-12-25T00:00:00.000Z",
-      "descripcion": "Navidad"
-    },
-    {
-      "fecha": "2024-01-01T00:00:00.000Z",
-      "descripcion": "Año Nuevo"
-    },
-    {
-      "fecha": "2024-02-14T00:00:00.000Z",
-      "descripcion": "Día de San Valentín"
-    },
-    {
-      "fecha": "2024-04-01T00:00:00.000Z",
-      "descripcion": "Día de los Inocentes"
-    },
-    {
-      "fecha": "2024-05-01T00:00:00.000Z",
-      "descripcion": "Día del Trabajo"
-    },
-    {
-      "fecha": "2024-07-04T00:00:00.000Z",
-      "descripcion": "Día de la Independencia"
-    },
-    {
-      "fecha": "2024-09-15T00:00:00.000Z",
-      "descripcion": "Día de la Independencia de México"
-    },
-    {
-      "fecha": "2024-10-31T00:00:00.000Z",
-      "descripcion": "Halloween"
-    },
-    {
-      "fecha": "2024-11-24T00:00:00.000Z",
-      "descripcion": "Acción de Gracias"
-    },
-    {
-      "fecha": "2024-12-25T00:00:00.000Z",
-      "descripcion": "Navidad"
-    },
-    {
-      "fecha": "2025-01-01T00:00:00.000Z",
-      "descripcion": "Año Nuevo"
-    },
-    {
-      "fecha": "2025-02-14T00:00:00.000Z",
-      "descripcion": "Día de San Valentín"
+      "id": 4,
+      "name": "Mario Gonzales",
+      "age": 35
     }
   ]
 }
