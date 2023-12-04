@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -8,7 +8,7 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
-import { IconButton } from '@mui/material';
+import { Grid, IconButton } from '@mui/material';
 import {
     GridRowModes,
     DataGrid,
@@ -23,9 +23,6 @@ import {
     randomId,
     randomArrayItem,
 } from '@mui/x-data-grid-generator';
-import { TextField } from '@mui/material';
-
-const initialRows = [];
 
 function EditToolbar(props) {
 
@@ -36,7 +33,7 @@ function EditToolbar(props) {
 
         const id = randomId();
 
-        setRows((oldRows) => [...oldRows, { id, fecha: '', descripcion: '', isNew: true, filaNueva: true }]);
+        setRows((oldRows) => [...oldRows, { id, fecha: '', descripcion: '', isNew: true}]);
         setRowModesModel((oldModel) => ({
             ...oldModel,
             [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
@@ -54,10 +51,22 @@ function EditToolbar(props) {
 
 
 export function Feriados() {
-    const [rows, setRows] = useState(initialRows);
+    const [rows, setRows] = useState([]);
     const [rowModesModel, setRowModesModel] = useState({});
-    // Cuando Modificamos o agregamos una fila, se guarda en este estado y podemos ver los valores en la consola para luego mandarlos al backend y bbdd
-    const [modifiedRows, setModifiedRows] = useState([]);
+
+    useEffect(() => {
+        try {
+            axios.get('http://localhost:3001/feriados')
+                .then(response => {
+                    setRows(response.data.map((item, index) => ({ id: index + 1, ...item })));
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }, []);
 
     const handleRowEditStop = (params, event) => {
         if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -67,31 +76,26 @@ export function Feriados() {
 
     const handleEditClick = (id) => () => {
         setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+
     };
 
-    const handleSaveClick = (id) => () => {
-
+    const handleSaveClick = (fila, id) => () => {
         setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-    };
+    }; 
 
 
     const handleDeleteClick = (id) => async () => {
-        try {
-            // Get the date associated with the row being deleted
-            const dateToDelete = rows.find((row) => row.id === id)?.fecha;
 
-            // Remove the row from the state
+        try {
+           
             setRows((prevRows) => prevRows.filter((row) => row.id !== id));
 
-            // Send a request to delete the date in the backend
-            await axios.delete(`http://localhost:3000/feriados/${id}`);
-
-            console.log(`Row with ID ${id} and date ${dateToDelete} deleted.`);
+            await axios.delete(`http://localhost:3001/feriados/${id}`);
+            
         } catch (error) {
             console.error('Error deleting row:', error);
         }
     };
-
 
     const handleCancelClick = (id) => () => {
         setRowModesModel({
@@ -105,10 +109,45 @@ export function Feriados() {
         }
     };
 
-    const processRowUpdate = (newRow) => {
+    // captura los valores actualizados
+    const processRowUpdate = async (newRow) => {
+
         const updatedRow = { ...newRow, isNew: false };
-        setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-        setModifiedRows((oldModifiedRows) => [...oldModifiedRows, updatedRow]);
+        
+        if(newRow.isNew){
+            console.log("FILA NUEVA")
+
+            const newFeriado = {
+                id: rows.length,
+                fecha: newRow.fecha,
+                descripcion: newRow.descripcion,
+            };
+
+            try {
+                const response = await axios.post('http://localhost:3001/feriados', newFeriado);
+                console.log(response);
+            } catch (error) {
+                console.error(error);
+            }
+
+        }else {
+            console.log("FILA VIEJA EDITADA")
+            
+            const updatedFeriado = {
+                fecha: rowData.fecha,
+                descripcion: rowData.descripcion,
+            };
+
+            try {
+                const response = await axios.put(`http://localhost:3000/feriados/${newRow.id}`, updatedFeriado);
+            } catch (error) {
+                console.error(error);
+            }
+
+        }
+
+        setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row))); 
+
         return updatedRow;
     };
 
@@ -116,98 +155,11 @@ export function Feriados() {
         setRowModesModel(newRowModesModel);
     };
 
-    useEffect(() => {
-
-        axios.get('http://localhost:3000/feriados')
-            .then(response => {
-
-                // Inicializa las filas con los datos obtenidos
-                setRows(response.data.map((item, index) => ({ id: index + 1, ...item })));
-
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-            });
-    }, [])
-
-    const guardarFila = async (rowData) => {
-        
-        if(rowData.filaNueva){
-
-            console.log("FILA NUEVA")
-            console.log(rowData);
-            /* const newFeriado = {
-                fecha: rowData.fecha,
-                descripcion: rowData.descripcion,
-            };
-    
-            try {
-                const response = await axios.post('http://localhost:3000/feriados', newFeriado);
-                console.log(response);
-            } catch (error) {
-                console.error(error);
-            } */
-
-        }else{
-
-            console.log("FILA VIEJA EDITADA")
-            console.log(rowData);
-
-            /* const updatedFeriado = {
-                fecha: rowData.fecha,
-                descripcion: rowData.descripcion,
-            };
-
-            try {
-                const response = await axios.put(`http://localhost:3000/feriados/${rowData.id}`, updatedFeriado);
-                console.log(response);
-            } catch (error) {
-                console.error(error);
-            } */
-        }
-    }
-
-    /* const handleSendHoliday = async () => {
-
-        const id = rows.length;
-
-        const newId = rows.length;
-
-        const newFecha = modifiedRows[0].fecha;
-        const newDescripcion = modifiedRows[0].descripcion;
-
-        const newFeriado = {
-
-            id: newId,
-            fecha: newFecha,
-            descripcion: newDescripcion,
-        };
-
-        console.log(newFeriado);
-
-        try {
-            const response = await axios.post('http://localhost:3000/feriados', newFeriado);
-            console.log(response);
-        } catch (error) {
-            console.error(error);
-        }
-    }
-
-    useEffect(() => {
-        if (modifiedRows.length > 0) {
-
-            console.log("fila nueva numero: " + rows.length);
-            handleSendHoliday();
-        }
-    }, [modifiedRows]);
- */
-
-
     const columns = [
         {
             field: 'fecha',
             headerName: 'Fecha',
-            width: 280,
+            width: 180,
             type: 'date',
             editable: true,
             valueFormatter: (params) => {
@@ -231,24 +183,24 @@ export function Feriados() {
             headerName: 'Edición',
             width: 100,
             cellClassName: 'actions',
-            getActions: ({ id }) => {
-                const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+            getActions: ( params ) => {
+                const isInEditMode = rowModesModel[params.row.id]?.mode === GridRowModes.Edit;
 
                 if (isInEditMode) {
                     return [
                         <GridActionsCellItem
-                            icon={<CheckIcon />}
+                            icon={<SaveIcon />}
                             label="Save"
                             sx={{
                                 color: 'primary.main',
                             }}
-                            onClick={handleSaveClick(id)}
+                            onClick={handleSaveClick(params.row, params.row.id)}
                         />,
                         <GridActionsCellItem
                             icon={<CancelIcon />}
                             label="Cancel"
                             className="textPrimary"
-                            onClick={handleCancelClick(id)}
+                            onClick={handleCancelClick(params.row.id)}
                             color="inherit"
                         />,
                     ];
@@ -259,39 +211,26 @@ export function Feriados() {
                         icon={<EditIcon />}
                         label="Edit"
                         className="textPrimary"
-                        onClick={handleEditClick(id)}
+                        onClick={handleEditClick(params.row.id)}
                         color="inherit"
                     />,
                     <GridActionsCellItem
                         icon={<DeleteIcon />}
                         label="Delete"
-                        onClick={handleDeleteClick(id)}
                         color="inherit"
+                        onClick={handleDeleteClick(params.row.id)}
                     />,
                 ];
 
 
             },
-        },
-        {
-            field: 'save',
-            headerName: 'Guardar',
-            width: 120,
-            renderCell: (params) => (
-                <IconButton
-                    color="primary"
-                    onClick={() => guardarFila(params.row)}
-                >
-                    <SaveIcon />
-                </IconButton>
-            ),
-        },
+        }
     ];
 
     return (
         <Box
             sx={{
-                margin: '100px auto',
+                margin: '60px auto',
                 height: 600,
                 width: '80%',
                 '& .actions': {

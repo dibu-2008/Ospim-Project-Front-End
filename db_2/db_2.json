@@ -1,7 +1,7 @@
 {
   "empresas": [
     {
-      "razonsocial": "Empresas de Agro Nro1",
+      "razonsocial": "Empresas de Agro AgroNro1",
       "cuit": "20949118682",
       "clave": "123",
       "email": "AgroNro1@gmail.com",
@@ -47,9 +47,9 @@
   ],
   "feriados": [
     {
-      "fecha": "2024-01-01T00:00:00.000Z",
-      "descripcion": "AÑO Nuevoooooo",
-      "id": 1
+      "id": 1,
+      "fecha": "2023-01-01T00:00:00.000Z",
+      "descripcion": "Año Nuevo"
     },
     {
       "id": 2,
@@ -75,16 +75,6 @@
       "id": 6,
       "fecha": "2023-09-15T00:00:00.000Z",
       "descripcion": "Día de la Independencia de México"
-    },
-    {
-      "id": 7,
-      "fecha": "2023-12-22T03:00:00.000Z",
-      "descripcion": "Cumple luis"
-    },
-    {
-      "id": 8,
-      "fecha": "2023-12-14T03:00:00.000Z",
-      "descripcion": "Cumple Diego"
     }
   ],
   "usuarios": [
@@ -96,6 +86,27 @@
       "nombre": "usuario1",
       "clave": "Prueba123"
     }
+  ],
+  "pruebas": [
+    {
+      "id": 1,
+      "name": "Grace Fleming",
+      "age": 31
+    },
+    {
+      "id": 2,
+      "name": "Eugene Bowers",
+      "age": 35
+    },
+    {
+      "id": 3,
+      "name": "Claudia Ortega",
+      "age": 35
+    },
+    {
+      "id": 4,
+      "name": "Mario Gonzales",
+      "age": 35
+    }
   ]
-  
 }
