@@ -77,6 +77,16 @@
       "descripcion": "Día de la Independencia de México"
     }
   ],
+  "usuarios": [
+    {
+      "nombre": "admin",
+      "clave": "Prueba123"
+    },
+    {
+      "nombre": "usuario1",
+      "clave": "Prueba123"
+    }
+  ],
   "pruebas": [
     {
       "id": 1,

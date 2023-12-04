@@ -8,7 +8,10 @@
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "json-server": "json-server --watch db/db_1.json"
+    "json-server": "json-server --watch db/db_1.json",
+    "startORIORI": "npx json-server --middlewares ./db/loginRoute.js --port 3001 db/db_1.json",
+    "startOri": "npx json-server --middlewares ./db/loginRoute.js --port 3001 db/db_1.json",
+    "start": "json-server --middlewares ./db/loginRoute.js --port 3000 --watch db/db_1.json"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
