@@ -133,5 +133,19 @@
       "vigenciaHasta": "2024-03-01",
       "id": 6
     }
+  ],
+  "publicacionesVigentes": [
+    {
+      "titulo": "Nuevos Contratos",
+      "cuerpo": "Nuevos Contratos dice: kjlfdh fjkds fkljd hgfjkd ghfjdk gkjfd hgjkfd sghjkfd sghjkfds ghkjfds hgjkfd hhgjkfds kjhgfd gkfds FIN.-"
+    },
+    {
+      "titulo": "Nota II",
+      "cuerpo": "Nota II dice: kjlfdh fjkds fkljd hgfjkd ghfjdk gkjfd hgjkfd sghjkfd sghjkfds ghkjfds hgjkfd hhgjkfds kjhgfd gkfds FIN.-"
+    },
+    {
+      "titulo": "Titulo Pabada 1",
+      "cuerpo": "Cuerpo Pabada 1"
+    }
   ]
 }
