@@ -96,6 +96,42 @@
       "nombre": "usuario1",
       "clave": "Prueba123"
     }
+  ],
+  "publicaciones": [
+    {
+      "id": 1,
+      "titulo": "Nuevos Contratos",
+      "cuerpo": "Nuevos Contratos dice: kjlfdh fjkds fkljd hgfjkd ghfjdk gkjfd hgjkfd sghjkfd sghjkfds ghkjfds hgjkfd hhgjkfds kjhgfd gkfds FIN.-",
+      "vigenciaDesde": "2023-12-01",
+      "vigenciaHasta": "2024-01-20"
+    },
+    {
+      "id": 2,
+      "titulo": "Nota antigua",
+      "cuerpo": "Nota antigua dice: kjlfdh fjkds fkljd hgfjkd ghfjdk gkjfd hgjkfd sghjkfd sghjkfds ghkjfds hgjkfd hhgjkfds kjhgfd gkfds FIN.-",
+      "vigenciaDesde": "2023-06-01",
+      "vigenciaHasta": "2023-07-20"
+    },
+    {
+      "id": 3,
+      "titulo": "Nota II",
+      "cuerpo": "Nota II dice: kjlfdh fjkds fkljd hgfjkd ghfjdk gkjfd hgjkfd sghjkfd sghjkfds ghkjfds hgjkfd hhgjkfds kjhgfd gkfds FIN.-",
+      "vigenciaDesde": "2023-06-01",
+      "vigenciaHasta": "2024-07-20"
+    },
+    {
+      "id": 4,
+      "titulo": "Nota FUTURA",
+      "cuerpo": "Nota FUTURA dice: kjlfdh fjkds fkljd hgfjkd ghfjdk gkjfd hgjkfd sghjkfd sghjkfds ghkjfds hgjkfd hhgjkfds kjhgfd gkfds FIN.-",
+      "vigenciaDesde": "2026-06-01",
+      "vigenciaHasta": "2028-07-20"
+    },
+    {
+      "titulo": "Titulo Pabada 1",
+      "cuerpo": "Cuerpo Pabada 1",
+      "vigenciaDesde": "2023-12-05",
+      "vigenciaHasta": "2024-03-01",
+      "id": 6
+    }
   ]
-  
 }
