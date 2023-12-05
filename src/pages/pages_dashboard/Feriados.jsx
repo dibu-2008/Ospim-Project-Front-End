@@ -24,6 +24,8 @@ import {
     randomArrayItem,
 } from '@mui/x-data-grid-generator';
 
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
 function EditToolbar(props) {
 
     const { setRows, setRowModesModel } = props;
@@ -56,7 +58,7 @@ export function Feriados() {
 
     useEffect(() => {
         try {
-            axios.get('http://localhost:3001/feriados')
+            axios.get(`${backendUrl}/feriados`)
                 .then(response => {
                     setRows(response.data.map((item, index) => ({ id: index + 1, ...item })));
                 })
@@ -90,7 +92,7 @@ export function Feriados() {
            
             setRows((prevRows) => prevRows.filter((row) => row.id !== id));
 
-            await axios.delete(`http://localhost:3001/feriados/${id}`);
+            await axios.delete(`${backendUrl}/feriados/${id}`);
             
         } catch (error) {
             console.error('Error deleting row:', error);
@@ -118,13 +120,12 @@ export function Feriados() {
             console.log("FILA NUEVA")
 
             const newFeriado = {
-                id: rows.length,
                 fecha: newRow.fecha,
                 descripcion: newRow.descripcion,
             };
 
             try {
-                const response = await axios.post('http://localhost:3001/feriados', newFeriado);
+                const response = await axios.post(`${backendUrl}/feriados`, newFeriado);
                 console.log(response);
             } catch (error) {
                 console.error(error);
@@ -134,12 +135,14 @@ export function Feriados() {
             console.log("FILA VIEJA EDITADA")
             
             const updatedFeriado = {
-                fecha: rowData.fecha,
-                descripcion: rowData.descripcion,
+                fecha: newRow.fecha,
+                descripcion: newRow.descripcion,
             };
 
+            console.log(updatedFeriado);
+
             try {
-                const response = await axios.put(`http://localhost:3000/feriados/${newRow.id}`, updatedFeriado);
+                const response = await axios.put(`${backendUrl}/feriados/${newRow.id}`, updatedFeriado);
             } catch (error) {
                 console.error(error);
             }
@@ -249,6 +252,10 @@ export function Feriados() {
                 onRowModesModelChange={handleRowModesModelChange}
                 onRowEditStop={handleRowEditStop}
                 processRowUpdate={processRowUpdate}
+                onProcessRowUpdateError={(error) => {
+                    console.error('Error during row update:', error);
+                    // Puedes agregar lógica adicional para manejar el error, si es necesario.
+                }}
                 slots={{
                     toolbar: EditToolbar,
                 }}

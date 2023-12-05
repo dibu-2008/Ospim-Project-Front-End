@@ -147,12 +147,14 @@ export const RegisterCompany = () => {
             <Box sx={{
               '& > :not(style)': { m: 1 },
               position: 'absolute',
-              marginTop: '0px',
-              marginLeft: '505px',
             }}>
               <Fab
                 size="small"
                 color="primary" aria-label="add"
+                style={{
+                  marginTop: '10px',
+                  marginLeft: '505px',
+                }}
                 onClick={handleAddEmail}
               >
                 <AddIcon />
@@ -217,12 +219,14 @@ export const RegisterCompany = () => {
             <Box sx={{
               '& > :not(style)': { m: 1 },
               position: 'absolute',
-              marginTop: '0px',
-              marginLeft: '505px',
             }}>
               <Fab
                 size="small"
                 color="primary" aria-label="add"
+                style={{
+                  marginTop: '10px',
+                  marginLeft: '505px',
+                }}
                 onClick={handleAddPhone}
               >
                 <AddIcon />

@@ -10,7 +10,7 @@ import PrivateRoute from "./PrivateRoute";
 import { RegisterCompany } from "../pages/RegisterCompany";
 import { Feriados } from "../pages/pages_dashboard/Feriados";
 import { DeclaracionesJuradas } from "../pages/pages_dashboard/DeclaracionesJuradas";
-import { Inicio } from "../pages/pages_dashboard/Inicio";
+import { Inicio } from "../pages/pages_dashboard/inicio/Inicio";
 
 const BoletasPage = () => <div>Contenido de la página de boletas</div>;
 const PagosPage = () => <div>Contenido de la página de pagos</div>;
