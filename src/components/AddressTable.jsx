@@ -24,6 +24,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { MenuItem, Select } from '@mui/material';
 
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 const randomRole = () => {
     return randomArrayItem(roles);
@@ -198,11 +199,9 @@ export const AddressTable = ({ companiesDto }) => {
 
         try {
 
-            const backendUrl = import.meta.env.VITE_BACKEND_URL;
-            console.log(backendUrl)
+            
             const response = await axios.post( `${backendUrl}/empresas`, userCompaniesSend)
             console.log(response);
-
             // Marcamos el registro como completo
             setIsRegistrationComplete(true);
         } catch (error) {

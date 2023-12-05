@@ -1,0 +1,30 @@
+.bienvenidos {
+   width: 80%;
+   margin: 60px auto;
+}
+.contacto {
+    margin: 20px 0px;
+}
+.contacto .contacto_child {
+    margin-left: 10px;
+}
+.contacto h2 {
+    color: #1A76D2;
+    margin-bottom: 10px;
+}
+.contacto h5 {
+    color: #1A76D2;
+    margin: 10px 0px;
+}
+.medios{
+    display: flex;
+    justify-content: flex-start;
+    gap: 30px;
+}
+.medios span {
+    font-size: 20px;
+    font-weight: bold;
+    color: #1A76D2;
+    margin-right: 5px;
+}
+

@@ -48,7 +48,7 @@
   "feriados": [
     {
       "fecha": "2024-01-01T00:00:00.000Z",
-      "descripcion": "AÑO Nuevoooooo",
+      "descripcion": "AÑO Nuevo",
       "id": 1
     },
     {
@@ -77,14 +77,19 @@
       "descripcion": "Día de la Independencia de México"
     },
     {
-      "id": 7,
-      "fecha": "2023-12-22T03:00:00.000Z",
-      "descripcion": "Cumple luis"
+      "fecha": "2024-02-13T00:00:00.000Z",
+      "descripcion": "Carnaval",
+      "id": 7
     },
     {
-      "id": 8,
-      "fecha": "2023-12-14T03:00:00.000Z",
-      "descripcion": "Cumple Diego"
+      "fecha": "2023-12-21T03:00:00.000Z",
+      "descripcion": "Cumple ",
+      "id": 8
+    },
+    {
+      "fecha": "2023-12-19T03:00:00.000Z",
+      "descripcion": "Cumple lUis",
+      "id": 9
     }
   ],
   "usuarios": [

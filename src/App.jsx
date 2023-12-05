@@ -1,4 +1,3 @@
-import { DashboardPage } from './pages'
 import AppRouter from './router/AppRouter'
 import { AppTheme } from './theme'
 
