@@ -4,11 +4,11 @@ import { useFormLoginCompany } from "../hooks/useFormLoginCompany.js"
 import { useState } from "react"
 import { useFormLoginInternalUser } from "../hooks/useFormLoginInternalUser.js";
 
-
 // Material UI
 import { InputComponent } from "../components/InputComponent.jsx";
 import { ButtonComponent } from "../components/ButtonComponent.jsx";
 
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 const LoginPage = () => {
 
@@ -44,7 +44,7 @@ const LoginPage = () => {
     OnResetFormLoginCompany()
   }
 
-  const onLoginInternalUser = async (e) => {
+  /* const onLoginInternalUser = async (e) => {
     e.preventDefault();
 
     try {
@@ -68,7 +68,7 @@ const LoginPage = () => {
     }
 
     OnResetFormLoginInternalUser();
-  };
+  }; */
 
   const onLoginInternalUser2 = async (e) => {
 
@@ -77,7 +77,7 @@ const LoginPage = () => {
     try {
 
       // Hacer la peticion aqui
-      const response = await axios.post('http://localhost:3001/login', {
+      const response = await axios.post(`${backendUrl}/login`, {
         usuario: user,
         clave: passwordLoginInternalUser,
       });
