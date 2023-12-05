@@ -174,11 +174,6 @@
       "descripcion": "Categoria A"
     },
     {
-      "camaraCodigo": "CAENA",
-      "descripcion": "Categoria B",
-      "id": 2
-    },
-    {
       "camaraCodigo": "FAIM",
       "descripcion": "Categoria X",
       "id": 3
@@ -187,6 +182,16 @@
       "camaraCodigo": "FAIM",
       "descripcion": "Categoria Y",
       "id": 4
+    },
+    {
+      "camaraCodigo": "FAIM",
+      "descripcion": "Categoria Z",
+      "id": 6
+    },
+    {
+      "camaraCodigo": "FAIM",
+      "descripcion": "Categoria GROSA UUU",
+      "id": 7
     }
   ]
 }

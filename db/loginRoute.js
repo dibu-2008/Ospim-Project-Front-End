@@ -30,7 +30,10 @@ module.exports = (req, res, next) => {
 
     res.json(response);
   } else {
-    if (req.method === "POST" && req.url === "/categoria/") {
+    let pattern = /\bcategoria/;
+    let result = req.url.search(pattern);
+    console.log("req.url:" + req.url + " - result:" + result);
+    if ((req.method === "POST" || req.method === "PUT") && result > -1) {
       console.log("Entrooo 3: POST - /categoria...");
       const { camaraCodigo, descripcion } = req.body;
       console.log("Entrooo 3: camaraCodigo: " + camaraCodigo);
@@ -45,10 +48,13 @@ module.exports = (req, res, next) => {
           descripcion: "Valor de camaraCodigo (" + camaraCodigo + ") invalido.",
         });
 
-        console.log(res.statusCode);
+        //console.log(res.statusCode);
+      } else {
+        next();
       }
+    } else {
+      next();
     }
   }
   // Pass the request to the next middleware if it doesn't match the login route
-  next();
 };
