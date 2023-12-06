@@ -7,6 +7,7 @@ import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import StyleIcon from '@mui/icons-material/Style';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import PersonIcon from '@mui/icons-material/Person';
+import CategoryIcon from '@mui/icons-material/Category';
 import CloseIcon from '@mui/icons-material/Close';
 import { Link, Outlet } from 'react-router-dom';
 
@@ -28,7 +29,8 @@ const DashboardPage = () => {
         <BottomNavigationAction label="DDJJ" icon={<LibraryBooksIcon />} component={Link} to="./ddjj" />
         <BottomNavigationAction label="Boletas" icon={<StyleIcon />} component={Link} to="./boletas" />
         <BottomNavigationAction label="Pagos" icon={<AccountBalanceWalletIcon />} component={Link} to="./pagos" />
-        <BottomNavigationAction label="Mis datos" icon={<PersonIcon />} component={Link} to="./misdatos" />
+        <BottomNavigationAction label="Datos" icon={<PersonIcon />} component={Link} to="./misdatos" />
+        <BottomNavigationAction label="Categorias" icon={<CategoryIcon />} component={Link} to="./categorias" />
         <BottomNavigationAction label="Salir" icon={<CloseIcon />} />
       </BottomNavigation>
 
