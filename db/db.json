@@ -155,6 +155,10 @@
   ],
   "camara": [
     {
+      "codigo": "FAIM-XXXX",
+      "descripcion": "FAIM - Prueba error"
+    },
+    {
       "codigo": "FAIM",
       "descripcion": "FAIM"
     },
