@@ -44,6 +44,7 @@ module.exports = (req, res, next) => {
       ) {
         res.status(412).jsonp({
           tipo: "ERROR_APP_BUSINESS",
+          ticket: "TK-156269",
           codigo: "CODIGO_INVALIDO",
           descripcion: "Valor de camaraCodigo (" + camaraCodigo + ") invalido.",
         });
@@ -53,6 +54,8 @@ module.exports = (req, res, next) => {
         next();
       }
     } else {
+      if (req.method === "POST" && req.url === "/login") {
+      }
       next();
     }
   }
