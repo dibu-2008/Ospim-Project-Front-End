@@ -140,14 +140,10 @@ export const Categorias = () => {
 
             console.log("FILA NUEVA");
 
-
-
             const newCategoria = {
                 camaraCodigo: newRow.camaraCodigo,
                 descripcion: newRow.descripcion
             };
-
-            console.log(newCategoria);
 
             try {
 
@@ -173,9 +169,6 @@ export const Categorias = () => {
                 camaraCodigo: newRow.camaraCodigo,
                 descripcion: newRow.descripcion
             };
-
-            console.log(newRow.id);
-            console.log(updatedCategoria);
 
             try {
                 const response = await axios.put(`${backendUrl}/categoria/${newRow.id}`, updatedCategoria);
