@@ -234,38 +234,47 @@ export function Feriados() {
     ];
 
     return (
-        <Box
-            sx={{
-                margin: '60px auto',
-                height: 'auto',
-                width: '80%',
-                '& .actions': {
-                    color: 'text.secondary',
-                },
-                '& .textPrimary': {
-                    color: 'text.primary',
-                },
-            }}
-        >
-            <DataGrid
-                rows={rows}
-                columns={columns}
-                editMode="row"
-                rowModesModel={rowModesModel}
-                onRowModesModelChange={handleRowModesModelChange}
-                onRowEditStop={handleRowEditStop}
-                processRowUpdate={processRowUpdate}
-                onProcessRowUpdateError={(error) => {
-                    console.error('Error during row update:', error);
-                    // Puedes agregar lógica adicional para manejar el error, si es necesario.
+        <div style={{
+            width: '70%',
+            margin: '80px auto',
+        }}>
+            <h1 style={{ 
+                color: '#1A76D2', 
+                marginBottom: '10px', 
+                textAlign: 'center' }}>Administración de feriados</h1>
+            <Box
+                sx={{
+                    margin: '60px auto',
+                    height: 'auto',
+                    width: '40%',
+                    '& .actions': {
+                        color: 'text.secondary',
+                    },
+                    '& .textPrimary': {
+                        color: 'text.primary',
+                    },
                 }}
-                slots={{
-                    toolbar: EditToolbar,
-                }}
-                slotProps={{
-                    toolbar: { setRows, rows, setRowModesModel },
-                }}
-            />
-        </Box>
+            >
+                <DataGrid
+                    rows={rows}
+                    columns={columns}
+                    editMode="row"
+                    rowModesModel={rowModesModel}
+                    onRowModesModelChange={handleRowModesModelChange}
+                    onRowEditStop={handleRowEditStop}
+                    processRowUpdate={processRowUpdate}
+                    onProcessRowUpdateError={(error) => {
+                        console.error('Error during row update:', error);
+                        // Puedes agregar lógica adicional para manejar el error, si es necesario.
+                    }}
+                    slots={{
+                        toolbar: EditToolbar,
+                    }}
+                    slotProps={{
+                        toolbar: { setRows, rows, setRowModesModel },
+                    }}
+                />
+            </Box>
+        </div>
     );
 }
