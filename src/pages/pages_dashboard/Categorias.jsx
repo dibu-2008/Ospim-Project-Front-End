@@ -140,16 +140,31 @@ export const Categorias = () => {
 
             console.log("FILA NUEVA");
 
+
+
             const newCategoria = {
                 camaraCodigo: newRow.camaraCodigo,
                 descripcion: newRow.descripcion
             };
 
+            console.log(newCategoria);
+
             try {
-                const response = await axios.post(`${backendUrl}/categoria`, newCategoria);
-                console.log(response);
+
+                await axios.post(`${backendUrl}/categoria`, newCategoria);
+
             } catch (error) {
-                console.error('Error fetching data:', error);
+
+                const { codigo, descripcion, ticket, tipo } = error.response.data;
+
+                console.log(tipo);
+
+                if(tipo === 'ERROR_APP_BUSINESS') {
+                    alert(`${descripcion}`);
+                }else {
+                    alert(`Su peticion no fue procesada ${ticket}`);
+                    console.log(error.response.data);
+                }
             }
         }else {
             console.log("FILA EDITADA");

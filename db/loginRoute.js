@@ -10,7 +10,21 @@ module.exports = (req, res, next) => {
   if (req.method === "POST" && req.url === "/login") {
     // Handle the login request here
     console.log("Entrooo 2: POST - /login...");
-    const { nombre, clave } = req.body;
+
+    console.log(req.body);
+
+    const { nombre , clave } = req.body;
+
+    if (nombre != "admin" || clave != "Prueba123") {
+      res.status(401).jsonp({
+        tipo: "ERROR_APP_BUSINESS",
+        ticket: "TK-156269",
+        codigo: "CREDENCIALES_INVALIDAS",
+        descripcion: "Credenciales invalidas.",
+      });
+
+      console.log(res.statusCode);
+    }
 
     // Perform authentication logic and return the desired response
     // You can retrieve the existing login resource from the db.json file if needed

@@ -27,6 +27,8 @@ const LoginPage = () => {
   const [showInternalUserForm, setShowInternalUserForm] = useState(true);
   const [showVerificationForm, setShowVerificationForm] = useState(false);
   const [verificationCode, setVerificationCode] = useState('');
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [credentialsError, setCredentialsError] = useState({});
 
   const onLoginCompany = (e) => {
     e.preventDefault()
@@ -78,7 +80,7 @@ const LoginPage = () => {
 
       // Hacer la peticion aqui
       const response = await axios.post(`${backendUrl}/login`, {
-        usuario: user,
+        nombre: user,
         clave: passwordLoginInternalUser,
       });
 
@@ -103,7 +105,14 @@ const LoginPage = () => {
 
 
     } catch (error) {
-      console.error('Error en la solicitud:', error);
+      setCredentialsError(error.response.data);
+      console.error('Error en la solicitud:', error.response.data);
+
+      setShowErrorModal(true);
+
+      setTimeout(() => {
+        setShowErrorModal(false);
+      }, 3000);
     }
 
     OnResetFormLoginInternalUser();
@@ -220,6 +229,13 @@ const LoginPage = () => {
 
           </div>
         )}
+        {
+          showErrorModal && (
+            <div className="error_modal">
+              <h1>{credentialsError.message}</h1>
+            </div>
+          )
+        }
       </div>
     </div>
 
