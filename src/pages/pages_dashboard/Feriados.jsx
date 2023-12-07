@@ -237,7 +237,7 @@ export function Feriados() {
         <Box
             sx={{
                 margin: '60px auto',
-                height: 600,
+                height: 'auto',
                 width: '80%',
                 '& .actions': {
                     color: 'text.secondary',
