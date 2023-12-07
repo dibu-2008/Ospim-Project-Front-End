@@ -1,0 +1,42 @@
+header {
+	display: flex;
+	position: sticky;
+	top: 0;
+	justify-content: space-between;
+	align-items: center;
+	padding: 25px;
+	background-color: #1a76d2;
+	color: #fff;
+	min-width: 600px;
+	z-index: 3;
+}
+
+header div {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+}
+
+header .entidades {
+	display: block;
+	margin: 0px 0px 0px -12px;
+}
+
+.entidades h4 {
+    margin-bottom: -2px;
+	text-decoration: none;
+	color: #fff;
+	font-size: 1rem;
+}
+
+nav,
+.user {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+}
+
+nav a {
+	text-decoration: none;
+	color: #fff;
+}
