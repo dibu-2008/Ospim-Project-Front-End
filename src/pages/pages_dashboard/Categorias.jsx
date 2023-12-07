@@ -13,19 +13,12 @@ import {
     GridActionsCellItem,
     GridRowEditStopReasons,
 } from '@mui/x-data-grid';
-import {
-    randomCreatedDate,
-    randomTraderName,
-    randomId,
-    randomArrayItem,
-} from '@mui/x-data-grid-generator';
-import axios from 'axios';
-const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-const roles = ['Market', 'Finance', 'Development'];
-const randomRole = () => {
-    return randomArrayItem(roles);
-};
+import axios from 'axios';
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
+const backendErrorMessages = import.meta.env.VITE_ERROR_MESSAGE;
 
 function EditToolbar(props) {
     const { setRows, rows, setRowModesModel } = props;
@@ -91,6 +84,16 @@ export const Categorias = () => {
 
     }, []);
 
+    // SweetAlert2
+    const showSwal = (message) => {
+        withReactContent(Swal).fire({
+            title: 'Error',
+            text: message,
+            icon: 'error',
+            timer: 3000,
+            showConfirmButton: false
+        })
+    }
 
     const handleRowEditStop = (params, event) => {
         if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -156,9 +159,9 @@ export const Categorias = () => {
                 console.log(tipo);
 
                 if(tipo === 'ERROR_APP_BUSINESS') {
-                    alert(`${descripcion}`);
+                    showSwal(descripcion);
                 }else {
-                    alert(`Su peticion no fue procesada ${ticket}`);
+                    showSwal(`${backendErrorMessages} ${ticket}`);
                     console.log(error.response.data);
                 }
             }
