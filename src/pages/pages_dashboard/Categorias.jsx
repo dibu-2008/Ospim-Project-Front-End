@@ -87,11 +87,23 @@ export const Categorias = () => {
     // SweetAlert2
     const showSwal = (message) => {
         withReactContent(Swal).fire({
-            title: 'Error',
-            text: message,
+            html: `
+                <div style="color:red; font-size: 26px;">
+                ${message}
+                </div>
+            `,
             icon: 'error',
             timer: 3000,
-            showConfirmButton: false
+            showConfirmButton: false,
+            onOpen: (modalElement) => {
+                // Personaliza el estilo del icono
+                const iconElement = modalElement.querySelector('.swal2-icon');
+                if (iconElement) {
+                    iconElement.style.color = 'green';  // Cambia el color del icono a rojo
+                    iconElement.style.fontSize = '24px';  // Cambia el tamaño del icono
+                    // Otros estilos que desees aplicar al icono
+                }
+            },
         })
     }
 
@@ -112,11 +124,11 @@ export const Categorias = () => {
     const handleDeleteClick = (id) => async () => {
         try {
             setRows(rows.filter((row) => row.id !== id));
-            
+
             await axios.delete(`${backendUrl}/categoria/${id}`);
 
         } catch (error) {
-            
+
         }
     };
 
@@ -138,8 +150,8 @@ export const Categorias = () => {
         console.log(updatedRow);
 
         setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-        
-        if(newRow.isNew){
+
+        if (newRow.isNew) {
 
             console.log("FILA NUEVA");
 
@@ -154,18 +166,30 @@ export const Categorias = () => {
 
             } catch (error) {
 
-                const { codigo, descripcion, ticket, tipo } = error.response.data;
+                if (error.response && error.response.data) {
 
-                console.log(tipo);
+                    const { codigo, descripcion, ticket, tipo } = error.response.data;
 
-                if(tipo === 'ERROR_APP_BUSINESS') {
-                    showSwal(descripcion);
-                }else {
-                    showSwal(`${backendErrorMessages} ${ticket}`);
-                    console.log(error.response.data);
+                    if (tipo === 'ERROR_APP_BUSINESS') {
+                        showSwal(descripcion);
+                    } else {
+
+                        try {
+
+                        } catch (error) {
+                            console.log(`Error internno ${error}`);
+                        }
+
+                        showSwal(`${backendErrorMessages} ${ticket}`);
+                        console.log(error.response.data);
+                    }
+                } else {
+                    // Manejar otras excepciones que no son de respuesta
+                    console.error('Error:', error);
                 }
+
             }
-        }else {
+        } else {
             console.log("FILA EDITADA");
 
             const updatedCategoria = {
@@ -254,8 +278,9 @@ export const Categorias = () => {
     return (
         <Box
             sx={{
-                height: 500,
-                width: '100%',
+                margin: '60px auto',
+                height: 'auto',
+                width: '80%',
                 '& .actions': {
                     color: 'text.secondary',
                 },
