@@ -6,10 +6,12 @@ import './Inicio.css'
 
 export const Inicio = () => {
     return (
-        <div className='bienvenidos'>
-            <h1 style={{ color: '#1A76D2', marginBottom: '10px', textAlign: 'left' }}>Bienvenidos</h1>
+        <div className='bienvenidos_container'>
+            <div className='bienvenidos'>
+                <h1 style={{ color: '#1A76D2', marginBottom: '10px', textAlign: 'left' }}>Bienvenidos</h1>
 
-            <p className='parrafo_portal'>Desde este portal, podrá generar boletas de pago para las entidades UOMA, OSPIM y AMTIMA</p>
+                <p className='parrafo_portal'>Desde este portal, podrá generar boletas de pago para las entidades UOMA, OSPIM y AMTIMA</p>
+            </div>
 
             <div className='contacto'>
                 <h2>Contacto</h2>
@@ -26,9 +28,10 @@ export const Inicio = () => {
                     <p>Lunes a Viernes de 10 a 12 y de 14 a 17hs.</p>
                 </div>
             </div>
-
-            <h2 style={{ color: '#1A76D2', margin: '20px 0px' }}>Novedades</h2>
-            <CarouselNews />
+            <div className='novedades'>
+                <h2>Novedades</h2>
+                <CarouselNews />
+            </div>
         </div>
     )
 }
