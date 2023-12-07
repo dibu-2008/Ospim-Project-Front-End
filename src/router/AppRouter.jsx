@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Navigate } from "react-router";
-import NavBar from "../components/NavBar";
+
 import {
   LoginPage,
   RegisterPage,
@@ -12,6 +12,7 @@ import { Feriados } from "../pages/pages_dashboard/Feriados";
 import { DeclaracionesJuradas } from "../pages/pages_dashboard/DeclaracionesJuradas";
 import { Inicio } from "../pages/pages_dashboard/inicio/Inicio";
 import { Categorias } from "../pages/pages_dashboard/Categorias";
+import NavBar from "../components/navbar/NavBar";
 
 const BoletasPage = () => <div>Contenido de la página de boletas</div>;
 const PagosPage = () => <div>Contenido de la página de pagos</div>;
