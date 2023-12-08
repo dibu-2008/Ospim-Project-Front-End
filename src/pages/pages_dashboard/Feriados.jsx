@@ -59,6 +59,7 @@ function EditToolbar(props) {
     );
 }
 
+const state = JSON.parse(localStorage.getItem('state'));
 
 export function Feriados() {
     const [rows, setRows] = useState([]);
@@ -66,18 +67,26 @@ export function Feriados() {
 
 
     useEffect(() => {
-        try {
-            axios.get(`${backendUrl}/feriados`)
-                .then(response => {
-                    setRows(response.data.map((item, index) => ({ id: index + 1, ...item })));
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
+
+
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(`${backendUrl}/feriados`, {
+                    headers: {
+                        'Authorization': state.token, 
+                    },
                 });
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
+                
+                setRows(response.data.map((item, index) => ({ id: index + 1, ...item })));
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+    
+        fetchData();
     }, []);
+    
+    
 
     const handleRowEditStop = (params, event) => {
         if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -101,7 +110,11 @@ export function Feriados() {
 
             setRows((prevRows) => prevRows.filter((row) => row.id !== id));
 
-            await axios.delete(`${backendUrl}/feriados/${id}`);
+            await axios.delete(`${backendUrl}/feriados/${id}`, {
+                headers: {
+                    'Authorization': state.token, 
+                },
+            });
 
         } catch (error) {
             console.error('Error deleting row:', error);
@@ -134,7 +147,11 @@ export function Feriados() {
             };
 
             try {
-                const response = await axios.post(`${backendUrl}/feriados`, newFeriado);
+                const response = await axios.post(`${backendUrl}/feriados`, newFeriado, {
+                    headers: {
+                        'Authorization': state.token, 
+                    },
+                });
                 console.log(response);
             } catch (error) {
                 console.error(error);
@@ -149,7 +166,11 @@ export function Feriados() {
             };
 
             try {
-                const response = await axios.put(`${backendUrl}/feriados/${newRow.id}`, updatedFeriado);
+                const response = await axios.put(`${backendUrl}/feriados/${newRow.id}`, updatedFeriado, {
+                    headers: {
+                        'Authorization': state.token, 
+                    }
+                });
                 console.log(response);
             } catch (error) {
                 console.error(error);
