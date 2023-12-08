@@ -335,9 +335,9 @@ export const RegisterCompany = () => {
             Domicilios declarados: (Para completar el registro, deberá agregar
             por lo menos el Domicilio Fiscal)
           </p>
-          <AddressTable
-            companiesDto={companiesDto}
-          />
+         <AddressTable
+          companiesDto={companiesDto}
+         />
         </form>
       </div>
     </main>
