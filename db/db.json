@@ -288,5 +288,12 @@
       "valor": "3554-7777",
       "id": 6
     }
+  ],
+  "empresaContactoTipo": [
+    { "codigo": "TEL", "descripcion": "Teléfono ppal." },
+    { "codigo": "TEL2", "descripcion": "Teléfono" },
+    { "codigo": "MAIL", "descripcion": "Mail ppal." },
+    { "codigo": "MAIL2", "descripcion": "Mail" },
+    { "codigo": "WHATSAP", "descripcion": "Whatsap" }
   ]
 }
