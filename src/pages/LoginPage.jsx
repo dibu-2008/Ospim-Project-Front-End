@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { useFormLoginCompany } from "../hooks/useFormLoginCompany.js"
 import { useState } from "react"
 import { useFormLoginInternalUser } from "../hooks/useFormLoginInternalUser.js";
@@ -12,6 +12,9 @@ const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 const LoginPage = () => {
 
+  const { state } = useLocation();
+  /* console.log("Estoy en el login");
+  console.log(state); */
   const navigate = useNavigate();
 
   const { cuit, passwordLoginCompany, codigoVerificacion, OnInputChangeLoginCompany, OnResetFormLoginCompany } = useFormLoginCompany({
@@ -29,6 +32,8 @@ const LoginPage = () => {
   const [verificationCode, setVerificationCode] = useState('');
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [credentialsError, setCredentialsError] = useState({});
+  const [token, setToken] = useState(null);
+  const [refreshToken, setRefreshToken] = useState(null);
 
   const onLoginCompany = (e) => {
     e.preventDefault()
@@ -95,13 +100,9 @@ const LoginPage = () => {
         }, 1000);
       }
 
-      // Puedes hacer lo que necesites con los tokens
-      console.log('Token:', token);
-      console.log('Token de refresco:', tokenRefresco);
-
       // También puedes almacenar los tokens en el estado, contexto, o donde sea necesario
-      // setToken(token);
-      // setRefreshToken(tokenRefresco);
+      setToken(token);
+      setRefreshToken(tokenRefresco);
 
 
     } catch (error) {
@@ -139,8 +140,8 @@ const LoginPage = () => {
         replace: true,
         state: {
           logged: true,
-          user,
-          passwordLoginInternalUser,
+          token,
+          refreshToken,
         },
       });
     } else {
