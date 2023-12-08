@@ -1,5 +1,5 @@
 {
-  "empresas": [
+  "usuario-empresa-alta": [
     {
       "razonsocial": "Empresas de Agro Nro1",
       "cuit": "20949118682",
@@ -196,6 +196,92 @@
       "camaraCodigo": "FAIM",
       "descripcion": "xcvcxvxcvxcvcx",
       "id": 7
+    }
+  ],
+  "empresa": [
+    {
+      "id": 1,
+      "razonSocial": "Razon Social molinera Santa Fe",
+      "ramoId": 1
+    }
+  ],
+  "empresaDomicilio": [
+    {
+      "id": 1,
+      "tipo": "FISCAL",
+      "provinciaId": 1,
+      "localidadId": 1,
+      "calle": "San Martin",
+      "calleNro": "15250",
+      "piso": "P.B.",
+      "depto": "A",
+      "oficina": "12",
+      "cp": "1414",
+      "planta": "Planta 1"
+    },
+    {
+      "id": 2,
+      "tipo": "REAL",
+      "provinciaId": 2,
+      "localidadId": 2,
+      "calle": "San Juan",
+      "calleNro": "3540",
+      "piso": "1",
+      "depto": "B",
+      "oficina": "5",
+      "cp": "1417",
+      "planta": "Planta 2"
+    },
+    {
+      "tipo": "REAL",
+      "provinciaId": 3,
+      "localidadId": 3,
+      "calle": "San Pedrosssss",
+      "calleNro": "15",
+      "piso": "2",
+      "depto": "C",
+      "oficina": null,
+      "cp": "7600",
+      "planta": "Planta 3",
+      "id": 3
+    }
+  ],
+  "empresaContacto": [
+    {
+      "id": 1,
+      "tipo": "TEL",
+      "prefijo": "011",
+      "valor": "3404-2022"
+    },
+    {
+      "id": 2,
+      "tipo": "MAIL",
+      "prefijo": null,
+      "valor": "mail1@gmail.com"
+    },
+    {
+      "id": 3,
+      "tipo": "WHATSAP",
+      "prefijo": "15",
+      "valor": "5504-2033"
+    },
+    {
+      "id": 4,
+      "tipo": "TEL2",
+      "prefijo": "11",
+      "valor": "4007-2023"
+    },
+    {
+      "id": 5,
+      "tipo": "MAIL2",
+      "prefijo": null,
+      "valor": "direMailnro2@gmail.com"
+    },
+    {
+      "tipo": "TEL",
+      "prefijo": "012",
+      "valor": "3554-7777",
+      "id": 6
     }
   ]
 }
