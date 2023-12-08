@@ -17,8 +17,10 @@ import {
 import axios from 'axios';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-const backendUrl = import.meta.env.VITE_BACKEND_URL;
-const backendErrorMessages = import.meta.env.VITE_ERROR_MESSAGE;
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+const ERROR_MESSAGE = import.meta.env.VITE_ERROR_MESSAGE;
+const ERROR_BODY = import.meta.env.VITE_ERROR_BODY;
+const ERROR_BUSINESS = import.meta.env.VITE_ERROR_BUSINESS;
 
 function EditToolbar(props) {
     const { setRows, rows, setRowModesModel } = props;
@@ -54,7 +56,7 @@ export const Categorias = () => {
 
     const getCategoria = async () => {
         try {
-            const response = await axios.get(`${backendUrl}/categoria`);
+            const response = await axios.get(`${BACKEND_URL}/categoria`);
             const jsonData = response.data;
             setRows(jsonData.map((item) => ({ id: item.id, ...item })));
         } catch (error) {
@@ -70,7 +72,7 @@ export const Categorias = () => {
 
     const getCamaras = async () => {
         try {
-            const response = await axios.get(`${backendUrl}/camara`);
+            const response = await axios.get(`${BACKEND_URL}/camara`);
             const jsonData = response.data;
             setCamaras(jsonData.map((item) => ({ id: item.id, ...item })));
         } catch (error) {
@@ -125,7 +127,7 @@ export const Categorias = () => {
         try {
             setRows(rows.filter((row) => row.id !== id));
 
-            await axios.delete(`${backendUrl}/categoria/${id}`);
+            await axios.delete(`${BACKEND_URL}/categoria/${id}`);
 
         } catch (error) {
 
@@ -162,30 +164,33 @@ export const Categorias = () => {
 
             try {
 
-                await axios.post(`${backendUrl}/categoria`, newCategoria);
+                await axios.post(`${BACKEND_URL}/categoria`, newCategoria);
 
             } catch (error) {
 
-                if (error.response && error.response.data) {
+                try {
 
-                    const { codigo, descripcion, ticket, tipo } = error.response.data;
+                    if (error.response && error.response.data) {
 
-                    if (tipo === 'ERROR_APP_BUSINESS') {
-                        showSwal(descripcion);
-                    } else {
+                        const { codigo, descripcion, ticket, tipo } = error.response.data;
 
-                        try {
+                        if (tipo === ERROR_BUSINESS) {
 
-                        } catch (error) {
-                            console.log(`Error internno ${error}`);
+                            showSwal(descripcion);
+
+                        } else {
+
+                            showSwal(`${ERROR_MESSAGE} ${ticket}`);
+                            console.error(error.response.data);
                         }
-
-                        showSwal(`${backendErrorMessages} ${ticket}`);
-                        console.log(error.response.data);
+                    } else {
+                        showSwal(`${ERROR_MESSAGE}`);
+                        console.error(`${ERROR_BODY} : ${error}`);
                     }
-                } else {
-                    // Manejar otras excepciones que no son de respuesta
-                    console.error('Error:', error);
+
+                } catch (error) {
+                    showSwal(`${ERROR_MESSAGE}`);
+                    console.error(`${ERROR_BODY} : ${error}`);
                 }
 
             }
@@ -198,7 +203,7 @@ export const Categorias = () => {
             };
 
             try {
-                const response = await axios.put(`${backendUrl}/categoria/${newRow.id}`, updatedCategoria);
+                const response = await axios.put(`${BACKEND_URL}/categoria/${newRow.id}`, updatedCategoria);
                 console.log(response);
             } catch (error) {
                 console.error('Error fetching data:', error);

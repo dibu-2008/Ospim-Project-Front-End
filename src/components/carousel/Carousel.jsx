@@ -5,8 +5,6 @@ import axios from 'axios';
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 const img_1 = "https://fastly.picsum.photos/id/0/5000/3333.jpg?hmac=_j6ghY5fCfSD6tvtcV74zXivkJSPIfR9B8w34XeQmvU"
-const img_2 = "https://fastly.picsum.photos/id/4/5000/3333.jpg?hmac=ghf06FdmgiD0-G4c9DdNM8RnBIN7BO0-ZGEw47khHP4"
-const img_3 = "https://fastly.picsum.photos/id/7/4728/3168.jpg?hmac=c5B5tfYFM9blHHMhuu4UKmhnbZoJqrzNOP9xjkV4w3o"
 
 export const CarouselNews = () => {
 
@@ -34,38 +32,20 @@ export const CarouselNews = () => {
 
     return (
         <Carousel activeIndex={index} onSelect={handleSelect}>
+
+
             {publicaciones.map((publicacion, index) => (
                 <Carousel.Item key={index}>
-                    {index === 0 && (
-                        <img
-                            style={{
-                                width: '100%',
-                                height: '500px',
-                                borderRadius: '10px'
-                            }}
-                            src={img_1} alt=""
-                        />
-                    )}
-                    {index === 1 && (
-                        <img
-                            style={{
-                                width: '100%',
-                                height: '500px',
-                                borderRadius: '10px'
-                            }}
-                            src={img_2} alt=""
-                        />
-                    )}
-                    {index === 2 && (
-                        <img
-                            style={{
-                                width: '100%',
-                                height: '500px',
-                                borderRadius: '10px'
-                            }}
-                            src={img_3} alt=""
-                        />
-                    )}
+
+                    <img
+                        style={{
+                            width: '100%',
+                            height: '500px',
+                            borderRadius: '10px'
+                        }}
+                        src={img_1} alt=""
+                    />
+
                     <Carousel.Caption style={{
                         backgroundColor: 'rgba(0, 0, 0, 0.8)',
                         borderRadius: '10px'
@@ -77,6 +57,6 @@ export const CarouselNews = () => {
             ))}
         </Carousel>
     );
-    
+
 }
 

@@ -7,7 +7,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
-import CheckIcon from '@mui/icons-material/Check';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import DescriptionIcon from '@mui/icons-material/Description';
 import { Grid, IconButton } from '@mui/material';
 import {
     GridRowModes,
@@ -40,7 +41,7 @@ function EditToolbar(props) {
         const id = newId;
 
         setRows((oldRows) => [
-            { id, fecha: '', descripcion: '', isNew: true},
+            { id, fecha: '', descripcion: '', isNew: true },
             ...oldRows
         ]);
         setRowModesModel((oldModel) => ({
@@ -58,24 +59,34 @@ function EditToolbar(props) {
     );
 }
 
+const state = JSON.parse(localStorage.getItem('state'));
 
 export function Feriados() {
     const [rows, setRows] = useState([]);
     const [rowModesModel, setRowModesModel] = useState({});
 
+
     useEffect(() => {
-        try {
-            axios.get(`${backendUrl}/feriados`)
-                .then(response => {
-                    setRows(response.data.map((item, index) => ({ id: index + 1, ...item })));
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
+
+
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(`${backendUrl}/feriados`, {
+                    headers: {
+                        'Authorization': state.token, 
+                    },
                 });
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
+                
+                setRows(response.data.map((item, index) => ({ id: index + 1, ...item })));
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+    
+        fetchData();
     }, []);
+    
+    
 
     const handleRowEditStop = (params, event) => {
         if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -90,17 +101,21 @@ export function Feriados() {
 
     const handleSaveClick = (fila, id) => () => {
         setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-    }; 
+    };
 
 
     const handleDeleteClick = (id) => async () => {
 
         try {
-           
+
             setRows((prevRows) => prevRows.filter((row) => row.id !== id));
 
-            await axios.delete(`${backendUrl}/feriados/${id}`);
-            
+            await axios.delete(`${backendUrl}/feriados/${id}`, {
+                headers: {
+                    'Authorization': state.token, 
+                },
+            });
+
         } catch (error) {
             console.error('Error deleting row:', error);
         }
@@ -122,8 +137,8 @@ export function Feriados() {
     const processRowUpdate = async (newRow) => {
 
         const updatedRow = { ...newRow, isNew: false };
-        
-        if(newRow.isNew){
+
+        if (newRow.isNew) {
             console.log("FILA NUEVA")
 
             const newFeriado = {
@@ -132,22 +147,30 @@ export function Feriados() {
             };
 
             try {
-                const response = await axios.post(`${backendUrl}/feriados`, newFeriado);
+                const response = await axios.post(`${backendUrl}/feriados`, newFeriado, {
+                    headers: {
+                        'Authorization': state.token, 
+                    },
+                });
                 console.log(response);
             } catch (error) {
                 console.error(error);
             }
 
-        }else {
+        } else {
             console.log("FILA VIEJA EDITADA")
-            
+
             const updatedFeriado = {
                 fecha: newRow.fecha,
                 descripcion: newRow.descripcion,
             };
 
             try {
-                const response = await axios.put(`${backendUrl}/feriados/${newRow.id}`, updatedFeriado);
+                const response = await axios.put(`${backendUrl}/feriados/${newRow.id}`, updatedFeriado, {
+                    headers: {
+                        'Authorization': state.token, 
+                    }
+                });
                 console.log(response);
             } catch (error) {
                 console.error(error);
@@ -155,7 +178,7 @@ export function Feriados() {
 
         }
 
-        setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row))); 
+        setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
 
         return updatedRow;
     };
@@ -168,31 +191,52 @@ export function Feriados() {
         {
             field: 'fecha',
             headerName: 'Fecha',
-            width: 180,
+            width: 250,
             type: 'date',
             editable: true,
             valueFormatter: (params) => {
                 const date = new Date(params.value);
 
-                date.setDate(date.getDate() + 1);
+                const day = date.getDate().toString().padStart(2, '0');
+                const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                const year = date.getFullYear();
 
-                return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+                return `${day}-${month}-${year}`;
             },
-
+            renderHeader: (params) => (
+                <Grid container alignItems="center">
+                    <Grid item>Fecha</Grid>
+                    <Grid item>
+                        <IconButton size="small" sx={{ ml: 1, color: '#1A76D2' }}>
+                            <CalendarMonthIcon />
+                        </IconButton>
+                    </Grid>
+                </Grid>
+            ),
         },
         {
             field: 'descripcion',
             headerName: 'Descripción',
             width: 250,
             editable: true,
+            renderHeader: (params) => (
+                <Grid container alignItems="center">
+                    <Grid item>Descripción</Grid>
+                    <Grid item>
+                        <IconButton size="small" sx={{ ml: 1, color: '#1A76D2' }}>
+                            <DescriptionIcon />
+                        </IconButton>
+                    </Grid>
+                </Grid>
+            ),
         },
         {
             field: 'actions',
             type: 'actions',
             headerName: 'Edición',
-            width: 100,
+            width: 250,
             cellClassName: 'actions',
-            getActions: ( params ) => {
+            getActions: (params) => {
                 const isInEditMode = rowModesModel[params.row.id]?.mode === GridRowModes.Edit;
 
                 if (isInEditMode) {
@@ -233,23 +277,38 @@ export function Feriados() {
 
 
             },
+            renderHeader: (params) => (
+                <Grid container alignItems="center">
+                    <Grid item>Descripción</Grid>
+                    <Grid item>
+                        <IconButton size="small" sx={{ ml: 1, color: '#1A76D2' }}>
+                            <EditIcon />
+                        </IconButton>
+                    </Grid>
+                </Grid>
+            ),
         }
     ];
+
+
+
 
     return (
         <div style={{
             width: '70%',
             margin: '80px auto',
         }}>
-            <h1 style={{ 
-                color: '#1A76D2', 
-                marginBottom: '10px', 
-                textAlign: 'center' }}>Administración de feriados</h1>
+            <h1 style={{
+                color: '#1A76D2',
+                marginBottom: '10px',
+                textAlign: 'center'
+            }}>Administración de feriados</h1>
             <Box
                 sx={{
                     margin: '60px auto',
                     height: 'auto',
-                    width: '40%',
+                    width: '80%',
+                    boxShadow: '0px 4px 8px rgba(26, 118, 210, 0.6)',
                     '& .actions': {
                         color: 'text.secondary',
                     },
@@ -276,6 +335,10 @@ export function Feriados() {
                     slotProps={{
                         toolbar: { setRows, rows, setRowModesModel },
                     }}
+                    
+                    pageSizeOptions={[
+                        
+                    ]}
                 />
             </Box>
         </div>
