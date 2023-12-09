@@ -59,11 +59,11 @@ function EditToolbar(props) {
     );
 }
 
-const state = JSON.parse(localStorage.getItem('state'));
-
 export function Feriados() {
     const [rows, setRows] = useState([]);
     const [rowModesModel, setRowModesModel] = useState({});
+
+    const state = JSON.parse(localStorage.getItem('state'));
 
 
     useEffect(() => {
@@ -337,7 +337,7 @@ export function Feriados() {
                     }}
                     
                     pageSizeOptions={[
-                        
+                        5,10,15
                     ]}
                 />
             </Box>
