@@ -12,9 +12,6 @@ const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 const LoginPage = () => {
 
-  const { state } = useLocation();
-  /* console.log("Estoy en el login");
-  console.log(state); */
   const navigate = useNavigate();
 
   const { cuit, passwordLoginCompany, codigoVerificacion, OnInputChangeLoginCompany, OnResetFormLoginCompany } = useFormLoginCompany({
