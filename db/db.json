@@ -285,15 +285,36 @@
     {
       "tipo": "TEL",
       "prefijo": "012",
+      "valor": "3554-2025",
+      "id": 7
+    },
+    {
+      "tipo": "TEL",
+      "prefijo": "012",
       "valor": "3554-7777",
-      "id": 6
+      "id": 8
     }
   ],
   "empresaContactoTipo": [
-    { "codigo": "TEL", "descripcion": "Teléfono ppal." },
-    { "codigo": "TEL2", "descripcion": "Teléfono" },
-    { "codigo": "MAIL", "descripcion": "Mail ppal." },
-    { "codigo": "MAIL2", "descripcion": "Mail" },
-    { "codigo": "WHATSAP", "descripcion": "Whatsap" }
+    {
+      "codigo": "TEL",
+      "descripcion": "Teléfono ppal."
+    },
+    {
+      "codigo": "TEL2",
+      "descripcion": "Teléfono"
+    },
+    {
+      "codigo": "MAIL",
+      "descripcion": "Mail ppal."
+    },
+    {
+      "codigo": "MAIL2",
+      "descripcion": "Mail"
+    },
+    {
+      "codigo": "WHATSAP",
+      "descripcion": "Whatsap"
+    }
   ]
 }

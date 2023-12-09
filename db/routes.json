@@ -3,7 +3,7 @@
   "/usuario/empresa/": "/usuario-empresa-alta",
   "/empresa/domicilio/": "/empresaDomicilio",
   "/empresa/domicilio/:id": "/empresaDomicilio/:id",
+  "/empresa/contacto/tipo": "/empresaContactoTipo",
   "/empresa/contacto/": "/empresaContacto",
-  "/empresa/contacto/:id": "/empresaContacto/:id",
-  "/empresa/contacto/tipo": "/empresaContactoTipo"
+  "/empresa/contacto/:id": "/empresaContacto/:id"
 }
