@@ -6,8 +6,13 @@
       "clave": "123",
       "email": "AgroNro1@gmail.com",
       "telefono": "123456787",
+      "telefono_prefijo": "011",
       "whatsapp": "1234567876",
-      "telefonosAlternativos": [],
+      "whatsapp_prefijo": "011",
+      "telefonosAlternativos": [
+        {"prefijo": "", "nro":"4333-7777"},
+        {"prefijo": "", "nro":"4333-8888"}
+      ],
       "emailAlternativos": [
         {
           "email": "AgroNro2@gmail.com",
@@ -43,33 +48,6 @@
         }
       ],
       "id": 1
-    },
-    {
-      "razonsocial": "Luis Salinas",
-      "cuit": "20949118682",
-      "clave": "123",
-      "whatsapp": "09876542",
-      "telefonosAlternativos": [],
-      "emailAlternativos": [
-        {
-          "email": "luis@luis3.com",
-          "id": "233ec455-22fb-4d79-a147-77b5fe85f39a"
-        }
-      ],
-      "domicilios": [
-        {
-          "tipo": "Real",
-          "provincia": "Río Negro",
-          "localidad": "San Javier",
-          "calle": "3",
-          "piso": "3",
-          "depto": "3",
-          "oficina": "3",
-          "cp": "333",
-          "planta": "Planta 1"
-        }
-      ],
-      "id": 2
     }
   ],
   "feriados": [

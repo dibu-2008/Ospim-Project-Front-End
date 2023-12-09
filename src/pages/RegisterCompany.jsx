@@ -118,7 +118,7 @@ export const RegisterCompany = () => {
             <InputComponent
               type="text"
               name="cuit"
-              id="ciut"
+              
               value={cuit}
               onChange={OnInputChangeRegisterCompany}
               autoComplete="off"
@@ -130,7 +130,7 @@ export const RegisterCompany = () => {
             <InputComponent
               type="text"
               name="razonSocial"
-              id="razonSocial"
+              
               value={razonSocial}
               onChange={OnInputChangeRegisterCompany}
               autoComplete="off"
@@ -161,7 +161,7 @@ export const RegisterCompany = () => {
               onChange={OnInputChangeRegisterCompany}
               autoComplete="off"
               variant="filled"
-              label="E-mail principal N° 2"
+              label="E-mail Alternativo N° 2"
             />
             <Box sx={{'& > :not(style)': { m: 1 }}}>
               <Fab
@@ -243,7 +243,7 @@ export const RegisterCompany = () => {
               onChange={OnInputChangeRegisterCompany}
               autoComplete="off"
               variant="filled"
-              label="Teléfono principal N° 1"
+              label="Teléfono Alternativo N° 1"
             />
             <Box sx={{'& > :not(style)': { m: 1 }}}>
               <Fab
