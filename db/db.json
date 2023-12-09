@@ -10,8 +10,14 @@
       "whatsapp": "1234567876",
       "whatsapp_prefijo": "011",
       "telefonosAlternativos": [
-        {"prefijo": "", "nro":"4333-7777"},
-        {"prefijo": "", "nro":"4333-8888"}
+        {
+          "prefijo": "",
+          "nro": "4333-7777"
+        },
+        {
+          "prefijo": "",
+          "nro": "4333-8888"
+        }
       ],
       "emailAlternativos": [
         {
@@ -49,6 +55,7 @@
       ],
       "id": 1
     }
+   
   ],
   "feriados": [
     {

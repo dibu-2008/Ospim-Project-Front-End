@@ -24,13 +24,6 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { MenuItem, Select } from '@mui/material';
 
-const backendUrl = import.meta.env.VITE_BACKEND_URL;
-
-const randomRole = () => {
-    return randomArrayItem(roles);
-};
-
-const initialRows = [];
 const tipos = ['Fiscal', 'Real', 'Legal'];
 
 function EditToolbar(props) {
@@ -69,18 +62,16 @@ function EditToolbar(props) {
     );
 }
 
-export const AddressTable = ({ companiesDto }) => {
+export const AddressTable = ({ companiesDto, rows, setRows }) => {
 
 
-
-    const [rows, setRows] = useState(initialRows);
     const [rowModesModel, setRowModesModel] = useState({});
     const [selectedDepartment, setSelectedDepartment] = useState('');
     const [provincias, setProvincias] = useState([]);
     const [localidades, setLocalidades] = useState([]);
     const [modifiedRows, setModifiedRows] = useState([]);
     const [userCompaniesSend, setUserCompaniesSend] = useState({});
-    const [isRegistrationComplete, setIsRegistrationComplete] = useState(false);
+    //const [isRegistrationComplete, setIsRegistrationComplete] = useState(false);
 
     const handleRowEditStop = (params, event) => {
         if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -162,7 +153,7 @@ export const AddressTable = ({ companiesDto }) => {
         };
         fetchData();
     }, [selectedDepartment]);
-
+    // No va 
     useEffect(() => {
         if (companiesDto) {
 
@@ -173,9 +164,11 @@ export const AddressTable = ({ companiesDto }) => {
                     cuit: companiesDto.cuit,
                     clave: companiesDto.password,
                     email: companiesDto.email,
-                    telefono: companiesDto.phone,
+                    telefono: companiesDto.telefono,
+                    telefono_prefijo: companiesDto.telefono_prefijo,
                     whatsapp: companiesDto.whatsapp,
-                    telefonosAlternativos: [],
+                    whatsapp_prefijo: companiesDto.whatsapp_prefijo,
+                    telefonosAlternativos: companiesDto.telefonosAlternativos,
                     emailAlternativos: companiesDto.emailAlternativos,
                     domicilios: modifiedRows.map((row) => ({
                         tipo: row.tipo,
@@ -197,11 +190,10 @@ export const AddressTable = ({ companiesDto }) => {
         }
     }, [companiesDto, modifiedRows])
 
-    const handleRegisterCompany = async () => {
+    // Mandar al padre  NO VA MAS
+    /* const handleRegisterCompany = async () => {
 
-        try {
-
-            
+        try {   
             const response = await axios.post( `${backendUrl}/usuario/empresa`, userCompaniesSend)
             console.log(response);
             // Marcamos el registro como completo
@@ -209,7 +201,7 @@ export const AddressTable = ({ companiesDto }) => {
         } catch (error) {
             console.error('Error al registrar empresa:', error);
         }
-    }
+    } */
 
     const columns = [
         {
@@ -349,44 +341,36 @@ export const AddressTable = ({ companiesDto }) => {
                 },
             }}
         >
-            {isRegistrationComplete ? (
-                <div>
-                    <p>¡Registro completado con éxito!</p>
-                    {/* Puedes agregar aquí cualquier otro contenido que desees mostrar */}
-                </div>
-            ) : (
-                <>
-                    <DataGrid
-                        rows={rows}
-                        columns={columns}
-                        editMode="row"
-                        rowModesModel={rowModesModel}
-                        onRowModesModelChange={handleRowModesModelChange}
-                        onRowEditStop={handleRowEditStop}
-                        processRowUpdate={processRowUpdate}
-                        slots={{
-                            toolbar: EditToolbar,
-                        }}
-                        slotProps={{
-                            toolbar: { setRows, setRowModesModel },
-                        }}
-                        localeText={{
-                            noRowsLabel: '',
-                        }}
-                    />
-                    <Button
-                        sx={{
-                            width: '150px',
-                            padding: '15px',
-                            marginTop: '25px',
-                        }}
-                        variant="contained"
-                        onClick={handleRegisterCompany}
-                    >
-                        Registrar
-                    </Button>
-                </>
-            )}
+
+            <DataGrid
+                rows={rows}
+                columns={columns}
+                editMode="row"
+                rowModesModel={rowModesModel}
+                onRowModesModelChange={handleRowModesModelChange}
+                onRowEditStop={handleRowEditStop}
+                processRowUpdate={processRowUpdate}
+                slots={{
+                    toolbar: EditToolbar,
+                }}
+                slotProps={{
+                    toolbar: { setRows, setRowModesModel },
+                }}
+                localeText={{
+                    noRowsLabel: '',
+                }}
+            />
+            {/* <Button
+                sx={{
+                    width: '150px',
+                    padding: '15px',
+                    marginTop: '25px',
+                }}
+                variant="contained"
+                onClick={handleRegisterCompany} 
+            >
+                Registrar
+            </Button> */}
         </Box>
     );
 }
