@@ -131,7 +131,9 @@ export const AddressTable = ({ companiesDto }) => {
 
             const nombresProvincias = provinciasResponse.data.provincias.map((prov) => prov.nombre);
 
-            setProvincias(['Seleccione una provincia', ...nombresProvincias]);
+            //setProvincias(['Seleccione una provincia', ...nombresProvincias]);
+
+            setProvincias(nombresProvincias);
 
         } catch (error) {
             console.error('Error al obtener provincias:', error);
@@ -200,7 +202,7 @@ export const AddressTable = ({ companiesDto }) => {
         try {
 
             
-            const response = await axios.post( `${backendUrl}/empresas`, userCompaniesSend)
+            const response = await axios.post( `${backendUrl}/usuario/empresa`, userCompaniesSend)
             console.log(response);
             // Marcamos el registro como completo
             setIsRegistrationComplete(true);
@@ -224,7 +226,7 @@ export const AddressTable = ({ companiesDto }) => {
             width: 220,
             editable: true,
             type: 'singleSelect',
-            valueOptions: ['Seleccione una provincia', ...provincias],
+            valueOptions: provincias,
             renderEditCell: (params) => (
                 <Select
                     value={params.value}

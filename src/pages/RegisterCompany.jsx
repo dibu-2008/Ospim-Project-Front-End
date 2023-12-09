@@ -24,18 +24,20 @@ export const RegisterCompany = () => {
   const [phoneAlternativos, setPhoneAlternativos] = useState([]);
 
   const {
-    cuit, razonSocial, email,
-    password, repeatPassword, phone,
+    cuit, razonSocial, email_first, email_second,
+    password, repeatPassword, phone_first, phone_second,
     whatsapp, ramos,
     OnInputChangeRegisterCompany,
     OnResetFormRegisterCompany
   } = useFormRegisterCompany({
     cuit: '',
     razonSocial: '',
-    email: '',
+    email_first: '',
+    email_second: '',
     password: '',
     repeatPassword: '',
-    phone: '',
+    phone_first: '',
+    phone_second: '',
     whatsapp: '',
     ramos: '',
   })
@@ -46,11 +48,13 @@ export const RegisterCompany = () => {
     const empresasDto = {
       cuit,
       razonSocial,
-      email,
+      email_first,
+      email_second,
       emailAlternativos,
       password,
       repeatPassword,
-      phone,
+      phone_first,
+      phone_second,
       phoneAlternativos,
       whatsapp,
       ramos,
@@ -137,24 +141,38 @@ export const RegisterCompany = () => {
           <div className="input-group">
             <InputComponent
               type="email"
-              name="email"
-              value={email}
+              name="email_first"
+              value={email_first}
               onChange={OnInputChangeRegisterCompany}
               autoComplete="off"
               variant="filled"
-              label="E-mail"
+              label="E-mail principal N° 1"
             />
-            <Box sx={{
-              '& > :not(style)': { m: 1 },
-              position: 'absolute',
-            }}>
+          </div>
+          <div 
+            style={{
+              position: 'relative',
+            }}
+            className="input-group">
+            <InputComponent
+              type="email"
+              name="email_second"
+              value={email_second}
+              onChange={OnInputChangeRegisterCompany}
+              autoComplete="off"
+              variant="filled"
+              label="E-mail principal N° 2"
+            />
+            <Box sx={{'& > :not(style)': { m: 1 }}}>
               <Fab
                 size="small"
                 color="primary" aria-label="add"
                 style={{
-                  marginTop: '10px',
-                  marginLeft: '505px',
-                }}
+                  position: 'absolute',
+                  marginTop: '-48px',
+                  marginLeft: '255px',
+                  zIndex: '1',
+                }} 
                 onClick={handleAddEmail}
               >
                 <AddIcon />
@@ -209,24 +227,34 @@ export const RegisterCompany = () => {
           <div className="input-group">
             <InputComponent
               type="phone"
-              name="phone"
-              value={phone}
+              name="phone_first"
+              value={phone_first}
               onChange={OnInputChangeRegisterCompany}
               autoComplete="off"
               variant="filled"
-              label="Teléfono principal"
+              label="Teléfono principal N° 1"
             />
-            <Box sx={{
-              '& > :not(style)': { m: 1 },
-              position: 'absolute',
-            }}>
+          </div>
+          <div className="input-group">
+            <InputComponent
+              type="phone"
+              name="phone_second"
+              value={phone_second}
+              onChange={OnInputChangeRegisterCompany}
+              autoComplete="off"
+              variant="filled"
+              label="Teléfono principal N° 1"
+            />
+            <Box sx={{'& > :not(style)': { m: 1 }}}>
               <Fab
                 size="small"
                 color="primary" aria-label="add"
                 style={{
-                  marginTop: '10px',
-                  marginLeft: '505px',
-                }}
+                  position: 'absolute',
+                  marginTop: '-48px',
+                  marginLeft: '255px',
+                  zIndex: '1',
+                }} 
                 onClick={handleAddPhone}
               >
                 <AddIcon />
