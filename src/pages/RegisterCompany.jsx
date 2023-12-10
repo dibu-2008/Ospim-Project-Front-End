@@ -12,6 +12,8 @@ import Box from '@mui/material/Box';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import { v4 as uuidv4 } from 'uuid';
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 
@@ -26,7 +28,7 @@ export const RegisterCompany = () => {
   const [idPhoneAlternativos, setIdPhoneAlternativos] = useState(2);
   const [idEmailAlternativos, setIdEmailAlternativos] = useState(2);
 
-  const [rows, setRows] = useState([]); 
+  const [rows, setRows] = useState([]);
 
   const {
     cuit, razonSocial, email_first, email_second,
@@ -101,7 +103,7 @@ export const RegisterCompany = () => {
 
     try {
       await axios.post(`${backendUrl}/usuario/empresa`, usuarioEmpresa);
-    }catch(error){
+    } catch (error) {
       console.log(error);
     }
 
@@ -114,6 +116,7 @@ export const RegisterCompany = () => {
     setRows([]);
 
     OnResetFormRegisterCompany()
+    showSwal("Empresa registrada correctamente");
   }
 
   const OnChangeRamos = (e) => {
@@ -161,6 +164,19 @@ export const RegisterCompany = () => {
     values.push(newPhone);
     setPhoneAlternativos([...phoneAlternativos, newPhone])
     setAdditionalPhone(values);
+  }
+
+  const showSwal = (message) => {
+    withReactContent(Swal).fire({
+      html: `
+            <div style="color:green; font-size: 26px;">
+            ${message}
+            </div>
+        `,
+      icon: 'success',
+      timer: 3000,
+      showConfirmButton: false,
+    })
   }
 
   return (
@@ -555,14 +571,14 @@ export const RegisterCompany = () => {
             setRows={setRows}
           />
           <ButtonComponent
-              styles={{
-                width: "auto",
-                marginTop: "20px",
-                padding: "15px",
-              }}
-              className="btn_ingresar"
-              name="REGISTRAR EMPRESA"
-            ></ButtonComponent>
+            styles={{
+              width: "auto",
+              marginTop: "20px",
+              padding: "15px",
+            }}
+            className="btn_ingresar"
+            name="REGISTRAR EMPRESA"
+          ></ButtonComponent>
         </form>
       </div>
     </main>
