@@ -19,7 +19,7 @@ module.exports = (req, res, next) => {
       res.status(401).jsonp({
         tipo: "ERROR_APP_BUSINESS",
         ticket: "TK-156269",
-        codigo: "CREDENCIALES_INVALIDAS",
+        codigo: "CODIGO_INVALIDO",
         descripcion: "Credenciales invalidas.",
       });
 
