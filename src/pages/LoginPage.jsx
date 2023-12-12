@@ -1,23 +1,24 @@
 import axios from "axios";
-import { useLocation, useNavigate } from "react-router-dom"
-import { useFormLoginCompany } from "../hooks/useFormLoginCompany.js"
+import { useNavigate } from "react-router-dom"
 import { useState } from "react"
 import { useFormLoginInternalUser } from "../hooks/useFormLoginInternalUser.js";
-import imgError from '../assets/error.svg';
-import imgSuccess from '../assets/success.svg';
-import imgLogo from '../assets/logo.svg';
-
-// Material UI
 import { InputComponent } from "../components/InputComponent.jsx";
 import { ButtonComponent } from "../components/ButtonComponent.jsx";
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import { errorBackendResponse } from "../errors/errorBackendResponse.js";
+import imgError from '../assets/error.svg';
+import imgSuccess from '../assets/success.svg';
+import imgLogo from '../assets/logo.svg';
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const ERROR_MESSAGE = import.meta.env.VITE_ERROR_MESSAGE;
 const ERROR_BODY = import.meta.env.VITE_ERROR_BODY;
 const ERROR_BUSINESS = import.meta.env.VITE_ERROR_BUSINESS;
+const SUCCESS_CODE_SEND = import.meta.env.VITE_SUCCESS_CODE_SEND;
+const VITE_WELCOME_PORTAL = import.meta.env.VITE_WELCOME_PORTAL;
+const VITE_ERROR_CODE_VERIFICATION = import.meta.env.VITE_ERROR_CODE_VERIFICATION;
 
 const LoginPage = () => {
 
@@ -68,7 +69,6 @@ const LoginPage = () => {
       html: `
             <div 
             style="
-              background-color:#1A76D2; 
               color:#fff; 
               font-size: 26px; 
               display: flex; 
@@ -78,16 +78,16 @@ const LoginPage = () => {
               justify-content: center;"
               >
               <img style="height:100px; width: 100px; margin: 10px auto;" src=${imgLogo}>
-              <h2>Bienvenido al portal molineros</h2>
+              <h2>${message}</h2>
             </div>
         `,
       timer: 2000,
-      background: '#1A76D2',
+      background: 'rgba(26, 118, 210, 0.8)',
       showConfirmButton: false,
     })
   }
 
-  const onLoginInternalUser2 = async (e) => {
+  const onLoginInternalUser = async (e) => {
 
     e.preventDefault()
 
@@ -102,14 +102,15 @@ const LoginPage = () => {
         if (passwordLoginInternalUser === '') {
           setShowAlertPassword(true);
         }
+
       } else {
 
         const userInicioSesion = {
-          nombre: user,
+          usuario: user,
           clave: passwordLoginInternalUser,
         }
 
-        const response = await axios.post(`${BACKEND_URL}/login`, userInicioSesion);
+        const response = await axios.post(`${BACKEND_URL}/auth/login`, userInicioSesion);
 
         const { token, tokenRefresco } = response.data;
 
@@ -117,11 +118,8 @@ const LoginPage = () => {
           setShowInternalUserForm(false);
           setShowVerificationForm(true);
 
-          showSwalCodeVerification('Código de verificación enviado correctamente');
+          showSwalCodeVerification(SUCCESS_CODE_SEND);
 
-          /* setTimeout(() => {
-            alert('123456')
-          }, 1000); */
         }
 
         setToken(token);
@@ -131,36 +129,10 @@ const LoginPage = () => {
 
     } catch (error) {
 
-      try {
-
-        if (error.response && error.response.data) {
-
-          const { codigo, descripcion, ticket, tipo } = error.response.data;
-
-          if (tipo === ERROR_BUSINESS) {
-
-            showSwalError(descripcion);
-
-          } else {
-
-            showSwalError(`${ERROR_MESSAGE} ${ticket}`);
-            console.error(error.response.data);
-          }
-        } else {
-          showSwalError(`${ERROR_MESSAGE}`);
-          console.error(`${ERROR_BODY} : ${error}`);
-        }
-
-      } catch (error) {
-        showSwalError(`${ERROR_MESSAGE}`);
-        console.error(`${ERROR_BODY} : ${error}`);
-      }
-
+      errorBackendResponse(error, ERROR_BUSINESS, ERROR_MESSAGE, ERROR_BODY, showSwalError);
       OnResetFormLoginInternalUser();
     }
   }
-
-
 
   const redirectToRegister = () => {
     navigate('/registercompany', {
@@ -174,11 +146,11 @@ const LoginPage = () => {
 
   const onVerificationCodeSubmit = (e) => {
     e.preventDefault();
-
     
+
     if (+(verificationCode) === 123456) {
-      
-      showSwalSuccess('Código de verificación correcto');
+
+      showSwalSuccess(VITE_WELCOME_PORTAL);
 
       navigate('/dashboard/inicio', {
         replace: true,
@@ -189,7 +161,7 @@ const LoginPage = () => {
         },
       });
     } else {
-      alert('Código de verificación incorrecto');
+      showSwalError(VITE_ERROR_CODE_VERIFICATION);
     }
   }
 
@@ -210,7 +182,7 @@ const LoginPage = () => {
       <div className="wrapper">
         {showInternalUserForm && (
           <div className="contenedor_form">
-            <form onSubmit={onLoginInternalUser2}>
+            <form onSubmit={onLoginInternalUser}>
               <h1>Usuario Interno</h1>
               <h3>Iniciar sesión</h3>
               <div className="input-group">
@@ -221,7 +193,6 @@ const LoginPage = () => {
                   value={user}
                   onChange={onInputChangeUser}
                   autoComplete="off"
-                  /* variant="filled" */
                   label="Usuario"
                 />
                 {
@@ -240,7 +211,6 @@ const LoginPage = () => {
                   value={passwordLoginInternalUser}
                   onChange={onInputChangePassword}
                   autoComplete="off"
-                  /* variant="filled" */
                   label="Contraseña"
                 />
                 {
@@ -283,7 +253,6 @@ const LoginPage = () => {
                   value={verificationCode}
                   onChange={onVerificationCodeChange}
                   autoComplete="off"
-                  // variant="filled"
                   label="Contraseña"
                 />
               </div>
@@ -297,13 +266,6 @@ const LoginPage = () => {
 
           </div>
         )}
-        {/*  {
-          showErrorModal && (
-            <div className="error_modal">
-              <h1>{credentialsError.message}</h1>
-            </div>
-          )
-        } */}
       </div>
     </div>
 

@@ -7,15 +7,15 @@ module.exports = (req, res, next) => {
   //console.log("db", req.app.db);
   //req.app.db.write({});
 
-  if (req.method === "POST" && req.url === "/login") {
+  if (req.method === "POST" && req.url === "/auth/login") {
     // Handle the login request here
     console.log("Entrooo 2: POST - /login...");
 
     console.log(req.body);
 
-    const { nombre , clave } = req.body;
+    const { usuario , clave } = req.body;
 
-    if (nombre != "admin" || clave != "Prueba123") {
+    if (usuario != "admin" || clave != "Prueba123") {
       res.status(401).jsonp({
         tipo: "ERROR_APP_BUSINESS",
         ticket: "TK-156269",

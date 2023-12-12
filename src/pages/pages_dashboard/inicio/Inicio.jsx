@@ -19,9 +19,9 @@ export const Inicio = () => {
                     <p>Ante cualquier inconveniente, por favor, no dude en contactarse con nosotros a través de los siguientes medios</p>
 
                     <div className='medios'>
-                        <div><span><EmailIcon/></span>Correo Electrónico</div>
-                        <div><span><LocalPhoneIcon/></span>Teléfono</div>
-                        <div><span><WhatsAppIcon/></span>WhatsApp</div>
+                        <div><span><EmailIcon /></span>Correo Electrónico</div>
+                        <div><span><LocalPhoneIcon /></span>Teléfono</div>
+                        <div><span><WhatsAppIcon /></span>WhatsApp</div>
                     </div>
 
                     <h5>Días y horarios:</h5>
@@ -29,7 +29,6 @@ export const Inicio = () => {
                 </div>
             </div>
             <div className='novedades'>
-                <h2>Novedades</h2>
                 <CarouselNews />
             </div>
         </div>

@@ -1,62 +1,153 @@
-import { useEffect, useState } from 'react';
-import Carousel from 'react-bootstrap/Carousel';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-const img_1 = "https://fastly.picsum.photos/id/0/5000/3333.jpg?hmac=_j6ghY5fCfSD6tvtcV74zXivkJSPIfR9B8w34XeQmvU"
-
 export const CarouselNews = () => {
+  const [publicaciones, setPublicaciones] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-    const [index, setIndex] = useState(0);
-    const [publicaciones, setPublicaciones] = useState([]);
+  useEffect(() => {
 
-    const getPublicaciones = async () => {
-        try {
-            const resp = await axios.get(`${backendUrl}/publicacionesVigentes`);
-            const data = await resp.data;
-            setPublicaciones(data);
-        } catch (error) {
-            console.error(error);
-        }
-    }
+    const fetchData = async () => {
 
-    useEffect(() => {
-        getPublicaciones();
-        console.log(publicaciones);
-    }, [])
-
-    const handleSelect = (selectedIndex) => {
-        setIndex(selectedIndex);
+      try {
+        const response = await axios.get(`${backendUrl}/publicacionesVigentes`);
+        setPublicaciones(response.data);
+      }catch (error) {
+        console.log(error);
+      }
     };
 
-    return (
-        <Carousel activeIndex={index} onSelect={handleSelect}>
+    fetchData();
 
+  }, []);
 
-            {publicaciones.map((publicacion, index) => (
-                <Carousel.Item key={index}>
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      goToNextSlide();
+    }, 3000);
 
-                    <img
-                        style={{
-                            width: '100%',
-                            height: '500px',
-                            borderRadius: '10px'
-                        }}
-                        src={img_1} alt=""
-                    />
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [currentIndex, publicaciones.length]);
 
-                    <Carousel.Caption style={{
-                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                        borderRadius: '10px'
-                    }}>
-                        <h3>{publicacion.titulo}</h3>
-                        <p>{publicacion.cuerpo}</p>
-                    </Carousel.Caption>
-                </Carousel.Item>
-            ))}
-        </Carousel>
-    );
+  const goToNextSlide = () => {
+    setCurrentIndex(prevIndex => (prevIndex + 1) % publicaciones.length);
+  };
 
-}
+  const goToPrevSlide = () => {
+    setCurrentIndex(prevIndex => (prevIndex - 1 + publicaciones.length) % publicaciones.length);
+  };
 
+  return (
+    <div>
+      {publicaciones.length > 0 && (
+        <div>
+          <div
+            style={{
+              height: '400px',
+              borderRadius: '10px',
+              width: '100%',
+              border: '2px solid #1A76D2',
+              boxShadow: '0px 0px 10px 0px #1A76D2',
+            }}
+          >
+            <h2
+              style={{
+                margin: '10px 0px 0px 15px',
+              }}
+            >Novedades</h2>
+
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100%',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginTop: '-50px'
+              }}
+            >
+              <h2
+                style={{
+                  color: '#1A76D2',
+                  marginBottom: '20px',
+                }}
+              >{publicaciones[currentIndex].titulo}</h2>
+              <p
+                style={{
+                  width: '50%',
+                  margin: '0 auto',
+                  textAlign: 'center',
+                }}
+              >{publicaciones[currentIndex].cuerpo}</p>
+            </div>
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginTop: '-220px',
+            }}
+          >
+            <span
+              onClick={goToPrevSlide}
+              style={{
+                cursor: 'pointer',
+                marginLeft: '100px',
+                marginTop: '-110px',
+              }}
+            >
+              <ArrowBackIosNewIcon
+                sx={{
+                  fontSize: '50px',
+                  color: '#1A76D2',
+                }}
+              />
+            </span>
+            <div style={{ 
+                display: 'flex',
+                marginTop: '100px',
+            }}>
+              {publicaciones.map((_, index) => (
+                <span
+                  key={index}
+                  onClick={() => setCurrentIndex(index)}
+                  style={{
+                    cursor: 'pointer',
+                    margin: '0 5px',
+                    fontSize: '30px',
+                    color: index === currentIndex ? '#1A76D2' : '#ccc',
+                  }}
+                >
+                  &bull;
+                </span>
+              ))}
+            </div>
+            <span
+              onClick={goToNextSlide}
+              style={{
+                cursor: 'pointer',
+                marginRight: '100px',
+                marginTop: '-110px',
+              }}
+            >
+              <ArrowForwardIosIcon
+                sx={{
+                  fontSize: '50px',
+                  color: '#1A76D2',
+                }}
+              />
+            </span>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};

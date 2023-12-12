@@ -105,11 +105,11 @@
   ],
   "usuarios": [
     {
-      "nombre": "admin",
+      "usuario": "admin",
       "clave": "Prueba123"
     },
     {
-      "nombre": "usuario1",
+      "usuario": "usuario1",
       "clave": "Prueba123"
     }
   ],
