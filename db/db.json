@@ -216,9 +216,9 @@
   ],
   "empresa": [
     {
-      "id": 1,
-      "razonSocial": "Razon Social molinera Santa Fe",
-      "ramoId": 1
+      "razonSocial": "Empresa de Agro Nro 7",
+      "ramoId": 2,
+      "id": 1
     }
   ],
   "empresaDomicilio": [
@@ -258,7 +258,7 @@
       "depto": "C",
       "oficina": null,
       "cp": "7600",
-      "planta": "Planta 3",
+      "planta": "Planta 3 --- ",
       "id": 3
     }
   ],
