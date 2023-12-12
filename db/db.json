@@ -300,9 +300,9 @@
       "id": 7
     },
     {
-      "tipo": "TEL",
-      "prefijo": "012",
-      "valor": "3554-7777",
+      "tipo": "TEL22222",
+      "prefijo": "018",
+      "valor": "4444-8888",
       "id": 8
     }
   ],
@@ -326,6 +326,16 @@
     {
       "codigo": "WHATSAP",
       "descripcion": "Whatsap"
+    }
+  ],
+  "empresaDomicilioTipo": [
+    {
+      "codigo": "FISCAL",
+      "descripcion": "Fiscal"
+    },
+    {
+      "codigo": "REAL",
+      "descripcion": "Real"
     }
   ]
 }
