@@ -13,11 +13,10 @@ import { DeclaracionesJuradas } from "../pages/pages_dashboard/DeclaracionesJura
 import { Inicio } from "../pages/pages_dashboard/inicio/Inicio";
 import { Categorias } from "../pages/pages_dashboard/Categorias";
 import NavBar from "../components/navbar/NavBar";
+import { Datos } from "../pages/pages_dashboard/datos/Datos";
 
 const BoletasPage = () => <div>Contenido de la página de boletas</div>;
 const PagosPage = () => <div>Contenido de la página de pagos</div>;
-const MisDatosPage = () => <div>Contenido de la página de mis datos</div>;
-
 
 const AppRouter = () => {
   return (
@@ -36,7 +35,7 @@ const AppRouter = () => {
             <Route path="ddjj" element={<DeclaracionesJuradas />} />
             <Route path="boletas" element={<BoletasPage />} />
             <Route path="pagos" element={<PagosPage />} />
-            <Route path="misdatos" element={<MisDatosPage />} />
+            <Route path="misdatos" element={<Datos />} />
             <Route path="categorias" element={<Categorias />} />
 
           </Route>
