@@ -5,6 +5,8 @@
   "/empresa/:id/domicilio/": "/empresaDomicilio",
   "/empresa/:empresaId/domicilio/:id": "/empresaDomicilio/:id",
   "/empresa/contacto/tipo": "/empresaContactoTipo",
+  "/empresa/domicilio/tipo": "/empresaDomicilioTipo",
   "/empresa/contacto/": "/empresaContacto",
-  "/empresa/contacto/:id": "/empresaContacto/:id"
+  "/empresa/:empresaId/contacto": "/empresaContacto/",
+  "/empresa/:empresaId/contacto/:id": "/empresaContacto/:id"
 }
