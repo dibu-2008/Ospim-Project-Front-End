@@ -346,5 +346,23 @@
     { "id": 5, "descripcion": "Personal Temporario" },
     { "id": 6, "descripcion": "Transporte y Distribución" },
     { "id": 7, "descripcion": "Otros" }
-  ]
+  ],
+  "auth-login-usuario": {
+    "usuario": {
+      "id": 1,
+      "nombre": "20233725006",
+      "rol": [
+        {
+          "id": 1,
+          "descripcion": "EMPLEADOR"
+        }
+      ]
+    },
+    "empresa": {
+      "id": 1,
+      "razonSocial": "Empresa Nro 1",
+      "cuit": "2023372500",
+      "ramoId": 1
+    }
+  }
 }
