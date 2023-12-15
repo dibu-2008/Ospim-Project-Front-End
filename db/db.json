@@ -282,10 +282,10 @@
       "valor": "5504-2033"
     },
     {
-      "id": 4,
       "tipo": "TEL2",
-      "prefijo": "11",
-      "valor": "4007-2023"
+      "prefijo": "011",
+      "valor": "4007-2023",
+      "id": 4
     },
     {
       "id": 5,
@@ -304,6 +304,24 @@
       "prefijo": "018",
       "valor": "4444-8888",
       "id": 8
+    },
+    {
+      "tipo": "TEL",
+      "prefijo": "012",
+      "valor": "1231-2333",
+      "id": 9
+    },
+    {
+      "tipo": "MAIL",
+      "prefijo": "",
+      "valor": "luis@ospim.com",
+      "id": 10
+    },
+    {
+      "tipo": "TEL",
+      "prefijo": "013",
+      "valor": "3333-4444",
+      "id": 11
     }
   ],
   "empresaContactoTipo": [
@@ -339,12 +357,33 @@
     }
   ],
   "ramo": [
-    { "id": 1, "descripcion": "Nutrición Animal" },
-    { "id": 2, "descripcion": "Avícola" },
-    { "id": 3, "descripcion": "Molienda de Trigo" },
-    { "id": 4, "descripcion": "Molienda de Maíz" },
-    { "id": 5, "descripcion": "Personal Temporario" },
-    { "id": 6, "descripcion": "Transporte y Distribución" },
-    { "id": 7, "descripcion": "Otros" }
+    {
+      "id": 1,
+      "descripcion": "Nutrición Animal"
+    },
+    {
+      "id": 2,
+      "descripcion": "Avícola"
+    },
+    {
+      "id": 3,
+      "descripcion": "Molienda de Trigo"
+    },
+    {
+      "id": 4,
+      "descripcion": "Molienda de Maíz"
+    },
+    {
+      "id": 5,
+      "descripcion": "Personal Temporario"
+    },
+    {
+      "id": 6,
+      "descripcion": "Transporte y Distribución"
+    },
+    {
+      "id": 7,
+      "descripcion": "Otros"
+    }
   ]
 }

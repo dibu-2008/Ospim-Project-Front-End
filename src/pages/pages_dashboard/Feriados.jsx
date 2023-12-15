@@ -335,10 +335,6 @@ export function Feriados() {
                     slotProps={{
                         toolbar: { setRows, rows, setRowModesModel },
                     }}
-                    
-                    pageSizeOptions={[
-                        5,10,15
-                    ]}
                 />
             </Box>
         </div>
