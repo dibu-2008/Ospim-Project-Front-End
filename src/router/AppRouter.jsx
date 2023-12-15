@@ -13,7 +13,7 @@ import { DeclaracionesJuradas } from "../pages/pages_dashboard/DeclaracionesJura
 import { Inicio } from "../pages/pages_dashboard/inicio/Inicio";
 import { Categorias } from "../pages/pages_dashboard/Categorias";
 import NavBar from "../components/navbar/NavBar";
-import { Datos } from "../pages/pages_dashboard/datos_empresa/Datos";
+import { Datos } from "../pages/pages_dashboard/datos_empresa/DatosEmpresa";
 
 const BoletasPage = () => <div>Contenido de la página de boletas</div>;
 const PagosPage = () => <div>Contenido de la página de pagos</div>;
