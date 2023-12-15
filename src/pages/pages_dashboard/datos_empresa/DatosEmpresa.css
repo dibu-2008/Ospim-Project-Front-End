@@ -1,0 +1,8 @@
+.readonly {
+    pointer-events: none; /* Deshabilita eventos del mouse */
+    background-color: #f4f4f4; /* Cambia el color de fondo a un color deshabilitado */
+}
+
+.red-background {
+    background-color: red !important; /* Usa !important para asegurarte de que prevalezca sobre otros estilos */
+}

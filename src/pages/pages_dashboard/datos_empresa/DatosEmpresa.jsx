@@ -1,3 +1,4 @@
+import './DatosEmpresa.css';
 import { useState, useEffect } from 'react';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
@@ -9,7 +10,7 @@ import Button from '@mui/material/Button';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
+
 // data grid
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
@@ -80,7 +81,7 @@ function EditToolbar(props) {
 
         const id = newId;
 
-        setRows((oldRows) => [{ id, tipo: '', prefijo:'', valor: '', isNew: true }, ...oldRows ]);
+        setRows((oldRows) => [{ id, tipo: '', prefijo: '', valor: '', isNew: true }, ...oldRows]);
         setRowModesModel((oldModel) => ({
             ...oldModel,
             [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
@@ -102,7 +103,6 @@ export const Datos = () => {
 
     const [rows, setRows] = useState([]);
     const [rowModesModel, setRowModesModel] = useState({});
-
     const [cuit, setCuit] = useState('');
     const [razonSocial, setRazonSocial] = useState('');
     const [ramo, setRamo] = useState('');
@@ -111,11 +111,17 @@ export const Datos = () => {
     // Estado para los tabs
     const [value, setValue] = useState(0);
 
+    const state = JSON.parse(localStorage.getItem('state'));
+
     // consulta a la api tipo de contacto
     useEffect(() => {
         const getTipoContacto = async () => {
             try {
-                const response = await axios.get(`${BACKEND_URL}/empresa/contacto/tipo`);
+                const response = await axios.get(`${BACKEND_URL}/empresa/contacto/tipo`, {
+                    headers: {
+                        'Authorization': state.token,
+                    }
+                });
                 const jsonData = await response.data;
                 setTipoContacto(jsonData.map((item) => ({ ...item })));
             } catch (error) {
@@ -129,8 +135,13 @@ export const Datos = () => {
     useEffect(() => {
         const getDatosEmpresa = async () => {
             try {
-                const response = await axios.get(`${BACKEND_URL}/empresa/contacto/`);
+                const response = await axios.get(`${BACKEND_URL}/empresa/:empresaId/contacto`, {
+                    headers: {
+                        'Authorization': state.token,
+                    }
+                });
                 const jsonData = await response.data;
+                console.log(jsonData);
                 setRows(jsonData.map((item) => ({ ...item })));
                 console.log(rows);
             } catch (error) {
@@ -171,9 +182,22 @@ export const Datos = () => {
         setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
     };
 
-    const handleDeleteClick = (id) => () => {
-        setRows(rows.filter((row) => row.id !== id));
-        setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+    const handleDeleteClick = (id) => async () => {
+        
+        try {
+
+            setRows(rows.filter((row) => row.id !== id));
+            //setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+
+            await axios.delete(`${BACKEND_URL}/empresa/:empresaId/contacto/${id}`, {
+                headers: {
+                    'Authorization': state.token,
+                }
+            })
+            
+        } catch (error) {
+            console.error('Error al eliminar contacto empresa: ', error);
+        }
     }
 
     const handleCancelClick = (id) => () => {
@@ -192,6 +216,56 @@ export const Datos = () => {
 
         const updatedRow = { ...newRow, isNew: false };
 
+        console.log(newRow);
+
+        if(newRow.isNew) {
+
+            console.log("Nueva fila");
+
+            const nuevoContacto = {
+                tipo: newRow.tipo,
+                prefijo: newRow.prefijo,
+                valor: newRow.valor,
+            }
+
+            try {
+
+                axios.post(`${BACKEND_URL}/empresa/:empresaId/contacto`, nuevoContacto, {
+                    headers: {
+                        'Authorization': state.token,
+                    }
+                })
+
+                
+            } catch (error) {
+                console.error('Error al crear contacto empresa: ', error);
+            }
+
+        }else {
+
+            console.log("Fila existente");
+
+            const contacto = {
+                tipo: newRow.tipo,
+                prefijo: newRow.prefijo,
+                valor: newRow.valor,
+            }
+
+            try {
+
+                axios.put(`${BACKEND_URL}/empresa/:empresaId/contacto/${newRow.id}`, contacto, {
+                    headers: {
+                        'Authorization': state.token,
+                    }
+                })
+
+                
+            } catch (error) {
+                console.error('Error al actualizar contacto empresa: ', error);
+            }
+
+        }
+
         setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
 
         return updatedRow;
@@ -201,6 +275,7 @@ export const Datos = () => {
         setRowModesModel(newRowModesModel);
     };
 
+
     const columns = [
         {
             field: 'tipo',
@@ -208,13 +283,18 @@ export const Datos = () => {
             width: 150,
             editable: true,
             type: 'singleSelect',
-            valueOptions: tipoContacto.map((item) => item.codigo),
+            valueOptions: tipoContacto.map((item) => {
+                return {
+                    value: item.codigo,
+                    label: item.descripcion
+                }
+            })
         },
         {
             field: 'prefijo',
             headerName: 'Prefijo',
             width: 100,
-            type: 'number',
+            type: 'string',
             headerAlign: 'left',
             align: 'left',
             editable: true,
@@ -223,7 +303,7 @@ export const Datos = () => {
             field: 'valor',
             headerName: 'Valor de contacto',
             width: 200,
-            type: 'number',
+            type: 'string',
             editable: true,
         },
         {
