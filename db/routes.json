@@ -9,5 +9,6 @@
   "/empresa/contacto/": "/empresaContacto",
   "/empresa/:empresaId/contacto": "/empresaContacto/",
   "/empresa/:empresaId/contacto/:id": "/empresaContacto/:id",
-  "/empresa/ramo": "/ramo"
+  "/empresa/ramo": "/ramo",
+  "/auth/login/usuario": "/auth-login-usuario"
 }
