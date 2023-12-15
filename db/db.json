@@ -337,5 +337,14 @@
       "codigo": "REAL",
       "descripcion": "Real"
     }
+  ],
+  "ramo": [
+    { "id": 1, "descripcion": "Nutrición Animal" },
+    { "id": 2, "descripcion": "Avícola" },
+    { "id": 3, "descripcion": "Molienda de Trigo" },
+    { "id": 4, "descripcion": "Molienda de Maíz" },
+    { "id": 5, "descripcion": "Personal Temporario" },
+    { "id": 6, "descripcion": "Transporte y Distribución" },
+    { "id": 7, "descripcion": "Otros" }
   ]
 }

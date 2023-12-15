@@ -8,5 +8,6 @@
   "/empresa/domicilio/tipo": "/empresaDomicilioTipo",
   "/empresa/contacto/": "/empresaContacto",
   "/empresa/:empresaId/contacto": "/empresaContacto/",
-  "/empresa/:empresaId/contacto/:id": "/empresaContacto/:id"
+  "/empresa/:empresaId/contacto/:id": "/empresaContacto/:id",
+  "/empresa/ramo": "/ramo"
 }
