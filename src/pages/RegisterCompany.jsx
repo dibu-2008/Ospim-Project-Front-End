@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { InputComponent } from "../components/InputComponent";
 import { ButtonComponent } from "../components/ButtonComponent";
-import TextField from '@mui/material/TextField';
-import InputAdornment from "@mui/material/InputAdornment";
-import SearchIcon from "@mui/icons-material/Search";
 import { useFormRegisterCompany } from "../hooks/useFormRegisterCompany";
 import { SelectComponent } from "../components/SelectComponent";
 import { AddressTable } from "../components/AddressTable";
+import { v4 as uuidv4 } from 'uuid';
+import TextField from '@mui/material/TextField';
+import InputAdornment from "@mui/material/InputAdornment";
+import SearchIcon from "@mui/icons-material/Search";
 import Box from '@mui/material/Box';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
-import { v4 as uuidv4 } from 'uuid';
+import axios from "axios";
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 const backendUrl = import.meta.env.VITE_BACKEND_URL;

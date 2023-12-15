@@ -302,7 +302,7 @@
     {
       "tipo": "TEL2",
       "prefijo": "018",
-      "valor": "4444-8888",
+      "valor": "4444-8889",
       "id": 8
     },
     {
@@ -322,6 +322,12 @@
       "prefijo": "013",
       "valor": "3333-4444",
       "id": 11
+    },
+    {
+      "tipo": "TEL",
+      "prefijo": "019",
+      "valor": "3234-0404",
+      "id": 12
     }
   ],
   "empresaContactoTipo": [

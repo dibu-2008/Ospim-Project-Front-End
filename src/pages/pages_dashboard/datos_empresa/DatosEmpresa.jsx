@@ -25,7 +25,7 @@ import {
     GridRowEditStopReasons,
 } from '@mui/x-data-grid';
 
-import axios from 'axios';
+import { GrillaEmpresaContacto } from './grilla_empresa_contacto/GrillaEmpresaContacto';
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const ramos = [
@@ -69,87 +69,17 @@ function a11yProps(index) {
     };
 }
 
-// Logica de la grilla contacto 
-function EditToolbar(props) {
-    const { setRows, rows, setRowModesModel } = props;
-
-    const handleClick = () => {
-
-        const maxId = Math.max(...rows.map((row) => row.id), 0);
-
-        const newId = maxId + 1;
-
-        const id = newId;
-
-        setRows((oldRows) => [{ id, tipo: '', prefijo: '', valor: '', isNew: true }, ...oldRows]);
-        setRowModesModel((oldModel) => ({
-            ...oldModel,
-            [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
-        }));
-    };
-
-    return (
-        <GridToolbarContainer>
-            <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-                Agregar contacto
-            </Button>
-        </GridToolbarContainer>
-    );
-}
-
-
-
 export const Datos = () => {
 
-    const [rows, setRows] = useState([]);
-    const [rowModesModel, setRowModesModel] = useState({});
+    const [rows, setRows] = useState([]); 
     const [cuit, setCuit] = useState('');
     const [razonSocial, setRazonSocial] = useState('');
     const [ramo, setRamo] = useState('');
-    const [tipoContacto, setTipoContacto] = useState([]);
 
     // Estado para los tabs
     const [value, setValue] = useState(0);
 
-    const state = JSON.parse(localStorage.getItem('state'));
-
-    // consulta a la api tipo de contacto
-    useEffect(() => {
-        const getTipoContacto = async () => {
-            try {
-                const response = await axios.get(`${BACKEND_URL}/empresa/contacto/tipo`, {
-                    headers: {
-                        'Authorization': state.token,
-                    }
-                });
-                const jsonData = await response.data;
-                setTipoContacto(jsonData.map((item) => ({ ...item })));
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        }
-        getTipoContacto();
-    }, []);
-
-    // consulta a la api datos de la empresa
-    useEffect(() => {
-        const getDatosEmpresa = async () => {
-            try {
-                const response = await axios.get(`${BACKEND_URL}/empresa/:empresaId/contacto`, {
-                    headers: {
-                        'Authorization': state.token,
-                    }
-                });
-                const jsonData = await response.data;
-                console.log(jsonData);
-                setRows(jsonData.map((item) => ({ ...item })));
-                console.log(rows);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        }
-        getDatosEmpresa();
-    }, []);
+    const state = JSON.parse(localStorage.getItem('state')); 
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -166,193 +96,7 @@ export const Datos = () => {
     const OnChangeRamos = (e) => {
         setRamo(e.target.value);
     }
-
-    // Logica de la grilla contacto
-    const handleRowEditStop = (params, event) => {
-        if (params.reason === GridRowEditStopReasons.rowFocusOut) {
-            event.defaultMuiPrevented = true;
-        }
-    };
-
-    const handleEditClick = (id) => () => {
-        setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
-    };
-
-    const handleSaveClick = (id) => () => {
-        setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-    };
-
-    const handleDeleteClick = (id) => async () => {
-        
-        try {
-
-            setRows(rows.filter((row) => row.id !== id));
-            //setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-
-            await axios.delete(`${BACKEND_URL}/empresa/:empresaId/contacto/${id}`, {
-                headers: {
-                    'Authorization': state.token,
-                }
-            })
-            
-        } catch (error) {
-            console.error('Error al eliminar contacto empresa: ', error);
-        }
-    }
-
-    const handleCancelClick = (id) => () => {
-        setRowModesModel({
-            ...rowModesModel,
-            [id]: { mode: GridRowModes.View, ignoreModifications: true },
-        });
-
-        const editedRow = rows.find((row) => row.id === id);
-        if (editedRow.isNew) {
-            setRows(rows.filter((row) => row.id !== id));
-        }
-    };
-
-    const processRowUpdate = (newRow) => {
-
-        const updatedRow = { ...newRow, isNew: false };
-
-        console.log(newRow);
-
-        if(newRow.isNew) {
-
-            console.log("Nueva fila");
-
-            const nuevoContacto = {
-                tipo: newRow.tipo,
-                prefijo: newRow.prefijo,
-                valor: newRow.valor,
-            }
-
-            try {
-
-                axios.post(`${BACKEND_URL}/empresa/:empresaId/contacto`, nuevoContacto, {
-                    headers: {
-                        'Authorization': state.token,
-                    }
-                })
-
-                
-            } catch (error) {
-                console.error('Error al crear contacto empresa: ', error);
-            }
-
-        }else {
-
-            console.log("Fila existente");
-
-            const contacto = {
-                tipo: newRow.tipo,
-                prefijo: newRow.prefijo,
-                valor: newRow.valor,
-            }
-
-            try {
-
-                axios.put(`${BACKEND_URL}/empresa/:empresaId/contacto/${newRow.id}`, contacto, {
-                    headers: {
-                        'Authorization': state.token,
-                    }
-                })
-
-                
-            } catch (error) {
-                console.error('Error al actualizar contacto empresa: ', error);
-            }
-
-        }
-
-        setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-
-        return updatedRow;
-    }
-
-    const handleRowModesModelChange = (newRowModesModel) => {
-        setRowModesModel(newRowModesModel);
-    };
-
-
-    const columns = [
-        {
-            field: 'tipo',
-            headerName: 'Tipo de contacto',
-            width: 150,
-            editable: true,
-            type: 'singleSelect',
-            valueOptions: tipoContacto.map((item) => {
-                return {
-                    value: item.codigo,
-                    label: item.descripcion
-                }
-            })
-        },
-        {
-            field: 'prefijo',
-            headerName: 'Prefijo',
-            width: 100,
-            type: 'string',
-            headerAlign: 'left',
-            align: 'left',
-            editable: true,
-        },
-        {
-            field: 'valor',
-            headerName: 'Valor de contacto',
-            width: 200,
-            type: 'string',
-            editable: true,
-        },
-        {
-            field: 'actions',
-            headerName: 'Actions',
-            width: 200,
-            type: 'actions',
-            getActions: ({ id }) => {
-                const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
-
-                if (isInEditMode) {
-                    return [
-                        <GridActionsCellItem
-                            icon={<SaveIcon />}
-                            label="Save"
-                            sx={{
-                                color: 'primary.main',
-                            }}
-                            onClick={handleSaveClick(id)}
-                        />,
-                        <GridActionsCellItem
-                            icon={<CancelIcon />}
-                            label="Cancel"
-                            className="textPrimary"
-                            onClick={handleCancelClick(id)}
-                            color="inherit"
-                        />,
-                    ];
-                }
-
-                return [
-                    <GridActionsCellItem
-                        icon={<EditIcon />}
-                        label="Edit"
-                        className="textPrimary"
-                        onClick={handleEditClick(id)}
-                        color="inherit"
-                    />,
-                    <GridActionsCellItem
-                        icon={<DeleteIcon />}
-                        label="Delete"
-                        onClick={handleDeleteClick(id)}
-                        color="inherit"
-                    />,
-                ];
-            },
-        }
-    ]
-
+    
     return (
         <div
             style={{
@@ -429,7 +173,7 @@ export const Datos = () => {
                 </Box>
                 <CustomTabPanel value={value} index={0}>
 
-                    <DataGrid
+                    {/* <DataGrid
                         rows={rows}
                         columns={columns}
                         editMode="row"
@@ -443,6 +187,13 @@ export const Datos = () => {
                         slotProps={{
                             toolbar: { setRows, rows, setRowModesModel },
                         }}
+                    /> */}
+
+                    <GrillaEmpresaContacto
+                        rows={rows}
+                        setRows={setRows}
+                        BACKEND_URL={BACKEND_URL}
+                        token={state.token}
                     />
 
                 </CustomTabPanel>
