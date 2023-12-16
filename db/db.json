@@ -101,6 +101,11 @@
       "fecha": "2023-12-22T03:00:00.000Z",
       "descripcion": "Cumple sssaaa",
       "id": 9
+    },
+    {
+      "fecha": "2024-07-10",
+      "descripcion": "Feriado del 07-10",
+      "id": 10
     }
   ],
   "usuarios": [
@@ -363,13 +368,34 @@
     }
   ],
   "ramo": [
-    { "id": 1, "descripcion": "Nutrición Animal" },
-    { "id": 2, "descripcion": "Avícola" },
-    { "id": 3, "descripcion": "Molienda de Trigo" },
-    { "id": 4, "descripcion": "Molienda de Maíz" },
-    { "id": 5, "descripcion": "Personal Temporario" },
-    { "id": 6, "descripcion": "Transporte y Distribución" },
-    { "id": 7, "descripcion": "Otros" }
+    {
+      "id": 1,
+      "descripcion": "Nutrición Animal"
+    },
+    {
+      "id": 2,
+      "descripcion": "Avícola"
+    },
+    {
+      "id": 3,
+      "descripcion": "Molienda de Trigo"
+    },
+    {
+      "id": 4,
+      "descripcion": "Molienda de Maíz"
+    },
+    {
+      "id": 5,
+      "descripcion": "Personal Temporario"
+    },
+    {
+      "id": 6,
+      "descripcion": "Transporte y Distribución"
+    },
+    {
+      "id": 7,
+      "descripcion": "Otros"
+    }
   ],
   "auth-login-usuario": {
     "usuario": {
@@ -388,5 +414,21 @@
       "cuit": "2023372500",
       "ramoId": 1
     }
-  }
+  },
+  "provincia": [
+    { "id": 3, "descripcion": "Capital Federal" },
+    { "id": 10, "descripcion": "Formosa" },
+    { "id": 16, "descripcion": "Neuquen" }
+  ],
+  "localidad-3": [{ "id": 265, "descripcion": "Capital Federal" }],
+  "localidad-10": [
+    { "id": 308, "descripcion": "Clorinda" },
+    { "id": 1893, "descripcion": "El Colorado" },
+    { "id": 477, "descripcion": "Formosa" }
+  ],
+  "localidad-16": [
+    { "id": 193, "descripcion": "Barrio Sarmiento" },
+    { "id": 242, "descripcion": "Caminera San Martin" },
+    { "id": 83, "descripcion": "Añelo" }
+  ]
 }
