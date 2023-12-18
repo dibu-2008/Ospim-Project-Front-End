@@ -77,9 +77,7 @@ export const GrillaEmpresaContacto = ({ rows, setRows, BACKEND_URL, token }) => 
                     }
                 });
                 const jsonData = await response.data;
-                console.log(jsonData);
                 setRows(jsonData.map((item) => ({ ...item })));
-                console.log(rows);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }

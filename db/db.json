@@ -275,10 +275,10 @@
       "valor": "3404-2022"
     },
     {
-      "id": 2,
       "tipo": "MAIL",
       "prefijo": null,
-      "valor": "mail1@gmail.com"
+      "valor": "mail1@gmail.com",
+      "id": 2
     },
     {
       "id": 3,
@@ -416,19 +416,51 @@
     }
   },
   "provincia": [
-    { "id": 3, "descripcion": "Capital Federal" },
-    { "id": 10, "descripcion": "Formosa" },
-    { "id": 16, "descripcion": "Neuquen" }
+    {
+      "id": 3,
+      "descripcion": "Capital Federal"
+    },
+    {
+      "id": 10,
+      "descripcion": "Formosa"
+    },
+    {
+      "id": 16,
+      "descripcion": "Neuquen"
+    }
   ],
-  "localidad-3": [{ "id": 265, "descripcion": "Capital Federal" }],
+  "localidad-3": [
+    {
+      "id": 265,
+      "descripcion": "Capital Federal"
+    }
+  ],
   "localidad-10": [
-    { "id": 308, "descripcion": "Clorinda" },
-    { "id": 1893, "descripcion": "El Colorado" },
-    { "id": 477, "descripcion": "Formosa" }
+    {
+      "id": 308,
+      "descripcion": "Clorinda"
+    },
+    {
+      "id": 1893,
+      "descripcion": "El Colorado"
+    },
+    {
+      "id": 477,
+      "descripcion": "Formosa"
+    }
   ],
   "localidad-16": [
-    { "id": 193, "descripcion": "Barrio Sarmiento" },
-    { "id": 242, "descripcion": "Caminera San Martin" },
-    { "id": 83, "descripcion": "Añelo" }
+    {
+      "id": 193,
+      "descripcion": "Barrio Sarmiento"
+    },
+    {
+      "id": 242,
+      "descripcion": "Caminera San Martin"
+    },
+    {
+      "id": 83,
+      "descripcion": "Añelo"
+    }
   ]
 }

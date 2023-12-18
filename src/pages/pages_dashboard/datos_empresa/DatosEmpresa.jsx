@@ -1,5 +1,6 @@
 import './DatosEmpresa.css';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { GrillaEmpresaContacto } from './grilla_empresa_contacto/GrillaEmpresaContacto';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
@@ -10,22 +11,7 @@ import Button from '@mui/material/Button';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-
-// data grid
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import SaveIcon from '@mui/icons-material/Save';
-import CancelIcon from '@mui/icons-material/Close';
-import {
-    GridRowModes,
-    DataGrid,
-    GridToolbarContainer,
-    GridActionsCellItem,
-    GridRowEditStopReasons,
-} from '@mui/x-data-grid';
-
-import { GrillaEmpresaContacto } from './grilla_empresa_contacto/GrillaEmpresaContacto';
+import { GrillaEmpresaDomilicio } from './grilla_empresa_domicilio/GrillaEmpresaDomilicio';
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const ramos = [
@@ -72,6 +58,7 @@ function a11yProps(index) {
 export const Datos = () => {
 
     const [rows, setRows] = useState([]); 
+    const [rows_domicilio, setRowsDomicilio] = useState([]); 
     const [cuit, setCuit] = useState('');
     const [razonSocial, setRazonSocial] = useState('');
     const [ramo, setRamo] = useState('');
@@ -172,33 +159,20 @@ export const Datos = () => {
                     </Tabs>
                 </Box>
                 <CustomTabPanel value={value} index={0}>
-
-                    {/* <DataGrid
-                        rows={rows}
-                        columns={columns}
-                        editMode="row"
-                        rowModesModel={rowModesModel}
-                        onRowModesModelChange={handleRowModesModelChange}
-                        onRowEditStop={handleRowEditStop}
-                        processRowUpdate={processRowUpdate}
-                        slots={{
-                            toolbar: EditToolbar,
-                        }}
-                        slotProps={{
-                            toolbar: { setRows, rows, setRowModesModel },
-                        }}
-                    /> */}
-
                     <GrillaEmpresaContacto
                         rows={rows}
                         setRows={setRows}
                         BACKEND_URL={BACKEND_URL}
                         token={state.token}
                     />
-
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={1}>
-                    Item Two
+                    <GrillaEmpresaDomilicio
+                        rows_domicilio={rows_domicilio}
+                        setRowsDomicilio={setRowsDomicilio}
+                        BACKEND_URL={BACKEND_URL}
+                        token={state.token}
+                    />
                 </CustomTabPanel>
 
             </Box>

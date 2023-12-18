@@ -126,6 +126,8 @@ export const AddressTable = ({ companiesDto, rows, setRows }) => {
 
             setProvincias(nombresProvincias);
 
+            console.log(provincias);
+
         } catch (error) {
             console.error('Error al obtener provincias:', error);
         }
