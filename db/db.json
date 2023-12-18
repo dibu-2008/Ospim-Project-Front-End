@@ -32,8 +32,8 @@
       "domicilios": [
         {
           "tipo": "Fiscal",
-          "provincia": "Santa Fe",
-          "localidad": "LOS NOGALES",
+          "provinciaId": 3,
+          "localidadId": 265,
           "calle": "ancun",
           "piso": "2",
           "depto": "3",
@@ -43,8 +43,8 @@
         },
         {
           "tipo": "Fiscal",
-          "provincia": "Corrientes",
-          "localidad": "EMPEDRADO",
+          "provinciaId": 3,
+          "localidadId": 265,
           "calle": "gdffgfd",
           "piso": "5",
           "depto": "3",
@@ -230,8 +230,8 @@
     {
       "id": 1,
       "tipo": "FISCAL",
-      "provinciaId": 1,
-      "localidadId": 1,
+      "provinciaId": 3,
+      "localidadId": 265,
       "calle": "San Martin",
       "calleNro": "15250",
       "piso": "P.B.",
@@ -243,8 +243,8 @@
     {
       "id": 2,
       "tipo": "REAL",
-      "provinciaId": 2,
-      "localidadId": 2,
+      "provinciaId": 3,
+      "localidadId": 265,
       "calle": "San Juan",
       "calleNro": "3540",
       "piso": "1",
@@ -256,7 +256,7 @@
     {
       "tipo": "REAL",
       "provinciaId": 3,
-      "localidadId": 3,
+      "localidadId": 265,
       "calle": "San Pedrosssss",
       "calleNro": "15",
       "piso": "2",
