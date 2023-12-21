@@ -99,8 +99,6 @@ export const GrillaEmpresaDomilicio = ({ rows_domicilio, setRowsDomicilio, BACKE
         getTipoDomicilio();
     }, [])
 
-
-
     const getProvincias = async () => {
 
         try {
@@ -114,14 +112,14 @@ export const GrillaEmpresaDomilicio = ({ rows_domicilio, setRowsDomicilio, BACKE
             const jsonData = await response.data;
             setProvincias(jsonData.map((item) => ({ ...item })));
 
-            console.log(jsonData);
-
         } catch (error) {
             console.error('Error al obtener provincias:', error);
         }
     }
 
     const getLocalidades = async (provinciaId) => {
+
+        console.log("id de provincia: " + provinciaId)
 
         try {
 
@@ -133,9 +131,8 @@ export const GrillaEmpresaDomilicio = ({ rows_domicilio, setRowsDomicilio, BACKE
 
             const jsonData = await response.data;
             setLocalidades(jsonData.map((item) => ({ ...item })));
-            console.log(jsonData);
-        
-        }catch (error) {
+
+        } catch (error) {
 
             console.error('Error al obtener localidades:', error);
         }
@@ -143,15 +140,17 @@ export const GrillaEmpresaDomilicio = ({ rows_domicilio, setRowsDomicilio, BACKE
 
     useEffect(() => {
         const fetchData = async () => {
+
             await getProvincias();
+
             if (provinciaSeleccionada) {
-                console.log(provinciaSeleccionada);
-                await getLocalidades(provinciaSeleccionada);
+
+                getLocalidades(provinciaSeleccionada);
+
             }
         };
         fetchData();
-    }, [provinciaSeleccionada]); 
-
+    }, [provinciaSeleccionada]);
 
     useEffect(() => {
 
@@ -163,15 +162,32 @@ export const GrillaEmpresaDomilicio = ({ rows_domicilio, setRowsDomicilio, BACKE
                     }
                 });
                 const jsonData = await response.data;
-                console.log(jsonData);
                 setRowsDomicilio(jsonData.map((item) => ({ ...item })));
-               
+
+                // recorrer el jsondata con un for of
+                for (const item of jsonData) {
+                    
+                    try {
+
+                        const res = await axios.get(`http://localhost:3001/localidad-${item.provinciaId}`)
+
+                        const json = await res.data;
+
+                        setLocalidades(json.map((item) => ({ ...item })));
+                        
+                    } catch (error) {
+                        
+                        console.error('Error al obtener localidades:', error);
+                    }
+                }
+
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         }
         getDatosEmpresa();
     }, []);
+
 
 
     const handleRowEditStop = (params, event) => {
@@ -228,7 +244,7 @@ export const GrillaEmpresaDomilicio = ({ rows_domicilio, setRowsDomicilio, BACKE
                     value: item.codigo,
                     label: item.descripcion,
                 }
-            }),
+            })
         },
         {
             field: 'provinciaId',
@@ -246,6 +262,7 @@ export const GrillaEmpresaDomilicio = ({ rows_domicilio, setRowsDomicilio, BACKE
                 return (
                     <Select
                         value={params.value}
+
                         onChange={(e) => {
                             setProvinciaSeleccionada(e.target.value)
                             params.api.setEditCellValue({
@@ -255,7 +272,8 @@ export const GrillaEmpresaDomilicio = ({ rows_domicilio, setRowsDomicilio, BACKE
                             }, e.target.value);
                         }}
                         sx={{ width: 200 }}
-                    >   
+                    >
+
                         {provincias.map((item) => {
                             return (
                                 <MenuItem key={item.id} value={item.id}>
@@ -265,7 +283,7 @@ export const GrillaEmpresaDomilicio = ({ rows_domicilio, setRowsDomicilio, BACKE
                         })}
                     </Select>
                 )
-            }
+            } 
         },
         {
             field: 'localidadId',
@@ -399,6 +417,9 @@ export const GrillaEmpresaDomilicio = ({ rows_domicilio, setRowsDomicilio, BACKE
                     noRowsLabel: '',
                 }}
             />
+
+
+
         </Box>
     )
 }
