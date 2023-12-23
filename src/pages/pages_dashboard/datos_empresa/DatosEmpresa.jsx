@@ -15,6 +15,7 @@ import { GrillaEmpresaDomilicio } from './grilla_empresa_domicilio/GrillaEmpresa
 import { GrillaEmpresaDomicilioPrueba } from './GrillaEmpresaDomicilioPrueba';
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
+// Hacer la peticion
 const ramos = [
     { value: "Ramo A", label: "Ramo A" },
     { value: "Ramo B", label: "Ramo B" },
@@ -58,13 +59,15 @@ function a11yProps(index) {
 
 export const Datos = () => {
 
+    // rows contacto cambiar a rows_contacto,
+    // usar CamelCase para las variables
     const [rows, setRows] = useState([]); 
     const [rows_domicilio, setRowsDomicilio] = useState([]); 
     const [cuit, setCuit] = useState('');
     const [razonSocial, setRazonSocial] = useState('');
     const [ramo, setRamo] = useState('');
 
-    // Estado para los tabs
+    // Estado para los tabs 
     const [value, setValue] = useState(0);
 
     const state = JSON.parse(localStorage.getItem('state')); 
@@ -171,7 +174,7 @@ export const Datos = () => {
                     <GrillaEmpresaDomilicio
                         rows_domicilio={rows_domicilio}
                         setRowsDomicilio={setRowsDomicilio}
-                        BACKEND_URL={BACKEND_URL}
+                        BACKEND_URL={BACKEND_URL} // No hacer esto mala practica.
                         token={state.token}
                     />
                     <GrillaEmpresaDomicilioPrueba/>

@@ -72,10 +72,18 @@ export const GrillaEmpresaDomilicio = ({ rows_domicilio, setRowsDomicilio, BACKE
 
     const [rowModesModel, setRowModesModel] = useState({});
     const [tipoDomicilio, setTipoDomicilio] = useState([]);
-    const [provincia, setProvincia] = useState('');
     const [provincias, setProvincias] = useState([]);
     const [localidadesList, setLocalidadesList] = useState([]);
     const [localidadesFiltradas, setLocalidadesFiltradas] = useState([]);
+
+    useEffect(() => {
+      first
+    
+      return () => {
+        second
+      }
+    }, [third])
+    
 
     useEffect(() => {
 
@@ -92,7 +100,6 @@ export const GrillaEmpresaDomilicio = ({ rows_domicilio, setRowsDomicilio, BACKE
                 setTipoDomicilio(jsonData.map((item) => ({ ...item })));
 
             } catch (error) {
-
                 console.error('Error al consultar los tipos de domicilio:', error);
             }
         }
@@ -250,6 +257,8 @@ export const GrillaEmpresaDomilicio = ({ rows_domicilio, setRowsDomicilio, BACKE
                             setProvincia(e.target.value);
 
                             const localidadesFiltradas = localidadesList.filter((item) => item.idProvincia === e.target.value);
+
+                            
 
                             setLocalidadesFiltradas(localidadesFiltradas);
 

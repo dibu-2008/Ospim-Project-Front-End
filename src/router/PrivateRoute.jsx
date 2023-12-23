@@ -20,15 +20,3 @@ const PrivateRoute = ({ children }) => {
 }
 
 export default PrivateRoute
-
-
-
-
-
- /* const { state } = useLocation();
-
-    if (state && state.logged) {
-        return children;
-    } else {
-        return <Navigate to="/login" state={{ from: "/" }} replace={true} />;
-    }  */

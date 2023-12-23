@@ -125,11 +125,11 @@
   ],
   "publicaciones": [
     {
-      "id": 1,
       "titulo": "Nuevos Contratos",
       "cuerpo": "Nuevos Contratos dice: kjlfdh fjkds fkljd hgfjkd ghfjdk gkjfd hgjkfd sghjkfd sghjkfds ghkjfds hgjkfd hhgjkfds kjhgfd gkfds FIN.-",
       "vigenciaDesde": "2023-12-01",
-      "vigenciaHasta": "2024-01-20"
+      "vigenciaHasta": "2024-01-26T03:00:00.000Z",
+      "id": 1
     },
     {
       "id": 2,
@@ -153,11 +153,18 @@
       "vigenciaHasta": "2028-07-20"
     },
     {
-      "titulo": "Titulo Pabada 1",
-      "cuerpo": "Cuerpo Pabada 1",
-      "vigenciaDesde": "2023-12-05",
-      "vigenciaHasta": "2024-03-01",
-      "id": 6
+      "titulo": "fdfdsf",
+      "cuerpo": "sdfsdf",
+      "vigenciaDesde": "2023-11-28T03:00:00.000Z",
+      "vigenciaHasta": "2023-12-14T03:00:00.000Z",
+      "id": 8
+    },
+    {
+      "titulo": "NUevo",
+      "cuerpo": "Cuerpo Nuevo",
+      "vigenciaDesde": "2023-12-20T03:00:00.000Z",
+      "vigenciaHasta": "2023-12-31T03:00:00.000Z",
+      "id": 9
     }
   ],
   "publicacionesVigentes": [

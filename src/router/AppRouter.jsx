@@ -6,6 +6,7 @@ import {
   RegisterPage,
   DashboardPage
 } from "../pages";
+
 import PrivateRoute from "./PrivateRoute";
 import { RegisterCompany } from "../pages/RegisterCompany";
 import { Feriados } from "../pages/pages_dashboard/Feriados";
@@ -14,9 +15,11 @@ import { Inicio } from "../pages/pages_dashboard/inicio/Inicio";
 import { Categorias } from "../pages/pages_dashboard/Categorias";
 import NavBar from "../components/navbar/NavBar";
 import { Datos } from "../pages/pages_dashboard/datos_empresa/DatosEmpresa";
+import { Publicaciones } from "../pages/pages_dashboard/publicaciones/Publicaciones";
 
 const BoletasPage = () => <div>Contenido de la página de boletas</div>;
 const PagosPage = () => <div>Contenido de la página de pagos</div>;
+const PublicacionesPage = () => <div>Contenido de la página de publicaciones</div>;
 
 const AppRouter = () => {
   return (
@@ -31,6 +34,7 @@ const AppRouter = () => {
             </PrivateRoute>
           }>
             <Route path="inicio" index element={<Inicio />} />
+            <Route path="publicaciones" element={<Publicaciones />} />
             <Route path="feriados" element={<Feriados />} />
             <Route path="ddjj" element={<DeclaracionesJuradas />} />
             <Route path="boletas" element={<BoletasPage />} />
