@@ -1,450 +1,421 @@
-import { useState, useEffect, useRef } from 'react';
-import { MenuItem, Select } from '@mui/material';
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+import { useState, useEffect, useRef } from "react";
+import { MenuItem, Select } from "@mui/material";
 import {
-    GridRowModes,
-    DataGrid,
-    GridToolbarContainer,
-    GridActionsCellItem,
-    GridRowEditStopReasons,
-} from '@mui/x-data-grid';
+  GridRowModes,
+  DataGrid,
+  GridToolbarContainer,
+  GridActionsCellItem,
+  GridRowEditStopReasons,
+} from "@mui/x-data-grid";
 
 import {
-    randomCreatedDate,
-    randomTraderName,
-    randomId,
-    randomArrayItem,
-} from '@mui/x-data-grid-generator';
+  randomCreatedDate,
+  randomTraderName,
+  randomId,
+  randomArrayItem,
+} from "@mui/x-data-grid-generator";
 
-import axios from 'axios';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import SaveIcon from '@mui/icons-material/Save';
-import CancelIcon from '@mui/icons-material/Close';
-
+import axios from "axios";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import SaveIcon from "@mui/icons-material/Save";
+import CancelIcon from "@mui/icons-material/Close";
 
 function EditToolbar(props) {
-    const { setRowsDomicilio, rows_domicilio, setRowModesModel } = props;
+  const { setRowsDomicilio, rows_domicilio, setRowModesModel } = props;
 
-    const handleClick = () => {
+  const handleClick = () => {
+    const maxId = Math.max(...rows_domicilio.map((row) => row.id), 0);
 
-        const maxId = Math.max(...rows_domicilio.map((row) => row.id), 0);
+    const newId = maxId + 1;
 
-        const newId = maxId + 1;
+    const id = newId;
 
-        const id = newId;
+    setRowsDomicilio((oldRows) => [
+      {
+        id,
+        tipo: "",
+        provinciaId: "",
+        localidadId: "",
+        calle: "",
+        piso: "",
+        dpto: "",
+        oficina: "",
+        cp: "",
+        planta: "",
+        valor: "",
+        isNew: true,
+      },
+      ...oldRows,
+    ]);
+    setRowModesModel((oldModel) => ({
+      ...oldModel,
+      [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
+    }));
+  };
 
-        setRowsDomicilio((oldRows) => [
-            {
-                id,
-                tipo: '',
-                provinciaId: '',
-                localidadId: '',
-                calle: '',
-                piso: '',
-                dpto: '',
-                oficina: '',
-                cp: '',
-                planta: '',
-                valor: '',
-                isNew: true
-            },
-            ...oldRows
-        ]);
-        setRowModesModel((oldModel) => ({
-            ...oldModel,
-            [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
-        }));
-    };
-
-    return (
-        <GridToolbarContainer>
-            <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-                Agregar contacto
-            </Button>
-        </GridToolbarContainer>
-    );
+  return (
+    <GridToolbarContainer>
+      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
+        Agregar contacto
+      </Button>
+    </GridToolbarContainer>
+  );
 }
 
-export const GrillaEmpresaDomilicio = ({ rows_domicilio, setRowsDomicilio, BACKEND_URL, token }) => {
+export const GrillaEmpresaDomilicio = ({
+  rowsDomicilio,
+  setRowsDomicilio,
+  token,
+}) => {
+  const [rowModesModel, setRowModesModel] = useState({});
+  const [tipoDomicilio, setTipoDomicilio] = useState([]);
+  const [provincia, setProvincia] = useState("");
+  const [provincias, setProvincias] = useState([]);
+  const [localidades, setLocalidades] = useState([]);
+  //const [localidadesFiltradas, setLocalidadesFiltradas] = useState([]);
 
-    const [rowModesModel, setRowModesModel] = useState({});
-    const [tipoDomicilio, setTipoDomicilio] = useState([]);
-    const [provincias, setProvincias] = useState([]);
-    const [localidadesList, setLocalidadesList] = useState([]);
-    const [localidadesFiltradas, setLocalidadesFiltradas] = useState([]);
-
-    useEffect(() => {
-      first
-    
-      return () => {
-        second
-      }
-    }, [third])
-    
-
-    useEffect(() => {
-
-        const getTipoDomicilio = async () => {
-            try {
-
-                const response = await axios.get(`${BACKEND_URL}/empresa/domicilio/tipo`, {
-                    headers: {
-                        'Authorization': token,
-                    }
-                });
-
-                const jsonData = await response.data;
-                setTipoDomicilio(jsonData.map((item) => ({ ...item })));
-
-            } catch (error) {
-                console.error('Error al consultar los tipos de domicilio:', error);
-            }
+  const getTipoDomicilio = async () => {
+    try {
+      const response = await axios.get(
+        `${BACKEND_URL}/empresa/domicilio/tipo`,
+        {
+          headers: {
+            Authorization: token,
+          },
         }
+      );
 
-        getTipoDomicilio();
-    }, [])
-
-    const getProvincias = async () => {
-
-        try {
-
-            const response = await axios.get(`${BACKEND_URL}/provincia`, {
-                headers: {
-                    'Authorization': token,
-                }
-            })
-
-            const jsonData = await response.data;
-            setProvincias(jsonData.map((item) => ({ ...item })));
-
-            const localidadesTemp = [];
-
-            for (const provincia of jsonData) {
-
-                try {
-
-                    const localidad = await axios.get(`http://localhost:3001/localidad-${provincia.id}`)
-
-                    const json = await localidad.data;
-
-                    // Agregar el campo idProvincia a cada objeto de localidades
-                    const localidadesConIdProvincia = json.map((item) => ({ idProvincia: provincia.id, ...item }));
-
-
-                    localidadesTemp.push(...localidadesConIdProvincia);
-
-                } catch (error) {
-                    console.error('Error al obtener localidades:', error);
-                }
-
-            }
-
-            setLocalidadesList(localidadesTemp);
-
-        } catch (error) {
-            console.error('Error al obtener provincias:', error);
-        }
+      const jsonData = await response.data;
+      setTipoDomicilio(jsonData.map((item) => ({ ...item })));
+    } catch (error) {
+      console.error("Error al consultar los tipos de domicilio:", error);
     }
+  };
 
-    useEffect(() => {
-        getProvincias();
-    }, [])
+  const getProvincias = async () => {
+    try {
+      const response = await axios.get(`${BACKEND_URL}/provincia`, {
+        headers: {
+          Authorization: token,
+        },
+      });
 
+      const jsonData = await response.data;
+      setProvincias(jsonData.map((item) => ({ ...item })));
+    } catch (error) {
+      console.error("Error al obtener provincias:", error);
+    }
+  };
 
-    useEffect(() => {
-
-        const getDatosEmpresa = async () => {
-            try {
-                const response = await axios.get(`${BACKEND_URL}/empresa/:empresaId/domicilio`, {
-                    headers: {
-                        'Authorization': token,
-                    }
-                });
-                const jsonData = await response.data;
-                setRowsDomicilio(jsonData.map((item) => ({ ...item })));
-
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
+  const getLocalidades = async (provinciaId) => {
+    console.log("getLocalidades- INIT");
+    try {
+      const response = await axios.get(
+        `${BACKEND_URL}/localidad-${provinciaId}`,
+        {
+          headers: {
+            Authorization: token,
+          },
         }
-        getDatosEmpresa();
-    }, []);
+      );
 
+      const jsonData = await response.data;
 
+      console.log("getLocalidades- jsonData:" + jsonData);
+      return jsonData.map((item) => ({ ...item }));
+    } catch (error) {
+      console.error("Error al obtener localidades:", error);
+    }
+  };
 
-    const handleRowEditStop = (params, event) => {
-        if (params.reason === GridRowEditStopReasons.rowFocusOut) {
-            event.defaultMuiPrevented = true;
+  const getRowsDomicilio = async () => {
+    try {
+      const response = await axios.get(
+        `${BACKEND_URL}/empresa/:empresaId/domicilio`,
+        {
+          headers: {
+            Authorization: token,
+          },
         }
-    };
+      );
+      const jsonData = await response.data;
+      setRowsDomicilio(jsonData.map((item) => ({ ...item })));
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
-    const handleEditClick = (id) => () => {
-        setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
-    };
+  const getDatosLocalidad = async () => {
+    const localidadesTemp = [];
+    console.log(
+      "** getDatosLocalidad - INIT - rowsDomicilio: " + rowsDomicilio
+    );
+    for (const reg of rowsDomicilio) {
+      console.log("getDatosLocalidad - PROCESANDO: " + reg.provinciaId);
+      try {
+        const vecRegProv = localidadesTemp.filter(
+          (locTmp) => locTmp.provinciaId == reg.provinciaId
+        );
+        console.log(
+          "** getDatosLocalidad - PROCESANDO - vecRegProv.length: " +
+            vecRegProv.length
+        );
+        if (vecRegProv.length == 0) {
+          console.log(
+            "** carga vecLocalidades - provinciaId : " + reg.provinciaId
+          );
+          const localidad = await getLocalidades(reg.provinciaId);
 
-    const handleSaveClick = (id) => () => {
-        setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-    };
+          // Agregar el campo idProvincia a cada objeto de localidades
+          const localidadesConIdProvincia = localidad.map((item) => ({
+            provinciaId: reg.provinciaId,
+            ...item,
+          }));
+          localidadesTemp.push(...localidadesConIdProvincia);
+        }
+      } catch (error) {
+        console.error("** Error al obtener localidades:", error);
+      }
+    }
+    //setLocalidades(localidadesTemp);
+    console.log("** getDatosLocalidad - localidadesTemp:" + localidadesTemp);
+  };
 
-    const handleDeleteClick = (id) => () => {
-        setRowsDomicilio(rows_domicilio.filter((row) => row.id !== id));
-    };
+  useEffect(() => {
+    getProvincias();
+  }, []);
+  useEffect(() => {
+    getTipoDomicilio();
+  }, []);
+  useEffect(() => {
+    getRowsDomicilio();
+    getDatosLocalidad();
+  }, []);
 
-    const handleCancelClick = (id) => () => {
-        setRowModesModel({
-            ...rowModesModel,
-            [id]: { mode: GridRowModes.View, ignoreModifications: true },
+  const handleRowEditStop = (params, event) => {
+    if (params.reason === GridRowEditStopReasons.rowFocusOut) {
+      event.defaultMuiPrevented = true;
+    }
+  };
+
+  const handleEditClick = (id) => () => {
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+  };
+
+  const handleSaveClick = (id) => () => {
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+  };
+
+  const handleDeleteClick = (id) => () => {
+    setRowsDomicilio(rowsDomicilio.filter((row) => row.id !== id));
+  };
+
+  const handleCancelClick = (id) => () => {
+    setRowModesModel({
+      ...rowModesModel,
+      [id]: { mode: GridRowModes.View, ignoreModifications: true },
+    });
+
+    const editedRow = rowsDomicilio.find((row) => row.id === id);
+    if (editedRow.isNew) {
+      setRowsDomicilio(rowsDomicilio.filter((row) => row.id !== id));
+    }
+  };
+
+  const processRowUpdate = (newRow) => {
+    const updatedRow = { ...newRow, isNew: false };
+
+    setRowsDomicilio(
+      rowsDomicilio.map((row) => (row.id === newRow.id ? updatedRow : row))
+    );
+
+    return updatedRow;
+  };
+
+  const handleRowModesModelChange = (newRowModesModel) => {
+    setRowModesModel(newRowModesModel);
+  };
+
+  const handleCellEditStart = (params, event, details) => {
+    // Realiza acciones personalizadas cuando comienza la edición de una celda
+    console.log("Cell edit started:", params, event, details);
+  };
+
+  const columns = [
+    {
+      field: "tipo",
+      headerName: "Tipo",
+      width: 120,
+      editable: true,
+      type: "singleSelect",
+      getOptionValue: (dato) => dato.codigo,
+      getOptionLabel: (dato) => dato.descripcion,
+      valueOptions: tipoDomicilio,
+    },
+    {
+      field: "provinciaId",
+      headerName: "Provincia",
+      width: 200,
+      editable: true,
+      type: "singleSelect",
+      valueOptions: provincias,
+      getOptionValue: (dato) => dato.id,
+      getOptionLabel: (dato) => dato.descripcion,
+    },
+    {
+      field: "localidadId",
+      headerName: "Localidad",
+      width: 220,
+      editable: true,
+      type: "singleSelect",
+      //valueOptions: localidadesList,
+      valueOptions: ({ row }) => {
+        var options = [];
+
+        console.log(
+          "columns.localidadId.valueOptions: row.provinciaId: " +
+            row.provinciaId
+        );
+        console.log(
+          "columns.localidadId.valueOptions: localidades: " + localidades
+        );
+
+        return localidades.filter((item) => {
+          item.provinciaId == row.provinciaId;
         });
 
-        const editedRow = rows_domicilio.find((row) => row.id === id);
-        if (editedRow.isNew) {
-            setRowsDomicilio(rows_domicilio.filter((row) => row.id !== id));
+        //return options;
+      },
+      getOptionValue: (dato) => dato.id,
+      getOptionLabel: (dato) => dato.descripcion,
+    },
+    {
+      field: "calle",
+      headerName: "Calle",
+      width: 120,
+      editable: true,
+    },
+    {
+      field: "piso",
+      headerName: "Piso",
+      width: 80,
+      editable: true,
+    },
+    {
+      field: "depto",
+      headerName: "Depto",
+      width: 80,
+      editable: true,
+    },
+    {
+      field: "oficina",
+      headerName: "Oficina",
+      width: 100,
+      editable: true,
+    },
+    {
+      field: "cp",
+      headerName: "CP",
+      width: 80,
+      editable: true,
+    },
+    {
+      field: "planta",
+      headerName: "Planta",
+      width: 100,
+      editable: true,
+    },
+    {
+      field: "actions",
+      type: "actions",
+      headerName: "Actions",
+      width: 100,
+      cellClassName: "actions",
+      getActions: ({ id }) => {
+        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+
+        if (isInEditMode) {
+          return [
+            <GridActionsCellItem
+              icon={<SaveIcon />}
+              label="Save"
+              sx={{
+                color: "primary.main",
+              }}
+              onClick={handleSaveClick(id)}
+            />,
+            <GridActionsCellItem
+              icon={<CancelIcon />}
+              label="Cancel"
+              className="textPrimary"
+              onClick={handleCancelClick(id)}
+              color="inherit"
+            />,
+          ];
         }
-    };
 
-    const processRowUpdate = (newRow) => {
-        const updatedRow = { ...newRow, isNew: false };
+        return [
+          <GridActionsCellItem
+            icon={<EditIcon />}
+            label="Edit"
+            className="textPrimary"
+            onClick={handleEditClick(id)}
+            color="inherit"
+          />,
+          <GridActionsCellItem
+            icon={<DeleteIcon />}
+            label="Delete"
+            onClick={handleDeleteClick(id)}
+            color="inherit"
+          />,
+        ];
+      },
+    },
+  ];
 
-        setRowsDomicilio(rows_domicilio.map((row) => (row.id === newRow.id ? updatedRow : row)));
-
-        return updatedRow;
-    };
-
-    const handleRowModesModelChange = (newRowModesModel) => {
-        setRowModesModel(newRowModesModel);
-    };
-
-    const handleCellEditStart = (params, event, details) => {
-        // Realiza acciones personalizadas cuando comienza la edición de una celda
-        console.log('Cell edit started:', params, event, details);
-    };
-
-    const columns = [
-        {
-            field: 'tipo',
-            headerName: 'Tipo',
-            width: 120,
-            editable: true,
-            type: 'singleSelect',
-            valueOptions: tipoDomicilio.map((item) => {
-                return {
-                    value: item.codigo,
-                    label: item.descripcion,
-                }
-            })
+  return (
+    <Box
+      sx={{
+        height: "auto",
+        width: "100%",
+        overflowX: "scroll",
+        "& .actions": {
+          color: "text.secondary",
         },
-        {
-            field: 'provinciaId',
-            headerName: 'Provincia',
-            width: 200,
-            editable: true,
-            type: 'singleSelect',
-            valueOptions: provincias.map((item) => {
-                return {
-                    value: item.id,
-                    label: item.descripcion,
-                }
-            }, []),
-            renderEditCell: (params) => {
-                return (
-                    <Select
-                        value={params.value}
-                        onChange={(e) => {
-
-                            setProvincia(e.target.value);
-
-                            const localidadesFiltradas = localidadesList.filter((item) => item.idProvincia === e.target.value);
-
-                            
-
-                            setLocalidadesFiltradas(localidadesFiltradas);
-
-                            params.api.setEditCellValue({
-                                id: params.id,
-                                field: 'provinciaId',
-                                value: e.target.value,
-                            }, e.target.value);
-                        }}
-                        sx={{ width: 200 }}
-
-                    >
-
-                        {provincias.map((item) => {
-                            return (
-                                <MenuItem key={item.id} value={item.id}>
-                                    {item.descripcion}
-                                </MenuItem>
-                            )
-                        })}
-                    </Select>
-                )
-            }
+        "& .textPrimary": {
+          color: "text.primary",
         },
-        {
-            field: 'localidadId',
-            headerName: 'Localidad',
-            width: 220,
-            editable: true,
-            type: 'singleSelect',
-            valueOptions: localidadesList.map((item) => {
-                return {
-                    value: item.id,
-                    label: item.descripcion,
-                }
-            }),
-            renderEditCell: (params) => {
-
-                // limpiar el campo localidadId cuando se cambia la provincia
-
-                return (
-                    <Select
-                        value={params.value}
-                        onChange={(e) => {
-                            params.api.setEditCellValue({
-                                id: params.id,
-                                field: 'localidadId',
-                                value: e.target.value,
-                            }, e.target.value);
-                        }}
-                        sx={{ width: 220 }}
-                    >
-                        {localidadesFiltradas.map((item) => {
-                            return (
-                                <MenuItem key={item.id} value={item.id}>
-                                    {item.descripcion}
-                                </MenuItem>
-                            )
-                        })}
-                    </Select>
-                )
-            }
-        },
-        {
-            field: 'calle',
-            headerName: 'Calle',
-            width: 120,
-            editable: true,
-        },
-        {
-            field: 'piso',
-            headerName: 'Piso',
-            width: 80,
-            editable: true,
-        },
-        {
-            field: 'depto',
-            headerName: 'Depto',
-            width: 80,
-            editable: true,
-        },
-        {
-            field: 'oficina',
-            headerName: 'Oficina',
-            width: 100,
-            editable: true,
-        },
-        {
-            field: 'cp',
-            headerName: 'CP',
-            width: 80,
-            editable: true,
-        },
-        {
-            field: 'planta',
-            headerName: 'Planta',
-            width: 100,
-            editable: true,
-        },
-        {
-            field: 'actions',
-            type: 'actions',
-            headerName: 'Actions',
-            width: 100,
-            cellClassName: 'actions',
-            getActions: ({ id }) => {
-                const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
-
-                if (isInEditMode) {
-                    return [
-                        <GridActionsCellItem
-                            icon={<SaveIcon />}
-                            label="Save"
-                            sx={{
-                                color: 'primary.main',
-                            }}
-                            onClick={handleSaveClick(id)}
-                        />,
-                        <GridActionsCellItem
-                            icon={<CancelIcon />}
-                            label="Cancel"
-                            className="textPrimary"
-                            onClick={handleCancelClick(id)}
-                            color="inherit"
-                        />,
-                    ];
-                }
-
-                return [
-                    <GridActionsCellItem
-                        icon={<EditIcon />}
-                        label="Edit"
-                        className="textPrimary"
-                        onClick={handleEditClick(id)}
-                        color="inherit"
-                    />,
-                    <GridActionsCellItem
-                        icon={<DeleteIcon />}
-                        label="Delete"
-                        onClick={handleDeleteClick(id)}
-                        color="inherit"
-                    />,
-                ];
-            },
-        },
-    ];
-
-
-    return (
-        <Box
-            sx={{
-                height: 'auto',
-                width: '100%',
-                overflowX: 'scroll',
-                '& .actions': {
-                    color: 'text.secondary',
-                },
-                '& .textPrimary': {
-                    color: 'text.primary',
-                },
-            }}
-        >
-
-            <DataGrid
-                autoHeight
-                rows={rows_domicilio}
-                columns={columns}
-                editMode="row"
-                rowModesModel={rowModesModel}
-                onRowModesModelChange={handleRowModesModelChange}
-                onRowEditStop={handleRowEditStop}
-                onCellEditStart={handleCellEditStart}
-                processRowUpdate={processRowUpdate}
-                slots={{
-                    toolbar: EditToolbar,
-                }}
-                slotProps={{
-                    toolbar: { setRowsDomicilio, rows_domicilio, setRowModesModel },
-                }}
-                localeText={{
-                    noRowsLabel: '',
-                }}
-            />
-
-
-
-        </Box>
-    )
-}
+      }}
+    >
+      <DataGrid
+        autoHeight
+        columns={columns}
+        rows={rowsDomicilio}
+        editMode="row"
+        rowModesModel={rowModesModel}
+        onRowModesModelChange={handleRowModesModelChange}
+        onRowEditStop={handleRowEditStop}
+        onCellEditStart={handleCellEditStart}
+        processRowUpdate={processRowUpdate}
+        slots={{
+          toolbar: EditToolbar,
+        }}
+        slotProps={{
+          toolbar: {
+            setRowsDomicilio,
+            rows_domicilio: rowsDomicilio,
+            setRowModesModel,
+          },
+        }}
+        localeText={{
+          noRowsLabel: "",
+        }}
+      />
+    </Box>
+  );
+};
