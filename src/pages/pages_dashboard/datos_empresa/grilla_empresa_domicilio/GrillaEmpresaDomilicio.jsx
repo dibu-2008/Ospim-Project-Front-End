@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { MenuItem, Select } from '@mui/material';
 import {
     GridRowModes,
@@ -72,9 +72,10 @@ export const GrillaEmpresaDomilicio = ({ rows_domicilio, setRowsDomicilio, BACKE
 
     const [rowModesModel, setRowModesModel] = useState({});
     const [tipoDomicilio, setTipoDomicilio] = useState([]);
+    const [provincia, setProvincia] = useState('');
     const [provincias, setProvincias] = useState([]);
-    const [provinciaSeleccionada, setProvinciaSeleccionada] = useState('');
-    const [localidades, setLocalidades] = useState([]);
+    const [localidadesList, setLocalidadesList] = useState([]);
+    const [localidadesFiltradas, setLocalidadesFiltradas] = useState([]);
 
     useEffect(() => {
 
@@ -112,45 +113,39 @@ export const GrillaEmpresaDomilicio = ({ rows_domicilio, setRowsDomicilio, BACKE
             const jsonData = await response.data;
             setProvincias(jsonData.map((item) => ({ ...item })));
 
+            const localidadesTemp = [];
+
+            for (const provincia of jsonData) {
+
+                try {
+
+                    const localidad = await axios.get(`http://localhost:3001/localidad-${provincia.id}`)
+
+                    const json = await localidad.data;
+
+                    // Agregar el campo idProvincia a cada objeto de localidades
+                    const localidadesConIdProvincia = json.map((item) => ({ idProvincia: provincia.id, ...item }));
+
+
+                    localidadesTemp.push(...localidadesConIdProvincia);
+
+                } catch (error) {
+                    console.error('Error al obtener localidades:', error);
+                }
+
+            }
+
+            setLocalidadesList(localidadesTemp);
+
         } catch (error) {
             console.error('Error al obtener provincias:', error);
         }
     }
 
-    const getLocalidades = async (provinciaId) => {
-
-        console.log("id de provincia: " + provinciaId)
-
-        try {
-
-            const response = await axios.get(`${BACKEND_URL}/provincia/${provinciaId}/localidad`, {
-                headers: {
-                    'Authorization': token,
-                }
-            })
-
-            const jsonData = await response.data;
-            setLocalidades(jsonData.map((item) => ({ ...item })));
-
-        } catch (error) {
-
-            console.error('Error al obtener localidades:', error);
-        }
-    }
-
     useEffect(() => {
-        const fetchData = async () => {
+        getProvincias();
+    }, [])
 
-            await getProvincias();
-
-            if (provinciaSeleccionada) {
-
-                getLocalidades(provinciaSeleccionada);
-
-            }
-        };
-        fetchData();
-    }, [provinciaSeleccionada]);
 
     useEffect(() => {
 
@@ -163,23 +158,6 @@ export const GrillaEmpresaDomilicio = ({ rows_domicilio, setRowsDomicilio, BACKE
                 });
                 const jsonData = await response.data;
                 setRowsDomicilio(jsonData.map((item) => ({ ...item })));
-
-                // recorrer el jsondata con un for of
-                for (const item of jsonData) {
-                    
-                    try {
-
-                        const res = await axios.get(`http://localhost:3001/localidad-${item.provinciaId}`)
-
-                        const json = await res.data;
-
-                        setLocalidades(json.map((item) => ({ ...item })));
-                        
-                    } catch (error) {
-                        
-                        console.error('Error al obtener localidades:', error);
-                    }
-                }
 
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -232,6 +210,11 @@ export const GrillaEmpresaDomilicio = ({ rows_domicilio, setRowsDomicilio, BACKE
         setRowModesModel(newRowModesModel);
     };
 
+    const handleCellEditStart = (params, event, details) => {
+        // Realiza acciones personalizadas cuando comienza la edición de una celda
+        console.log('Cell edit started:', params, event, details);
+    };
+
     const columns = [
         {
             field: 'tipo',
@@ -257,14 +240,19 @@ export const GrillaEmpresaDomilicio = ({ rows_domicilio, setRowsDomicilio, BACKE
                     value: item.id,
                     label: item.descripcion,
                 }
-            }),
+            }, []),
             renderEditCell: (params) => {
                 return (
                     <Select
                         value={params.value}
-
                         onChange={(e) => {
-                            setProvinciaSeleccionada(e.target.value)
+
+                            setProvincia(e.target.value);
+
+                            const localidadesFiltradas = localidadesList.filter((item) => item.idProvincia === e.target.value);
+
+                            setLocalidadesFiltradas(localidadesFiltradas);
+
                             params.api.setEditCellValue({
                                 id: params.id,
                                 field: 'provinciaId',
@@ -272,6 +260,7 @@ export const GrillaEmpresaDomilicio = ({ rows_domicilio, setRowsDomicilio, BACKE
                             }, e.target.value);
                         }}
                         sx={{ width: 200 }}
+
                     >
 
                         {provincias.map((item) => {
@@ -283,7 +272,7 @@ export const GrillaEmpresaDomilicio = ({ rows_domicilio, setRowsDomicilio, BACKE
                         })}
                     </Select>
                 )
-            } 
+            }
         },
         {
             field: 'localidadId',
@@ -291,12 +280,38 @@ export const GrillaEmpresaDomilicio = ({ rows_domicilio, setRowsDomicilio, BACKE
             width: 220,
             editable: true,
             type: 'singleSelect',
-            valueOptions: localidades.map((item) => {
+            valueOptions: localidadesList.map((item) => {
                 return {
                     value: item.id,
                     label: item.descripcion,
                 }
-            })
+            }),
+            renderEditCell: (params) => {
+
+                // limpiar el campo localidadId cuando se cambia la provincia
+
+                return (
+                    <Select
+                        value={params.value}
+                        onChange={(e) => {
+                            params.api.setEditCellValue({
+                                id: params.id,
+                                field: 'localidadId',
+                                value: e.target.value,
+                            }, e.target.value);
+                        }}
+                        sx={{ width: 220 }}
+                    >
+                        {localidadesFiltradas.map((item) => {
+                            return (
+                                <MenuItem key={item.id} value={item.id}>
+                                    {item.descripcion}
+                                </MenuItem>
+                            )
+                        })}
+                    </Select>
+                )
+            }
         },
         {
             field: 'calle',
@@ -406,6 +421,7 @@ export const GrillaEmpresaDomilicio = ({ rows_domicilio, setRowsDomicilio, BACKE
                 rowModesModel={rowModesModel}
                 onRowModesModelChange={handleRowModesModelChange}
                 onRowEditStop={handleRowEditStop}
+                onCellEditStart={handleCellEditStart}
                 processRowUpdate={processRowUpdate}
                 slots={{
                     toolbar: EditToolbar,

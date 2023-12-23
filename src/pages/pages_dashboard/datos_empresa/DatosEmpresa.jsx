@@ -12,6 +12,7 @@ import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { GrillaEmpresaDomilicio } from './grilla_empresa_domicilio/GrillaEmpresaDomilicio';
+import { GrillaEmpresaDomicilioPrueba } from './GrillaEmpresaDomicilioPrueba';
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const ramos = [
@@ -173,6 +174,7 @@ export const Datos = () => {
                         BACKEND_URL={BACKEND_URL}
                         token={state.token}
                     />
+                    <GrillaEmpresaDomicilioPrueba/>
                 </CustomTabPanel>
 
             </Box>
