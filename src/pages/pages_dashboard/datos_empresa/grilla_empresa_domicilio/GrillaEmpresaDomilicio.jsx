@@ -125,8 +125,6 @@ export const GrillaEmpresaDomilicio = ({
       );
 
       const jsonData = await response.data;
-
-      console.log("getLocalidades- jsonData:" + jsonData);
       return jsonData.map((item) => ({ ...item }));
     } catch (error) {
       console.error("Error al obtener localidades:", error);
@@ -145,6 +143,10 @@ export const GrillaEmpresaDomilicio = ({
       );
       const jsonData = await response.data;
       setRowsDomicilio(jsonData.map((item) => ({ ...item })));
+
+      console.log("** getRowsDomicilio - rowsDomicilio: ");
+      console.log(rowsDomicilio)
+      
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -152,10 +154,11 @@ export const GrillaEmpresaDomilicio = ({
 
   const getDatosLocalidad = async () => {
     const localidadesTemp = [];
-    console.log(
-      "** getDatosLocalidad - INIT - rowsDomicilio: " + rowsDomicilio
-    );
+    console.log("** getDatosLocalidad - INIT - rowsDomicilio: ");
+    console.log(rowsDomicilio);
+    let i = 1;
     for (const reg of rowsDomicilio) {
+      console.log("Vuelta numero: " + i++);
       console.log("getDatosLocalidad - PROCESANDO: " + reg.provinciaId);
       try {
         const vecRegProv = localidadesTemp.filter(
@@ -183,7 +186,8 @@ export const GrillaEmpresaDomilicio = ({
       }
     }
     //setLocalidades(localidadesTemp);
-    console.log("** getDatosLocalidad - localidadesTemp:" + localidadesTemp);
+    console.log("** getDatosLocalidad - localidadesTemp:");
+    console.log(localidadesTemp);
   };
 
   useEffect(() => {
@@ -277,14 +281,14 @@ export const GrillaEmpresaDomilicio = ({
       valueOptions: ({ row }) => {
         var options = [];
 
-        console.log(
+        /* console.log(
           "columns.localidadId.valueOptions: row.provinciaId: " +
             row.provinciaId
         );
         console.log(
           "columns.localidadId.valueOptions: localidades: " + localidades
         );
-
+ */
         return localidades.filter((item) => {
           item.provinciaId == row.provinciaId;
         });
