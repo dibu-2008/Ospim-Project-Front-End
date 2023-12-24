@@ -113,7 +113,6 @@ export const GrillaEmpresaDomilicio = ({
   };
 
   const getLocalidades = async (provinciaId) => {
-    console.log("getLocalidades- INIT");
     try {
       const response = await axios.get(
         `${BACKEND_URL}/localidad-${provinciaId}`,
@@ -123,7 +122,6 @@ export const GrillaEmpresaDomilicio = ({
           },
         }
       );
-
       const jsonData = await response.data;
       return jsonData.map((item) => ({ ...item }));
     } catch (error) {
@@ -142,36 +140,23 @@ export const GrillaEmpresaDomilicio = ({
         }
       );
       const jsonData = await response.data;
-      setRowsDomicilio(jsonData.map((item) => ({ ...item })));
-
-      console.log("** getRowsDomicilio - rowsDomicilio: ");
-      console.log(rowsDomicilio)
-      
+      const vecData = jsonData.map((item) => ({ ...item }));
+      setRowsDomicilio(vecData);
+      getDatosLocalidad(vecData);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
-  const getDatosLocalidad = async () => {
+  const getDatosLocalidad = async (rowsDomicilio) => {
     const localidadesTemp = [];
-    console.log("** getDatosLocalidad - INIT - rowsDomicilio: ");
-    console.log(rowsDomicilio);
-    let i = 1;
     for (const reg of rowsDomicilio) {
-      console.log("Vuelta numero: " + i++);
-      console.log("getDatosLocalidad - PROCESANDO: " + reg.provinciaId);
       try {
         const vecRegProv = localidadesTemp.filter(
           (locTmp) => locTmp.provinciaId == reg.provinciaId
         );
-        console.log(
-          "** getDatosLocalidad - PROCESANDO - vecRegProv.length: " +
-            vecRegProv.length
-        );
+
         if (vecRegProv.length == 0) {
-          console.log(
-            "** carga vecLocalidades - provinciaId : " + reg.provinciaId
-          );
           const localidad = await getLocalidades(reg.provinciaId);
 
           // Agregar el campo idProvincia a cada objeto de localidades
@@ -185,9 +170,23 @@ export const GrillaEmpresaDomilicio = ({
         console.error("** Error al obtener localidades:", error);
       }
     }
-    //setLocalidades(localidadesTemp);
-    console.log("** getDatosLocalidad - localidadesTemp:");
-    console.log(localidadesTemp);
+    setLocalidades(localidadesTemp);
+  };
+
+  const actualizarDatosLocalidad = async (provinciaId) => {
+    var options = [];
+    options = localidades.filter((item) => {
+      return item.provinciaId == provinciaId;
+    });
+    if (options.length == 0) {
+      const localidad = await getLocalidades(provinciaId);
+      const localidadesConIdProvincia = localidad.map((item) => ({
+        provinciaId: provinciaId,
+        ...item,
+      }));
+      localidadesConIdProvincia.push(...localidades);
+      setLocalidades(localidadesConIdProvincia);
+    }
   };
 
   useEffect(() => {
@@ -198,7 +197,6 @@ export const GrillaEmpresaDomilicio = ({
   }, []);
   useEffect(() => {
     getRowsDomicilio();
-    getDatosLocalidad();
   }, []);
 
   const handleRowEditStop = (params, event) => {
@@ -270,6 +268,34 @@ export const GrillaEmpresaDomilicio = ({
       valueOptions: provincias,
       getOptionValue: (dato) => dato.id,
       getOptionLabel: (dato) => dato.descripcion,
+      renderEditCell: (params) => {
+        actualizarDatosLocalidad(params.value);
+        return (
+          <Select
+            value={params.value}
+            onChange={(e) => {
+              setProvincia(e.target.value);
+              params.api.setEditCellValue(
+                {
+                  id: params.id,
+                  field: "provinciaId",
+                  value: e.target.value,
+                },
+                e.target.value
+              );
+            }}
+            sx={{ width: 200 }}
+          >
+            {provincias.map((item) => {
+              return (
+                <MenuItem key={item.id} value={item.id}>
+                  {item.descripcion}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        );
+      },
     },
     {
       field: "localidadId",
@@ -279,24 +305,43 @@ export const GrillaEmpresaDomilicio = ({
       type: "singleSelect",
       //valueOptions: localidadesList,
       valueOptions: ({ row }) => {
-        var options = [];
-
-        /* console.log(
-          "columns.localidadId.valueOptions: row.provinciaId: " +
-            row.provinciaId
-        );
-        console.log(
-          "columns.localidadId.valueOptions: localidades: " + localidades
-        );
- */
-        return localidades.filter((item) => {
-          item.provinciaId == row.provinciaId;
+        var options = localidades.filter((item) => {
+          return item.provinciaId == row.provinciaId;
         });
-
-        //return options;
+        return options;
       },
       getOptionValue: (dato) => dato.id,
       getOptionLabel: (dato) => dato.descripcion,
+      renderEditCell: (params) => {
+        // limpiar el campo localidadId cuando se cambia la provincia
+        var datos = localidades.filter((item) => {
+          return item.provinciaId == params.row.provinciaId;
+        });
+        return (
+          <Select
+            value={params.value}
+            onChange={(e) => {
+              params.api.setEditCellValue(
+                {
+                  id: params.id,
+                  field: "localidadId",
+                  value: e.target.value,
+                },
+                e.target.value
+              );
+            }}
+            sx={{ width: 220 }}
+          >
+            {datos.map((item) => {
+              return (
+                <MenuItem key={item.id} value={item.id}>
+                  {item.descripcion}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        );
+      },
     },
     {
       field: "calle",
