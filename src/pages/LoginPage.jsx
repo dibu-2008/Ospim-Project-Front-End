@@ -1,68 +1,76 @@
-import axios from "axios";
-import { useNavigate } from "react-router-dom"
-import { useState } from "react"
+import { logon } from "./LoginApi";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { useFormLoginInternalUser } from "../hooks/useFormLoginInternalUser.js";
 import { InputComponent } from "../components/InputComponent.jsx";
 import { ButtonComponent } from "../components/ButtonComponent.jsx";
-import Alert from '@mui/material/Alert';
-import Stack from '@mui/material/Stack';
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
-import { errorBackendResponse } from "../errors/errorBackendResponse.js";
-import imgError from '../assets/error.svg';
-import imgSuccess from '../assets/success.svg';
-import imgLogo from '../assets/logo.svg';
+import Alert from "@mui/material/Alert";
+import Stack from "@mui/material/Stack";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+import imgError from "../assets/error.svg";
+import imgSuccess from "../assets/success.svg";
+import imgLogo from "../assets/logo.svg";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const ERROR_MESSAGE = import.meta.env.VITE_ERROR_MESSAGE;
 const ERROR_BODY = import.meta.env.VITE_ERROR_BODY;
 const ERROR_BUSINESS = import.meta.env.VITE_ERROR_BUSINESS;
 const SUCCESS_CODE_SEND = import.meta.env.VITE_SUCCESS_CODE_SEND;
 const VITE_WELCOME_PORTAL = import.meta.env.VITE_WELCOME_PORTAL;
-const VITE_ERROR_CODE_VERIFICATION = import.meta.env.VITE_ERROR_CODE_VERIFICATION;
+const VITE_ERROR_CODE_VERIFICATION = import.meta.env
+  .VITE_ERROR_CODE_VERIFICATION;
 
 const LoginPage = () => {
-
   const navigate = useNavigate();
 
-  const { user, passwordLoginInternalUser, OnInputChangeLoginInternalUser, OnResetFormLoginInternalUser } = useFormLoginInternalUser({
-    user: '',
-    passwordLoginInternalUser: ''
-  })
+  const {
+    user,
+    passwordLoginInternalUser,
+    OnInputChangeLoginInternalUser,
+    OnResetFormLoginInternalUser,
+  } = useFormLoginInternalUser({
+    user: "",
+    passwordLoginInternalUser: "",
+  });
 
   const [showInternalUserForm, setShowInternalUserForm] = useState(true);
   const [showVerificationForm, setShowVerificationForm] = useState(false);
-  const [verificationCode, setVerificationCode] = useState('');
+  const [verificationCode, setVerificationCode] = useState("");
   const [token, setToken] = useState(null);
   const [refreshToken, setRefreshToken] = useState(null);
   const [showAlertUser, setShowAlertUser] = useState(false);
   const [showAlertPassword, setShowAlertPassword] = useState(false);
 
-  // SweetAlert2
-  const showSwalError = (message) => {
-    withReactContent(Swal).fire({
+  const showAlert = (tipo, mensaje) => {
+    var alertColor;
+    var alertIcon;
+    if (tipo == "ERROR") {
+      alertColor = "red";
+      alertIcon = imgError;
+    }
+    if (tipo == "SUCCESS") {
+      alertColor = "green";
+      alertIcon = imgSuccess;
+    }
+    return withReactContent(Swal).fire({
       html: `
-            <div style="color:red; font-size: 26px; display: flex; flex-direction:column;">
-             <img style="height:50px; width: 50px; margin: 10px auto;" src=${imgError}>
+            <div style="color:${alertColor}; font-size: 26px; display: flex; flex-direction:column;">
+             <img style="height:50px; width: 50px; margin: 10px auto;" src=${alertIcon}>
             ${message}
             </div>
         `,
       timer: 2000,
       showConfirmButton: false,
-    })
-  }
+    });
+  };
+
+  const showSwalError = (message) => {
+    showAlert("ERROR", message);
+  };
 
   const showSwalCodeVerification = (message) => {
-    withReactContent(Swal).fire({
-      html: `
-            <div style="color:green; font-size: 26px; display: flex; flex-direction:column;">
-            <img style="height:50px; width: 50px; margin: 10px auto;" src=${imgSuccess}>
-            ${message}
-            </div>
-        `,
-      timer: 2000,
-      showConfirmButton: false,
-    })
-  }
+    showAlert("SUCCESS", message);
+  };
 
   const showSwalSuccess = (message) => {
     withReactContent(Swal).fire({
@@ -82,77 +90,63 @@ const LoginPage = () => {
             </div>
         `,
       timer: 2000,
-      background: 'rgba(26, 118, 210, 0.8)',
+      background: "rgba(26, 118, 210, 0.8)",
       showConfirmButton: false,
-    })
-  }
+    });
+  };
 
   const onLoginInternalUser = async (e) => {
-
-    e.preventDefault()
+    e.preventDefault();
 
     try {
-
-      if (user === '' || passwordLoginInternalUser === '') {
-
-        if (user === '') {
-          setShowAlertUser(true);
-        }
-
-        if (passwordLoginInternalUser === '') {
-          setShowAlertPassword(true);
-        }
-
-      } else {
-
-        const userInicioSesion = {
-          usuario: user,
-          clave: passwordLoginInternalUser,
-        }
-
-        const response = await axios.post(`${BACKEND_URL}/auth/login`, userInicioSesion);
-
-        const { token, tokenRefresco } = response.data;
-
-        if (token && tokenRefresco) {
-          setShowInternalUserForm(false);
-          setShowVerificationForm(true);
-
-          showSwalCodeVerification(SUCCESS_CODE_SEND);
-
-        }
-
-        setToken(token);
-        setRefreshToken(tokenRefresco);
-        OnResetFormLoginInternalUser();
+      if (user === "" || passwordLoginInternalUser === "") {
+        if (user === "") setShowAlertUser(true);
+        if (passwordLoginInternalUser === "") setShowAlertPassword(true);
+        return false;
       }
 
-    } catch (error) {
+      const { token, tokenRefresco } = await logon(
+        user,
+        passwordLoginInternalUser
+      );
 
-      errorBackendResponse(error, ERROR_BUSINESS, ERROR_MESSAGE, ERROR_BODY, showSwalError);
+      if (token && tokenRefresco) {
+        setShowInternalUserForm(false);
+        setShowVerificationForm(true);
+        showSwalCodeVerification(SUCCESS_CODE_SEND);
+      }
+      setToken(token);
+      setRefreshToken(tokenRefresco);
+      OnResetFormLoginInternalUser();
+    } catch (error) {
+      errorBackendResponse(
+        error,
+        ERROR_BUSINESS,
+        ERROR_MESSAGE,
+        ERROR_BODY,
+        showSwalError
+      );
       OnResetFormLoginInternalUser();
     }
-  }
+  };
 
   const redirectToRegister = () => {
-    navigate('/registercompany', {
-      replace: true
-    })
-  }
+    navigate("/registercompany", {
+      replace: true,
+    });
+  };
 
   const onVerificationCodeChange = (e) => {
     setVerificationCode(e.target.value);
-  }
+  };
 
   const onVerificationCodeSubmit = (e) => {
     e.preventDefault();
-    
 
-    if (+(verificationCode) === 123456) {
-
+    if (+verificationCode === 123456) {
       showSwalSuccess(VITE_WELCOME_PORTAL);
 
-      navigate('/dashboard/inicio', {
+      navigate("/dashboard/inicio", {
         replace: true,
         state: {
           logged: true,
@@ -163,22 +157,20 @@ const LoginPage = () => {
     } else {
       showSwalError(VITE_ERROR_CODE_VERIFICATION);
     }
-  }
+  };
 
   const onInputChangeUser = (e) => {
     OnInputChangeLoginInternalUser(e);
     setShowAlertUser(false);
-  }
+  };
 
   const onInputChangePassword = (e) => {
     OnInputChangeLoginInternalUser(e);
     setShowAlertPassword(false);
-  }
+  };
 
   return (
-
     <div className="wrapper_container">
-
       <div className="wrapper">
         {showInternalUserForm && (
           <div className="contenedor_form">
@@ -195,13 +187,11 @@ const LoginPage = () => {
                   autoComplete="off"
                   label="Usuario"
                 />
-                {
-                  showAlertUser && (
-                    <Stack sx={{ width: '100%' }} spacing={2}>
-                      <Alert severity="error">Campo requerido</Alert>
-                    </Stack>
-                  )
-                }
+                {showAlertUser && (
+                  <Stack sx={{ width: "100%" }} spacing={2}>
+                    <Alert severity="error">Campo requerido</Alert>
+                  </Stack>
+                )}
               </div>
               <div className="input-group">
                 <InputComponent
@@ -213,25 +203,21 @@ const LoginPage = () => {
                   autoComplete="off"
                   label="Contraseña"
                 />
-                {
-                  showAlertPassword && (
-                    <Stack sx={{ width: '100%' }} spacing={2}>
-                      <Alert severity="error">Campo requerido</Alert>
-                    </Stack>
-                  )
-                }
+                {showAlertPassword && (
+                  <Stack sx={{ width: "100%" }} spacing={2}>
+                    <Alert severity="error">Campo requerido</Alert>
+                  </Stack>
+                )}
               </div>
               <ButtonComponent
                 styles={{
-                  marginTop: '120px',
+                  marginTop: "120px",
                 }}
-                name={'SIGUIENTE'}
+                name={"SIGUIENTE"}
               />
               <div className="container_btn_pass_firts">
                 <a>Recupero de Contraseña</a>
-                <a
-                  onClick={redirectToRegister}
-                >Ingreso por primera vez</a>
+                <a onClick={redirectToRegister}>Ingreso por primera vez</a>
               </div>
             </form>
           </div>
@@ -243,7 +229,7 @@ const LoginPage = () => {
               <div
                 className="input-group"
                 style={{
-                  marginTop: '150px'
+                  marginTop: "150px",
                 }}
               >
                 <InputComponent
@@ -258,18 +244,16 @@ const LoginPage = () => {
               </div>
               <ButtonComponent
                 styles={{
-                  marginTop: '157px',
+                  marginTop: "157px",
                 }}
-                name={'INGRESAR'}
+                name={"INGRESAR"}
               />
             </form>
-
           </div>
         )}
       </div>
     </div>
+  );
+};
 
-  )
-}
-
-export default LoginPage
+export default LoginPage;

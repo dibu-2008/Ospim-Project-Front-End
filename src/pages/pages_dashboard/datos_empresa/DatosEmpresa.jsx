@@ -17,7 +17,7 @@ import { GrillaEmpresaDomicilioPrueba } from "./GrillaEmpresaDomicilioPrueba";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const state = JSON.parse(localStorage.getItem("state"));
-const ramos = await getRamo(state.token);
+const ramos = await getRamo(state && state.token ? state.token : null);
 
 // Logica de los tabs incio
 function CustomTabPanel(props) {

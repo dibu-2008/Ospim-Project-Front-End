@@ -5,6 +5,8 @@ import Swal from "sweetalert2";
 import { errorBackendResponse } from "../../../errors/errorBackendResponse";
 
 export const getRamo = async (token) => {
+  if (!token) return [];
+
   const URL = `${BACKEND_URL}/empresa/ramo`;
 
   const showSwalError = (descripcion) => {
