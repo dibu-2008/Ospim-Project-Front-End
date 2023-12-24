@@ -115,7 +115,7 @@ export const GrillaEmpresaDomilicio = ({
   const getLocalidades = async (provinciaId) => {
     try {
       const response = await axios.get(
-        `${BACKEND_URL}/localidad-${provinciaId}`,
+        `${BACKEND_URL}/provincia/${provinciaId}/localidad`,
         {
           headers: {
             Authorization: token,

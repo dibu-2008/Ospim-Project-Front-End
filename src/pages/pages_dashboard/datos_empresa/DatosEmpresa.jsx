@@ -11,19 +11,15 @@ import Button from "@mui/material/Button";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
+import { getRamo } from "./DatosApi";
 import { GrillaEmpresaDomilicio } from "./grilla_empresa_domicilio/GrillaEmpresaDomilicio";
 import { GrillaEmpresaDomicilioPrueba } from "./GrillaEmpresaDomicilioPrueba";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-// Hacer la peticion
-const ramos = [
-  { value: "Ramo A", label: "Ramo A" },
-  { value: "Ramo B", label: "Ramo B" },
-  { value: "Ramo C", label: "Ramo C" },
-];
+const state = JSON.parse(localStorage.getItem("state"));
+const ramos = await getRamo(state.token);
 
 // Logica de los tabs incio
-
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -57,12 +53,15 @@ function a11yProps(index) {
   };
 }
 
-export const Datos = () => {
+export const DatosEmpresa = () => {
   const [rowsContacto, setRowsContacto] = useState([]);
   const [rowsDomicilio, setRowsDomicilio] = useState([]);
   const [cuit, setCuit] = useState("");
   const [razonSocial, setRazonSocial] = useState("");
   const [ramo, setRamo] = useState("");
+
+  console.log("ver Ramos: ");
+  console.log(ramos);
 
   // Estado para los tabs
   const [tabState, setTabState] = useState(0);
@@ -139,8 +138,8 @@ export const Datos = () => {
               onChange={OnChangeRamos}
             >
               {ramos.map((option, index) => (
-                <MenuItem key={index} value={option.value}>
-                  {option.value}
+                <MenuItem key={index} value={option.id}>
+                  {option.descripcion}
                 </MenuItem>
               ))}
             </Select>
