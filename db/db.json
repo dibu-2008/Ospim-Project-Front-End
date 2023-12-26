@@ -1,4 +1,6 @@
 {
+  "login-dfa": [{ "valor": true }],
+  "usuario-loguedo-habilitado": [{ "valor": true }],
   "usuario-empresa-alta": [
     {
       "razonsocial": "Empresas de Agro Nro1",
