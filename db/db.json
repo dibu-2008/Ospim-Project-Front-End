@@ -154,7 +154,7 @@
     },
     {
       "titulo": "Nueva Nota",
-      "cuerpo": "Cuerpo nuevito",
+      "cuerpo": "Cuerpo ",
       "vigenciaDesde": "2023-12-27T03:00:00.000Z",
       "vigenciaHasta": "2023-12-31T03:00:00.000Z",
       "id": 5

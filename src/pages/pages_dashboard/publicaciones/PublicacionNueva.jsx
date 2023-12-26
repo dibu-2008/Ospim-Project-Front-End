@@ -45,7 +45,7 @@ export const EditarNuevaFila = (props) => {
     return (
         <GridToolbarContainer>
             <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-                Agregar una nueva novedad
+                Agregar una nueva publicación
             </Button>
         </GridToolbarContainer>
     );
