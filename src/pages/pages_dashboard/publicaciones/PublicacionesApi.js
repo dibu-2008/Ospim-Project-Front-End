@@ -104,7 +104,6 @@ export const actualizar = async (publicacionId, publicacion, token) => {
         })
     }
 
-
     try {
         
         const publicacionEditada = await axios.put(URL, publicacion, {
@@ -125,9 +124,6 @@ export const actualizar = async (publicacionId, publicacion, token) => {
 }
 
 export const eliminar = async (publicacionId, token) => {
-
-    console.log(publicacionId, token);
-
 
     const URL = `${BACKEND_URL}/publicaciones/${publicacionId}`;
 
@@ -168,5 +164,5 @@ export const eliminar = async (publicacionId, token) => {
 
         errorBackendResponse(error, showSwalError);
 
-    }
+    } 
 }

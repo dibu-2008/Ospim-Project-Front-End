@@ -213,7 +213,7 @@ export const Publicaciones = () => {
     return (
 
         <div className='publicaciones_container'>
-            <h1>Administracion de Novedades</h1>
+            <h1>Administracion de Publicaciones</h1>
             <DataGrid
                 rows={rows}
                 columns={columns}
