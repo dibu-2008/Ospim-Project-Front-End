@@ -25,7 +25,8 @@ module.exports = (req, res, next) => {
       };
       console.log("req.url: " + req.url);
       res.json(response);
-      next();
+      /* En la sección donde manejas la ruta "/auth/login-dfa" con el método POST, estás llamando a res.json(response) y luego a next(). En este caso, res.json() envía la respuesta al cliente, pero luego también estás pasando la solicitud al siguiente middleware con next(). Esto puede resultar en un conflicto, ya que la respuesta ya se ha enviado al cliente. */
+      //next();
     } else {
       if (req.method === "POST" && req.url === "/auth/login") {
         // Handle the login request here

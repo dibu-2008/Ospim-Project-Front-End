@@ -12,9 +12,9 @@ import { Categorias } from "../pages/pages_dashboard/Categorias";
 import NavBar from "../components/navbar/NavBar";
 import { DatosEmpresa } from "../pages/pages_dashboard/datos_empresa/DatosEmpresa";
 import { Publicaciones } from "../pages/pages_dashboard/publicaciones/Publicaciones";
-import { LoginPage } from "../pages/LoginPage";
 import { RegisterPage } from "../pages/RegisterPage";
 import DashboardPage from "../pages/DashboardPage";
+import { LoginPage } from "../pages/login/LoginPage";
 
 const BoletasPage = () => <div>Contenido de la página de boletas</div>;
 const PagosPage = () => <div>Contenido de la página de pagos</div>;

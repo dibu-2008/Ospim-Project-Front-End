@@ -1,27 +1,26 @@
-import { logon } from "./LoginApi";
+import { logon, usuarioLogueadoHabilitadoDFA } from "./LoginApi.js";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useFormLoginInternalUser } from "../hooks/useFormLoginInternalUser.js";
-import { InputComponent } from "../components/InputComponent.jsx";
-import { ButtonComponent } from "../components/ButtonComponent.jsx";
+import { useFormLoginInternalUser } from "../../hooks/useFormLoginInternalUser.js";
+import { InputComponent } from "../../components/InputComponent.jsx";
+import { ButtonComponent } from "../../components/ButtonComponent.jsx";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import imgError from "../assets/error.svg";
-import imgSuccess from "../assets/success.svg";
-import imgLogo from "../assets/logo.svg";
-import { errorBackendResponse } from "../errors/errorBackendResponse.js";
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-const ERROR_MESSAGE = import.meta.env.VITE_ERROR_MESSAGE;
-const ERROR_BODY = import.meta.env.VITE_ERROR_BODY;
-const ERROR_BUSINESS = import.meta.env.VITE_ERROR_BUSINESS;
+import imgError from "../../assets/error.svg";
+import imgSuccess from "../../assets/success.svg";
+import imgLogo from "../../assets/logo.svg";
+import { errorBackendResponse } from "../../errors/errorBackendResponse.js";
+import axios from "axios";
+
 const SUCCESS_CODE_SEND = import.meta.env.VITE_SUCCESS_CODE_SEND;
 const VITE_WELCOME_PORTAL = import.meta.env.VITE_WELCOME_PORTAL;
-const VITE_ERROR_CODE_VERIFICATION = import.meta.env
-  .VITE_ERROR_CODE_VERIFICATION;
+const VITE_ERROR_CODE_VERIFICATION = import.meta.env.VITE_ERROR_CODE_VERIFICATION;
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 export const LoginPage = () => {
+
   const navigate = useNavigate();
 
   const {
@@ -112,22 +111,33 @@ export const LoginPage = () => {
         passwordLoginInternalUser
       );
 
-      console.log(token, tokenRefresco);
+      // Obtengo los tokens
+      //console.log(token, tokenRefresco);
 
-      
-      if (token && tokenRefresco) {
+      // Consultar si el usuario tiene habilitado el DFA
+      const usuarioHabilitadoDFA = await usuarioLogueadoHabilitadoDFA(token);
+
+      if (usuarioHabilitadoDFA) {
+        console.log("Usuario habilitado para DFA");
         setShowInternalUserForm(false);
         setShowVerificationForm(true);
-        showSwalCodeVerification(SUCCESS_CODE_SEND);
+
+        // Consultar
       }
-      setToken(token);
-      setRefreshToken(tokenRefresco); 
-      OnResetFormLoginInternalUser();
+
+      /*  if (token && tokenRefresco) {
+         setShowInternalUserForm(false);
+         setShowVerificationForm(true);
+         showSwalCodeVerification(SUCCESS_CODE_SEND);
+       }
+       setToken(token);
+       setRefreshToken(tokenRefresco);
+       OnResetFormLoginInternalUser(); */
     } catch (error) {
       errorBackendResponse(
         error,
         showSwalError
-      ); 
+      );
       OnResetFormLoginInternalUser();
     }
   };
