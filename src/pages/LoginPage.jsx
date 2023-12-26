@@ -21,7 +21,7 @@ const VITE_WELCOME_PORTAL = import.meta.env.VITE_WELCOME_PORTAL;
 const VITE_ERROR_CODE_VERIFICATION = import.meta.env
   .VITE_ERROR_CODE_VERIFICATION;
 
-const LoginPage = () => {
+export const LoginPage = () => {
   const navigate = useNavigate();
 
   const {
@@ -257,5 +257,3 @@ const LoginPage = () => {
     </div>
   );
 };
-
-export default LoginPage;

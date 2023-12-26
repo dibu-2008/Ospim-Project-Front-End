@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import { useFormLoginCompany } from "../hooks/useFormLoginCompany"
 
-const RegisterPage = () => {
+export const RegisterPage = () => {
 
   // Recorda que le cambiaste todas las propiedades al custonHook de useFormLoginCompany ya esta
 
@@ -81,5 +81,3 @@ const RegisterPage = () => {
     </div>
   )
 }
-
-export default RegisterPage

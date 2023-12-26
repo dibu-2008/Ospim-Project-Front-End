@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Navigate } from "react-router";
 
-import { LoginPage, RegisterPage, DashboardPage } from "../pages";
+/* import { LoginPage, RegisterPage, DashboardPage } from "../pages"; */
 
 import PrivateRoute from "./PrivateRoute";
 import { RegisterCompany } from "../pages/RegisterCompany";
@@ -12,6 +12,9 @@ import { Categorias } from "../pages/pages_dashboard/Categorias";
 import NavBar from "../components/navbar/NavBar";
 import { DatosEmpresa } from "../pages/pages_dashboard/datos_empresa/DatosEmpresa";
 import { Publicaciones } from "../pages/pages_dashboard/publicaciones/Publicaciones";
+import { LoginPage } from "../pages/LoginPage";
+import { RegisterPage } from "../pages/RegisterPage";
+import DashboardPage from "../pages/DashboardPage";
 
 const BoletasPage = () => <div>Contenido de la página de boletas</div>;
 const PagosPage = () => <div>Contenido de la página de pagos</div>;
