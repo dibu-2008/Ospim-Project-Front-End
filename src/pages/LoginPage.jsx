@@ -11,6 +11,7 @@ import withReactContent from "sweetalert2-react-content";
 import imgError from "../assets/error.svg";
 import imgSuccess from "../assets/success.svg";
 import imgLogo from "../assets/logo.svg";
+import { errorBackendResponse } from "../errors/errorBackendResponse.js";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const ERROR_MESSAGE = import.meta.env.VITE_ERROR_MESSAGE;
 const ERROR_BODY = import.meta.env.VITE_ERROR_BODY;
@@ -56,7 +57,7 @@ const LoginPage = () => {
       html: `
             <div style="color:${alertColor}; font-size: 26px; display: flex; flex-direction:column;">
              <img style="height:50px; width: 50px; margin: 10px auto;" src=${alertIcon}>
-            ${message}
+            ${mensaje}
             </div>
         `,
       timer: 2000,
@@ -105,27 +106,28 @@ const LoginPage = () => {
         return false;
       }
 
+
       const { token, tokenRefresco } = await logon(
         user,
         passwordLoginInternalUser
       );
 
+      console.log(token, tokenRefresco);
+
+      
       if (token && tokenRefresco) {
         setShowInternalUserForm(false);
         setShowVerificationForm(true);
         showSwalCodeVerification(SUCCESS_CODE_SEND);
       }
       setToken(token);
-      setRefreshToken(tokenRefresco);
+      setRefreshToken(tokenRefresco); 
       OnResetFormLoginInternalUser();
     } catch (error) {
       errorBackendResponse(
         error,
-        ERROR_BUSINESS,
-        ERROR_MESSAGE,
-        ERROR_BODY,
         showSwalError
-      );
+      ); 
       OnResetFormLoginInternalUser();
     }
   };

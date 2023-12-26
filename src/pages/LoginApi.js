@@ -4,6 +4,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { errorBackendResponse } from "../errors/errorBackendResponse";
 
+
 export const logon = async (usuario, clave) => {
   const URL = `${BACKEND_URL}/auth/login`;
 
@@ -19,14 +20,16 @@ export const logon = async (usuario, clave) => {
 
   try {
     const logonDto = {
-      usuario: user,
-      clave: passwordLoginInternalUser,
+      usuario: usuario,
+      clave: clave,
     };
     const logonResponse = await axios.post(URL, logonDto);
+    console.log(logonResponse);
     const logon = await logonResponse.data;
 
     return logon || {};
   } catch (error) {
+
     errorBackendResponse(error, showSwalError);
   }
 };
