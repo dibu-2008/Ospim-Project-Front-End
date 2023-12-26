@@ -33,7 +33,7 @@ export const Publicaciones = () => {
             
             const publicaciones = await obtener(token);
             
-            setRows(publicaciones.map((item, index)=>({...item, id: index + 1})));
+            setRows(publicaciones.map((item, index)=>({...item, id: item.id})));
 
         };
 

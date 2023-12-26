@@ -126,6 +126,9 @@ export const actualizar = async (publicacionId, publicacion, token) => {
 
 export const eliminar = async (publicacionId, token) => {
 
+    console.log(publicacionId, token);
+
+
     const URL = `${BACKEND_URL}/publicaciones/${publicacionId}`;
 
     const showSwalError = (descripcion) => {
@@ -155,6 +158,8 @@ export const eliminar = async (publicacionId, token) => {
             }
         });
 
+        console.log(publicacionEliminada);
+
         if(publicacionEliminada.status === 200){
             showSwallSuccess();
         }
@@ -163,5 +168,5 @@ export const eliminar = async (publicacionId, token) => {
 
         errorBackendResponse(error, showSwalError);
 
-    } 
+    }
 }
