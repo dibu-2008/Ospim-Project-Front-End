@@ -13,7 +13,6 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { getRamo } from "./DatosApi";
 import { GrillaEmpresaDomilicio } from "./grilla_empresa_domicilio/GrillaEmpresaDomilicio";
-import { GrillaEmpresaDomicilioPrueba } from "./GrillaEmpresaDomicilioPrueba";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const state = JSON.parse(localStorage.getItem("state"));
@@ -173,7 +172,6 @@ export const DatosEmpresa = () => {
             BACKEND_URL={BACKEND_URL}
             token={state.token}
           />
-          <GrillaEmpresaDomicilioPrueba />
         </CustomTabPanel>
       </Box>
     </div>
