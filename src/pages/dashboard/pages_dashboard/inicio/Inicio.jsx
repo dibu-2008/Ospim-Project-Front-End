@@ -1,8 +1,8 @@
 import EmailIcon from '@mui/icons-material/Email';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
-import { CarouselNews } from '../../../components/carousel/Carousel'
 import './Inicio.css'
+import { CarouselNews } from '../../../../components/carousel/Carousel';
 
 export const Inicio = () => {
     return (

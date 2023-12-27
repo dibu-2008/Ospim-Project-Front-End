@@ -5,22 +5,20 @@ import { Navigate } from "react-router";
 
 import PrivateRoute from "./PrivateRoute";
 import { RegisterCompany } from "../pages/RegisterCompany";
-import { Feriados } from "../pages/pages_dashboard/Feriados";
-import { DeclaracionesJuradas } from "../pages/pages_dashboard/DeclaracionesJuradas";
-import { Inicio } from "../pages/pages_dashboard/inicio/Inicio";
-import { Categorias } from "../pages/pages_dashboard/Categorias";
+
+import { DeclaracionesJuradas } from "../pages/dashboard/pages_dashboard/ddjj/DeclaracionesJuradas";
+import { Inicio } from "../pages/dashboard/pages_dashboard/inicio/Inicio";
+import { Categorias } from "../pages/dashboard/pages_dashboard/categorias/Categorias";
 import NavBar from "../components/navbar/NavBar";
-import { DatosEmpresa } from "../pages/pages_dashboard/datos_empresa/DatosEmpresa";
-import { Publicaciones } from "../pages/pages_dashboard/publicaciones/Publicaciones";
+import { DatosEmpresa } from "../pages/dashboard/pages_dashboard/datos_empresa/DatosEmpresa";
+import { Publicaciones } from "../pages/dashboard/pages_dashboard/publicaciones/Publicaciones";
 import { RegisterPage } from "../pages/RegisterPage";
-import DashboardPage from "../pages/DashboardPage";
+import DashboardPage from "../pages/dashboard/DashboardPage";
 import { LoginPage } from "../pages/login/LoginPage";
+import { Feriados } from "../pages/dashboard/pages_dashboard/feriados/Feriados";
 
 const BoletasPage = () => <div>Contenido de la página de boletas</div>;
 const PagosPage = () => <div>Contenido de la página de pagos</div>;
-const PublicacionesPage = () => (
-  <div>Contenido de la página de publicaciones</div>
-);
 
 const AppRouter = () => {
   return (

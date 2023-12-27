@@ -3,7 +3,7 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 import axios from 'axios'
 import Swal from 'sweetalert2'
-import { errorBackendResponse } from '../../../errors/errorBackendResponse';
+import { errorBackendResponse } from '../../../../errors/errorBackendResponse';
 
 export const obtener = async (token) => {
 
