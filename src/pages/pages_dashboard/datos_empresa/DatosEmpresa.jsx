@@ -60,9 +60,6 @@ export const DatosEmpresa = () => {
   const [razonSocial, setRazonSocial] = useState("");
   const [ramo, setRamo] = useState("");
 
-  console.log("ver Ramos: ");
-  console.log(ramos);
-
   // Estado para los tabs
   const [tabState, setTabState] = useState(0);
 
