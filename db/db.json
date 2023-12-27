@@ -414,8 +414,19 @@
     }
   ],
   "auth-login-usuario": {
-    "headers": {
-      "Authorization": "ncvfjlkcovkelvkeivnfjkvevcfo.cmkdwocjoiwcmw.dnmiwedfiwejndfmwe"
+    "usuario": {
+      "nombre": "20233725006",
+      "rol": [
+        {
+          "descripcion": "EMPLEADOR"
+        }
+      ]
+    },
+    "empresa": {
+      "id": 1,
+      "razonSocial": "Empresa Nro 1",
+      "cuit": "2023372500",
+      "ramoId": 1
     }
   },
   "provincia": [

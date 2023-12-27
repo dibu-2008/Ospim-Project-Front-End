@@ -12,6 +12,7 @@ import imgError from "../../assets/error.svg";
 import imgSuccess from "../../assets/success.svg";
 import imgLogo from "../../assets/logo.svg";
 import { errorBackendResponse } from "../../errors/errorBackendResponse.js";
+import "./LoginPage.css";
 
 const VITE_WELCOME_PORTAL = import.meta.env.VITE_WELCOME_PORTAL;
 
@@ -31,7 +32,7 @@ export const LoginPage = () => {
 
   const [showInternalUserForm, setShowInternalUserForm] = useState(true);
   const [showVerificationForm, setShowVerificationForm] = useState(false);
-  const [verificationCode, setVerificationCode] = useState("");
+  const [verificationCode, setVerificationCode] = useState("310279");
   const [token, setToken] = useState(null);
   const [refreshToken, setRefreshToken] = useState(null);
   const [showAlertUser, setShowAlertUser] = useState(false);
@@ -211,12 +212,12 @@ export const LoginPage = () => {
 
   return (
     <div className="wrapper_container">
-      <div className="wrapper">
-        {showInternalUserForm && (
+
+      {showInternalUserForm && (
+        <div className="wrapper">
           <div className="contenedor_form">
             <form onSubmit={onLoginInternalUser}>
-              <h1>Usuario Interno</h1>
-              <h3>Iniciar sesión</h3>
+              <h1>Iniciar Sesión</h1>
               <div className="input-group">
                 <InputComponent
                   type="text"
@@ -251,7 +252,7 @@ export const LoginPage = () => {
               </div>
               <ButtonComponent
                 styles={{
-                  marginTop: "120px",
+                  marginTop: showAlertUser && showAlertPassword ? "50px" : "120px",
                 }}
                 name={"SIGUIENTE"}
               />
@@ -261,38 +262,34 @@ export const LoginPage = () => {
               </div>
             </form>
           </div>
-        )}
-        {showVerificationForm && (
-          <div className="contenedor_form">
-            <h1>Ingrese el numero de 6 digitos</h1>
-            <form onSubmit={onVerificationCodeSubmit}>
-              <div
-                className="input-group"
-                style={{
-                  marginTop: "150px",
-                }}
-              >
-                310279
-                <InputComponent
-                  type="number"
-                  name="verificationCode"
-                  id="verificationCode"
-                  value={verificationCode}
-                  onChange={onVerificationCodeChange}
-                  autoComplete="off"
-                  label="Contraseña"
-                />
-              </div>
-              <ButtonComponent
-                styles={{
-                  marginTop: "157px",
-                }}
-                name={"INGRESAR"}
+        </div>
+      )}
+      {showVerificationForm && (
+        <div className="wrapper">
+        <div className="contenedor_form_code">
+          <h1>Ingrese el codigó</h1>
+          <form onSubmit={onVerificationCodeSubmit}>
+            <div className="input_group_code">
+              <InputComponent
+                type="number"
+                name="verificationCode"
+                id="verificationCode"
+                value={verificationCode}
+                onChange={onVerificationCodeChange}
+                autoComplete="off"
+                label="Contraseña"
               />
-            </form>
-          </div>
-        )}
-      </div>
+            </div>
+            <ButtonComponent
+              styles={{
+                marginTop: "157px",
+              }}
+              name={"INGRESAR"}
+            />
+          </form>
+        </div>
+        </div>
+      )}
     </div>
   );
 };
