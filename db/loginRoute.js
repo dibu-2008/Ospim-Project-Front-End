@@ -18,15 +18,35 @@ module.exports = (req, res, next) => {
     next();
   } else {
     if (req.method === "POST" && req.url === "/auth/login-dfa") {
-      const response = {
-        token: "ncvfjlkcovkelvkeivnfjkvevcfo.cmkdwocjoiwcmw.dnmiwedfiwejndfmwe",
-        tokenRefresco:
-          "2ncvfjlkcovkelvkeivnfjkvevcfo.cmkdwocjoiwcmw.dnmiwedfiwejndfmwe",
-      };
-      console.log("req.url: " + req.url);
-      res.json(response);
-      /* En la sección donde manejas la ruta "/auth/login-dfa" con el método POST, estás llamando a res.json(response) y luego a next(). En este caso, res.json() envía la respuesta al cliente, pero luego también estás pasando la solicitud al siguiente middleware con next(). Esto puede resultar en un conflicto, ya que la respuesta ya se ha enviado al cliente. */
-      //next();
+
+      console.log("Entrooo 1: POST - /login-dfa...");
+      console.log(req.body);
+
+      const { codigo } = req.body;
+
+      if (codigo != "310279") {
+        res.status(401).jsonp({
+          tipo: "ERROR_APP_BUSINESS",
+          ticket: "TK-156269",
+          codigo: "CODIGO_INVALIDO",
+          descripcion: "Codigo de verificación invalido.",
+        });
+
+        console.log(res.statusCode);
+      }else {
+
+        const response = {
+          token: "ncvfjlkcovkelvkeivnfjkvevcfo.cmkdwocjoiwcmw.dnmiwedfiwejndfmwe",
+          tokenRefresco:
+            "2ncvfjlkcovkelvkeivnfjkvevcfo.cmkdwocjoiwcmw.dnmiwedfiwejndfmwe",
+        };
+        console.log("req.url: " + req.url);
+        res.json(response);
+        /* En la sección donde manejas la ruta "/auth/login-dfa" con el método POST, estás llamando a res.json(response) y luego a next(). En este caso, res.json() envía la respuesta al cliente, pero luego también estás pasando la solicitud al siguiente middleware con next(). Esto puede resultar en un conflicto, ya que la respuesta ya se ha enviado al cliente. */
+        //next();
+      }
+
+
     } else {
       if (req.method === "POST" && req.url === "/auth/login") {
         // Handle the login request here

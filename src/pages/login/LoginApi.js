@@ -24,7 +24,6 @@ export const logon = async (usuario, clave) => {
       clave: clave,
     };
     const logonResponse = await axios.post(URL, logonDto);
-    console.log(logonResponse);
     const logon = await logonResponse.data;
 
     return logon || {};
@@ -64,7 +63,39 @@ export const usuarioLogueadoHabilitadoDFA = async (token) => {
   }
 }
 
+export const logonDFA = async(token,codigo) => {
 
+  console.log("codigoVerificacion")
+  
+  const URL = `${BACKEND_URL}/auth/login-dfa`;
+
+  const showSwalError = (descripcion) => {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: descripcion,
+      showConfirmButton: false,
+      timer: 3000,
+    });
+  };
+
+  const codigoVerificacion = {
+    codigo: codigo,
+  };
+
+  try {
+    const loginDfaResponse = await axios.post(URL, codigoVerificacion, {
+      headers: {
+        Authorization: token,
+      },
+    });
+    const loginDfa = await loginDfaResponse.data;
+
+    return loginDfa || {};
+  } catch (error) {
+    errorBackendResponse(error, showSwalError);
+  }
+}
 
 
 export const consultarUsuarioLogueado = async (token) => {
@@ -81,15 +112,21 @@ export const consultarUsuarioLogueado = async (token) => {
   };
 
   try {
-    const usuarioLogeadoResponse = await axios.post(URL, {
+    const usuarioLogeadoResponse = await axios.get(URL, {
       headers: {
         Authorization: token,
       },
     });
+
+    console.log(usuarioLogeadoResponse);
+
     const usuarioLogeado = await usuarioLogeadoResponse.data;
+
+    console.log(usuarioLogeado);
 
     return usuarioLogeado || {};
   } catch (error) {
     errorBackendResponse(error, showSwalError);
   }
 };
+

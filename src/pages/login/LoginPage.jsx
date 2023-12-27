@@ -1,4 +1,4 @@
-import { logon, usuarioLogueadoHabilitadoDFA } from "./LoginApi.js";
+import { consultarUsuarioLogueado, logon, logonDFA, usuarioLogueadoHabilitadoDFA } from "./LoginApi.js";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useFormLoginInternalUser } from "../../hooks/useFormLoginInternalUser.js";
@@ -12,12 +12,8 @@ import imgError from "../../assets/error.svg";
 import imgSuccess from "../../assets/success.svg";
 import imgLogo from "../../assets/logo.svg";
 import { errorBackendResponse } from "../../errors/errorBackendResponse.js";
-import axios from "axios";
 
-const SUCCESS_CODE_SEND = import.meta.env.VITE_SUCCESS_CODE_SEND;
 const VITE_WELCOME_PORTAL = import.meta.env.VITE_WELCOME_PORTAL;
-const VITE_ERROR_CODE_VERIFICATION = import.meta.env.VITE_ERROR_CODE_VERIFICATION;
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 export const LoginPage = () => {
 
@@ -95,6 +91,20 @@ export const LoginPage = () => {
     });
   };
 
+  const onVerificationCodeChange = (e) => {
+    setVerificationCode(e.target.value);
+  };
+
+  const onInputChangeUser = (e) => {
+    OnInputChangeLoginInternalUser(e);
+    setShowAlertUser(false);
+  };
+
+  const onInputChangePassword = (e) => {
+    OnInputChangeLoginInternalUser(e);
+    setShowAlertPassword(false);
+  };
+
   const onLoginInternalUser = async (e) => {
     e.preventDefault();
 
@@ -122,22 +132,26 @@ export const LoginPage = () => {
         setShowInternalUserForm(false);
         setShowVerificationForm(true);
 
-        // Consultar
-      }
+      } else {
 
-      /*  if (token && tokenRefresco) {
-         setShowInternalUserForm(false);
-         setShowVerificationForm(true);
-         showSwalCodeVerification(SUCCESS_CODE_SEND);
-       }
-       setToken(token);
-       setRefreshToken(tokenRefresco);
-       OnResetFormLoginInternalUser(); */
+        setToken(token);
+        setRefreshToken(tokenRefresco);
+        OnResetFormLoginInternalUser();
+
+        showSwalSuccess(VITE_WELCOME_PORTAL);
+
+        navigate("/dashboard/inicio", {
+          replace: true,
+          state: {
+            logged: true,
+            token,
+            tokenRefresco,
+          },
+        });
+
+      }
     } catch (error) {
-      errorBackendResponse(
-        error,
-        showSwalError
-      );
+      errorBackendResponse(error, showSwalError);
       OnResetFormLoginInternalUser();
     }
   };
@@ -148,38 +162,52 @@ export const LoginPage = () => {
     });
   };
 
-  const onVerificationCodeChange = (e) => {
-    setVerificationCode(e.target.value);
-  };
-
-  const onVerificationCodeSubmit = (e) => {
+  const onVerificationCodeSubmit = async (e) => {
     e.preventDefault();
 
-    if (+verificationCode === 123456) {
+    const logonDfa = await logonDFA(token, verificationCode);
+
+    if (logonDfa) {
+
       showSwalSuccess(VITE_WELCOME_PORTAL);
 
-      navigate("/dashboard/inicio", {
+      const { token, tokenRefresco } = logonDfa;
+
+      const usuarioLogueado = await consultarUsuarioLogueado(token);
+
+      console.log(usuarioLogueado);
+
+      /* const usuario = {
+        usuario: {
+          nombre: usuarioLogueado.nombre,
+          rol: [
+            {
+              descripcion: usuarioLogueado.rol.descripcion,
+            }
+          ]
+        },
+        empresa: {
+          id: usuarioLogueado.empresa.id,
+          razonSocial: usuarioLogueado.empresa.razonSocial,
+          cuit: usuarioLogueado.empresa.cuit,
+          ramoId: usuarioLogueado.empresa.ramoId,
+        }
+      }
+
+      console.log(usuario); */
+
+      /* navigate("/dashboard/inicio", {
         replace: true,
         state: {
           logged: true,
           token,
-          refreshToken,
+          tokenRefresco,
         },
-      });
-    } else {
-      showSwalError(VITE_ERROR_CODE_VERIFICATION);
+      }); */
     }
   };
 
-  const onInputChangeUser = (e) => {
-    OnInputChangeLoginInternalUser(e);
-    setShowAlertUser(false);
-  };
 
-  const onInputChangePassword = (e) => {
-    OnInputChangeLoginInternalUser(e);
-    setShowAlertPassword(false);
-  };
 
   return (
     <div className="wrapper_container">
@@ -244,6 +272,7 @@ export const LoginPage = () => {
                   marginTop: "150px",
                 }}
               >
+                310279
                 <InputComponent
                   type="number"
                   name="verificationCode"

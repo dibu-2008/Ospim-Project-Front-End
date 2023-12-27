@@ -1,6 +1,14 @@
 {
-  "login-dfa": [{ "valor": true }],
-  "usuario-loguedo-habilitado": [{ "valor": true }],
+  "login-dfa": [
+    {
+      "valor": true
+    }
+  ],
+  "usuario-loguedo-habilitado": [
+    {
+      "valor": true
+    }
+  ],
   "usuario-empresa-alta": [
     {
       "razonsocial": "Empresas de Agro Nro1",
@@ -406,19 +414,8 @@
     }
   ],
   "auth-login-usuario": {
-    "usuario": {
-      "nombre": "20233725006",
-      "rol": [
-        {
-          "descripcion": "EMPLEADOR"
-        }
-      ]
-    },
-    "empresa": {
-      "id": 1,
-      "razonSocial": "Empresa Nro 1",
-      "cuit": "2023372500",
-      "ramoId": 1
+    "headers": {
+      "Authorization": "ncvfjlkcovkelvkeivnfjkvevcfo.cmkdwocjoiwcmw.dnmiwedfiwejndfmwe"
     }
   },
   "provincia": [
