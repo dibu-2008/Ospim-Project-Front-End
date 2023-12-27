@@ -11,7 +11,7 @@ import Button from "@mui/material/Button";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import { getRamo } from "./DatosApi";
+import { getRamo } from "./DatosEmpresaApi";
 import { GrillaEmpresaDomilicio } from "./grilla_empresa_domicilio/GrillaEmpresaDomilicio";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
