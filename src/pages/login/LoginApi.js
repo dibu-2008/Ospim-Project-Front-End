@@ -64,8 +64,6 @@ export const usuarioLogueadoHabilitadoDFA = async (token) => {
 }
 
 export const logonDFA = async(token,codigo) => {
-
-  console.log("codigoVerificacion")
   
   const URL = `${BACKEND_URL}/auth/login-dfa`;
 
@@ -118,11 +116,7 @@ export const consultarUsuarioLogueado = async (token) => {
       },
     });
 
-    console.log(usuarioLogeadoResponse);
-
     const usuarioLogeado = await usuarioLogeadoResponse.data;
-
-    console.log(usuarioLogeado);
 
     return usuarioLogeado || {};
   } catch (error) {
