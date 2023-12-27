@@ -1,6 +1,7 @@
 import "./DatosEmpresa.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GrillaEmpresaContacto } from "./grilla_empresa_contacto/GrillaEmpresaContacto";
+import { GrillaEmpresaDomilicio } from "./grilla_empresa_domicilio/GrillaEmpresaDomilicio";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
@@ -12,13 +13,9 @@ import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { getRamo } from "./DatosEmpresaApi";
-import { GrillaEmpresaDomilicio } from "./grilla_empresa_domicilio/GrillaEmpresaDomilicio";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const state = JSON.parse(localStorage.getItem("state"));
-const ramos = await getRamo(state && state.token ? state.token : null);
-
-// Logica de los tabs incio
+// Logica de los tabs inicio
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -53,16 +50,31 @@ function a11yProps(index) {
 }
 
 export const DatosEmpresa = () => {
+  
+  const STATE = JSON.parse(localStorage.getItem("state"));
+  const TOKEN = STATE.usuarioLogueado.usuario.token;
+  const CUIT = STATE.usuarioLogueado.empresa.cuit;
+  const RAZONSOCIAL = STATE.usuarioLogueado.empresa.razonSocial;
+  const RAMO = STATE.usuarioLogueado.empresa.ramoId;
+  
   const [rowsContacto, setRowsContacto] = useState([]);
   const [rowsDomicilio, setRowsDomicilio] = useState([]);
-  const [cuit, setCuit] = useState("");
-  const [razonSocial, setRazonSocial] = useState("");
+  const [razonSocial, setRazonSocial] = useState(RAZONSOCIAL);
   const [ramo, setRamo] = useState("");
-
-  // Estado para los tabs
+  const [ramos, setRamos] = useState([]);
   const [tabState, setTabState] = useState(0);
 
-  const state = JSON.parse(localStorage.getItem("state"));
+  useEffect(()=>{
+    const ObtenerRamos = async () => {
+      const ramos = await getRamo(TOKEN);
+      setRamos(ramos);
+      const ramoEncontrado = ramos.find((ramo)=>ramo.id === RAMO);
+      setRamo(ramoEncontrado.id);
+    }
+    ObtenerRamos();
+    
+  }, [])
+
 
   const handleChangeTabState = (event, newValue) => {
     setTabState(newValue);
@@ -102,8 +114,8 @@ export const DatosEmpresa = () => {
         <TextField
           type="text"
           name="cuit"
-          value={cuit}
-          onChange={OnChangeCuit}
+          value={CUIT}
+          /* onChange={OnChangeCuit} */
           autoComplete="off"
           label="CUIT"
         />
@@ -162,7 +174,7 @@ export const DatosEmpresa = () => {
             rows={rowsContacto}
             setRows={setRowsContacto}
             BACKEND_URL={BACKEND_URL}
-            token={state.token}
+            token={TOKEN}
           />
         </CustomTabPanel>
         <CustomTabPanel value={tabState} index={1}>
@@ -170,7 +182,7 @@ export const DatosEmpresa = () => {
             rowsDomicilio={rowsDomicilio}
             setRowsDomicilio={setRowsDomicilio}
             BACKEND_URL={BACKEND_URL}
-            token={state.token}
+            token={TOKEN}
           />
         </CustomTabPanel>
       </Box>

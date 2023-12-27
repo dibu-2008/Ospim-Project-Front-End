@@ -27,6 +27,8 @@ export const getRamo = async (token) => {
     });
     const ramos = await ramoResponse.data;
 
+    console.log(ramos);
+
     return ramos || [];
   } catch (error) {
     errorBackendResponse(error, showSwalError);
