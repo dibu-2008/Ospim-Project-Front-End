@@ -170,6 +170,7 @@ export const DatosEmpresa = () => {
           </Tabs>
         </Box>
         <CustomTabPanel value={tabState} index={0}>
+             
           <GrillaEmpresaContacto
             rows={rowsContacto}
             setRows={setRowsContacto}

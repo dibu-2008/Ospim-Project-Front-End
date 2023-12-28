@@ -76,6 +76,7 @@ export const GrillaEmpresaDomilicio = ({
   const [tipoDomicilio, setTipoDomicilio] = useState([]);
   const [provincia, setProvincia] = useState("");
   const [provincias, setProvincias] = useState([]);
+  const [localidad, setLocalidad] = useState("");
   const [localidades, setLocalidades] = useState([]);
   //const [localidadesFiltradas, setLocalidadesFiltradas] = useState([]);
 
@@ -283,6 +284,10 @@ export const GrillaEmpresaDomilicio = ({
                 },
                 e.target.value
               );
+
+              console.log("params:", params);
+              console.log(params.row.localidadId);
+              params.row.localidadId = "";
             }}
             sx={{ width: 200 }}
           >
