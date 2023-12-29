@@ -12,7 +12,7 @@ import Button from "@mui/material/Button";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import { getRamo } from "./DatosEmpresaApi";
+import { getEmpresa, getRamo, modificarEmpresa } from "./DatosEmpresaApi";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 // Logica de los tabs inicio
@@ -53,28 +53,45 @@ export const DatosEmpresa = () => {
   
   const STATE = JSON.parse(localStorage.getItem("state"));
   const TOKEN = STATE.usuarioLogueado.usuario.token;
+  /* const ID = STATE.usuarioLogueado.empresa.id;
+  const TOKEN = STATE.usuarioLogueado.usuario.token;
   const CUIT = STATE.usuarioLogueado.empresa.cuit;
   const RAZONSOCIAL = STATE.usuarioLogueado.empresa.razonSocial;
-  const RAMO = STATE.usuarioLogueado.empresa.ramoId;
+  const RAMO = STATE.usuarioLogueado.empresa.ramoId; */
   
   const [rowsContacto, setRowsContacto] = useState([]);
   const [rowsDomicilio, setRowsDomicilio] = useState([]);
-  const [razonSocial, setRazonSocial] = useState(RAZONSOCIAL);
+  const [idEmpresa, setIdEmpresa] = useState("");
+  const [cuit, setCuit] = useState("");
+  const [razonSocial, setRazonSocial] = useState("");
   const [ramo, setRamo] = useState("");
   const [ramos, setRamos] = useState([]);
   const [tabState, setTabState] = useState(0);
+
+  useEffect(() => {
+    const ObtenerEmpresa = async () => {
+      const empresa = await getEmpresa(TOKEN);
+      console.log(empresa);
+      setCuit(empresa.empresa.cuit);
+      setRazonSocial(empresa.empresa.razonSocial);
+      setIdEmpresa(empresa.empresa.id);
+      setRamo(empresa.empresa.ramoId);
+    };
+    ObtenerEmpresa();
+  }, []);
 
   useEffect(()=>{
     const ObtenerRamos = async () => {
       const ramos = await getRamo(TOKEN);
       setRamos(ramos);
-      const ramoEncontrado = ramos.find((ramo)=>ramo.id === RAMO);
-      setRamo(ramoEncontrado.id);
+      //const ramoEncontrado = ramos.find((ramo)=>ramo.id === ramo);
+      //setRamo(ramoEncontrado.id);
     }
     ObtenerRamos();
     
   }, [])
 
+  
 
   const handleChangeTabState = (event, newValue) => {
     setTabState(newValue);
@@ -91,6 +108,15 @@ export const DatosEmpresa = () => {
   const OnChangeRamos = (e) => {
     setRamo(e.target.value);
   };
+
+  const onSubmitModificarEmpresa = async (e) => {
+    e.preventDefault();
+    const empresa = {
+      razonSocial: razonSocial,
+      ramoId: ramo,
+    };
+    await modificarEmpresa(TOKEN, idEmpresa, empresa)
+  }
 
   return (
     <div
@@ -110,11 +136,12 @@ export const DatosEmpresa = () => {
           alignContent: "center",
           margin: "50px auto",
         }}
+        onSubmit={onSubmitModificarEmpresa}
       >
         <TextField
           type="text"
           name="cuit"
-          value={CUIT}
+          value={cuit}
           /* onChange={OnChangeCuit} */
           autoComplete="off"
           label="CUIT"
