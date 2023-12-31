@@ -103,11 +103,6 @@
       "id": 7
     },
     {
-      "fecha": "2024-02-25T03:00:00.000Z",
-      "descripcion": "Cumple Luis",
-      "id": 8
-    },
-    {
       "fecha": "2023-12-22T03:00:00.000Z",
       "descripcion": "Cumple sssaaa",
       "id": 9
@@ -251,17 +246,16 @@
       "planta": "Planta 1"
     },
     {
-      "id": 2,
       "tipo": "REAL",
       "provinciaId": 3,
       "localidadId": 265,
       "calle": "San Juan",
-      "calleNro": "3540",
       "piso": "1",
       "depto": "B",
       "oficina": "5",
       "cp": "1417",
-      "planta": "Planta 2"
+      "planta": "Planta 2",
+      "id": 2
     },
     {
       "tipo": "REAL",
@@ -275,6 +269,18 @@
       "cp": "7600",
       "planta": "Planta 3",
       "id": 3
+    },
+    {
+      "tipo": "FISCAL",
+      "provinciaId": 10,
+      "localidadId": 308,
+      "calle": "Calle",
+      "piso": "Piso",
+      "depto": "Depto",
+      "oficina": "Ofi",
+      "cp": "1212",
+      "planta": "Planta 4",
+      "id": 4
     }
   ],
   "empresaContacto": [
@@ -355,18 +361,6 @@
       "prefijo": "011",
       "valor": "3321-8978",
       "id": 14
-    },
-    {
-      "tipo": "",
-      "prefijo": "",
-      "valor": "",
-      "id": 15
-    },
-    {
-      "tipo": "",
-      "prefijo": "",
-      "valor": "",
-      "id": 16
     }
   ],
   "empresaContactoTipo": [
