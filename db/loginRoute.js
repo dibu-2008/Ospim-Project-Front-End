@@ -18,7 +18,6 @@ module.exports = (req, res, next) => {
     next();
   } else {
     if (req.method === "POST" && req.url === "/auth/login-dfa") {
-
       console.log("Entrooo 1: POST - /login-dfa...");
       console.log(req.body);
 
@@ -33,10 +32,10 @@ module.exports = (req, res, next) => {
         });
 
         console.log(res.statusCode);
-      }else {
-
+      } else {
         const response = {
-          token: "ncvfjlkcovkelvkeivnfjkvevcfo.cmkdwocjoiwcmw.dnmiwedfiwejndfmwe",
+          token:
+            "ncvfjlkcovkelvkeivnfjkvevcfo.cmkdwocjoiwcmw.dnmiwedfiwejndfmwe",
           tokenRefresco:
             "2ncvfjlkcovkelvkeivnfjkvevcfo.cmkdwocjoiwcmw.dnmiwedfiwejndfmwe",
         };
@@ -45,8 +44,6 @@ module.exports = (req, res, next) => {
         /* En la sección donde manejas la ruta "/auth/login-dfa" con el método POST, estás llamando a res.json(response) y luego a next(). En este caso, res.json() envía la respuesta al cliente, pero luego también estás pasando la solicitud al siguiente middleware con next(). Esto puede resultar en un conflicto, ya que la respuesta ya se ha enviado al cliente. */
         //next();
       }
-
-
     } else {
       if (req.method === "POST" && req.url === "/auth/login") {
         // Handle the login request here
@@ -56,7 +53,10 @@ module.exports = (req, res, next) => {
 
         const { usuario, clave } = req.body;
 
-        if (usuario != "admin" || clave != "Prueba123") {
+        if (
+          usuario != "admin" ||
+          (clave != "Prueba123" && clave != "Prueba3333")
+        ) {
           res.status(401).jsonp({
             tipo: "ERROR_APP_BUSINESS",
             ticket: "TK-156269",
