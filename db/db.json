@@ -1,4 +1,11 @@
 {
+  "ospim-contacto": [
+    {
+      "email": "ospim@gmail.com",
+      "telefono": "15-5988-2246",
+      "whasap": "15-5555-8000"
+    }
+  ],
   "login-dfa": [
     {
       "valor": true
@@ -66,6 +73,23 @@
       "id": 1
     }
   ],
+  "rol": [
+    {
+      "id": 1,
+      "descripcion": "ROOT",
+      "baja": false
+    },
+    {
+      "id": 7,
+      "descripcion": "ADMINISTRATIVO",
+      "baja": false
+    },
+    {
+      "descripcion": "CONTADURIA",
+      "baja": true,
+      "id": 8
+    }
+  ],
   "feriados": [
     {
       "fecha": "2024-01-01T00:00:00.000Z",
@@ -123,14 +147,64 @@
       "id": 11
     }
   ],
-  "usuarios": [
+  "usuario-interno": [
     {
-      "usuario": "admin",
-      "clave": "Prueba123"
+      "id": 1,
+      "descripcion": "admin",
+      "clave": "Prueba123",
+      "rolId": 1,
+      "habilitado": false,
+      "nombre": "PRUEBA 2",
+      "apellido": "true",
+      "email": "prueba@gmail.com"
     },
     {
-      "usuario": "usuario1",
-      "clave": "Prueba123"
+      "id": 2,
+      "descripcion": "usuario1",
+      "clave": "Prueba123",
+      "rolId": 7,
+      "habilitado": false,
+      "nombre": "PRUEBA 2",
+      "apellido": "true",
+      "email": "prueba2@gmail.com"
+    },
+    {
+      "id": 4,
+      "descripcion": "usuauro4",
+      "clave": "Prueba123",
+      "rolId": 7,
+      "nombre": "PRUEBA 3",
+      "apellido": "true",
+      "email": ""
+    },
+    {
+      "id": 5,
+      "descripcion": "cccc",
+      "clave": "cccc",
+      "rolId": 7,
+      "nombre": "nombre ",
+      "apellido": "ape",
+      "email": "cccc@gmail.com",
+      "habilitado": true
+    },
+    {
+      "id": 6,
+      "descripcion": "ccccjjj",
+      "clave": "cccc jjj",
+      "rolId": 77,
+      "nombre": "nombre ",
+      "apellido": "ape",
+      "email": "cccc@gmail.com"
+    },
+    {
+      "descripcion": "usuario-2",
+      "clave": "Prueba123",
+      "rolId": 7,
+      "nombre": "Usuario-2 ",
+      "apellido": "-2",
+      "email": "usuario-2@gmail.com",
+      "id": 7,
+      "habilitado": true
     }
   ],
   "publicaciones": [
@@ -443,38 +517,41 @@
       "descripcion": "Neuquen"
     }
   ],
-  "localidad-3": [
+  "localidad": [
     {
+      "provinciaId": 3,
       "id": 265,
       "descripcion": "Capital Federal"
-    }
-  ],
-  "localidad-10": [
-    {
-      "id": 308,
-      "descripcion": "Clorinda"
     },
     {
-      "id": 1893,
-      "descripcion": "El Colorado"
-    },
-    {
-      "id": 477,
-      "descripcion": "Formosa"
-    }
-  ],
-  "localidad-16": [
-    {
+      "provinciaId": 16,
       "id": 193,
       "descripcion": "Barrio Sarmiento"
     },
     {
+      "provinciaId": 16,
       "id": 242,
       "descripcion": "Caminera San Martin"
     },
     {
+      "provinciaId": 16,
       "id": 83,
       "descripcion": "Añelo"
+    },
+    {
+      "provinciaId": 10,
+      "id": 308,
+      "descripcion": "Clorinda"
+    },
+    {
+      "provinciaId": 10,
+      "id": 1893,
+      "descripcion": "El Colorado"
+    },
+    {
+      "provinciaId": 10,
+      "id": 477,
+      "descripcion": "Formosa"
     }
   ]
 }

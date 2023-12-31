@@ -1,6 +1,10 @@
 {
+  "/ospim/contacto/": "/ospim-contacto",
   "/publicaciones/vigentes": "/publicacionesVigentes",
   "/usuario/empresa/": "/usuario-empresa-alta",
+  "/usuario/interno": "/usuario-interno",
+  "/usuario/interno/:id": "/usuario-interno/:id",
+  "/usuario/:id/habilitar/": "/usuario-interno/:id",
   "/empresa/domicilio/": "/empresaDomicilio",
   "/empresa/:id/domicilio/": "/empresaDomicilio",
   "/empresa/:empresaId/domicilio/:id": "/empresaDomicilio/:id",
@@ -11,5 +15,5 @@
   "/empresa/:empresaId/contacto/:id": "/empresaContacto/:id",
   "/empresa/ramo": "/ramo",
   "/auth/login/usuario": "/auth-login-usuario",
-  "/provincia/:provinciaId/localidad": "/localidad-:provinciaId"
+  "/provincia/:provinciaId/localidad": "/localidad?provinciaId=:provinciaId"
 }
