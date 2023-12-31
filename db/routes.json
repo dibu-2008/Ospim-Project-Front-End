@@ -5,6 +5,7 @@
   "/usuario/interno": "/usuario-interno",
   "/usuario/interno/:id": "/usuario-interno/:id",
   "/usuario/:id/habilitar/": "/usuario-interno/:id",
+  "/usuario/:id/deshabilitar/": "/usuario-interno/:id",
   "/empresa/domicilio/": "/empresaDomicilio",
   "/empresa/:id/domicilio/": "/empresaDomicilio",
   "/empresa/:empresaId/domicilio/:id": "/empresaDomicilio/:id",

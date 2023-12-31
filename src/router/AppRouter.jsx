@@ -16,6 +16,7 @@ import { RegisterPage } from "../pages/RegisterPage";
 import DashboardPage from "../pages/dashboard/DashboardPage";
 import { LoginPage } from "../pages/login/LoginPage";
 import { Feriados } from "../pages/dashboard/pages_dashboard/feriados/Feriados";
+import { AltaUsuarioInterno } from "../pages/dashboard/pages_dashboard/alta_usuario_interno/AltaUsuarioInterno";
 
 const BoletasPage = () => <div>Contenido de la página de boletas</div>;
 const PagosPage = () => <div>Contenido de la página de pagos</div>;
@@ -43,6 +44,7 @@ const AppRouter = () => {
             <Route path="pagos" element={<PagosPage />} />
             <Route path="misdatos" element={<DatosEmpresa />} />
             <Route path="categorias" element={<Categorias />} />
+            <Route path="altausuariointerno" element={<AltaUsuarioInterno />} />
           </Route>
           <Route path="registercompany" element={<RegisterCompany />} />
           <Route index element={<Navigate to="/login" />} />

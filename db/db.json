@@ -7,7 +7,10 @@
     }
   ],
   "entidad": [
-    { "codigo": "UOMA", "descripcion": "Union Obrera Molinera Argentina" },
+    {
+      "codigo": "UOMA",
+      "descripcion": "Union Obrera Molinera Argentina"
+    },
     {
       "codigo": "ANTIMA",
       "descripcion": "Asociación Mutual de los Trabajadores de la Industria Molinera"
@@ -155,14 +158,14 @@
   ],
   "usuario-interno": [
     {
-      "id": 1,
       "descripcion": "admin",
       "clave": "Prueba123",
-      "rolId": 1,
-      "habilitado": false,
+      "rolId": 7,
       "nombre": "PRUEBA 2",
       "apellido": "true",
-      "email": "prueba@gmail.com"
+      "email": "prueba@gmail.com",
+      "id": 1,
+      "habilitado": true
     },
     {
       "id": 2,
@@ -206,11 +209,20 @@
       "descripcion": "usuario-2",
       "clave": "Prueba123",
       "rolId": 7,
-      "nombre": "Usuario-2 ",
+      "nombre": "Usuario-22 ",
       "apellido": "-2",
       "email": "usuario-2@gmail.com",
       "id": 7,
-      "habilitado": true
+      "habilitado": false
+    },
+    {
+      "descripcion": "luig33",
+      "clave": "123",
+      "rolId": 7,
+      "nombre": "Luis",
+      "apellido": "Salinas",
+      "email": "luis@gmail.com",
+      "id": 8
     }
   ],
   "publicaciones": [
