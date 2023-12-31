@@ -353,10 +353,10 @@
   ],
   "empresaContacto": [
     {
-      "id": 1,
       "tipo": "TEL",
       "prefijo": "011",
-      "valor": "3404-2022"
+      "valor": "3404-2032",
+      "id": 1
     },
     {
       "tipo": "MAIL",
@@ -423,6 +423,24 @@
       "prefijo": "123",
       "valor": "3454-6879",
       "id": 13
+    },
+    {
+      "tipo": "TEL",
+      "prefijo": "011",
+      "valor": "3321-8978",
+      "id": 14
+    },
+    {
+      "tipo": "",
+      "prefijo": "",
+      "valor": "",
+      "id": 15
+    },
+    {
+      "tipo": "",
+      "prefijo": "",
+      "valor": "",
+      "id": 16
     }
   ],
   "empresaContactoTipo": [

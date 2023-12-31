@@ -15,6 +15,7 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import axios from 'axios';
+import { crearFilaContacto, eliminarFilaContacto, modificarFilaContacto, obtenerDatosEmpresa, obtenerTipo } from './GrillaEmpresaContactoApi';
 
 
 function EditToolbar(props) {
@@ -49,43 +50,26 @@ export const GrillaEmpresaContacto = ({ rows, setRows, BACKEND_URL, token }) => 
     const [rowModesModel, setRowModesModel] = useState({});  // pasar
     const [tipoContacto, setTipoContacto] = useState([]); // pasar
 
-    // consulta a la api tipo de contacto
     useEffect(() => {
         const getTipoContacto = async () => {
-            try {
-                const response = await axios.get(`${BACKEND_URL}/empresa/contacto/tipo`, {
-                    headers: {
-                        'Authorization': token,
-                    }
-                });
-                const jsonData = await response.data;
-                setTipoContacto(jsonData.map((item) => ({ ...item })));
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
+            
+            const tipo = await obtenerTipo(token);
+
+            setTipoContacto(tipo.map((item) => ({ ...item })));
         }
         getTipoContacto();
     }, []);
 
-    // consulta a la api datos de la empresa
     useEffect(() => {
         const getDatosEmpresa = async () => {
-            try {
-                const response = await axios.get(`${BACKEND_URL}/empresa/:empresaId/contacto`, {
-                    headers: {
-                        'Authorization': token,
-                    }
-                });
-                const jsonData = await response.data;
-                setRows(jsonData.map((item) => ({ ...item })));
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
+            
+            const datosEmpresa = await obtenerDatosEmpresa(token);
+
+            setRows(datosEmpresa.map((item) => ({ ...item, id: item.id })));
         }
         getDatosEmpresa();
     }, []);
 
-    // Logica de la grilla contacto
     const handleRowEditStop = (params, event) => {
         if (params.reason === GridRowEditStopReasons.rowFocusOut) {
             event.defaultMuiPrevented = true;
@@ -102,20 +86,9 @@ export const GrillaEmpresaContacto = ({ rows, setRows, BACKEND_URL, token }) => 
 
     const handleDeleteClick = (id) => async () => {
 
-        try {
-
-            setRows(rows.filter((row) => row.id !== id));
-            //setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-
-            await axios.delete(`${BACKEND_URL}/empresa/:empresaId/contacto/${id}`, {
-                headers: {
-                    'Authorization': token,
-                }
-            })
-
-        } catch (error) {
-            console.error('Error al eliminar contacto empresa: ', error);
-        }
+        setRows(rows.filter((row) => row.id !== id));
+        
+        await eliminarFilaContacto(token, id)
     }
 
     const handleCancelClick = (id) => () => {
@@ -130,7 +103,7 @@ export const GrillaEmpresaContacto = ({ rows, setRows, BACKEND_URL, token }) => 
         }
     };
 
-    const processRowUpdate = (newRow) => {
+    const processRowUpdate = async (newRow) => {
 
         const updatedRow = { ...newRow, isNew: false };
 
@@ -138,26 +111,13 @@ export const GrillaEmpresaContacto = ({ rows, setRows, BACKEND_URL, token }) => 
 
         if (newRow.isNew) {
 
-            console.log("Nueva fila");
-
             const nuevoContacto = {
                 tipo: newRow.tipo,
                 prefijo: newRow.prefijo,
                 valor: newRow.valor,
             }
 
-            try {
-
-                axios.post(`${BACKEND_URL}/empresa/:empresaId/contacto`, nuevoContacto, {
-                    headers: {
-                        'Authorization': token,
-                    }
-                })
-
-
-            } catch (error) {
-                console.error('Error al crear contacto empresa: ', error);
-            }
+            await crearFilaContacto(token, nuevoContacto);
 
         } else {
 
@@ -169,19 +129,7 @@ export const GrillaEmpresaContacto = ({ rows, setRows, BACKEND_URL, token }) => 
                 valor: newRow.valor,
             }
 
-            try {
-
-                axios.put(`${BACKEND_URL}/empresa/:empresaId/contacto/${newRow.id}`, contacto, {
-                    headers: {
-                        'Authorization': token,
-                    }
-                })
-
-
-            } catch (error) {
-                console.error('Error al actualizar contacto empresa: ', error);
-            }
-
+            await modificarFilaContacto(token, newRow.id, contacto);
         }
 
         setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
