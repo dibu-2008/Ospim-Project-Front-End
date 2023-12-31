@@ -6,6 +6,17 @@
       "whasap": "15-5555-8000"
     }
   ],
+  "entidad": [
+    { "codigo": "UOMA", "descripcion": "Union Obrera Molinera Argentina" },
+    {
+      "codigo": "ANTIMA",
+      "descripcion": "Asociación Mutual de los Trabajadores de la Industria Molinera"
+    },
+    {
+      "codigo": "OSPIM",
+      "descripcion": "Obra Social del Personal de la Industria Molinera"
+    }
+  ],
   "login-dfa": [
     {
       "valor": true
