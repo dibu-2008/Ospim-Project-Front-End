@@ -3,13 +3,48 @@ import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import './Inicio.css'
 import { CarouselText } from '../../../../components/carousel/CarouselText';
+import { ObtenerDatosDeContacto, ObtenerPublicacionesVigentes } from './InicioApi';
+import { useState, useEffect } from 'react';
 
 export const Inicio = () => {
+
+    const [datosContacto, setDatosContacto] = useState([]);
+    const [contenido, setContenido] = useState([]);
+
+    const TOKEN = JSON.parse(localStorage.getItem('state')).usuarioLogueado.usuario.token;
+
+    useEffect(() => {
+
+        const getDatosContacto = async () => {
+
+            const datos = await ObtenerDatosDeContacto(TOKEN);
+            
+            setDatosContacto(datos);
+
+        };
+
+        getDatosContacto();
+
+    }, []);
+
+    useEffect(() => {
+
+        const getContenido = async () => {
+
+            const contenidos = await ObtenerPublicacionesVigentes(TOKEN, '/publicacionesVigentes');
+
+            setContenido(contenidos);
+
+        };
+
+        getContenido();
+
+    }, []);
+
     return (
         <div className='bienvenidos_container'>
             <div className='bienvenidos'>
-                <h1 style={{ color: '#1A76D2', marginBottom: '10px', textAlign: 'left' }}>Bienvenidos</h1>
-
+                <h1>Bienvenidos</h1>
                 <p className='parrafo_portal'>Desde este portal, podrá generar boletas de pago para las entidades UOMA, OSPIM y AMTIMA</p>
             </div>
 
@@ -19,9 +54,9 @@ export const Inicio = () => {
                     <p>Ante cualquier inconveniente, por favor, no dude en contactarse con nosotros a través de los siguientes medios</p>
 
                     <div className='medios'>
-                        <div><span><EmailIcon /></span>Correo Electrónico</div>
-                        <div><span><LocalPhoneIcon /></span>Teléfono</div>
-                        <div><span><WhatsAppIcon /></span>WhatsApp</div>
+                        <div><span><EmailIcon /></span>{datosContacto[0]?.email}</div>
+                        <div><span><LocalPhoneIcon /></span>{datosContacto[0]?.telefono}</div>
+                        <div><span><WhatsAppIcon /></span>{datosContacto[0]?.whasap}</div>
                     </div>
 
                     <h5>Días y horarios:</h5>
@@ -29,7 +64,9 @@ export const Inicio = () => {
                 </div>
             </div>
             <div className='novedades'>
-                <CarouselText />
+                <CarouselText 
+                    contenido={contenido}
+                />
             </div>
         </div>
     )

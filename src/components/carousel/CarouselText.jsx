@@ -1,30 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
-const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-export const CarouselText = () => {
-  const [contenido, setContenido] = useState([]);
+export const CarouselText = ({contenido}) => {
+  
   const [currentIndex, setCurrentIndex] = useState(0);
-
-  useEffect(() => {
-
-    const fetchData = async () => {
-
-      try {
-        const response = await axios.get(`${backendUrl}/publicacionesVigentes`);
-        setContenido(response.data);
-      }catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchData();
-
-  }, []);
 
   useEffect(() => {
     const intervalId = setInterval(() => {

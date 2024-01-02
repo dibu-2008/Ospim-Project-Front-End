@@ -8,6 +8,12 @@
     margin: 20px auto 60px auto;
 }
 
+.bienvenidos h1 {
+    color: #1A76D2;
+    margin-bottom: 10px;
+    text-align: left !important;
+}
+
 .contacto {
     width: 80%;
     margin: 60px auto;
