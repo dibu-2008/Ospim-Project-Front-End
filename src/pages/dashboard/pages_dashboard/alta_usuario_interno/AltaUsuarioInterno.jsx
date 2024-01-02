@@ -152,7 +152,7 @@ export const AltaUsuarioInterno = () => {
     {
       field: 'apellido',
       headerName: 'Apellido',
-      width: 150,
+      width: 200,
       type: 'string',
       editable: true,
     },
@@ -173,7 +173,7 @@ export const AltaUsuarioInterno = () => {
     {
       field: 'email',
       headerName: 'Email',
-      width: 200,
+      width: 225,
       type: 'string',
       editable: true,
     },
@@ -208,7 +208,7 @@ export const AltaUsuarioInterno = () => {
     {
       field: 'habilitado',
       headerName: 'Habilitado',
-      width: 200,
+      width: 100,
       type: 'string',
       editable: false,
       valueGetter: (params) => {
@@ -278,7 +278,7 @@ export const AltaUsuarioInterno = () => {
       <Box
         sx={{
           height: "auto",
-          width: "80%",
+          width: "90%",
           overflowX: "auto",
           "& .actions": {
             color: "text.secondary",
