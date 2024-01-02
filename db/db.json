@@ -7,7 +7,10 @@
     }
   ],
   "entidad": [
-    { "codigo": "UOMA", "descripcion": "Union Obrera Molinera Argentina" },
+    {
+      "codigo": "UOMA",
+      "descripcion": "Union Obrera Molinera Argentina"
+    },
     {
       "codigo": "ANTIMA",
       "descripcion": "Asociación Mutual de los Trabajadores de la Industria Molinera"
@@ -138,11 +141,6 @@
       "id": 7
     },
     {
-      "fecha": "2024-02-25T03:00:00.000Z",
-      "descripcion": "Cumple Luis",
-      "id": 8
-    },
-    {
       "fecha": "2023-12-22T03:00:00.000Z",
       "descripcion": "Cumple sssaaa",
       "id": 9
@@ -160,14 +158,14 @@
   ],
   "usuario-interno": [
     {
-      "id": 1,
       "descripcion": "admin",
       "clave": "Prueba123",
-      "rolId": 1,
-      "habilitado": false,
+      "rolId": 7,
       "nombre": "PRUEBA 2",
       "apellido": "true",
-      "email": "prueba@gmail.com"
+      "email": "prueba@gmail.com",
+      "id": 1,
+      "habilitado": true
     },
     {
       "id": 2,
@@ -211,11 +209,20 @@
       "descripcion": "usuario-2",
       "clave": "Prueba123",
       "rolId": 7,
-      "nombre": "Usuario-2 ",
+      "nombre": "Usuario-22 ",
       "apellido": "-2",
       "email": "usuario-2@gmail.com",
       "id": 7,
-      "habilitado": true
+      "habilitado": false
+    },
+    {
+      "descripcion": "luig33",
+      "clave": "123",
+      "rolId": 7,
+      "nombre": "Luis",
+      "apellido": "Salinas",
+      "email": "luis@gmail.com",
+      "id": 8
     }
   ],
   "publicaciones": [
@@ -368,17 +375,16 @@
       "planta": "Planta 1"
     },
     {
-      "id": 2,
       "tipo": "REAL",
       "provinciaId": 3,
       "localidadId": 265,
       "calle": "San Juan",
-      "calleNro": "3540",
       "piso": "1",
       "depto": "B",
       "oficina": "5",
       "cp": "1417",
-      "planta": "Planta 2"
+      "planta": "Planta 2",
+      "id": 2
     },
     {
       "tipo": "REAL",
@@ -392,6 +398,18 @@
       "cp": "7600",
       "planta": "Planta 3",
       "id": 3
+    },
+    {
+      "tipo": "FISCAL",
+      "provinciaId": 10,
+      "localidadId": 308,
+      "calle": "Calle",
+      "piso": "Piso",
+      "depto": "Depto",
+      "oficina": "Ofi",
+      "cp": "1212",
+      "planta": "Planta 4",
+      "id": 4
     }
   ],
   "empresaContacto": [
@@ -472,18 +490,6 @@
       "prefijo": "011",
       "valor": "3321-8978",
       "id": 14
-    },
-    {
-      "tipo": "",
-      "prefijo": "",
-      "valor": "",
-      "id": 15
-    },
-    {
-      "tipo": "",
-      "prefijo": "",
-      "valor": "",
-      "id": 16
     }
   ],
   "empresaContactoTipo": [

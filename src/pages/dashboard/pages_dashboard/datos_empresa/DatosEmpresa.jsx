@@ -58,6 +58,8 @@ export const DatosEmpresa = () => {
   const CUIT = STATE.usuarioLogueado.empresa.cuit;
   const RAZONSOCIAL = STATE.usuarioLogueado.empresa.razonSocial;
   const RAMO = STATE.usuarioLogueado.empresa.ramoId; */
+
+  // Actualizar el storage
   
   const [rowsContacto, setRowsContacto] = useState([]);
   const [rowsDomicilio, setRowsDomicilio] = useState([]);

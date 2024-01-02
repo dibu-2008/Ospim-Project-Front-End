@@ -23,6 +23,7 @@ const DashboardPage = () => {
         onChange={(event, newValue) => {
           setValue(newValue);
         }}
+        sx={{ width: '100%'}}
       >
         <BottomNavigationAction label="Inicio" icon={<HomeIcon />} component={Link} to="./inicio" />
         <BottomNavigationAction label="Publicaciones" icon={<LibraryBooksIcon />} component={Link} to="./publicaciones" />
@@ -32,6 +33,11 @@ const DashboardPage = () => {
         <BottomNavigationAction label="Pagos" icon={<AccountBalanceWalletIcon />} component={Link} to="./pagos" />
         <BottomNavigationAction label="Datos" icon={<PersonIcon />} component={Link} to="./misdatos" />
         <BottomNavigationAction label="Categorias" icon={<CategoryIcon />} component={Link} to="./categorias" />
+        <BottomNavigationAction 
+          label="Alta Usuario Interno" 
+          icon={<PersonIcon />} 
+          component={Link} to="./altausuariointerno" 
+        />
         <BottomNavigationAction label="Salir" icon={<CloseIcon />} />
       </BottomNavigation>
 
