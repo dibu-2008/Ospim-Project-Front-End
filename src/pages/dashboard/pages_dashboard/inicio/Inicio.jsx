@@ -2,7 +2,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import './Inicio.css'
-import { CarouselNews } from '../../../../components/carousel/Carousel';
+import { CarouselText } from '../../../../components/carousel/CarouselText';
 
 export const Inicio = () => {
     return (
@@ -29,7 +29,7 @@ export const Inicio = () => {
                 </div>
             </div>
             <div className='novedades'>
-                <CarouselNews />
+                <CarouselText />
             </div>
         </div>
     )

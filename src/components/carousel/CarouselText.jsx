@@ -6,8 +6,8 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-export const CarouselNews = () => {
-  const [publicaciones, setPublicaciones] = useState([]);
+export const CarouselText = () => {
+  const [contenido, setContenido] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
@@ -16,7 +16,7 @@ export const CarouselNews = () => {
 
       try {
         const response = await axios.get(`${backendUrl}/publicacionesVigentes`);
-        setPublicaciones(response.data);
+        setContenido(response.data);
       }catch (error) {
         console.log(error);
       }
@@ -34,19 +34,19 @@ export const CarouselNews = () => {
     return () => {
       clearInterval(intervalId);
     };
-  }, [currentIndex, publicaciones.length]);
+  }, [currentIndex, contenido.length]);
 
   const goToNextSlide = () => {
-    setCurrentIndex(prevIndex => (prevIndex + 1) % publicaciones.length);
+    setCurrentIndex(prevIndex => (prevIndex + 1) % contenido.length);
   };
 
   const goToPrevSlide = () => {
-    setCurrentIndex(prevIndex => (prevIndex - 1 + publicaciones.length) % publicaciones.length);
+    setCurrentIndex(prevIndex => (prevIndex - 1 + contenido.length) % contenido.length);
   };
 
   return (
     <div>
-      {publicaciones.length > 0 && (
+      {contenido.length > 0 && (
         <div>
           <div
             style={{
@@ -78,14 +78,14 @@ export const CarouselNews = () => {
                   color: '#1A76D2',
                   marginBottom: '20px',
                 }}
-              >{publicaciones[currentIndex].titulo}</h2>
+              >{contenido[currentIndex].titulo}</h2>
               <p
                 style={{
                   width: '50%',
                   margin: '0 auto',
                   textAlign: 'center',
                 }}
-              >{publicaciones[currentIndex].cuerpo}</p>
+              >{contenido[currentIndex].cuerpo}</p>
             </div>
           </div>
           <div
@@ -115,7 +115,7 @@ export const CarouselNews = () => {
                 display: 'flex',
                 marginTop: '100px',
             }}>
-              {publicaciones.map((_, index) => (
+              {contenido.map((_, index) => (
                 <span
                   key={index}
                   onClick={() => setCurrentIndex(index)}
