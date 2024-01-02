@@ -296,29 +296,61 @@
   ],
   "categoria": [
     {
+      "camaraCodigo": "FAIM",
+      "descripcion": "A"
+    },
+    {
+      "camaraCodigo": "FAIM",
+      "descripcion": "B"
+    },
+    {
+      "camaraCodigo": "FAIM",
+      "descripcion": "C"
+    },
+    {
+      "camaraCodigo": "FAIM",
+      "descripcion": "D"
+    },
+    {
+      "camaraCodigo": "CEPA",
+      "descripcion": "A"
+    },
+    {
+      "camaraCodigo": "CEPA",
+      "descripcion": "B"
+    },
+    {
+      "camaraCodigo": "CEPA",
+      "descripcion": "C"
+    },
+    {
+      "camaraCodigo": "CEPA",
+      "descripcion": "D"
+    },
+    {
+      "camaraCodigo": "CEPA",
+      "descripcion": "E"
+    },
+
+    {
       "camaraCodigo": "CAENA",
-      "descripcion": "CAmara AENA",
-      "id": 1
-    },
-    {
-      "camaraCodigo": "FAIM",
-      "descripcion": "Categoria X",
-      "id": 2
-    },
-    {
-      "camaraCodigo": "FAIM",
-      "descripcion": "Categoria Z",
-      "id": 4
+      "descripcion": "A"
     },
     {
       "camaraCodigo": "CAENA",
-      "descripcion": "dfdsfdgdfgfdAAAA",
-      "id": 5
+      "descripcion": "B"
     },
     {
-      "camaraCodigo": "FAIM",
-      "descripcion": "aaaaaazzz",
-      "id": 6
+      "camaraCodigo": "CAENA",
+      "descripcion": "C"
+    },
+    {
+      "camaraCodigo": "CAENA",
+      "descripcion": "D"
+    },
+    {
+      "camaraCodigo": "CAENA",
+      "descripcion": "E"
     }
   ],
   "empresa": [
