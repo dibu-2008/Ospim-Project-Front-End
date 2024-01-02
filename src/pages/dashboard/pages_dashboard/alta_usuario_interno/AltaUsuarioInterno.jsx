@@ -7,6 +7,7 @@ import {
   GridActionsCellItem,
   GridRowEditStopReasons,
 } from '@mui/x-data-grid';
+import Box from "@mui/material/Box";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
@@ -136,11 +137,11 @@ export const AltaUsuarioInterno = () => {
       habilitado: updatedRow.habilitado
     }
 
-    if(updatedRow.habilitado){
+    if (updatedRow.habilitado) {
 
       await habilitarUsuarioInterno(token, id, habilitado);
-      
-    }else {
+
+    } else {
 
       await deshabilitarUsuarioInterno(token, id, habilitado);
 
@@ -274,21 +275,46 @@ export const AltaUsuarioInterno = () => {
   return (
     <div className='usuario_interno_container'>
       <h1>Alta Usuario Interno</h1>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        editMode="row"
-        rowModesModel={rowModesModel}
-        onRowModesModelChange={handleRowModesModelChange}
-        onRowEditStop={handleRowEditStop}
-        processRowUpdate={processRowUpdate}
-        slots={{
-          toolbar: AltaUsuarioInternoNuevo,
+      <Box
+        sx={{
+          height: "auto",
+          width: "80%",
+          overflowX: "auto",
+          "& .actions": {
+            color: "text.secondary",
+          },
+          "& .textPrimary": {
+            color: "text.primary",
+          },
         }}
-        slotProps={{
-          toolbar: { setRows, rows, setRowModesModel },
-        }}
-      />
+      >
+
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          editMode="row"
+          rowModesModel={rowModesModel}
+          onRowModesModelChange={handleRowModesModelChange}
+          onRowEditStop={handleRowEditStop}
+          processRowUpdate={processRowUpdate}
+          slots={{
+            toolbar: AltaUsuarioInternoNuevo,
+          }}
+          slotProps={{
+            toolbar: { setRows, rows, setRowModesModel },
+          }}
+          sx={{
+            // ...
+            '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
+              width: '8px',
+              visibility: 'visible',
+            },
+            '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
+              backgroundColor: '#ccc',
+            },
+          }}
+        />
+      </Box>
     </div>
   )
 }
