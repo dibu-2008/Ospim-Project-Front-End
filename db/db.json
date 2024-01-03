@@ -187,12 +187,11 @@
     {
       "descripcion": "admin",
       "clave": "Prueba123",
-      "rolId": 7,
+      "rolId": 1,
       "nombre": "PRUEBA 2",
       "apellido": "true",
       "email": "prueba@gmail.com",
-      "id": 1,
-      "habilitado": true
+      "id": 1
     },
     {
       "id": 2,
@@ -259,6 +258,16 @@
       "apellido": "Apellido12 comp.",
       "email": "usuario12@gmail.com",
       "id": 9
+    },
+    {
+      "descripcion": "luis33",
+      "clave": "123",
+      "rolId": 7,
+      "nombre": "Luis",
+      "apellido": "Salinas",
+      "email": "luis@gmail.com",
+      "id": 10,
+      "habilitado": true
     }
   ],
   "publicaciones": [
@@ -675,11 +684,11 @@
       "id": 150,
       "estado": "PE",
       "empresaId": 1,
-      "periodo": "12/2023",
+      "periodo": "2023-12-01T00:00:00.000Z",
       "secuencia": 0,
       "totalART46": 15168.26,
       "totalAntimaCS": 35598.75,
-      "totalUomaCS": 1265333.0,
+      "totalUomaCS": 1265333,
       "totalUomaAS": 2659887.01,
       "totalCuotaUsu": 0
     },
@@ -687,11 +696,11 @@
       "id": 120,
       "estado": "PE",
       "empresaId": 1,
-      "periodo": "11/2023",
+      "periodo": "2023-11-01T00:00:00.000Z",
       "secuencia": 0,
       "totalART46": 15600.26,
       "totalAntimaCS": 77598.75,
-      "totalUomaCS": 1365333.0,
+      "totalUomaCS": 1365333,
       "totalUomaAS": 2659887.01,
       "totalCuotaUsu": 0
     },
@@ -699,11 +708,11 @@
       "id": 121,
       "estado": "PE",
       "empresaId": 1,
-      "periodo": "11/2023",
+      "periodo": "2023-11-01T00:00:00.000Z",
       "secuencia": 1,
       "totalART46": 25600.26,
       "totalAntimaCS": 75598.75,
-      "totalUomaCS": 1365333.0,
+      "totalUomaCS": 1365333,
       "totalUomaAS": 2659887.01,
       "totalCuotaUsu": 1000
     },
@@ -711,11 +720,11 @@
       "id": 110,
       "estado": "PE",
       "empresaId": 1,
-      "periodo": "10/2023",
+      "periodo": "2023-10-01T00:00:00.000Z",
       "secuencia": 0,
       "totalART46": 20600.26,
       "totalAntimaCS": 70598.75,
-      "totalUomaCS": 1305333.0,
+      "totalUomaCS": 1305333,
       "totalUomaAS": 2009887.01,
       "totalCuotaUsu": 100
     },
@@ -723,11 +732,11 @@
       "id": 100,
       "estado": "PE",
       "empresaId": 1,
-      "periodo": "09/2023",
+      "periodo": "2023-09-01T00:00:00.000Z",
       "secuencia": 0,
       "totalART46": 20600.26,
       "totalAntimaCS": 70598.75,
-      "totalUomaCS": 1305333.0,
+      "totalUomaCS": 1305333,
       "totalUomaAS": 2009887.01,
       "totalCuotaUsu": 100
     },
@@ -735,11 +744,11 @@
       "id": 101,
       "estado": "PR",
       "empresaId": 1,
-      "periodo": "09/2023",
+      "periodo": "2023-09-01T00:00:00.000Z",
       "secuencia": 1,
       "totalART46": 26000.26,
       "totalAntimaCS": 70598.75,
-      "totalUomaCS": 1305333.0,
+      "totalUomaCS": 1305333,
       "totalUomaAS": 200000.01,
       "totalCuotaUsu": 10
     },
@@ -747,11 +756,11 @@
       "id": 200,
       "estado": "PR",
       "empresaId": 2,
-      "periodo": "09/2023",
+      "periodo": "2023-09-01T00:00:00.000Z",
       "secuencia": 2,
       "totalART46": 26000.26,
       "totalAntimaCS": 70598.75,
-      "totalUomaCS": 1305333.0,
+      "totalUomaCS": 1305333,
       "totalUomaAS": 200000.01,
       "totalCuotaUsu": 10
     },
@@ -759,11 +768,11 @@
       "id": 201,
       "estado": "PR",
       "empresaId": 2,
-      "periodo": "09/2023",
+      "periodo": "2023-09-01T00:00:00.000Z",
       "secuencia": 1,
       "totalART46": 26000.26,
       "totalAntimaCS": 70598.75,
-      "totalUomaCS": 1305333.0,
+      "totalUomaCS": 1305333,
       "totalUomaAS": 200000.01,
       "totalCuotaUsu": 10
     }

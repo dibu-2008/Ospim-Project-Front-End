@@ -502,35 +502,6 @@ export const RegistroEmpresa = () => {
               position: "relative",
             }}
           ></div>
-          {/* <div
-            className="flex-container"
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              width: "100%",
-              marginBlock: "30px",
-            }}
-          >
-            <TextField
-              type="search"
-              name="search"
-              value={search}
-              onChange={onInputChangeSearchCompany}
-              autoComplete="off"
-              variant="outlined"
-              label="Buscar"
-              sx={{
-                width: "150px",
-              }}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <SearchIcon />
-                  </InputAdornment>
-                ),
-              }}
-            /> 
-          </div> */}
           <p
             style={{
               marginTop: "20px",
@@ -543,11 +514,7 @@ export const RegistroEmpresa = () => {
             Domicilios declarados: (Para completar el registro, deberá agregar
             por lo menos el Domicilio Fiscal)
           </p>
-          {/* <AddressTable
-            companiesDto={companiesDto}
-            rows={rows}
-            setRows={setRows}
-          /> */}
+       
           <GrillaRegistroDomilicio
             rows={rows}
             setRows={setRows}
