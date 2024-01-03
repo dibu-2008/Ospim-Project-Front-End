@@ -1,23 +1,19 @@
-import { useEffect, useState } from "react";
-import { InputComponent } from "../components/InputComponent";
-import { ButtonComponent } from "../components/ButtonComponent";
-import { useFormRegisterCompany } from "../hooks/useFormRegisterCompany";
-import { SelectComponent } from "../components/SelectComponent";
-import { AddressTable } from "../components/AddressTable";
+import { useState } from "react";
+import { InputComponent } from "../../components/InputComponent";
+import { ButtonComponent } from "../../components/ButtonComponent";
+import { useFormRegisterCompany } from "../../hooks/useFormRegisterCompany";
+import { SelectComponent } from "../../components/SelectComponent";
 import { v4 as uuidv4 } from 'uuid';
+import { GrillaRegistroDomilicio } from "./grilla_registro_domicilio/GrillaRegistroDomicilio";
+import { registrarEmpresa } from "./RegistroEmpresaApi";
 import TextField from '@mui/material/TextField';
-import InputAdornment from "@mui/material/InputAdornment";
-import SearchIcon from "@mui/icons-material/Search";
 import Box from '@mui/material/Box';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
-import axios from "axios";
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
-const backendUrl = import.meta.env.VITE_BACKEND_URL;
+import { useEffect } from "react";
 
 
-export const RegisterCompany = () => {
+export const RegistroEmpresa = () => {
 
   const [search, setSearch] = useState('');
   const [companiesDto, setCompaniesDto] = useState({});
@@ -27,8 +23,11 @@ export const RegisterCompany = () => {
   const [phoneAlternativos, setPhoneAlternativos] = useState([]);
   const [idPhoneAlternativos, setIdPhoneAlternativos] = useState(2);
   const [idEmailAlternativos, setIdEmailAlternativos] = useState(2);
-
   const [rows, setRows] = useState([]);
+  const [ramoo, setRamo] = useState('');
+  const [ramos, setRamos] = useState([]);
+
+  useEffect(() => {}, [])
 
   const {
     cuit, razonSocial, email_first, email_second,
@@ -90,8 +89,8 @@ export const RegisterCompany = () => {
       ],
       domicilios: rows.map((row) => ({
         tipo: row.tipo,
-        provincia: row.provincia,
-        localidad: row.localidad,
+        provincia: row.provinciaId,
+        localidad: row.localidadId,
         calle: row.calle,
         piso: row.piso,
         depto: row.depto,
@@ -101,22 +100,14 @@ export const RegisterCompany = () => {
       }))
     }
 
-    try {
-      await axios.post(`${backendUrl}/usuario/empresa`, usuarioEmpresa);
-    } catch (error) {
-      console.log(error);
-    }
+    await registrarEmpresa(usuarioEmpresa);
 
-    //setCompaniesDto(usuarioEmpresa);
-
-    // Limpiar y ocultar los inputs de email y telefonos alternativos
     setAddionalEmail([]);
     setEmailAlternativos([]);
     setAdditionalPhone([]);
     setRows([]);
 
-    OnResetFormRegisterCompany()
-    showSwal("Empresa registrada correctamente");
+    OnResetFormRegisterCompany();
   }
 
   const OnChangeRamos = (e) => {
@@ -164,19 +155,6 @@ export const RegisterCompany = () => {
     values.push(newPhone);
     setPhoneAlternativos([...phoneAlternativos, newPhone])
     setAdditionalPhone(values);
-  }
-
-  const showSwal = (message) => {
-    withReactContent(Swal).fire({
-      html: `
-            <div style="color:green; font-size: 26px;">
-            ${message}
-            </div>
-        `,
-      icon: 'success',
-      timer: 3000,
-      showConfirmButton: false,
-    })
   }
 
   return (
@@ -565,11 +543,16 @@ export const RegisterCompany = () => {
             Domicilios declarados: (Para completar el registro, deberá agregar
             por lo menos el Domicilio Fiscal)
           </p>
-          <AddressTable
+          {/* <AddressTable
             companiesDto={companiesDto}
             rows={rows}
             setRows={setRows}
+          /> */}
+          <GrillaRegistroDomilicio
+            rows={rows}
+            setRows={setRows}
           />
+          
           <ButtonComponent
             styles={{
               width: "auto",

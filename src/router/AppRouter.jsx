@@ -4,8 +4,6 @@ import { Navigate } from "react-router";
 /* import { LoginPage, RegisterPage, DashboardPage } from "../pages"; */
 
 import PrivateRoute from "./PrivateRoute";
-import { RegisterCompany } from "../pages/RegisterCompany";
-
 import { DeclaracionesJuradas } from "../pages/dashboard/pages_dashboard/ddjj/DeclaracionesJuradas";
 import { Inicio } from "../pages/dashboard/pages_dashboard/inicio/Inicio";
 import { Categorias } from "../pages/dashboard/pages_dashboard/categorias/Categorias";
@@ -17,6 +15,8 @@ import DashboardPage from "../pages/dashboard/DashboardPage";
 import { LoginPage } from "../pages/login/LoginPage";
 import { Feriados } from "../pages/dashboard/pages_dashboard/feriados/Feriados";
 import { AltaUsuarioInterno } from "../pages/dashboard/pages_dashboard/alta_usuario_interno/AltaUsuarioInterno";
+import { RegistroEmpresa } from "../pages/registro_empresa/RegistroEmpresa";
+
 
 const BoletasPage = () => <div>Contenido de la página de boletas</div>;
 const PagosPage = () => <div>Contenido de la página de pagos</div>;
@@ -46,7 +46,7 @@ const AppRouter = () => {
             <Route path="categorias" element={<Categorias />} />
             <Route path="altausuariointerno" element={<AltaUsuarioInterno />} />
           </Route>
-          <Route path="registercompany" element={<RegisterCompany />} />
+          <Route path="registercompany" element={<RegistroEmpresa />} />
           <Route index element={<Navigate to="/login" />} />
         </Route>
       </Routes>
