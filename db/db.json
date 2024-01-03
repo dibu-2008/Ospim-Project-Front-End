@@ -679,7 +679,7 @@
       "secuencia": 0,
       "totalART46": 15168.26,
       "totalAntimaCS": 35598.75,
-      "totalUomaCS": 1265333,
+      "totalUomaCS": 1265333.0,
       "totalUomaAS": 2659887.01,
       "totalCuotaUsu": 0
     },
@@ -691,7 +691,7 @@
       "secuencia": 0,
       "totalART46": 15600.26,
       "totalAntimaCS": 77598.75,
-      "totalUomaCS": 1365333,
+      "totalUomaCS": 1365333.0,
       "totalUomaAS": 2659887.01,
       "totalCuotaUsu": 0
     },
@@ -703,21 +703,45 @@
       "secuencia": 1,
       "totalART46": 25600.26,
       "totalAntimaCS": 75598.75,
-      "totalUomaCS": 1365333,
+      "totalUomaCS": 1365333.0,
       "totalUomaAS": 2659887.01,
       "totalCuotaUsu": 1000
     },
     {
       "id": 110,
-      "estado": "PR",
+      "estado": "PE",
       "empresaId": 1,
       "periodo": "10/2023",
       "secuencia": 0,
       "totalART46": 20600.26,
       "totalAntimaCS": 70598.75,
-      "totalUomaCS": 1305333,
+      "totalUomaCS": 1305333.0,
       "totalUomaAS": 2009887.01,
       "totalCuotaUsu": 100
+    },
+    {
+      "id": 100,
+      "estado": "PE",
+      "empresaId": 1,
+      "periodo": "09/2023",
+      "secuencia": 0,
+      "totalART46": 20600.26,
+      "totalAntimaCS": 70598.75,
+      "totalUomaCS": 1305333.0,
+      "totalUomaAS": 2009887.01,
+      "totalCuotaUsu": 100
+    },
+    {
+      "id": 101,
+      "estado": "PR",
+      "empresaId": 1,
+      "periodo": "09/2023",
+      "secuencia": 1,
+      "totalART46": 26000.26,
+      "totalAntimaCS": 70598.75,
+      "totalUomaCS": 1305333.0,
+      "totalUomaAS": 200000.01,
+      "totalCuotaUsu": 10
     },
     {
       "id": 200,
@@ -727,7 +751,7 @@
       "secuencia": 2,
       "totalART46": 26000.26,
       "totalAntimaCS": 70598.75,
-      "totalUomaCS": 1305333,
+      "totalUomaCS": 1305333.0,
       "totalUomaAS": 200000.01,
       "totalCuotaUsu": 10
     },
@@ -739,7 +763,7 @@
       "secuencia": 1,
       "totalART46": 26000.26,
       "totalAntimaCS": 70598.75,
-      "totalUomaCS": 1305333,
+      "totalUomaCS": 1305333.0,
       "totalUomaAS": 200000.01,
       "totalCuotaUsu": 10
     }
