@@ -250,6 +250,15 @@
       "apellido": "Salinas",
       "email": "luis@gmail.com",
       "id": 8
+    },
+    {
+      "descripcion": "usuario12",
+      "clave": "Prueba123",
+      "rolId": 1,
+      "nombre": "Nombre12",
+      "apellido": "Apellido12 comp.",
+      "email": "usuario12@gmail.com",
+      "id": 9
     }
   ],
   "publicaciones": [
@@ -659,6 +668,80 @@
       "provinciaId": 10,
       "id": 477,
       "descripcion": "Formosa"
+    }
+  ],
+  "DDJJ-consulta": [
+    {
+      "id": 150,
+      "estado": "PE",
+      "empresaId": 1,
+      "periodo": "12/2023",
+      "secuencia": 0,
+      "totalART46": 15168.26,
+      "totalAntimaCS": 35598.75,
+      "totalUomaCS": 1265333,
+      "totalUomaAS": 2659887.01,
+      "totalCuotaUsu": 0
+    },
+    {
+      "id": 120,
+      "estado": "PE",
+      "empresaId": 1,
+      "periodo": "11/2023",
+      "secuencia": 0,
+      "totalART46": 15600.26,
+      "totalAntimaCS": 77598.75,
+      "totalUomaCS": 1365333,
+      "totalUomaAS": 2659887.01,
+      "totalCuotaUsu": 0
+    },
+    {
+      "id": 121,
+      "estado": "PE",
+      "empresaId": 1,
+      "periodo": "11/2023",
+      "secuencia": 1,
+      "totalART46": 25600.26,
+      "totalAntimaCS": 75598.75,
+      "totalUomaCS": 1365333,
+      "totalUomaAS": 2659887.01,
+      "totalCuotaUsu": 1000
+    },
+    {
+      "id": 110,
+      "estado": "PR",
+      "empresaId": 1,
+      "periodo": "10/2023",
+      "secuencia": 0,
+      "totalART46": 20600.26,
+      "totalAntimaCS": 70598.75,
+      "totalUomaCS": 1305333,
+      "totalUomaAS": 2009887.01,
+      "totalCuotaUsu": 100
+    },
+    {
+      "id": 200,
+      "estado": "PR",
+      "empresaId": 2,
+      "periodo": "09/2023",
+      "secuencia": 2,
+      "totalART46": 26000.26,
+      "totalAntimaCS": 70598.75,
+      "totalUomaCS": 1305333,
+      "totalUomaAS": 200000.01,
+      "totalCuotaUsu": 10
+    },
+    {
+      "id": 201,
+      "estado": "PR",
+      "empresaId": 2,
+      "periodo": "09/2023",
+      "secuencia": 1,
+      "totalART46": 26000.26,
+      "totalAntimaCS": 70598.75,
+      "totalUomaCS": 1305333,
+      "totalUomaAS": 200000.01,
+      "totalCuotaUsu": 10
     }
   ]
 }
