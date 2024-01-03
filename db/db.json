@@ -472,18 +472,6 @@
   ],
   "empresaContacto": [
     {
-      "tipo": "TEL",
-      "prefijo": "011",
-      "valor": "3404-2032",
-      "id": 1
-    },
-    {
-      "tipo": "MAIL",
-      "prefijo": null,
-      "valor": "mail1@gmail.com",
-      "id": 2
-    },
-    {
       "id": 3,
       "tipo": "WHATSAP",
       "prefijo": "15",
@@ -540,14 +528,8 @@
     {
       "tipo": "TEL2",
       "prefijo": "123",
-      "valor": "3454-6879",
+      "valor": "3454-6870",
       "id": 13
-    },
-    {
-      "tipo": "TEL",
-      "prefijo": "011",
-      "valor": "3321-8978",
-      "id": 14
     }
   ],
   "empresaContactoTipo": [

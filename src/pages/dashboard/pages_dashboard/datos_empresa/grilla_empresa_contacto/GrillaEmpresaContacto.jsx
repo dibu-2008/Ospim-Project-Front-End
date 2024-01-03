@@ -52,12 +52,7 @@ function EditToolbar(props) {
   );
 }
 
-export const GrillaEmpresaContacto = ({
-  rows,
-  setRows,
-  BACKEND_URL,
-  token,
-}) => {
+export const GrillaEmpresaContacto = ({ rows, setRows, token }) => {
   const [rowModesModel, setRowModesModel] = useState({}); // pasar
   const [tipoContacto, setTipoContacto] = useState([]); // pasar
 

@@ -13,7 +13,7 @@ import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { getEmpresa, getRamo, modificarEmpresa } from "./DatosEmpresaApi";
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
 
 // Logica de los tabs inicio
 function CustomTabPanel(props) {
@@ -203,7 +203,6 @@ export const DatosEmpresa = () => {
           <GrillaEmpresaContacto
             rows={rowsContacto}
             setRows={setRowsContacto}
-            BACKEND_URL={BACKEND_URL}
             token={TOKEN}
           />
         </CustomTabPanel>
@@ -211,7 +210,6 @@ export const DatosEmpresa = () => {
           <GrillaEmpresaDomilicio
             rowsDomicilio={rowsDomicilio}
             setRowsDomicilio={setRowsDomicilio}
-            BACKEND_URL={BACKEND_URL}
             token={TOKEN}
           />
         </CustomTabPanel>

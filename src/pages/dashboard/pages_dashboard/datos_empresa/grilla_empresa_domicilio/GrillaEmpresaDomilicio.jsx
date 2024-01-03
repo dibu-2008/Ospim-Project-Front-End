@@ -69,11 +69,7 @@ function EditToolbar(props) {
   );
 }
 
-export const GrillaEmpresaDomilicio = ({
-  rowsDomicilio,
-  setRowsDomicilio,
-  token,
-}) => {
+export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token }) => {
   const [rowModesModel, setRowModesModel] = useState({});
   const [tipoDomicilio, setTipoDomicilio] = useState([]);
   const [provincias, setProvincias] = useState([]);
