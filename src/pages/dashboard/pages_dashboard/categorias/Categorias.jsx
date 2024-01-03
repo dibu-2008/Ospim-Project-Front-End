@@ -58,7 +58,8 @@ export const Categorias = () => {
         try {
             const response = await axios.get(`${BACKEND_URL}/categoria`);
             const jsonData = response.data;
-            setRows(jsonData.map((item) => ({ id: item.id, ...item })));
+            console.log(jsonData);
+            setRows(jsonData.map((item, index) => ({ id: index+1, ...item })));
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -68,7 +69,7 @@ export const Categorias = () => {
 
         getCategoria();
 
-    }, []);
+    }, []); 
 
     const getCamaras = async () => {
         try {
