@@ -20,6 +20,38 @@
       "descripcion": "Obra Social del Personal de la Industria Molinera"
     }
   ],
+  "entidad-aporte": [
+    {
+      "entidad_codigo": "UOMA",
+      "codigo": "CS",
+      "decripcion": "Cuota Social UOMA",
+      "calculo": "%"
+    },
+    {
+      "entidad_codigo": "UOMA",
+      "codigo": "AS",
+      "decripcion": "Aporte Solidario",
+      "calculo": "%"
+    },
+    {
+      "entidad_codigo": "UOMA",
+      "codigo": "CU",
+      "decripcion": "Cuota Usufructo",
+      "calculo": "%"
+    },
+    {
+      "entidad_codigo": "UOMA",
+      "codigo": "A46",
+      "decripcion": "Artículo 46",
+      "calculo": "%"
+    },
+    {
+      "entidad_codigo": "ANTIMA",
+      "codigo": "CF",
+      "decripcion": "Cuota Fija",
+      "calculo": "$"
+    }
+  ],
   "login-dfa": [
     {
       "valor": true
@@ -147,13 +179,8 @@
     },
     {
       "fecha": "2024-07-10",
-      "descripcion": "Feriado del 07-10",
+      "descripcion": "Feriado del 09-07",
       "id": 10
-    },
-    {
-      "fecha": "2023-12-14T03:00:00.000Z",
-      "descripcion": "prubea",
-      "id": 11
     }
   ],
   "usuario-interno": [
@@ -223,6 +250,15 @@
       "apellido": "Salinas",
       "email": "luis@gmail.com",
       "id": 8
+    },
+    {
+      "descripcion": "usuario12",
+      "clave": "Prueba123",
+      "rolId": 1,
+      "nombre": "Nombre12",
+      "apellido": "Apellido12 comp.",
+      "email": "usuario12@gmail.com",
+      "id": 9
     }
   ],
   "publicaciones": [
@@ -296,58 +332,72 @@
   ],
   "categoria": [
     {
+      "id": 1,
       "camaraCodigo": "FAIM",
       "descripcion": "A"
     },
     {
+      "id": 2,
       "camaraCodigo": "FAIM",
       "descripcion": "B"
     },
     {
+      "id": 3,
       "camaraCodigo": "FAIM",
       "descripcion": "C"
     },
     {
+      "id": 4,
       "camaraCodigo": "FAIM",
       "descripcion": "D"
     },
     {
+      "id": 5,
       "camaraCodigo": "CEPA",
       "descripcion": "A"
     },
     {
+      "id": 6,
       "camaraCodigo": "CEPA",
       "descripcion": "B"
     },
     {
+      "id": 7,
       "camaraCodigo": "CEPA",
       "descripcion": "C"
     },
     {
+      "id": 8,
       "camaraCodigo": "CEPA",
       "descripcion": "D"
     },
     {
+      "id": 9,
       "camaraCodigo": "CEPA",
       "descripcion": "E"
     },
     {
+      "id": 10,
       "camaraCodigo": "CAENA",
       "descripcion": "A"
     },
     {
+      "id": 11,
       "camaraCodigo": "CAENA",
       "descripcion": "B"
     },
     {
+      "id": 12,
       "camaraCodigo": "CAENA",
       "descripcion": "C"
     },
     {
+      "id": 13,
       "camaraCodigo": "CAENA",
       "descripcion": "D"
     },
     {
+      "id": 14,
       "camaraCodigo": "CAENA",
       "descripcion": "E"
     }
@@ -618,6 +668,104 @@
       "provinciaId": 10,
       "id": 477,
       "descripcion": "Formosa"
+    }
+  ],
+  "DDJJ-consulta": [
+    {
+      "id": 150,
+      "estado": "PE",
+      "empresaId": 1,
+      "periodo": "12/2023",
+      "secuencia": 0,
+      "totalART46": 15168.26,
+      "totalAntimaCS": 35598.75,
+      "totalUomaCS": 1265333.0,
+      "totalUomaAS": 2659887.01,
+      "totalCuotaUsu": 0
+    },
+    {
+      "id": 120,
+      "estado": "PE",
+      "empresaId": 1,
+      "periodo": "11/2023",
+      "secuencia": 0,
+      "totalART46": 15600.26,
+      "totalAntimaCS": 77598.75,
+      "totalUomaCS": 1365333.0,
+      "totalUomaAS": 2659887.01,
+      "totalCuotaUsu": 0
+    },
+    {
+      "id": 121,
+      "estado": "PE",
+      "empresaId": 1,
+      "periodo": "11/2023",
+      "secuencia": 1,
+      "totalART46": 25600.26,
+      "totalAntimaCS": 75598.75,
+      "totalUomaCS": 1365333.0,
+      "totalUomaAS": 2659887.01,
+      "totalCuotaUsu": 1000
+    },
+    {
+      "id": 110,
+      "estado": "PE",
+      "empresaId": 1,
+      "periodo": "10/2023",
+      "secuencia": 0,
+      "totalART46": 20600.26,
+      "totalAntimaCS": 70598.75,
+      "totalUomaCS": 1305333.0,
+      "totalUomaAS": 2009887.01,
+      "totalCuotaUsu": 100
+    },
+    {
+      "id": 100,
+      "estado": "PE",
+      "empresaId": 1,
+      "periodo": "09/2023",
+      "secuencia": 0,
+      "totalART46": 20600.26,
+      "totalAntimaCS": 70598.75,
+      "totalUomaCS": 1305333.0,
+      "totalUomaAS": 2009887.01,
+      "totalCuotaUsu": 100
+    },
+    {
+      "id": 101,
+      "estado": "PR",
+      "empresaId": 1,
+      "periodo": "09/2023",
+      "secuencia": 1,
+      "totalART46": 26000.26,
+      "totalAntimaCS": 70598.75,
+      "totalUomaCS": 1305333.0,
+      "totalUomaAS": 200000.01,
+      "totalCuotaUsu": 10
+    },
+    {
+      "id": 200,
+      "estado": "PR",
+      "empresaId": 2,
+      "periodo": "09/2023",
+      "secuencia": 2,
+      "totalART46": 26000.26,
+      "totalAntimaCS": 70598.75,
+      "totalUomaCS": 1305333.0,
+      "totalUomaAS": 200000.01,
+      "totalCuotaUsu": 10
+    },
+    {
+      "id": 201,
+      "estado": "PR",
+      "empresaId": 2,
+      "periodo": "09/2023",
+      "secuencia": 1,
+      "totalART46": 26000.26,
+      "totalAntimaCS": 70598.75,
+      "totalUomaCS": 1305333.0,
+      "totalUomaAS": 200000.01,
+      "totalCuotaUsu": 10
     }
   ]
 }

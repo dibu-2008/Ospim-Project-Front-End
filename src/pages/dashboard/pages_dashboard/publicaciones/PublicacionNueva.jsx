@@ -1,52 +1,51 @@
 import {
-    GridRowModes,
-    DataGrid,
-    GridToolbarContainer,
-    GridActionsCellItem,
-    GridRowEditStopReasons,
-} from '@mui/x-data-grid';
+  GridRowModes,
+  DataGrid,
+  GridToolbarContainer,
+  GridActionsCellItem,
+  GridRowEditStopReasons,
+} from "@mui/x-data-grid";
 
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import SaveIcon from '@mui/icons-material/Save';
-import CancelIcon from '@mui/icons-material/Close';
+import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import SaveIcon from "@mui/icons-material/Save";
+import CancelIcon from "@mui/icons-material/Close";
 
-import Button from '@mui/material/Button';
-
+import Button from "@mui/material/Button";
 
 export const EditarNuevaFila = (props) => {
+  const { setRows, rows, setRowModesModel } = props;
 
-    const { setRows, rows, setRowModesModel } = props;
+  const handleClick = () => {
+    const maxId = Math.max(...rows.map((row) => row.id), 0);
 
-    const handleClick = () => {
+    const newId = maxId + 1;
 
-        const maxId = Math.max(...rows.map((row) => row.id), 0);
+    const id = newId;
 
-        const newId = maxId + 1;
+    setRows((oldRows) => [
+      {
+        id,
+        titulo: "",
+        cuerpo: "",
+        vigenciaDesde: "",
+        vigenciaHasta: "",
+        isNew: true,
+      },
+      ...oldRows,
+    ]);
+    setRowModesModel((oldModel) => ({
+      ...oldModel,
+      [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
+    }));
+  };
 
-        const id = newId;
-
-        setRows((oldRows) => [
-            { 
-                id, 
-                titulo: '', 
-                cuerpo: '', 
-                vigenciaDesde: '',
-                vigenciaHasta: '',
-                isNew: true 
-            }, ...oldRows]);
-        setRowModesModel((oldModel) => ({
-            ...oldModel,
-            [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
-        }));
-    };
-
-    return (
-        <GridToolbarContainer>
-            <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-                Agregar una nueva publicación
-            </Button>
-        </GridToolbarContainer>
-    );
-}
+  return (
+    <GridToolbarContainer>
+      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
+        Nuevo Registro
+      </Button>
+    </GridToolbarContainer>
+  );
+};

@@ -17,5 +17,9 @@
   "/empresa/ramo": "/ramo",
   "/auth/login/usuario": "/auth-login-usuario",
   "/provincia/:provinciaId/localidad": "/localidad?provinciaId=:provinciaId",
-  "/camara/categoria": "/categoria"
+  "/camara/categoria": "/categoria",
+  "/entidad/aporte": "/entidad-aporte",
+  "/empresa/:empresaId/dj/": "/DDJJ-consulta?empresaId=:empresaId",
+  "/empresa/:empresaId/dj/:id": "/DDJJ-consulta/:id",
+  "/empresa/:empresaId/dj/:id/presentar": "/DDJJ-consulta/:id"
 }
