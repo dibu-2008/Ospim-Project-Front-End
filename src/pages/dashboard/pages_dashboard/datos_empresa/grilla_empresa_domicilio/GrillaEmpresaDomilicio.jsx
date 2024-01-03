@@ -17,7 +17,15 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
-import { actualizarFilaDomicilio, crearFilaDomicilio, eliminarFilaDomicilio, obtenerFilasDomicilio, obtenerLocalidades, obtenerProvincias, obtenerTipoDomicilio } from "./GrillaEmpresaDomicilioApi";
+import {
+  actualizarFilaDomicilio,
+  crearFilaDomicilio,
+  eliminarFilaDomicilio,
+  obtenerFilasDomicilio,
+  obtenerLocalidades,
+  obtenerProvincias,
+  obtenerTipoDomicilio,
+} from "./GrillaEmpresaDomicilioApi";
 
 function EditToolbar(props) {
   const { setRowsDomicilio, rows_domicilio, setRowModesModel } = props;
@@ -55,7 +63,7 @@ function EditToolbar(props) {
   return (
     <GridToolbarContainer>
       <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-        Agregar contacto
+        Nuevo Registro
       </Button>
     </GridToolbarContainer>
   );
@@ -72,27 +80,24 @@ export const GrillaEmpresaDomilicio = ({
   const [localidades, setLocalidades] = useState([]);
 
   const getTipoDomicilio = async () => {
-    
     const tiposResponse = await obtenerTipoDomicilio(token);
 
     setTipoDomicilio(tiposResponse.map((item) => ({ ...item })));
   };
 
   const getProvincias = async () => {
-      const provinciasResponse = await obtenerProvincias(token);
-      setProvincias(provinciasResponse.map((item) => ({ ...item })));
+    const provinciasResponse = await obtenerProvincias(token);
+    setProvincias(provinciasResponse.map((item) => ({ ...item })));
   };
 
   const getLocalidades = async (provinciaId) => {
     console.log("provinciaId:", provinciaId);
     if (provinciaId) {
-      
-      return await obtenerLocalidades(token, provinciaId)
+      return await obtenerLocalidades(token, provinciaId);
     }
   };
 
   const getRowsDomicilio = async () => {
-
     const domiciliosResponse = await obtenerFilasDomicilio(token);
     setRowsDomicilio(domiciliosResponse.map((item) => ({ ...item })));
     getDatosLocalidad(domiciliosResponse.map((item) => ({ ...item })));
@@ -129,10 +134,9 @@ export const GrillaEmpresaDomilicio = ({
       return item.provinciaId == provinciaId;
     });
     if (options.length == 0) {
-      const localidad = await getLocalidades(provinciaId)
+      const localidad = await getLocalidades(provinciaId);
 
-      if(localidad){
-
+      if (localidad) {
         const localidadesConIdProvincia = localidad.map((item) => ({
           provinciaId: provinciaId,
           ...item,
@@ -187,8 +191,7 @@ export const GrillaEmpresaDomilicio = ({
   const processRowUpdate = async (newRow) => {
     const updatedRow = { ...newRow, isNew: false };
 
-    if(newRow.isNew){
-      
+    if (newRow.isNew) {
       const domicilio = {
         tipo: newRow.tipo,
         provinciaId: newRow.provinciaId,
@@ -202,8 +205,7 @@ export const GrillaEmpresaDomilicio = ({
       };
 
       await crearFilaDomicilio(token, domicilio);
-    }else {
-
+    } else {
       const domicilio = {
         tipo: newRow.tipo,
         provinciaId: newRow.provinciaId,
@@ -261,7 +263,6 @@ export const GrillaEmpresaDomilicio = ({
           <Select
             value={params.value}
             onChange={(e) => {
-              
               params.api.setEditCellValue(
                 {
                   id: params.id,

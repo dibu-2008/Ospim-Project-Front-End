@@ -179,13 +179,8 @@
     },
     {
       "fecha": "2024-07-10",
-      "descripcion": "Feriado del 07-10",
+      "descripcion": "Feriado del 09-07",
       "id": 10
-    },
-    {
-      "fecha": "2023-12-14T03:00:00.000Z",
-      "descripcion": "prubea",
-      "id": 11
     }
   ],
   "usuario-interno": [
