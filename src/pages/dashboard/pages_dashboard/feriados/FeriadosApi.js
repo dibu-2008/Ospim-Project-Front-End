@@ -1,17 +1,14 @@
+import { errorBackendResponse } from "../../../../errors/errorBackendResponse";
+import axios from 'axios'
+import Swal from 'sweetalert2'
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const MESSAGE_HTTP_CREATED = import.meta.env.VITE_MESSAGE_HTTP_CREATED;
 const MESSAGE_HTTP_UPDATED = import.meta.env.VITE_MESSAGE_HTTP_UPDATED;
 const MESSAGE_HTTP_DELETED = import.meta.env.VITE_MESSAGE_HTTP_DELETED;
 
+export const obtenerFeriados = async (token) => {
 
-import axios from 'axios'
-import Swal from 'sweetalert2'
-import { errorBackendResponse } from '../../../../errors/errorBackendResponse';
-
-export const obtenerPublicaciones = async (token) => {
-
-    const URL = `${BACKEND_URL}/publicaciones`;
-
+    const URL = `${BACKEND_URL}/feriados`;
 
     const showSwalError = (descripcion) => {
         Swal.fire({
@@ -24,27 +21,27 @@ export const obtenerPublicaciones = async (token) => {
     }
 
     try {
-        
-        const novedadesResponse = await axios.get(URL, {
+
+        const feriadosResponse = await axios.get(URL, {
             headers: {
                 'Authorization': token
             }
         });
-        const novedades = await novedadesResponse.data;
+        const feriados = await feriadosResponse.data;
 
-        return novedades || [];
+        return feriados || [];
 
-    } catch (error) {
+    }
+    catch (error) {
 
         errorBackendResponse(error, showSwalError);
 
-    }  
+    }
 }
 
+export const crearFeriado = async (nuevoFeriado, token) => {
 
-export const crearPublicacion = async (publicacion, token) => {
-
-    const URL = `${BACKEND_URL}/publicaciones`;
+    const URL = `${BACKEND_URL}/feriados`;
 
     const showSwalError = (descripcion) => {
         Swal.fire({
@@ -66,27 +63,28 @@ export const crearPublicacion = async (publicacion, token) => {
     }
 
     try {
-        
-        const publicacionCreada = await axios.post(URL, publicacion, {
+
+        const feriadoResponse = await axios.post(URL, nuevoFeriado, {
             headers: {
                 'Authorization': token
             }
         });
 
-        if(publicacionCreada.status === 201){
+        if (feriadoResponse.status === 201) {
             showSwallSuccess();
         }
 
-    } catch (error) {
+    }
+    catch (error) {
 
         errorBackendResponse(error, showSwalError);
 
-    }  
+    }
 }
 
-export const actualizarPublicacion = async (publicacionId, publicacion, token) => {
+export const actualizarFeriado = async (idFeriado, feriado, token) => {
 
-    const URL = `${BACKEND_URL}/publicaciones/${publicacionId}`;
+    const URL = `${BACKEND_URL}/feriados/${idFeriado}`;
 
     const showSwalError = (descripcion) => {
         Swal.fire({
@@ -108,27 +106,29 @@ export const actualizarPublicacion = async (publicacionId, publicacion, token) =
     }
 
     try {
-        
-        const publicacionEditada = await axios.put(URL, publicacion, {
+
+        const feriadoResponse = await axios.put(URL, feriado, {
             headers: {
                 'Authorization': token
             }
         });
 
-        if(publicacionEditada.status === 200){
+        if (feriadoResponse.status === 200) {
             showSwallSuccess();
         }
 
-    } catch (error) {
+    }
+    catch (error) {
 
         errorBackendResponse(error, showSwalError);
 
-    } 
+    }
+
 }
 
-export const eliminarPublicacion = async (publicacionId, token) => {
+export const eliminarFeriado = async (idFeriado, token) => {
 
-    const URL = `${BACKEND_URL}/publicaciones/${publicacionId}`;
+    const URL = `${BACKEND_URL}/feriados/${idFeriado}`;
 
     const showSwalError = (descripcion) => {
         Swal.fire({
@@ -150,22 +150,22 @@ export const eliminarPublicacion = async (publicacionId, token) => {
     }
 
     try {
-        
-        const publicacionEliminada = await axios.delete(URL, {
+
+        const feriadoResponse = await axios.delete(URL, {
             headers: {
                 'Authorization': token
             }
         });
 
-        console.log(publicacionEliminada);
-
-        if(publicacionEliminada.status === 200){
+        if (feriadoResponse.status === 200) {
             showSwallSuccess();
         }
 
-    } catch (error) {
+    }
+    catch (error) {
 
         errorBackendResponse(error, showSwalError);
 
-    } 
+    }
+
 }

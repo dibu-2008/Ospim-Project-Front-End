@@ -17,6 +17,7 @@ import {
 import axios from "axios";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import { actualizarCategoria, crearCategoria, eliminarCategoria, obtenerCamaras, obtenerCategorias } from "./CategoriasApi";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const ERROR_MESSAGE = import.meta.env.VITE_ERROR_MESSAGE;
 const ERROR_BODY = import.meta.env.VITE_ERROR_BODY;
@@ -54,57 +55,31 @@ export const Categorias = () => {
   const [rowModesModel, setRowModesModel] = useState({});
   const [camaras, setCamaras] = useState([]);
 
-  const getCategoria = async () => {
-    try {
-      const response = await axios.get(`${BACKEND_URL}/categoria`);
-      const jsonData = response.data;
-      console.log(jsonData);
-      setRows(jsonData.map((item, index) => ({ id: index + 1, ...item })));
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+  const TOKEN = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.usuario.token;
+
+  
 
   useEffect(() => {
-    getCategoria();
+    const ObtenerCategorias = async () => {
+
+      const categoriasResponse = await obtenerCategorias(TOKEN);
+
+      setRows(categoriasResponse.map((item) => ({ id: item.id, ...item })));
+   
+    };
+    ObtenerCategorias();
   }, []);
 
-  const getCamaras = async () => {
-    try {
-      const response = await axios.get(`${BACKEND_URL}/camara`);
-      const jsonData = response.data;
-      setCamaras(jsonData.map((item) => ({ id: item.id, ...item })));
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
+  
   useEffect(() => {
-    getCamaras();
-  }, []);
+    const ObtenerCamaras = async () => {
 
-  // SweetAlert2
-  const showSwal = (message) => {
-    withReactContent(Swal).fire({
-      html: `
-                <div style="color:red; font-size: 26px;">
-                ${message}
-                </div>
-            `,
-      icon: "error",
-      timer: 3000,
-      showConfirmButton: false,
-      onOpen: (modalElement) => {
-        // Personaliza el estilo del icono
-        const iconElement = modalElement.querySelector(".swal2-icon");
-        if (iconElement) {
-          iconElement.style.color = "green"; // Cambia el color del icono a rojo
-          iconElement.style.fontSize = "24px"; // Cambia el tamaño del icono
-          // Otros estilos que desees aplicar al icono
-        }
-      },
-    });
-  };
+      const camarasResponse = await obtenerCamaras(TOKEN);
+
+      setCamaras(camarasResponse.map((item) => ({ id: item.id, ...item })));
+    };
+    ObtenerCamaras();  
+  }, []);
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -121,11 +96,10 @@ export const Categorias = () => {
   };
 
   const handleDeleteClick = (id) => async () => {
-    try {
-      setRows(rows.filter((row) => row.id !== id));
-
-      await axios.delete(`${BACKEND_URL}/categoria/${id}`);
-    } catch (error) {}
+    
+    setRows(rows.filter((row) => row.id !== id));
+    
+    await eliminarCategoria(id, TOKEN);
   };
 
   const handleCancelClick = (id) => () => {
@@ -141,59 +115,29 @@ export const Categorias = () => {
   };
 
   const processRowUpdate = async (newRow) => {
-    const updatedRow = { ...newRow, isNew: false };
 
-    console.log(updatedRow);
+    const updatedRow = { ...newRow, isNew: false };
 
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
 
     if (newRow.isNew) {
-      console.log("FILA NUEVA");
 
-      const newCategoria = {
+      const nuevaCategoria = {
         camaraCodigo: newRow.camaraCodigo,
         descripcion: newRow.descripcion,
       };
 
-      try {
-        await axios.post(`${BACKEND_URL}/categoria`, newCategoria);
-      } catch (error) {
-        try {
-          if (error.response && error.response.data) {
-            const { codigo, descripcion, ticket, tipo } = error.response.data;
+      await crearCategoria(nuevaCategoria, TOKEN);
 
-            if (tipo === ERROR_BUSINESS) {
-              showSwal(descripcion);
-            } else {
-              showSwal(`${ERROR_MESSAGE} ${ticket}`);
-              console.error(error.response.data);
-            }
-          } else {
-            showSwal(`${ERROR_MESSAGE}`);
-            console.error(`${ERROR_BODY} : ${error}`);
-          }
-        } catch (error) {
-          showSwal(`${ERROR_MESSAGE}`);
-          console.error(`${ERROR_BODY} : ${error}`);
-        }
-      }
+     
     } else {
-      console.log("FILA EDITADA");
 
-      const updatedCategoria = {
+      const categoria = {
         camaraCodigo: newRow.camaraCodigo,
         descripcion: newRow.descripcion,
       };
 
-      try {
-        const response = await axios.put(
-          `${BACKEND_URL}/categoria/${newRow.id}`,
-          updatedCategoria
-        );
-        console.log(response);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
+      await actualizarCategoria(newRow.id, categoria, TOKEN);
     }
 
     return updatedRow;
@@ -209,20 +153,26 @@ export const Categorias = () => {
       headerName: "Camara",
       width: 150,
       editable: true,
+      headerAlign: "center",
+      align: "center",
       type: "singleSelect",
       valueOptions: camaras.map((camara) => camara.codigo),
     },
     {
       field: "descripcion",
-      headerName: "Descripcion de la Categoria",
-      width: 280,
+      headerName: "Descripcion",
+      width: 200,
       editable: true,
+      headerAlign: "center",
+      align: "center",
     },
     {
       field: "actions",
       type: "actions",
-      headerName: "Actions",
+      headerName: "Acciones",
       width: 100,
+      headerAlign: "center",
+      align: "center",
       cellClassName: "actions",
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
@@ -267,34 +217,42 @@ export const Categorias = () => {
   ];
 
   return (
-    <Box
-      sx={{
-        margin: "60px auto",
-        height: "auto",
-        width: "80%",
-        "& .actions": {
-          color: "text.secondary",
-        },
-        "& .textPrimary": {
-          color: "text.primary",
-        },
-      }}
-    >
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        editMode="row"
-        rowModesModel={rowModesModel}
-        onRowModesModelChange={handleRowModesModelChange}
-        onRowEditStop={handleRowEditStop}
-        processRowUpdate={processRowUpdate}
-        slots={{
-          toolbar: EditToolbar,
+    <div
+      style={{
+        marginTop: 60,
+        height: 400,
+        width: "100%",
+      }}>
+      <h1>Administracion de Categorias</h1>
+      <Box
+        sx={{
+          margin: "60px auto",
+          height: "auto",
+          width: "40%",
+          "& .actions": {
+            color: "text.secondary",
+          },
+          "& .textPrimary": {
+            color: "text.primary",
+          },
         }}
-        slotProps={{
-          toolbar: { setRows, rows, setRowModesModel },
-        }}
-      />
-    </Box>
+      >
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          editMode="row"
+          rowModesModel={rowModesModel}
+          onRowModesModelChange={handleRowModesModelChange}
+          onRowEditStop={handleRowEditStop}
+          processRowUpdate={processRowUpdate}
+          slots={{
+            toolbar: EditToolbar,
+          }}
+          slotProps={{
+            toolbar: { setRows, rows, setRowModesModel },
+          }}
+        />
+      </Box>
+    </div>
   );
 };

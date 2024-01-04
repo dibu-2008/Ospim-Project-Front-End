@@ -51,8 +51,7 @@ function a11yProps(index) {
 
 export const DatosEmpresa = () => {
   
-  const STATE = JSON.parse(localStorage.getItem("state"));
-  const TOKEN = STATE.usuarioLogueado.usuario.token;
+  const TOKEN = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.usuario.token;
   /* const ID = STATE.usuarioLogueado.empresa.id;
   const TOKEN = STATE.usuarioLogueado.usuario.token;
   const CUIT = STATE.usuarioLogueado.empresa.cuit;
@@ -73,7 +72,6 @@ export const DatosEmpresa = () => {
   useEffect(() => {
     const ObtenerEmpresa = async () => {
       const empresa = await getEmpresa(TOKEN);
-      console.log(empresa);
       setCuit(empresa.empresa.cuit);
       setRazonSocial(empresa.empresa.razonSocial);
       setIdEmpresa(empresa.empresa.id);

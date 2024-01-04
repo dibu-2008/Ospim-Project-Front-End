@@ -14,11 +14,10 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
-import axios from "axios";
 import {
-  crearFilaContacto,
-  eliminarFilaContacto,
-  modificarFilaContacto,
+  actualizarContacto,
+  crearContacto,
+  eliminarContacto,
   obtenerDatosEmpresa,
   obtenerTipo,
 } from "./GrillaEmpresaContactoApi";
@@ -53,8 +52,9 @@ function EditToolbar(props) {
 }
 
 export const GrillaEmpresaContacto = ({ rows, setRows, token }) => {
-  const [rowModesModel, setRowModesModel] = useState({}); // pasar
-  const [tipoContacto, setTipoContacto] = useState([]); // pasar
+
+  const [rowModesModel, setRowModesModel] = useState({}); 
+  const [tipoContacto, setTipoContacto] = useState([]); 
 
   useEffect(() => {
     const getTipoContacto = async () => {
@@ -91,7 +91,7 @@ export const GrillaEmpresaContacto = ({ rows, setRows, token }) => {
   const handleDeleteClick = (id) => async () => {
     setRows(rows.filter((row) => row.id !== id));
 
-    await eliminarFilaContacto(token, id);
+    await eliminarContacto(id, token);
   };
 
   const handleCancelClick = (id) => () => {
@@ -107,9 +107,8 @@ export const GrillaEmpresaContacto = ({ rows, setRows, token }) => {
   };
 
   const processRowUpdate = async (newRow) => {
-    const updatedRow = { ...newRow, isNew: false };
 
-    console.log(newRow);
+    const updatedRow = { ...newRow, isNew: false };
 
     if (newRow.isNew) {
       const nuevoContacto = {
@@ -118,9 +117,9 @@ export const GrillaEmpresaContacto = ({ rows, setRows, token }) => {
         valor: newRow.valor,
       };
 
-      await crearFilaContacto(token, nuevoContacto);
+      await crearContacto(nuevoContacto, token);
+
     } else {
-      console.log("Fila existente");
 
       const contacto = {
         tipo: newRow.tipo,
@@ -128,7 +127,7 @@ export const GrillaEmpresaContacto = ({ rows, setRows, token }) => {
         valor: newRow.valor,
       };
 
-      await modificarFilaContacto(token, newRow.id, contacto);
+      await actualizarContacto(newRow.id, contacto, token);
     }
 
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));

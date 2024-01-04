@@ -10,14 +10,14 @@ const NavBar = () => {
   const navigate = useNavigate(); 
 
   if (state)
-    localStorage.setItem('state', JSON.stringify(state))
+    localStorage.setItem('stateLogin', JSON.stringify(state))
 
-  const localState = localStorage.getItem('state')
+  const localState = localStorage.getItem('stateLogin')
   const localStateParse = JSON.parse(localState)
 
   const onLogout = () => {
     navigate('/login', { replace: true })
-    localStorage.removeItem('state')
+    localStorage.removeItem('stateLogin')
   }
 
   return (

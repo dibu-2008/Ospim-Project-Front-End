@@ -18,10 +18,10 @@ import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import {
-  actualizarFilaDomicilio,
-  crearFilaDomicilio,
-  eliminarFilaDomicilio,
-  obtenerFilasDomicilio,
+  actualizarDomicilio,
+  crearDomicilio,
+  eliminarDomicilio,
+  obtenerDomicilios,
   obtenerLocalidades,
   obtenerProvincias,
   obtenerTipoDomicilio,
@@ -87,14 +87,14 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
   };
 
   const getLocalidades = async (provinciaId) => {
-    console.log("provinciaId:", provinciaId);
+    
     if (provinciaId) {
       return await obtenerLocalidades(token, provinciaId);
     }
   };
 
   const getRowsDomicilio = async () => {
-    const domiciliosResponse = await obtenerFilasDomicilio(token);
+    const domiciliosResponse = await obtenerDomicilios(token);
     setRowsDomicilio(domiciliosResponse.map((item) => ({ ...item })));
     getDatosLocalidad(domiciliosResponse.map((item) => ({ ...item })));
   };
@@ -169,7 +169,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
 
   const handleDeleteClick = (id) => async () => {
     setRowsDomicilio(rowsDomicilio.filter((row) => row.id !== id));
-    await eliminarFilaDomicilio(token, id);
+    await eliminarDomicilio(id, token);
   };
 
   const handleCancelClick = (id) => () => {
@@ -185,10 +185,12 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
   };
 
   const processRowUpdate = async (newRow) => {
+
     const updatedRow = { ...newRow, isNew: false };
 
     if (newRow.isNew) {
-      const domicilio = {
+
+      const nuevoDomicilio = {
         tipo: newRow.tipo,
         provinciaId: newRow.provinciaId,
         localidadId: newRow.localidadId,
@@ -200,8 +202,10 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
         planta: newRow.planta,
       };
 
-      await crearFilaDomicilio(token, domicilio);
+      await crearDomicilio(nuevoDomicilio, token);
+
     } else {
+
       const domicilio = {
         tipo: newRow.tipo,
         provinciaId: newRow.provinciaId,
@@ -214,7 +218,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
         planta: newRow.planta,
       };
 
-      await actualizarFilaDomicilio(token, newRow.id, domicilio);
+      await actualizarDomicilio(newRow.id, domicilio, token);
     }
 
     setRowsDomicilio(
@@ -259,6 +263,15 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
           <Select
             value={params.value}
             onChange={(e) => {
+
+              // Limpiar el valor de la localidad
+              params.api.setEditCellValue(
+                { 
+                  id: params.id, 
+                  field: 'localidadId', 
+                  value: '' 
+                }
+              ); 
               params.api.setEditCellValue(
                 {
                   id: params.id,

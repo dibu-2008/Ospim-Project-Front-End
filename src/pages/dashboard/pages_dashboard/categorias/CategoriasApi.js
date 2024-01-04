@@ -6,41 +6,9 @@ const MESSAGE_HTTP_CREATED = import.meta.env.VITE_MESSAGE_HTTP_CREATED;
 const MESSAGE_HTTP_UPDATED = import.meta.env.VITE_MESSAGE_HTTP_UPDATED;
 const MESSAGE_HTTP_DELETED = import.meta.env.VITE_MESSAGE_HTTP_DELETED;
 
-export const obtenerUsuariosInternos = async (token) => {
+export const obtenerCategorias = async (token) => {
 
-    const URL = `${BACKEND_URL}/usuario/interno`;
-
-    const showSwalError = (descripcion) => {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: descripcion,
-            showConfirmButton: false,
-            timer: 3000,
-        })
-    }
-
-    try {
-
-        const usuariosInternosResponse = await axios.get(URL, {
-            headers: {
-                'Authorization': token
-            }
-        });
-        const usuariosInternos = await usuariosInternosResponse.data;
-
-        return usuariosInternos || [];
-
-    } catch (error) {
-
-        errorBackendResponse(error, showSwalError);
-
-    }
-}
-
-export const obtenerRoles = async (token) => {
-
-    const URL = `${BACKEND_URL}/rol`;
+    const URL = `${BACKEND_URL}/categoria`;
 
     const showSwalError = (descripcion) => {
         Swal.fire({
@@ -54,14 +22,14 @@ export const obtenerRoles = async (token) => {
 
     try {
 
-        const rolesResponse = await axios.get(URL, {
+        const categoriasResponse = await axios.get(URL, {
             headers: {
                 'Authorization': token
             }
         });
-        const roles = await rolesResponse.data;
+        const categorias = await categoriasResponse.data;
 
-        return roles || [];
+        return categorias || [];
 
     } catch (error) {
 
@@ -70,9 +38,9 @@ export const obtenerRoles = async (token) => {
     }
 }
 
-export const crearUsuarioInterno = async (token, usuarioInterno) => {
+export const obtenerCamaras = async (token) => {
 
-    const URL = `${BACKEND_URL}/usuario/interno`;
+    const URL = `${BACKEND_URL}/camara`;
 
     const showSwalError = (descripcion) => {
         Swal.fire({
@@ -84,26 +52,57 @@ export const crearUsuarioInterno = async (token, usuarioInterno) => {
         })
     }
 
-    const showSwalSuccess = () => {
+    try {
+
+        const camarasResponse = await axios.get(URL, {
+            headers: {
+                'Authorization': token
+            }
+        });
+        const camaras = await camarasResponse.data;
+
+        return camaras || [];
+
+    } catch (error) {
+
+        errorBackendResponse(error, showSwalError);
+
+    }
+}
+
+export const crearCategoria = async (nuevaCategoria, token) => {
+
+    const URL = `${BACKEND_URL}/categoria`;
+
+    const showSwalError = (descripcion) => {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: descripcion,
+            showConfirmButton: false,
+            timer: 2000,
+        })
+    }
+
+    const showSwallSuccess = () => {
         Swal.fire({
             icon: 'success',
             title: MESSAGE_HTTP_CREATED,
             showConfirmButton: false,
-            timer: 3000,
+            timer: 2000,
         })
     }
 
     try {
 
-        const usuarioCreado = await axios.post(URL, usuarioInterno, {
+        const categoriaResponse = await axios.post(URL, nuevaCategoria, {
             headers: {
                 'Authorization': token
             }
         });
-
-
-        if (usuarioCreado.status === 201) {
-            showSwalSuccess();
+        
+        if(categoriaResponse.status === 201) {
+            showSwallSuccess();
         }
 
     } catch (error) {
@@ -113,9 +112,51 @@ export const crearUsuarioInterno = async (token, usuarioInterno) => {
     }
 }
 
-export const actualizarUsuarioInterno = async (token, usuarioInterno, idUsuarioInterno) => {
+export const actualizarCategoria = async (idCategoria, categoria, token) => {
 
-    const URL = `${BACKEND_URL}/usuario/interno/${idUsuarioInterno}`;
+    const URL = `${BACKEND_URL}/categoria/${idCategoria}`;
+
+    const showSwalError = (descripcion) => {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: descripcion,
+            showConfirmButton: false,
+            timer: 2000,
+        })
+    }
+
+    const showSwallSuccess = () => {
+        Swal.fire({
+            icon: 'success',
+            title: MESSAGE_HTTP_UPDATED,
+            showConfirmButton: false,
+            timer: 2000,
+        })
+    }
+
+    try {
+
+        const categoriaResponse = await axios.put(URL, categoria, {
+            headers: {
+                'Authorization': token
+            }
+        });
+
+        if(categoriaResponse.status === 200) {
+            showSwallSuccess();
+        }
+
+    } catch (error) {
+
+        errorBackendResponse(error, showSwalError);
+
+    }
+}
+
+export const eliminarCategoria = async (idCategoria, token) => {
+
+    const URL = `${BACKEND_URL}/categoria/${idCategoria}`;
 
     const showSwalError = (descripcion) => {
         Swal.fire({
@@ -127,26 +168,25 @@ export const actualizarUsuarioInterno = async (token, usuarioInterno, idUsuarioI
         })
     }
 
-    const showSwalSuccess = () => {
+    const showSwallSuccess = () => {
         Swal.fire({
             icon: 'success',
-            title: MESSAGE_HTTP_UPDATED,
+            title: MESSAGE_HTTP_DELETED,
             showConfirmButton: false,
-            timer: 3000,
+            timer: 2000,
         })
     }
 
     try {
 
-        const usuarioModificado = await axios.put(URL, usuarioInterno, {
+        const categoriaResponse = await axios.delete(URL, {
             headers: {
                 'Authorization': token
             }
         });
 
-
-        if (usuarioModificado.status === 200) {
-            showSwalSuccess();
+        if(categoriaResponse.status === 200) {
+            showSwallSuccess();
         }
 
     } catch (error) {
@@ -154,90 +194,4 @@ export const actualizarUsuarioInterno = async (token, usuarioInterno, idUsuarioI
         errorBackendResponse(error, showSwalError);
 
     }
-}
-
-export const habilitarUsuarioInterno = async (token, idUsuarioInterno, habilitado) => {
-
-    const URL = `${BACKEND_URL}/usuario/${idUsuarioInterno}/habilitar`;
-
-    const showSwalError = (descripcion) => {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: descripcion,
-            showConfirmButton: false,
-            timer: 3000,
-        })
-    }
-
-    const showSwalSuccess = () => {
-        Swal.fire({
-            icon: 'success',
-            title: MESSAGE_HTTP_UPDATED,
-            showConfirmButton: false,
-            timer: 3000,
-        })
-    }
-
-    try {
-
-        const usuarioHabilitado = await axios.patch(URL, habilitado, {
-            headers: {
-                'Authorization': token
-            }
-        });
-
-        if (usuarioHabilitado.status === 200) {
-            showSwalSuccess();
-        }
-
-    } catch (error) {
-
-        errorBackendResponse(error, showSwalError);
-
-    }
-
-}
-
-export const deshabilitarUsuarioInterno = async (token, idUsuarioInterno, habilitado) => {
-
-    const URL = `${BACKEND_URL}/usuario/${idUsuarioInterno}/deshabilitar`;
-
-    const showSwalError = (descripcion) => {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: descripcion,
-            showConfirmButton: false,
-            timer: 3000,
-        })
-    }
-
-    const showSwalSuccess = () => {
-        Swal.fire({
-            icon: 'success',
-            title: MESSAGE_HTTP_UPDATED,
-            showConfirmButton: false,
-            timer: 3000,
-        })
-    }
-
-    try {
-
-        const usuarioDeshabilitado = await axios.patch(URL, habilitado, {
-            headers: {
-                'Authorization': token
-            }
-        });
-
-        if (usuarioDeshabilitado.status === 200) {
-            showSwalSuccess();
-        }
-
-    } catch (error) {
-
-        errorBackendResponse(error, showSwalError);
-
-    }
-
 }

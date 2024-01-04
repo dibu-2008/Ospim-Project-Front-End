@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { eliminar, obtener, crear, actualizar } from "./PublicacionesApi";
+import { crearPublicacion, obtenerPublicaciones, actualizarPublicacion, eliminarPublicacion } from "./PublicacionesApi";
 import { EditarNuevaFila } from "./PublicacionNueva";
 import {
   GridRowModes,
@@ -18,12 +18,11 @@ export const Publicaciones = () => {
   const [rowModesModel, setRowModesModel] = useState({});
   const [rows, setRows] = useState([]);
 
-  const state = JSON.parse(localStorage.getItem("state"));
-  const token = state.token;
+  const TOKEN = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.usuario.token;
 
   useEffect(() => {
     const ObtenerPublicaciones = async () => {
-      const publicaciones = await obtener(token);
+      const publicaciones = await obtenerPublicaciones(TOKEN);
       setRows(publicaciones.map((item, index) => ({ ...item, id: item.id })));
     };
 
@@ -52,7 +51,7 @@ export const Publicaciones = () => {
       return newModel;
     });
 
-    await eliminar(id, token);
+    await eliminarPublicacion(id, TOKEN);
   };
 
   const handleCancelClick = (id) => () => {
@@ -80,7 +79,7 @@ export const Publicaciones = () => {
         vigenciaHasta: newRow.vigenciaHasta,
       };
 
-      await crear(nuevaPublicacion, token);
+      await crearPublicacion(nuevaPublicacion, TOKEN);
     } else {
       const publicacionEditada = {
         titulo: newRow.titulo,
@@ -89,7 +88,7 @@ export const Publicaciones = () => {
         vigenciaHasta: newRow.vigenciaHasta,
       };
 
-      await actualizar(newRow.id, publicacionEditada, token);
+      await actualizarPublicacion(newRow.id, publicacionEditada, TOKEN);
     }
 
     return updatedRow;

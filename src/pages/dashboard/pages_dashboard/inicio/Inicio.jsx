@@ -11,7 +11,7 @@ export const Inicio = () => {
     const [datosContacto, setDatosContacto] = useState([]);
     const [contenido, setContenido] = useState([]);
 
-    const TOKEN = JSON.parse(localStorage.getItem('state')).usuarioLogueado.usuario.token;
+    const TOKEN = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.usuario.token;
 
     useEffect(() => {
 

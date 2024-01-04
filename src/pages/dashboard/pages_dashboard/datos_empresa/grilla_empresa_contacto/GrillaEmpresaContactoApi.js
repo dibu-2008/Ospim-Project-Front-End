@@ -1,7 +1,10 @@
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+import { errorBackendResponse } from "../../../../../errors/errorBackendResponse";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { errorBackendResponse } from "../../../../../errors/errorBackendResponse";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+const MESSAGE_HTTP_CREATED = import.meta.env.VITE_MESSAGE_HTTP_CREATED;
+const MESSAGE_HTTP_UPDATED = import.meta.env.VITE_MESSAGE_HTTP_UPDATED;
+const MESSAGE_HTTP_DELETED = import.meta.env.VITE_MESSAGE_HTTP_DELETED;
 
 
 export const obtenerTipo = async (token) => {
@@ -68,7 +71,7 @@ export const obtenerDatosEmpresa = async (token) => {
     }
 }
 
-export const crearFilaContacto = async (token, filaContacto) => {
+export const crearContacto = async (nuevoContacto, token) => {
 
     const URL = `${BACKEND_URL}/empresa/:empresaId/contacto`;
 
@@ -85,7 +88,7 @@ export const crearFilaContacto = async (token, filaContacto) => {
     const showSwallSuccess = () => {
         Swal.fire({
             icon: 'success',
-            title: 'Contacto creado',
+            title: MESSAGE_HTTP_CREATED,
             showConfirmButton: false,
             timer: 2000,
         })
@@ -93,7 +96,7 @@ export const crearFilaContacto = async (token, filaContacto) => {
 
     try {
 
-        const contactoResponse = await axios.post(URL, filaContacto, {
+        const contactoResponse = await axios.post(URL, nuevoContacto, {
             headers: {
                 'Authorization': token
             }
@@ -111,9 +114,9 @@ export const crearFilaContacto = async (token, filaContacto) => {
 
 }
 
-export const modificarFilaContacto = async (token, filaId, filaContacto) => {
+export const actualizarContacto = async (idContacto, contacto, token) => {
 
-    const URL = `${BACKEND_URL}/empresa/:empresaId/contacto/${filaId}`;
+    const URL = `${BACKEND_URL}/empresa/:empresaId/contacto/${idContacto}`;
 
     const showSwalError = (descripcion) => {
         Swal.fire({
@@ -128,7 +131,7 @@ export const modificarFilaContacto = async (token, filaId, filaContacto) => {
     const showSwallSuccess = () => {
         Swal.fire({
             icon: 'success',
-            title: 'Contacto modificado',
+            title: MESSAGE_HTTP_UPDATED,
             showConfirmButton: false,
             timer: 2000,
         })
@@ -136,7 +139,7 @@ export const modificarFilaContacto = async (token, filaId, filaContacto) => {
 
     try {
 
-        const contactoResponse = await axios.put(URL, filaContacto, {
+        const contactoResponse = await axios.put(URL, contacto, {
             headers: {
                 'Authorization': token
             }
@@ -156,9 +159,9 @@ export const modificarFilaContacto = async (token, filaId, filaContacto) => {
 
 }
 
-export const eliminarFilaContacto = async (token, filaId) => {
+export const eliminarContacto = async (idContacto, token) => {
 
-    const URL = `${BACKEND_URL}/empresa/:empresaId/contacto/${filaId}`;
+    const URL = `${BACKEND_URL}/empresa/:empresaId/contacto/${idContacto}`;
 
     const showSwalError = (descripcion) => {
         Swal.fire({
@@ -173,7 +176,7 @@ export const eliminarFilaContacto = async (token, filaId) => {
     const showSwallSuccess = () => {
         Swal.fire({
             icon: 'success',
-            title: 'Contacto eliminado',
+            title: MESSAGE_HTTP_DELETED,
             showConfirmButton: false,
             timer: 2000,
         })

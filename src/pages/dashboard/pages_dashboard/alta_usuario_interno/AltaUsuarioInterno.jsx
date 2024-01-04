@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { crearUsuarioInterno, deshabilitarUsuarioInterno, habilitarUsuarioInterno, modificarUsuarioInterno, obtenerRoles, obtenerUsuariosInternos } from './AltaUsuarioInternoApi';
+import { crearUsuarioInterno, deshabilitarUsuarioInterno, habilitarUsuarioInterno, actualizarUsuarioInterno, obtenerRoles, obtenerUsuariosInternos } from './AltaUsuarioInternoApi';
 import { AltaUsuarioInternoNuevo } from './AltaUsuarioInternoNuevo';
 import {
   GridRowModes,
@@ -22,14 +22,13 @@ export const AltaUsuarioInterno = () => {
   const [rows, setRows] = useState([])
   const [roles, setRoles] = useState([]);
 
-  const state = JSON.parse(localStorage.getItem('state'));
-  const token = state.token;
+  const TOKEN = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.usuario.token;
 
   useEffect(() => {
 
     const ObtenerUsuariosInternos = async () => {
 
-      const usuarios = await obtenerUsuariosInternos(token);
+      const usuarios = await obtenerUsuariosInternos(TOKEN);
       setRows(usuarios.map((item, index) => ({ ...item, id: item.id })));
 
     };
@@ -40,7 +39,7 @@ export const AltaUsuarioInterno = () => {
 
   useEffect(() => {
     const ObtenerRol = async () => {
-      const rol = await obtenerRoles(token);
+      const rol = await obtenerRoles(TOKEN);
       setRoles(rol);
     }
     ObtenerRol();
@@ -101,7 +100,7 @@ export const AltaUsuarioInterno = () => {
 
       }
 
-      await crearUsuarioInterno(token, nuevoUsuario);
+      await crearUsuarioInterno(TOKEN, nuevoUsuario);
 
     } else {
 
@@ -116,7 +115,7 @@ export const AltaUsuarioInterno = () => {
 
       }
 
-      await modificarUsuarioInterno(token, usuario, newRow.id);
+      await actualizarUsuarioInterno(TOKEN, usuario, newRow.id);
 
     }
 
@@ -128,10 +127,10 @@ export const AltaUsuarioInterno = () => {
   };
 
   const handleHabilitar = (id) => async () => {
+
     const updatedRow = { ...rows.find((row) => row.id === id) };
     updatedRow.habilitado = !updatedRow.habilitado;
     setRows(rows.map((row) => (row.id === id ? updatedRow : row)));
-    // Este metodo es el que hace el patch
 
     const habilitado = {
       habilitado: updatedRow.habilitado
@@ -139,11 +138,11 @@ export const AltaUsuarioInterno = () => {
 
     if (updatedRow.habilitado) {
 
-      await habilitarUsuarioInterno(token, id, habilitado);
+      await habilitarUsuarioInterno(TOKEN, id, habilitado);
 
     } else {
 
-      await deshabilitarUsuarioInterno(token, id, habilitado);
+      await deshabilitarUsuarioInterno(TOKEN, id, habilitado);
 
     }
   };
@@ -213,7 +212,7 @@ export const AltaUsuarioInterno = () => {
       editable: false,
       valueGetter: (params) => {
 
-        if (params.row.habilitado === null) return ("");
+        //if (params.row.habilitado === null) return ("");
 
         return params.row.habilitado ? "Si" : "No"
       },
@@ -252,12 +251,6 @@ export const AltaUsuarioInterno = () => {
             label="Edit"
             className="textPrimary"
             onClick={handleEditClick(id)}
-            color="inherit"
-          />,
-          <GridActionsCellItem
-            icon={<DeleteIcon />}
-            label="Delete"
-            onClick={handleDeleteClick(id)}
             color="inherit"
           />,
           <GridActionsCellItem

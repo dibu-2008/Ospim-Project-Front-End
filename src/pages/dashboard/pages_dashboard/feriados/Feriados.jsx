@@ -17,13 +17,7 @@ import {
   GridActionsCellItem,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
-
-import {
-  randomCreatedDate,
-  randomTraderName,
-  randomId,
-  randomArrayItem,
-} from "@mui/x-data-grid-generator";
+import { actualizarFeriado, crearFeriado, eliminarFeriado, obtenerFeriados } from "./FeriadosApi";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -58,25 +52,18 @@ export function Feriados() {
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
 
-  const state = JSON.parse(localStorage.getItem("state"));
+  const TOKEN = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.usuario.token;
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`${backendUrl}/feriados`, {
-          headers: {
-            Authorization: state.token,
-          },
-        });
-        setRows(
-          response.data.map((item, index) => ({ id: index + 1, ...item }))
-        );
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
+    const ObtenerFeriados = async () => {
+
+      const feriadosResponse = await obtenerFeriados(TOKEN);
+      setRows(feriadosResponse.map((item) => ({ id: item.id, ...item })));
+
     };
 
-    fetchData();
+    ObtenerFeriados();
+
   }, []);
 
   const handleRowEditStop = (params, event) => {
@@ -94,17 +81,10 @@ export function Feriados() {
   };
 
   const handleDeleteClick = (id) => async () => {
-    try {
-      setRows((prevRows) => prevRows.filter((row) => row.id !== id));
-
-      await axios.delete(`${backendUrl}/feriados/${id}`, {
-        headers: {
-          Authorization: state.token,
-        },
-      });
-    } catch (error) {
-      console.error("Error deleting row:", error);
-    }
+    
+    setRows((prevRows) => prevRows.filter((row) => row.id !== id));
+    
+    await eliminarFeriado(id, TOKEN);
   };
 
   const handleCancelClick = (id) => () => {
@@ -119,54 +99,28 @@ export function Feriados() {
     }
   };
 
-  // captura los valores actualizados
   const processRowUpdate = async (newRow) => {
+
     const updatedRow = { ...newRow, isNew: false };
 
     if (newRow.isNew) {
-      console.log("FILA NUEVA");
 
-      const newFeriado = {
+      const nuevoFeriado = {
         fecha: newRow.fecha,
         descripcion: newRow.descripcion,
       };
 
-      try {
-        const response = await axios.post(
-          `${backendUrl}/feriados`,
-          newFeriado,
-          {
-            headers: {
-              Authorization: state.token,
-            },
-          }
-        );
-        console.log(response);
-      } catch (error) {
-        console.error(error);
-      }
+      await crearFeriado(nuevoFeriado, TOKEN);
+
     } else {
-      console.log("FILA VIEJA EDITADA");
+
 
       const updatedFeriado = {
         fecha: newRow.fecha,
         descripcion: newRow.descripcion,
       };
 
-      try {
-        const response = await axios.put(
-          `${backendUrl}/feriados/${newRow.id}`,
-          updatedFeriado,
-          {
-            headers: {
-              Authorization: state.token,
-            },
-          }
-        );
-        console.log(response);
-      } catch (error) {
-        console.error(error);
-      }
+      await actualizarFeriado(newRow.id, updatedFeriado, TOKEN);
     }
 
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));

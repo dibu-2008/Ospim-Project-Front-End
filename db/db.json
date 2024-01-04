@@ -173,11 +173,6 @@
       "id": 7
     },
     {
-      "fecha": "2023-12-22T03:00:00.000Z",
-      "descripcion": "Cumple sssaaa",
-      "id": 9
-    },
-    {
       "fecha": "2024-07-10",
       "descripcion": "Feriado del 09-07",
       "id": 10
@@ -191,7 +186,8 @@
       "nombre": "PRUEBA 2",
       "apellido": "true",
       "email": "prueba@gmail.com",
-      "id": 1
+      "id": 1,
+      "habilitado": false
     },
     {
       "id": 2,
@@ -272,20 +268,6 @@
   ],
   "publicaciones": [
     {
-      "titulo": "Nuevos Contratos",
-      "cuerpo": "Nuevos Contratos: kjlfdh fjkds fkljd hgfjkd ghfjdk gkjfd hgjkfd sghjkfd sghjkfds ghkjfds hgjkfd hhgjkfds kjhgfd gkfds FIN.-",
-      "vigenciaDesde": "2023-12-01",
-      "vigenciaHasta": "2024-01-26T03:00:00.000Z",
-      "id": 1
-    },
-    {
-      "id": 2,
-      "titulo": "Nota antigua",
-      "cuerpo": "Nota antigua dice: kjlfdh fjkds fkljd hgfjkd ghfjdk gkjfd hgjkfd sghjkfd sghjkfds ghkjfds hgjkfd hhgjkfds kjhgfd gkfds FIN.-",
-      "vigenciaDesde": "2023-06-01",
-      "vigenciaHasta": "2023-07-20"
-    },
-    {
       "id": 3,
       "titulo": "Nota II",
       "cuerpo": "Nota II dice: kjlfdh fjkds fkljd hgfjkd ghfjdk gkjfd hgjkfd sghjkfd sghjkfds ghkjfds hgjkfd hhgjkfds kjhgfd gkfds FIN.-",
@@ -305,6 +287,20 @@
       "vigenciaDesde": "2023-12-27T03:00:00.000Z",
       "vigenciaHasta": "2023-12-31T03:00:00.000Z",
       "id": 5
+    },
+    {
+      "titulo": "fsfsd",
+      "cuerpo": "sdfsd",
+      "vigenciaDesde": "2024-01-11T03:00:00.000Z",
+      "vigenciaHasta": "2024-01-26T03:00:00.000Z",
+      "id": 6
+    },
+    {
+      "titulo": "dfsdf",
+      "cuerpo": "sdfdsss",
+      "vigenciaDesde": "2024-01-04T03:00:00.000Z",
+      "vigenciaHasta": "2024-01-19T03:00:00.000Z",
+      "id": 7
     }
   ],
   "publicacionesVigentes": [
@@ -340,11 +336,6 @@
     }
   ],
   "categoria": [
-    {
-      "id": 1,
-      "camaraCodigo": "FAIM",
-      "descripcion": "A"
-    },
     {
       "id": 2,
       "camaraCodigo": "FAIM",
@@ -409,28 +400,32 @@
       "id": 14,
       "camaraCodigo": "CAENA",
       "descripcion": "E"
+    },
+    {
+      "camaraCodigo": "FAIM",
+      "descripcion": "B",
+      "id": 15
     }
   ],
   "empresa": [
     {
-      "razonSocial": "Empresa de Agro Nro 7",
-      "ramoId": 2,
+      "razonSocial": "Empresa Nro 1",
+      "ramoId": 1,
       "id": 1
     }
   ],
   "empresaDomicilio": [
     {
-      "id": 1,
       "tipo": "FISCAL",
       "provinciaId": 3,
       "localidadId": 265,
       "calle": "San Martin",
-      "calleNro": "15250",
       "piso": "P.B.",
       "depto": "A",
       "oficina": "12",
       "cp": "1414",
-      "planta": "Planta 1"
+      "planta": "Planta 11",
+      "id": 1
     },
     {
       "tipo": "REAL",
@@ -468,19 +463,25 @@
       "cp": "1212",
       "planta": "Planta 4",
       "id": 4
+    },
+    {
+      "tipo": "REAL",
+      "provinciaId": 16,
+      "localidadId": 242,
+      "calle": "ssd",
+      "piso": "asd",
+      "depto": "wer",
+      "oficina": "2",
+      "cp": "2222",
+      "planta": "adasdsad",
+      "id": 5
     }
   ],
   "empresaContacto": [
     {
-      "id": 3,
-      "tipo": "WHATSAP",
-      "prefijo": "15",
-      "valor": "5504-2033"
-    },
-    {
       "tipo": "TEL2",
       "prefijo": "011",
-      "valor": "4007-2023",
+      "valor": "4007-2022",
       "id": 4
     },
     {
@@ -508,12 +509,6 @@
       "id": 9
     },
     {
-      "tipo": "MAIL",
-      "prefijo": "",
-      "valor": "luis@ospim.com",
-      "id": 10
-    },
-    {
       "tipo": "TEL",
       "prefijo": "013",
       "valor": "3333-4444",
@@ -524,12 +519,6 @@
       "prefijo": "019",
       "valor": "3234-0404",
       "id": 12
-    },
-    {
-      "tipo": "TEL2",
-      "prefijo": "123",
-      "valor": "3454-6870",
-      "id": 13
     }
   ],
   "empresaContactoTipo": [

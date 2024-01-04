@@ -6,9 +6,9 @@ const PrivateRoute = ({ children }) => {
     const { state } = useLocation();
 
     if (state) 
-        localStorage.setItem('state', JSON.stringify(state))
+        localStorage.setItem('stateLogin', JSON.stringify(state))
 
-    const localState = localStorage.getItem('state')
+    const localState = localStorage.getItem('stateLogin')
     const localStateParse = JSON.parse(localState)
     
     if (localStateParse && localStateParse.logged) {

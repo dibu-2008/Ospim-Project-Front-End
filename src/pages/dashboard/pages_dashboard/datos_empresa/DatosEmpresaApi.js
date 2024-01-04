@@ -1,7 +1,10 @@
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+import { errorBackendResponse } from "../../../../errors/errorBackendResponse";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { errorBackendResponse } from "../../../../errors/errorBackendResponse";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+const MESSAGE_HTTP_CREATED = import.meta.env.VITE_MESSAGE_HTTP_CREATED;
+const MESSAGE_HTTP_UPDATED = import.meta.env.VITE_MESSAGE_HTTP_UPDATED;
+const MESSAGE_HTTP_DELETED = import.meta.env.VITE_MESSAGE_HTTP_DELETED;
 
 export const getRamo = async (token) => {
   if (!token) return [];
@@ -75,17 +78,26 @@ export const modificarEmpresa = async (token, empresaId, empresaInfo) => {
     });
   }
 
+  const showSwallSuccess = () => {
+    Swal.fire({
+      icon: "success",
+      title: MESSAGE_HTTP_UPDATED,
+      showConfirmButton: false,
+      timer: 2000,
+    });
+  }
+
   try {
     const empresaResponse = await axios.put(URL, empresaInfo, {
       headers: {
         Authorization: token,
       },
     });
-    const empresa = await empresaResponse.data;
+    
+    if (empresaResponse.status === 200) {
+      showSwallSuccess();
+    }
 
-    console.log(empresa);
-
-    return empresa || [];
   } catch (error) {
     errorBackendResponse(error, showSwalError);
   }
