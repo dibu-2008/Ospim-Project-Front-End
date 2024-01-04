@@ -4,7 +4,7 @@ import { Navigate } from "react-router";
 /* import { LoginPage, RegisterPage, DashboardPage } from "../pages"; */
 
 import PrivateRoute from "./PrivateRoute";
-import { DeclaracionesJuradas } from "../pages/dashboard/pages_dashboard/ddjj/DeclaracionesJuradas";
+import { DeclaracionesJuradas } from "../pages/dashboard/pages_dashboard/declaraciones_juradas/DeclaracionesJuradas";
 import { Inicio } from "../pages/dashboard/pages_dashboard/inicio/Inicio";
 import { Categorias } from "../pages/dashboard/pages_dashboard/categorias/Categorias";
 import NavBar from "../components/navbar/NavBar";

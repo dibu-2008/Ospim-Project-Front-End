@@ -1,0 +1,7 @@
+.mis_declaraciones_juradas_container {
+    display: flex;
+    justify-content: space-around;
+    height: 200px;
+    width: 60%;
+    margin: 0 auto;
+}
