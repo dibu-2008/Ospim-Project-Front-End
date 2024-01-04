@@ -14,6 +14,7 @@ export const MisDeclaracionesJuradas = () => {
     const [desde, setDesde] = useState(null);
     const [hasta, setHasta] = useState(null);
     const TOKEN = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.usuario.token;
+    const ID_EMPRESA = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.empresa.id;
 
     const handleChangeDesde = (date) => {
 
@@ -79,6 +80,7 @@ export const MisDeclaracionesJuradas = () => {
                     rows_mis_ddjj={rows_mis_ddjj}
                     setRowsMisDdjj={setRowsMisDdjj}
                     token={TOKEN}
+                    idEmpresa={ID_EMPRESA}
                 />
             </Stack>
         </div>

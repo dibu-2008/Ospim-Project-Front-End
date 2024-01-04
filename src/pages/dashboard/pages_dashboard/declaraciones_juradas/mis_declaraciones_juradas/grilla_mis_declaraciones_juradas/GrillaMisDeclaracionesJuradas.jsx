@@ -5,6 +5,7 @@ import {
     GridToolbarContainer,
     GridActionsCellItem,
     GridRowEditStopReasons,
+    GridToolbar,
 } from "@mui/x-data-grid";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
@@ -13,8 +14,10 @@ import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import { obtenerMisDeclaracionesJuradas } from "./GrillaMisDeclaracionesJuradasApi";
+import { Grid } from "@mui/material";
 
-function EditToolbar(props) {
+
+/* function EditToolbar(props) {
 
     const { setRowsMisDdjj, rows_mis_ddjj, setRowModesModel } = props;
 
@@ -52,26 +55,24 @@ function EditToolbar(props) {
             </Button>
         </GridToolbarContainer>
     );
-}
+} */
 
-export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, token }) => {
+export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, token, idEmpresa }) => {
 
-    
     useEffect(() => {
 
         const ObtenerMisDeclaracionesJuradas = async () => {
 
-            const ddjjResponse = await obtenerMisDeclaracionesJuradas(token);
-            console.log(ddjjResponse);
+            const ddjjResponse = await obtenerMisDeclaracionesJuradas(idEmpresa, token);
 
             setRowsMisDdjj(ddjjResponse.map((item) => ({ id: item.id, ...item })));
 
         };
 
-        ObtenerMisDeclaracionesJuradas(); 
+        ObtenerMisDeclaracionesJuradas();
 
     }, []);
-        
+
 
     const [rowModesModel, setRowModesModel] = useState({});
 
@@ -130,13 +131,32 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
             headerName: "Periodo",
             width: 150,
             editable: true,
-            type: "date"
+            type: "date",
+            valueFormatter: (params) => {
+
+                const date = new Date(params.value);
+
+                const day = date.getDate().toString().padStart(2, "0");
+                const month = (date.getMonth() + 1).toString().padStart(2, "0");
+                const year = date.getFullYear();
+
+                return `${day}-${month}-${year}`;
+            }
         },
         {
-            field: "numero",
+            field: "secuencia",
             headerName: "Numero",
             width: 150,
             editable: true,
+            valueGetter: (params) => {
+
+                // Si secuencia es 0 es "Original" sino es "Rectificativa"+secuencia
+                if (params.value === 0) {
+                    return "Original";
+                } else {
+                    return "Rectificativa " + params.value;
+                }
+            }
         },
         {
             field: "totalUomaCS",
@@ -168,12 +188,16 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
             width: 150,
             editable: true,
         },
+       
         {
             field: "actions",
             headerName: "Acciones",
-            width: 200,
+            width: 250,
             type: "actions",
-            getActions: ({ id }) => {
+            getActions: ({ id, row }) => {
+
+                console.log(row);
+
                 const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
                 if (isInEditMode) {
@@ -196,21 +220,41 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
                     ];
                 }
 
-                return [
-                    <GridActionsCellItem
-                        icon={<EditIcon />}
-                        label="Edit"
-                        className="textPrimary"
-                        onClick={handleEditClick(id)}
-                        color="inherit"
-                    />,
-                    <GridActionsCellItem
-                        icon={<DeleteIcon />}
-                        label="Delete"
-                        onClick={handleDeleteClick(id)}
-                        color="inherit"
-                    />,
-                ];
+                if (row.estado === "PE") {
+                    return [
+                        <Button variant="contained">Presentar</Button>,
+                        <GridActionsCellItem
+                            icon={<EditIcon />}
+                            label="Edit"
+                            className="textPrimary"
+                            onClick={handleEditClick(id)}
+                            color="inherit"
+                        />,
+                        <GridActionsCellItem
+                            icon={<DeleteIcon />}
+                            label="Delete"
+                            onClick={handleDeleteClick(id)}
+                            color="inherit"
+                        />
+                    ];
+                } else {
+                    return [
+                        <Button variant="contained">Generar Boleta</Button>,
+                        <GridActionsCellItem
+                            icon={<EditIcon />}
+                            label="Edit"
+                            className="textPrimary"
+                            onClick={handleEditClick(id)}
+                            color="inherit"
+                        />,
+                        <GridActionsCellItem
+                            icon={<DeleteIcon />}
+                            label="Delete"
+                            onClick={handleDeleteClick(id)}
+                            color="inherit"
+                        />
+                    ];
+                }
             },
         },
     ];
@@ -224,12 +268,13 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
             onRowModesModelChange={handleRowModesModelChange}
             onRowEditStop={handleRowEditStop}
             processRowUpdate={processRowUpdate}
-            slots={{
-                toolbar: EditToolbar,
-            }}
-            slotProps={{
-                toolbar: { setRowsMisDdjj, rows_mis_ddjj, setRowModesModel },
-            }}
+        slots={{
+            toolbar: GridToolbar,
+        }}
+        /* 
+        slotProps={{
+            toolbar: { setRowsMisDdjj, rows_mis_ddjj, setRowModesModel },
+        }} */
         />
     );
 }
