@@ -220,7 +220,7 @@ export const AltaUsuarioInterno = () => {
     },
     {
       field: 'actions',
-      headerName: 'Actions',
+      headerName: 'Acciones',
       width: 200,
       type: 'actions',
       getActions: ({ id, row }) => {
