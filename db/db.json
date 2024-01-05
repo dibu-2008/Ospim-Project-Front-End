@@ -653,7 +653,7 @@
   "DDJJ-consulta": [
     {
       "id": 150,
-      "estado": "PE",
+      "estado": "PR",
       "empresaId": 1,
       "periodo": "2023-12-01T00:00:00.000Z",
       "secuencia": 0,
@@ -665,7 +665,7 @@
     },
     {
       "id": 120,
-      "estado": "PE",
+      "estado": "PR",
       "empresaId": 1,
       "periodo": "2023-11-01T00:00:00.000Z",
       "secuencia": 0,

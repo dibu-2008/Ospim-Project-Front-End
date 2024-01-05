@@ -13,9 +13,14 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
-import { obtenerMisDeclaracionesJuradas } from "./GrillaMisDeclaracionesJuradasApi";
-import { Grid } from "@mui/material";
-
+import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
+import {
+    eliminarDeclaracionJurada,
+    obtenerMisDeclaracionesJuradas,
+    presentarDeclaracionJurada
+} from "./GrillaMisDeclaracionesJuradasApi";
+import { PDFViewer, PDFDownloadLink } from '@react-pdf/renderer';
+import { MyDocument } from "./MiPdf";
 
 /* function EditToolbar(props) {
 
@@ -57,7 +62,10 @@ import { Grid } from "@mui/material";
     );
 } */
 
+
 export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, token, idEmpresa }) => {
+
+    const [rowModesModel, setRowModesModel] = useState({});
 
     useEffect(() => {
 
@@ -73,8 +81,23 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
 
     }, []);
 
+    const PresentarDeclaracionesJuradas = async (id) => {
 
-    const [rowModesModel, setRowModesModel] = useState({});
+        const updatedRow = { ...rows_mis_ddjj.find((row) => row.id === id) };
+
+        updatedRow.estado = "PR";
+
+        const estado = {
+            estado: updatedRow.estado,
+        }
+
+        await presentarDeclaracionJurada(idEmpresa, id, estado, token);
+
+        setRowsMisDdjj(rows_mis_ddjj.map((row) => (row.id === id ? updatedRow : row)));
+
+        return updatedRow;
+
+    }
 
     const handleRowEditStop = (params, event) => {
         if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -92,6 +115,8 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
 
     const handleDeleteClick = (id) => async () => {
         setRowsMisDdjj(rows_mis_ddjj.filter((row) => row.id !== id));
+
+        await eliminarDeclaracionJurada(idEmpresa, id, token);
     };
 
     const handleCancelClick = (id) => () => {
@@ -124,6 +149,13 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
     const handleRowModesModelChange = (newRowModesModel) => {
         setRowModesModel(newRowModesModel);
     };
+
+    const formatter = new Intl.NumberFormat("es-CL", {
+        minimumFractionDigits: 2,
+        useGrouping: true,
+        currency: "CLP",
+        style: "currency",
+    });
 
     const columns = [
         {
@@ -163,40 +195,43 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
             headerName: "Total UOMA CS",
             width: 150,
             editable: true,
+            valueFormatter: (params) => formatter.format(params.value || 0),
         },
         {
             field: "totalUomaAS",
             headerName: "Total UOMA AS",
             width: 150,
             editable: true,
+            valueFormatter: (params) => formatter.format(params.value || 0),
         },
         {
             field: "totalCuotaUsu",
             headerName: "Total Cuota Usu",
             width: 150,
             editable: true,
+            valueFormatter: (params) => formatter.format(params.value || 0),
         },
         {
             field: "totalART46",
             headerName: "Total ART 46",
             width: 150,
             editable: true,
+            valueFormatter: (params) => formatter.format(params.value || 0),
         },
         {
             field: "totalAntimaCS",
             headerName: "Total Antima CS",
             width: 150,
             editable: true,
+            valueFormatter: (params) => formatter.format(params.value || 0),
         },
-       
+
         {
             field: "actions",
             headerName: "Acciones",
-            width: 250,
+            width: 280,
             type: "actions",
             getActions: ({ id, row }) => {
-
-                console.log(row);
 
                 const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
@@ -222,7 +257,12 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
 
                 if (row.estado === "PE") {
                     return [
-                        <Button variant="contained">Presentar</Button>,
+                        <Button
+                            sx={{
+                                width: '160px',
+                            }}
+                            onClick={() => PresentarDeclaracionesJuradas(id)}
+                            variant="contained">Presentar</Button>,
                         <GridActionsCellItem
                             icon={<EditIcon />}
                             label="Edit"
@@ -235,11 +275,26 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
                             label="Delete"
                             onClick={handleDeleteClick(id)}
                             color="inherit"
-                        />
+                        />,
+                        <PDFDownloadLink 
+                            document={<MyDocument rows_mis_ddjj={rows_mis_ddjj}/>}
+                            fileName="ddjj.pdf"
+                            >
+                            <GridActionsCellItem
+                                icon={<LocalPrintshopIcon />}
+                                label="Print"
+                                color="inherit"
+                            />
+                        </PDFDownloadLink>
                     ];
                 } else {
                     return [
-                        <Button variant="contained">Generar Boleta</Button>,
+                        <Button
+                            sx={{
+                                width: '160px',
+                                marginLeft: '-40px',
+                            }}
+                            variant="contained">Generar Boleta</Button>,
                         <GridActionsCellItem
                             icon={<EditIcon />}
                             label="Edit"
@@ -247,12 +302,16 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
                             onClick={handleEditClick(id)}
                             color="inherit"
                         />,
-                        <GridActionsCellItem
-                            icon={<DeleteIcon />}
-                            label="Delete"
-                            onClick={handleDeleteClick(id)}
-                            color="inherit"
-                        />
+                        <PDFDownloadLink 
+                            document={<MyDocument rows_mis_ddjj={rows_mis_ddjj}/>}
+                            fileName="ddjj.pdf"
+                            >
+                            <GridActionsCellItem
+                                icon={<LocalPrintshopIcon />}
+                                label="Print"
+                                color="inherit"
+                            />,
+                        </PDFDownloadLink>
                     ];
                 }
             },
@@ -260,21 +319,28 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
     ];
 
     return (
-        <DataGrid
-            rows={rows_mis_ddjj}
-            columns={columns}
-            editMode="row"
-            rowModesModel={rowModesModel}
-            onRowModesModelChange={handleRowModesModelChange}
-            onRowEditStop={handleRowEditStop}
-            processRowUpdate={processRowUpdate}
-        slots={{
-            toolbar: GridToolbar,
-        }}
-        /* 
-        slotProps={{
-            toolbar: { setRowsMisDdjj, rows_mis_ddjj, setRowModesModel },
-        }} */
-        />
+        <div>
+            <DataGrid
+                rows={rows_mis_ddjj}
+                columns={columns}
+                editMode="row"
+                rowModesModel={rowModesModel}
+                onRowModesModelChange={handleRowModesModelChange}
+                onRowEditStop={handleRowEditStop}
+                processRowUpdate={processRowUpdate}
+            /* slots={{
+                toolbar: GridToolbar,
+            }} */
+            /* 
+            slotProps={{
+                toolbar: { setRowsMisDdjj, rows_mis_ddjj, setRowModesModel },
+            }} */
+            />
+            <PDFViewer style={{ width: "100%", height: "500px" }}>
+                <MyDocument 
+                    rows_mis_ddjj={rows_mis_ddjj}
+                />
+            </PDFViewer>
+        </div>
     );
 }

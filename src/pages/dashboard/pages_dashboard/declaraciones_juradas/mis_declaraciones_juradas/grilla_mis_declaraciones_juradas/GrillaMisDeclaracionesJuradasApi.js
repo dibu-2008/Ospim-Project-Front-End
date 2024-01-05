@@ -81,9 +81,9 @@ export const presentarDeclaracionJurada = async (idEmpresa, idDeclaracionJurada,
     }
 }
 
-export const eliminarDeclaracionJurada = async (idDeclaracionJurada, token) => {
+export const eliminarDeclaracionJurada = async (idEmpresa, idDeclaracionJurada, token) => {
 
-    const URL = `${BACKEND_URL}/empresa/:empresaId/dj/${idDeclaracionJurada}`;
+    const URL = `${BACKEND_URL}/empresa/${idEmpresa}/dj/${idDeclaracionJurada}`;
 
     const showSwalError = (descripcion) => {
         Swal.fire({
