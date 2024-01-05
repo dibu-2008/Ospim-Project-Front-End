@@ -18,15 +18,24 @@ export const MisDeclaracionesJuradas = () => {
 
     const handleChangeDesde = (date) => {
 
-        setDesde(date);
-        console.log(date ? date.toISOString() : null);
+        setDesde(date ? date.toISOString() : null);
     };
 
     const handleChangeHasta = (date) => {
 
-        setHasta(date);
-        console.log(date ? date.toISOString() : null);
+        setHasta(date ? date.toISOString() : null);
     };
+
+    const buscarDeclaracionesJuradas = () => {
+
+        // Filtrar las ddjj por rango de fechas
+        const declaracionesFiltradas = rows_mis_ddjj.filter(ddjj=>{
+            const fecha = new Date(ddjj.periodo);
+            return fecha >= new Date(desde) && fecha <= new Date(hasta);
+        })
+
+        setRowsMisDdjj(declaracionesFiltradas);
+    }
 
     return (
         <div>
@@ -64,7 +73,9 @@ export const MisDeclaracionesJuradas = () => {
                     alignItems="center"
                 >
 
-                    <Button variant="contained">Buscar</Button>
+                    <Button
+                        onClick={buscarDeclaracionesJuradas} 
+                        variant="contained">Buscar</Button>
                     <Button variant="contained">Exportar</Button>
 
                 </Stack>
@@ -81,6 +92,7 @@ export const MisDeclaracionesJuradas = () => {
                     setRowsMisDdjj={setRowsMisDdjj}
                     token={TOKEN}
                     idEmpresa={ID_EMPRESA}
+                   
                 />
             </Stack>
         </div>
