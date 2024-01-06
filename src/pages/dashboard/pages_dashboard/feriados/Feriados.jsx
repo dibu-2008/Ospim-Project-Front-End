@@ -19,8 +19,6 @@ import {
 } from "@mui/x-data-grid";
 import { actualizarFeriado, crearFeriado, eliminarFeriado, obtenerFeriados } from "./FeriadosApi";
 
-const backendUrl = import.meta.env.VITE_BACKEND_URL;
-
 function EditToolbar(props) {
   const { setRows, rows, setRowModesModel } = props;
 

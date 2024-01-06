@@ -15,6 +15,7 @@ import CancelIcon from '@mui/icons-material/Close';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
 import './AltaUsuarioInterno.css'
+import { Grid, IconButton } from '@mui/material';
 
 export const AltaUsuarioInterno = () => {
 
@@ -155,6 +156,8 @@ export const AltaUsuarioInterno = () => {
       width: 200,
       type: 'string',
       editable: true,
+      headerClassName: 'header--cell',
+      cellClassName: 'row--cell',
     },
     {
       field: 'nombre',
@@ -162,6 +165,7 @@ export const AltaUsuarioInterno = () => {
       width: 200,
       type: 'string',
       editable: true,
+      headerClassName: 'header--cell',
     },
     {
       field: 'descripcion',
@@ -169,6 +173,7 @@ export const AltaUsuarioInterno = () => {
       width: 200,
       type: 'string',
       editable: true,
+      headerClassName: 'header--cell',
     },
     {
       field: 'email',
@@ -176,6 +181,7 @@ export const AltaUsuarioInterno = () => {
       width: 225,
       type: 'string',
       editable: true,
+      headerClassName: 'header--cell',
     },
     {
       field: 'clave',
@@ -183,6 +189,7 @@ export const AltaUsuarioInterno = () => {
       width: 200,
       type: 'string',
       editable: true,
+      headerClassName: 'header--cell',
     },
     {
       field: 'repetirClave',
@@ -190,6 +197,7 @@ export const AltaUsuarioInterno = () => {
       width: 200,
       type: 'string',
       editable: true,
+      headerClassName: 'header--cell',
       valueGetter: (params) => {
 
         return params.row.clave
@@ -201,14 +209,15 @@ export const AltaUsuarioInterno = () => {
       width: 200,
       type: 'singleSelect',
       editable: true,
+      headerClassName: 'header--cell',
       valueOptions: roles.map((item) => {
         return { value: item.id, label: item.descripcion }
-      })
+      }),
     },
     {
       field: 'habilitado',
       headerName: 'Habilitado',
-      width: 100,
+      width: 170,
       type: 'string',
       editable: false,
       valueGetter: (params) => {
@@ -217,12 +226,15 @@ export const AltaUsuarioInterno = () => {
 
         return params.row.habilitado ? "Si" : "No"
       },
+      headerClassName: 'habilitado--cell',
+      cellClassName: 'habilitado--cell',
     },
     {
       field: 'actions',
       headerName: 'Acciones',
       width: 200,
       type: 'actions',
+      headerClassName: 'header--cell',
       getActions: ({ id, row }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
