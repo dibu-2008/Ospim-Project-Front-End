@@ -176,7 +176,7 @@ export function Feriados() {
     {
       field: "actions",
       type: "actions",
-      headerName: "Edición",
+      headerName: "Acciones",
       width: 250,
       cellClassName: "actions",
       getActions: (params) => {
@@ -221,7 +221,7 @@ export function Feriados() {
       },
       renderHeader: (params) => (
         <Grid container alignItems="center">
-          <Grid item>Descripción</Grid>
+          <Grid item>Acciones</Grid>
           <Grid item>
             <IconButton size="small" sx={{ ml: 1, color: "#1A76D2" }}>
               <EditIcon />

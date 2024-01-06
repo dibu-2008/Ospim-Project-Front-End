@@ -147,7 +147,7 @@ export const Publicaciones = () => {
     },
     {
       field: "actions",
-      headerName: "Actions",
+      headerName: "Acciones",
       width: 200,
       type: "actions",
       getActions: ({ id }) => {
