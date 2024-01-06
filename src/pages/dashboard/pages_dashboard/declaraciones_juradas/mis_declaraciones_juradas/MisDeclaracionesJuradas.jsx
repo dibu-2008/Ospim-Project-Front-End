@@ -10,7 +10,7 @@ import { GrillaMisDeclaracionesJuradas } from './grilla_mis_declaraciones_jurada
 
 export const MisDeclaracionesJuradas = () => {
 
-    const [rows_mis_ddjj, setRowsMisDdjj] = useState([]); 
+    const [rows_mis_ddjj, setRowsMisDdjj] = useState([]);
     const [desde, setDesde] = useState(null);
     const [hasta, setHasta] = useState(null);
     const TOKEN = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.usuario.token;
@@ -29,10 +29,17 @@ export const MisDeclaracionesJuradas = () => {
     const buscarDeclaracionesJuradas = () => {
 
         // Filtrar las ddjj por rango de fechas
-        const declaracionesFiltradas = rows_mis_ddjj.filter(ddjj=>{
+        const declaracionesFiltradas = rows_mis_ddjj.filter(ddjj => {
+            console.log("Linea 33");
+            console.log(ddjj.periodo)
             const fecha = new Date(ddjj.periodo);
+            console.log(fecha);
             return fecha >= new Date(desde) && fecha <= new Date(hasta);
         })
+
+        console.log("desde ", desde)
+
+        console.log(declaracionesFiltradas)
 
         setRowsMisDdjj(declaracionesFiltradas);
     }
@@ -52,6 +59,7 @@ export const MisDeclaracionesJuradas = () => {
                                 label="Periodo desde"
                                 value={desde}
                                 onChange={handleChangeDesde}
+                                format="DD-MM-YYYY"
                             />
                         </DemoContainer>
                     </LocalizationProvider>
@@ -61,6 +69,7 @@ export const MisDeclaracionesJuradas = () => {
                                 label="Periodo hasta"
                                 value={hasta}
                                 onChange={handleChangeHasta}
+                                format="DD-MM-YYYY"
                             />
                         </DemoContainer>
                     </LocalizationProvider>
@@ -74,7 +83,7 @@ export const MisDeclaracionesJuradas = () => {
                 >
 
                     <Button
-                        onClick={buscarDeclaracionesJuradas} 
+                        onClick={buscarDeclaracionesJuradas}
                         variant="contained">Buscar</Button>
                     <Button variant="contained">Exportar</Button>
 
@@ -92,7 +101,7 @@ export const MisDeclaracionesJuradas = () => {
                     setRowsMisDdjj={setRowsMisDdjj}
                     token={TOKEN}
                     idEmpresa={ID_EMPRESA}
-                   
+
                 />
             </Stack>
         </div>
