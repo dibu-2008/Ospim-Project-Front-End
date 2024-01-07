@@ -225,100 +225,105 @@ export const AltaUsuarioInterno = () => {
         //if (params.row.habilitado === null) return ("");
 
         return params.row.habilitado ? "Si" : "No"
-      },
-      headerClassName: 'habilitado--cell',
-      cellClassName: 'habilitado--cell',
-    },
-    {
-      field: 'actions',
-      headerName: 'Acciones',
-      width: 200,
-      type: 'actions',
-      headerClassName: 'header--cell',
-      getActions: ({ id, row }) => {
-        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+          },
+          headerClassName: 'habilitado--cell',
+          cellClassName: 'habilitado--cell',
+        },
+        {
+          field: 'actions',
+          headerName: 'Acciones',
+          width: 200,
+          type: 'actions',
+          headerClassName: 'header--cell',
+          getActions: ({ id, row }) => {
+            const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
-        if (isInEditMode) {
-          return [
-            <GridActionsCellItem
-              icon={<SaveIcon />}
-              label="Save"
-              sx={{
-                color: 'primary.main',
-              }}
-              onClick={handleSaveClick(id)}
-            />,
-            <GridActionsCellItem
-              icon={<CancelIcon />}
-              label="Cancel"
-              className="textPrimary"
-              onClick={handleCancelClick(id)}
-              color="inherit"
-            />,
-          ];
+            if (isInEditMode) {
+              return [
+                <GridActionsCellItem
+                  icon={<SaveIcon />}
+                  label="Save"
+                  sx={{
+                    color: 'primary.main',
+                  }}
+                  onClick={handleSaveClick(id)}
+                />,
+                <GridActionsCellItem
+                  icon={<CancelIcon />}
+                  label="Cancel"
+                  className="textPrimary"
+                  onClick={handleCancelClick(id)}
+                  color="inherit"
+                />,
+              ];
+            }
+
+            return [
+              <GridActionsCellItem
+                icon={<EditIcon />}
+                label="Edit"
+                className="textPrimary"
+                onClick={handleEditClick(id)}
+                color="inherit"
+              />,
+              <GridActionsCellItem
+                icon={row.habilitado ? <CloseIcon sx={{ color: 'red' }} /> : <CheckIcon sx={{ color: 'green' }} />}
+                label={row.habilitado ? "Cerrar" : "Abrir"}
+                onClick={handleHabilitar(id)}
+                color="inherit"
+              />
+            ];
+          },
         }
+      ]
 
-        return [
-          <GridActionsCellItem
-            icon={<EditIcon />}
-            label="Edit"
-            className="textPrimary"
-            onClick={handleEditClick(id)}
-            color="inherit"
-          />,
-          <GridActionsCellItem
-            icon={row.habilitado ? <CloseIcon sx={{ color: 'red' }} /> : <CheckIcon sx={{ color: 'green' }} />}
-            label={row.habilitado ? "Cerrar" : "Abrir"}
-            onClick={handleHabilitar(id)}
-            color="inherit"
-          />
-        ];
-      },
-    }
-  ]
+      return (
+        <div className='usuario_interno_container'>
+          <h1>Alta Usuario Interno</h1>
+          <Box
+            sx={{
+              height: "400px",
+              width: "90%",
+              overflowX: "auto",
+              "& .actions": {
+                color: "text.secondary",
+              },
+              "& .textPrimary": {
+                color: "text.primary",
+              },
+            }}
+          >
 
-
-  return (
-    <div className='usuario_interno_container'>
-      <h1>Alta Usuario Interno</h1>
-      <Box
-        sx={{
-          height: "auto",
-          width: "90%",
-          overflowX: "auto",
-          "& .actions": {
-            color: "text.secondary",
-          },
-          "& .textPrimary": {
-            color: "text.primary",
-          },
-        }}
-      >
-
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          editMode="row"
-          rowModesModel={rowModesModel}
-          onRowModesModelChange={handleRowModesModelChange}
-          onRowEditStop={handleRowEditStop}
-          processRowUpdate={processRowUpdate}
-          slots={{
-            toolbar: AltaUsuarioInternoNuevo,
-          }}
-          slotProps={{
-            toolbar: { setRows, rows, setRowModesModel },
-          }}
-          sx={{
-            // ...
-            '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
-              width: '8px',
-              visibility: 'visible',
-            },
-            '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
-              backgroundColor: '#ccc',
-            },
-          }}
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              editMode="row"
+              rowModesModel={rowModesModel}
+              onRowModesModelChange={handleRowModesModelChange}
+              onRowEditStop={handleRowEditStop}
+              processRowUpdate={processRowUpdate}
+              slots={{
+                toolbar: AltaUsuarioInternoNuevo,
+              }}
+              slotProps={{
+                toolbar: { setRows, rows, setRowModesModel },
+              }}
+              sx={{
+                // ...
+                '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
+                  width: '8px',
+                  visibility: 'visible',
+                },
+                '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
+                  backgroundColor: '#ccc',
+                },
+              }}
+              initialState={{
+                ...rows.initialState,
+                pagination: { paginationModel: { pageSize: 5 } },
+              }}
+              pageSizeOptions={[5, 10, 25]}
+          
         />
       </Box>
     </div>
