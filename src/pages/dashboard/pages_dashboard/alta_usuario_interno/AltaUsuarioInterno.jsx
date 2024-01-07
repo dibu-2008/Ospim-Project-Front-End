@@ -332,8 +332,6 @@ export const AltaUsuarioInterno = () => {
               ...rows.initialState,
               pagination: {
                 paginationModel: { pageSize: 5 },
-                // cambiar el nombre de Rows per page por filas por pagina
-                labels: { rowsPerPage: 'Filas por pagina' }
               },
             }}
             pageSizeOptions={[5, 10, 25]}
