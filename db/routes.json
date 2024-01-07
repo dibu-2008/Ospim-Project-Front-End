@@ -22,5 +22,5 @@
   "/empresa/:empresaId/dj/": "/DDJJ-consulta?empresaId=:empresaId",
   "/empresa/:empresaId/dj/:id": "/DDJJ-consulta/:id",
   "/empresa/:empresaId/dj/:id/presentar": "/DDJJ-consulta/:id",
-  "/cuit/restringido": "/cuit-restringido"
+  "/cuit-restringido": "/cuit-restringido"
 }
