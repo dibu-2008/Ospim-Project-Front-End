@@ -1,5 +1,4 @@
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { MenuItem, Select } from "@mui/material";
 import {
   GridRowModes,
@@ -9,7 +8,6 @@ import {
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
 
-import axios from "axios";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
@@ -244,6 +242,9 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
       width: 120,
       editable: true,
       type: "singleSelect",
+      headerAlign: "center",
+      align: "center",
+      headerClassName: 'header--cell',
       getOptionValue: (dato) => dato.codigo,
       getOptionLabel: (dato) => dato.descripcion,
       valueOptions: tipoDomicilio,
@@ -254,6 +255,9 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
       width: 200,
       editable: true,
       type: "singleSelect",
+      headerAlign: "center",
+      align: "center",
+      headerClassName: 'header--cell',
       valueOptions: provincias,
       getOptionValue: (dato) => dato.id,
       getOptionLabel: (dato) => dato.descripcion,
@@ -304,6 +308,9 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
       width: 220,
       editable: true,
       type: "singleSelect",
+      headerAlign: "center",
+      align: "center",
+      headerClassName: 'header--cell',
       //valueOptions: localidadesList,
       valueOptions: ({ row }) => {
         var options = localidades.filter((item) => {
@@ -349,43 +356,63 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
       headerName: "Calle",
       width: 120,
       editable: true,
+      headerAlign: "center",
+      align: "center",
+      headerClassName: 'header--cell',
     },
     {
       field: "piso",
       headerName: "Piso",
       width: 80,
       editable: true,
+      headerAlign: "center",
+      align: "center",
+      headerClassName: 'header--cell',
     },
     {
       field: "depto",
       headerName: "Depto",
       width: 80,
       editable: true,
+      headerAlign: "center",
+      align: "center",
+      headerClassName: 'header--cell',
     },
     {
       field: "oficina",
       headerName: "Oficina",
       width: 100,
       editable: true,
+      headerAlign: "center",
+      align: "center",
+      headerClassName: 'header--cell',
     },
     {
       field: "cp",
       headerName: "CP",
       width: 80,
       editable: true,
+      headerAlign: "center",
+      align: "center",
+      headerClassName: 'header--cell',
     },
     {
       field: "planta",
       headerName: "Planta",
       width: 100,
       editable: true,
+      headerAlign: "center",
+      align: "center",
+      headerClassName: 'header--cell',
     },
     {
       field: "actions",
       type: "actions",
-      headerName: "Actions",
+      headerName: "Acciones",
       width: 100,
-      cellClassName: "actions",
+      headerAlign: "center",
+      align: "center",
+      headerClassName: 'header--cell',
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
@@ -431,7 +458,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
   return (
     <Box
       sx={{
-        height: "auto",
+        height: "400px",
         width: "100%",
         overflowX: "scroll",
         "& .actions": {
@@ -443,7 +470,6 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
       }}
     >
       <DataGrid
-        autoHeight
         columns={columns}
         rows={rowsDomicilio}
         editMode="row"
@@ -462,9 +488,26 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
             setRowModesModel,
           },
         }}
+        sx={{
+          // ...
+          '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
+            width: '8px',
+            visibility: 'visible',
+          },
+          '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
+            backgroundColor: '#ccc',
+          },
+        }}
         localeText={{
           noRowsLabel: "",
         }}
+        initialState={{
+          ...rowsDomicilio.initialState,
+          pagination: {
+            paginationModel: { pageSize: 5 },
+          },
+        }}
+        pageSizeOptions={[5, 10, 25]}
       />
     </Box>
   );

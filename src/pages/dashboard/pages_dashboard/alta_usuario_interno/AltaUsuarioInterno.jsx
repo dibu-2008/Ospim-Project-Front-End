@@ -166,8 +166,9 @@ export const AltaUsuarioInterno = () => {
       width: 200,
       type: 'string',
       editable: true,
+      headerAlign: "center",
+      align: "center",
       headerClassName: 'header--cell',
-      cellClassName: 'row--cell',
     },
     {
       field: 'nombre',
@@ -175,6 +176,8 @@ export const AltaUsuarioInterno = () => {
       width: 200,
       type: 'string',
       editable: true,
+      headerAlign: "center",
+      align: "center",
       headerClassName: 'header--cell',
     },
     {
@@ -183,6 +186,8 @@ export const AltaUsuarioInterno = () => {
       width: 200,
       type: 'string',
       editable: true,
+      headerAlign: "center",
+      align: "center",
       headerClassName: 'header--cell',
     },
     {
@@ -191,6 +196,8 @@ export const AltaUsuarioInterno = () => {
       width: 225,
       type: 'string',
       editable: true,
+      headerAlign: "center",
+      align: "center",
       headerClassName: 'header--cell',
     },
     {
@@ -199,6 +206,8 @@ export const AltaUsuarioInterno = () => {
       width: 200,
       type: 'string',
       editable: true,
+      headerAlign: "center",
+      align: "center",
       headerClassName: 'header--cell',
     },
     {
@@ -207,6 +216,8 @@ export const AltaUsuarioInterno = () => {
       width: 200,
       type: 'string',
       editable: true,
+      headerAlign: "center",
+      align: "center",
       headerClassName: 'header--cell',
       valueGetter: (params) => {
 
@@ -219,6 +230,8 @@ export const AltaUsuarioInterno = () => {
       width: 200,
       type: 'singleSelect',
       editable: true,
+      headerAlign: "center",
+      align: "center",
       headerClassName: 'header--cell',
       valueOptions: roles.map((item) => {
         return { value: item.id, label: item.descripcion }
@@ -229,6 +242,8 @@ export const AltaUsuarioInterno = () => {
       headerName: 'Habilitado',
       width: 170,
       type: 'string',
+      headerAlign: "center",
+      align: "center",
       editable: false,
       valueGetter: (params) => {
 
@@ -244,6 +259,8 @@ export const AltaUsuarioInterno = () => {
       headerName: 'Acciones',
       width: 200,
       type: 'actions',
+      headerAlign: "center",
+      align: "center",
       headerClassName: 'header--cell',
       getActions: ({ id, row }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;

@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-
 import {
   GridRowModes,
   DataGrid,
@@ -7,7 +6,6 @@ import {
   GridActionsCellItem,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
-
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
@@ -21,6 +19,7 @@ import {
   obtenerDatosEmpresa,
   obtenerTipo,
 } from "./GrillaEmpresaContactoApi";
+import Box from "@mui/material/Box";
 
 function EditToolbar(props) {
   const { setRows, rows, setRowModesModel } = props;
@@ -53,8 +52,8 @@ function EditToolbar(props) {
 
 export const GrillaEmpresaContacto = ({ rows, setRows, token }) => {
 
-  const [rowModesModel, setRowModesModel] = useState({}); 
-  const [tipoContacto, setTipoContacto] = useState([]); 
+  const [rowModesModel, setRowModesModel] = useState({});
+  const [tipoContacto, setTipoContacto] = useState([]);
 
   useEffect(() => {
     const getTipoContacto = async () => {
@@ -143,9 +142,12 @@ export const GrillaEmpresaContacto = ({ rows, setRows, token }) => {
     {
       field: "tipo",
       headerName: "Tipo de contacto",
-      width: 150,
+      width: 240,
       editable: true,
       type: "singleSelect",
+      headerAlign: "center",
+      align: "center",
+      headerClassName: 'header--cell',
       valueOptions: tipoContacto.map((item) => {
         return {
           value: item.codigo,
@@ -156,24 +158,31 @@ export const GrillaEmpresaContacto = ({ rows, setRows, token }) => {
     {
       field: "prefijo",
       headerName: "Prefijo",
-      width: 100,
+      width: 240,
       type: "string",
-      headerAlign: "left",
-      align: "left",
       editable: true,
+      headerAlign: "center",
+      align: "center",
+      headerClassName: 'header--cell',
     },
     {
       field: "valor",
       headerName: "Valor de contacto",
-      width: 200,
+      width: 240,
       type: "string",
       editable: true,
+      headerAlign: "center",
+      align: "center",
+      headerClassName: 'header--cell',
     },
     {
       field: "actions",
-      headerName: "Actions",
-      width: 200,
+      headerName: "Acciones",
+      width: 240,
       type: "actions",
+      headerAlign: "center",
+      align: "center",
+      headerClassName: 'header--cell',
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
@@ -217,20 +226,51 @@ export const GrillaEmpresaContacto = ({ rows, setRows, token }) => {
   ];
 
   return (
-    <DataGrid
-      rows={rows}
-      columns={columns}
-      editMode="row"
-      rowModesModel={rowModesModel}
-      onRowModesModelChange={handleRowModesModelChange}
-      onRowEditStop={handleRowEditStop}
-      processRowUpdate={processRowUpdate}
-      slots={{
-        toolbar: EditToolbar,
+    <Box
+      sx={{
+        height: "400px",
+        width: "100%",
+        overflowX: "scroll",
+        "& .actions": {
+          color: "text.secondary",
+        },
+        "& .textPrimary": {
+          color: "text.primary",
+        },
       }}
-      slotProps={{
-        toolbar: { setRows, rows, setRowModesModel },
-      }}
-    />
+    >
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        editMode="row"
+        rowModesModel={rowModesModel}
+        onRowModesModelChange={handleRowModesModelChange}
+        onRowEditStop={handleRowEditStop}
+        processRowUpdate={processRowUpdate}
+        slots={{
+          toolbar: EditToolbar,
+        }}
+        slotProps={{
+          toolbar: { setRows, rows, setRowModesModel },
+        }}
+        /* sx={{
+          // ...
+          '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
+            width: '8px',
+            visibility: 'visible',
+          },
+          '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
+            backgroundColor: '#ccc',
+          },
+        }} */
+        initialState={{
+          ...rows.initialState,
+          pagination: {
+            paginationModel: { pageSize: 5 },
+          },
+        }}
+        pageSizeOptions={[5, 10, 25]}
+      />
+    </Box>
   );
 };

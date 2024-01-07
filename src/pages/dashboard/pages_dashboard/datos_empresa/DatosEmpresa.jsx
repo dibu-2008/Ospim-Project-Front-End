@@ -1,5 +1,5 @@
 import "./DatosEmpresa.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { GrillaEmpresaContacto } from "./grilla_empresa_contacto/GrillaEmpresaContacto";
 import { GrillaEmpresaDomilicio } from "./grilla_empresa_domicilio/GrillaEmpresaDomilicio";
 import TextField from "@mui/material/TextField";
@@ -13,7 +13,8 @@ import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { getEmpresa, getRamo, modificarEmpresa } from "./DatosEmpresaApi";
-
+import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
+import * as locales from '@mui/material/locale';
 
 // Logica de los tabs inicio
 function CustomTabPanel(props) {
@@ -50,7 +51,7 @@ function a11yProps(index) {
 }
 
 export const DatosEmpresa = () => {
-  
+
   const TOKEN = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.usuario.token;
   /* const ID = STATE.usuarioLogueado.empresa.id;
   const TOKEN = STATE.usuarioLogueado.usuario.token;
@@ -58,8 +59,7 @@ export const DatosEmpresa = () => {
   const RAZONSOCIAL = STATE.usuarioLogueado.empresa.razonSocial;
   const RAMO = STATE.usuarioLogueado.empresa.ramoId; */
 
-  // Actualizar el storage
-  
+  const [locale, setLocale] = useState('esES');
   const [rowsContacto, setRowsContacto] = useState([]);
   const [rowsDomicilio, setRowsDomicilio] = useState([]);
   const [idEmpresa, setIdEmpresa] = useState("");
@@ -68,6 +68,13 @@ export const DatosEmpresa = () => {
   const [ramo, setRamo] = useState("");
   const [ramos, setRamos] = useState([]);
   const [tabState, setTabState] = useState(0);
+
+  const theme = useTheme();
+
+  const themeWithLocale = useMemo(
+    () => createTheme(theme, locales[locale]),
+    [locale, theme],
+  );
 
   useEffect(() => {
     const ObtenerEmpresa = async () => {
@@ -80,7 +87,7 @@ export const DatosEmpresa = () => {
     ObtenerEmpresa();
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     const ObtenerRamos = async () => {
       const ramos = await getRamo(TOKEN);
       setRamos(ramos);
@@ -88,10 +95,10 @@ export const DatosEmpresa = () => {
       //setRamo(ramoEncontrado.id);
     }
     ObtenerRamos();
-    
+
   }, [])
 
-  
+
 
   const handleChangeTabState = (event, newValue) => {
     setTabState(newValue);
@@ -197,19 +204,22 @@ export const DatosEmpresa = () => {
           </Tabs>
         </Box>
         <CustomTabPanel value={tabState} index={0}>
-             
-          <GrillaEmpresaContacto
-            rows={rowsContacto}
-            setRows={setRowsContacto}
-            token={TOKEN}
-          />
+          <ThemeProvider theme={themeWithLocale}>
+            <GrillaEmpresaContacto
+              rows={rowsContacto}
+              setRows={setRowsContacto}
+              token={TOKEN}
+            />
+          </ThemeProvider>
         </CustomTabPanel>
         <CustomTabPanel value={tabState} index={1}>
-          <GrillaEmpresaDomilicio
-            rowsDomicilio={rowsDomicilio}
-            setRowsDomicilio={setRowsDomicilio}
-            token={TOKEN}
-          />
+          <ThemeProvider theme={themeWithLocale}>
+            <GrillaEmpresaDomilicio
+              rowsDomicilio={rowsDomicilio}
+              setRowsDomicilio={setRowsDomicilio}
+              token={TOKEN}
+            />
+          </ThemeProvider>
         </CustomTabPanel>
       </Box>
     </div>

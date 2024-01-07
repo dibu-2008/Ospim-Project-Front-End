@@ -60,9 +60,10 @@ export const DeclaracionesJuradas = () => {
 
   return (
     <div className='declaraciones_juradas_container'>
+      <h1>Administracion declaraciones juradas</h1>
       <ThemeProvider theme={themeWithLocale}>
         <Box sx={{ width: '100%' }}>
-          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider', marginTop: '50px' }}>
             <Tabs 
               value={tabState} 
               onChange={handleChangeTabState} 

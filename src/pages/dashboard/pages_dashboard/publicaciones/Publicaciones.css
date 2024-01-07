@@ -1,8 +1,5 @@
 .publicaciones_container {
-    margin-top: 50px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
+    margin: 50px auto;
+    height: 400px;
+    width: 80%;
 }

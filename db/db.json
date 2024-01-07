@@ -337,9 +337,9 @@
   ],
   "categoria": [
     {
-      "id": 2,
       "camaraCodigo": "FAIM",
-      "descripcion": "B"
+      "descripcion": "A",
+      "id": 2
     },
     {
       "id": 3,

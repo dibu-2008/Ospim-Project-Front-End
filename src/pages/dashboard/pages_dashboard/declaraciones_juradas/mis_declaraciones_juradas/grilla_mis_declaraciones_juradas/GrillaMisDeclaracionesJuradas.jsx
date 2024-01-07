@@ -164,6 +164,9 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
             width: 150,
             editable: true,
             type: "date",
+            headerAlign: "center",
+            align: "center",
+            headerClassName: 'header--cell',
             valueFormatter: (params) => {
 
                 const date = new Date(params.value);
@@ -180,6 +183,9 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
             headerName: "Numero",
             width: 150,
             editable: true,
+            headerAlign: "center",
+            align: "center",
+            headerClassName: 'header--cell',
             valueGetter: (params) => {
 
                 // Si secuencia es 0 es "Original" sino es "Rectificativa"+secuencia
@@ -195,6 +201,9 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
             headerName: "Total UOMA CS",
             width: 150,
             editable: true,
+            headerAlign: "center",
+            align: "center",
+            headerClassName: 'header--cell',
             valueFormatter: (params) => formatter.format(params.value || 0),
         },
         {
@@ -202,6 +211,9 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
             headerName: "Total UOMA AS",
             width: 150,
             editable: true,
+            headerAlign: "center",
+            align: "center",
+            headerClassName: 'header--cell',
             valueFormatter: (params) => formatter.format(params.value || 0),
         },
         {
@@ -209,6 +221,9 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
             headerName: "Total Cuota Usu",
             width: 150,
             editable: true,
+            headerAlign: "center",
+            align: "center",
+            headerClassName: 'header--cell',
             valueFormatter: (params) => formatter.format(params.value || 0),
         },
         {
@@ -216,6 +231,9 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
             headerName: "Total ART 46",
             width: 150,
             editable: true,
+            headerAlign: "center",
+            align: "center",
+            headerClassName: 'header--cell',
             valueFormatter: (params) => formatter.format(params.value || 0),
         },
         {
@@ -223,6 +241,9 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
             headerName: "Total Antima CS",
             width: 150,
             editable: true,
+            headerAlign: "center",
+            align: "center",
+            headerClassName: 'header--cell',
             valueFormatter: (params) => formatter.format(params.value || 0),
         },
 
@@ -231,6 +252,9 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
             headerName: "Acciones",
             width: 280,
             type: "actions",
+            headerAlign: "center",
+            align: "center",
+            headerClassName: 'header--cell',
             getActions: ({ id, row }) => {
 
                 const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
@@ -276,10 +300,10 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
                             onClick={handleDeleteClick(id)}
                             color="inherit"
                         />,
-                        <PDFDownloadLink 
-                            document={<MyDocument rows_mis_ddjj={rows_mis_ddjj}/>}
+                        <PDFDownloadLink
+                            document={<MyDocument rows_mis_ddjj={rows_mis_ddjj} />}
                             fileName="ddjj.pdf"
-                            >
+                        >
                             <GridActionsCellItem
                                 icon={<LocalPrintshopIcon />}
                                 label="Print"
@@ -302,10 +326,10 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
                             onClick={handleEditClick(id)}
                             color="inherit"
                         />,
-                        <PDFDownloadLink 
-                            document={<MyDocument rows_mis_ddjj={rows_mis_ddjj}/>}
+                        <PDFDownloadLink
+                            document={<MyDocument rows_mis_ddjj={rows_mis_ddjj} />}
                             fileName="ddjj.pdf"
-                            >
+                        >
                             <GridActionsCellItem
                                 icon={<LocalPrintshopIcon />}
                                 label="Print"
@@ -337,7 +361,7 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
             }} */
             />
             <PDFViewer style={{ width: "100%", height: "500px" }}>
-                <MyDocument 
+                <MyDocument
                     rows_mis_ddjj={rows_mis_ddjj}
                 />
             </PDFViewer>

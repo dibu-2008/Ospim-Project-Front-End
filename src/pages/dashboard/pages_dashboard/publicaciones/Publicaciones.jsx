@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { crearPublicacion, obtenerPublicaciones, actualizarPublicacion, eliminarPublicacion } from "./PublicacionesApi";
 import { EditarNuevaFila } from "./PublicacionNueva";
 import {
@@ -7,18 +7,29 @@ import {
   GridActionsCellItem,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
-
+import Box from "@mui/material/Box";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
+import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
+import * as locales from '@mui/material/locale';
 import "./Publicaciones.css";
 
 export const Publicaciones = () => {
+
+  const [locale, setLocale] = useState('esES');
   const [rowModesModel, setRowModesModel] = useState({});
   const [rows, setRows] = useState([]);
 
   const TOKEN = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.usuario.token;
+
+  const theme = useTheme();
+
+  const themeWithLocale = useMemo(
+    () => createTheme(theme, locales[locale]),
+    [locale, theme],
+  );
 
   useEffect(() => {
     const ObtenerPublicaciones = async () => {
@@ -102,23 +113,32 @@ export const Publicaciones = () => {
     {
       field: "titulo",
       headerName: "Titulo",
-      width: 150,
+      width: 230,
       type: "string",
       editable: true,
+      headerAlign: "center",
+      align: "center",
+      headerClassName: 'header--cell',
     },
     {
       field: "cuerpo",
       headerName: "Cuerpo",
-      width: 200,
+      width: 230,
       type: "string",
       editable: true,
+      headerAlign: "center",
+      align: "center",
+      headerClassName: 'header--cell',
     },
     {
       field: "vigenciaDesde",
       headerName: "Vigencia Desde",
-      width: 200,
+      width: 230,
       type: "date",
       editable: true,
+      headerAlign: "center",
+      align: "center",
+      headerClassName: 'header--cell',
       valueFormatter: (params) => {
         const date = new Date(params.value);
 
@@ -132,9 +152,12 @@ export const Publicaciones = () => {
     {
       field: "vigenciaHasta",
       headerName: "Vigencia Hasta",
-      width: 200,
+      width: 230,
       type: "date",
       editable: true,
+      headerAlign: "center",
+      align: "center",
+      headerClassName: 'header--cell',
       valueFormatter: (params) => {
         const date = new Date(params.value);
 
@@ -148,8 +171,11 @@ export const Publicaciones = () => {
     {
       field: "actions",
       headerName: "Acciones",
-      width: 200,
+      width: 230,
       type: "actions",
+      headerAlign: "center",
+      align: "center",
+      headerClassName: 'header--cell',
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
@@ -195,21 +221,44 @@ export const Publicaciones = () => {
   return (
     <div className="publicaciones_container">
       <h1>Administracion de Publicaciones</h1>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        editMode="row"
-        rowModesModel={rowModesModel}
-        onRowModesModelChange={handleRowModesModelChange}
-        onRowEditStop={handleRowEditStop}
-        processRowUpdate={processRowUpdate}
-        slots={{
-          toolbar: EditarNuevaFila,
+      <Box
+        sx={{
+          height: "400px",
+          width: "100%",
+          "& .actions": {
+            color: "text.secondary",
+          },
+          "& .textPrimary": {
+            color: "text.primary",
+          },
         }}
-        slotProps={{
-          toolbar: { setRows, rows, setRowModesModel },
-        }}
-      />
+      >
+
+        <ThemeProvider theme={themeWithLocale}>
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            editMode="row"
+            rowModesModel={rowModesModel}
+            onRowModesModelChange={handleRowModesModelChange}
+            onRowEditStop={handleRowEditStop}
+            processRowUpdate={processRowUpdate}
+            slots={{
+              toolbar: EditarNuevaFila,
+            }}
+            slotProps={{
+              toolbar: { setRows, rows, setRowModesModel },
+            }}
+            initialState={{
+              ...rows.initialState,
+              pagination: {
+                paginationModel: { pageSize: 5 },
+              },
+            }}
+            pageSizeOptions={[5, 10, 25]}
+          />
+        </ThemeProvider>
+      </Box>
     </div>
   );
 };
