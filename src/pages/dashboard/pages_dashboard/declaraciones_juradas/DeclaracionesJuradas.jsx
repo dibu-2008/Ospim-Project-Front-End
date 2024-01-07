@@ -69,25 +69,26 @@ export const DeclaracionesJuradas = () => {
               onChange={handleChangeTabState} 
             >
               <Tab 
-                label="Mis Declaraciones Juradas" {...a11yProps(0)}
-                sx={{
-                  fontSize: '1.5rem',
-                  margin: '0 auto',
-                }}  
+                label="Alta Declaracion Jurada" {...a11yProps(0)}
+                sx={{ fontSize: '1rem' }}
               />
               <Tab 
-                label="Mis Pagos" {...a11yProps(1)}
-                sx={{
-                  fontSize: '1.5rem',
-                  margin: '0 auto',
-                }}  
+                label="Mis Declaraciones Juradas" {...a11yProps(0)}
+                sx={{ fontSize: '1rem' }}  
+              />
+              <Tab 
+                label="Mis Pagos" {...a11yProps(2)}
+                sx={{ fontSize: '1rem' }}  
               />
             </Tabs>
           </Box>
           <CustomTabPanel value={tabState} index={0}>
-            <MisDeclaracionesJuradas />
+            Alta Declaracion Jurada
           </CustomTabPanel>
           <CustomTabPanel value={tabState} index={1}>
+            <MisDeclaracionesJuradas />
+          </CustomTabPanel>
+          <CustomTabPanel value={tabState} index={2}>
           Mis Pagos
           </CustomTabPanel>
         </Box>

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Box from "@mui/material/Box";
 import {
     GridRowModes,
     DataGrid,
@@ -343,23 +344,59 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
     ];
 
     return (
-        <div>
-            <DataGrid
-                rows={rows_mis_ddjj}
-                columns={columns}
-                editMode="row"
-                rowModesModel={rowModesModel}
-                onRowModesModelChange={handleRowModesModelChange}
-                onRowEditStop={handleRowEditStop}
-                processRowUpdate={processRowUpdate}
-            /* slots={{
-                toolbar: GridToolbar,
-            }} */
-            /* 
-            slotProps={{
-                toolbar: { setRowsMisDdjj, rows_mis_ddjj, setRowModesModel },
-            }} */
-            />
+        <div
+            style={{
+                marginTop: 50,
+                height: 400,
+                width: "100%",
+            }}>
+            <Box
+                sx={{
+                    margin: "0 auto",
+                    height: "400px",
+                    width: "100%%",
+                    "& .actions": {
+                        color: "text.secondary",
+                    },
+                    "& .textPrimary": {
+                        color: "text.primary",
+                    },
+                }}
+            >
+                <DataGrid
+                    rows={rows_mis_ddjj}
+                    columns={columns}
+                    editMode="row"
+                    rowModesModel={rowModesModel}
+                    onRowModesModelChange={handleRowModesModelChange}
+                    onRowEditStop={handleRowEditStop}
+                    processRowUpdate={processRowUpdate}
+                    /* slots={{
+                        toolbar: GridToolbar,
+                    }} */
+                    /* 
+                    slotProps={{
+                        toolbar: { setRowsMisDdjj, rows_mis_ddjj, setRowModesModel },
+                    }} */
+                    sx={{
+                        // ...
+                        '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
+                          width: '8px',
+                          visibility: 'visible',
+                        },
+                        '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
+                          backgroundColor: '#ccc',
+                        }
+                    }}
+                    initialState={{
+                        ...rows_mis_ddjj.initialState,
+                        pagination: {
+                            paginationModel: { pageSize: 5 },
+                        },
+                    }}
+                    pageSizeOptions={[5, 10, 25]}
+                />
+            </Box>
             <PDFViewer style={{ width: "100%", height: "500px" }}>
                 <MyDocument
                     rows_mis_ddjj={rows_mis_ddjj}

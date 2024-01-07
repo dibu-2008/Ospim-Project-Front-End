@@ -76,8 +76,8 @@ export const MisDeclaracionesJuradas = () => {
                     </LocalizationProvider>
                 </Stack>
 
-                <Stack
-                    spacing={2}
+                <Stack  
+                    spacing={4}
                     direction="row"
                     justifyContent="center"
                     alignItems="center"
@@ -92,7 +92,6 @@ export const MisDeclaracionesJuradas = () => {
 
             </div>
             <Stack
-                spacing={2}
                 direction="row"
                 justifyContent="center"
                 alignItems="center"
