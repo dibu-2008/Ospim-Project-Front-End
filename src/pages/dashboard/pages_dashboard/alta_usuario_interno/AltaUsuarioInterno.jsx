@@ -16,7 +16,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
 import './AltaUsuarioInterno.css'
 import { Grid, IconButton } from '@mui/material';
-
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import * as locales from '@mui/material/locale';
 
