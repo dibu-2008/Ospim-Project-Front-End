@@ -7,6 +7,7 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import './MisDeclaracionesJuradas.css'
 import { GrillaMisDeclaracionesJuradas } from './grilla_mis_declaraciones_juradas/GrillaMisDeclaracionesJuradas';
+import { obtenerMisDeclaracionesJuradas } from './grilla_mis_declaraciones_juradas/GrillaMisDeclaracionesJuradasApi';
 
 export const MisDeclaracionesJuradas = () => {
 
@@ -16,32 +17,21 @@ export const MisDeclaracionesJuradas = () => {
     const TOKEN = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.usuario.token;
     const ID_EMPRESA = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.empresa.id;
 
-    const handleChangeDesde = (date) => {
+    const handleChangeDesde = (date) => setDesde(date);
 
-        setDesde(date ? date.toISOString() : null);
-    };
+    const handleChangeHasta = (date) => setHasta(date);
 
-    const handleChangeHasta = (date) => {
-
-        setHasta(date ? date.toISOString() : null);
-    };
-
-    const buscarDeclaracionesJuradas = () => {
-
-        // Filtrar las ddjj por rango de fechas
-        const declaracionesFiltradas = rows_mis_ddjj.filter(ddjj => {
-            console.log("Linea 33");
-            console.log(ddjj.periodo)
-            const fecha = new Date(ddjj.periodo);
-            console.log(fecha);
-            return fecha >= new Date(desde) && fecha <= new Date(hasta);
-        })
-
-        console.log("desde ", desde)
-
-        console.log(declaracionesFiltradas)
-
-        setRowsMisDdjj(declaracionesFiltradas);
+    const buscarDeclaracionesJuradas = async () => {
+        try {
+            const ddjjResponse = await obtenerMisDeclaracionesJuradas(ID_EMPRESA, TOKEN);
+            const declaracionesFiltradas = ddjjResponse.filter(ddjj => {
+                const fecha = new Date(ddjj.periodo);
+                return fecha >= new Date(desde) && fecha <= new Date(hasta);
+            });
+            setRowsMisDdjj(declaracionesFiltradas);
+        } catch (error) {
+            console.error('Error al buscar declaraciones juradas:', error);
+        }
     }
 
     return (
