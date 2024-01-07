@@ -747,5 +747,47 @@
       "totalUomaAS": 200000.01,
       "totalCuotaUsu": 10
     }
+  ],
+  "cuit-restringido": [
+    {
+      "id": 1,
+      "cuit": "20233725006",
+      "observacion": "Cuit restringido por falta de pago"
+    },
+    {
+      "id": 2,
+      "cuit": "30789154021",
+      "observacion": "Cuit restringido por incumplimiento fiscal"
+    },
+    {
+      "id": 3,
+      "cuit": "40518267004",
+      "observacion": "Cuit restringido por falta de presentación de documentación"
+    },
+    {
+      "id": 4,
+      "cuit": "23659874103",
+      "observacion": "Cuit restringido por irregularidades contables"
+    },
+    {
+      "id": 5,
+      "cuit": "18930475012",
+      "observacion": "Cuit restringido por no cumplir con obligaciones tributarias"
+    },
+    {
+      "id": 6,
+      "cuit": "50231489005",
+      "observacion": "Cuit restringido por falta de pago de deudas previsionales"
+    },
+    {
+      "id": 7,
+      "cuit": "16784026309",
+      "observacion": "Cuit restringido por inconsistencias en la presentación de declaraciones juradas"
+    },
+    {
+      "id": 8,
+      "cuit": "40872519607",
+      "observacion": "Cuit restringido por falta de regularización de deudas fiscales"
+    }
   ]
 }

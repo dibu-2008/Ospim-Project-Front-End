@@ -9,6 +9,7 @@ import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import PersonIcon from '@mui/icons-material/Person';
 import CategoryIcon from '@mui/icons-material/Category';
 import CloseIcon from '@mui/icons-material/Close';
+import NetworkLockedIcon from '@mui/icons-material/NetworkLocked';
 import { Link, Outlet } from 'react-router-dom';
 
 const DashboardPage = () => {
@@ -33,6 +34,7 @@ const DashboardPage = () => {
         <BottomNavigationAction label="Pagos" icon={<AccountBalanceWalletIcon />} component={Link} to="./pagos" />
         <BottomNavigationAction label="Datos" icon={<PersonIcon />} component={Link} to="./misdatos" />
         <BottomNavigationAction label="Categorias" icon={<CategoryIcon />} component={Link} to="./categorias" />
+        <BottomNavigationAction label="Cuits Restringidos" icon={<NetworkLockedIcon />} component={Link} to="./cuitsrestringidos" />
         <BottomNavigationAction 
           label="Alta Usuario Interno" 
           icon={<PersonIcon />} 

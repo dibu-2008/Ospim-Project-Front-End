@@ -16,6 +16,7 @@ import { LoginPage } from "../pages/login/LoginPage";
 import { Feriados } from "../pages/dashboard/pages_dashboard/feriados/Feriados";
 import { AltaUsuarioInterno } from "../pages/dashboard/pages_dashboard/alta_usuario_interno/AltaUsuarioInterno";
 import { RegistroEmpresa } from "../pages/registro_empresa/RegistroEmpresa";
+import { CuitsRestringidos } from "../pages/dashboard/pages_dashboard/cuits-restringidos/CuitsRestringidos";
 
 
 const BoletasPage = () => <div>Contenido de la página de boletas</div>;
@@ -45,6 +46,7 @@ const AppRouter = () => {
             <Route path="misdatos" element={<DatosEmpresa />} />
             <Route path="categorias" element={<Categorias />} />
             <Route path="altausuariointerno" element={<AltaUsuarioInterno />} />
+            <Route path="cuitsrestringidos" element={<CuitsRestringidos />} />
           </Route>
           <Route path="registercompany" element={<RegistroEmpresa />} />
           <Route index element={<Navigate to="/login" />} />
