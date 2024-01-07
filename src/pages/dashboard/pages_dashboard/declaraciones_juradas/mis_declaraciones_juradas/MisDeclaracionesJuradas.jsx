@@ -2,12 +2,15 @@ import { useState } from 'react';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';                    
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import './MisDeclaracionesJuradas.css'
 import { GrillaMisDeclaracionesJuradas } from './grilla_mis_declaraciones_juradas/GrillaMisDeclaracionesJuradas';
 import { obtenerMisDeclaracionesJuradas } from './grilla_mis_declaraciones_juradas/GrillaMisDeclaracionesJuradasApi';
+import { esES } from '@mui/x-date-pickers/locales';
+import dayjs from 'dayjs';
+import esLocale from 'dayjs/locale/es';
 
 export const MisDeclaracionesJuradas = () => {
 
@@ -43,7 +46,11 @@ export const MisDeclaracionesJuradas = () => {
                     justifyContent="center"
                     alignItems="center"
                 >
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <LocalizationProvider 
+                        dateAdapter={AdapterDayjs}
+                        adapterLocale={"es"}
+                        localeText={esES.components.MuiLocalizationProvider.defaultProps.localeText}
+                    >
                         <DemoContainer components={['DatePicker']}>
                             <DatePicker
                                 label="Periodo desde"
@@ -53,7 +60,11 @@ export const MisDeclaracionesJuradas = () => {
                             />
                         </DemoContainer>
                     </LocalizationProvider>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <LocalizationProvider 
+                        dateAdapter={AdapterDayjs}
+                        adapterLocale={"es"}
+                        localeText={esES.components.MuiLocalizationProvider.defaultProps.localeText}    
+                    >
                         <DemoContainer components={['DatePicker']}>
                             <DatePicker
                                 label="Periodo hasta"

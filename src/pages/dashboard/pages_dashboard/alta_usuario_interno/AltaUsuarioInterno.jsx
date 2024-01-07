@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { crearUsuarioInterno, deshabilitarUsuarioInterno, habilitarUsuarioInterno, actualizarUsuarioInterno, obtenerRoles, obtenerUsuariosInternos } from './AltaUsuarioInternoApi';
 import { AltaUsuarioInternoNuevo } from './AltaUsuarioInternoNuevo';
 import {
@@ -17,11 +17,22 @@ import CheckIcon from '@mui/icons-material/Check';
 import './AltaUsuarioInterno.css'
 import { Grid, IconButton } from '@mui/material';
 
+import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
+import * as locales from '@mui/material/locale';
+
 export const AltaUsuarioInterno = () => {
 
+  const [locale, setLocale] = useState('esES');
   const [rowModesModel, setRowModesModel] = useState({});
   const [rows, setRows] = useState([])
   const [roles, setRoles] = useState([]);
+
+  const theme = useTheme();
+
+  const themeWithLocale = useMemo(
+    () => createTheme(theme, locales[locale]),
+    [locale, theme],
+  );
 
   const TOKEN = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.usuario.token;
 
@@ -44,7 +55,7 @@ export const AltaUsuarioInterno = () => {
       setRoles(rol);
     }
     ObtenerRol();
-    
+
   }, [])
 
   const handleRowEditStop = (params, event) => {
@@ -225,106 +236,110 @@ export const AltaUsuarioInterno = () => {
         //if (params.row.habilitado === null) return ("");
 
         return params.row.habilitado ? "Si" : "No"
-          },
-          headerClassName: 'habilitado--cell',
-          cellClassName: 'habilitado--cell',
-        },
-        {
-          field: 'actions',
-          headerName: 'Acciones',
-          width: 200,
-          type: 'actions',
-          headerClassName: 'header--cell',
-          getActions: ({ id, row }) => {
-            const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+      },
+      headerClassName: 'habilitado--cell',
+      cellClassName: 'habilitado--cell',
+    },
+    {
+      field: 'actions',
+      headerName: 'Acciones',
+      width: 200,
+      type: 'actions',
+      headerClassName: 'header--cell',
+      getActions: ({ id, row }) => {
+        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
-            if (isInEditMode) {
-              return [
-                <GridActionsCellItem
-                  icon={<SaveIcon />}
-                  label="Save"
-                  sx={{
-                    color: 'primary.main',
-                  }}
-                  onClick={handleSaveClick(id)}
-                />,
-                <GridActionsCellItem
-                  icon={<CancelIcon />}
-                  label="Cancel"
-                  className="textPrimary"
-                  onClick={handleCancelClick(id)}
-                  color="inherit"
-                />,
-              ];
-            }
-
-            return [
-              <GridActionsCellItem
-                icon={<EditIcon />}
-                label="Edit"
-                className="textPrimary"
-                onClick={handleEditClick(id)}
-                color="inherit"
-              />,
-              <GridActionsCellItem
-                icon={row.habilitado ? <CloseIcon sx={{ color: 'red' }} /> : <CheckIcon sx={{ color: 'green' }} />}
-                label={row.habilitado ? "Cerrar" : "Abrir"}
-                onClick={handleHabilitar(id)}
-                color="inherit"
-              />
-            ];
-          },
+        if (isInEditMode) {
+          return [
+            <GridActionsCellItem
+              icon={<SaveIcon />}
+              label="Save"
+              sx={{
+                color: 'primary.main',
+              }}
+              onClick={handleSaveClick(id)}
+            />,
+            <GridActionsCellItem
+              icon={<CancelIcon />}
+              label="Cancel"
+              className="textPrimary"
+              onClick={handleCancelClick(id)}
+              color="inherit"
+            />,
+          ];
         }
-      ]
 
-      return (
-        <div className='usuario_interno_container'>
-          <h1>Alta Usuario Interno</h1>
-          <Box
+        return [
+          <GridActionsCellItem
+            icon={<EditIcon />}
+            label="Edit"
+            className="textPrimary"
+            onClick={handleEditClick(id)}
+            color="inherit"
+          />,
+          <GridActionsCellItem
+            icon={row.habilitado ? <CloseIcon sx={{ color: 'red' }} /> : <CheckIcon sx={{ color: 'green' }} />}
+            label={row.habilitado ? "Cerrar" : "Abrir"}
+            onClick={handleHabilitar(id)}
+            color="inherit"
+          />
+        ];
+      },
+    }
+  ]
+
+  return (
+    <div className='usuario_interno_container'>
+      <h1>Alta Usuario Interno</h1>
+      <Box
+        sx={{
+          height: "400px",
+          width: "90%",
+          overflowX: "auto",
+          "& .actions": {
+            color: "text.secondary",
+          },
+          "& .textPrimary": {
+            color: "text.primary",
+          },
+        }}
+      >
+        <ThemeProvider theme={themeWithLocale}>
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            editMode="row"
+            rowModesModel={rowModesModel}
+            onRowModesModelChange={handleRowModesModelChange}
+            onRowEditStop={handleRowEditStop}
+            processRowUpdate={processRowUpdate}
+            slots={{
+              toolbar: AltaUsuarioInternoNuevo,
+            }}
+            slotProps={{
+              toolbar: { setRows, rows, setRowModesModel },
+            }}
             sx={{
-              height: "400px",
-              width: "90%",
-              overflowX: "auto",
-              "& .actions": {
-                color: "text.secondary",
+              // ...
+              '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
+                width: '8px',
+                visibility: 'visible',
               },
-              "& .textPrimary": {
-                color: "text.primary",
+              '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
+                backgroundColor: '#ccc',
               },
             }}
-          >
-
-            <DataGrid
-              rows={rows}
-              columns={columns}
-              editMode="row"
-              rowModesModel={rowModesModel}
-              onRowModesModelChange={handleRowModesModelChange}
-              onRowEditStop={handleRowEditStop}
-              processRowUpdate={processRowUpdate}
-              slots={{
-                toolbar: AltaUsuarioInternoNuevo,
-              }}
-              slotProps={{
-                toolbar: { setRows, rows, setRowModesModel },
-              }}
-              sx={{
-                // ...
-                '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
-                  width: '8px',
-                  visibility: 'visible',
-                },
-                '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
-                  backgroundColor: '#ccc',
-                },
-              }}
-              initialState={{
-                ...rows.initialState,
-                pagination: { paginationModel: { pageSize: 5 } },
-              }}
-              pageSizeOptions={[5, 10, 25]}
-          
-        />
+            initialState={{
+              ...rows.initialState,
+              pagination: {
+                paginationModel: { pageSize: 5 },
+                // cambiar el nombre de Rows per page por filas por pagina
+                labels: { rowsPerPage: 'Filas por pagina' }
+              },
+            }}
+            pageSizeOptions={[5, 10, 25]}
+          />
+        </ThemeProvider>
       </Box>
     </div>
   )
