@@ -268,13 +268,6 @@
   ],
   "publicaciones": [
     {
-      "id": 3,
-      "titulo": "Nota II",
-      "cuerpo": "Nota II dice: kjlfdh fjkds fkljd hgfjkd ghfjdk gkjfd hgjkfd sghjkfd sghjkfds ghkjfds hgjkfd hhgjkfds kjhgfd gkfds FIN.-",
-      "vigenciaDesde": "2023-06-01",
-      "vigenciaHasta": "2024-07-20"
-    },
-    {
       "id": 4,
       "titulo": "Nota FUTURA",
       "cuerpo": "Nota FUTURA dice: kjlfdh fjkds fkljd hgfjkd ghfjdk gkjfd hgjkfd sghjkfd sghjkfds ghkjfds hgjkfd hhgjkfds kjhgfd gkfds FIN.-",
@@ -337,9 +330,9 @@
   ],
   "categoria": [
     {
-      "id": 2,
       "camaraCodigo": "FAIM",
-      "descripcion": "B"
+      "descripcion": "A",
+      "id": 2
     },
     {
       "id": 3,
@@ -793,9 +786,58 @@
     }
   ],
   "DDJJ-periordo-existe": [
-    { "periodo": "202311", "valor": false },
-    { "periodo": "202312", "valor": true },
-    { "periodo": "202401", "valor": true },
-    { "periodo": "202402", "valor": false }
+    {
+      "periodo": "202311",
+      "valor": false
+    },
+    {
+      "periodo": "202312",
+      "valor": true
+    },
+    {
+      "periodo": "202401",
+      "valor": true
+    },
+    {
+      "periodo": "202402",
+      "valor": false
+    }
+  ],
+  "cuit-restringido": [
+    {
+      "id": 2,
+      "cuit": "30789154021",
+      "observacion": "Cuit restringido por incumplimiento fiscal"
+    },
+    {
+      "id": 3,
+      "cuit": "40518267004",
+      "observacion": "Cuit restringido por falta de presentación de documentación"
+    },
+    {
+      "id": 4,
+      "cuit": "23659874103",
+      "observacion": "Cuit restringido por irregularidades contables"
+    },
+    {
+      "id": 5,
+      "cuit": "18930475012",
+      "observacion": "Cuit restringido por no cumplir con obligaciones tributarias"
+    },
+    {
+      "id": 6,
+      "cuit": "50231489005",
+      "observacion": "Cuit restringido por falta de pago de deudas previsionales"
+    },
+    {
+      "id": 7,
+      "cuit": "16784026309",
+      "observacion": "Cuit restringido por inconsistencias en la presentación de declaraciones juradas"
+    },
+    {
+      "id": 8,
+      "cuit": "40872519607",
+      "observacion": "Cuit restringido por falta de regularización de deudas fiscales"
+    }
   ]
 }

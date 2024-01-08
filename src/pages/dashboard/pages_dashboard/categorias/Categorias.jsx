@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
@@ -13,15 +13,13 @@ import {
   GridActionsCellItem,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
+import {
+  actualizarCategoria, crearCategoria,
+  eliminarCategoria, obtenerCamaras, obtenerCategorias
+} from "./CategoriasApi";
+import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
+import * as locales from '@mui/material/locale';
 
-import axios from "axios";
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
-import { actualizarCategoria, crearCategoria, eliminarCategoria, obtenerCamaras, obtenerCategorias } from "./CategoriasApi";
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-const ERROR_MESSAGE = import.meta.env.VITE_ERROR_MESSAGE;
-const ERROR_BODY = import.meta.env.VITE_ERROR_BODY;
-const ERROR_BUSINESS = import.meta.env.VITE_ERROR_BUSINESS;
 
 function EditToolbar(props) {
   const { setRows, rows, setRowModesModel } = props;
@@ -51,13 +49,20 @@ function EditToolbar(props) {
 }
 
 export const Categorias = () => {
+
+  const [locale, setLocale] = useState('esES');
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
   const [camaras, setCamaras] = useState([]);
 
   const TOKEN = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.usuario.token;
 
-  
+  const theme = useTheme();
+
+  const themeWithLocale = useMemo(
+    () => createTheme(theme, locales[locale]),
+    [locale, theme],
+  );
 
   useEffect(() => {
     const ObtenerCategorias = async () => {
@@ -65,12 +70,12 @@ export const Categorias = () => {
       const categoriasResponse = await obtenerCategorias(TOKEN);
 
       setRows(categoriasResponse.map((item) => ({ id: item.id, ...item })));
-   
+
     };
     ObtenerCategorias();
   }, []);
 
-  
+
   useEffect(() => {
     const ObtenerCamaras = async () => {
 
@@ -78,7 +83,7 @@ export const Categorias = () => {
 
       setCamaras(camarasResponse.map((item) => ({ id: item.id, ...item })));
     };
-    ObtenerCamaras();  
+    ObtenerCamaras();
   }, []);
 
   const handleRowEditStop = (params, event) => {
@@ -96,9 +101,9 @@ export const Categorias = () => {
   };
 
   const handleDeleteClick = (id) => async () => {
-    
+
     setRows(rows.filter((row) => row.id !== id));
-    
+
     await eliminarCategoria(id, TOKEN);
   };
 
@@ -129,7 +134,7 @@ export const Categorias = () => {
 
       await crearCategoria(nuevaCategoria, TOKEN);
 
-     
+
     } else {
 
       const categoria = {
@@ -157,6 +162,7 @@ export const Categorias = () => {
       align: "center",
       type: "singleSelect",
       valueOptions: camaras.map((camara) => camara.codigo),
+      headerClassName: 'header--cell',
     },
     {
       field: "descripcion",
@@ -165,15 +171,16 @@ export const Categorias = () => {
       editable: true,
       headerAlign: "center",
       align: "center",
+      headerClassName: 'header--cell',
     },
     {
       field: "actions",
       type: "actions",
       headerName: "Acciones",
-      width: 100,
+      width: 200,
       headerAlign: "center",
       align: "center",
-      cellClassName: "actions",
+      headerClassName: 'header--cell',
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
@@ -219,16 +226,16 @@ export const Categorias = () => {
   return (
     <div
       style={{
-        marginTop: 60,
+        marginTop: 50,
         height: 400,
         width: "100%",
       }}>
       <h1>Administracion de Categorias</h1>
       <Box
         sx={{
-          margin: "60px auto",
-          height: "auto",
-          width: "40%",
+          margin: "0 auto",
+          height: "400px",
+          width: "38%",
           "& .actions": {
             color: "text.secondary",
           },
@@ -237,21 +244,42 @@ export const Categorias = () => {
           },
         }}
       >
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          editMode="row"
-          rowModesModel={rowModesModel}
-          onRowModesModelChange={handleRowModesModelChange}
-          onRowEditStop={handleRowEditStop}
-          processRowUpdate={processRowUpdate}
-          slots={{
-            toolbar: EditToolbar,
-          }}
-          slotProps={{
-            toolbar: { setRows, rows, setRowModesModel },
-          }}
-        />
+        <ThemeProvider theme={themeWithLocale}>
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            editMode="row"
+            rowModesModel={rowModesModel}
+            onRowModesModelChange={handleRowModesModelChange}
+            onRowEditStop={handleRowEditStop}
+            processRowUpdate={processRowUpdate}
+            slots={{
+              toolbar: EditToolbar, 
+            }}
+            slotProps={{
+              toolbar: { 
+                setRows, 
+                rows, setRowModesModel },
+            }}
+            sx={{
+              // ...
+              /* '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
+                width: '8px',
+                visibility: 'visible',
+              },
+              '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
+                backgroundColor: '#ccc',
+              }, */
+            }}
+            initialState={{
+              ...rows.initialState,
+              pagination: {
+                paginationModel: { pageSize: 5 },
+              },
+            }}
+            pageSizeOptions={[5, 10, 25]}
+          />
+        </ThemeProvider>
       </Box>
     </div>
   );

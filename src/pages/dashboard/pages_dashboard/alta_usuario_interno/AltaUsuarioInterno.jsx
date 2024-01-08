@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { crearUsuarioInterno, deshabilitarUsuarioInterno, habilitarUsuarioInterno, actualizarUsuarioInterno, obtenerRoles, obtenerUsuariosInternos } from './AltaUsuarioInternoApi';
 import { AltaUsuarioInternoNuevo } from './AltaUsuarioInternoNuevo';
 import {
@@ -16,12 +16,22 @@ import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
 import './AltaUsuarioInterno.css'
 import { Grid, IconButton } from '@mui/material';
+import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
+import * as locales from '@mui/material/locale';
 
 export const AltaUsuarioInterno = () => {
 
+  const [locale, setLocale] = useState('esES');
   const [rowModesModel, setRowModesModel] = useState({});
   const [rows, setRows] = useState([])
   const [roles, setRoles] = useState([]);
+
+  const theme = useTheme();
+
+  const themeWithLocale = useMemo(
+    () => createTheme(theme, locales[locale]),
+    [locale, theme],
+  );
 
   const TOKEN = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.usuario.token;
 
@@ -44,7 +54,7 @@ export const AltaUsuarioInterno = () => {
       setRoles(rol);
     }
     ObtenerRol();
-    
+
   }, [])
 
   const handleRowEditStop = (params, event) => {
@@ -156,8 +166,9 @@ export const AltaUsuarioInterno = () => {
       width: 200,
       type: 'string',
       editable: true,
+      headerAlign: "center",
+      align: "center",
       headerClassName: 'header--cell',
-      cellClassName: 'row--cell',
     },
     {
       field: 'nombre',
@@ -165,6 +176,8 @@ export const AltaUsuarioInterno = () => {
       width: 200,
       type: 'string',
       editable: true,
+      headerAlign: "center",
+      align: "center",
       headerClassName: 'header--cell',
     },
     {
@@ -173,6 +186,8 @@ export const AltaUsuarioInterno = () => {
       width: 200,
       type: 'string',
       editable: true,
+      headerAlign: "center",
+      align: "center",
       headerClassName: 'header--cell',
     },
     {
@@ -181,6 +196,8 @@ export const AltaUsuarioInterno = () => {
       width: 225,
       type: 'string',
       editable: true,
+      headerAlign: "center",
+      align: "center",
       headerClassName: 'header--cell',
     },
     {
@@ -189,6 +206,8 @@ export const AltaUsuarioInterno = () => {
       width: 200,
       type: 'string',
       editable: true,
+      headerAlign: "center",
+      align: "center",
       headerClassName: 'header--cell',
     },
     {
@@ -197,6 +216,8 @@ export const AltaUsuarioInterno = () => {
       width: 200,
       type: 'string',
       editable: true,
+      headerAlign: "center",
+      align: "center",
       headerClassName: 'header--cell',
       valueGetter: (params) => {
 
@@ -209,6 +230,8 @@ export const AltaUsuarioInterno = () => {
       width: 200,
       type: 'singleSelect',
       editable: true,
+      headerAlign: "center",
+      align: "center",
       headerClassName: 'header--cell',
       valueOptions: roles.map((item) => {
         return { value: item.id, label: item.descripcion }
@@ -219,6 +242,8 @@ export const AltaUsuarioInterno = () => {
       headerName: 'Habilitado',
       width: 170,
       type: 'string',
+      headerAlign: "center",
+      align: "center",
       editable: false,
       valueGetter: (params) => {
 
@@ -234,6 +259,8 @@ export const AltaUsuarioInterno = () => {
       headerName: 'Acciones',
       width: 200,
       type: 'actions',
+      headerAlign: "center",
+      align: "center",
       headerClassName: 'header--cell',
       getActions: ({ id, row }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
@@ -277,13 +304,12 @@ export const AltaUsuarioInterno = () => {
     }
   ]
 
-
   return (
     <div className='usuario_interno_container'>
       <h1>Alta Usuario Interno</h1>
       <Box
         sx={{
-          height: "auto",
+          height: "400px",
           width: "90%",
           overflowX: "auto",
           "& .actions": {
@@ -294,32 +320,40 @@ export const AltaUsuarioInterno = () => {
           },
         }}
       >
-
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          editMode="row"
-          rowModesModel={rowModesModel}
-          onRowModesModelChange={handleRowModesModelChange}
-          onRowEditStop={handleRowEditStop}
-          processRowUpdate={processRowUpdate}
-          slots={{
-            toolbar: AltaUsuarioInternoNuevo,
-          }}
-          slotProps={{
-            toolbar: { setRows, rows, setRowModesModel },
-          }}
-          sx={{
-            // ...
-            '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
-              width: '8px',
-              visibility: 'visible',
-            },
-            '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
-              backgroundColor: '#ccc',
-            },
-          }}
-        />
+        <ThemeProvider theme={themeWithLocale}>
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            editMode="row"
+            rowModesModel={rowModesModel}
+            onRowModesModelChange={handleRowModesModelChange}
+            onRowEditStop={handleRowEditStop}
+            processRowUpdate={processRowUpdate}
+            slots={{
+              toolbar: AltaUsuarioInternoNuevo,
+            }}
+            slotProps={{
+              toolbar: { setRows, rows, setRowModesModel },
+            }}
+            sx={{
+              // ...
+              '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
+                width: '8px',
+                visibility: 'visible',
+              },
+              '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
+                backgroundColor: '#ccc',
+              },
+            }}
+            initialState={{
+              ...rows.initialState,
+              pagination: {
+                paginationModel: { pageSize: 5 },
+              },
+            }}
+            pageSizeOptions={[5, 10, 25]}
+          />
+        </ThemeProvider>
       </Box>
     </div>
   )

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Box from "@mui/material/Box";
 import {
     GridRowModes,
     DataGrid,
@@ -164,6 +165,9 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
             width: 150,
             editable: true,
             type: "date",
+            headerAlign: "center",
+            align: "center",
+            headerClassName: 'header--cell',
             valueFormatter: (params) => {
 
                 const date = new Date(params.value);
@@ -180,6 +184,9 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
             headerName: "Numero",
             width: 150,
             editable: true,
+            headerAlign: "center",
+            align: "center",
+            headerClassName: 'header--cell',
             valueGetter: (params) => {
 
                 // Si secuencia es 0 es "Original" sino es "Rectificativa"+secuencia
@@ -195,6 +202,9 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
             headerName: "Total UOMA CS",
             width: 150,
             editable: true,
+            headerAlign: "center",
+            align: "center",
+            headerClassName: 'header--cell',
             valueFormatter: (params) => formatter.format(params.value || 0),
         },
         {
@@ -202,6 +212,9 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
             headerName: "Total UOMA AS",
             width: 150,
             editable: true,
+            headerAlign: "center",
+            align: "center",
+            headerClassName: 'header--cell',
             valueFormatter: (params) => formatter.format(params.value || 0),
         },
         {
@@ -209,6 +222,9 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
             headerName: "Total Cuota Usu",
             width: 150,
             editable: true,
+            headerAlign: "center",
+            align: "center",
+            headerClassName: 'header--cell',
             valueFormatter: (params) => formatter.format(params.value || 0),
         },
         {
@@ -216,6 +232,9 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
             headerName: "Total ART 46",
             width: 150,
             editable: true,
+            headerAlign: "center",
+            align: "center",
+            headerClassName: 'header--cell',
             valueFormatter: (params) => formatter.format(params.value || 0),
         },
         {
@@ -223,6 +242,9 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
             headerName: "Total Antima CS",
             width: 150,
             editable: true,
+            headerAlign: "center",
+            align: "center",
+            headerClassName: 'header--cell',
             valueFormatter: (params) => formatter.format(params.value || 0),
         },
 
@@ -231,6 +253,9 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
             headerName: "Acciones",
             width: 280,
             type: "actions",
+            headerAlign: "center",
+            align: "center",
+            headerClassName: 'header--cell',
             getActions: ({ id, row }) => {
 
                 const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
@@ -276,10 +301,10 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
                             onClick={handleDeleteClick(id)}
                             color="inherit"
                         />,
-                        <PDFDownloadLink 
-                            document={<MyDocument rows_mis_ddjj={rows_mis_ddjj}/>}
+                        <PDFDownloadLink
+                            document={<MyDocument rows_mis_ddjj={rows_mis_ddjj} />}
                             fileName="ddjj.pdf"
-                            >
+                        >
                             <GridActionsCellItem
                                 icon={<LocalPrintshopIcon />}
                                 label="Print"
@@ -302,10 +327,10 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
                             onClick={handleEditClick(id)}
                             color="inherit"
                         />,
-                        <PDFDownloadLink 
-                            document={<MyDocument rows_mis_ddjj={rows_mis_ddjj}/>}
+                        <PDFDownloadLink
+                            document={<MyDocument rows_mis_ddjj={rows_mis_ddjj} />}
                             fileName="ddjj.pdf"
-                            >
+                        >
                             <GridActionsCellItem
                                 icon={<LocalPrintshopIcon />}
                                 label="Print"
@@ -319,25 +344,61 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
     ];
 
     return (
-        <div>
-            <DataGrid
-                rows={rows_mis_ddjj}
-                columns={columns}
-                editMode="row"
-                rowModesModel={rowModesModel}
-                onRowModesModelChange={handleRowModesModelChange}
-                onRowEditStop={handleRowEditStop}
-                processRowUpdate={processRowUpdate}
-            /* slots={{
-                toolbar: GridToolbar,
-            }} */
-            /* 
-            slotProps={{
-                toolbar: { setRowsMisDdjj, rows_mis_ddjj, setRowModesModel },
-            }} */
-            />
+        <div
+            style={{
+                marginTop: 50,
+                height: 400,
+                width: "100%",
+            }}>
+            <Box
+                sx={{
+                    margin: "0 auto",
+                    height: "400px",
+                    width: "100%%",
+                    "& .actions": {
+                        color: "text.secondary",
+                    },
+                    "& .textPrimary": {
+                        color: "text.primary",
+                    },
+                }}
+            >
+                <DataGrid
+                    rows={rows_mis_ddjj}
+                    columns={columns}
+                    editMode="row"
+                    rowModesModel={rowModesModel}
+                    onRowModesModelChange={handleRowModesModelChange}
+                    onRowEditStop={handleRowEditStop}
+                    processRowUpdate={processRowUpdate}
+                    /* slots={{
+                        toolbar: GridToolbar,
+                    }} */
+                    /* 
+                    slotProps={{
+                        toolbar: { setRowsMisDdjj, rows_mis_ddjj, setRowModesModel },
+                    }} */
+                    sx={{
+                        // ...
+                        '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
+                          width: '8px',
+                          visibility: 'visible',
+                        },
+                        '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
+                          backgroundColor: '#ccc',
+                        }
+                    }}
+                    initialState={{
+                        ...rows_mis_ddjj.initialState,
+                        pagination: {
+                            paginationModel: { pageSize: 5 },
+                        },
+                    }}
+                    pageSizeOptions={[5, 10, 25]}
+                />
+            </Box>
             <PDFViewer style={{ width: "100%", height: "500px" }}>
-                <MyDocument 
+                <MyDocument
                     rows_mis_ddjj={rows_mis_ddjj}
                 />
             </PDFViewer>

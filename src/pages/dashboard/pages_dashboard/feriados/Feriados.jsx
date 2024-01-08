@@ -1,5 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
-import axios from "axios";
+import { useState, useEffect, useMemo } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
@@ -7,9 +6,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import DescriptionIcon from "@mui/icons-material/Description";
-import { Grid, IconButton } from "@mui/material";
 import {
   GridRowModes,
   DataGrid,
@@ -18,6 +14,8 @@ import {
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
 import { actualizarFeriado, crearFeriado, eliminarFeriado, obtenerFeriados } from "./FeriadosApi";
+import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
+import * as locales from '@mui/material/locale';
 
 function EditToolbar(props) {
   const { setRows, rows, setRowModesModel } = props;
@@ -46,11 +44,20 @@ function EditToolbar(props) {
   );
 }
 
-export function Feriados() {
+export const Feriados = () => {
+
+  const [locale, setLocale] = useState('esES');
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
 
   const TOKEN = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.usuario.token;
+
+  const theme = useTheme();
+
+  const themeWithLocale = useMemo(
+    () => createTheme(theme, locales[locale]),
+    [locale, theme],
+  );
 
   useEffect(() => {
     const ObtenerFeriados = async () => {
@@ -79,9 +86,9 @@ export function Feriados() {
   };
 
   const handleDeleteClick = (id) => async () => {
-    
+
     setRows((prevRows) => prevRows.filter((row) => row.id !== id));
-    
+
     await eliminarFeriado(id, TOKEN);
   };
 
@@ -112,7 +119,6 @@ export function Feriados() {
 
     } else {
 
-
       const updatedFeriado = {
         fecha: newRow.fecha,
         descripcion: newRow.descripcion,
@@ -134,9 +140,12 @@ export function Feriados() {
     {
       field: "fecha",
       headerName: "Fecha",
-      width: 250,
+      width: 335,
       type: "date",
       editable: true,
+      headerAlign: "center",
+      align: "center",
+      headerClassName: 'header--cell',
       valueFormatter: (params) => {
         const date = new Date(params.value);
 
@@ -146,39 +155,25 @@ export function Feriados() {
 
         return `${day}-${month}-${year}`;
       },
-      renderHeader: (params) => (
-        <Grid container alignItems="center">
-          <Grid item>Fecha</Grid>
-          <Grid item>
-            <IconButton size="small" sx={{ ml: 1, color: "#1A76D2" }}>
-              <CalendarMonthIcon />
-            </IconButton>
-          </Grid>
-        </Grid>
-      ),
     },
     {
       field: "descripcion",
       headerName: "Descripción",
-      width: 250,
+      width: 335,
       editable: true,
-      renderHeader: (params) => (
-        <Grid container alignItems="center">
-          <Grid item>Descripción</Grid>
-          <Grid item>
-            <IconButton size="small" sx={{ ml: 1, color: "#1A76D2" }}>
-              <DescriptionIcon />
-            </IconButton>
-          </Grid>
-        </Grid>
-      ),
+      headerAlign: "center",
+      align: "center",
+      headerClassName: 'header--cell',
     },
     {
       field: "actions",
       type: "actions",
       headerName: "Acciones",
-      width: 250,
+      width: 335,
       cellClassName: "actions",
+      headerAlign: "center",
+      align: "center",
+      headerClassName: 'header--cell',
       getActions: (params) => {
         const isInEditMode =
           rowModesModel[params.row.id]?.mode === GridRowModes.Edit;
@@ -219,41 +214,22 @@ export function Feriados() {
           />,
         ];
       },
-      renderHeader: (params) => (
-        <Grid container alignItems="center">
-          <Grid item>Acciones</Grid>
-          <Grid item>
-            <IconButton size="small" sx={{ ml: 1, color: "#1A76D2" }}>
-              <EditIcon />
-            </IconButton>
-          </Grid>
-        </Grid>
-      ),
     },
   ];
 
   return (
     <div
       style={{
+        margin: "50px auto",
+        height: 400,
         width: "70%",
-        margin: "80px auto",
       }}
     >
-      <h1
-        style={{
-          color: "#1A76D2",
-          marginBottom: "10px",
-          textAlign: "center",
-        }}
-      >
-        Administración de feriados
-      </h1>
+      <h1>Administración de feriados</h1>
       <Box
         sx={{
-          margin: "60px auto",
-          height: "auto",
-          width: "80%",
-          boxShadow: "0px 4px 8px rgba(26, 118, 210, 0.6)",
+          height: "400px",
+          width: "100%",
           "& .actions": {
             color: "text.secondary",
           },
@@ -262,25 +238,30 @@ export function Feriados() {
           },
         }}
       >
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          editMode="row"
-          rowModesModel={rowModesModel}
-          onRowModesModelChange={handleRowModesModelChange}
-          onRowEditStop={handleRowEditStop}
-          processRowUpdate={processRowUpdate}
-          onProcessRowUpdateError={(error) => {
-            console.error("Error during row update:", error);
-            // Puedes agregar lógica adicional para manejar el error, si es necesario.
-          }}
-          slots={{
-            toolbar: EditToolbar,
-          }}
-          slotProps={{
-            toolbar: { setRows, rows, setRowModesModel },
-          }}
-        />
+        <ThemeProvider theme={themeWithLocale}>
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            editMode="row"
+            rowModesModel={rowModesModel}
+            onRowModesModelChange={handleRowModesModelChange}
+            onRowEditStop={handleRowEditStop}
+            processRowUpdate={processRowUpdate}
+            slots={{
+              toolbar: EditToolbar,
+            }}
+            slotProps={{
+              toolbar: { setRows, rows, setRowModesModel },
+            }}
+            initialState={{
+              ...rows.initialState,
+              pagination: {
+                paginationModel: { pageSize: 5 },
+              },
+            }}
+            pageSizeOptions={[5, 10, 25]}
+          />
+        </ThemeProvider>
       </Box>
     </div>
   );

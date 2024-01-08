@@ -1,0 +1,162 @@
+.mis_alta_declaraciones_juradas_container {
+    height: auto;
+    width: 100%;
+    margin-bottom: 100px;
+}
+
+.periodo_container {
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 0px #1A76D2;
+    height: 133px;
+    margin-bottom: 20px;
+}
+
+.periodo_container .paso {
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    padding: 10px;
+    background-color: #1A76D2;
+    color: #fff;
+}
+
+.periodo_container .title_periodo,
+.presentacion_container .title_subir_archivo,
+.manualmente_container .title_manualmente {
+    margin-left: 20px;
+}
+
+h5 {
+    text-align: left;
+}
+
+.presentacion_container {
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 0px #1A76D2;
+    height: 340px;
+    margin-bottom: 20px;
+}
+
+.presentacion_container .paso {
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    padding: 10px;
+    background-color: #1A76D2;
+    color: #fff;
+}
+
+.subir_archivo_container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 96%;
+    margin: 16px auto 10px auto;
+}
+
+.subir_archivo_container .span {
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    line-height: 40px;
+    display: inline-block;
+    text-align: center;
+    background-color: #1A76D2;
+    color: #fff;
+}
+
+.subir_archivo_container .title_subir_archivo {
+    margin-top: 10px;
+}
+
+.file-select {
+    position: relative;
+    display: inline-block;
+    margin-left: 43px;
+}
+.file-select-label {
+    position: absolute;
+    left: 105px;
+    right: 0px;
+    top: 3px;
+    bottom: 0;
+}
+
+.file-select::before {
+    background-color: #1A76D2;
+    color: white;
+    text-transform: uppercase;
+    display: flex;
+    font-size: 0.885rem;
+    width: 93px;
+    padding: 5px 10px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 3px;
+    content: 'Buscar';
+    position: absolute;
+    left: 0;
+    right: 198px;
+    top: -3px;
+    bottom: -3px;
+    cursor: pointer;
+}
+
+.file-select input[type="file"] {
+    opacity: 0;
+    cursor: pointer;
+}
+
+.copiar_periodo_container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 145px;
+    width: 96%;
+    margin: 16px auto 10px auto;
+}
+
+.copiar_periodo_container .span {
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    line-height: 40px;
+    display: inline-block;
+    text-align: center;
+    background-color: #1A76D2;
+    color: #fff;
+}
+
+.manualmente_container{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 96%;
+    margin: 16px auto 10px auto;
+}
+.manualmente_container .span {
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    line-height: 40px;
+    display: inline-block;
+    text-align: center;
+    background-color: #1A76D2;
+    color: #fff;
+}
+
+.manualmente_container .title_manualmente {
+    margin-top: 10px;
+}
+
+.formulario_container {
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 0px #1A76D2;
+    height: 133px;
+}
+
+.formulario_container .paso {
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    padding: 10px;
+    background-color: #1A76D2;
+    color: #fff;
+}

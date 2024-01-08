@@ -1,26 +1,54 @@
+import * as locales from '@mui/material/locale';
 import { useState, useEffect, useMemo } from "react";
-import { crearPublicacion, obtenerPublicaciones, actualizarPublicacion, eliminarPublicacion } from "./PublicacionesApi";
-import { EditarNuevaFila } from "./PublicacionNueva";
 import {
   GridRowModes,
   DataGrid,
+  GridToolbarContainer,
   GridActionsCellItem,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
+import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
-import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
-import * as locales from '@mui/material/locale';
-import "./Publicaciones.css";
+import { actualizarCuitRestringido, crearCuitRestringido, eliminarCuitRestringido, obtenerCuitsRestringidos } from './CuitsRestringidosApi';
 
-export const Publicaciones = () => {
+function EditToolbar(props) {
+  const { setRows, rows, setRowModesModel } = props;
+
+  const handleClick = () => {
+    const maxId = Math.max(...rows.map((row) => row.id), 0);
+    const newId = maxId + 1;
+    const id = newId;
+
+    setRows((oldRows) => [
+      { id, cuit: "", observacion: "", isNew: true },
+      ...oldRows,
+    ]);
+    setRowModesModel((oldModel) => ({
+      [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
+      ...oldModel,
+    }));
+  };
+
+  return (
+    <GridToolbarContainer>
+      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
+        Nuevo Registro
+      </Button>
+    </GridToolbarContainer>
+  );
+}
+
+export const CuitsRestringidos = () => {
 
   const [locale, setLocale] = useState('esES');
-  const [rowModesModel, setRowModesModel] = useState({});
   const [rows, setRows] = useState([]);
+  const [rowModesModel, setRowModesModel] = useState({});
 
   const TOKEN = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.usuario.token;
 
@@ -32,13 +60,19 @@ export const Publicaciones = () => {
   );
 
   useEffect(() => {
-    const ObtenerPublicaciones = async () => {
-      const publicaciones = await obtenerPublicaciones(TOKEN);
-      setRows(publicaciones.map((item, index) => ({ ...item, id: item.id })));
-    };
+    
+    const ObtenerCuitsRestringidos = async () => {
 
-    ObtenerPublicaciones();
+      const cuitsRestringidosResponse = await obtenerCuitsRestringidos(TOKEN);
+
+      setRows(cuitsRestringidosResponse.map((item) => ({ id: item.id, ...item })))
+
+    }
+
+    ObtenerCuitsRestringidos();
+
   }, []);
+
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -55,14 +89,10 @@ export const Publicaciones = () => {
   };
 
   const handleDeleteClick = (id) => async () => {
-    setRows((oldRows) => oldRows.filter((row) => row.id !== id));
-    setRowModesModel((oldModel) => {
-      const newModel = { ...oldModel };
-      delete newModel[id];
-      return newModel;
-    });
 
-    await eliminarPublicacion(id, TOKEN);
+    setRows(rows.filter((row) => row.id !== id));
+
+    await eliminarCuitRestringido(id, TOKEN);
   };
 
   const handleCancelClick = (id) => () => {
@@ -78,28 +108,29 @@ export const Publicaciones = () => {
   };
 
   const processRowUpdate = async (newRow) => {
+
     const updatedRow = { ...newRow, isNew: false };
 
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
 
     if (newRow.isNew) {
-      const nuevaPublicacion = {
-        titulo: newRow.titulo,
-        cuerpo: newRow.cuerpo,
-        vigenciaDesde: newRow.vigenciaDesde,
-        vigenciaHasta: newRow.vigenciaHasta,
+
+      const nuevoCuitRestringido = {
+        cuit: newRow.cuit,
+        observacion: newRow.observacion,
       };
 
-      await crearPublicacion(nuevaPublicacion, TOKEN);
+      await crearCuitRestringido(nuevoCuitRestringido, TOKEN);
+
     } else {
-      const publicacionEditada = {
-        titulo: newRow.titulo,
-        cuerpo: newRow.cuerpo,
-        vigenciaDesde: newRow.vigenciaDesde,
-        vigenciaHasta: newRow.vigenciaHasta,
+
+      const cuitRestringido = {
+        cuit: newRow.cuit,
+        observacion: newRow.observacion,
       };
 
-      await actualizarPublicacion(newRow.id, publicacionEditada, TOKEN);
+      await actualizarCuitRestringido(newRow.id, cuitRestringido, TOKEN)
+
     }
 
     return updatedRow;
@@ -111,71 +142,31 @@ export const Publicaciones = () => {
 
   const columns = [
     {
-      field: "titulo",
-      headerName: "Titulo",
-      width: 230,
-      type: "string",
+      field: "cuit",
+      headerName: "CUIT",
+      width: 290,
       editable: true,
       headerAlign: "center",
       align: "center",
       headerClassName: 'header--cell',
     },
     {
-      field: "cuerpo",
-      headerName: "Cuerpo",
-      width: 230,
-      type: "string",
+      field: "observacion",
+      headerName: "Observacion",
+      width: 290,
       editable: true,
       headerAlign: "center",
       align: "center",
       headerClassName: 'header--cell',
-    },
-    {
-      field: "vigenciaDesde",
-      headerName: "Vigencia Desde",
-      width: 230,
-      type: "date",
-      editable: true,
-      headerAlign: "center",
-      align: "center",
-      headerClassName: 'header--cell',
-      valueFormatter: (params) => {
-        const date = new Date(params.value);
-
-        const day = date.getDate().toString().padStart(2, "0");
-        const month = (date.getMonth() + 1).toString().padStart(2, "0");
-        const year = date.getFullYear();
-
-        return `${day}-${month}-${year}`;
-      },
-    },
-    {
-      field: "vigenciaHasta",
-      headerName: "Vigencia Hasta",
-      width: 230,
-      type: "date",
-      editable: true,
-      headerAlign: "center",
-      align: "center",
-      headerClassName: 'header--cell',
-      valueFormatter: (params) => {
-        const date = new Date(params.value);
-
-        const day = date.getDate().toString().padStart(2, "0");
-        const month = (date.getMonth() + 1).toString().padStart(2, "0");
-        const year = date.getFullYear();
-
-        return `${day}-${month}-${year}`;
-      },
     },
     {
       field: "actions",
-      headerName: "Acciones",
-      width: 230,
       type: "actions",
+      headerName: "Acciones",
       headerAlign: "center",
       align: "center",
       headerClassName: 'header--cell',
+      width: 290,
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
@@ -219,12 +210,18 @@ export const Publicaciones = () => {
   ];
 
   return (
-    <div className="publicaciones_container">
-      <h1>Administracion de Publicaciones</h1>
+    <div
+      style={{
+        marginTop: 50,
+        height: 400,
+        width: "100%",
+      }}>
+      <h1>Administracion de Categorias</h1>
       <Box
         sx={{
+          margin: "0 auto",
           height: "400px",
-          width: "100%",
+          width: "60%",
           "& .actions": {
             color: "text.secondary",
           },
@@ -233,7 +230,6 @@ export const Publicaciones = () => {
           },
         }}
       >
-
         <ThemeProvider theme={themeWithLocale}>
           <DataGrid
             rows={rows}
@@ -244,10 +240,20 @@ export const Publicaciones = () => {
             onRowEditStop={handleRowEditStop}
             processRowUpdate={processRowUpdate}
             slots={{
-              toolbar: EditarNuevaFila,
+              toolbar: EditToolbar,
             }}
             slotProps={{
               toolbar: { setRows, rows, setRowModesModel },
+            }}
+            sx={{
+              // ...
+              /* '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
+                width: '8px',
+                visibility: 'visible',
+              },
+              '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
+                backgroundColor: '#ccc',
+              }, */
             }}
             initialState={{
               ...rows.initialState,
@@ -260,5 +266,5 @@ export const Publicaciones = () => {
         </ThemeProvider>
       </Box>
     </div>
-  );
-};
+  )
+}
