@@ -1,5 +1,6 @@
 module.exports = (req, res, next) => {
-  console.log("Entrooo.1..");
+  console.log("Middleware - LOGIN - INIT..");
+
   console.log("Entrooo.1..req.method: " + req.method);
   console.log("Entrooo.1..req.url: " + req.url);
   //const users = require("./db/db_1.json");

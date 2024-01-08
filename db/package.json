@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "json-server --watch --routes routes.json --middlewares ./loginRoute.js -fks Id --port 3001 db.json"
+    "start": "json-server --watch --routes routes.json --middlewares ./loginRoute.js ./ddjj.js -fks Id --port 3001 db.json"
   },
   "author": "",
   "license": "ISC",
