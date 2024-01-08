@@ -15,7 +15,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
-import { actualizarCuitRestringido, crearCuitRestringido, obtenerCuitsRestringidos } from './CuitsRestringidosApi';
+import { actualizarCuitRestringido, crearCuitRestringido, eliminarCuitRestringido, obtenerCuitsRestringidos } from './CuitsRestringidosApi';
 
 function EditToolbar(props) {
   const { setRows, rows, setRowModesModel } = props;
@@ -88,10 +88,11 @@ export const CuitsRestringidos = () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
-  const handleDeleteClick = (id) => () => {
+  const handleDeleteClick = (id) => async () => {
 
     setRows(rows.filter((row) => row.id !== id));
 
+    await eliminarCuitRestringido(id, TOKEN);
   };
 
   const handleCancelClick = (id) => () => {

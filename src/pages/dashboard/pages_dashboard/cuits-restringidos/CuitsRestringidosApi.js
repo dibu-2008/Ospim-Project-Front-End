@@ -123,3 +123,46 @@ export const actualizarCuitRestringido = async (idCuitRestringido, cuitRestringi
     }
 
 }
+
+export const eliminarCuitRestringido = async (idCuitRestringido, token) => {
+
+    const URL = `${BACKEND_URL}/cuit-restringido/${idCuitRestringido}`;
+
+    const showSwalError = (descripcion) => {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: descripcion,
+            showConfirmButton: false,
+            timer: 3000,
+        })
+    }
+
+    const showSwallSuccess = () => {
+        Swal.fire({
+            icon: 'success',
+            title: MESSAGE_HTTP_DELETED,
+            showConfirmButton: false,
+            timer: 2000,
+        })
+    }
+
+    try {
+
+        const cuitRestringidoResponse = await axios.delete(URL, {
+            headers: {
+                'Authorization': token
+            }
+        });
+
+        if (cuitRestringidoResponse.status === 200) {
+            showSwallSuccess();
+        }
+
+    } catch (error) {
+
+        errorBackendResponse(error, showSwalError);
+
+    }
+
+}

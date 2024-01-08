@@ -743,11 +743,6 @@
   ],
   "cuit-restringido": [
     {
-      "cuit": "20233725006",
-      "observacion": "Cuit restringido por falta de pago",
-      "id": 1
-    },
-    {
       "id": 2,
       "cuit": "30789154021",
       "observacion": "Cuit restringido por incumplimiento fiscal"
