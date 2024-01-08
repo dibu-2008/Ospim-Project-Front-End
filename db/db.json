@@ -268,13 +268,6 @@
   ],
   "publicaciones": [
     {
-      "id": 3,
-      "titulo": "Nota II",
-      "cuerpo": "Nota II dice: kjlfdh fjkds fkljd hgfjkd ghfjdk gkjfd hgjkfd sghjkfd sghjkfds ghkjfds hgjkfd hhgjkfds kjhgfd gkfds FIN.-",
-      "vigenciaDesde": "2023-06-01",
-      "vigenciaHasta": "2024-07-20"
-    },
-    {
       "id": 4,
       "titulo": "Nota FUTURA",
       "cuerpo": "Nota FUTURA dice: kjlfdh fjkds fkljd hgfjkd ghfjdk gkjfd hgjkfd sghjkfd sghjkfds ghkjfds hgjkfd hhgjkfds kjhgfd gkfds FIN.-",

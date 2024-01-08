@@ -8,6 +8,7 @@ import { MisDeclaracionesJuradas } from './mis_declaraciones_juradas/MisDeclarac
 
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import * as locales from '@mui/material/locale';
+import { MisAltaDeclaracionesJuradas } from './mis_alta_declaraciones_juradas/MisAltaDeclaracionesJuradas';
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -70,20 +71,20 @@ export const DeclaracionesJuradas = () => {
             >
               <Tab 
                 label="Alta Declaracion Jurada" {...a11yProps(0)}
-                sx={{ fontSize: '1rem' }}
+                sx={{ fontSize: '1.2rem' }}
               />
               <Tab 
                 label="Mis Declaraciones Juradas" {...a11yProps(0)}
-                sx={{ fontSize: '1rem' }}  
+                sx={{ fontSize: '1.2rem' }}  
               />
               <Tab 
                 label="Mis Pagos" {...a11yProps(2)}
-                sx={{ fontSize: '1rem' }}  
+                sx={{ fontSize: '1.2rem' }}  
               />
             </Tabs>
           </Box>
           <CustomTabPanel value={tabState} index={0}>
-            Alta Declaracion Jurada
+            <MisAltaDeclaracionesJuradas />
           </CustomTabPanel>
           <CustomTabPanel value={tabState} index={1}>
             <MisDeclaracionesJuradas />
