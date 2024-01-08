@@ -254,10 +254,12 @@ export const Categorias = () => {
             onRowEditStop={handleRowEditStop}
             processRowUpdate={processRowUpdate}
             slots={{
-              toolbar: EditToolbar,
+              toolbar: EditToolbar, 
             }}
             slotProps={{
-              toolbar: { setRows, rows, setRowModesModel },
+              toolbar: { 
+                setRows, 
+                rows, setRowModesModel },
             }}
             sx={{
               // ...
