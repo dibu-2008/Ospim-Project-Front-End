@@ -9,10 +9,12 @@ import { Box, TextField, Button, Radio, RadioGroup, FormControlLabel } from '@mu
 import dayjs from 'dayjs';
 import esLocale from 'dayjs/locale/es';
 import './MisAltaDeclaracionesJuradas.css';
+import { GrillaPasoTres } from './grilla_paso_tres/GrillaPasoTres';
 
 export const MisAltaDeclaracionesJuradas = () => {
 
     const [rows, setRows] = useState([]);
+    const [rowsAltaDDJJ, setRowsAltaDDJJ] = useState([]);
     const [periodo, setPeriodo] = useState(null);
     const [desde, setDesde] = useState(null);
     const [hasta, setHasta] = useState(null);
@@ -202,6 +204,11 @@ export const MisAltaDeclaracionesJuradas = () => {
 
             <div className="formulario_container">
                 <h5 className='paso'>Paso 3 - Completar el formulario</h5>
+                <GrillaPasoTres
+                    rowsAltaDDJJ={rowsAltaDDJJ}
+                    setRowsAltaDDJJ={setRowsAltaDDJJ}
+                    token={TOKEN}
+                />
             </div>
 
         </div>

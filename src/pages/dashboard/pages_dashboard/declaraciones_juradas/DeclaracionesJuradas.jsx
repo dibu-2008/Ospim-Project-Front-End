@@ -74,7 +74,7 @@ export const DeclaracionesJuradas = () => {
                 sx={{ fontSize: '1.2rem' }}
               />
               <Tab 
-                label="Mis Declaraciones Juradas" {...a11yProps(0)}
+                label="Mis Declaraciones Juradas" {...a11yProps(1)}
                 sx={{ fontSize: '1.2rem' }}  
               />
               <Tab 
