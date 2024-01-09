@@ -271,28 +271,28 @@
       "id": 4,
       "titulo": "Nota FUTURA",
       "cuerpo": "Nota FUTURA dice: kjlfdh fjkds fkljd hgfjkd ghfjdk gkjfd hgjkfd sghjkfd sghjkfds ghkjfds hgjkfd hhgjkfds kjhgfd gkfds FIN.-",
-      "vigenciaDesde": "2026-06-01",
-      "vigenciaHasta": "2028-07-20"
+      "vigenciaDesde": "2026-06-01T00:00:00.000Z",
+      "vigenciaHasta": "2028-07-20T00:00:00.000Z"
     },
     {
       "titulo": "Nueva Nota",
       "cuerpo": "Cuerpo ",
-      "vigenciaDesde": "2023-12-27T03:00:00.000Z",
-      "vigenciaHasta": "2023-12-31T03:00:00.000Z",
+      "vigenciaDesde": "2023-12-27T00:00:00.000Z",
+      "vigenciaHasta": "2023-12-31T00:00:00.000Z",
       "id": 5
     },
     {
       "titulo": "fsfsd",
       "cuerpo": "sdfsd",
-      "vigenciaDesde": "2024-01-11T03:00:00.000Z",
-      "vigenciaHasta": "2024-01-26T03:00:00.000Z",
+      "vigenciaDesde": "2024-01-11T00:00:00.000Z",
+      "vigenciaHasta": "2024-01-26T00:00:00.000Z",
       "id": 6
     },
     {
       "titulo": "dfsdf",
       "cuerpo": "sdfdsss",
-      "vigenciaDesde": "2024-01-04T03:00:00.000Z",
-      "vigenciaHasta": "2024-01-19T03:00:00.000Z",
+      "vigenciaDesde": "2024-01-04T00:00:00.000Z",
+      "vigenciaHasta": "2024-01-19T00:00:00.000Z",
       "id": 7
     }
   ],
