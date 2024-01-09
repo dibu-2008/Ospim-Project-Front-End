@@ -209,8 +209,18 @@ export const MisAltaDeclaracionesJuradas = () => {
                     setRowsAltaDDJJ={setRowsAltaDDJJ}
                     token={TOKEN}
                 />
+                <div
+                    className='botones_container'
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'flex-end',
+                        marginTop: '20px'
+                    }}
+                >
+                    <Button variant="contained" sx={{ padding: '6px 52px' }}>Guardar</Button>
+                    <Button variant="contained" sx={{ padding: '6px 52px', marginLeft: '10px' }}>Presentar</Button>
+                </div>
             </div>
-
         </div>
     )
 }
