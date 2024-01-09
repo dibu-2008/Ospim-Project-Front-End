@@ -101,7 +101,7 @@ export const MisAltaDeclaracionesJuradas = () => {
                     <Button
                         variant="contained"
                         sx={{
-                            padding: '6px 45px',
+                            padding: '6px 52px',
                         }}
                     >Subir</Button>
                 </div>
