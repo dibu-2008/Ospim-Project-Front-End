@@ -15,12 +15,14 @@
   "/empresa/:empresaId/contacto": "/empresaContacto/",
   "/empresa/:empresaId/contacto/:id": "/empresaContacto/:id",
   "/empresa/ramo": "/ramo",
+  "/empresa/restringida/": "/cuit-restringido/",
+  "/empresa/restringida/:id": "/cuit-restringido/:id",
   "/auth/login/usuario": "/auth-login-usuario",
   "/provincia/:provinciaId/localidad": "/localidad?provinciaId=:provinciaId",
   "/camara/categoria": "/categoria",
   "/entidad/aporte": "/entidad-aporte",
-  "/empresa/:empresaId/dj/": "/DDJJ-consulta?empresaId=:empresaId",
-  "/empresa/:empresaId/dj/:id": "/DDJJ-consulta/:id",
-  "/empresa/:empresaId/dj/:id/presentar": "/DDJJ-consulta/:id",
-  "/cuit-restringido": "/cuit-restringido"
+  "/empresa/:empresaId/dj/": "/DDJJConsulta?empresaId=:empresaId",
+  "/empresa/:empresaId/dj/:id": "/DDJJConsulta/:id",
+  "/empresa/:empresaId/dj/:id/presentar": "/DDJJConsulta/:id",
+  "/empresa/:empresaId/dj/periodo/:periodo/existe": "/DDJJConsulta?empresaId=:empresaId&periodo=:periodo"
 }
