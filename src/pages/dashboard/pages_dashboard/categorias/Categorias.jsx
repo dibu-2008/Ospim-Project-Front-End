@@ -156,7 +156,7 @@ export const Categorias = () => {
     {
       field: "camaraCodigo",
       headerName: "Camara",
-      width: 150,
+      width: 433,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -167,7 +167,7 @@ export const Categorias = () => {
     {
       field: "descripcion",
       headerName: "Descripcion",
-      width: 200,
+      width: 450,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -177,7 +177,7 @@ export const Categorias = () => {
       field: "actions",
       type: "actions",
       headerName: "Acciones",
-      width: 200,
+      width: 450,
       headerAlign: "center",
       align: "center",
       headerClassName: 'header--cell',
@@ -226,22 +226,15 @@ export const Categorias = () => {
   return (
     <div
       style={{
-        marginTop: 50,
+        margin: '50px auto',
         height: 400,
-        width: "100%",
+        width: "70%",
       }}>
       <h1>Administracion de Categorias</h1>
       <Box
         sx={{
-          margin: "0 auto",
           height: "400px",
-          width: "38%",
-          "& .actions": {
-            color: "text.secondary",
-          },
-          "& .textPrimary": {
-            color: "text.primary",
-          },
+          width: "100%",
         }}
       >
         <ThemeProvider theme={themeWithLocale}>
@@ -262,14 +255,13 @@ export const Categorias = () => {
                 rows, setRowModesModel },
             }}
             sx={{
-              // ...
-              /* '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
+              '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
                 width: '8px',
                 visibility: 'visible',
               },
               '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
                 backgroundColor: '#ccc',
-              }, */
+              },
             }}
             initialState={{
               ...rows.initialState,

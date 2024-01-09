@@ -1,11 +1,13 @@
 import { useState, useEffect, useMemo } from "react";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import AddIcon from "@mui/icons-material/Add";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/DeleteOutlined";
-import SaveIcon from "@mui/icons-material/Save";
-import CancelIcon from "@mui/icons-material/Close";
+import { Box, Button } from "@mui/material";
+import {
+  Add as AddIcon,
+  Edit as EditIcon,
+  DeleteOutlined as DeleteIcon,
+  Save as SaveIcon,
+  Close as CancelIcon,
+} from "@mui/icons-material";
+
 import {
   GridRowModes,
   DataGrid,
@@ -13,9 +15,16 @@ import {
   GridActionsCellItem,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
-import { actualizarFeriado, crearFeriado, eliminarFeriado, obtenerFeriados } from "./FeriadosApi";
-import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
+import { actualizarFeriado, 
+  crearFeriado, 
+  eliminarFeriado, 
+  obtenerFeriados } from "./FeriadosApi";
+import { 
+  createTheme, 
+  ThemeProvider, 
+  useTheme } from '@mui/material/styles';
 import * as locales from '@mui/material/locale';
+import "./Feriados.css";
 
 function EditToolbar(props) {
   const { setRows, rows, setRowModesModel } = props;
@@ -140,26 +149,27 @@ export const Feriados = () => {
     {
       field: "fecha",
       headerName: "Fecha",
-      width: 335,
+      width: 500,
       type: "date",
       editable: true,
       headerAlign: "center",
       align: "center",
       headerClassName: 'header--cell',
       valueFormatter: (params) => {
+        
         const date = new Date(params.value);
-
-        const day = date.getDate().toString().padStart(2, "0");
-        const month = (date.getMonth() + 1).toString().padStart(2, "0");
-        const year = date.getFullYear();
-
+      
+        const day = date.getUTCDate().toString().padStart(2, "0");
+        const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
+        const year = date.getUTCFullYear();
+      
         return `${day}-${month}-${year}`;
       },
     },
     {
       field: "descripcion",
       headerName: "Descripción",
-      width: 335,
+      width: 520,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -169,7 +179,7 @@ export const Feriados = () => {
       field: "actions",
       type: "actions",
       headerName: "Acciones",
-      width: 335,
+      width: 505,
       cellClassName: "actions",
       headerAlign: "center",
       align: "center",
@@ -218,13 +228,7 @@ export const Feriados = () => {
   ];
 
   return (
-    <div
-      style={{
-        margin: "50px auto",
-        height: 400,
-        width: "70%",
-      }}
-    >
+    <div className="feriados_container">
       <h1>Administración de feriados</h1>
       <Box
         sx={{
@@ -252,6 +256,15 @@ export const Feriados = () => {
             }}
             slotProps={{
               toolbar: { setRows, rows, setRowModesModel },
+            }}
+            sx={{
+              '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
+                width: '8px',
+                visibility: 'visible',
+              },
+              '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
+                backgroundColor: '#ccc',
+              },
             }}
             initialState={{
               ...rows.initialState,

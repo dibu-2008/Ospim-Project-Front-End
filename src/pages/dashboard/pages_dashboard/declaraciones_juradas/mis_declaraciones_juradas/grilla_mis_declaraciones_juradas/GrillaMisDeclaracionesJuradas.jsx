@@ -162,7 +162,7 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
         {
             field: "periodo",
             headerName: "Periodo",
-            width: 150,
+            width: 180,
             editable: true,
             type: "date",
             headerAlign: "center",
@@ -172,17 +172,17 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
 
                 const date = new Date(params.value);
 
-                const day = date.getDate().toString().padStart(2, "0");
-                const month = (date.getMonth() + 1).toString().padStart(2, "0");
-                const year = date.getFullYear();
+                const day = date.getUTCDate().toString().padStart(2, "0");
+                const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
+                const year = date.getUTCFullYear();
 
                 return `${day}-${month}-${year}`;
-            }
+            },
         },
         {
             field: "secuencia",
             headerName: "Numero",
-            width: 150,
+            width: 180,
             editable: true,
             headerAlign: "center",
             align: "center",
@@ -200,7 +200,7 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
         {
             field: "totalUomaCS",
             headerName: "Total UOMA CS",
-            width: 150,
+            width: 180,
             editable: true,
             headerAlign: "center",
             align: "center",
@@ -210,7 +210,7 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
         {
             field: "totalUomaAS",
             headerName: "Total UOMA AS",
-            width: 150,
+            width: 180,
             editable: true,
             headerAlign: "center",
             align: "center",
@@ -220,7 +220,7 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
         {
             field: "totalCuotaUsu",
             headerName: "Total Cuota Usu",
-            width: 150,
+            width: 180,
             editable: true,
             headerAlign: "center",
             align: "center",
@@ -230,7 +230,7 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
         {
             field: "totalART46",
             headerName: "Total ART 46",
-            width: 150,
+            width: 180,
             editable: true,
             headerAlign: "center",
             align: "center",
@@ -240,7 +240,7 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
         {
             field: "totalAntimaCS",
             headerName: "Total Antima CS",
-            width: 150,
+            width: 180,
             editable: true,
             headerAlign: "center",
             align: "center",
@@ -381,11 +381,11 @@ export const GrillaMisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, t
                     sx={{
                         // ...
                         '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
-                          width: '8px',
-                          visibility: 'visible',
+                            width: '8px',
+                            visibility: 'visible',
                         },
                         '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
-                          backgroundColor: '#ccc',
+                            backgroundColor: '#ccc',
                         }
                     }}
                     initialState={{

@@ -336,7 +336,6 @@ export const AltaUsuarioInterno = () => {
               toolbar: { setRows, rows, setRowModesModel },
             }}
             sx={{
-              // ...
               '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
                 width: '8px',
                 visibility: 'visible',

@@ -113,7 +113,7 @@ export const Publicaciones = () => {
     {
       field: "titulo",
       headerName: "Titulo",
-      width: 310,
+      width: 300,
       type: "string",
       editable: true,
       headerAlign: "center",
@@ -123,7 +123,7 @@ export const Publicaciones = () => {
     {
       field: "cuerpo",
       headerName: "Cuerpo",
-      width: 330,
+      width: 325,
       type: "string",
       editable: true,
       headerAlign: "center",
@@ -147,8 +147,6 @@ export const Publicaciones = () => {
         const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
         const year = date.getUTCFullYear();
       
-        console.log(`Desde : ${day}-${month}-${year}`);
-      
         return `${day}-${month}-${year}`;
       },
     },
@@ -168,8 +166,6 @@ export const Publicaciones = () => {
         const day = date.getUTCDate().toString().padStart(2, "0");
         const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
         const year = date.getUTCFullYear();
-
-        console.log(`hasta : ${day}-${month}-${year}`);
       
         return `${day}-${month}-${year}`;
       },
@@ -254,6 +250,15 @@ export const Publicaciones = () => {
             }}
             slotProps={{
               toolbar: { setRows, rows, setRowModesModel },
+            }}
+            sx={{
+              '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
+                width: '8px',
+                visibility: 'visible',
+              },
+              '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
+                backgroundColor: '#ccc',
+              },
             }}
             initialState={{
               ...rows.initialState,
