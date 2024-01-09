@@ -21,8 +21,8 @@
   "/provincia/:provinciaId/localidad": "/localidad?provinciaId=:provinciaId",
   "/camara/categoria": "/categoria",
   "/entidad/aporte": "/entidad-aporte",
-  "/empresa/:empresaId/dj/": "/DDJJ-consulta?empresaId=:empresaId",
-  "/empresa/:empresaId/dj/:id": "/DDJJ-consulta/:id",
-  "/empresa/:empresaId/dj/:id/presentar": "/DDJJ-consulta/:id",
-  "/empresa/:empresaId/dj/periodo/:periodo/existe": "/DDJJ-periordo-existe?periodo=:periodo"
+  "/empresa/:empresaId/dj/": "/DDJJConsulta?empresaId=:empresaId",
+  "/empresa/:empresaId/dj/:id": "/DDJJConsulta/:id",
+  "/empresa/:empresaId/dj/:id/presentar": "/DDJJConsulta/:id",
+  "/empresa/:empresaId/dj/periodo/:periodo/existe": "/DDJJConsulta?empresaId=:empresaId&periodo=:periodo"
 }

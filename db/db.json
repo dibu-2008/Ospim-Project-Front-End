@@ -643,7 +643,7 @@
       "descripcion": "Formosa"
     }
   ],
-  "DDJJ-consulta": [
+  "DDJJConsulta": [
     {
       "id": 150,
       "estado": "PR",
@@ -783,24 +783,6 @@
       "cuil": "27446744955",
       "apellido": "Longoria",
       "nombre": "Albano"
-    }
-  ],
-  "DDJJ-periordo-existe": [
-    {
-      "periodo": "202311",
-      "valor": false
-    },
-    {
-      "periodo": "202312",
-      "valor": true
-    },
-    {
-      "periodo": "202401",
-      "valor": true
-    },
-    {
-      "periodo": "202402",
-      "valor": false
     }
   ],
   "cuit-restringido": [
