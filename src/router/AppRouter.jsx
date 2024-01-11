@@ -17,9 +17,8 @@ import { Feriados } from "../pages/dashboard/pages_dashboard/feriados/Feriados";
 import { AltaUsuarioInterno } from "../pages/dashboard/pages_dashboard/alta_usuario_interno/AltaUsuarioInterno";
 import { RegistroEmpresa } from "../pages/registro_empresa/RegistroEmpresa";
 import { CuitsRestringidos } from "../pages/dashboard/pages_dashboard/cuits-restringidos/CuitsRestringidos";
+import { Boletas } from "../pages/dashboard/pages_dashboard/boletas/Boletas";
 
-
-const BoletasPage = () => <div>Contenido de la página de boletas</div>;
 const PagosPage = () => <div>Contenido de la página de pagos</div>;
 
 const AppRouter = () => {
@@ -41,7 +40,7 @@ const AppRouter = () => {
             <Route path="publicaciones" element={<Publicaciones />} />
             <Route path="feriados" element={<Feriados />} />
             <Route path="ddjj" element={<DeclaracionesJuradas />} />
-            <Route path="boletas" element={<BoletasPage />} />
+            <Route path="boletas" element={<Boletas />} />
             <Route path="pagos" element={<PagosPage />} />
             <Route path="misdatos" element={<DatosEmpresa />} />
             <Route path="categorias" element={<Categorias />} />
