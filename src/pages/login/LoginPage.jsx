@@ -2,8 +2,13 @@ import { consultarUsuarioLogueado, logon, logonDFA, usuarioLogueadoHabilitadoDFA
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useFormLoginInternalUser } from "../../hooks/useFormLoginInternalUser.js";
+/* ANTES 
 import { InputComponent } from "../../components/InputComponent.jsx";
-import { ButtonComponent } from "../../components/ButtonComponent.jsx";
+import { ButtonComponent } from "../../components/ButtonComponent.jsx"; 
+*/
+// Ahora 
+import { InputComponent } from "@components/InputComponent.jsx";
+import { ButtonComponent } from "@components/ButtonComponent.jsx";
 import { showSwalSuccess } from "./LoginShowAlert.js";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
