@@ -16,18 +16,20 @@ export const MisAltaDeclaracionesJuradas = () => {
     const [rows, setRows] = useState([]);
     const [rowsAltaDDJJ, setRowsAltaDDJJ] = useState([]);
     const [periodo, setPeriodo] = useState(null);
-    const [desde, setDesde] = useState(null);
-    const [hasta, setHasta] = useState(null);
+    const [otroPeriodo, setOtroPeriodo] = useState(null);
+    /* const [desde, setDesde] = useState(null);
+    const [hasta, setHasta] = useState(null); */
     const [selectedFileName, setSelectedFileName] = useState('');
     const [mostrarPeriodos, setMostrarPeriodos] = useState(false);
     const TOKEN = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.usuario.token;
     const ID_EMPRESA = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.empresa.id;
 
-    const handleChangeDesde = (date) => setDesde(date);
+    //const handleChangeDesde = (date) => setDesde(date);
 
-    const handleChangeHasta = (date) => setHasta(date);
+    //const handleChangeHasta = (date) => setHasta(date);
 
     const handleChangePeriodo = (date) => setPeriodo(date);
+    const handleChangeOtroPeriodo = (date) => setOtroPeriodo(date);
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
@@ -56,14 +58,16 @@ export const MisAltaDeclaracionesJuradas = () => {
                     >
                         <DemoContainer components={['DatePicker']}>
                             <DatePicker
-                                label="Periodo desde"
+                                label="Periodo"
                                 value={periodo}
                                 onChange={handleChangePeriodo}
-                                format="DD-MM-YYYY"
+                                format="MMMM YYYY"
+                                openTo="year"
+                                views={["year", "month"]}
                             />
                         </DemoContainer>
                     </LocalizationProvider>
-                    <LocalizationProvider
+                    {/* <LocalizationProvider
                         dateAdapter={AdapterDayjs}
                         adapterLocale={"es"}
                         localeText={esES.components.MuiLocalizationProvider.defaultProps.localeText}
@@ -76,7 +80,7 @@ export const MisAltaDeclaracionesJuradas = () => {
                                 format="DD-MM-YYYY"
                             />
                         </DemoContainer>
-                    </LocalizationProvider>
+                    </LocalizationProvider> */}
                 </Stack>
             </div>
 
@@ -141,6 +145,22 @@ export const MisAltaDeclaracionesJuradas = () => {
                                     >
                                         <DemoContainer components={['DatePicker']}>
                                             <DatePicker
+                                                label="Otro periodo"
+                                                value={otroPeriodo}
+                                                onChange={handleChangeOtroPeriodo}
+                                                format="MMMM YYYY"
+                                                openTo="year"
+                                                views={["year", "month"]}
+                                            />
+                                        </DemoContainer>
+                                    </LocalizationProvider>
+                                    {/* <LocalizationProvider
+                                        dateAdapter={AdapterDayjs}
+                                        adapterLocale={"es"}
+                                        localeText={esES.components.MuiLocalizationProvider.defaultProps.localeText}
+                                    >
+                                        <DemoContainer components={['DatePicker']}>
+                                            <DatePicker
                                                 label="Periodo desde"
                                                 value={desde}
                                                 onChange={handleChangeDesde}
@@ -153,8 +173,8 @@ export const MisAltaDeclaracionesJuradas = () => {
                                                 }}
                                             />
                                         </DemoContainer>
-                                    </LocalizationProvider>
-                                    <LocalizationProvider
+                                    </LocalizationProvider> */}
+                                    {/* <LocalizationProvider
                                         dateAdapter={AdapterDayjs}
                                         adapterLocale={"es"}
                                         localeText={esES.components.MuiLocalizationProvider.defaultProps.localeText}
@@ -173,7 +193,7 @@ export const MisAltaDeclaracionesJuradas = () => {
                                                 }}
                                             />
                                         </DemoContainer>
-                                    </LocalizationProvider>
+                                    </LocalizationProvider> */}
                                 </Stack>
                             )}
                         </div>
