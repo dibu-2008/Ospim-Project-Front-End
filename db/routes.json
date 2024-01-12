@@ -24,5 +24,6 @@
   "/empresa/:empresaId/dj/": "/DDJJConsulta?empresaId=:empresaId",
   "/empresa/:empresaId/dj/:id": "/DDJJConsulta/:id",
   "/empresa/:empresaId/dj/:id/presentar": "/DDJJConsulta/:id",
-  "/empresa/:empresaId/dj/periodo/:periodo/existe": "/DDJJConsulta?empresaId=:empresaId&periodo=:periodo"
+  "/empresa/:empresaId/dj/periodo/:periodo/existe": "/DDJJConsulta?empresaId=:empresaId&periodo=:periodo",
+  "/afiliado/?cuil:cuil": "/afiliado/?cuil_titular:cuil"
 }

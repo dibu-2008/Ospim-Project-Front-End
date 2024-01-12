@@ -34,8 +34,10 @@ module.exports = (req, res, next) => {
       } else {
         res.status(200).send({ existe: false });
       }
+    } else {
+      next();
     }
+  } else {
+    next();
   }
-
-  //next();
 };
