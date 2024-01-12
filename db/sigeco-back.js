@@ -33,6 +33,14 @@ module.exports = (req, res, next) => {
       return "CATEGORIAS";
     }
 
+    if (
+      req.method === "GET" &&
+      req.url.startsWith("/comun/cui/") &&
+      req.url.endsWith("/validar")
+    ) {
+      return "COMUN-CUI-VALIDAR";
+    }
+
     return "----";
   }
 
@@ -53,12 +61,23 @@ module.exports = (req, res, next) => {
     case "CATEGORIAS":
       categoriasURL();
       break;
+    case "COMUN-CUI-VALIDAR":
+      validarCUI();
+      break;
     case "----":
       // code block
       next();
       break;
     default:
     // code block
+  }
+
+  function validarCUI() {
+    const rand = Math.random() < 0.5;
+    const response = {
+      resultado: rand,
+    };
+    res.json(response);
   }
 
   function categoriasURL() {
