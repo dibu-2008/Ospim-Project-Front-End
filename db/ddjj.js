@@ -30,9 +30,9 @@ module.exports = (req, res, next) => {
 
       if (reg) {
         //console.log("Middleware - DDJJ - reg: " + reg);
-        res.status(200).send({ existe: true });
+        res.status(200).send({ resultado: true });
       } else {
-        res.status(200).send({ existe: false });
+        res.status(200).send({ resultado: false });
       }
     } else {
       next();
