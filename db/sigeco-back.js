@@ -1,7 +1,7 @@
 module.exports = (req, res, next) => {
-  console.log("Middleware - SIGECO - INIT..");
+  console.log("Middleware - SIGECO - INIT - getAPI: " + getAPI());
   console.log("Middleware - SIGECO - req.url:" + req.url);
-  console.log("Middleware - SIGECO - req.body:" + req.body);
+  //console.log("Middleware - SIGECO - req.body:" + req.body);
 
   function getAPI() {
     if (
@@ -36,7 +36,6 @@ module.exports = (req, res, next) => {
     return "----";
   }
 
-  console.log("Middleware - DDJJ - getAPI: " + getAPI());
   switch (getAPI()) {
     case "DDJJ-PERIODO-VALIDAR":
       validarPeriodo();
@@ -98,14 +97,14 @@ module.exports = (req, res, next) => {
       });
 
       console.log(res.statusCode);
+    } else {
+      const response = {
+        token: "ncvfjlkcovkelvkeivnfjkvevcfo.cmkdwocjoiwcmw.dnmiwedfiwejndfmwe",
+        tokenRefresco:
+          "2ncvfjlkcovkelvkeivnfjkvevcfo.cmkdwocjoiwcmw.dnmiwedfiwejndfmwe",
+      };
+      res.json(response);
     }
-
-    const response = {
-      token: "ncvfjlkcovkelvkeivnfjkvevcfo.cmkdwocjoiwcmw.dnmiwedfiwejndfmwe",
-      tokenRefresco:
-        "2ncvfjlkcovkelvkeivnfjkvevcfo.cmkdwocjoiwcmw.dnmiwedfiwejndfmwe",
-    };
-    res.json(response);
   }
 
   function validarLoguinHabilitado() {
