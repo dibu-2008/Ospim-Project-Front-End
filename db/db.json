@@ -176,6 +176,11 @@
       "fecha": "2024-07-10",
       "descripcion": "Feriado del 09-07",
       "id": 10
+    },
+    {
+      "fecha": "2024-01-11T03:00:00.000Z",
+      "descripcion": "AAAAA",
+      "id": 11
     }
   ],
   "usuario-interno": [
@@ -271,29 +276,64 @@
       "id": 4,
       "titulo": "Nota FUTURA",
       "cuerpo": "Nota FUTURA dice: kjlfdh fjkds fkljd hgfjkd ghfjdk gkjfd hgjkfd sghjkfd sghjkfds ghkjfds hgjkfd hhgjkfds kjhgfd gkfds FIN.-",
-      "vigenciaDesde": "2026-06-01",
-      "vigenciaHasta": "2028-07-20"
+      "vigenciaDesde": "2026-06-01T00:00:00.000Z",
+      "vigenciaHasta": "2028-07-20T00:00:00.000Z"
     },
     {
       "titulo": "Nueva Nota",
       "cuerpo": "Cuerpo ",
-      "vigenciaDesde": "2023-12-27T03:00:00.000Z",
-      "vigenciaHasta": "2023-12-31T03:00:00.000Z",
+      "vigenciaDesde": "2023-12-27T00:00:00.000Z",
+      "vigenciaHasta": "2023-12-31T00:00:00.000Z",
       "id": 5
     },
     {
       "titulo": "fsfsd",
       "cuerpo": "sdfsd",
-      "vigenciaDesde": "2024-01-11T03:00:00.000Z",
-      "vigenciaHasta": "2024-01-26T03:00:00.000Z",
+      "vigenciaDesde": "2024-01-11T00:00:00.000Z",
+      "vigenciaHasta": "2024-01-26T00:00:00.000Z",
       "id": 6
     },
     {
       "titulo": "dfsdf",
       "cuerpo": "sdfdsss",
-      "vigenciaDesde": "2024-01-04T03:00:00.000Z",
-      "vigenciaHasta": "2024-01-19T03:00:00.000Z",
+      "vigenciaDesde": "2024-01-04T00:00:00.000Z",
+      "vigenciaHasta": "2024-01-19T00:00:00.000Z",
       "id": 7
+    },
+    {
+      "titulo": "Nota 1",
+      "cuerpo": "Nota 1 dice: kjlfdh fjkds fkljd hgfjkd ghfjdk gkjfd hgjkfd sghjkfd sghjkfds ghkjfds hgjkfd hhgjkfds kjhgfd gkfds FIN.-",
+      "vigenciaDesde": "2023-12-01T00:00:00.000Z",
+      "vigenciaHasta": "2023-12-31T00:00:00.000Z",
+      "id": 8
+    },
+    {
+      "titulo": "Nota 2",
+      "cuerpo": "Nota 2 dice: kjlfdh fjkds fkljd hgfjkd ghfjdk gkjfd hgjkfd sghjkfd sghjkfds ghkjfds hgjkfd hhgjkfds kjhgfd gkfds FIN.-",
+      "vigenciaDesde": "2023-12-01T00:00:00.000Z",
+      "vigenciaHasta": "2023-12-31T00:00:00.000Z",
+      "id": 9
+    },
+    {
+      "titulo": "Nota 3",
+      "cuerpo": "Nota 3 dice: kjlfdh fjkds fkljd hgfjkd ghfjdk gkjfd hgjkfd sghjkfd sghjkfds ghkjfds hgjkfd hhgjkfds kjhgfd gkfds FIN.-",
+      "vigenciaDesde": "2023-12-01T00:00:00.000Z",
+      "vigenciaHasta": "2023-12-31T00:00:00.000Z",
+      "id": 10
+    },
+    {
+      "titulo": "Nota 4",
+      "cuerpo": "Nota 4 dice: kjlfdh fjkds fkljd hgfjkd ghfjdk gkjfd hgjkfd sghjkfd sghjkfds ghkjfds hgjkfd hhgjkfds kjhgfd gkfds FIN.-",
+      "vigenciaDesde": "2023-12-01T00:00:00.000Z",
+      "vigenciaHasta": "2023-12-31T00:00:00.000Z",
+      "id": 11
+    },
+    {
+      "titulo": "Nota 5",
+      "cuerpo": "Nota 5 dice: kjlfdh fjkds fkljd hgfjkd ghfjdk gkjfd hgjkfd sghjkfd sghjkfds ghkjfds hgjkfd hhgjkfds kjhgfd gkfds FIN.-",
+      "vigenciaDesde": "2023-12-01T00:00:00.000Z",
+      "vigenciaHasta": "2023-12-31T00:00:00.000Z",
+      "id": 12
     }
   ],
   "publicacionesVigentes": [
@@ -820,6 +860,16 @@
       "id": 8,
       "cuit": "40872519607",
       "observacion": "Cuit restringido por falta de regularización de deudas fiscales"
+    },
+    {
+      "cuit": "30789154023",
+      "observacion": "Observacion ",
+      "id": 9
+    },
+    {
+      "cuit": "30789154024",
+      "observacion": "Aaaaaaaa",
+      "id": 10
     }
   ]
 }

@@ -354,7 +354,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
     {
       field: "calle",
       headerName: "Calle",
-      width: 120,
+      width: 150,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -363,7 +363,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
     {
       field: "piso",
       headerName: "Piso",
-      width: 80,
+      width: 150,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -372,7 +372,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
     {
       field: "depto",
       headerName: "Depto",
-      width: 80,
+      width: 150,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -381,7 +381,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
     {
       field: "oficina",
       headerName: "Oficina",
-      width: 100,
+      width: 150,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -390,7 +390,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
     {
       field: "cp",
       headerName: "CP",
-      width: 80,
+      width: 150,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -399,7 +399,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
     {
       field: "planta",
       headerName: "Planta",
-      width: 100,
+      width: 150,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -409,7 +409,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
       field: "actions",
       type: "actions",
       headerName: "Acciones",
-      width: 100,
+      width: 250,
       headerAlign: "center",
       align: "center",
       headerClassName: 'header--cell',

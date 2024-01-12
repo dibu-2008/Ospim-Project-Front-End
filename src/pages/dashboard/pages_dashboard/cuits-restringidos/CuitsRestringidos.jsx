@@ -144,7 +144,7 @@ export const CuitsRestringidos = () => {
     {
       field: "cuit",
       headerName: "CUIT",
-      width: 290,
+      width: 432,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -153,7 +153,7 @@ export const CuitsRestringidos = () => {
     {
       field: "observacion",
       headerName: "Observacion",
-      width: 290,
+      width: 450,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -166,7 +166,7 @@ export const CuitsRestringidos = () => {
       headerAlign: "center",
       align: "center",
       headerClassName: 'header--cell',
-      width: 290,
+      width: 450,
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
@@ -212,22 +212,15 @@ export const CuitsRestringidos = () => {
   return (
     <div
       style={{
-        marginTop: 50,
+        margin: '50px auto',
         height: 400,
-        width: "100%",
+        width: "70%",
       }}>
-      <h1>Administracion de Categorias</h1>
+      <h1>Administracion de Cuits restringidos</h1>
       <Box
         sx={{
-          margin: "0 auto",
           height: "400px",
-          width: "60%",
-          "& .actions": {
-            color: "text.secondary",
-          },
-          "& .textPrimary": {
-            color: "text.primary",
-          },
+          width: "100%",
         }}
       >
         <ThemeProvider theme={themeWithLocale}>
@@ -246,14 +239,13 @@ export const CuitsRestringidos = () => {
               toolbar: { setRows, rows, setRowModesModel },
             }}
             sx={{
-              // ...
-              /* '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
+              '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
                 width: '8px',
                 visibility: 'visible',
               },
               '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
                 backgroundColor: '#ccc',
-              }, */
+              },
             }}
             initialState={{
               ...rows.initialState,

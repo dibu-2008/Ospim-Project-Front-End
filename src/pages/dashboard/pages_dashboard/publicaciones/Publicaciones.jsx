@@ -113,7 +113,7 @@ export const Publicaciones = () => {
     {
       field: "titulo",
       headerName: "Titulo",
-      width: 230,
+      width: 300,
       type: "string",
       editable: true,
       headerAlign: "center",
@@ -123,7 +123,7 @@ export const Publicaciones = () => {
     {
       field: "cuerpo",
       headerName: "Cuerpo",
-      width: 230,
+      width: 325,
       type: "string",
       editable: true,
       headerAlign: "center",
@@ -133,45 +133,47 @@ export const Publicaciones = () => {
     {
       field: "vigenciaDesde",
       headerName: "Vigencia Desde",
-      width: 230,
+      width: 300,
       type: "date",
       editable: true,
       headerAlign: "center",
       align: "center",
       headerClassName: 'header--cell',
       valueFormatter: (params) => {
+        
         const date = new Date(params.value);
-
-        const day = date.getDate().toString().padStart(2, "0");
-        const month = (date.getMonth() + 1).toString().padStart(2, "0");
-        const year = date.getFullYear();
-
+      
+        const day = date.getUTCDate().toString().padStart(2, "0");
+        const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
+        const year = date.getUTCFullYear();
+      
         return `${day}-${month}-${year}`;
       },
     },
     {
       field: "vigenciaHasta",
       headerName: "Vigencia Hasta",
-      width: 230,
+      width: 300,
       type: "date",
       editable: true,
       headerAlign: "center",
       align: "center",
       headerClassName: 'header--cell',
       valueFormatter: (params) => {
+        
         const date = new Date(params.value);
-
-        const day = date.getDate().toString().padStart(2, "0");
-        const month = (date.getMonth() + 1).toString().padStart(2, "0");
-        const year = date.getFullYear();
-
+      
+        const day = date.getUTCDate().toString().padStart(2, "0");
+        const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
+        const year = date.getUTCFullYear();
+      
         return `${day}-${month}-${year}`;
       },
     },
     {
       field: "actions",
       headerName: "Acciones",
-      width: 230,
+      width: 300,
       type: "actions",
       headerAlign: "center",
       align: "center",
@@ -249,6 +251,15 @@ export const Publicaciones = () => {
             slotProps={{
               toolbar: { setRows, rows, setRowModesModel },
             }}
+            sx={{
+              '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
+                width: '8px',
+                visibility: 'visible',
+              },
+              '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
+                backgroundColor: '#ccc',
+              },
+            }}
             initialState={{
               ...rows.initialState,
               pagination: {
@@ -262,3 +273,5 @@ export const Publicaciones = () => {
     </div>
   );
 };
+
+

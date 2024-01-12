@@ -142,7 +142,7 @@ export const GrillaEmpresaContacto = ({ rows, setRows, token }) => {
     {
       field: "tipo",
       headerName: "Tipo de contacto",
-      width: 240,
+      width: 300,
       editable: true,
       type: "singleSelect",
       headerAlign: "center",
@@ -158,7 +158,7 @@ export const GrillaEmpresaContacto = ({ rows, setRows, token }) => {
     {
       field: "prefijo",
       headerName: "Prefijo",
-      width: 240,
+      width: 300,
       type: "string",
       editable: true,
       headerAlign: "center",
@@ -168,7 +168,7 @@ export const GrillaEmpresaContacto = ({ rows, setRows, token }) => {
     {
       field: "valor",
       headerName: "Valor de contacto",
-      width: 240,
+      width: 334,
       type: "string",
       editable: true,
       headerAlign: "center",
@@ -178,7 +178,7 @@ export const GrillaEmpresaContacto = ({ rows, setRows, token }) => {
     {
       field: "actions",
       headerName: "Acciones",
-      width: 240,
+      width: 350,
       type: "actions",
       headerAlign: "center",
       align: "center",
@@ -253,8 +253,7 @@ export const GrillaEmpresaContacto = ({ rows, setRows, token }) => {
         slotProps={{
           toolbar: { setRows, rows, setRowModesModel },
         }}
-        /* sx={{
-          // ...
+        sx={{
           '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
             width: '8px',
             visibility: 'visible',
@@ -262,7 +261,7 @@ export const GrillaEmpresaContacto = ({ rows, setRows, token }) => {
           '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
             backgroundColor: '#ccc',
           },
-        }} */
+        }}
         initialState={{
           ...rows.initialState,
           pagination: {

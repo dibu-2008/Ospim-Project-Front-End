@@ -179,11 +179,12 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token }) => {
             align: "center",
             headerClassName: 'header--cell',
             valueFormatter: (params) => {
+
                 const date = new Date(params.value);
 
-                const day = date.getDate().toString().padStart(2, "0");
-                const month = (date.getMonth() + 1).toString().padStart(2, "0");
-                const year = date.getFullYear();
+                const day = date.getUTCDate().toString().padStart(2, "0");
+                const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
+                const year = date.getUTCFullYear();
 
                 return `${day}-${month}-${year}`;
             },
@@ -434,6 +435,15 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token }) => {
                         }}
                         slotProps={{
                             toolbar: { setRowsAltaDDJJ, rowsAltaDDJJ, setRowModesModel },
+                        }}
+                        sx={{
+                            '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
+                                width: '8px',
+                                visibility: 'visible',
+                            },
+                            '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
+                                backgroundColor: '#ccc',
+                            },
                         }}
                         initialState={{
                             ...rowsAltaDDJJ.initialState,
