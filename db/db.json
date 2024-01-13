@@ -449,6 +449,7 @@
   ],
   "empresaDomicilio": [
     {
+      "empresaId": 1,
       "tipo": "FISCAL",
       "provinciaId": 3,
       "localidadId": 265,
@@ -461,6 +462,7 @@
       "id": 1
     },
     {
+      "empresaId": 1,
       "tipo": "REAL",
       "provinciaId": 3,
       "localidadId": 265,
@@ -475,17 +477,19 @@
     {
       "tipo": "REAL",
       "provinciaId": 3,
-      "localidadId": 265,
-      "calle": "San Pedrosssss",
-      "calleNro": "15",
-      "piso": "2",
-      "depto": "C",
+      "localidadId": 3,
+      "calle": "San Luis de las camelias II",
+      "calleNro": "1077",
+      "piso": "7",
+      "depto": "B",
       "oficina": null,
-      "cp": "7600",
-      "planta": "Planta 3",
+      "cp": "1417",
+      "planta": "Planta 5",
+      "empresaId": "1",
       "id": 3
     },
     {
+      "empresaId": 1,
       "tipo": "FISCAL",
       "provinciaId": 10,
       "localidadId": 308,
@@ -498,6 +502,7 @@
       "id": 4
     },
     {
+      "empresaId": 1,
       "tipo": "REAL",
       "provinciaId": 16,
       "localidadId": 242,
@@ -508,6 +513,34 @@
       "cp": "2222",
       "planta": "adasdsad",
       "id": 5
+    },
+    {
+      "tipo": "REAL",
+      "provinciaId": 3,
+      "localidadId": 3,
+      "calle": "San Luis de las camelias",
+      "calleNro": "1077",
+      "piso": "7",
+      "depto": "B",
+      "oficina": null,
+      "cp": "1417",
+      "planta": "Planta 5",
+      "empresaId": "1",
+      "id": 6
+    },
+    {
+      "tipo": "REAL",
+      "provinciaId": 1,
+      "localidadId": 1,
+      "calle": "Thomas Edison",
+      "calleNro": "1505",
+      "piso": "1",
+      "depto": "A",
+      "oficina": null,
+      "cp": "1414",
+      "planta": "Planta 1",
+      "empresaId": "2",
+      "id": 7
     }
   ],
   "empresaContacto": [

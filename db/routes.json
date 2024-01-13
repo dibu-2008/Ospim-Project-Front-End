@@ -7,7 +7,8 @@
   "/usuario/:id/habilitar/": "/usuario-interno/:id",
   "/usuario/:id/deshabilitar/": "/usuario-interno/:id",
   "/empresa/domicilio/": "/empresaDomicilio",
-  "/empresa/:id/domicilio/": "/empresaDomicilio",
+  "/empresa/:id/domicilio/": "/empresaDomicilio?empresaId=:id",
+  "/empresa/:id/domicilio/planta/": "/empresaDomicilio/planta?empresaId=:id",
   "/empresa/:empresaId/domicilio/:id": "/empresaDomicilio/:id",
   "/empresa/contacto/tipo": "/empresaContactoTipo",
   "/empresa/domicilio/tipo": "/empresaDomicilioTipo",
@@ -22,7 +23,7 @@
   "/camara/categoria": "/categoria",
   "/entidad/aporte": "/entidad-aporte",
   "/empresa/:empresaId/dj/": "/DDJJConsulta?empresaId=:empresaId",
-  "/empresa/:empresaId/dj/:id": "/DDJJConsulta/:id",
+  "/empresa/:empresaId/dj/:id": "/DDJJConsulta/:id?empresaId=:empresaId",
   "/empresa/:empresaId/dj/:id/presentar": "/DDJJConsulta/:id",
   "/empresa/:empresaId/dj/periodo/:periodo/existe": "/DDJJConsulta?empresaId=:empresaId&periodo=:periodo",
   "/afiliado/?cuil:cuil": "/afiliado/?cuil_titular:cuil"

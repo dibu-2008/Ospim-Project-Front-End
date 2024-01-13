@@ -1,6 +1,6 @@
 module.exports = (req, res, next) => {
   console.log("Middleware - SIGECO - INIT - getAPI: " + getAPI());
-  console.log("Middleware - SIGECO - req.url:" + req.url);
+  console.log("Middleware - SIGECO - req.url: " + req.method + "->" + req.url);
   //console.log("Middleware - SIGECO - req.body:" + req.body);
 
   function getAPI() {
@@ -40,6 +40,18 @@ module.exports = (req, res, next) => {
     ) {
       return "COMUN-CUI-VALIDAR";
     }
+    ///empresa/:empresaId/domicilio/planta/
+    if (
+      req.method === "GET" &&
+      req.url.startsWith("/empresaDomicilio/planta")
+    ) {
+      ///empresaDomicilio/planta?empresaId=1
+      return "EMPRESA-PLANTA-CONSULTA";
+    }
+
+    if (req.method === "POST" && req.url.startsWith("/empresaDomicilio")) {
+      return "EMPRESA-DOMICILIO-ALTA";
+    }
 
     return "----";
   }
@@ -64,12 +76,47 @@ module.exports = (req, res, next) => {
     case "COMUN-CUI-VALIDAR":
       validarCUI();
       break;
+    case "EMPRESA-PLANTA-CONSULTA":
+      empresaPlataConsulta();
+      break;
+    case "EMPRESA-DOMICILIO-ALTA":
+      empresaDomicilioAlta();
+      break;
     case "----":
       // code block
       next();
       break;
     default:
     // code block
+  }
+
+  function empresaDomicilioAlta() {
+    let empresaId = req.query.empresaId;
+    console.log("empresaId: " + empresaId);
+    if (empresaId) {
+      req.body.empresaId = empresaId;
+    }
+    next();
+  }
+
+  function empresaPlataConsulta() {
+    let empresaId = req.query.empresaId;
+    if (empresaId) {
+      var domicilioDB = req.app.db.__wrapped__.empresaDomicilio;
+      const lstFiltrado = domicilioDB.filter((element) => {
+        return element.empresaId == empresaId;
+      });
+
+      lstPlanta = lstFiltrado.map((reg) => {
+        let newReg;
+        newReg = { id: reg.id, planta: reg.planta };
+        return newReg;
+      });
+
+      res.status(200).send(lstPlanta);
+    } else {
+      next();
+    }
   }
 
   function validarCUI() {
