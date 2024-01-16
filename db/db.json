@@ -370,74 +370,60 @@
   ],
   "categoria": [
     {
-      "camaraCodigo": "FAIM",
-      "descripcion": "A",
-      "id": 2
+      "camara": "FAIM",
+      "categoria": "A"
     },
     {
-      "id": 3,
-      "camaraCodigo": "FAIM",
-      "descripcion": "C"
+      "camara": "FAIM",
+      "categoria": "C"
     },
     {
-      "id": 4,
-      "camaraCodigo": "FAIM",
-      "descripcion": "D"
+      "camara": "FAIM",
+      "categoria": "D"
     },
     {
-      "id": 5,
-      "camaraCodigo": "CEPA",
-      "descripcion": "A"
+      "camara": "CEPA",
+      "categoria": "A"
     },
     {
-      "id": 6,
-      "camaraCodigo": "CEPA",
-      "descripcion": "B"
+      "camara": "CEPA",
+      "categoria": "B"
     },
     {
-      "id": 7,
-      "camaraCodigo": "CEPA",
-      "descripcion": "C"
+      "camara": "CEPA",
+      "categoria": "C"
     },
     {
-      "id": 8,
-      "camaraCodigo": "CEPA",
-      "descripcion": "D"
+      "camara": "CEPA",
+      "categoria": "D"
     },
     {
-      "id": 9,
-      "camaraCodigo": "CEPA",
-      "descripcion": "E"
+      "camara": "CEPA",
+      "categoria": "E"
     },
     {
-      "id": 10,
-      "camaraCodigo": "CAENA",
-      "descripcion": "A"
+      "camara": "CAENA",
+      "categoria": "A"
     },
     {
-      "id": 11,
-      "camaraCodigo": "CAENA",
-      "descripcion": "B"
+      "camara": "CAENA",
+      "categoria": "B"
     },
     {
-      "id": 12,
-      "camaraCodigo": "CAENA",
-      "descripcion": "C"
+      "camara": "CAENA",
+      "categoria": "C"
     },
     {
-      "id": 13,
-      "camaraCodigo": "CAENA",
-      "descripcion": "D"
+      "camara": "CAENA",
+      "categoria": "D"
     },
     {
-      "id": 14,
-      "camaraCodigo": "CAENA",
-      "descripcion": "E"
+      "camara": "CAENA",
+      "categoria": "E"
     },
     {
-      "camaraCodigo": "FAIM",
-      "descripcion": "B",
-      "id": 15
+      "camara": "FAIM",
+      "categoria": "B"
     }
   ],
   "empresa": [
@@ -816,44 +802,38 @@
   ],
   "afiliado": [
     {
-      "cuil_titular": "23278871924",
-      "inter": 0,
       "cuil": "23278871924",
+      "inter": 0,
       "apellido": "Morales",
       "nombre": "Alfio"
     },
     {
-      "cuil_titular": "27312728848",
-      "inter": 0,
       "cuil": "27312728848",
+      "inter": 0,
       "apellido": "Castaneda",
       "nombre": "Manfredo"
     },
     {
-      "cuil_titular": "20289401173",
-      "inter": 0,
       "cuil": "20289401173",
+      "inter": 0,
       "apellido": "Anaya",
       "nombre": "Reinardo"
     },
     {
-      "cuil_titular": "27112763592",
-      "inter": 0,
       "cuil": "27112763592",
+      "inter": 0,
       "apellido": "Raya",
       "nombre": "Doria"
     },
     {
-      "cuil_titular": "23332969889",
-      "inter": 0,
       "cuil": "23332969889",
+      "inter": 0,
       "apellido": "Tejada",
       "nombre": "Vanda"
     },
     {
-      "cuil_titular": "27446744955",
-      "inter": 0,
       "cuil": "27446744955",
+      "inter": 0,
       "apellido": "Longoria",
       "nombre": "Albano"
     }
