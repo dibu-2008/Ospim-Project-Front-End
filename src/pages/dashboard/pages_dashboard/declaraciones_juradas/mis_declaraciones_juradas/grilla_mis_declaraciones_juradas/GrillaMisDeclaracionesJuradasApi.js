@@ -8,7 +8,7 @@ const MESSAGE_HTTP_DELETED = import.meta.env.VITE_MESSAGE_HTTP_DELETED;
 
 export const obtenerMisDeclaracionesJuradas = async (idEmpresa, token) => {
 
-    const URL = `${BACKEND_URL}/empresa/${idEmpresa}/dj`;
+    const URL = `${BACKEND_URL}/empresa/${idEmpresa}/ddjj`;
 
     const showSwalError = (descripcion) => {
         Swal.fire({
@@ -41,7 +41,7 @@ export const obtenerMisDeclaracionesJuradas = async (idEmpresa, token) => {
 
 export const presentarDeclaracionJurada = async (idEmpresa, idDeclaracionJurada, estado, token) => {
 
-    const URL = `${BACKEND_URL}/empresa/${idEmpresa}/dj/${idDeclaracionJurada}/presentar`;
+    const URL = `${BACKEND_URL}/empresa/${idEmpresa}/ddjj/${idDeclaracionJurada}/presentar`;
 
     const showSwalError = (descripcion) => {
         Swal.fire({
@@ -83,7 +83,7 @@ export const presentarDeclaracionJurada = async (idEmpresa, idDeclaracionJurada,
 
 export const eliminarDeclaracionJurada = async (idEmpresa, idDeclaracionJurada, token) => {
 
-    const URL = `${BACKEND_URL}/empresa/${idEmpresa}/dj/${idDeclaracionJurada}`;
+    const URL = `${BACKEND_URL}/empresa/${idEmpresa}/ddjj/${idDeclaracionJurada}`;
 
     const showSwalError = (descripcion) => {
         Swal.fire({
