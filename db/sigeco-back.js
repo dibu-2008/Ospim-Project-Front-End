@@ -1,5 +1,6 @@
 module.exports = (req, res, next) => {
   console.log("Middleware - SIGECO - INIT - getAPI: " + getAPI());
+
   console.log("Middleware - SIGECO - req.url: " + req.method + "->" + req.url);
   //console.log("Middleware - SIGECO - req.body:" + req.body);
 
@@ -53,6 +54,13 @@ module.exports = (req, res, next) => {
       return "EMPRESA-DOMICILIO-ALTA";
     }
 
+    if (req.method === "POST" && req.url.startsWith("/DDJJConsulta")) {
+      return "DDJJ-ALTA";
+    }
+    if (req.method === "PUT" && req.url.startsWith("/DDJJConsulta")) {
+      return "DDJJ-MODI";
+    }
+
     return "----";
   }
 
@@ -81,6 +89,12 @@ module.exports = (req, res, next) => {
       break;
     case "EMPRESA-DOMICILIO-ALTA":
       empresaDomicilioAlta();
+      break;
+    case "DDJJ-ALTA":
+      DDJJSetParams();
+      break;
+    case "DDJJ-MODI":
+      DDJJSetParams();
       break;
     case "----":
       // code block
@@ -136,7 +150,7 @@ module.exports = (req, res, next) => {
     if (
       camaraCodigo != "CAENA" &&
       camaraCodigo != "FAIM" &&
-      camaraCodigo != "CAENA"
+      camaraCodigo != "CEPA"
     ) {
       res.status(412).jsonp({
         tipo: "ERROR_APP_BUSINESS",
@@ -235,5 +249,40 @@ module.exports = (req, res, next) => {
     } else {
       res.status(200).send({ resultado: false });
     }
+  }
+
+  function DDJJSetParams() {
+    console.log("DDJJAlta - Hola");
+    var empresaId = req.query.empresaId;
+    if (empresaId != ":empresaId") {
+      console.log("empresaId: " + empresaId);
+      if (empresaId) {
+        req.body.empresaId = empresaId;
+      }
+      req.body.estado = "PE";
+      req.body.secuencia = null;
+      req.body.totalART46 = genRand(100000, 1000000, 2);
+      req.body.totalAntimaCS = genRand(100000, 1000000, 2);
+      req.body.totalUomaCS = genRand(100000, 1000000, 2);
+      req.body.totalUomaAS = genRand(100000, 1000000, 2);
+      req.body.totalCuotaUsu = genRand(100000, 1000000, 2);
+
+      next();
+    } else {
+      res.status(401).jsonp({
+        tipo: "ERROR_APP_BUSINESS",
+        ticket: "TK-156270",
+        codigo: "CODIGO_INVALIDO",
+        descripcion: "Debe indicar la empresa de la DDJJ .",
+      });
+
+      console.log(res.statusCode);
+    }
+  }
+
+  function genRand(min, max, decimalPlaces) {
+    var rand = Math.random() * (max - min) + min;
+    var power = Math.pow(10, decimalPlaces);
+    return Math.floor(rand * power) / power;
   }
 };
