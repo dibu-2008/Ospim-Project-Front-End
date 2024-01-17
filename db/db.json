@@ -798,6 +798,37 @@
       "totalUomaCS": 1305333,
       "totalUomaAS": 200000.01,
       "totalCuotaUsu": 10
+    },
+    {
+      "periodo": "2023-10-01T00:00:00.000Z",
+      "afiliados": [
+        {
+          "cuil": "23279737229",
+          "inte": null,
+          "apellido": "Vázquez",
+          "nombre": "Lot",
+          "fechaIngreso": "01/01/2001",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "aporteUomaCs": true,
+          "aporteUomaAs": true,
+          "aporteCuotaUsu": true,
+          "aporteArt46": true,
+          "aporteAntimaCs": true
+        }
+      ],
+      "empresaId": "1",
+      "estado": "PE",
+      "secuencia": null,
+      "totalART46": 940868.93,
+      "totalAntimaCS": 519949.91,
+      "totalUomaCS": 605240.74,
+      "totalUomaAS": 217441.68,
+      "totalCuotaUsu": 334984.99,
+      "id": 202
     }
   ],
   "afiliado": [
