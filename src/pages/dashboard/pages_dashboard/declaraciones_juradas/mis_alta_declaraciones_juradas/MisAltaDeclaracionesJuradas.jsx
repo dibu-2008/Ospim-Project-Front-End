@@ -4,6 +4,7 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { esES } from '@mui/x-date-pickers/locales';
 import { Box, TextField, Button, Radio, RadioGroup, FormControlLabel } from '@mui/material';
 import dayjs from 'dayjs';
@@ -29,6 +30,30 @@ export const MisAltaDeclaracionesJuradas = () => {
     //const handleChangeHasta = (date) => setHasta(date);
 
     const handleChangePeriodo = (date) => setPeriodo(date);
+    /* const handleAccept = () => {
+        const {$d:fecha} = periodo;
+        const fechaFormateada = new Date(fecha).toISOString();
+        console.log(fechaFormateada);  // 2026-02-18T03:00:00.000Z
+        
+    }; */
+
+    const handleAccept = () => {
+        if (periodo && periodo.$d) {
+            const {$d:fecha} = periodo;
+            const fechaFormateada = new Date(fecha);
+            fechaFormateada.setDate(1); // Establecer el día del mes a 1
+    
+            // Ajustar la zona horaria a UTC
+            fechaFormateada.setUTCHours(0, 0, 0, 0);
+    
+            const fechaISO = fechaFormateada.toISOString();
+            console.log(fechaISO);  // 2026-02-01T00:00:00.000Z
+        } else {
+            console.log("No se ha seleccionado ninguna fecha.");
+        }
+    };
+    
+
     const handleChangeOtroPeriodo = (date) => setOtroPeriodo(date);
 
     const handleFileChange = (event) => {
@@ -57,13 +82,22 @@ export const MisAltaDeclaracionesJuradas = () => {
                         localeText={esES.components.MuiLocalizationProvider.defaultProps.localeText}
                     >
                         <DemoContainer components={['DatePicker']}>
-                            <DatePicker
+                            {/* <DatePicker
                                 label="Periodo"
                                 value={periodo}
                                 onChange={handleChangePeriodo}
                                 format="MMMM YYYY"
                                 openTo="year"
                                 views={["year", "month"]}
+                            /> */}
+                            <DesktopDatePicker
+                                label={'Periodo'}
+                                views={['month', 'year']}
+                                closeOnSelect={false}
+                                onChange={handleChangePeriodo}
+                                value={periodo}
+                                slotProps={{ actionBar: { actions: ['cancel', 'accept'] } }}
+                                onAccept={handleAccept}
                             />
                         </DemoContainer>
                     </LocalizationProvider>

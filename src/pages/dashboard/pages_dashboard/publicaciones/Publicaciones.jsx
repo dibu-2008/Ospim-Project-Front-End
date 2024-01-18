@@ -82,12 +82,21 @@ export const Publicaciones = () => {
 
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
 
+    const fechaDesde = new Date(newRow.vigenciaDesde);
+    const fechaHasta = new Date(newRow.vigenciaHasta);
+
+    fechaDesde.setUTCHours(0, 0, 0, 0);
+    fechaHasta.setUTCHours(0, 0, 0, 0);
+
+    const fechaDesdeFormateada = fechaDesde.toISOString();
+    const fechaHastaFormateada = fechaHasta.toISOString();
+
     if (newRow.isNew) {
       const nuevaPublicacion = {
         titulo: newRow.titulo,
         cuerpo: newRow.cuerpo,
-        vigenciaDesde: newRow.vigenciaDesde,
-        vigenciaHasta: newRow.vigenciaHasta,
+        vigenciaDesde: fechaDesdeFormateada,
+        vigenciaHasta: fechaHastaFormateada,
       };
 
       await crearPublicacion(nuevaPublicacion, TOKEN);
@@ -95,8 +104,8 @@ export const Publicaciones = () => {
       const publicacionEditada = {
         titulo: newRow.titulo,
         cuerpo: newRow.cuerpo,
-        vigenciaDesde: newRow.vigenciaDesde,
-        vigenciaHasta: newRow.vigenciaHasta,
+        vigenciaDesde: fechaDesdeFormateada,
+        vigenciaHasta: fechaHastaFormateada,
       };
 
       await actualizarPublicacion(newRow.id, publicacionEditada, TOKEN);

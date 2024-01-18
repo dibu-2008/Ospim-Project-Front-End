@@ -117,10 +117,16 @@ export const Feriados = () => {
 
     const updatedRow = { ...newRow, isNew: false };
 
+    const fecha = new Date(newRow.fecha);
+
+    fecha.setUTCHours(0, 0, 0, 0);
+
+    const fechaFormateada = fecha.toISOString();
+
     if (newRow.isNew) {
 
       const nuevoFeriado = {
-        fecha: newRow.fecha,
+        fecha: fechaFormateada,
         descripcion: newRow.descripcion,
       };
 
@@ -129,7 +135,7 @@ export const Feriados = () => {
     } else {
 
       const updatedFeriado = {
-        fecha: newRow.fecha,
+        fecha: fechaFormateada,
         descripcion: newRow.descripcion,
       };
 
