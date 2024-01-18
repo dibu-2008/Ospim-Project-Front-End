@@ -33,14 +33,14 @@ const DashboardPage = () => {
         <BottomNavigationAction label="Boletas" icon={<StyleIcon />} component={Link} to="./boletas" />
         <BottomNavigationAction label="Pagos" icon={<AccountBalanceWalletIcon />} component={Link} to="./pagos" />
         <BottomNavigationAction label="Datos" icon={<PersonIcon />} component={Link} to="./misdatos" />
-        <BottomNavigationAction label="Categorias" icon={<CategoryIcon />} component={Link} to="./categorias" />
+        {/* <BottomNavigationAction label="Categorias" icon={<CategoryIcon />} component={Link} to="./categorias" /> */}
         <BottomNavigationAction label="Cuits Restringidos" icon={<NetworkLockedIcon />} component={Link} to="./cuitsrestringidos" />
         <BottomNavigationAction 
           label="Alta Usuario Interno" 
           icon={<PersonIcon />} 
           component={Link} to="./altausuariointerno" 
         />
-        <BottomNavigationAction label="Salir" icon={<CloseIcon />} />
+        {/* <BottomNavigationAction label="Salir" icon={<CloseIcon />} /> */}
       </BottomNavigation>
 
       <Outlet />
