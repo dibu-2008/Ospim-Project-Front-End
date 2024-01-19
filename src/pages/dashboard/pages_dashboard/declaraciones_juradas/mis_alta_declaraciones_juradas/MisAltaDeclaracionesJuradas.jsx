@@ -30,13 +30,7 @@ export const MisAltaDeclaracionesJuradas = () => {
     //const handleChangeHasta = (date) => setHasta(date);
 
     const handleChangePeriodo = (date) => setPeriodo(date);
-    /* const handleAccept = () => {
-        const {$d:fecha} = periodo;
-        const fechaFormateada = new Date(fecha).toISOString();
-        console.log(fechaFormateada);  // 2026-02-18T03:00:00.000Z
-        
-    }; */
-
+    
     const handleAccept = () => {
         if (periodo && periodo.$d) {
             const {$d:fecha} = periodo;
@@ -131,6 +125,7 @@ export const MisAltaDeclaracionesJuradas = () => {
                             name="src-file1"
                             aria-label="Archivo"
                             onChange={handleFileChange}
+                            accept=".csv, .xlsx"
                         />
                         <div className="file-select-label" id="src-file1-label">
                             {selectedFileName || 'Nombre del archivo'}
