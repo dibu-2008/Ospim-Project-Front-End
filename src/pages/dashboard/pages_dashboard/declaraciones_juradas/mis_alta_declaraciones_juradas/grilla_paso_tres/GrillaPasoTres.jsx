@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
     GridRowModes,
     DataGrid,
@@ -14,9 +14,11 @@ import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import SearchIcon from '@mui/icons-material/Search';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import * as locales from '@mui/material/locale';
-import { Checkbox, Box, Button } from "@mui/material";
+import { Checkbox, Box, Button, TextField } from "@mui/material";
+import { obtenerAfiliados } from "../MisAltaDeclaracionesJuradasApi";
 
 function EditToolbar(props) {
     const { setRowsAltaDDJJ, rowsAltaDDJJ, setRowModesModel } = props;
@@ -67,15 +69,77 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token }) => {
     const [locale, setLocale] = useState('esES');
     const [rowModesModel, setRowModesModel] = useState({});
     const [camaras, setCamaras] = useState([]);
-    const [check, setCheck] = useState(false);
-    const TOKEN = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.usuario.token;
 
     const theme = useTheme();
-
     const themeWithLocale = useMemo(
         () => createTheme(theme, locales[locale]),
         [locale, theme],
     );
+
+    /* const ObtenerAfiliados = async (row, cuilElegido) => {
+
+        console.log("row antes: " , row);
+        const afiliados = await obtenerAfiliados(token, cuilElegido);
+        const afiliado = afiliados.find(afiliado => afiliado.cuil === cuilElegido);
+        row.apellido = afiliado.apellido;
+        row.nombre = afiliado.nombre;
+        
+        console.log("row ahora: " , row);
+
+    }; */
+
+    
+    const ObtenerAfiliados = async (params, cuilElegido) => {
+    
+        const afiliados = await obtenerAfiliados(token, cuilElegido);
+        const afiliado = afiliados.find((afiliado) => afiliado.cuil === cuilElegido);    
+    
+        // Actualizar el estado con el nuevo objeto usando setEditCellValue
+        params.api.setEditCellValue({
+            id: params.id,
+            field: 'apellido',
+            value: afiliado.apellido,
+            renderEditCell: (params) => {
+                return (
+                    <TextField
+                        fullWidth
+                        value={params.value}
+                        onChange={(event) => {
+                            const newValue = event.target.value;
+                            params.api.setEditCellValue({
+                                id: params.id,
+                                field: 'apellido',
+                                value: newValue,
+                            });
+                        }}
+                        sx={{
+                            '& .MuiOutlinedInput-root': {
+                                '& fieldset': {
+                                    borderColor: 'transparent', // Color del borde cuando no está enfocado
+                                },
+                                '&:hover fieldset': {
+                                    borderColor: 'transparent', // Color del borde al pasar el ratón
+                                },
+                                '&.Mui-focused fieldset': {
+                                    borderColor: 'transparent', // Color del borde cuando está enfocado
+                                },
+                            },
+                        }}
+
+                    />
+                );
+            }
+        });
+
+        params.api.setEditCellValue({
+            id: params.id,
+            field: 'nombre',
+            value: afiliado.nombre,
+        });
+    
+    };
+    
+
 
     const handleRowEditStop = (params, event) => {
         if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -133,11 +197,47 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token }) => {
             field: "cuil",
             type: "string",
             headerName: "CUIL",
-            width: 150,
+            width: 250,
             editable: true,
             headerAlign: "center",
             align: "center",
             headerClassName: 'header--cell',
+            renderEditCell: (params) => {
+                return (
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <TextField
+                            fullWidth
+                            value={params.value}
+                            onChange={(event) => {
+                                const newValue = event.target.value;
+                                params.api.setEditCellValue({
+                                    id: params.id,
+                                    field: 'cuil',
+                                    value: newValue,
+                                });
+                            }}
+                            sx={{
+                                '& .MuiOutlinedInput-root': {
+                                    '& fieldset': {
+                                        borderColor: 'transparent', // Color del borde cuando no está enfocado
+                                    },
+                                    '&:hover fieldset': {
+                                        borderColor: 'transparent', // Color del borde al pasar el ratón
+                                    },
+                                    '&.Mui-focused fieldset': {
+                                        borderColor: 'transparent', // Color del borde cuando está enfocado
+                                    },
+                                },
+                            }}
+
+                        />
+                        <SearchIcon
+                            style={{ marginLeft: 8, cursor: 'pointer' }}
+                            onClick={() => ObtenerAfiliados(params, params.value)}
+                        />
+                    </div>
+                );
+            },
         },
         {
             field: "apellido",
