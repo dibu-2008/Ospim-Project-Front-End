@@ -37,3 +37,67 @@ export const obtenerAfiliados = async (token, cuil) => {
 
     }
 }
+
+export const obtenerCamaras = async (token) => {
+
+    const URL = `${BACKEND_URL}/camara`;
+
+    const showSwalError = (descripcion) => {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: descripcion,
+            showConfirmButton: false,
+            timer: 3000,
+        })
+    }
+
+    try {
+
+        const camarasResponse = await axios.get(URL, {
+            headers: {
+                'Authorization': token
+            }
+        });
+        const camaras = await camarasResponse.data;
+
+        return camaras || [];
+
+    } catch (error) {
+
+        errorBackendResponse(error, showSwalError);
+
+    }
+}
+
+export const obtenerCategorias = async (token) => {
+
+    const URL = `${BACKEND_URL}/categoria`;
+
+    const showSwalError = (descripcion) => {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: descripcion,
+            showConfirmButton: false,
+            timer: 3000,
+        })
+    }
+
+    try {
+
+        const categoriasResponse = await axios.get(URL, {
+            headers: {
+                'Authorization': token
+            }
+        });
+        const categorias = await categoriasResponse.data;
+
+        return categorias || [];
+
+    } catch (error) {
+
+        errorBackendResponse(error, showSwalError);
+
+    }
+}

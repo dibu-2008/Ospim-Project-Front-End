@@ -156,7 +156,7 @@ export const Categorias = () => {
     {
       field: "camaraCodigo",
       headerName: "Camara",
-      width: 433,
+      width: 150,
       editable: true,
       headerAlign: "center",
       align: "center",

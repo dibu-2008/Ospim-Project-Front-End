@@ -64,11 +64,10 @@ function EditToolbar(props) {
     );
 }
 
-export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token }) => {
+export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, categorias }) => {
 
     const [locale, setLocale] = useState('esES');
     const [rowModesModel, setRowModesModel] = useState({});
-    const [camaras, setCamaras] = useState([]);
 
     const theme = useTheme();
     const themeWithLocale = useMemo(
@@ -88,12 +87,12 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token }) => {
 
     }; */
 
-    
+
     const ObtenerAfiliados = async (params, cuilElegido) => {
-    
+
         const afiliados = await obtenerAfiliados(token, cuilElegido);
-        const afiliado = afiliados.find((afiliado) => afiliado.cuil === cuilElegido);    
-    
+        const afiliado = afiliados.find((afiliado) => afiliado.cuil === cuilElegido);
+
         // Actualizar el estado con el nuevo objeto usando setEditCellValue
         params.api.setEditCellValue({
             id: params.id,
@@ -136,9 +135,9 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token }) => {
             field: 'nombre',
             value: afiliado.nombre,
         });
-    
+
     };
-    
+
 
 
     const handleRowEditStop = (params, event) => {
@@ -261,13 +260,16 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token }) => {
         },
         {
             field: "camara",
-            type: "singleSelect",
             headerName: "Camara",
-            width: 150,
+            width: 433,
             editable: true,
             headerAlign: "center",
             align: "center",
-            headerClassName: 'header--cell'
+            type: "singleSelect",
+            valueOptions: camaras.map((camara) => {
+                return { value: camara.codigo, label: camara.descripcion };
+            }),
+            headerClassName: 'header--cell',
         },
         {
             field: "fechaIngreso",
