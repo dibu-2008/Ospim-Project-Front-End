@@ -280,9 +280,10 @@
       "clave": "Prueba123",
       "rolId": 1,
       "nombre": "Nombre12",
-      "apellido": "Apellido12 comp.",
+      "apellido": "Apellido12 PRUEBA",
       "email": "usuario12@gmail.com",
-      "id": 9
+      "id": 9,
+      "habilitado": true
     },
     {
       "descripcion": "luis33",
@@ -293,6 +294,15 @@
       "email": "luis@gmail.com",
       "id": 10,
       "habilitado": true
+    },
+    {
+      "descripcion": "",
+      "clave": "",
+      "rolId": "",
+      "nombre": "Juan",
+      "apellido": "Pepenilla",
+      "email": "",
+      "id": 11
     }
   ],
   "publicaciones": [
@@ -460,19 +470,6 @@
   "empresaDomicilio": [
     {
       "empresaId": 1,
-      "tipo": "FISCAL",
-      "provinciaId": 3,
-      "localidadId": 265,
-      "calle": "San Martin",
-      "piso": "P.B.",
-      "depto": "A",
-      "oficina": "12",
-      "cp": "1414",
-      "planta": "Planta 11",
-      "id": 1
-    },
-    {
-      "empresaId": 1,
       "tipo": "REAL",
       "provinciaId": 3,
       "localidadId": 265,
@@ -551,6 +548,19 @@
       "planta": "Planta 1",
       "empresaId": "2",
       "id": 7
+    },
+    {
+      "tipo": "FISCAL",
+      "provinciaId": 3,
+      "localidadId": 265,
+      "calle": "San Juan 1521",
+      "piso": "1",
+      "depto": "D",
+      "oficina": "",
+      "cp": "1417",
+      "planta": "Oficina Central",
+      "empresaId": ":empresaId",
+      "id": 8
     }
   ],
   "empresaContacto": [
