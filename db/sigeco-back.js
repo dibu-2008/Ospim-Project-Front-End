@@ -61,6 +61,21 @@ module.exports = (req, res, next) => {
       return "DDJJ-MODI";
     }
 
+    if (
+      req.method === "GET" &&
+      req.url.startsWith("/rol/funcionalidad/getRel")
+    ) {
+      return "ROL-FUNC-REL-CONS";
+    }
+
+    if (req.method === "PUT" && req.url.startsWith("/rolFuncionalidad/")) {
+      return "ROL-FUNC-REL-ALTA";
+    }
+
+    if (req.method === "DELETE" && req.url.startsWith("/rolFuncionalidad/")) {
+      return "ROL-FUNC-REL-BAJA";
+    }
+
     return "----";
   }
 
@@ -96,12 +111,87 @@ module.exports = (req, res, next) => {
     case "DDJJ-MODI":
       DDJJSetParams();
       break;
+    case "ROL-FUNC-REL-CONS":
+      RolFuncionalidadRelCons();
+      break;
+    case "ROL-FUNC-REL-ALTA":
+      RolFuncionalidadRelAlta();
+      break;
+    case "ROL-FUNC-REL-BAJA":
+      RolFuncionalidadRelBaja();
+      break;
     case "----":
       // code block
       next();
       break;
     default:
     // code block
+  }
+
+  function RolFuncionalidadRelBaja() {
+    let rolId = req.query.rolId;
+    let funcCodigo = req.query.funcionalidad;
+    console.log("rolId:" + rolId + " - funcCodigo:" + funcCodigo);
+
+    let reg = { rolId: rolId, funcionalidad: funcCodigo };
+
+    let rolFuncDB = req.app.db.__wrapped__.rolFuncionalidad;
+    const lstFiltrado = rolFuncDB.filter((element) => {
+      return !(
+        element.rolId == reg.rolId && element.funcionalidad == reg.funcionalidad
+      );
+    });
+    console.log(lstFiltrado);
+    if (!lstFiltrado || lstFiltrado.length > 0) {
+      req.app.db.__wrapped__.rolFuncionalidad = lstFiltrado;
+      req.app.db.write();
+    } else {
+      console.log("NO SE PUEDE BOORAR lo que NO EXSISTE !...");
+    }
+    res.status(200).send(null);
+  }
+
+  function RolFuncionalidadRelAlta() {
+    let rolId = req.query.rolId;
+    let funcCodigo = req.query.funcionalidad;
+    console.log("rolId:" + rolId + " - funcCodigo:" + funcCodigo);
+
+    let reg = { rolId: rolId, funcionalidad: funcCodigo };
+
+    let rolFuncDB = req.app.db.__wrapped__.rolFuncionalidad;
+    const lstFiltrado = rolFuncDB.filter((element) => {
+      return (
+        element.rolId == reg.rolId && element.funcionalidad == reg.funcionalidad
+      );
+    });
+    console.log(lstFiltrado);
+    if (!lstFiltrado || lstFiltrado.length == 0) {
+      rolFuncDB.push(reg);
+      req.app.db.write();
+    } else {
+      console.log("YA EXSITE !...");
+    }
+    res.status(201).send(null);
+  }
+
+  function RolFuncionalidadRelCons() {
+    let rolId = req.query.rolId;
+
+    console.log("rolId: " + rolId);
+    if (rolId && rolId != ":id") {
+      let rolFuncDB = req.app.db.__wrapped__.rolFuncionalidad;
+      //let rolFuncDB = req.app.db.get("rolFuncionalidad");
+      const lstFiltrado = rolFuncDB.filter((element) => {
+        return element.rolId == rolId;
+      });
+      if (lstFiltrado && lstFiltrado.length && lstFiltrado.length > 0) {
+        res.status(200).send(lstFiltrado);
+      } else {
+        res.status(204).send(null);
+      }
+    } else {
+      res.status(404).send(null);
+    }
   }
 
   function empresaDomicilioAlta() {

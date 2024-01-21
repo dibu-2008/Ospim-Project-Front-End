@@ -122,18 +122,47 @@
   "rol": [
     {
       "id": 1,
-      "descripcion": "ROOT",
-      "baja": false
+      "descripcion": "ROOT"
     },
     {
       "id": 7,
-      "descripcion": "ADMINISTRATIVO",
-      "baja": false
+      "descripcion": "ADMINISTRATIVO"
     },
     {
       "descripcion": "CONTADURIA",
-      "baja": true,
       "id": 8
+    }
+  ],
+  "funcionalidad": [
+    {
+      "codigo": "FERIADO",
+      "descripcion": "Tabla Feriados"
+    },
+    {
+      "codigo": "USUA-INTER",
+      "descripcion": "Tabla Usuario Interno"
+    },
+    {
+      "codigo": "USUA-EMPRE",
+      "descripcion": "Tabla Usuario Empresa"
+    }
+  ],
+  "rolFuncionalidad": [
+    {
+      "rolId": 1,
+      "funcionalidad": "FERIADO"
+    },
+    {
+      "rolId": 1,
+      "funcionalidad": "USUA-INTER"
+    },
+    {
+      "rolId": 1,
+      "funcionalidad": "USUA-EMPRE"
+    },
+    {
+      "rolId": "7",
+      "funcionalidad": "USUA-EMPRE"
     }
   ],
   "feriados": [
@@ -173,9 +202,9 @@
       "id": 7
     },
     {
-      "fecha": "2024-01-19T00:00:00.000Z",
-      "descripcion": "nueva descripcion ",
-      "id": 8
+      "fecha": "2024-01-11T03:00:00.000Z",
+      "descripcion": "AAAAA",
+      "id": 11
     }
   ],
   "usuario-interno": [
@@ -799,7 +828,7 @@
       "afiliados": [
         {
           "cuil": "23279737229",
-          "inte": null,
+          "inte": 1,
           "apellido": "Vázquez",
           "nombre": "Lot",
           "fechaIngreso": "01/01/2001",
@@ -832,12 +861,6 @@
       "inter": 0,
       "apellido": "Morales",
       "nombre": "Alfio"
-    },
-    {
-      "cuil": "20949118682",
-      "inter": 0,
-      "apellido": "Salinas",
-      "nombre": "Luis"
     },
     {
       "cuil": "27312728848",
