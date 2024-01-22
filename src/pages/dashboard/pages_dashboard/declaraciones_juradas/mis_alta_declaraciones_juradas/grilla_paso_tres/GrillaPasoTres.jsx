@@ -17,8 +17,8 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import SearchIcon from '@mui/icons-material/Search';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import * as locales from '@mui/material/locale';
-import { Checkbox, Box, Button, TextField } from "@mui/material";
-import { obtenerAfiliados } from "../MisAltaDeclaracionesJuradasApi";
+import { Checkbox, Box, Button, TextField, Select, MenuItem } from "@mui/material";
+import { obtenerAfiliados, obtenerCategorias } from "../MisAltaDeclaracionesJuradasApi";
 
 function EditToolbar(props) {
     const { setRowsAltaDDJJ, rowsAltaDDJJ, setRowModesModel } = props;
@@ -64,7 +64,7 @@ function EditToolbar(props) {
     );
 }
 
-export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, categorias }) => {
+export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, categorias, setCategorias }) => {
 
     const [locale, setLocale] = useState('esES');
     const [rowModesModel, setRowModesModel] = useState({});
@@ -98,7 +98,7 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
             id: params.id,
             field: 'apellido',
             value: afiliado.apellido,
-            renderEditCell: (params) => {
+            /* renderEditCell: (params) => {
                 return (
                     <TextField
                         fullWidth
@@ -127,7 +127,7 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
 
                     />
                 );
-            }
+            } */
         });
 
         params.api.setEditCellValue({
@@ -137,6 +137,21 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
         });
 
     };
+
+    const filtroDeCategoria = async (params, codigoCamara) => {
+
+        const categoriasResponse = await obtenerCategorias(token);
+
+        const categoriasFiltradas = categoriasResponse.filter((categoria) => categoria.camara === codigoCamara); 
+        console.log("categoriasFiltradas: " , categoriasFiltradas);
+        
+        // armar un array solo de categorias
+        const soloCategorias = categoriasFiltradas.map((item) => item.categoria);
+        console.log("soloCategorias: " , soloCategorias);
+
+        setCategorias(soloCategorias);
+    };
+
 
 
 
@@ -152,8 +167,6 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
 
     const handleSaveClick = (id) => () => {
         setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-        const updatedRows = rowsAltaDDJJ.map((row) => (row.id === id ? { ...row, isNew: false } : row));
-        setRowsAltaDDJJ(updatedRows);
     };
 
     const handleDeleteClick = (id) => async () => {
@@ -180,8 +193,10 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
 
         if (newRow.isNew) {
 
-        } else {
+            //console.log("newRow: " , newRow);
 
+        } else {
+            //console.log("newRow: " , newRow);
         }
 
         return updatedRow;
@@ -261,15 +276,69 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
         {
             field: "camara",
             headerName: "Camara",
-            width: 433,
+            width: 150,
             editable: true,
             headerAlign: "center",
             align: "center",
             type: "singleSelect",
             valueOptions: camaras.map((camara) => {
-                return { value: camara.codigo, label: camara.descripcion };
+                return { value: camara.codigo, label: camara.descripcion, key: camara.codigo }; // Agrega la propiedad 'key'
             }),
             headerClassName: 'header--cell',
+            renderEditCell: (params) => {
+                return (
+                    <Select
+                        fullWidth
+                        value={params.value}
+                        onChange={(event) => {
+                            const newValue = event.target.value;
+                            params.api.setEditCellValue({
+                                id: params.id,
+                                field: 'camara',
+                                value: newValue,
+                            });
+                        }}
+                        sx={{
+                            '& .MuiOutlinedInput-root': {
+                                '& fieldset': {
+                                    borderColor: 'transparent', 
+                                },
+                                '&:hover fieldset': {
+                                    borderColor: 'transparent', 
+                                },
+                                '&.Mui-focused fieldset': {
+                                    borderColor: 'transparent', 
+                                },
+                            },
+                        }}
+                    >
+                        {camaras.map((camara) => {
+                            return (
+                                <MenuItem
+                                    key={camara.codigo}
+                                    value={camara.codigo}
+                                    onClick={() => filtroDeCategoria(params, camara.codigo)}
+                                >
+                                    {camara.descripcion}
+                                </MenuItem>
+                            );
+                        })}
+                    </Select>
+                )
+            }
+        },
+        {
+
+            field: "categoria",
+            type: "singleSelect",
+            headerName: "Categoria",
+            width: 150,
+            editable: true,
+            headerAlign: "center",
+            align: "center",
+            headerClassName: 'header--cell',
+            //valueOptions: categorias.map((cat) => cat.cat),
+            valueOptions: categorias
         },
         {
             field: "fechaIngreso",
@@ -295,17 +364,6 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
             field: "planta",
             type: "singleSelect",
             headerName: "Planta",
-            width: 150,
-            editable: true,
-            headerAlign: "center",
-            align: "center",
-            headerClassName: 'header--cell',
-        },
-        {
-
-            field: "categoria",
-            type: "singleSelect",
-            headerName: "Categoria",
             width: 150,
             editable: true,
             headerAlign: "center",

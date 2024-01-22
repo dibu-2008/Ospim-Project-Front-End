@@ -20,7 +20,7 @@ export const MisAltaDeclaracionesJuradas = () => {
     const [periodo, setPeriodo] = useState(null);
     const [otroPeriodo, setOtroPeriodo] = useState(null);
     const [camaras, setCamaras] = useState([]);
-    const [categorias, setCategorias] = useState(null);
+    const [categorias, setCategorias] = useState([]);
     /* const [desde, setDesde] = useState(null);
     const [hasta, setHasta] = useState(null); */
     const [selectedFileName, setSelectedFileName] = useState('');
@@ -33,23 +33,23 @@ export const MisAltaDeclaracionesJuradas = () => {
     //const handleChangeHasta = (date) => setHasta(date);
 
     const handleChangePeriodo = (date) => setPeriodo(date);
-    
+
     const handleAccept = () => {
         if (periodo && periodo.$d) {
-            const {$d:fecha} = periodo;
+            const { $d: fecha } = periodo;
             const fechaFormateada = new Date(fecha);
             fechaFormateada.setDate(1); // Establecer el día del mes a 1
-    
+
             // Ajustar la zona horaria a UTC
             fechaFormateada.setUTCHours(0, 0, 0, 0);
-    
+
             const fechaISO = fechaFormateada.toISOString();
             console.log(fechaISO);  // 2026-02-01T00:00:00.000Z
         } else {
             console.log("No se ha seleccionado ninguna fecha.");
         }
     };
-    
+
 
     const handleChangeOtroPeriodo = (date) => setOtroPeriodo(date);
 
@@ -58,21 +58,31 @@ export const MisAltaDeclaracionesJuradas = () => {
 
             const camarasResponse = await obtenerCamaras(TOKEN);
 
-            setCamaras(camarasResponse.map((item, index) => ({ id: index+1, ...item })));
+            setCamaras(camarasResponse.map((item, index) => ({ id: index + 1, ...item })));
         };
         ObtenerCamaras();
     }, []);
 
     useEffect(() => {
         const ObtenerCategorias = async () => {
-    
-          const categoriasResponse = await obtenerCategorias(TOKEN);
-    
-          setRows(categoriasResponse.map((item) => ({ id: item.id, ...item })));
-    
+
+            const categoriasResponse = await obtenerCategorias(TOKEN);
+
+           // quitar los objectos repetidos de la propiedad categoria
+            const categoriasResponseSinRepetidos = categoriasResponse.filter((item, index, arr) =>
+                index === arr.findIndex((t) => (
+                    t.categoria === item.categoria
+                ))
+            );
+
+            // armar un array de solo categorias
+            const soloCategorias = categoriasResponseSinRepetidos.map((item) => item.categoria);
+
+            setCategorias(soloCategorias);
+
         };
         ObtenerCategorias();
-      }, []);
+    }, []);
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
@@ -283,6 +293,7 @@ export const MisAltaDeclaracionesJuradas = () => {
                     token={TOKEN}
                     camaras={camaras}
                     categorias={categorias}
+                    setCategorias={setCategorias}
                 />
                 <div
                     className='botones_container'
