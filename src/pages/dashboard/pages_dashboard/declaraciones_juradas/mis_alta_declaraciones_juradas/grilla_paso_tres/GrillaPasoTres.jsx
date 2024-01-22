@@ -492,7 +492,6 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
                             params.api.setEditCellValue({ id: params.id, field: 'cuotaUsuf', value: false, editable: false });
                         }}
                     />
-
                 )
             },
             renderCell: (params) => (
