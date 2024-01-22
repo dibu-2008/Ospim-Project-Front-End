@@ -64,7 +64,7 @@ function EditToolbar(props) {
     );
 }
 
-export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, categorias, setCategorias }) => {
+export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, categorias, setCategorias, setAfiliado }) => {
 
     const [locale, setLocale] = useState('esES');
     const [rowModesModel, setRowModesModel] = useState({});
@@ -87,53 +87,24 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
 
     }; */
 
-
     const ObtenerAfiliados = async (params, cuilElegido) => {
 
         const afiliados = await obtenerAfiliados(token, cuilElegido);
-        const afiliado = afiliados.find((afiliado) => afiliado.cuil === cuilElegido);
+        const afiliadoEncontrado = afiliados.find((afiliado) => afiliado.cuil === cuilElegido);
+
+        setAfiliado(afiliadoEncontrado);
 
         // Actualizar el estado con el nuevo objeto usando setEditCellValue
         params.api.setEditCellValue({
             id: params.id,
             field: 'apellido',
-            value: afiliado.apellido,
-            /* renderEditCell: (params) => {
-                return (
-                    <TextField
-                        fullWidth
-                        value={params.value}
-                        onChange={(event) => {
-                            const newValue = event.target.value;
-                            params.api.setEditCellValue({
-                                id: params.id,
-                                field: 'apellido',
-                                value: newValue,
-                            });
-                        }}
-                        sx={{
-                            '& .MuiOutlinedInput-root': {
-                                '& fieldset': {
-                                    borderColor: 'transparent', // Color del borde cuando no está enfocado
-                                },
-                                '&:hover fieldset': {
-                                    borderColor: 'transparent', // Color del borde al pasar el ratón
-                                },
-                                '&.Mui-focused fieldset': {
-                                    borderColor: 'transparent', // Color del borde cuando está enfocado
-                                },
-                            },
-                        }}
-
-                    />
-                );
-            } */
+            value: afiliadoEncontrado.apellido
         });
 
         params.api.setEditCellValue({
             id: params.id,
             field: 'nombre',
-            value: afiliado.nombre,
+            value: afiliadoEncontrado.nombre,
         });
 
     };
@@ -151,9 +122,6 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
 
         setCategorias(soloCategorias);
     };
-
-
-
 
     const handleRowEditStop = (params, event) => {
         if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -190,6 +158,10 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
         const updatedRow = { ...newRow, isNew: false };
 
         setRowsAltaDDJJ(rowsAltaDDJJ.map((row) => (row.id === newRow.id ? updatedRow : row)));
+
+        const afiliadoFinal = {
+
+        }
 
         if (newRow.isNew) {
 
@@ -405,6 +377,8 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
                         onChange={(event) => {
                             const isChecked = event.target.checked;
                             params.api.setEditCellValue({ id: params.id, field: 'cuotaSocUoma', value: isChecked });
+                            // deshabilitar el campo de cuotaUsuf
+                            params.api.setEditCellValue({ id: params.id, field: 'cuotaUsuf', value: false, editable: false });
                         }}
                     />
 
@@ -430,6 +404,8 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
                         onChange={(event) => {
                             const isChecked = event.target.checked;
                             params.api.setEditCellValue({ id: params.id, field: 'aporteSolUoma', value: isChecked });
+                            // deshabilitar el campo de cuotaUsuf
+                            params.api.setEditCellValue({ id: params.id, field: 'cuotaUsuf', value: false, editable: false });
                         }}
                     />
 
@@ -455,6 +431,13 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
                         onChange={(event) => {
                             const isChecked = event.target.checked;
                             params.api.setEditCellValue({ id: params.id, field: 'cuotaUsuf', value: isChecked });
+                            console.log("Click en cuota usufructo...")
+                            // deshabilitar el campo de cuotaSocUoma
+                            params.api.setEditCellValue({ id: params.id, field: 'cuotaSocUoma', value: false, editable: false });
+                            // deshabilitar el campo de aporteSolUoma
+                            params.api.setEditCellValue({ id: params.id, field: 'aporteSolUoma', value: false, editable: false });
+                            // deshabilitar el campo de amtima
+                            params.api.setEditCellValue({ id: params.id, field: 'amtima', value: false, editable: false });
                         }}
                     />
 
@@ -505,6 +488,8 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
                         onChange={(event) => {
                             const isChecked = event.target.checked;
                             params.api.setEditCellValue({ id: params.id, field: 'amtima', value: isChecked });
+                            // deshabilitar el campo de cuotaUsuf
+                            params.api.setEditCellValue({ id: params.id, field: 'cuotaUsuf', value: false, editable: false });
                         }}
                     />
 

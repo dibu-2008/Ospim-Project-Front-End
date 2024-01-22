@@ -15,12 +15,13 @@ import { obtenerCamaras, obtenerCategorias } from './MisAltaDeclaracionesJuradas
 
 export const MisAltaDeclaracionesJuradas = () => {
 
-    const [rows, setRows] = useState([]);
     const [rowsAltaDDJJ, setRowsAltaDDJJ] = useState([]);
     const [periodo, setPeriodo] = useState(null);
+    const [periodoIso, setPeriodoIso] = useState(null); 
     const [otroPeriodo, setOtroPeriodo] = useState(null);
     const [camaras, setCamaras] = useState([]);
     const [categorias, setCategorias] = useState([]);
+    const [afiliado, setAfiliado] = useState({});
     /* const [desde, setDesde] = useState(null);
     const [hasta, setHasta] = useState(null); */
     const [selectedFileName, setSelectedFileName] = useState('');
@@ -32,7 +33,7 @@ export const MisAltaDeclaracionesJuradas = () => {
 
     //const handleChangeHasta = (date) => setHasta(date);
 
-    const handleChangePeriodo = (date) => setPeriodo(date);
+    const handleChangePeriodo = (date) => setPeriodo(date); 
 
     const handleAccept = () => {
         if (periodo && periodo.$d) {
@@ -43,8 +44,8 @@ export const MisAltaDeclaracionesJuradas = () => {
             // Ajustar la zona horaria a UTC
             fechaFormateada.setUTCHours(0, 0, 0, 0);
 
-            const fechaISO = fechaFormateada.toISOString();
-            console.log(fechaISO);  // 2026-02-01T00:00:00.000Z
+            const fechaISO = fechaFormateada.toISOString(); // 2026-02-01T00:00:00.000Z
+            setPeriodoIso(fechaISO);
         } else {
             console.log("No se ha seleccionado ninguna fecha.");
         }
@@ -93,6 +94,39 @@ export const MisAltaDeclaracionesJuradas = () => {
         setMostrarPeriodos(event.target.value === 'elegirOtro');
     };
 
+    const guardarDeclaracionJurada = () => {
+
+        const altaDeclaraionJuaradaFinal = {
+            periodo: periodoIso,
+            afiliados: rowsAltaDDJJ.map((item) => ({
+                cuil: item.cuil,
+                inte: afiliado.inter,
+                apellido: item.apellido,
+                nombre: item.nombre,
+                fechaIngreso: item.fechaIngreso,
+                empresaDomicilioId: ID_EMPRESA,
+                camara: item.camara,
+                categoria: item.categoria,
+                remunerativo: item.remunerativo,
+                noRemunerativo: item.noRemunerativo,
+                aporteUomaCs: item.cuotaSocUoma,
+                aporteUomaAs: item.aporteSolUoma,
+                aporteCuotaUsuaria: item.cuotaUsuf,
+                aporteArt46: item.art46,
+                aporteAntimaCs: item.amtima
+            }))
+        }
+
+
+
+        console.log("Alta DDJJ Final: ", altaDeclaraionJuaradaFinal);
+
+        console.log("Rows: ", rowsAltaDDJJ)
+        console.log("Afiliado: ", afiliado);
+
+    }
+
+
     return (
         <div className='mis_alta_declaraciones_juradas_container'>
             <div className="periodo_container">
@@ -110,14 +144,6 @@ export const MisAltaDeclaracionesJuradas = () => {
                         localeText={esES.components.MuiLocalizationProvider.defaultProps.localeText}
                     >
                         <DemoContainer components={['DatePicker']}>
-                            {/* <DatePicker
-                                label="Periodo"
-                                value={periodo}
-                                onChange={handleChangePeriodo}
-                                format="MMMM YYYY"
-                                openTo="year"
-                                views={["year", "month"]}
-                            /> */}
                             <DesktopDatePicker
                                 label={'Periodo'}
                                 views={['month', 'year']}
@@ -129,20 +155,6 @@ export const MisAltaDeclaracionesJuradas = () => {
                             />
                         </DemoContainer>
                     </LocalizationProvider>
-                    {/* <LocalizationProvider
-                        dateAdapter={AdapterDayjs}
-                        adapterLocale={"es"}
-                        localeText={esES.components.MuiLocalizationProvider.defaultProps.localeText}
-                    >
-                        <DemoContainer components={['DatePicker']}>
-                            <DatePicker
-                                label="Periodo hasta"
-                                value={hasta}
-                                onChange={handleChangeHasta}
-                                format="DD-MM-YYYY"
-                            />
-                        </DemoContainer>
-                    </LocalizationProvider> */}
                 </Stack>
             </div>
 
@@ -294,6 +306,7 @@ export const MisAltaDeclaracionesJuradas = () => {
                     camaras={camaras}
                     categorias={categorias}
                     setCategorias={setCategorias}
+                    setAfiliado={setAfiliado}
                 />
                 <div
                     className='botones_container'
@@ -303,7 +316,11 @@ export const MisAltaDeclaracionesJuradas = () => {
                         marginTop: '20px'
                     }}
                 >
-                    <Button variant="contained" sx={{ padding: '6px 52px' }}>Guardar</Button>
+                    <Button 
+                        variant="contained" 
+                        sx={{ padding: '6px 52px' }}
+                        onClick={guardarDeclaracionJurada}
+                    >Guardar</Button>
                     <Button variant="contained" sx={{ padding: '6px 52px', marginLeft: '10px' }}>Presentar</Button>
                 </div>
             </div>
