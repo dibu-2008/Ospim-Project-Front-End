@@ -17,8 +17,8 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import SearchIcon from '@mui/icons-material/Search';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import * as locales from '@mui/material/locale';
-import { Checkbox, Box, Button, TextField } from "@mui/material";
-import { obtenerAfiliados } from "../MisAltaDeclaracionesJuradasApi";
+import { Checkbox, Box, Button, TextField, Select, MenuItem } from "@mui/material";
+import { obtenerAfiliados, obtenerCategorias } from "../MisAltaDeclaracionesJuradasApi";
 
 function EditToolbar(props) {
     const { setRowsAltaDDJJ, rowsAltaDDJJ, setRowModesModel } = props;
@@ -64,7 +64,7 @@ function EditToolbar(props) {
     );
 }
 
-export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, categorias }) => {
+export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, categorias, setCategorias, setAfiliado }) => {
 
     const [locale, setLocale] = useState('esES');
     const [rowModesModel, setRowModesModel] = useState({});
@@ -87,58 +87,41 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
 
     }; */
 
-
     const ObtenerAfiliados = async (params, cuilElegido) => {
 
         const afiliados = await obtenerAfiliados(token, cuilElegido);
-        const afiliado = afiliados.find((afiliado) => afiliado.cuil === cuilElegido);
+        const afiliadoEncontrado = afiliados.find((afiliado) => afiliado.cuil === cuilElegido);
+
+        setAfiliado(afiliadoEncontrado);
 
         // Actualizar el estado con el nuevo objeto usando setEditCellValue
         params.api.setEditCellValue({
             id: params.id,
             field: 'apellido',
-            value: afiliado.apellido,
-            renderEditCell: (params) => {
-                return (
-                    <TextField
-                        fullWidth
-                        value={params.value}
-                        onChange={(event) => {
-                            const newValue = event.target.value;
-                            params.api.setEditCellValue({
-                                id: params.id,
-                                field: 'apellido',
-                                value: newValue,
-                            });
-                        }}
-                        sx={{
-                            '& .MuiOutlinedInput-root': {
-                                '& fieldset': {
-                                    borderColor: 'transparent', // Color del borde cuando no está enfocado
-                                },
-                                '&:hover fieldset': {
-                                    borderColor: 'transparent', // Color del borde al pasar el ratón
-                                },
-                                '&.Mui-focused fieldset': {
-                                    borderColor: 'transparent', // Color del borde cuando está enfocado
-                                },
-                            },
-                        }}
-
-                    />
-                );
-            }
+            value: afiliadoEncontrado.apellido
         });
 
         params.api.setEditCellValue({
             id: params.id,
             field: 'nombre',
-            value: afiliado.nombre,
+            value: afiliadoEncontrado.nombre,
         });
 
     };
 
+    const filtroDeCategoria = async (params, codigoCamara) => {
 
+        const categoriasResponse = await obtenerCategorias(token);
+
+        const categoriasFiltradas = categoriasResponse.filter((categoria) => categoria.camara === codigoCamara); 
+        console.log("categoriasFiltradas: " , categoriasFiltradas);
+        
+        // armar un array solo de categorias
+        const soloCategorias = categoriasFiltradas.map((item) => item.categoria);
+        console.log("soloCategorias: " , soloCategorias);
+
+        setCategorias(soloCategorias);
+    };
 
     const handleRowEditStop = (params, event) => {
         if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -152,8 +135,6 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
 
     const handleSaveClick = (id) => () => {
         setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-        const updatedRows = rowsAltaDDJJ.map((row) => (row.id === id ? { ...row, isNew: false } : row));
-        setRowsAltaDDJJ(updatedRows);
     };
 
     const handleDeleteClick = (id) => async () => {
@@ -178,10 +159,16 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
 
         setRowsAltaDDJJ(rowsAltaDDJJ.map((row) => (row.id === newRow.id ? updatedRow : row)));
 
+        const afiliadoFinal = {
+
+        }
+
         if (newRow.isNew) {
 
-        } else {
+            //console.log("newRow: " , newRow);
 
+        } else {
+            //console.log("newRow: " , newRow);
         }
 
         return updatedRow;
@@ -261,15 +248,69 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
         {
             field: "camara",
             headerName: "Camara",
-            width: 433,
+            width: 150,
             editable: true,
             headerAlign: "center",
             align: "center",
             type: "singleSelect",
             valueOptions: camaras.map((camara) => {
-                return { value: camara.codigo, label: camara.descripcion };
+                return { value: camara.codigo, label: camara.descripcion, key: camara.codigo }; // Agrega la propiedad 'key'
             }),
             headerClassName: 'header--cell',
+            renderEditCell: (params) => {
+                return (
+                    <Select
+                        fullWidth
+                        value={params.value}
+                        onChange={(event) => {
+                            const newValue = event.target.value;
+                            params.api.setEditCellValue({
+                                id: params.id,
+                                field: 'camara',
+                                value: newValue,
+                            });
+                        }}
+                        sx={{
+                            '& .MuiOutlinedInput-root': {
+                                '& fieldset': {
+                                    borderColor: 'transparent', 
+                                },
+                                '&:hover fieldset': {
+                                    borderColor: 'transparent', 
+                                },
+                                '&.Mui-focused fieldset': {
+                                    borderColor: 'transparent', 
+                                },
+                            },
+                        }}
+                    >
+                        {camaras.map((camara) => {
+                            return (
+                                <MenuItem
+                                    key={camara.codigo}
+                                    value={camara.codigo}
+                                    onClick={() => filtroDeCategoria(params, camara.codigo)}
+                                >
+                                    {camara.descripcion}
+                                </MenuItem>
+                            );
+                        })}
+                    </Select>
+                )
+            }
+        },
+        {
+
+            field: "categoria",
+            type: "singleSelect",
+            headerName: "Categoria",
+            width: 150,
+            editable: true,
+            headerAlign: "center",
+            align: "center",
+            headerClassName: 'header--cell',
+            //valueOptions: categorias.map((cat) => cat.cat),
+            valueOptions: categorias
         },
         {
             field: "fechaIngreso",
@@ -295,17 +336,6 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
             field: "planta",
             type: "singleSelect",
             headerName: "Planta",
-            width: 150,
-            editable: true,
-            headerAlign: "center",
-            align: "center",
-            headerClassName: 'header--cell',
-        },
-        {
-
-            field: "categoria",
-            type: "singleSelect",
-            headerName: "Categoria",
             width: 150,
             editable: true,
             headerAlign: "center",
@@ -347,6 +377,8 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
                         onChange={(event) => {
                             const isChecked = event.target.checked;
                             params.api.setEditCellValue({ id: params.id, field: 'cuotaSocUoma', value: isChecked });
+                            // deshabilitar el campo de cuotaUsuf
+                            params.api.setEditCellValue({ id: params.id, field: 'cuotaUsuf', value: false, editable: false });
                         }}
                     />
 
@@ -372,6 +404,8 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
                         onChange={(event) => {
                             const isChecked = event.target.checked;
                             params.api.setEditCellValue({ id: params.id, field: 'aporteSolUoma', value: isChecked });
+                            // deshabilitar el campo de cuotaUsuf
+                            params.api.setEditCellValue({ id: params.id, field: 'cuotaUsuf', value: false, editable: false });
                         }}
                     />
 
@@ -397,6 +431,13 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
                         onChange={(event) => {
                             const isChecked = event.target.checked;
                             params.api.setEditCellValue({ id: params.id, field: 'cuotaUsuf', value: isChecked });
+                            console.log("Click en cuota usufructo...")
+                            // deshabilitar el campo de cuotaSocUoma
+                            params.api.setEditCellValue({ id: params.id, field: 'cuotaSocUoma', value: false, editable: false });
+                            // deshabilitar el campo de aporteSolUoma
+                            params.api.setEditCellValue({ id: params.id, field: 'aporteSolUoma', value: false, editable: false });
+                            // deshabilitar el campo de amtima
+                            params.api.setEditCellValue({ id: params.id, field: 'amtima', value: false, editable: false });
                         }}
                     />
 
@@ -447,9 +488,10 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
                         onChange={(event) => {
                             const isChecked = event.target.checked;
                             params.api.setEditCellValue({ id: params.id, field: 'amtima', value: isChecked });
+                            // deshabilitar el campo de cuotaUsuf
+                            params.api.setEditCellValue({ id: params.id, field: 'cuotaUsuf', value: false, editable: false });
                         }}
                     />
-
                 )
             },
             renderCell: (params) => (

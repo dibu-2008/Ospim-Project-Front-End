@@ -15,12 +15,13 @@ import { obtenerCamaras, obtenerCategorias } from './MisAltaDeclaracionesJuradas
 
 export const MisAltaDeclaracionesJuradas = () => {
 
-    const [rows, setRows] = useState([]);
     const [rowsAltaDDJJ, setRowsAltaDDJJ] = useState([]);
     const [periodo, setPeriodo] = useState(null);
+    const [periodoIso, setPeriodoIso] = useState(null); 
     const [otroPeriodo, setOtroPeriodo] = useState(null);
     const [camaras, setCamaras] = useState([]);
-    const [categorias, setCategorias] = useState(null);
+    const [categorias, setCategorias] = useState([]);
+    const [afiliado, setAfiliado] = useState({});
     /* const [desde, setDesde] = useState(null);
     const [hasta, setHasta] = useState(null); */
     const [selectedFileName, setSelectedFileName] = useState('');
@@ -32,24 +33,24 @@ export const MisAltaDeclaracionesJuradas = () => {
 
     //const handleChangeHasta = (date) => setHasta(date);
 
-    const handleChangePeriodo = (date) => setPeriodo(date);
-    
+    const handleChangePeriodo = (date) => setPeriodo(date); 
+
     const handleAccept = () => {
         if (periodo && periodo.$d) {
-            const {$d:fecha} = periodo;
+            const { $d: fecha } = periodo;
             const fechaFormateada = new Date(fecha);
             fechaFormateada.setDate(1); // Establecer el día del mes a 1
-    
+
             // Ajustar la zona horaria a UTC
             fechaFormateada.setUTCHours(0, 0, 0, 0);
-    
-            const fechaISO = fechaFormateada.toISOString();
-            console.log(fechaISO);  // 2026-02-01T00:00:00.000Z
+
+            const fechaISO = fechaFormateada.toISOString(); // 2026-02-01T00:00:00.000Z
+            setPeriodoIso(fechaISO);
         } else {
             console.log("No se ha seleccionado ninguna fecha.");
         }
     };
-    
+
 
     const handleChangeOtroPeriodo = (date) => setOtroPeriodo(date);
 
@@ -58,21 +59,31 @@ export const MisAltaDeclaracionesJuradas = () => {
 
             const camarasResponse = await obtenerCamaras(TOKEN);
 
-            setCamaras(camarasResponse.map((item, index) => ({ id: index+1, ...item })));
+            setCamaras(camarasResponse.map((item, index) => ({ id: index + 1, ...item })));
         };
         ObtenerCamaras();
     }, []);
 
     useEffect(() => {
         const ObtenerCategorias = async () => {
-    
-          const categoriasResponse = await obtenerCategorias(TOKEN);
-    
-          setRows(categoriasResponse.map((item) => ({ id: item.id, ...item })));
-    
+
+            const categoriasResponse = await obtenerCategorias(TOKEN);
+
+           // quitar los objectos repetidos de la propiedad categoria
+            const categoriasResponseSinRepetidos = categoriasResponse.filter((item, index, arr) =>
+                index === arr.findIndex((t) => (
+                    t.categoria === item.categoria
+                ))
+            );
+
+            // armar un array de solo categorias
+            const soloCategorias = categoriasResponseSinRepetidos.map((item) => item.categoria);
+
+            setCategorias(soloCategorias);
+
         };
         ObtenerCategorias();
-      }, []);
+    }, []);
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
@@ -82,6 +93,39 @@ export const MisAltaDeclaracionesJuradas = () => {
     const handleElegirOtroChange = (event) => {
         setMostrarPeriodos(event.target.value === 'elegirOtro');
     };
+
+    const guardarDeclaracionJurada = () => {
+
+        const altaDeclaraionJuaradaFinal = {
+            periodo: periodoIso,
+            afiliados: rowsAltaDDJJ.map((item) => ({
+                cuil: item.cuil,
+                inte: afiliado.inter,
+                apellido: item.apellido,
+                nombre: item.nombre,
+                fechaIngreso: item.fechaIngreso,
+                empresaDomicilioId: ID_EMPRESA,
+                camara: item.camara,
+                categoria: item.categoria,
+                remunerativo: item.remunerativo,
+                noRemunerativo: item.noRemunerativo,
+                aporteUomaCs: item.cuotaSocUoma,
+                aporteUomaAs: item.aporteSolUoma,
+                aporteCuotaUsuaria: item.cuotaUsuf,
+                aporteArt46: item.art46,
+                aporteAntimaCs: item.amtima
+            }))
+        }
+
+
+
+        console.log("Alta DDJJ Final: ", altaDeclaraionJuaradaFinal);
+
+        console.log("Rows: ", rowsAltaDDJJ)
+        console.log("Afiliado: ", afiliado);
+
+    }
+
 
     return (
         <div className='mis_alta_declaraciones_juradas_container'>
@@ -100,14 +144,6 @@ export const MisAltaDeclaracionesJuradas = () => {
                         localeText={esES.components.MuiLocalizationProvider.defaultProps.localeText}
                     >
                         <DemoContainer components={['DatePicker']}>
-                            {/* <DatePicker
-                                label="Periodo"
-                                value={periodo}
-                                onChange={handleChangePeriodo}
-                                format="MMMM YYYY"
-                                openTo="year"
-                                views={["year", "month"]}
-                            /> */}
                             <DesktopDatePicker
                                 label={'Periodo'}
                                 views={['month', 'year']}
@@ -119,20 +155,6 @@ export const MisAltaDeclaracionesJuradas = () => {
                             />
                         </DemoContainer>
                     </LocalizationProvider>
-                    {/* <LocalizationProvider
-                        dateAdapter={AdapterDayjs}
-                        adapterLocale={"es"}
-                        localeText={esES.components.MuiLocalizationProvider.defaultProps.localeText}
-                    >
-                        <DemoContainer components={['DatePicker']}>
-                            <DatePicker
-                                label="Periodo hasta"
-                                value={hasta}
-                                onChange={handleChangeHasta}
-                                format="DD-MM-YYYY"
-                            />
-                        </DemoContainer>
-                    </LocalizationProvider> */}
                 </Stack>
             </div>
 
@@ -283,6 +305,8 @@ export const MisAltaDeclaracionesJuradas = () => {
                     token={TOKEN}
                     camaras={camaras}
                     categorias={categorias}
+                    setCategorias={setCategorias}
+                    setAfiliado={setAfiliado}
                 />
                 <div
                     className='botones_container'
@@ -292,7 +316,11 @@ export const MisAltaDeclaracionesJuradas = () => {
                         marginTop: '20px'
                     }}
                 >
-                    <Button variant="contained" sx={{ padding: '6px 52px' }}>Guardar</Button>
+                    <Button 
+                        variant="contained" 
+                        sx={{ padding: '6px 52px' }}
+                        onClick={guardarDeclaracionJurada}
+                    >Guardar</Button>
                     <Button variant="contained" sx={{ padding: '6px 52px', marginLeft: '10px' }}>Presentar</Button>
                 </div>
             </div>
