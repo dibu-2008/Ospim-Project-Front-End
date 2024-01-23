@@ -102,9 +102,9 @@ export const obtenerLocalidades = async (token, idProvincia) => {
     }
 }
 
-export const obtenerDomicilios = async (token) => {
+export const obtenerDomicilios = async (token, empresaId) => {
 
-    const URL = `${BACKEND_URL}/empresa/:empresaId/domicilio`;
+    const URL = `${BACKEND_URL}/empresa/${empresaId}/domicilio`;
 
     const showSwalError = (descripcion) => {
         Swal.fire({
@@ -134,9 +134,9 @@ export const obtenerDomicilios = async (token) => {
     }
 }
 
-export const crearDomicilio = async (nuevoDomicilio, token) => {
+export const crearDomicilio = async (nuevoDomicilio, empresaId, token) => {
 
-    const URL = `${BACKEND_URL}/empresa/:empresaId/domicilio`;
+    const URL = `${BACKEND_URL}/empresa/${empresaId}/domicilio`;
 
     const showSwalError = (descripcion) => {
         Swal.fire({
@@ -167,7 +167,6 @@ export const crearDomicilio = async (nuevoDomicilio, token) => {
 
         if (response.status === 201) {
             showSwallSuccess();
-
         }
 
     } catch (error) {
@@ -178,9 +177,9 @@ export const crearDomicilio = async (nuevoDomicilio, token) => {
 
 }
 
-export const actualizarDomicilio = async (idDomicilio, domicilio, token) => {
+export const actualizarDomicilio = async (idDomicilio, domicilio, token, empresaId) => {
 
-    const URL = `${BACKEND_URL}/empresa/:empresaId/domicilio/${idDomicilio}`;
+    const URL = `${BACKEND_URL}/empresa/${empresaId}/domicilio/${idDomicilio}`;
 
     const showSwalError = (descripcion) => {
         Swal.fire({
@@ -224,9 +223,9 @@ export const actualizarDomicilio = async (idDomicilio, domicilio, token) => {
 }
 
 
-export const eliminarDomicilio = async (idDomicilio, token) => {
+export const eliminarDomicilio = async (idDomicilio, token, empresaId) => {
 
-    const URL = `${BACKEND_URL}/empresa/:empresaId/domicilio/${idDomicilio}`;
+    const URL = `${BACKEND_URL}/empresa/${empresaId}/domicilio/${idDomicilio}`;
 
     const showSwalError = (descripcion) => {
         Swal.fire({

@@ -67,7 +67,8 @@ function EditToolbar(props) {
   );
 }
 
-export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token }) => {
+export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token, ID_EMPRESA }) => {
+
   const [rowModesModel, setRowModesModel] = useState({});
   const [tipoDomicilio, setTipoDomicilio] = useState([]);
   const [provincias, setProvincias] = useState([]);
@@ -92,7 +93,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
   };
 
   const getRowsDomicilio = async () => {
-    const domiciliosResponse = await obtenerDomicilios(token);
+    const domiciliosResponse = await obtenerDomicilios(token, ID_EMPRESA);
     setRowsDomicilio(domiciliosResponse.map((item) => ({ ...item })));
     getDatosLocalidad(domiciliosResponse.map((item) => ({ ...item })));
   };
@@ -167,7 +168,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
 
   const handleDeleteClick = (id) => async () => {
     setRowsDomicilio(rowsDomicilio.filter((row) => row.id !== id));
-    await eliminarDomicilio(id, token);
+    await eliminarDomicilio(id, token, ID_EMPRESA);
   };
 
   const handleCancelClick = (id) => () => {
@@ -198,9 +199,10 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
         oficina: newRow.oficina,
         cp: newRow.cp,
         planta: newRow.planta,
+        empresaId: ID_EMPRESA,
       };
 
-      await crearDomicilio(nuevoDomicilio, token);
+      await crearDomicilio(nuevoDomicilio, ID_EMPRESA, token);
 
     } else {
 
@@ -214,9 +216,10 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
         oficina: newRow.oficina,
         cp: newRow.cp,
         planta: newRow.planta,
+        empresaId: ID_EMPRESA,
       };
 
-      await actualizarDomicilio(newRow.id, domicilio, token);
+      await actualizarDomicilio(newRow.id, domicilio, token, ID_EMPRESA);
     }
 
     setRowsDomicilio(

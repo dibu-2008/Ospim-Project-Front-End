@@ -482,6 +482,7 @@
       "id": 2
     },
     {
+      "empresaId": 1,
       "tipo": "REAL",
       "provinciaId": 3,
       "localidadId": 3,
@@ -492,11 +493,9 @@
       "oficina": null,
       "cp": "1417",
       "planta": "Planta 5",
-      "empresaId": "1",
       "id": 3
     },
     {
-      "empresaId": 1,
       "tipo": "FISCAL",
       "provinciaId": 10,
       "localidadId": 308,
@@ -505,35 +504,9 @@
       "depto": "Depto",
       "oficina": "Ofi",
       "cp": "1212",
-      "planta": "Planta 4",
-      "id": 4
-    },
-    {
+      "planta": "Planta 44",
       "empresaId": 1,
-      "tipo": "REAL",
-      "provinciaId": 16,
-      "localidadId": 242,
-      "calle": "ssd",
-      "piso": "asd",
-      "depto": "wer",
-      "oficina": "2",
-      "cp": "2222",
-      "planta": "adasdsad",
-      "id": 5
-    },
-    {
-      "tipo": "REAL",
-      "provinciaId": 3,
-      "localidadId": 3,
-      "calle": "San Luis de las camelias",
-      "calleNro": "1077",
-      "piso": "7",
-      "depto": "B",
-      "oficina": null,
-      "cp": "1417",
-      "planta": "Planta 5",
-      "empresaId": "1",
-      "id": 6
+      "id": 4
     },
     {
       "tipo": "REAL",
@@ -547,20 +520,7 @@
       "cp": "1414",
       "planta": "Planta 1",
       "empresaId": "2",
-      "id": 7
-    },
-    {
-      "tipo": "FISCAL",
-      "provinciaId": 3,
-      "localidadId": 265,
-      "calle": "San Juan 1521",
-      "piso": "1",
-      "depto": "D",
-      "oficina": "",
-      "cp": "1417",
-      "planta": "Oficina Central",
-      "empresaId": ":empresaId",
-      "id": 8
+      "id": 6
     }
   ],
   "empresaContacto": [
