@@ -17,10 +17,11 @@ export const MisAltaDeclaracionesJuradas = () => {
 
     const [rowsAltaDDJJ, setRowsAltaDDJJ] = useState([]);
     const [periodo, setPeriodo] = useState(null);
-    const [periodoIso, setPeriodoIso] = useState(null); 
+    const [periodoIso, setPeriodoIso] = useState(null);
     const [otroPeriodo, setOtroPeriodo] = useState(null);
     const [camaras, setCamaras] = useState([]);
-    const [categorias, setCategorias] = useState([]);
+    const [todasLasCategorias, setTodasLasCategorias] = useState([]);
+    const [categoriasFiltradas, setCategoriasFiltradas] = useState([]);
     const [afiliado, setAfiliado] = useState({});
     /* const [desde, setDesde] = useState(null);
     const [hasta, setHasta] = useState(null); */
@@ -33,9 +34,10 @@ export const MisAltaDeclaracionesJuradas = () => {
 
     //const handleChangeHasta = (date) => setHasta(date);
 
-    const handleChangePeriodo = (date) => setPeriodo(date); 
+    const handleChangePeriodo = (date) => setPeriodo(date);
 
     const handleAccept = () => {
+
         if (periodo && periodo.$d) {
             const { $d: fecha } = periodo;
             const fechaFormateada = new Date(fecha);
@@ -46,9 +48,7 @@ export const MisAltaDeclaracionesJuradas = () => {
 
             const fechaISO = fechaFormateada.toISOString(); // 2026-02-01T00:00:00.000Z
             setPeriodoIso(fechaISO);
-        } else {
-            console.log("No se ha seleccionado ninguna fecha.");
-        }
+        } 
     };
 
 
@@ -69,17 +69,23 @@ export const MisAltaDeclaracionesJuradas = () => {
 
             const categoriasResponse = await obtenerCategorias(TOKEN);
 
-           // quitar los objectos repetidos de la propiedad categoria
+            /* // quitar los objectos repetidos de la propiedad categoria
             const categoriasResponseSinRepetidos = categoriasResponse.filter((item, index, arr) =>
                 index === arr.findIndex((t) => (
                     t.categoria === item.categoria
                 ))
             );
 
+            console.log(categoriasResponseSinRepetidos)
+
             // armar un array de solo categorias
             const soloCategorias = categoriasResponseSinRepetidos.map((item) => item.categoria);
 
-            setCategorias(soloCategorias);
+            //setCategorias(soloCategorias); */
+
+            //setCategorias(categoriasResponse.map((item, index) => ({ id: index + 1, ...item })));
+
+            setTodasLasCategorias(categoriasResponse.map((item, index) => ({ id: index + 1, ...item })));
 
         };
         ObtenerCategorias();
@@ -304,9 +310,10 @@ export const MisAltaDeclaracionesJuradas = () => {
                     setRowsAltaDDJJ={setRowsAltaDDJJ}
                     token={TOKEN}
                     camaras={camaras}
-                    categorias={categorias}
-                    setCategorias={setCategorias}
+                    categoriasFiltradas={categoriasFiltradas}
+                    setCategoriasFiltradas={setCategoriasFiltradas}
                     setAfiliado={setAfiliado}
+                    todasLasCategorias={todasLasCategorias}
                 />
                 <div
                     className='botones_container'
@@ -316,8 +323,8 @@ export const MisAltaDeclaracionesJuradas = () => {
                         marginTop: '20px'
                     }}
                 >
-                    <Button 
-                        variant="contained" 
+                    <Button
+                        variant="contained"
                         sx={{ padding: '6px 52px' }}
                         onClick={guardarDeclaracionJurada}
                     >Guardar</Button>

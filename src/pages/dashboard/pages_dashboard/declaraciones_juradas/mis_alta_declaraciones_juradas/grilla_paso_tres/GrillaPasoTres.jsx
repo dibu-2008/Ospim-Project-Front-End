@@ -64,7 +64,7 @@ function EditToolbar(props) {
     );
 }
 
-export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, categorias, setCategorias, setAfiliado }) => {
+export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, categoriasFiltradas, setCategoriasFiltradas, setAfiliado, todasLasCategorias }) => {
 
     const [locale, setLocale] = useState('esES');
     const [rowModesModel, setRowModesModel] = useState({});
@@ -98,29 +98,39 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
         params.api.setEditCellValue({
             id: params.id,
             field: 'apellido',
-            value: afiliadoEncontrado.apellido
+            value: afiliadoEncontrado.apellido,
+            // no editar el campo apellido
+            editable: false
         });
 
         params.api.setEditCellValue({
             id: params.id,
             field: 'nombre',
             value: afiliadoEncontrado.nombre,
+            editable: false
         });
 
     };
 
     const filtroDeCategoria = async (params, codigoCamara) => {
 
-        const categoriasResponse = await obtenerCategorias(token);
+        //const categoriasResponse = await obtenerCategorias(token);
 
-        const categoriasFiltradas = categoriasResponse.filter((categoria) => categoria.camara === codigoCamara); 
-        console.log("categoriasFiltradas: " , categoriasFiltradas);
+        const filtroCategorias = todasLasCategorias.filter((categoria) => categoria.camara === codigoCamara); 
+        console.log("categoriasFiltradas: " , filtroCategorias);
         
         // armar un array solo de categorias
-        const soloCategorias = categoriasFiltradas.map((item) => item.categoria);
+        const soloCategorias = filtroCategorias.map((item) => item.categoria);
         console.log("soloCategorias: " , soloCategorias);
 
-        setCategorias(soloCategorias);
+        params.api.setEditCellValue({
+            id: params.id,
+            field: 'categoria',
+            value: soloCategorias[0],
+            value: ''
+        });
+
+        setCategoriasFiltradas(soloCategorias);
     };
 
     const handleRowEditStop = (params, event) => {
@@ -309,8 +319,7 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
             headerAlign: "center",
             align: "center",
             headerClassName: 'header--cell',
-            //valueOptions: categorias.map((cat) => cat.cat),
-            valueOptions: categorias
+            valueOptions: categoriasFiltradas
         },
         {
             field: "fechaIngreso",
