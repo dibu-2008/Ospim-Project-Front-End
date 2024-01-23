@@ -123,8 +123,8 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
   };
 
   const actualizarDatosLocalidad = async (provinciaId) => {
-    var options = [];
-    options = localidades.filter((item) => {
+    
+    const options = localidades.filter((item) => {
       return item.provinciaId == provinciaId;
     });
     if (options.length == 0) {
