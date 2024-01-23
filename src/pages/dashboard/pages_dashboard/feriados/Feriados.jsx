@@ -35,7 +35,7 @@ function EditToolbar(props) {
     const id = newId;
 
     setRows((oldRows) => [
-      { id, fecha: "", descripcion: "", isNew: true },
+      { id, fecha: "", /* descripcion: "", */ isNew: true },
       ...oldRows,
     ]);
     setRowModesModel((oldModel) => ({
@@ -172,7 +172,7 @@ export const Feriados = () => {
         return `${day}-${month}-${year}`;
       },
     },
-    {
+   /*  {
       field: "descripcion",
       headerName: "Descripción",
       width: 520,
@@ -180,7 +180,7 @@ export const Feriados = () => {
       headerAlign: "center",
       align: "center",
       headerClassName: 'header--cell',
-    },
+    }, */
     {
       field: "actions",
       type: "actions",
