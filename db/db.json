@@ -167,11 +167,6 @@
   ],
   "feriados": [
     {
-      "fecha": "2024-01-01T00:00:00.000Z",
-      "descripcion": "AÑO Nuevo",
-      "id": 1
-    },
-    {
       "id": 2,
       "fecha": "2023-02-14T00:00:00.000Z",
       "descripcion": "Día de San Valentín"
@@ -205,6 +200,14 @@
       "fecha": "2024-01-11T03:00:00.000Z",
       "descripcion": "AAAAA",
       "id": 11
+    },
+    {
+      "fecha": "2024-01-17T00:00:00.000Z",
+      "id": 12
+    },
+    {
+      "fecha": "2024-01-27T00:00:00.000Z",
+      "id": 13
     }
   ],
   "usuario-interno": [
@@ -314,13 +317,6 @@
       "vigenciaHasta": "2028-07-20T00:00:00.000Z"
     },
     {
-      "titulo": "Nueva Nota",
-      "cuerpo": "Cuerpo ",
-      "vigenciaDesde": "2023-12-27T00:00:00.000Z",
-      "vigenciaHasta": "2023-12-31T00:00:00.000Z",
-      "id": 5
-    },
-    {
       "titulo": "fsfsd",
       "cuerpo": "sdfsd",
       "vigenciaDesde": "2024-01-11T00:00:00.000Z",
@@ -368,6 +364,13 @@
       "vigenciaDesde": "2023-12-01T00:00:00.000Z",
       "vigenciaHasta": "2023-12-31T00:00:00.000Z",
       "id": 12
+    },
+    {
+      "titulo": "sss",
+      "cuerpo": "ssss",
+      "vigenciaDesde": "2024-01-10T00:00:00.000Z",
+      "vigenciaHasta": "2024-01-17T00:00:00.000Z",
+      "id": 13
     }
   ],
   "publicacionesVigentes": [
@@ -524,12 +527,6 @@
     }
   ],
   "empresaContacto": [
-    {
-      "tipo": "TEL2",
-      "prefijo": "011",
-      "valor": "4007-2022",
-      "id": 4
-    },
     {
       "id": 5,
       "tipo": "MAIL2",

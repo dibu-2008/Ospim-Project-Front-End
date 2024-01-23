@@ -15,15 +15,19 @@ import {
   GridActionsCellItem,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
-import { actualizarFeriado, 
-  crearFeriado, 
-  eliminarFeriado, 
-  obtenerFeriados } from "./FeriadosApi";
-import { 
-  createTheme, 
-  ThemeProvider, 
-  useTheme } from '@mui/material/styles';
+import {
+  actualizarFeriado,
+  crearFeriado,
+  eliminarFeriado,
+  obtenerFeriados
+} from "./FeriadosApi";
+import {
+  createTheme,
+  ThemeProvider,
+  useTheme
+} from '@mui/material/styles';
 import * as locales from '@mui/material/locale';
+import Swal from 'sweetalert2'
 import "./Feriados.css";
 
 function EditToolbar(props) {
@@ -42,7 +46,9 @@ function EditToolbar(props) {
       [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
       ...oldModel,
     }));
+
   };
+
 
   return (
     <GridToolbarContainer>
@@ -96,9 +102,30 @@ export const Feriados = () => {
 
   const handleDeleteClick = (id) => async () => {
 
-    setRows((prevRows) => prevRows.filter((row) => row.id !== id));
+    const showSwalConfirm = async () => {
+      try {
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: "¡No podrás revertir esto!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#1A76D2',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: 'Si, bórralo!'
+        }).then(async (result) => {
+          if (result.isConfirmed) {
 
-    await eliminarFeriado(id, TOKEN);
+            setRows((prevRows) => prevRows.filter((row) => row.id !== id));
+
+            await eliminarFeriado(id, TOKEN);
+          }
+        });
+      } catch (error) {
+        console.error('Error al ejecutar eliminarFeriado:', error);
+      }
+    };
+
+    showSwalConfirm();
   };
 
   const handleCancelClick = (id) => () => {
@@ -162,25 +189,25 @@ export const Feriados = () => {
       align: "center",
       headerClassName: 'header--cell',
       valueFormatter: (params) => {
-        
+
         const date = new Date(params.value);
-      
+
         const day = date.getUTCDate().toString().padStart(2, "0");
         const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
         const year = date.getUTCFullYear();
-      
+
         return `${day}-${month}-${year}`;
       },
     },
-   /*  {
-      field: "descripcion",
-      headerName: "Descripción",
-      width: 520,
-      editable: true,
-      headerAlign: "center",
-      align: "center",
-      headerClassName: 'header--cell',
-    }, */
+    /*  {
+       field: "descripcion",
+       headerName: "Descripción",
+       width: 520,
+       editable: true,
+       headerAlign: "center",
+       align: "center",
+       headerClassName: 'header--cell',
+     }, */
     {
       field: "actions",
       type: "actions",

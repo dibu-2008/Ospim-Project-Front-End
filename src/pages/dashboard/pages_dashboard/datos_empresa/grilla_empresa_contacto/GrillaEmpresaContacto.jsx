@@ -20,6 +20,7 @@ import {
   obtenerTipo,
 } from "./GrillaEmpresaContactoApi";
 import Box from "@mui/material/Box";
+import Swal from "sweetalert2";
 
 function EditToolbar(props) {
   const { setRows, rows, setRowModesModel } = props;
@@ -88,9 +89,29 @@ export const GrillaEmpresaContacto = ({ rows, setRows, token }) => {
   };
 
   const handleDeleteClick = (id) => async () => {
-    setRows(rows.filter((row) => row.id !== id));
 
-    await eliminarContacto(id, token);
+    const showSwalConfirm = async () => {
+      try {
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: "¡No podrás revertir esto!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#1A76D2',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: 'Si, bórralo!'
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            setRows(rows.filter((row) => row.id !== id));
+            await eliminarContacto(id, token);
+          }
+        });
+      } catch (error) {
+        console.error('Error al ejecutar eliminarFeriado:', error);
+      }
+    };
+
+    showSwalConfirm();
   };
 
   const handleCancelClick = (id) => () => {

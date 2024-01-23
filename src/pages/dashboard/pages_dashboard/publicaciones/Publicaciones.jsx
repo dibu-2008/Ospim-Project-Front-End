@@ -14,6 +14,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import * as locales from '@mui/material/locale';
+import Swal from 'sweetalert2'
 import "./Publicaciones.css";
 
 export const Publicaciones = () => {
@@ -55,14 +56,35 @@ export const Publicaciones = () => {
   };
 
   const handleDeleteClick = (id) => async () => {
-    setRows((oldRows) => oldRows.filter((row) => row.id !== id));
-    setRowModesModel((oldModel) => {
+
+    /* setRowModesModel((oldModel) => {
       const newModel = { ...oldModel };
       delete newModel[id];
       return newModel;
-    });
+    }); */
 
-    await eliminarPublicacion(id, TOKEN);
+    const showSwalConfirm = async () => {
+      try {
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: "¡No podrás revertir esto!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#1A76D2',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: 'Si, bórralo!'
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            setRows((oldRows) => oldRows.filter((row) => row.id !== id));
+            await eliminarPublicacion(id, TOKEN);
+          }
+        });
+      } catch (error) {
+        console.error('Error al ejecutar eliminarFeriado:', error);
+      }
+    };
+
+    showSwalConfirm();
   };
 
   const handleCancelClick = (id) => () => {

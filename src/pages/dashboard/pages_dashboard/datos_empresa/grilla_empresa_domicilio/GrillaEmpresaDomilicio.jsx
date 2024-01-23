@@ -24,6 +24,7 @@ import {
   obtenerProvincias,
   obtenerTipoDomicilio,
 } from "./GrillaEmpresaDomicilioApi";
+import Swal from "sweetalert2";
 
 function EditToolbar(props) {
   const { setRowsDomicilio, rows_domicilio, setRowModesModel } = props;
@@ -167,8 +168,30 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token,
   };
 
   const handleDeleteClick = (id) => async () => {
-    setRowsDomicilio(rowsDomicilio.filter((row) => row.id !== id));
-    await eliminarDomicilio(id, token, ID_EMPRESA);
+
+    const showSwalConfirm = async () => {
+      try {
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: "¡No podrás revertir esto!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#1A76D2',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: 'Si, bórralo!'
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+
+            setRowsDomicilio(rowsDomicilio.filter((row) => row.id !== id));
+            await eliminarDomicilio(id, token, ID_EMPRESA);
+          }
+        });
+      } catch (error) {
+        console.error('Error al ejecutar eliminarFeriado:', error);
+      }
+    };
+
+    showSwalConfirm();
   };
 
   const handleCancelClick = (id) => () => {
