@@ -251,7 +251,7 @@ export const AltaUsuarioInterno = () => {
 
         return params.row.habilitado ? "Si" : "No"
       },
-      headerClassName: 'habilitado--cell',
+      headerClassName: 'header--cell',
       cellClassName: 'habilitado--cell',
     },
     {
