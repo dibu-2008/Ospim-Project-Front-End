@@ -193,7 +193,7 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
             field: "cuil",
             type: "string",
             headerName: "CUIL",
-            width: 250,
+            width: 150,
             editable: true,
             headerAlign: "center",
             align: "center",
@@ -363,7 +363,15 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
         {
             field: "noRemunerativo",
             type: "string",
-            headerName: "No Remunerativo",
+            renderHeader: () => (
+                <div style={{ textAlign: 'center', color: '#fff', fontSize: '0.8rem' }}>
+                  <span role="img" aria-label="enjoy">
+                    No 
+                    <br />
+                    Remunerativo
+                  </span>
+                </div>
+              ),
             width: 150,
             editable: true,
             headerAlign: "center",
@@ -372,7 +380,15 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
         },
         {
             field: "cuotaSocUoma",
-            headerName: "Cuota Soc UOMA",
+            renderHeader: () => (
+                <div style={{ textAlign: 'center', color: '#fff', fontSize: '0.8rem' }}>
+                    <span role="img" aria-label="enjoy">
+                        Cuota Social
+                        <br />
+                        Uoma
+                    </span>
+                </div>
+            ),
             width: 150,
             editable: true,
             headerAlign: "center",
@@ -400,6 +416,15 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
         {
             field: "aporteSolUoma",
             headerName: "Aporte Sol UOMA",
+            renderHeader: () => (
+                <div style={{ textAlign: 'center', color: '#fff', fontSize: '0.8rem' }}>
+                    <span role="img" aria-label="enjoy">
+                        Aporte Solidario
+                        <br />
+                        Uoma
+                    </span>
+                </div>
+            ),
             width: 150,
             editable: true,
             headerAlign: "center",
@@ -426,7 +451,15 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
         },
         {
             field: "cuotaUsuf",
-            headerName: "Cuota USUF",
+            renderHeader: () => (
+                <div style={{ textAlign: 'center', color: '#fff', fontSize: '0.8rem' }}>
+                    <span role="img" aria-label="enjoy">
+                        Cuota
+                        <br />
+                        Usufructo
+                    </span>
+                </div>
+            ),
             width: 150,
             editable: true,
             headerAlign: "center",
@@ -458,7 +491,15 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
         },
         {
             field: "art46",
-            headerName: "Art 46",
+            renderHeader: () => (
+                <div style={{ textAlign: 'center', color: '#fff', fontSize: '0.8rem' }}>
+                    <span role="img" aria-label="enjoy">
+                        Articulo
+                        <br />
+                        46
+                    </span>
+                </div>
+            ),  
             width: 150,
             editable: true,
             headerAlign: "center",
@@ -484,7 +525,7 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
         {
             field: "amtima",
             headerName: "AMTIMA",
-            width: 150,
+            width: 130,
             editable: true,
             headerAlign: "center",
             align: "center",
@@ -511,7 +552,7 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
             field: "actions",
             type: "actions",
             headerName: "Acciones",
-            width: 150,
+            width: 130,
             headerAlign: "center",
             align: "center",
             headerClassName: 'header--cell',
@@ -597,6 +638,9 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
                             '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
                                 backgroundColor: '#ccc',
                             },
+                            '& .css-1iyq7zh-MuiDataGrid-columnHeaders': {
+                                backgroundColor: '#1A76D2 !important',
+                              },
                         }}
                         initialState={{
                             ...rowsAltaDDJJ.initialState,

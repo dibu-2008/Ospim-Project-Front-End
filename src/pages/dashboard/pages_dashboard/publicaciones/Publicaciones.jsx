@@ -144,7 +144,7 @@ export const Publicaciones = () => {
     {
       field: "titulo",
       headerName: "Titulo",
-      width: 300,
+      flex: 1,
       type: "string",
       editable: true,
       headerAlign: "center",
@@ -154,22 +154,22 @@ export const Publicaciones = () => {
     {
       field: "cuerpo",
       headerName: "Cuerpo",
-      width: 325,
+      flex: 1,
       type: "string",
       editable: true,
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell',
+      headerClassName: 'header--cell header--cell--left',
     },
     {
       field: "vigenciaDesde",
       headerName: "Vigencia Desde",
-      width: 300,
+      flex: 1,
       type: "date",
       editable: true,
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell',
+      headerClassName: 'header--cell header--cell--left',
       valueFormatter: (params) => {
         
         const date = new Date(params.value);
@@ -184,12 +184,12 @@ export const Publicaciones = () => {
     {
       field: "vigenciaHasta",
       headerName: "Vigencia Hasta",
-      width: 300,
+      flex: 1,
       type: "date",
       editable: true,
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell',
+      headerClassName: 'header--cell header--cell--left',
       valueFormatter: (params) => {
         
         const date = new Date(params.value);
@@ -204,11 +204,11 @@ export const Publicaciones = () => {
     {
       field: "actions",
       headerName: "Acciones",
-      width: 300,
+      flex: 1,
       type: "actions",
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell',
+      headerClassName: 'header--cell header--cell--left',
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
@@ -289,6 +289,9 @@ export const Publicaciones = () => {
               },
               '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
                 backgroundColor: '#ccc',
+              },
+              '& .css-1iyq7zh-MuiDataGrid-columnHeaders': {
+                backgroundColor: '#1A76D2 !important',
               },
             }}
             initialState={{

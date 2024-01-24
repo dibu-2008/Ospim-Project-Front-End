@@ -164,7 +164,7 @@ export const CuitsRestringidos = () => {
     {
       field: "cuit",
       headerName: "CUIT",
-      width: 432,
+      flex:1,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -173,7 +173,7 @@ export const CuitsRestringidos = () => {
     {
       field: "observacion",
       headerName: "Observacion",
-      width: 450,
+      flex:1,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -186,7 +186,7 @@ export const CuitsRestringidos = () => {
       headerAlign: "center",
       align: "center",
       headerClassName: 'header--cell',
-      width: 450,
+      flex:1,
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
@@ -265,6 +265,9 @@ export const CuitsRestringidos = () => {
               },
               '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
                 backgroundColor: '#ccc',
+              },
+              '& .css-1iyq7zh-MuiDataGrid-columnHeaders': {
+                backgroundColor: '#1A76D2 !important',
               },
             }}
             initialState={{

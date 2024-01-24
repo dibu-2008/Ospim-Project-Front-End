@@ -39,7 +39,7 @@ function EditToolbar(props) {
     const id = newId;
 
     setRows((oldRows) => [
-      { id, fecha: "", /* descripcion: "", */ isNew: true },
+      { id, fecha: "", isNew: true },
       ...oldRows,
     ]);
     setRowModesModel((oldModel) => ({
@@ -182,7 +182,7 @@ export const Feriados = () => {
     {
       field: "fecha",
       headerName: "Fecha",
-      width: 500,
+      flex: 1,
       type: "date",
       editable: true,
       headerAlign: "center",
@@ -199,20 +199,11 @@ export const Feriados = () => {
         return `${day}-${month}-${year}`;
       },
     },
-    /*  {
-       field: "descripcion",
-       headerName: "Descripción",
-       width: 520,
-       editable: true,
-       headerAlign: "center",
-       align: "center",
-       headerClassName: 'header--cell',
-     }, */
     {
       field: "actions",
       type: "actions",
       headerName: "Acciones",
-      width: 505,
+      flex: 1,
       cellClassName: "actions",
       headerAlign: "center",
       align: "center",
@@ -291,13 +282,21 @@ export const Feriados = () => {
               toolbar: { setRows, rows, setRowModesModel },
             }}
             sx={{
-              '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
+              /* '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
                 width: '8px',
                 visibility: 'visible',
               },
               '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
-                backgroundColor: '#ccc',
+                backgroundColor: 'red',
+              }, */
+              /* '& .header--cell--left': {
+                marginLeft: '20px',
+                border: 'none',
+              }, */
+              '& .css-1iyq7zh-MuiDataGrid-columnHeaders': {
+                backgroundColor: '#1A76D2 !important',
               },
+
             }}
             initialState={{
               ...rows.initialState,

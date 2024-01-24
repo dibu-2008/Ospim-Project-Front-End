@@ -163,7 +163,7 @@ export const GrillaEmpresaContacto = ({ rows, setRows, token }) => {
     {
       field: "tipo",
       headerName: "Tipo de contacto",
-      width: 300,
+      flex: 1,
       editable: true,
       type: "singleSelect",
       headerAlign: "center",
@@ -179,7 +179,7 @@ export const GrillaEmpresaContacto = ({ rows, setRows, token }) => {
     {
       field: "prefijo",
       headerName: "Prefijo",
-      width: 300,
+      flex: 1,
       type: "string",
       editable: true,
       headerAlign: "center",
@@ -189,7 +189,7 @@ export const GrillaEmpresaContacto = ({ rows, setRows, token }) => {
     {
       field: "valor",
       headerName: "Valor de contacto",
-      width: 334,
+      flex: 1,
       type: "string",
       editable: true,
       headerAlign: "center",
@@ -199,7 +199,7 @@ export const GrillaEmpresaContacto = ({ rows, setRows, token }) => {
     {
       field: "actions",
       headerName: "Acciones",
-      width: 350,
+      flex: 1,
       type: "actions",
       headerAlign: "center",
       align: "center",
@@ -281,6 +281,9 @@ export const GrillaEmpresaContacto = ({ rows, setRows, token }) => {
           },
           '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
             backgroundColor: '#ccc',
+          },
+          '& .css-1iyq7zh-MuiDataGrid-columnHeaders': {
+            backgroundColor: '#1A76D2 !important',
           },
         }}
         initialState={{

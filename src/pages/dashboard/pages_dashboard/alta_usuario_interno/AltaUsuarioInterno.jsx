@@ -343,6 +343,9 @@ export const AltaUsuarioInterno = () => {
               '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
                 backgroundColor: '#ccc',
               },
+              '& .css-1iyq7zh-MuiDataGrid-columnHeaders': {
+                backgroundColor: '#1A76D2 !important',
+              },
             }}
             initialState={{
               ...rows.initialState,
