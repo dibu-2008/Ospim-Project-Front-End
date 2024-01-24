@@ -43,7 +43,7 @@ function EditToolbar(props) {
                 cuotaSocUoma: false,
                 aporteSolUoma: false,
                 cuotaUsuf: false,
-                art46: false,
+                art46: true,
                 amtima: false,
                 isNew: true
             },
@@ -402,6 +402,7 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
                         onChange={(event) => {
                             const isChecked = event.target.checked;
                             params.api.setEditCellValue({ id: params.id, field: 'cuotaSocUoma', value: isChecked });
+                            params.api.setEditCellValue({ id: params.id, field: 'aporteSolUoma', value: isChecked });
                             // deshabilitar el campo de cuotaUsuf
                             params.api.setEditCellValue({ id: params.id, field: 'cuotaUsuf', value: false, editable: false });
                         }}
@@ -438,6 +439,7 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
                         onChange={(event) => {
                             const isChecked = event.target.checked;
                             params.api.setEditCellValue({ id: params.id, field: 'aporteSolUoma', value: isChecked });
+                            params.api.setEditCellValue({ id: params.id, field: 'cuotaSocUoma', value: isChecked });
                             // deshabilitar el campo de cuotaUsuf
                             params.api.setEditCellValue({ id: params.id, field: 'cuotaUsuf', value: false, editable: false });
                         }}
@@ -501,10 +503,11 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
                 </div>
             ),  
             width: 150,
-            editable: true,
+            editable: false,
             headerAlign: "center",
             align: "center",
             headerClassName: 'header--cell',
+            cellClassName: 'art46--cell',
             renderEditCell: (params) => {
                 return (
                     <Checkbox
@@ -538,6 +541,8 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
                         onChange={(event) => {
                             const isChecked = event.target.checked;
                             params.api.setEditCellValue({ id: params.id, field: 'amtima', value: isChecked });
+                            params.api.setEditCellValue({ id: params.id, field: 'aporteSolUoma', value: isChecked });
+                            params.api.setEditCellValue({ id: params.id, field: 'cuotaSocUoma', value: isChecked });
                             // deshabilitar el campo de cuotaUsuf
                             params.api.setEditCellValue({ id: params.id, field: 'cuotaUsuf', value: false, editable: false });
                         }}
@@ -641,6 +646,9 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
                             '& .css-1iyq7zh-MuiDataGrid-columnHeaders': {
                                 backgroundColor: '#1A76D2 !important',
                               },
+                            '& .art46--cell': {
+                                backgroundColor: '#ccc',
+                            },
                         }}
                         initialState={{
                             ...rowsAltaDDJJ.initialState,
