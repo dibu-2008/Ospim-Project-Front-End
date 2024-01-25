@@ -14,6 +14,7 @@ import {
   GridToolbarContainer,
   GridActionsCellItem,
   GridRowEditStopReasons,
+  GridToolbar,
 } from "@mui/x-data-grid";
 import {
   actualizarFeriado,
@@ -31,12 +32,14 @@ import Swal from 'sweetalert2'
 import "./Feriados.css";
 
 function EditToolbar(props) {
-  const { setRows, rows, setRowModesModel } = props;
+  const { setRows, rows, setRowModesModel, goToFirstPage } = props;
 
   const handleClick = () => {
     const maxId = Math.max(...rows.map((row) => row.id), 0);
     const newId = maxId + 1;
     const id = newId;
+
+    goToFirstPage();
 
     setRows((oldRows) => [
       { id, fecha: "", isNew: true },
@@ -64,6 +67,10 @@ export const Feriados = () => {
   const [locale, setLocale] = useState('esES');
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
+  const [paginationModel, setPaginationModel] = useState({
+    pageSize: 5,
+    page: 0,
+  });
 
   const TOKEN = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.usuario.token;
 
@@ -85,6 +92,14 @@ export const Feriados = () => {
     ObtenerFeriados();
 
   }, []);
+
+  const goToFirstPage = () => {
+    console.log('goToFirstPage')
+    setPaginationModel((prevPaginationModel) => ({
+      ...prevPaginationModel,
+      page: 0,
+    }));
+  };
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -275,11 +290,9 @@ export const Feriados = () => {
             onRowModesModelChange={handleRowModesModelChange}
             onRowEditStop={handleRowEditStop}
             processRowUpdate={processRowUpdate}
-            slots={{
-              toolbar: EditToolbar,
-            }}
+            slots={{ toolbar: EditToolbar }}
             slotProps={{
-              toolbar: { setRows, rows, setRowModesModel },
+              toolbar: { setRows, rows, setRowModesModel, goToFirstPage },
             }}
             sx={{
               /* '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
@@ -295,17 +308,25 @@ export const Feriados = () => {
               }, */
               '& .css-1iyq7zh-MuiDataGrid-columnHeaders': {
                 backgroundColor: '#1A76D2 !important',
-              },
-
+              }
             }}
-            initialState={{
+
+            /* initialState={{
               ...rows.initialState,
               pagination: {
-                paginationModel: { pageSize: 5 },
+                paginationModel: { ...paginationModel },
               },
+              onPaginationModelChange: {setPaginationModel},
+  
             }}
+            pageSizeOptions={[5, 10, 25]} */
+            paginationModel={paginationModel}
+            onPaginationModelChange={setPaginationModel}
             pageSizeOptions={[5, 10, 25]}
           />
+          <div style={{ marginTop: 16 }}>
+            <button onClick={goToFirstPage}>Inicio</button>
+          </div>
         </ThemeProvider>
       </Box>
     </div>
