@@ -20,8 +20,12 @@ import "./Publicaciones.css";
 export const Publicaciones = () => {
 
   const [locale, setLocale] = useState('esES');
-  const [rowModesModel, setRowModesModel] = useState({});
   const [rows, setRows] = useState([]);
+  const [rowModesModel, setRowModesModel] = useState({});
+  const [paginationModel, setPaginationModel] = useState({
+    pageSize: 5,
+    page: 0,
+  });
 
   const TOKEN = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.usuario.token;
 
@@ -40,6 +44,13 @@ export const Publicaciones = () => {
 
     ObtenerPublicaciones();
   }, []);
+
+  const volverPrimerPagina = () => {
+    setPaginationModel((prevPaginationModel) => ({
+      ...prevPaginationModel,
+      page: 0,
+    }));
+  };
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -280,7 +291,7 @@ export const Publicaciones = () => {
               toolbar: EditarNuevaFila,
             }}
             slotProps={{
-              toolbar: { setRows, rows, setRowModesModel },
+              toolbar: { setRows, rows, setRowModesModel, volverPrimerPagina },
             }}
             sx={{
               '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
@@ -294,12 +305,8 @@ export const Publicaciones = () => {
                 backgroundColor: '#1A76D2 !important',
               },
             }}
-            initialState={{
-              ...rows.initialState,
-              pagination: {
-                paginationModel: { pageSize: 5 },
-              },
-            }}
+            paginationModel={paginationModel}
+            onPaginationModelChange={setPaginationModel}
             pageSizeOptions={[5, 10, 25]}
           />
         </ThemeProvider>
