@@ -177,11 +177,6 @@
       "descripcion": "Día de los Inocentes"
     },
     {
-      "id": 4,
-      "fecha": "2023-05-01T00:00:00.000Z",
-      "descripcion": "Día del Trabajo"
-    },
-    {
       "id": 5,
       "fecha": "2023-07-04T00:00:00.000Z",
       "descripcion": "Día de la Independencia"
@@ -240,6 +235,22 @@
     {
       "fecha": "2024-01-03T00:00:00.000Z",
       "id": 21
+    },
+    {
+      "fecha": "2024-01-18T00:00:00.000Z",
+      "id": 22
+    },
+    {
+      "fecha": "2024-01-09T00:00:00.000Z",
+      "id": 23
+    },
+    {
+      "fecha": "2024-01-30T00:00:00.000Z",
+      "id": 24
+    },
+    {
+      "fecha": "2024-01-17T00:00:00.000Z",
+      "id": 25
     }
   ],
   "usuario-interno": [
