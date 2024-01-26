@@ -11,9 +11,9 @@ import {
 import {
   GridRowModes as ModosFila,
   DataGrid as GrillaDatos,
-  GridToolbarContainer,
-  GridActionsCellItem,
-  GridRowEditStopReasons,
+  GridToolbarContainer as GrillaContenedorBarraHerramientas,
+  GridActionsCellItem as CeldaAcciones,
+  GridRowEditStopReasons as GrillaFilaParaEditar
 } from "@mui/x-data-grid";
 import {
   actualizarFeriado,
@@ -32,42 +32,42 @@ import "./Feriados.css";
 
 const crearNuevoFeriado = (props) => {
 
-  const { setFilasFeriados, filasFeriados, setModoModeloFila, volverPrimerPagina } = props;
+  const { filasFeriado, setFilasFeriado, setModeloFila, volverPrimerPagina } = props;
 
-  const handleNuevoRegistro = () => {
-    const maxId = Math.max(...filasFeriados.map((row) => row.id), 0);
+  const nuevoRegistro = () => {
+    const maxId = Math.max(...filasFeriado.map((row) => row.id), 0);
     const newId = maxId + 1;
     const id = newId;
 
     volverPrimerPagina();
 
-    setFilasFeriados((oldRows) => [
-      { id, fecha: "", isNew: true },
-      ...oldRows,
+    setFilasFeriado((filasAnteriores) => [
+      { id, fecha: "", esNueva: true },
+      ...filasAnteriores,
     ]);
-    setModoModeloFila((oldModel) => ({
+    setModeloFila((filasAnteriores) => ({
       [id]: { mode: ModosFila.Edit, fieldToFocus: "name" },
-      ...oldModel,
+      ...filasAnteriores,
     }));
 
   };
 
 
   return (
-    <GridToolbarContainer>
-      <Button color="primary" startIcon={<IconoAgregar />} onClick={handleNuevoRegistro}>
+    <GrillaContenedorBarraHerramientas>
+      <Button color="primary" startIcon={<IconoAgregar />} onClick={nuevoRegistro}>
         Nuevo Registro
       </Button>
-    </GridToolbarContainer>
+    </GrillaContenedorBarraHerramientas>
   );
 }
 
 export const Feriados = () => {
 
   const [localizacion, setLocalizacion] = useState('esES');
-  const [filasFeriados, setFilasFeriados] = useState([]);
-  const [rowModesModel, setModoModeloFila] = useState({});
-  const [paginationModel, setPaginationModel] = useState({
+  const [filasFeriado, setFilasFeriado] = useState([]);
+  const [modeloFila, setModeloFila] = useState({});
+  const [paginacion, setPaginacion] = useState({
     pageSize: 5,
     page: 0,
   });
@@ -85,7 +85,7 @@ export const Feriados = () => {
     const ObtenerFeriados = async () => {
 
       const feriadosResponse = await obtenerFeriados(TOKEN);
-      setFilasFeriados(feriadosResponse.map((item) => ({ id: item.id, ...item })));
+      setFilasFeriado(feriadosResponse.map((item) => ({ id: item.id, ...item })));
 
     };
 
@@ -94,29 +94,24 @@ export const Feriados = () => {
   }, []);
 
   const volverPrimerPagina = () => {
-    setPaginationModel((prevPaginationModel) => ({
-      ...prevPaginationModel,
+    setPaginacion((paginacionAnterior) => ({
+      ...paginacionAnterior,
       page: 0,
     }));
   };
 
-  const handleRowEditStop = (params, event) => {
-    if (params.reason === GridRowEditStopReasons.rowFocusOut) {
-      event.defaultMuiPrevented = true;
-    }
+  const editarFila = (id) => () => {
+    setModeloFila({ ...modeloFila, [id]: { mode: ModosFila.Edit } });
   };
 
-  const handleEditClick = (id) => () => {
-    setModoModeloFila({ ...rowModesModel, [id]: { mode: ModosFila.Edit } });
+  const guardarFila = (id) => () => {
+    setModeloFila({ ...modeloFila, [id]: { mode: ModosFila.View } });
   };
 
-  const handleSaveClick = (id) => () => {
-    setModoModeloFila({ ...rowModesModel, [id]: { mode: ModosFila.View } });
-  };
+  const eliminarFila = (id) => async () => {
 
-  const handleDeleteClick = (id) => async () => {
+    const confirmarEliminarRegistro = async () => {
 
-    const showSwalConfirm = async () => {
       try {
         Swal.fire({
           title: '¿Estás seguro?',
@@ -126,10 +121,10 @@ export const Feriados = () => {
           confirmButtonColor: '#1A76D2',
           cancelButtonColor: '#6c757d',
           confirmButtonText: 'Si, bórralo!'
-        }).then(async (result) => {
-          if (result.isConfirmed) {
+        }).then(async (respuesta) => {
+          if (respuesta.isConfirmed) {
 
-            setFilasFeriados((prevRows) => prevRows.filter((row) => row.id !== id));
+            setFilasFeriado((filasAnteriores) => filasAnteriores.filter((row) => row.id !== id));
 
             await eliminarFeriado(id, TOKEN);
           }
@@ -139,60 +134,56 @@ export const Feriados = () => {
       }
     };
 
-    showSwalConfirm();
+    confirmarEliminarRegistro();
   };
 
-  const handleCancelClick = (id) => () => {
-    setModoModeloFila({
-      ...rowModesModel,
+  const cancelarEdicionFila = (id) => () => {
+    setModeloFila({
+      ...modeloFila,
       [id]: { mode: ModosFila.View, ignoreModifications: true },
     });
 
-    const editedRow = filasFeriados.find((row) => row.id === id);
-    if (editedRow.isNew) {
-      setFilasFeriados(filasFeriados.filter((row) => row.id !== id));
+    const filaEditada = filasFeriado.find((row) => row.id === id);
+    if (filaEditada.esNueva) {
+      setFilasFeriado(filasFeriado.filter((row) => row.id !== id));
     }
   };
 
-  const processRowUpdate = async (newRow) => {
+  const procesarActualizarFila = async (nuevaFila) => {
 
-    const updatedRow = { ...newRow, isNew: false };
+    const filaActualizada = { ...nuevaFila, esNueva: false };
 
-    const fecha = new Date(newRow.fecha);
+    const fecha = new Date(nuevaFila.fecha);
 
     fecha.setUTCHours(0, 0, 0, 0);
 
     const fechaFormateada = fecha.toISOString();
 
-    if (newRow.isNew) {
+    if (nuevaFila.esNueva) {
 
-      const nuevoFeriado = {
+      const feriadoNuevo = {
         fecha: fechaFormateada,
-        descripcion: newRow.descripcion,
+        descripcion: nuevaFila.descripcion,
       };
 
-      await crearFeriado(nuevoFeriado, TOKEN);
+      await crearFeriado(feriadoNuevo, TOKEN);
 
     } else {
 
-      const updatedFeriado = {
+      const feriadoEditado = {
         fecha: fechaFormateada,
-        descripcion: newRow.descripcion,
+        descripcion: nuevaFila.descripcion,
       };
 
-      await actualizarFeriado(newRow.id, updatedFeriado, TOKEN);
+      await actualizarFeriado(nuevaFila.id, feriadoEditado, TOKEN);
     }
 
-    setFilasFeriados(filasFeriados.map((row) => (row.id === newRow.id ? updatedRow : row)));
+    setFilasFeriado(filasFeriado.map((row) => (row.id === nuevaFila.id ? filaActualizada : row)));
 
-    return updatedRow;
+    return filaActualizada;
   };
 
-  const handleRowModesModelChange = (newRowModesModel) => {
-    setModoModeloFila(newRowModesModel);
-  };
-
-  const columns = [
+  const columnas = [
     {
       field: "fecha",
       headerName: "Fecha",
@@ -202,15 +193,15 @@ export const Feriados = () => {
       headerAlign: "center",
       align: "center",
       headerClassName: 'header--cell',
-      valueFormatter: (params) => {
+      valueFormatter: ({ value }) => {
 
-        const date = new Date(params.value);
+        const fecha = new Date(value);
 
-        const day = date.getUTCDate().toString().padStart(2, "0");
-        const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
-        const year = date.getUTCFullYear();
+        const dia = fecha.getUTCDate().toString().padStart(2, "0");
+        const mes = (fecha.getUTCMonth() + 1).toString().padStart(2, "0");
+        const anio = fecha.getUTCFullYear();
 
-        return `${day}-${month}-${year}`;
+        return `${dia}-${mes}-${anio}`;
       },
     },
     {
@@ -222,46 +213,45 @@ export const Feriados = () => {
       headerAlign: "center",
       align: "center",
       headerClassName: 'header--cell',
-      getActions: (params) => {
-        const isInEditMode =
-          rowModesModel[params.row.id]?.mode === ModosFila.Edit;
+      getActions: ({ row }) => {
 
-        if (isInEditMode) {
+        const { id } = row;
+        const ModoEdicion = modeloFila[id]?.mode === ModosFila.Edit;
+
+        if (ModoEdicion) {
           return [
-            <GridActionsCellItem
+            <CeldaAcciones
               icon={<IconoGuardar />}
-              label="Save"
-              sx={{
-                color: "primary.main",
-              }}
-              onClick={handleSaveClick(params.row.id)}
+              label="Guardar"
+              sx={{ color: "primary.main" }}
+              onClick={guardarFila(id)}
             />,
-            <GridActionsCellItem
+            <CeldaAcciones
               icon={<IconoCancelar />}
-              label="Cancel"
+              label="Cancelar"
               className="textPrimary"
-              onClick={handleCancelClick(params.row.id)}
+              onClick={cancelarEdicionFila(id)}
               color="inherit"
             />,
           ];
         }
 
         return [
-          <GridActionsCellItem
+          <CeldaAcciones
             icon={<IconoEditar />}
-            label="Edit"
+            label="Editar"
             className="textPrimary"
-            onClick={handleEditClick(params.row.id)}
-            color="inherit"
+            onClick={editarFila(id)}
           />,
-          <GridActionsCellItem
+          <CeldaAcciones
             icon={<IconoEliminar />}
-            label="Delete"
-            color="inherit"
-            onClick={handleDeleteClick(params.row.id)}
+            label="Eliminar"
+            className="textPrimary"
+            onClick={eliminarFila(id)}
           />,
         ];
       },
+
     },
   ];
 
@@ -282,24 +272,26 @@ export const Feriados = () => {
       >
         <ProveedorTemas theme={temaConlocalizacion}>
           <GrillaDatos
-            rows={filasFeriados}
-            columns={columns}
-            editMode="row"
-            rowModesModel={rowModesModel}
-            onRowModesModelChange={handleRowModesModelChange}
-            onRowEditStop={handleRowEditStop}
-            processRowUpdate={processRowUpdate}
+            rows={filasFeriado}
+            columns={columnas}
+            rowModesModel={modeloFila}
+            processRowUpdate={procesarActualizarFila}
             slots={{ toolbar: crearNuevoFeriado }}
             slotProps={{
-              toolbar: { setFilasFeriados, filasFeriados, setModoModeloFila, volverPrimerPagina },
+              toolbar: { 
+                filasFeriado, 
+                setFilasFeriado, 
+                setModeloFila, 
+                volverPrimerPagina 
+              },
             }}
             sx={{
               '& .css-1iyq7zh-MuiDataGrid-columnHeaders': {
                 backgroundColor: '#1A76D2 !important',
               }
             }}
-            paginationModel={paginationModel}
-            onPaginationModelChange={setPaginationModel}
+            paginationModel={paginacion}
+            onPaginationModelChange={setPaginacion}
             pageSizeOptions={[5, 10, 25]}
           />
         </ProveedorTemas>

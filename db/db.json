@@ -167,14 +167,9 @@
   ],
   "feriados": [
     {
-      "id": 2,
-      "fecha": "2023-02-14T00:00:00.000Z",
-      "descripcion": "Día de San Valentín"
-    },
-    {
-      "id": 3,
-      "fecha": "2023-04-01T00:00:00.000Z",
-      "descripcion": "Día de los Inocentes"
+      "fecha": "2023-03-31T00:00:00.000Z",
+      "descripcion": "Día de los Inocentes",
+      "id": 3
     },
     {
       "id": 5,
@@ -251,6 +246,22 @@
     {
       "fecha": "2024-01-17T00:00:00.000Z",
       "id": 25
+    },
+    {
+      "fecha": "2024-01-25T00:00:00.000Z",
+      "id": 26
+    },
+    {
+      "fecha": "2024-01-25T00:00:00.000Z",
+      "id": 27
+    },
+    {
+      "fecha": "2024-01-27T00:00:00.000Z",
+      "id": 28
+    },
+    {
+      "fecha": "2024-01-10T00:00:00.000Z",
+      "id": 29
     }
   ],
   "usuario-interno": [
