@@ -64,7 +64,7 @@ function EditToolbar(props) {
     );
 }
 
-export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, categoriasFiltradas, setCategoriasFiltradas, setAfiliado, todasLasCategorias }) => {
+export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, categoriasFiltradas, setCategoriasFiltradas, setAfiliado, todasLasCategorias, plantas }) => {
 
     const [locale, setLocale] = useState('esES');
     const [rowModesModel, setRowModesModel] = useState({});
@@ -74,18 +74,6 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
         () => createTheme(theme, locales[locale]),
         [locale, theme],
     );
-
-    /* const ObtenerAfiliados = async (row, cuilElegido) => {
-
-        console.log("row antes: " , row);
-        const afiliados = await obtenerAfiliados(token, cuilElegido);
-        const afiliado = afiliados.find(afiliado => afiliado.cuil === cuilElegido);
-        row.apellido = afiliado.apellido;
-        row.nombre = afiliado.nombre;
-        
-        console.log("row ahora: " , row);
-
-    }; */
 
     const ObtenerAfiliados = async (params, cuilElegido) => {
 
@@ -99,15 +87,12 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
             id: params.id,
             field: 'apellido',
             value: afiliadoEncontrado.apellido,
-            // no editar el campo apellido
-            editable: false
         });
 
         params.api.setEditCellValue({
             id: params.id,
             field: 'nombre',
             value: afiliadoEncontrado.nombre,
-            editable: false
         });
 
     };
@@ -116,12 +101,12 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
 
         //const categoriasResponse = await obtenerCategorias(token);
 
-        const filtroCategorias = todasLasCategorias.filter((categoria) => categoria.camara === codigoCamara); 
-        console.log("categoriasFiltradas: " , filtroCategorias);
-        
+        const filtroCategorias = todasLasCategorias.filter((categoria) => categoria.camara === codigoCamara);
+        console.log("categoriasFiltradas: ", filtroCategorias);
+
         // armar un array solo de categorias
         const soloCategorias = filtroCategorias.map((item) => item.categoria);
-        console.log("soloCategorias: " , soloCategorias);
+        console.log("soloCategorias: ", soloCategorias);
 
         params.api.setEditCellValue({
             id: params.id,
@@ -169,18 +154,6 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
 
         setRowsAltaDDJJ(rowsAltaDDJJ.map((row) => (row.id === newRow.id ? updatedRow : row)));
 
-        const afiliadoFinal = {
-
-        }
-
-        if (newRow.isNew) {
-
-            //console.log("newRow: " , newRow);
-
-        } else {
-            //console.log("newRow: " , newRow);
-        }
-
         return updatedRow;
     };
 
@@ -188,12 +161,19 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
         setRowModesModel(newRowModesModel);
     };
 
+    const formatter = new Intl.NumberFormat("es-CL", {
+        minimumFractionDigits: 2,
+        useGrouping: true,
+        currency: "CLP",
+        style: "currency",
+    });
+
     const columns = [
         {
             field: "cuil",
             type: "string",
             headerName: "CUIL",
-            width: 150,
+            width: 180,
             editable: true,
             headerAlign: "center",
             align: "center",
@@ -244,6 +224,29 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
             headerAlign: "center",
             align: "center",
             headerClassName: 'header--cell',
+            renderEditCell: (params) => {
+                return (
+                    <TextField
+                        fullWidth
+                        value={params.value}
+                        readOnly
+                        // readOnly={!params.row.isNew} Hacer readonly si no es una nueva fila
+                        sx={{
+                            '& .MuiOutlinedInput-root': {
+                                '& fieldset': {
+                                    borderColor: 'transparent', // Color del borde cuando no está enfocado
+                                },
+                                '&:hover fieldset': {
+                                    borderColor: 'transparent', // Color del borde al pasar el ratón
+                                },
+                                '&.Mui-focused fieldset': {
+                                    borderColor: 'transparent', // Color del borde cuando está enfocado
+                                },
+                            },
+                        }}
+                    />
+                );
+            },
         },
         {
             field: "nombre",
@@ -254,6 +257,29 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
             headerAlign: "center",
             align: "center",
             headerClassName: 'header--cell',
+            renderEditCell: (params) => {
+                return (
+                    <TextField
+                        fullWidth
+                        value={params.value}
+                        readOnly
+                        // readOnly={!params.row.isNew} Hacer readonly si no es una nueva fila
+                        sx={{
+                            '& .MuiOutlinedInput-root': {
+                                '& fieldset': {
+                                    borderColor: 'transparent', // Color del borde cuando no está enfocado
+                                },
+                                '&:hover fieldset': {
+                                    borderColor: 'transparent', // Color del borde al pasar el ratón
+                                },
+                                '&.Mui-focused fieldset': {
+                                    borderColor: 'transparent', // Color del borde cuando está enfocado
+                                },
+                            },
+                        }}
+                    />
+                );
+            },
         },
         {
             field: "camara",
@@ -279,19 +305,6 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
                                 field: 'camara',
                                 value: newValue,
                             });
-                        }}
-                        sx={{
-                            '& .MuiOutlinedInput-root': {
-                                '& fieldset': {
-                                    borderColor: 'transparent', 
-                                },
-                                '&:hover fieldset': {
-                                    borderColor: 'transparent', 
-                                },
-                                '&.Mui-focused fieldset': {
-                                    borderColor: 'transparent', 
-                                },
-                            },
                         }}
                     >
                         {camaras.map((camara) => {
@@ -350,6 +363,9 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
             headerAlign: "center",
             align: "center",
             headerClassName: 'header--cell',
+            valueOptions: plantas.map((planta) => {
+                return { value: planta.id, label: planta.planta }; // Agrega la propiedad 'key'
+            })
         },
         {
             field: "remunerativo",
@@ -359,24 +375,26 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
             headerAlign: "center",
             align: "center",
             headerClassName: 'header--cell',
+            valueFormatter: (params) => formatter.format(params.value || 0),
         },
         {
             field: "noRemunerativo",
             type: "string",
             renderHeader: () => (
                 <div style={{ textAlign: 'center', color: '#fff', fontSize: '0.8rem' }}>
-                  <span role="img" aria-label="enjoy">
-                    No 
-                    <br />
-                    Remunerativo
-                  </span>
+                    <span role="img" aria-label="enjoy">
+                        No
+                        <br />
+                        Remunerativo
+                    </span>
                 </div>
-              ),
+            ),
             width: 150,
             editable: true,
             headerAlign: "center",
             align: "center",
             headerClassName: 'header--cell',
+            valueFormatter: (params) => formatter.format(params.value || 0),
         },
         {
             field: "cuotaSocUoma",
@@ -501,7 +519,7 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
                         46
                     </span>
                 </div>
-            ),  
+            ),
             width: 150,
             editable: false,
             headerAlign: "center",
@@ -645,7 +663,7 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
                             },
                             '& .css-1iyq7zh-MuiDataGrid-columnHeaders': {
                                 backgroundColor: '#1A76D2 !important',
-                              },
+                            },
                             '& .art46--cell': {
                                 backgroundColor: '#ccc',
                             },

@@ -874,6 +874,37 @@
       "totalUomaAS": 217441.68,
       "totalCuotaUsu": 334984.99,
       "id": 202
+    },
+    {
+      "periodo": "2023-10-01T00:00:00.000Z",
+      "afiliados": [
+        {
+          "cuil": "20949118682",
+          "inte": 0,
+          "apellido": "Salinas",
+          "nombre": "Luis",
+          "fechaIngreso": "2021-01-01T03:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": "545000.70",
+          "noRemunerativo": "25000",
+          "aporteUomaCs": true,
+          "aporteUomaAs": true,
+          "aporteCuotaUsuaria": false,
+          "aporteArt46": true,
+          "aporteAntimaCs": true
+        }
+      ],
+      "empresaId": "1",
+      "estado": "PE",
+      "secuencia": null,
+      "totalART46": 455448.48,
+      "totalAntimaCS": 476238.62,
+      "totalUomaCS": 886718.38,
+      "totalUomaAS": 102365.99,
+      "totalCuotaUsu": 303776.31,
+      "id": 203
     }
   ],
   "afiliado": [
