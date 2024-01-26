@@ -217,6 +217,7 @@ export const GrillaMisDeclaracionesJuradas = ({
         if (params.value === 0) {
           return "Original";
         } else {
+          console.log(params.value)
           return "Rectificativa " + params.value;
         }
       },
