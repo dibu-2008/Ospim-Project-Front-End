@@ -12,7 +12,7 @@ import dayjs from 'dayjs';
 import esLocale from 'dayjs/locale/es';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
 
-export const MisDeclaracionesJuradas = () => {
+export const MisDeclaracionesJuradas = ({ setTabState }) => {
 
     const [rows_mis_ddjj, setRowsMisDdjj] = useState([]);
     const [desde, setDesde] = useState(null);
@@ -121,6 +121,7 @@ export const MisDeclaracionesJuradas = () => {
                     setRowsMisDdjj={setRowsMisDdjj}
                     token={TOKEN}
                     idEmpresa={ID_EMPRESA}
+                    setTabState={setTabState}
                 />
             </Stack>
         </div>

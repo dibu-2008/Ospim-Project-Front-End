@@ -45,6 +45,7 @@ function a11yProps(index) {
 
 export const DeclaracionesJuradas = () => {
   
+  const [periodo, setPeriodo] = useState(null);
   const [locale, setLocale] = useState('esES');
   const [tabState, setTabState] = useState(0);
 
@@ -84,10 +85,15 @@ export const DeclaracionesJuradas = () => {
             </Tabs>
           </Box>
           <CustomTabPanel value={tabState} index={0}>
-            <MisAltaDeclaracionesJuradas />
+            <MisAltaDeclaracionesJuradas 
+              periodo={periodo}
+              setPeriodo={setPeriodo}
+            />
           </CustomTabPanel>
           <CustomTabPanel value={tabState} index={1}>
-            <MisDeclaracionesJuradas />
+            <MisDeclaracionesJuradas 
+              setTabState={setTabState}
+            />
           </CustomTabPanel>
           <CustomTabPanel value={tabState} index={2}>
           Mis Pagos

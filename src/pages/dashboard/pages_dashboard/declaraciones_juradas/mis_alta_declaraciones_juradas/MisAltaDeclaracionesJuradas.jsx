@@ -13,10 +13,10 @@ import './MisAltaDeclaracionesJuradas.css';
 import { GrillaPasoTres } from './grilla_paso_tres/GrillaPasoTres';
 import { crearAltaDeclaracionJurada, obtenerCamaras, obtenerCategorias, obtenerPlantaEmpresas } from './MisAltaDeclaracionesJuradasApi';
 
-export const MisAltaDeclaracionesJuradas = () => {
+export const MisAltaDeclaracionesJuradas = ({periodo, setPeriodo}) => {
 
     const [rowsAltaDDJJ, setRowsAltaDDJJ] = useState([]);
-    const [periodo, setPeriodo] = useState(null);
+    //const [periodo, setPeriodo] = useState(null);
     const [periodoIso, setPeriodoIso] = useState(null);
     const [otroPeriodo, setOtroPeriodo] = useState(null);
     const [otroPeriodoIso, setOtroPeriodoIso] = useState(null);
@@ -30,7 +30,10 @@ export const MisAltaDeclaracionesJuradas = () => {
     const TOKEN = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.usuario.token;
     const ID_EMPRESA = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.empresa.id;
 
-    const handleChangePeriodo = (date) => setPeriodo(date);
+    const handleChangePeriodo = (date) => {
+        console.log("------", date)
+        setPeriodo(date)
+    };
 
     const handleAcceptPeriodo = () => {
 
@@ -275,6 +278,7 @@ export const MisAltaDeclaracionesJuradas = () => {
                     setAfiliado={setAfiliado}
                     todasLasCategorias={todasLasCategorias}
                     plantas={plantas}
+                    setPeriodo={setPeriodo}
                 />
                 <div
                     className='botones_container'

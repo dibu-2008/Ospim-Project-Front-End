@@ -69,6 +69,7 @@ export const GrillaMisDeclaracionesJuradas = ({
   setRowsMisDdjj,
   token,
   idEmpresa,
+  setTabState,
 }) => {
   const [rowModesModel, setRowModesModel] = useState({});
 
@@ -110,7 +111,8 @@ export const GrillaMisDeclaracionesJuradas = ({
   };
 
   const handleEditClick = (id) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+    // setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+    setTabState(0);
   };
 
   const handleSaveClick = (id) => () => {
@@ -187,7 +189,7 @@ export const GrillaMisDeclaracionesJuradas = ({
     {
       field: "periodo",
       headerName: "Periodo",
-      width: 180,
+      flex: 1,
       editable: true,
       type: "date",
       headerAlign: "center",
@@ -214,6 +216,7 @@ export const GrillaMisDeclaracionesJuradas = ({
       headerClassName: "header--cell",
       valueGetter: (params) => {
         // Si secuencia es 0 es "Original" sino es "Rectificativa"+secuencia
+        // TODO : Tener en cuenta en valor de la secuencia cuando venga en null
         if (params.value === 0) {
           return "Original";
         } else {
