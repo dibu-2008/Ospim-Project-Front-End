@@ -76,6 +76,20 @@ module.exports = (req, res, next) => {
       return "ROL-FUNC-REL-BAJA";
     }
 
+    if (req.method === "DELETE" && req.url.startsWith("/aportes/?")) {
+      return "APORTES-BAJA";
+    }
+
+    if (req.method === "PUT" && req.url.startsWith("/aportes/?")) {
+      return "APORTES-MODI";
+    }
+
+    if (
+      (req.method === "PUT" || req.method === "POST") &&
+      req.url.startsWith("/aportesDetalle/?")
+    ) {
+      return "APORTE-DETALLE-ALTA";
+    }
     return "----";
   }
 
@@ -120,12 +134,67 @@ module.exports = (req, res, next) => {
     case "ROL-FUNC-REL-BAJA":
       RolFuncionalidadRelBaja();
       break;
+    case "APORTES-BAJA":
+      AportesBaja();
+      break;
+    case "APORTES-MODI":
+      AportesModi();
+      break;
+    case "APORTE-DETALLE-ALTA":
+      AporteDetalleAlta();
+      break;
     case "----":
       // code block
       next();
       break;
     default:
     // code block
+  }
+
+  function AporteDetalleAlta() {
+    let aporte = req.query.aporte;
+    req.body.aporte = aporte;
+    next();
+  }
+
+  function AportesBaja() {
+    let codigo = req.query.codigo;
+    let aportesDB = req.app.db.__wrapped__.aportes;
+    let aporte = aportesDB.find((elem) => elem.codigo == codigo);
+    if (aporte) {
+      let aportesDBNew = aportesDB.filter((elem) => elem.codigo != codigo);
+      req.app.db.__wrapped__.aportes = aportesDBNew;
+      req.app.db.write();
+      res.status(200).send(null);
+    } else {
+      res.status(404).jsonp({
+        tipo: "ERROR_APP_BUSINESS",
+        ticket: "TK-156269",
+        codigo: "CODIGO_INVALIDO",
+        descripcion: "Codigo inexistente.",
+      });
+    }
+  }
+
+  function AportesModi() {
+    let codigo = req.query.codigo;
+    let aportesDB = req.app.db.__wrapped__.aportes;
+    let aportesIndex = aportesDB.findIndex((elem) => elem.codigo == codigo);
+    console.log("aportesIndex: " + aportesIndex);
+    if (aportesIndex > -1) {
+      if (req.body.descripcion)
+        aportesDB[aportesIndex].descripcion = req.body.descripcion;
+      if (req.body.cuenta) aportesDB[aportesIndex].cuenta = req.body.cuenta;
+      req.app.db.write();
+      res.status(200).send(null);
+    } else {
+      res.status(404).jsonp({
+        tipo: "ERROR_APP_BUSINESS",
+        ticket: "TK-156269",
+        codigo: "CODIGO_INVALIDO",
+        descripcion: "Codigo inexistente.",
+      });
+    }
   }
 
   function RolFuncionalidadRelBaja() {

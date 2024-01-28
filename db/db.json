@@ -863,6 +863,54 @@
       "totalUomaAS": 217441.68,
       "totalCuotaUsu": 334984.99,
       "id": 202
+    },
+    {
+      "periodo": "2023-10-01T00:00:00.000Z",
+      "afiliados": [
+        {
+          "cuil": "23279737229",
+          "inte": null,
+          "apellido": "Vázquez",
+          "nombre": "Lot",
+          "fechaIngreso": "2001-01-01T00:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "aporteUomaCs": true,
+          "aporteUomaAs": true,
+          "aporteCuotaUsu": true,
+          "aporteArt46": true,
+          "aporteAntimaCs": true
+        },
+        {
+          "cuil": "20294465996",
+          "inte": 1,
+          "apellido": "Querubín",
+          "nombre": "Tapia",
+          "fechaIngreso": "2010-01-01T00:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "aporteUomaCs": true,
+          "aporteUomaAs": true,
+          "aporteCuotaUsu": true,
+          "aporteArt46": true,
+          "aporteAntimaCs": true
+        }
+      ],
+      "empresaId": "1",
+      "estado": "PE",
+      "secuencia": null,
+      "totalART46": 381356.55,
+      "totalAntimaCS": 975734.25,
+      "totalUomaCS": 813855.05,
+      "totalUomaAS": 351067.9,
+      "totalCuotaUsu": 825044.14,
+      "id": 203
     }
   ],
   "afiliado": [
@@ -954,6 +1002,94 @@
       "cuit": "30789154024",
       "observacion": "Aaaaaaaa",
       "id": 10
+    }
+  ],
+  "aportes": [
+    {
+      "id": 1,
+      "codigo": "UOMACS",
+      "descripcion": "UOMA Cuota Social",
+      "cuenta": "12148/4"
+    },
+    {
+      "id": 2,
+      "codigo": "UOMAAS",
+      "descripcion": "UOMA Aporte Solidario",
+      "cuenta": "47598/4"
+    },
+    {
+      "id": 3,
+      "codigo": "UOMACU",
+      "descripcion": "UOMA Cuota Usufructo",
+      "cuenta": "49859/7"
+    },
+    {
+      "id": 4,
+      "codigo": "ANTIMACS",
+      "descripcion": "ANTIMA Cuota Social",
+      "cuenta": "11598/5"
+    },
+    {
+      "id": 5,
+      "codigo": "ART46",
+      "descripcion": "Art. 46",
+      "cuenta": "89652/7"
+    }
+  ],
+  "aportesDetalle": [
+    {
+      "id": 1,
+      "aporte": "UOMACS",
+      "entidad": "UOMA",
+      "tipo": "P",
+      "valor": 2,
+      "referencia": "R",
+      "categoria": null,
+      "antiguedad": null,
+      "vigenciaDesde": "1900-01-01",
+      "vigenciaHasta": null
+    },
+    {
+      "id": 2,
+      "entidad": "UOMA",
+      "aporte": "UOMAAS",
+      "unidad": "P",
+      "valor": 2,
+      "referencia": "R",
+      "categoria": null,
+      "antiguedad": null,
+      "vigenciaDesde": "1990-01-01T00:00.000Z",
+      "vigenciaHasta": null
+    },
+    {
+      "id": 3,
+      "entidad": null,
+      "aporte": "ART46",
+      "unidad": "P",
+      "valor": 200,
+      "referencia": "PJ",
+      "categoria": "F",
+      "antiguedad": 0
+    },
+    {
+      "id": 4,
+      "entidad": "ANTIMA",
+      "aporte": "ANTIMACS",
+      "unidad": "E",
+      "valor": 7500,
+      "referencia": null,
+      "categoria": null,
+      "antiguedad": null
+    },
+    {
+      "id": 5,
+      "entidad": "UOMA",
+      "aporte": "UOMACU",
+      "unidad": "P",
+      "valor": 2,
+      "referencia": "R",
+      "categoria": null,
+      "antiguedad": null
     }
   ]
 }
