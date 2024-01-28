@@ -22,6 +22,7 @@ import {
 } from "./GrillaMisDeclaracionesJuradasApi";
 import { PDFViewer, PDFDownloadLink } from "@react-pdf/renderer";
 import { MyDocument } from "./MiPdf";
+import Swal from 'sweetalert2'
 
 /* function EditToolbar(props) {
 
@@ -68,6 +69,7 @@ export const GrillaMisDeclaracionesJuradas = ({
   setRowsMisDdjj,
   token,
   idEmpresa,
+  setTabState,
 }) => {
   const [rowModesModel, setRowModesModel] = useState({});
 
@@ -109,7 +111,8 @@ export const GrillaMisDeclaracionesJuradas = ({
   };
 
   const handleEditClick = (id) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+    // setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+    setTabState(0);
   };
 
   const handleSaveClick = (id) => () => {
@@ -117,9 +120,32 @@ export const GrillaMisDeclaracionesJuradas = ({
   };
 
   const handleDeleteClick = (id) => async () => {
-    setRowsMisDdjj(rows_mis_ddjj.filter((row) => row.id !== id));
+    
 
-    await eliminarDeclaracionJurada(idEmpresa, id, token);
+    const showSwalConfirm = async () => {
+      try {
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: "¡No podrás revertir esto!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#1A76D2',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: 'Si, bórralo!'
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+
+            setRowsMisDdjj(rows_mis_ddjj.filter((row) => row.id !== id));
+            
+            await eliminarDeclaracionJurada(idEmpresa, id, token);
+          }
+        });
+      } catch (error) {
+        console.error('Error al ejecutar eliminarFeriado:', error);
+      }
+    };
+
+    showSwalConfirm();
   };
 
   const handleCancelClick = (id) => () => {
@@ -163,7 +189,7 @@ export const GrillaMisDeclaracionesJuradas = ({
     {
       field: "periodo",
       headerName: "Periodo",
-      width: 180,
+      flex: 1,
       editable: true,
       type: "date",
       headerAlign: "center",
@@ -190,9 +216,11 @@ export const GrillaMisDeclaracionesJuradas = ({
       headerClassName: "header--cell",
       valueGetter: (params) => {
         // Si secuencia es 0 es "Original" sino es "Rectificativa"+secuencia
+        // TODO : Tener en cuenta en valor de la secuencia cuando venga en null
         if (params.value === 0) {
           return "Original";
         } else {
+          console.log(params.value)
           return "Rectificativa " + params.value;
         }
       },

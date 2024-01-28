@@ -101,3 +101,90 @@ export const obtenerCategorias = async (token) => {
 
     }
 }
+
+export const obtenerPlantaEmpresas = async (token, empresaId) => {
+
+    const URL = `${BACKEND_URL}/empresa/${empresaId}/domicilio/planta`;
+
+    const showSwalError = (descripcion) => {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: descripcion,
+            showConfirmButton: false,
+            timer: 3000,
+        })
+    }
+
+    try {
+
+        const plantasResponse = await axios.get(URL, {
+            headers: {
+                'Authorization': token
+            }
+        });
+        const plantas = await plantasResponse.data;
+
+        return plantas || [];
+
+    } catch (error) {
+
+        errorBackendResponse(error, showSwalError);
+    }
+
+}
+
+export const crearAltaDeclaracionJurada = async (token, empresaId, ddjj) => {
+
+    const URL = `${BACKEND_URL}/empresa/${empresaId}/ddjj`;
+
+    const showSwalError = (descripcion) => {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: descripcion,
+            showConfirmButton: true,
+        })
+    }
+
+    const showSwallSuccess = () => {
+
+        Swal.fire({
+            icon: 'success',
+            title: MESSAGE_HTTP_CREATED,
+            showConfirmButton: false,
+            timer: 2000,
+        })
+    }
+
+    try {
+
+        const altaDeclaracionJuradaResponse = await axios.post(URL, ddjj, {
+            headers: {
+                'Authorization': token
+            }
+        });
+
+        showSwallSuccess();
+
+        return altaDeclaracionJuradaResponse.data;
+
+    }catch (error) {
+
+        errorBackendResponse(error, showSwalError);
+
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+

@@ -14,13 +14,18 @@ import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import * as locales from '@mui/material/locale';
+import Swal from 'sweetalert2'
 import "./Publicaciones.css";
 
 export const Publicaciones = () => {
 
   const [locale, setLocale] = useState('esES');
-  const [rowModesModel, setRowModesModel] = useState({});
   const [rows, setRows] = useState([]);
+  const [rowModesModel, setRowModesModel] = useState({});
+  const [paginationModel, setPaginationModel] = useState({
+    pageSize: 5,
+    page: 0,
+  });
 
   const TOKEN = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.usuario.token;
 
@@ -40,6 +45,13 @@ export const Publicaciones = () => {
     ObtenerPublicaciones();
   }, []);
 
+  const volverPrimerPagina = () => {
+    setPaginationModel((prevPaginationModel) => ({
+      ...prevPaginationModel,
+      page: 0,
+    }));
+  };
+
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true;
@@ -55,14 +67,35 @@ export const Publicaciones = () => {
   };
 
   const handleDeleteClick = (id) => async () => {
-    setRows((oldRows) => oldRows.filter((row) => row.id !== id));
-    setRowModesModel((oldModel) => {
+
+    /* setRowModesModel((oldModel) => {
       const newModel = { ...oldModel };
       delete newModel[id];
       return newModel;
-    });
+    }); */
 
-    await eliminarPublicacion(id, TOKEN);
+    const showSwalConfirm = async () => {
+      try {
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: "¡No podrás revertir esto!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#1A76D2',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: 'Si, bórralo!'
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            setRows((oldRows) => oldRows.filter((row) => row.id !== id));
+            await eliminarPublicacion(id, TOKEN);
+          }
+        });
+      } catch (error) {
+        console.error('Error al ejecutar eliminarFeriado:', error);
+      }
+    };
+
+    showSwalConfirm();
   };
 
   const handleCancelClick = (id) => () => {
@@ -122,7 +155,7 @@ export const Publicaciones = () => {
     {
       field: "titulo",
       headerName: "Titulo",
-      width: 300,
+      flex: 1,
       type: "string",
       editable: true,
       headerAlign: "center",
@@ -132,22 +165,22 @@ export const Publicaciones = () => {
     {
       field: "cuerpo",
       headerName: "Cuerpo",
-      width: 325,
+      flex: 1,
       type: "string",
       editable: true,
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell',
+      headerClassName: 'header--cell header--cell--left',
     },
     {
       field: "vigenciaDesde",
       headerName: "Vigencia Desde",
-      width: 300,
+      flex: 1,
       type: "date",
       editable: true,
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell',
+      headerClassName: 'header--cell header--cell--left',
       valueFormatter: (params) => {
         
         const date = new Date(params.value);
@@ -162,12 +195,12 @@ export const Publicaciones = () => {
     {
       field: "vigenciaHasta",
       headerName: "Vigencia Hasta",
-      width: 300,
+      flex: 1,
       type: "date",
       editable: true,
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell',
+      headerClassName: 'header--cell header--cell--left',
       valueFormatter: (params) => {
         
         const date = new Date(params.value);
@@ -182,11 +215,11 @@ export const Publicaciones = () => {
     {
       field: "actions",
       headerName: "Acciones",
-      width: 300,
+      flex: 1,
       type: "actions",
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell',
+      headerClassName: 'header--cell header--cell--left',
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
@@ -258,7 +291,7 @@ export const Publicaciones = () => {
               toolbar: EditarNuevaFila,
             }}
             slotProps={{
-              toolbar: { setRows, rows, setRowModesModel },
+              toolbar: { setRows, rows, setRowModesModel, volverPrimerPagina },
             }}
             sx={{
               '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
@@ -268,13 +301,12 @@ export const Publicaciones = () => {
               '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
                 backgroundColor: '#ccc',
               },
-            }}
-            initialState={{
-              ...rows.initialState,
-              pagination: {
-                paginationModel: { pageSize: 5 },
+              '& .css-1iyq7zh-MuiDataGrid-columnHeaders': {
+                backgroundColor: '#1A76D2 !important',
               },
             }}
+            paginationModel={paginationModel}
+            onPaginationModelChange={setPaginationModel}
             pageSizeOptions={[5, 10, 25]}
           />
         </ThemeProvider>

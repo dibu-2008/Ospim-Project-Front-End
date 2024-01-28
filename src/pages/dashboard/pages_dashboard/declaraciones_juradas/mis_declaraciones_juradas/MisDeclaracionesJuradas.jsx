@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';                    
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import './MisDeclaracionesJuradas.css'
@@ -11,8 +10,9 @@ import { obtenerMisDeclaracionesJuradas } from './grilla_mis_declaraciones_jurad
 import { esES } from '@mui/x-date-pickers/locales';
 import dayjs from 'dayjs';
 import esLocale from 'dayjs/locale/es';
+import { DesktopDatePicker } from '@mui/x-date-pickers';
 
-export const MisDeclaracionesJuradas = () => {
+export const MisDeclaracionesJuradas = ({ setTabState }) => {
 
     const [rows_mis_ddjj, setRowsMisDdjj] = useState([]);
     const [desde, setDesde] = useState(null);
@@ -27,11 +27,27 @@ export const MisDeclaracionesJuradas = () => {
     const buscarDeclaracionesJuradas = async () => {
         try {
             const ddjjResponse = await obtenerMisDeclaracionesJuradas(ID_EMPRESA, TOKEN);
-            const declaracionesFiltradas = ddjjResponse.filter(ddjj => {
-                const fecha = new Date(ddjj.periodo);
-                return fecha >= new Date(desde) && fecha <= new Date(hasta);
-            });
-            setRowsMisDdjj(declaracionesFiltradas);
+            
+            if(desde && desde.$d && hasta && hasta.$d){
+                const { $d: $desde } = desde;
+                const { $d: $hasta } = hasta;
+
+                const fechaDesde = new Date($desde);
+                fechaDesde.setDate(1); // Seteamos el día del mes a 1
+                fechaDesde.setUTCHours(0, 0, 0, 0); // Ajustamos la zona horaria a UTC
+                const fechaIsoDesde = fechaDesde.toISOString(); // Convertimos la fecha a ISO
+
+                const fechaHasta = new Date($hasta);
+                fechaHasta.setDate(1); // Seteamos el día del mes a 1
+                fechaHasta.setUTCHours(0, 0, 0, 0); // Ajustamos la zona horaria a UTC
+                const fechaIsoHasta = fechaHasta.toISOString(); // Convertimos la fecha a ISO
+                
+                const declaracionesFiltradas = ddjjResponse.filter(ddjj => {
+                    const fecha = new Date(ddjj.periodo);
+                    return fecha >= new Date(fechaIsoDesde) && fecha <= new Date(fechaIsoHasta);
+                });
+                setRowsMisDdjj(declaracionesFiltradas);
+            }
         } catch (error) {
             console.error('Error al buscar declaraciones juradas:', error);
         }
@@ -46,37 +62,41 @@ export const MisDeclaracionesJuradas = () => {
                     justifyContent="center"
                     alignItems="center"
                 >
-                    <LocalizationProvider 
+                    <LocalizationProvider
                         dateAdapter={AdapterDayjs}
                         adapterLocale={"es"}
                         localeText={esES.components.MuiLocalizationProvider.defaultProps.localeText}
                     >
                         <DemoContainer components={['DatePicker']}>
-                            <DatePicker
-                                label="Periodo desde"
-                                value={desde}
+                            <DesktopDatePicker
+                                label={'Periodo desde'}
+                                views={['month', 'year']}
+                                closeOnSelect={false}
                                 onChange={handleChangeDesde}
-                                format="DD-MM-YYYY"
+                                value={desde}
+                                slotProps={{ actionBar: { actions: ['cancel', 'accept'] } }}
                             />
                         </DemoContainer>
                     </LocalizationProvider>
-                    <LocalizationProvider 
+                    <LocalizationProvider
                         dateAdapter={AdapterDayjs}
                         adapterLocale={"es"}
-                        localeText={esES.components.MuiLocalizationProvider.defaultProps.localeText}    
+                        localeText={esES.components.MuiLocalizationProvider.defaultProps.localeText}
                     >
                         <DemoContainer components={['DatePicker']}>
-                            <DatePicker
-                                label="Periodo hasta"
-                                value={hasta}
+                            <DesktopDatePicker
+                                label={'Periodo hasta'}
+                                views={['month', 'year']}
+                                closeOnSelect={false}
                                 onChange={handleChangeHasta}
-                                format="DD-MM-YYYY"
+                                value={hasta}
+                                slotProps={{ actionBar: { actions: ['cancel', 'accept'] } }}
                             />
                         </DemoContainer>
                     </LocalizationProvider>
                 </Stack>
 
-                <Stack  
+                <Stack
                     spacing={4}
                     direction="row"
                     justifyContent="center"
@@ -101,7 +121,7 @@ export const MisDeclaracionesJuradas = () => {
                     setRowsMisDdjj={setRowsMisDdjj}
                     token={TOKEN}
                     idEmpresa={ID_EMPRESA}
-
+                    setTabState={setTabState}
                 />
             </Stack>
         </div>

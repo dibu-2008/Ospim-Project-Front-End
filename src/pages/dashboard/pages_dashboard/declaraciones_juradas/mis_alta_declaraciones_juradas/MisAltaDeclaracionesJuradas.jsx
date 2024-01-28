@@ -11,31 +11,32 @@ import dayjs from 'dayjs';
 import esLocale from 'dayjs/locale/es';
 import './MisAltaDeclaracionesJuradas.css';
 import { GrillaPasoTres } from './grilla_paso_tres/GrillaPasoTres';
-import { obtenerCamaras, obtenerCategorias } from './MisAltaDeclaracionesJuradasApi';
+import { crearAltaDeclaracionJurada, obtenerCamaras, obtenerCategorias, obtenerPlantaEmpresas } from './MisAltaDeclaracionesJuradasApi';
 
-export const MisAltaDeclaracionesJuradas = () => {
+export const MisAltaDeclaracionesJuradas = ({periodo, setPeriodo}) => {
 
     const [rowsAltaDDJJ, setRowsAltaDDJJ] = useState([]);
-    const [periodo, setPeriodo] = useState(null);
-    const [periodoIso, setPeriodoIso] = useState(null); 
+    //const [periodo, setPeriodo] = useState(null);
+    const [periodoIso, setPeriodoIso] = useState(null);
     const [otroPeriodo, setOtroPeriodo] = useState(null);
+    const [otroPeriodoIso, setOtroPeriodoIso] = useState(null);
     const [camaras, setCamaras] = useState([]);
-    const [categorias, setCategorias] = useState([]);
+    const [todasLasCategorias, setTodasLasCategorias] = useState([]);
+    const [categoriasFiltradas, setCategoriasFiltradas] = useState([]);
     const [afiliado, setAfiliado] = useState({});
-    /* const [desde, setDesde] = useState(null);
-    const [hasta, setHasta] = useState(null); */
+    const [plantas, setPlantas] = useState([]);
     const [selectedFileName, setSelectedFileName] = useState('');
     const [mostrarPeriodos, setMostrarPeriodos] = useState(false);
     const TOKEN = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.usuario.token;
     const ID_EMPRESA = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.empresa.id;
 
-    //const handleChangeDesde = (date) => setDesde(date);
+    const handleChangePeriodo = (date) => {
+        console.log("------", date)
+        setPeriodo(date)
+    };
 
-    //const handleChangeHasta = (date) => setHasta(date);
+    const handleAcceptPeriodo = () => {
 
-    const handleChangePeriodo = (date) => setPeriodo(date); 
-
-    const handleAccept = () => {
         if (periodo && periodo.$d) {
             const { $d: fecha } = periodo;
             const fechaFormateada = new Date(fecha);
@@ -46,13 +47,27 @@ export const MisAltaDeclaracionesJuradas = () => {
 
             const fechaISO = fechaFormateada.toISOString(); // 2026-02-01T00:00:00.000Z
             setPeriodoIso(fechaISO);
-        } else {
-            console.log("No se ha seleccionado ninguna fecha.");
         }
     };
 
 
     const handleChangeOtroPeriodo = (date) => setOtroPeriodo(date);
+
+    const handleAcceptOtroPeriodo = () => {
+
+        if (otroPeriodo && otroPeriodo.$d) {
+            const { $d: fecha } = otroPeriodo;
+            const fechaFormateada = new Date(fecha);
+            fechaFormateada.setDate(1); // Establecer el día del mes a 1
+
+            // Ajustar la zona horaria a UTC
+            fechaFormateada.setUTCHours(0, 0, 0, 0);
+
+            const fechaISO = fechaFormateada.toISOString(); // 2026-02-01T00:00:00.000Z
+            setOtroPeriodoIso(fechaISO);
+        }
+
+    };
 
     useEffect(() => {
         const ObtenerCamaras = async () => {
@@ -69,20 +84,22 @@ export const MisAltaDeclaracionesJuradas = () => {
 
             const categoriasResponse = await obtenerCategorias(TOKEN);
 
-           // quitar los objectos repetidos de la propiedad categoria
-            const categoriasResponseSinRepetidos = categoriasResponse.filter((item, index, arr) =>
-                index === arr.findIndex((t) => (
-                    t.categoria === item.categoria
-                ))
-            );
-
-            // armar un array de solo categorias
-            const soloCategorias = categoriasResponseSinRepetidos.map((item) => item.categoria);
-
-            setCategorias(soloCategorias);
+            setTodasLasCategorias(categoriasResponse.map((item, index) => ({ id: index + 1, ...item })));
 
         };
         ObtenerCategorias();
+    }, []);
+
+    useEffect(() => {
+        const ObtenerPlantaEmpresas = async () => {
+
+            const plantaEmpresasResponse = await obtenerPlantaEmpresas(TOKEN, ID_EMPRESA);
+
+            setPlantas(plantaEmpresasResponse.map((item) => ({ id: item, ...item })));
+
+        }
+        ObtenerPlantaEmpresas();
+
     }, []);
 
     const handleFileChange = (event) => {
@@ -94,7 +111,7 @@ export const MisAltaDeclaracionesJuradas = () => {
         setMostrarPeriodos(event.target.value === 'elegirOtro');
     };
 
-    const guardarDeclaracionJurada = () => {
+    const guardarDeclaracionJurada = async () => {
 
         const altaDeclaraionJuaradaFinal = {
             periodo: periodoIso,
@@ -104,7 +121,7 @@ export const MisAltaDeclaracionesJuradas = () => {
                 apellido: item.apellido,
                 nombre: item.nombre,
                 fechaIngreso: item.fechaIngreso,
-                empresaDomicilioId: ID_EMPRESA,
+                empresaDomicilioId: item.planta,
                 camara: item.camara,
                 categoria: item.categoria,
                 remunerativo: item.remunerativo,
@@ -117,15 +134,8 @@ export const MisAltaDeclaracionesJuradas = () => {
             }))
         }
 
-
-
-        console.log("Alta DDJJ Final: ", altaDeclaraionJuaradaFinal);
-
-        console.log("Rows: ", rowsAltaDDJJ)
-        console.log("Afiliado: ", afiliado);
-
+        await crearAltaDeclaracionJurada(TOKEN, ID_EMPRESA, altaDeclaraionJuaradaFinal);
     }
-
 
     return (
         <div className='mis_alta_declaraciones_juradas_container'>
@@ -151,7 +161,7 @@ export const MisAltaDeclaracionesJuradas = () => {
                                 onChange={handleChangePeriodo}
                                 value={periodo}
                                 slotProps={{ actionBar: { actions: ['cancel', 'accept'] } }}
-                                onAccept={handleAccept}
+                                onAccept={handleAcceptPeriodo}
                             />
                         </DemoContainer>
                     </LocalizationProvider>
@@ -211,64 +221,23 @@ export const MisAltaDeclaracionesJuradas = () => {
                                 <Stack
                                     spacing={4}
                                     direction="row"
-                                    sx={{ marginLeft: '-11px' }}
+                                    sx={{ marginLeft: '-11px', marginTop: '10px' }}
                                 >
                                     <LocalizationProvider
                                         dateAdapter={AdapterDayjs}
                                         adapterLocale={"es"}
                                         localeText={esES.components.MuiLocalizationProvider.defaultProps.localeText}
                                     >
-                                        <DemoContainer components={['DatePicker']}>
-                                            <DatePicker
-                                                label="Otro periodo"
-                                                value={otroPeriodo}
-                                                onChange={handleChangeOtroPeriodo}
-                                                format="MMMM YYYY"
-                                                openTo="year"
-                                                views={["year", "month"]}
-                                            />
-                                        </DemoContainer>
+                                        <DesktopDatePicker
+                                            label={'Otro Periodo'}
+                                            views={['month', 'year']}
+                                            closeOnSelect={false}
+                                            onChange={handleChangeOtroPeriodo}
+                                            value={otroPeriodo}
+                                            slotProps={{ actionBar: { actions: ['cancel', 'accept'] } }}
+                                            onAccept={handleAcceptOtroPeriodo}
+                                        />
                                     </LocalizationProvider>
-                                    {/* <LocalizationProvider
-                                        dateAdapter={AdapterDayjs}
-                                        adapterLocale={"es"}
-                                        localeText={esES.components.MuiLocalizationProvider.defaultProps.localeText}
-                                    >
-                                        <DemoContainer components={['DatePicker']}>
-                                            <DatePicker
-                                                label="Periodo desde"
-                                                value={desde}
-                                                onChange={handleChangeDesde}
-                                                format="DD-MM-YYYY"
-                                                slotProps={{
-                                                    textField: {
-                                                        size: 'small',
-                                                        style: { width: '200px' },
-                                                    },
-                                                }}
-                                            />
-                                        </DemoContainer>
-                                    </LocalizationProvider> */}
-                                    {/* <LocalizationProvider
-                                        dateAdapter={AdapterDayjs}
-                                        adapterLocale={"es"}
-                                        localeText={esES.components.MuiLocalizationProvider.defaultProps.localeText}
-                                    >
-                                        <DemoContainer components={['DatePicker']}>
-                                            <DatePicker
-                                                label="Periodo hasta"
-                                                value={hasta}
-                                                onChange={handleChangeHasta}
-                                                format="DD-MM-YYYY"
-                                                slotProps={{
-                                                    textField: {
-                                                        size: 'small',
-                                                        style: { width: '200px' },
-                                                    },
-                                                }}
-                                            />
-                                        </DemoContainer>
-                                    </LocalizationProvider> */}
                                 </Stack>
                             )}
                         </div>
@@ -304,9 +273,12 @@ export const MisAltaDeclaracionesJuradas = () => {
                     setRowsAltaDDJJ={setRowsAltaDDJJ}
                     token={TOKEN}
                     camaras={camaras}
-                    categorias={categorias}
-                    setCategorias={setCategorias}
+                    categoriasFiltradas={categoriasFiltradas}
+                    setCategoriasFiltradas={setCategoriasFiltradas}
                     setAfiliado={setAfiliado}
+                    todasLasCategorias={todasLasCategorias}
+                    plantas={plantas}
+                    setPeriodo={setPeriodo}
                 />
                 <div
                     className='botones_container'
@@ -316,8 +288,8 @@ export const MisAltaDeclaracionesJuradas = () => {
                         marginTop: '20px'
                     }}
                 >
-                    <Button 
-                        variant="contained" 
+                    <Button
+                        variant="contained" // Si quito esto se ve mejor ?????
                         sx={{ padding: '6px 52px' }}
                         onClick={guardarDeclaracionJurada}
                     >Guardar</Button>

@@ -24,6 +24,7 @@ import {
   obtenerProvincias,
   obtenerTipoDomicilio,
 } from "./GrillaEmpresaDomicilioApi";
+import Swal from "sweetalert2";
 
 function EditToolbar(props) {
   const { setRowsDomicilio, rows_domicilio, setRowModesModel } = props;
@@ -67,7 +68,8 @@ function EditToolbar(props) {
   );
 }
 
-export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token }) => {
+export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token, ID_EMPRESA }) => {
+
   const [rowModesModel, setRowModesModel] = useState({});
   const [tipoDomicilio, setTipoDomicilio] = useState([]);
   const [provincias, setProvincias] = useState([]);
@@ -92,7 +94,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
   };
 
   const getRowsDomicilio = async () => {
-    const domiciliosResponse = await obtenerDomicilios(token);
+    const domiciliosResponse = await obtenerDomicilios(token, ID_EMPRESA);
     setRowsDomicilio(domiciliosResponse.map((item) => ({ ...item })));
     getDatosLocalidad(domiciliosResponse.map((item) => ({ ...item })));
   };
@@ -123,8 +125,8 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
   };
 
   const actualizarDatosLocalidad = async (provinciaId) => {
-    var options = [];
-    options = localidades.filter((item) => {
+    
+    const options = localidades.filter((item) => {
       return item.provinciaId == provinciaId;
     });
     if (options.length == 0) {
@@ -166,8 +168,30 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
   };
 
   const handleDeleteClick = (id) => async () => {
-    setRowsDomicilio(rowsDomicilio.filter((row) => row.id !== id));
-    await eliminarDomicilio(id, token);
+
+    const showSwalConfirm = async () => {
+      try {
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: "¡No podrás revertir esto!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#1A76D2',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: 'Si, bórralo!'
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+
+            setRowsDomicilio(rowsDomicilio.filter((row) => row.id !== id));
+            await eliminarDomicilio(id, token, ID_EMPRESA);
+          }
+        });
+      } catch (error) {
+        console.error('Error al ejecutar eliminarFeriado:', error);
+      }
+    };
+
+    showSwalConfirm();
   };
 
   const handleCancelClick = (id) => () => {
@@ -198,9 +222,10 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
         oficina: newRow.oficina,
         cp: newRow.cp,
         planta: newRow.planta,
+        empresaId: ID_EMPRESA,
       };
 
-      await crearDomicilio(nuevoDomicilio, token);
+      await crearDomicilio(nuevoDomicilio, ID_EMPRESA, token);
 
     } else {
 
@@ -214,9 +239,10 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
         oficina: newRow.oficina,
         cp: newRow.cp,
         planta: newRow.planta,
+        empresaId: ID_EMPRESA,
       };
 
-      await actualizarDomicilio(newRow.id, domicilio, token);
+      await actualizarDomicilio(newRow.id, domicilio, token, ID_EMPRESA);
     }
 
     setRowsDomicilio(
@@ -239,7 +265,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
     {
       field: "tipo",
       headerName: "Tipo",
-      width: 120,
+      width: 100,
       editable: true,
       type: "singleSelect",
       headerAlign: "center",
@@ -252,7 +278,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
     {
       field: "provinciaId",
       headerName: "Provincia",
-      width: 200,
+      width: 150,
       editable: true,
       type: "singleSelect",
       headerAlign: "center",
@@ -305,7 +331,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
     {
       field: "localidadId",
       headerName: "Localidad",
-      width: 220,
+      width: 150,
       editable: true,
       type: "singleSelect",
       headerAlign: "center",
@@ -354,7 +380,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
     {
       field: "calle",
       headerName: "Calle",
-      width: 150,
+      width: 100,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -363,7 +389,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
     {
       field: "piso",
       headerName: "Piso",
-      width: 150,
+      width: 100,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -372,7 +398,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
     {
       field: "depto",
       headerName: "Depto",
-      width: 150,
+      width: 100,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -381,7 +407,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
     {
       field: "oficina",
       headerName: "Oficina",
-      width: 150,
+      width: 100,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -390,7 +416,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
     {
       field: "cp",
       headerName: "CP",
-      width: 150,
+      width: 100,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -399,7 +425,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
     {
       field: "planta",
       headerName: "Planta",
-      width: 150,
+      width: 100,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -409,7 +435,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token 
       field: "actions",
       type: "actions",
       headerName: "Acciones",
-      width: 250,
+      width: 100,
       headerAlign: "center",
       align: "center",
       headerClassName: 'header--cell',

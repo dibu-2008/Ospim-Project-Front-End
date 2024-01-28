@@ -53,6 +53,7 @@ function a11yProps(index) {
 export const DatosEmpresa = () => {
 
   const TOKEN = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.usuario.token;
+  const ID_EMPRESA = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.empresa.id;
   /* const ID = STATE.usuarioLogueado.empresa.id;
   const TOKEN = STATE.usuarioLogueado.usuario.token;
   const CUIT = STATE.usuarioLogueado.empresa.cuit;
@@ -218,6 +219,7 @@ export const DatosEmpresa = () => {
               rowsDomicilio={rowsDomicilio}
               setRowsDomicilio={setRowsDomicilio}
               token={TOKEN}
+              ID_EMPRESA={ID_EMPRESA}
             />
           </ThemeProvider>
         </CustomTabPanel>

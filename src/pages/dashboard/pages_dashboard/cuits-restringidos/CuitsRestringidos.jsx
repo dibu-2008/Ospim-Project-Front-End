@@ -16,6 +16,7 @@ import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import { actualizarCuitRestringido, crearCuitRestringido, eliminarCuitRestringido, obtenerCuitsRestringidos } from './CuitsRestringidosApi';
+import Swal from 'sweetalert2';
 
 function EditToolbar(props) {
   const { setRows, rows, setRowModesModel } = props;
@@ -60,7 +61,7 @@ export const CuitsRestringidos = () => {
   );
 
   useEffect(() => {
-    
+
     const ObtenerCuitsRestringidos = async () => {
 
       const cuitsRestringidosResponse = await obtenerCuitsRestringidos(TOKEN);
@@ -90,9 +91,28 @@ export const CuitsRestringidos = () => {
 
   const handleDeleteClick = (id) => async () => {
 
-    setRows(rows.filter((row) => row.id !== id));
+    const showSwalConfirm = async () => {
+      try {
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: "¡No podrás revertir esto!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#1A76D2',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: 'Si, bórralo!'
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            setRows(rows.filter((row) => row.id !== id));
+            await eliminarCuitRestringido(id, TOKEN);
+          }
+        });
+      } catch (error) {
+        console.error('Error al ejecutar eliminarFeriado:', error);
+      }
+    };
 
-    await eliminarCuitRestringido(id, TOKEN);
+    showSwalConfirm();
   };
 
   const handleCancelClick = (id) => () => {
@@ -144,7 +164,7 @@ export const CuitsRestringidos = () => {
     {
       field: "cuit",
       headerName: "CUIT",
-      width: 432,
+      flex:1,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -153,7 +173,7 @@ export const CuitsRestringidos = () => {
     {
       field: "observacion",
       headerName: "Observacion",
-      width: 450,
+      flex:1,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -166,7 +186,7 @@ export const CuitsRestringidos = () => {
       headerAlign: "center",
       align: "center",
       headerClassName: 'header--cell',
-      width: 450,
+      flex:1,
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
@@ -245,6 +265,9 @@ export const CuitsRestringidos = () => {
               },
               '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
                 backgroundColor: '#ccc',
+              },
+              '& .css-1iyq7zh-MuiDataGrid-columnHeaders': {
+                backgroundColor: '#1A76D2 !important',
               },
             }}
             initialState={{
