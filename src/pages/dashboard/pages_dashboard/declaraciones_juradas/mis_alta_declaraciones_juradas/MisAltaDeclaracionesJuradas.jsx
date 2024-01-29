@@ -93,9 +93,9 @@ export const MisAltaDeclaracionesJuradas = ({ periodo, periodoIso, handleChangeP
 
     const guardarDeclaracionJurada = async () => {
 
-        console.log('rowsAltaDDJJ', rowsAltaDDJJ);
+        /* console.log('rowsAltaDDJJ', rowsAltaDDJJ);
 
-        console.log('id de ddjj: ', idDDJJ);
+        console.log('id de ddjj: ', idDDJJ); */
 
         const altaDDJJFinal = {
             periodo: periodoIso,
@@ -105,18 +105,20 @@ export const MisAltaDeclaracionesJuradas = ({ periodo, periodoIso, handleChangeP
                 apellido: item.apellido,
                 nombre: item.nombre,
                 fechaIngreso: item.fechaIngreso,
-                empresaDomicilioId: item.planta,
+                empresaDomicilioId: item.empresaDomicilioId,
                 camara: item.camara,
                 categoria: item.categoria,
                 remunerativo: item.remunerativo,
                 noRemunerativo: item.noRemunerativo,
-                aporteUomaCs: item.cuotaSocUoma,
-                aporteUomaAs: item.aporteSolUoma,
-                aporteCuotaUsu: item.cuotaUsuf,
-                aporteArt46: item.art46,
-                aporteAntimaCs: item.amtima
+                aporteUomaCs: item.aporteUomaCs,
+                aporteUomaAs: item.aporteUomaAs,
+                aporteCuotaUsu: item.aporteCuotaUsu,
+                aporteArt46: item.aporteArt46,
+                aporteAntimaCs: item.aporteAntimaCs
             }))
         }
+
+        console.log('altaDDJJFinal', altaDDJJFinal);
 
         if(peticion === "PUT"){
 

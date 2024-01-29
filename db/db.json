@@ -876,27 +876,33 @@
       "id": 202
     },
     {
-      "periodo": "2023-10-01T00:00:00.000Z",
+      "periodo": "2023-02-01T00:00:00.000Z",
       "afiliados": [
         {
           "cuil": "20949118682",
           "apellido": "Salinas",
           "nombre": "Luis",
-          "fechaIngreso": "2021-01-01T03:00:00.000Z",
-          "camara": "FAIM",
-          "categoria": "B",
-          "remunerativo": "545000.70",
-          "noRemunerativo": "25000"
+          "fechaIngreso": "2024-01-23T03:00:00.000Z",
+          "empresaDomicilioId": 2,
+          "camara": "CAENA",
+          "categoria": "E",
+          "remunerativo": "679050.80",
+          "noRemunerativo": "988540.90",
+          "aporteUomaCs": true,
+          "aporteUomaAs": true,
+          "aporteCuotaUsu": false,
+          "aporteArt46": true,
+          "aporteAntimaCs": true
         }
       ],
       "empresaId": "1",
       "estado": "PE",
       "secuencia": null,
-      "totalART46": 535730.09,
-      "totalAntimaCS": 974586.87,
-      "totalUomaCS": 483210.73,
-      "totalUomaAS": 538209.64,
-      "totalCuotaUsu": 700955.01,
+      "totalART46": 439547.08,
+      "totalAntimaCS": 660765.49,
+      "totalUomaCS": 678511.21,
+      "totalUomaAS": 555817.36,
+      "totalCuotaUsu": 377863.59,
       "id": 203
     }
   ],

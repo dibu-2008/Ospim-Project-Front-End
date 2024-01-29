@@ -121,6 +121,8 @@ export const GrillaMisDeclaracionesJuradas = ({
 
     setTabState(0);
 
+    console.log("row", row);
+
     // PERIODO
     const periodoRow = row.periodo;
 
