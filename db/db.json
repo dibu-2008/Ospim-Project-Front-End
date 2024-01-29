@@ -990,5 +990,93 @@
       "observacion": "Aaaaaaaa",
       "id": 10
     }
+  ],
+  "aportes": [
+    {
+      "id": 1,
+      "codigo": "UOMACS",
+      "descripcion": "UOMA Cuota Social",
+      "cuenta": "12148/4"
+    },
+    {
+      "id": 2,
+      "codigo": "UOMAAS",
+      "descripcion": "UOMA Aporte Solidario",
+      "cuenta": "47598/4"
+    },
+    {
+      "id": 3,
+      "codigo": "UOMACU",
+      "descripcion": "UOMA Cuota Usufructo",
+      "cuenta": "49859/7"
+    },
+    {
+      "id": 4,
+      "codigo": "ANTIMACS",
+      "descripcion": "ANTIMA Cuota Social",
+      "cuenta": "11598/5"
+    },
+    {
+      "id": 5,
+      "codigo": "ART46",
+      "descripcion": "Art. 46",
+      "cuenta": "89652/7"
+    }
+  ],
+  "aportesDetalle": [
+    {
+      "id": 1,
+      "aporte": "UOMACS",
+      "entidad": "UOMA",
+      "tipo": "P",
+      "valor": 2,
+      "referencia": "R",
+      "categoria": null,
+      "antiguedad": null,
+      "vigenciaDesde": "1900-01-01",
+      "vigenciaHasta": null
+    },
+    {
+      "id": 2,
+      "entidad": "UOMA",
+      "aporte": "UOMAAS",
+      "unidad": "P",
+      "valor": 2,
+      "referencia": "R",
+      "categoria": null,
+      "antiguedad": null,
+      "vigenciaDesde": "1990-01-01T00:00.000Z",
+      "vigenciaHasta": null
+    },
+    {
+      "id": 3,
+      "entidad": null,
+      "aporte": "ART46",
+      "unidad": "P",
+      "valor": 200,
+      "referencia": "PJ",
+      "categoria": "F",
+      "antiguedad": 0
+    },
+    {
+      "id": 4,
+      "entidad": "ANTIMA",
+      "aporte": "ANTIMACS",
+      "unidad": "E",
+      "valor": 7500,
+      "referencia": null,
+      "categoria": null,
+      "antiguedad": null
+    },
+    {
+      "id": 5,
+      "entidad": "UOMA",
+      "aporte": "UOMACU",
+      "unidad": "P",
+      "valor": 2,
+      "referencia": "R",
+      "categoria": null,
+      "antiguedad": null
+    }
   ]
 }
