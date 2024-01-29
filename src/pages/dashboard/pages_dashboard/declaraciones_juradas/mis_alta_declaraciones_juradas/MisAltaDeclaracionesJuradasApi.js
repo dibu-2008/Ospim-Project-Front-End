@@ -177,12 +177,49 @@ export const crearAltaDeclaracionJurada = async (token, empresaId, ddjj) => {
 
 }
 
+export const actualizarDeclaracionJurada = async (token, empresaId, ddjj, idDDJJ) => {
 
+    const URL = `${BACKEND_URL}/empresa/${empresaId}/ddjj/${idDDJJ}`;
 
+    const showSwalError = (descripcion) => {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: descripcion,
+            showConfirmButton: false,
+            timer: 2000,
+        })
+    } 
 
+    const showSwallSuccess = () => {
+        Swal.fire({
+            icon: 'success',
+            title: MESSAGE_HTTP_UPDATED,
+            showConfirmButton: false,
+            timer: 2000,
+        })
+    }
 
+    try {
 
+        const actualizarDeclaracionJuradaResponse = await axios.put(URL, ddjj, {
+            headers: {
+                'Authorization': token
+            }
+        });
 
+        showSwallSuccess();
+
+        if(actualizarDeclaracionJuradaResponse.status === 200) {
+            showSwallSuccess();
+        }
+
+    } catch (error) {
+
+        errorBackendResponse(error, showSwalError);
+
+    }
+}
 
 
 

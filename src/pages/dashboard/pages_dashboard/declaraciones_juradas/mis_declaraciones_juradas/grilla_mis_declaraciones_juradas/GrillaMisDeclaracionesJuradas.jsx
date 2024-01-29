@@ -23,6 +23,7 @@ import {
 import { PDFViewer, PDFDownloadLink } from "@react-pdf/renderer";
 import { MyDocument } from "./MiPdf";
 import Swal from 'sweetalert2'
+import dayjs from 'dayjs';
 
 /* function EditToolbar(props) {
 
@@ -70,9 +71,15 @@ export const GrillaMisDeclaracionesJuradas = ({
   token,
   idEmpresa,
   setTabState,
+  setPeriodo,
+  handleAcceptPeriodoDDJJ,
+  rowsAltaDDJJ,
+  setRowsAltaDDJJ,
+  setPeticion,
+  setIdDDJJ
 }) => {
   const [rowModesModel, setRowModesModel] = useState({});
-
+  
   useEffect(() => {
     const ObtenerMisDeclaracionesJuradas = async () => {
       const ddjjResponse = await obtenerMisDeclaracionesJuradas(
@@ -110,9 +117,38 @@ export const GrillaMisDeclaracionesJuradas = ({
     }
   };
 
-  const handleEditClick = (id) => () => {
-    // setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+  const handleEditClick = (id, row) => () => {
+
     setTabState(0);
+
+    // PERIODO
+    const periodoRow = row.periodo;
+
+    // Crear un objeto Date a partir de la cadena de fecha
+    const fecha = new Date(periodoRow);
+
+    // Obtener el mes y el año
+    const mes = fecha.getMonth() + 1; // Sumar 1 porque los meses van de 0 a 11
+    const anio = fecha.getFullYear();
+
+    // Agregar 1 al mes antes de pasar a dayjs
+    setPeriodo(dayjs(`${anio}-${mes + 1}`));
+
+    handleAcceptPeriodoDDJJ();
+
+    const afiliados = row.afiliados;
+
+    const updateRowsAltaDDJJ = afiliados.map((item, index) => ({
+      id: index + 1,
+      ...item,
+    }));
+
+    setPeticion("PUT");
+
+    setIdDDJJ(id);
+
+    setRowsAltaDDJJ(updateRowsAltaDDJJ)
+      
   };
 
   const handleSaveClick = (id) => () => {
@@ -120,7 +156,7 @@ export const GrillaMisDeclaracionesJuradas = ({
   };
 
   const handleDeleteClick = (id) => async () => {
-    
+
 
     const showSwalConfirm = async () => {
       try {
@@ -136,7 +172,7 @@ export const GrillaMisDeclaracionesJuradas = ({
           if (result.isConfirmed) {
 
             setRowsMisDdjj(rows_mis_ddjj.filter((row) => row.id !== id));
-            
+
             await eliminarDeclaracionJurada(idEmpresa, id, token);
           }
         });
@@ -209,7 +245,7 @@ export const GrillaMisDeclaracionesJuradas = ({
     {
       field: "secuencia",
       headerName: "Numero",
-      width: 180,
+      flex: 1,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -220,7 +256,6 @@ export const GrillaMisDeclaracionesJuradas = ({
         if (params.value === 0) {
           return "Original";
         } else {
-          console.log(params.value)
           return "Rectificativa " + params.value;
         }
       },
@@ -228,7 +263,7 @@ export const GrillaMisDeclaracionesJuradas = ({
     {
       field: "totalUomaCS",
       headerName: "Total UOMA CS",
-      width: 180,
+      flex: 1,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -238,7 +273,7 @@ export const GrillaMisDeclaracionesJuradas = ({
     {
       field: "totalUomaAS",
       headerName: "Total UOMA AS",
-      width: 180,
+      flex: 1,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -248,7 +283,7 @@ export const GrillaMisDeclaracionesJuradas = ({
     {
       field: "totalCuotaUsu",
       headerName: "Total Cuota Usu",
-      width: 180,
+      flex: 1,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -258,7 +293,7 @@ export const GrillaMisDeclaracionesJuradas = ({
     {
       field: "totalART46",
       headerName: "Total ART 46",
-      width: 180,
+      flex: 1,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -268,7 +303,7 @@ export const GrillaMisDeclaracionesJuradas = ({
     {
       field: "totalAntimaCS",
       headerName: "Total Antima CS",
-      width: 180,
+      flex: 1,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -279,12 +314,13 @@ export const GrillaMisDeclaracionesJuradas = ({
     {
       field: "actions",
       headerName: "Acciones",
-      width: 280,
+      flex: 2,
       type: "actions",
       headerAlign: "center",
       align: "center",
       headerClassName: "header--cell",
       getActions: ({ id, row }) => {
+
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
         if (isInEditMode) {
@@ -322,7 +358,7 @@ export const GrillaMisDeclaracionesJuradas = ({
               icon={<EditIcon />}
               label="Edit"
               className="textPrimary"
-              onClick={handleEditClick(id)}
+              onClick={handleEditClick(id, row)}
               color="inherit"
             />,
             <GridActionsCellItem
@@ -357,7 +393,7 @@ export const GrillaMisDeclaracionesJuradas = ({
               icon={<EditIcon />}
               label="Edit"
               className="textPrimary"
-              onClick={handleEditClick(id)}
+              onClick={handleEditClick(id, row)}
               color="inherit"
             />,
             <PDFDownloadLink
@@ -388,7 +424,7 @@ export const GrillaMisDeclaracionesJuradas = ({
       <Box
         sx={{
           margin: "0 auto",
-          height: "400px",
+          height: "auto",
           width: "100%%",
           "& .actions": {
             color: "text.secondary",

@@ -11,13 +11,13 @@ import dayjs from 'dayjs';
 import esLocale from 'dayjs/locale/es';
 import './MisAltaDeclaracionesJuradas.css';
 import { GrillaPasoTres } from './grilla_paso_tres/GrillaPasoTres';
-import { crearAltaDeclaracionJurada, obtenerCamaras, obtenerCategorias, obtenerPlantaEmpresas } from './MisAltaDeclaracionesJuradasApi';
+import { actualizarDeclaracionJurada, crearAltaDeclaracionJurada, obtenerCamaras, obtenerCategorias, obtenerPlantaEmpresas } from './MisAltaDeclaracionesJuradasApi';
 
-export const MisAltaDeclaracionesJuradas = ({periodo, setPeriodo}) => {
+export const MisAltaDeclaracionesJuradas = ({ periodo, periodoIso, handleChangePeriodo, handleAcceptPeriodoDDJJ, rowsAltaDDJJ, setRowsAltaDDJJ, peticion, idDDJJ }) => {
 
-    const [rowsAltaDDJJ, setRowsAltaDDJJ] = useState([]);
-    //const [periodo, setPeriodo] = useState(null);
-    const [periodoIso, setPeriodoIso] = useState(null);
+    // const [rowsAltaDDJJ, setRowsAltaDDJJ] = useState([]);
+    // const [periodo, setPeriodo] = useState(null);
+    // const [periodoIso, setPeriodoIso] = useState(null);
     const [otroPeriodo, setOtroPeriodo] = useState(null);
     const [otroPeriodoIso, setOtroPeriodoIso] = useState(null);
     const [camaras, setCamaras] = useState([]);
@@ -30,27 +30,7 @@ export const MisAltaDeclaracionesJuradas = ({periodo, setPeriodo}) => {
     const TOKEN = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.usuario.token;
     const ID_EMPRESA = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.empresa.id;
 
-    const handleChangePeriodo = (date) => {
-        console.log("------", date)
-        setPeriodo(date)
-    };
-
-    const handleAcceptPeriodo = () => {
-
-        if (periodo && periodo.$d) {
-            const { $d: fecha } = periodo;
-            const fechaFormateada = new Date(fecha);
-            fechaFormateada.setDate(1); // Establecer el día del mes a 1
-
-            // Ajustar la zona horaria a UTC
-            fechaFormateada.setUTCHours(0, 0, 0, 0);
-
-            const fechaISO = fechaFormateada.toISOString(); // 2026-02-01T00:00:00.000Z
-            setPeriodoIso(fechaISO);
-        }
-    };
-
-
+    
     const handleChangeOtroPeriodo = (date) => setOtroPeriodo(date);
 
     const handleAcceptOtroPeriodo = () => {
@@ -113,7 +93,11 @@ export const MisAltaDeclaracionesJuradas = ({periodo, setPeriodo}) => {
 
     const guardarDeclaracionJurada = async () => {
 
-        const altaDeclaraionJuaradaFinal = {
+        console.log('rowsAltaDDJJ', rowsAltaDDJJ);
+
+        console.log('id de ddjj: ', idDDJJ);
+
+        const altaDDJJFinal = {
             periodo: periodoIso,
             afiliados: rowsAltaDDJJ.map((item) => ({
                 cuil: item.cuil,
@@ -128,13 +112,21 @@ export const MisAltaDeclaracionesJuradas = ({periodo, setPeriodo}) => {
                 noRemunerativo: item.noRemunerativo,
                 aporteUomaCs: item.cuotaSocUoma,
                 aporteUomaAs: item.aporteSolUoma,
-                aporteCuotaUsuaria: item.cuotaUsuf,
+                aporteCuotaUsu: item.cuotaUsuf,
                 aporteArt46: item.art46,
                 aporteAntimaCs: item.amtima
             }))
         }
 
-        await crearAltaDeclaracionJurada(TOKEN, ID_EMPRESA, altaDeclaraionJuaradaFinal);
+        if(peticion === "PUT"){
+
+            await actualizarDeclaracionJurada(TOKEN, ID_EMPRESA, altaDDJJFinal, idDDJJ);
+
+        }else {
+
+            await crearAltaDeclaracionJurada(TOKEN, ID_EMPRESA, altaDDJJFinal);
+        }
+        
     }
 
     return (
@@ -161,7 +153,7 @@ export const MisAltaDeclaracionesJuradas = ({periodo, setPeriodo}) => {
                                 onChange={handleChangePeriodo}
                                 value={periodo}
                                 slotProps={{ actionBar: { actions: ['cancel', 'accept'] } }}
-                                onAccept={handleAcceptPeriodo}
+                                onAccept={handleAcceptPeriodoDDJJ}
                             />
                         </DemoContainer>
                     </LocalizationProvider>
@@ -278,7 +270,6 @@ export const MisAltaDeclaracionesJuradas = ({periodo, setPeriodo}) => {
                     setAfiliado={setAfiliado}
                     todasLasCategorias={todasLasCategorias}
                     plantas={plantas}
-                    setPeriodo={setPeriodo}
                 />
                 <div
                     className='botones_container'
