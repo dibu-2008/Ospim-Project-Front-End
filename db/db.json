@@ -747,6 +747,75 @@
       "descripcion": "Formosa"
     }
   ],
+  "DDJJ-V2-CONSUL": [
+    {
+      "id": 120,
+      "estado": "PR",
+      "empresaId": 1,
+      "periodo": "2023-11-01T00:00:00.000Z",
+      "secuencia": 0,
+      "aportes": [
+        {
+          "codigo": "UOMACU",
+          "importe": 9725.75
+        },
+        {
+          "codigo": "ART46",
+          "importe": 5200.52
+        },
+        {
+          "codigo": "UOMACU",
+          "importe": 9725.75
+        }
+      ]
+    },
+    {
+      "id": 121,
+      "estado": "PE",
+      "empresaId": 1,
+      "periodo": "2023-11-01T00:00:00.000Z",
+      "secuencia": 1,
+      "aportes": [
+        {
+          "codigo": "UOMACU",
+          "importe": 9725.75
+        },
+        {
+          "codigo": "ART46",
+          "importe": 5200.52
+        },
+        {
+          "codigo": "UOMACU",
+          "importe": 9725.75
+        }
+      ]
+    },
+    {
+      "periodo": "2023-10-01T00:00:00.000Z",
+      "id": 204,
+      "estado": "PE",
+      "empresaId": 2,
+      "secuencia": null,
+      "aportes": [
+        {
+          "aporte": "ART46",
+          "importe": 5200.52
+        },
+        {
+          "aporte": "UOMACS",
+          "importe": 3041.5
+        },
+        {
+          "aporte": "UOMAAS",
+          "importe": 3041.5
+        },
+        {
+          "aporte": "ANTIMACS",
+          "importe": 15000
+        }
+      ]
+    }
+  ],
   "DDJJ": [
     {
       "id": 120,
@@ -1835,6 +1904,12 @@
       "codigo": "ART46",
       "descripcion": "Art. 46",
       "cuenta": "89652/7"
+    },
+    {
+      "codigo": "UOMACSXX-PRUEBA",
+      "descripcion": "UOMA Cuota Social XXXX-PRUEBA2",
+      "cuenta": "118888/7",
+      "id": 6
     }
   ],
   "aportesDetalle": [

@@ -30,7 +30,7 @@
   "/v1/empresa/:empresaId/ddjj/:id/presentar": "/DDJJConsulta/:id",
   "/v1/empresa/:empresaId/ddjj/periodo/:periodo/existe": "/DDJJConsulta?empresaId=:empresaId&periodo=:periodo",
 
-  "/v2/empresa/:empresaId/ddjj/": "/DDJJ?empresaId=:empresaId",
+  "/v2/empresa/:empresaId/ddjj/": "/DDJJ-V2-CONSUL?empresaId=:empresaId",
   "/v2/empresa/:empresaId/ddjj/:id": "/DDJJ/:id?empresaId=:empresaId",
   "/v2/empresa/:empresaId/ddjj/:id/presentar": "/DDJJ/:id",
   "/v2/empresa/:empresaId/ddjj/periodo/:periodo/existe": "/DDJJ?empresaId=:empresaId&periodo=:periodo",

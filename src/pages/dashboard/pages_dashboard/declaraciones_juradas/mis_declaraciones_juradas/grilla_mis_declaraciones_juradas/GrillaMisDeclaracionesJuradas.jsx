@@ -22,7 +22,7 @@ import {
 } from "./GrillaMisDeclaracionesJuradasApi";
 import { PDFViewer, PDFDownloadLink } from "@react-pdf/renderer";
 import { MyDocument } from "./MiPdf";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 
 /* function EditToolbar(props) {
 
@@ -120,28 +120,25 @@ export const GrillaMisDeclaracionesJuradas = ({
   };
 
   const handleDeleteClick = (id) => async () => {
-    
-
     const showSwalConfirm = async () => {
       try {
         Swal.fire({
-          title: '¿Estás seguro?',
+          title: "¿Estás seguro?",
           text: "¡No podrás revertir esto!",
-          icon: 'warning',
+          icon: "warning",
           showCancelButton: true,
-          confirmButtonColor: '#1A76D2',
-          cancelButtonColor: '#6c757d',
-          confirmButtonText: 'Si, bórralo!'
+          confirmButtonColor: "#1A76D2",
+          cancelButtonColor: "#6c757d",
+          confirmButtonText: "Si, bórralo!",
         }).then(async (result) => {
           if (result.isConfirmed) {
-
             setRowsMisDdjj(rows_mis_ddjj.filter((row) => row.id !== id));
-            
+
             await eliminarDeclaracionJurada(idEmpresa, id, token);
           }
         });
       } catch (error) {
-        console.error('Error al ejecutar eliminarFeriado:', error);
+        console.error("Error al ejecutar eliminarFeriado:", error);
       }
     };
 
@@ -185,6 +182,17 @@ export const GrillaMisDeclaracionesJuradas = ({
     style: "currency",
   });
 
+  columns[2] = {
+    field: "totalUomaCS",
+    headerName: vecAportes[0].descripcion,
+    width: 180,
+    editable: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header--cell",
+    valueFormatter: (params) => formatter.format(params.value || 0),
+  };
+
   const columns = [
     {
       field: "periodo",
@@ -220,7 +228,7 @@ export const GrillaMisDeclaracionesJuradas = ({
         if (params.value === 0) {
           return "Original";
         } else {
-          console.log(params.value)
+          console.log(params.value);
           return "Rectificativa " + params.value;
         }
       },

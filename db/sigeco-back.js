@@ -15,9 +15,7 @@ module.exports = (req, res, next) => {
     ) {
       return "DDJJ-PERIODO-VALIDAR";
     }
-    console.log("req.method:" + req.method);
-    console.log("req.url:" + req.url);
-    console.log("req.query.empresaId:" + req.query.empresaId);
+
     if (
       req.method === "POST" &&
       req.url.startsWith("/DDJJ?") &&
@@ -106,6 +104,9 @@ module.exports = (req, res, next) => {
   }
 
   switch (getAPI()) {
+    case "DDJJ-MISDDJJ-CONSULTA":
+      ddjjGenerarTotales();
+      break;
     case "DDJJ-PERIODO-VALIDAR":
       validarPeriodo();
       break;
