@@ -22,8 +22,7 @@ import {
 } from "./GrillaMisDeclaracionesJuradasApi";
 import { PDFViewer, PDFDownloadLink } from "@react-pdf/renderer";
 import { MyDocument } from "./MiPdf";
-import Swal from 'sweetalert2'
-import dayjs from 'dayjs';
+import Swal from "sweetalert2";
 
 /* function EditToolbar(props) {
 
@@ -71,15 +70,9 @@ export const GrillaMisDeclaracionesJuradas = ({
   token,
   idEmpresa,
   setTabState,
-  setPeriodo,
-  handleAcceptPeriodoDDJJ,
-  rowsAltaDDJJ,
-  setRowsAltaDDJJ,
-  setPeticion,
-  setIdDDJJ
 }) => {
   const [rowModesModel, setRowModesModel] = useState({});
-  
+
   useEffect(() => {
     const ObtenerMisDeclaracionesJuradas = async () => {
       const ddjjResponse = await obtenerMisDeclaracionesJuradas(
@@ -117,40 +110,9 @@ export const GrillaMisDeclaracionesJuradas = ({
     }
   };
 
-  const handleEditClick = (id, row) => () => {
-
+  const handleEditClick = (id) => () => {
+    // setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
     setTabState(0);
-
-    console.log("row", row);
-
-    // PERIODO
-    const periodoRow = row.periodo;
-
-    // Crear un objeto Date a partir de la cadena de fecha
-    const fecha = new Date(periodoRow);
-
-    // Obtener el mes y el año
-    const mes = fecha.getMonth() + 1; // Sumar 1 porque los meses van de 0 a 11
-    const anio = fecha.getFullYear();
-
-    // Agregar 1 al mes antes de pasar a dayjs
-    setPeriodo(dayjs(`${anio}-${mes + 1}`));
-
-    handleAcceptPeriodoDDJJ();
-
-    const afiliados = row.afiliados;
-
-    const updateRowsAltaDDJJ = afiliados.map((item, index) => ({
-      id: index + 1,
-      ...item,
-    }));
-
-    setPeticion("PUT");
-
-    setIdDDJJ(id);
-
-    setRowsAltaDDJJ(updateRowsAltaDDJJ)
-      
   };
 
   const handleSaveClick = (id) => () => {
@@ -158,28 +120,25 @@ export const GrillaMisDeclaracionesJuradas = ({
   };
 
   const handleDeleteClick = (id) => async () => {
-
-
     const showSwalConfirm = async () => {
       try {
         Swal.fire({
-          title: '¿Estás seguro?',
+          title: "¿Estás seguro?",
           text: "¡No podrás revertir esto!",
-          icon: 'warning',
+          icon: "warning",
           showCancelButton: true,
-          confirmButtonColor: '#1A76D2',
-          cancelButtonColor: '#6c757d',
-          confirmButtonText: 'Si, bórralo!'
+          confirmButtonColor: "#1A76D2",
+          cancelButtonColor: "#6c757d",
+          confirmButtonText: "Si, bórralo!",
         }).then(async (result) => {
           if (result.isConfirmed) {
-
             setRowsMisDdjj(rows_mis_ddjj.filter((row) => row.id !== id));
 
             await eliminarDeclaracionJurada(idEmpresa, id, token);
           }
         });
       } catch (error) {
-        console.error('Error al ejecutar eliminarFeriado:', error);
+        console.error("Error al ejecutar eliminarFeriado:", error);
       }
     };
 
@@ -223,6 +182,17 @@ export const GrillaMisDeclaracionesJuradas = ({
     style: "currency",
   });
 
+  columns[2] = {
+    field: "totalUomaCS",
+    headerName: vecAportes[0].descripcion,
+    width: 180,
+    editable: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header--cell",
+    valueFormatter: (params) => formatter.format(params.value || 0),
+  };
+
   const columns = [
     {
       field: "periodo",
@@ -247,7 +217,7 @@ export const GrillaMisDeclaracionesJuradas = ({
     {
       field: "secuencia",
       headerName: "Numero",
-      flex: 1,
+      width: 180,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -258,6 +228,7 @@ export const GrillaMisDeclaracionesJuradas = ({
         if (params.value === 0) {
           return "Original";
         } else {
+          console.log(params.value);
           return "Rectificativa " + params.value;
         }
       },
@@ -265,7 +236,7 @@ export const GrillaMisDeclaracionesJuradas = ({
     {
       field: "totalUomaCS",
       headerName: "Total UOMA CS",
-      flex: 1,
+      width: 180,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -275,7 +246,7 @@ export const GrillaMisDeclaracionesJuradas = ({
     {
       field: "totalUomaAS",
       headerName: "Total UOMA AS",
-      flex: 1,
+      width: 180,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -285,7 +256,7 @@ export const GrillaMisDeclaracionesJuradas = ({
     {
       field: "totalCuotaUsu",
       headerName: "Total Cuota Usu",
-      flex: 1,
+      width: 180,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -295,7 +266,7 @@ export const GrillaMisDeclaracionesJuradas = ({
     {
       field: "totalART46",
       headerName: "Total ART 46",
-      flex: 1,
+      width: 180,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -305,7 +276,7 @@ export const GrillaMisDeclaracionesJuradas = ({
     {
       field: "totalAntimaCS",
       headerName: "Total Antima CS",
-      flex: 1,
+      width: 180,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -316,13 +287,12 @@ export const GrillaMisDeclaracionesJuradas = ({
     {
       field: "actions",
       headerName: "Acciones",
-      flex: 2,
+      width: 280,
       type: "actions",
       headerAlign: "center",
       align: "center",
       headerClassName: "header--cell",
       getActions: ({ id, row }) => {
-
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
         if (isInEditMode) {
@@ -360,7 +330,7 @@ export const GrillaMisDeclaracionesJuradas = ({
               icon={<EditIcon />}
               label="Edit"
               className="textPrimary"
-              onClick={handleEditClick(id, row)}
+              onClick={handleEditClick(id)}
               color="inherit"
             />,
             <GridActionsCellItem
@@ -395,7 +365,7 @@ export const GrillaMisDeclaracionesJuradas = ({
               icon={<EditIcon />}
               label="Edit"
               className="textPrimary"
-              onClick={handleEditClick(id, row)}
+              onClick={handleEditClick(id)}
               color="inherit"
             />,
             <PDFDownloadLink
@@ -426,7 +396,7 @@ export const GrillaMisDeclaracionesJuradas = ({
       <Box
         sx={{
           margin: "0 auto",
-          height: "auto",
+          height: "400px",
           width: "100%%",
           "& .actions": {
             color: "text.secondary",

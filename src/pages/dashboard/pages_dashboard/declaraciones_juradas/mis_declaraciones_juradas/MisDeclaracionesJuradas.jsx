@@ -12,8 +12,9 @@ import dayjs from 'dayjs';
 import esLocale from 'dayjs/locale/es';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
 
-export const MisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, setTabState, setPeriodo, handleAcceptPeriodoDDJJ, rowsAltaDDJJ, setRowsAltaDDJJ, setPeticion, setIdDDJJ }) => {
+export const MisDeclaracionesJuradas = ({ setTabState }) => {
 
+    const [rows_mis_ddjj, setRowsMisDdjj] = useState([]);
     const [desde, setDesde] = useState(null);
     const [hasta, setHasta] = useState(null);
     const TOKEN = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.usuario.token;
@@ -121,12 +122,6 @@ export const MisDeclaracionesJuradas = ({ rows_mis_ddjj, setRowsMisDdjj, setTabS
                     token={TOKEN}
                     idEmpresa={ID_EMPRESA}
                     setTabState={setTabState}
-                    setPeriodo={setPeriodo}
-                    handleAcceptPeriodoDDJJ={handleAcceptPeriodoDDJJ}
-                    rowsAltaDDJJ={rowsAltaDDJJ}
-                    setRowsAltaDDJJ={setRowsAltaDDJJ}
-                    setPeticion={setPeticion}
-                    setIdDDJJ={setIdDDJJ}
                 />
             </Stack>
         </div>

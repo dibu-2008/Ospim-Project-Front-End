@@ -36,15 +36,15 @@ function EditToolbar(props) {
                 nombre: "",
                 camara: "",
                 fechaIngreso: "",
-                empresaDomicilioId: "",
+                planta: "",
                 categoria: "",
                 remunerativo: "",
                 noRemunerativo: "",
-                aporteUomaCs: false,
-                aporteUomaAs: false,
-                aporteCuotaUsu: false,
-                aporteArt46: true,
-                aporteAntimaCs: false,
+                cuotaSocUoma: false,
+                aporteSolUoma: false,
+                cuotaUsuf: false,
+                art46: true,
+                amtima: false,
                 isNew: true
             },
             ...oldRows,
@@ -64,7 +64,7 @@ function EditToolbar(props) {
     );
 }
 
-export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, categoriasFiltradas, setCategoriasFiltradas, setAfiliado, todasLasCategorias, plantas }) => {
+export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, categoriasFiltradas, setCategoriasFiltradas, setAfiliado, todasLasCategorias, plantas, setPeriodo }) => {
 
     const [locale, setLocale] = useState('esES');
     const [rowModesModel, setRowModesModel] = useState({});
@@ -112,6 +112,7 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
             id: params.id,
             field: 'categoria',
             value: soloCategorias[0],
+            value: ''
         });
 
         setCategoriasFiltradas(soloCategorias);
@@ -152,7 +153,6 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
         const updatedRow = { ...newRow, isNew: false };
 
         setRowsAltaDDJJ(rowsAltaDDJJ.map((row) => (row.id === newRow.id ? updatedRow : row)));
-
 
         return updatedRow;
     };
@@ -355,7 +355,7 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
             },
         },
         {
-            field: "empresaDomicilioId",
+            field: "planta",
             type: "singleSelect",
             headerName: "Planta",
             width: 150,
@@ -364,7 +364,6 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
             align: "center",
             headerClassName: 'header--cell',
             valueOptions: plantas.map((planta) => {
-                
                 return { value: planta.id, label: planta.planta }; // Agrega la propiedad 'key'
             })
         },
@@ -398,7 +397,7 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
             valueFormatter: (params) => formatter.format(params.value || 0),
         },
         {
-            field: "aporteUomaCs",
+            field: "cuotaSocUoma",
             renderHeader: () => (
                 <div style={{ textAlign: 'center', color: '#fff', fontSize: '0.8rem' }}>
                     <span role="img" aria-label="enjoy">
@@ -420,10 +419,10 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
                         checked={(params.value)}
                         onChange={(event) => {
                             const isChecked = event.target.checked;
-                            params.api.setEditCellValue({ id: params.id, field: 'aporteUomaCs', value: isChecked });
-                            params.api.setEditCellValue({ id: params.id, field: 'aporteUomaAs', value: isChecked });
+                            params.api.setEditCellValue({ id: params.id, field: 'cuotaSocUoma', value: isChecked });
+                            params.api.setEditCellValue({ id: params.id, field: 'aporteSolUoma', value: isChecked });
                             // deshabilitar el campo de cuotaUsuf
-                            params.api.setEditCellValue({ id: params.id, field: 'aporteCuotaUsu', value: false, editable: false });
+                            params.api.setEditCellValue({ id: params.id, field: 'cuotaUsuf', value: false, editable: false });
                         }}
                     />
 
@@ -434,7 +433,7 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
             ),
         },
         {
-            field: "aporteUomaAs",
+            field: "aporteSolUoma",
             headerName: "Aporte Sol UOMA",
             renderHeader: () => (
                 <div style={{ textAlign: 'center', color: '#fff', fontSize: '0.8rem' }}>
@@ -457,10 +456,10 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
                         checked={(params.value)}
                         onChange={(event) => {
                             const isChecked = event.target.checked;
-                            params.api.setEditCellValue({ id: params.id, field: 'aporteUomaCs', value: isChecked });
-                            params.api.setEditCellValue({ id: params.id, field: 'aporteUomaAs', value: isChecked });
+                            params.api.setEditCellValue({ id: params.id, field: 'aporteSolUoma', value: isChecked });
+                            params.api.setEditCellValue({ id: params.id, field: 'cuotaSocUoma', value: isChecked });
                             // deshabilitar el campo de cuotaUsuf
-                            params.api.setEditCellValue({ id: params.id, field: 'aporteCuotaUsu', value: false, editable: false });
+                            params.api.setEditCellValue({ id: params.id, field: 'cuotaUsuf', value: false, editable: false });
                         }}
                     />
 
@@ -471,7 +470,7 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
             ),
         },
         {
-            field: "aporteCuotaUsu",
+            field: "cuotaUsuf",
             renderHeader: () => (
                 <div style={{ textAlign: 'center', color: '#fff', fontSize: '0.8rem' }}>
                     <span role="img" aria-label="enjoy">
@@ -493,14 +492,14 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
                         checked={(params.value)}
                         onChange={(event) => {
                             const isChecked = event.target.checked;
-                            params.api.setEditCellValue({ id: params.id, field: 'aporteCuotaUsu', value: isChecked });
+                            params.api.setEditCellValue({ id: params.id, field: 'cuotaUsuf', value: isChecked });
                             console.log("Click en cuota usufructo...")
                             // deshabilitar el campo de cuotaSocUoma
-                            params.api.setEditCellValue({ id: params.id, field: 'aporteUomaCs', value: false, editable: false });
+                            params.api.setEditCellValue({ id: params.id, field: 'cuotaSocUoma', value: false, editable: false });
                             // deshabilitar el campo de aporteSolUoma
-                            params.api.setEditCellValue({ id: params.id, field: 'aporteUomaAs', value: false, editable: false });
+                            params.api.setEditCellValue({ id: params.id, field: 'aporteSolUoma', value: false, editable: false });
                             // deshabilitar el campo de amtima
-                            params.api.setEditCellValue({ id: params.id, field: 'aporteAntimaCs', value: false, editable: false });
+                            params.api.setEditCellValue({ id: params.id, field: 'amtima', value: false, editable: false });
                         }}
                     />
 
@@ -511,7 +510,7 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
             ),
         },
         {
-            field: "aporteArt46",
+            field: "art46",
             renderHeader: () => (
                 <div style={{ textAlign: 'center', color: '#fff', fontSize: '0.8rem' }}>
                     <span role="img" aria-label="enjoy">
@@ -545,7 +544,7 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
             ),
         },
         {
-            field: "aporteAntimaCs",
+            field: "amtima",
             headerName: "AMTIMA",
             width: 130,
             editable: true,
@@ -559,11 +558,11 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
                         checked={(params.value)}
                         onChange={(event) => {
                             const isChecked = event.target.checked;
-                            params.api.setEditCellValue({ id: params.id, field: 'aporteAntimaCs', value: isChecked });
-                            params.api.setEditCellValue({ id: params.id, field: 'aporteUomaAs', value: isChecked });
-                            params.api.setEditCellValue({ id: params.id, field: 'aporteUomaCs', value: isChecked }); 
+                            params.api.setEditCellValue({ id: params.id, field: 'amtima', value: isChecked });
+                            params.api.setEditCellValue({ id: params.id, field: 'aporteSolUoma', value: isChecked });
+                            params.api.setEditCellValue({ id: params.id, field: 'cuotaSocUoma', value: isChecked });
                             // deshabilitar el campo de cuotaUsuf
-                            params.api.setEditCellValue({ id: params.id, field: 'aporteCuotaUsu', value: false, editable: false });
+                            params.api.setEditCellValue({ id: params.id, field: 'cuotaUsuf', value: false, editable: false });
                         }}
                     />
                 )

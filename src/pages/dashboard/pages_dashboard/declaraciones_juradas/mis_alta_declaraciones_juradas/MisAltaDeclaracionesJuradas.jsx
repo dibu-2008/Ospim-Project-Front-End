@@ -11,13 +11,13 @@ import dayjs from 'dayjs';
 import esLocale from 'dayjs/locale/es';
 import './MisAltaDeclaracionesJuradas.css';
 import { GrillaPasoTres } from './grilla_paso_tres/GrillaPasoTres';
-import { actualizarDeclaracionJurada, crearAltaDeclaracionJurada, obtenerCamaras, obtenerCategorias, obtenerPlantaEmpresas } from './MisAltaDeclaracionesJuradasApi';
+import { crearAltaDeclaracionJurada, obtenerCamaras, obtenerCategorias, obtenerPlantaEmpresas } from './MisAltaDeclaracionesJuradasApi';
 
-export const MisAltaDeclaracionesJuradas = ({ periodo, periodoIso, handleChangePeriodo, handleAcceptPeriodoDDJJ, rowsAltaDDJJ, setRowsAltaDDJJ, peticion, idDDJJ }) => {
+export const MisAltaDeclaracionesJuradas = ({periodo, setPeriodo}) => {
 
-    // const [rowsAltaDDJJ, setRowsAltaDDJJ] = useState([]);
-    // const [periodo, setPeriodo] = useState(null);
-    // const [periodoIso, setPeriodoIso] = useState(null);
+    const [rowsAltaDDJJ, setRowsAltaDDJJ] = useState([]);
+    //const [periodo, setPeriodo] = useState(null);
+    const [periodoIso, setPeriodoIso] = useState(null);
     const [otroPeriodo, setOtroPeriodo] = useState(null);
     const [otroPeriodoIso, setOtroPeriodoIso] = useState(null);
     const [camaras, setCamaras] = useState([]);
@@ -30,7 +30,27 @@ export const MisAltaDeclaracionesJuradas = ({ periodo, periodoIso, handleChangeP
     const TOKEN = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.usuario.token;
     const ID_EMPRESA = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.empresa.id;
 
-    
+    const handleChangePeriodo = (date) => {
+        console.log("------", date)
+        setPeriodo(date)
+    };
+
+    const handleAcceptPeriodo = () => {
+
+        if (periodo && periodo.$d) {
+            const { $d: fecha } = periodo;
+            const fechaFormateada = new Date(fecha);
+            fechaFormateada.setDate(1); // Establecer el día del mes a 1
+
+            // Ajustar la zona horaria a UTC
+            fechaFormateada.setUTCHours(0, 0, 0, 0);
+
+            const fechaISO = fechaFormateada.toISOString(); // 2026-02-01T00:00:00.000Z
+            setPeriodoIso(fechaISO);
+        }
+    };
+
+
     const handleChangeOtroPeriodo = (date) => setOtroPeriodo(date);
 
     const handleAcceptOtroPeriodo = () => {
@@ -93,11 +113,7 @@ export const MisAltaDeclaracionesJuradas = ({ periodo, periodoIso, handleChangeP
 
     const guardarDeclaracionJurada = async () => {
 
-        /* console.log('rowsAltaDDJJ', rowsAltaDDJJ);
-
-        console.log('id de ddjj: ', idDDJJ); */
-
-        const altaDDJJFinal = {
+        const altaDeclaraionJuaradaFinal = {
             periodo: periodoIso,
             afiliados: rowsAltaDDJJ.map((item) => ({
                 cuil: item.cuil,
@@ -105,30 +121,20 @@ export const MisAltaDeclaracionesJuradas = ({ periodo, periodoIso, handleChangeP
                 apellido: item.apellido,
                 nombre: item.nombre,
                 fechaIngreso: item.fechaIngreso,
-                empresaDomicilioId: item.empresaDomicilioId,
+                empresaDomicilioId: item.planta,
                 camara: item.camara,
                 categoria: item.categoria,
                 remunerativo: item.remunerativo,
                 noRemunerativo: item.noRemunerativo,
-                aporteUomaCs: item.aporteUomaCs,
-                aporteUomaAs: item.aporteUomaAs,
-                aporteCuotaUsu: item.aporteCuotaUsu,
-                aporteArt46: item.aporteArt46,
-                aporteAntimaCs: item.aporteAntimaCs
+                aporteUomaCs: item.cuotaSocUoma,
+                aporteUomaAs: item.aporteSolUoma,
+                aporteCuotaUsuaria: item.cuotaUsuf,
+                aporteArt46: item.art46,
+                aporteAntimaCs: item.amtima
             }))
         }
 
-        console.log('altaDDJJFinal', altaDDJJFinal);
-
-        if(peticion === "PUT"){
-
-            await actualizarDeclaracionJurada(TOKEN, ID_EMPRESA, altaDDJJFinal, idDDJJ);
-
-        }else {
-
-            await crearAltaDeclaracionJurada(TOKEN, ID_EMPRESA, altaDDJJFinal);
-        }
-        
+        await crearAltaDeclaracionJurada(TOKEN, ID_EMPRESA, altaDeclaraionJuaradaFinal);
     }
 
     return (
@@ -155,7 +161,7 @@ export const MisAltaDeclaracionesJuradas = ({ periodo, periodoIso, handleChangeP
                                 onChange={handleChangePeriodo}
                                 value={periodo}
                                 slotProps={{ actionBar: { actions: ['cancel', 'accept'] } }}
-                                onAccept={handleAcceptPeriodoDDJJ}
+                                onAccept={handleAcceptPeriodo}
                             />
                         </DemoContainer>
                     </LocalizationProvider>
@@ -272,6 +278,7 @@ export const MisAltaDeclaracionesJuradas = ({ periodo, periodoIso, handleChangeP
                     setAfiliado={setAfiliado}
                     todasLasCategorias={todasLasCategorias}
                     plantas={plantas}
+                    setPeriodo={setPeriodo}
                 />
                 <div
                     className='botones_container'
