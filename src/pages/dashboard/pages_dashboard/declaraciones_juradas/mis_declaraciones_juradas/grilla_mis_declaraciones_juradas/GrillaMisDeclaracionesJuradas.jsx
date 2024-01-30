@@ -182,17 +182,6 @@ export const GrillaMisDeclaracionesJuradas = ({
     style: "currency",
   });
 
-  columns[2] = {
-    field: "totalUomaCS",
-    headerName: vecAportes[0].descripcion,
-    width: 180,
-    editable: true,
-    headerAlign: "center",
-    align: "center",
-    headerClassName: "header--cell",
-    valueFormatter: (params) => formatter.format(params.value || 0),
-  };
-
   const columns = [
     {
       field: "periodo",
@@ -283,7 +272,6 @@ export const GrillaMisDeclaracionesJuradas = ({
       headerClassName: "header--cell",
       valueFormatter: (params) => formatter.format(params.value || 0),
     },
-
     {
       field: "actions",
       headerName: "Acciones",
