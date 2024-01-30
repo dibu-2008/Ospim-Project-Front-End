@@ -206,7 +206,7 @@ export const GrillaMisDeclaracionesJuradas = ({
     {
       field: "secuencia",
       headerName: "Numero",
-      width: 180,
+      flex: 1,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -225,7 +225,7 @@ export const GrillaMisDeclaracionesJuradas = ({
     {
       field: "totalUomaCS",
       headerName: "Total UOMA CS",
-      width: 180,
+      flex: 1,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -235,7 +235,7 @@ export const GrillaMisDeclaracionesJuradas = ({
     {
       field: "totalUomaAS",
       headerName: "Total UOMA AS",
-      width: 180,
+      flex: 1,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -245,7 +245,7 @@ export const GrillaMisDeclaracionesJuradas = ({
     {
       field: "totalCuotaUsu",
       headerName: "Total Cuota Usu",
-      width: 180,
+      flex: 1,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -255,7 +255,7 @@ export const GrillaMisDeclaracionesJuradas = ({
     {
       field: "totalART46",
       headerName: "Total ART 46",
-      width: 180,
+      flex: 1,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -265,7 +265,7 @@ export const GrillaMisDeclaracionesJuradas = ({
     {
       field: "totalAntimaCS",
       headerName: "Total Antima CS",
-      width: 180,
+      flex: 1,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -275,7 +275,7 @@ export const GrillaMisDeclaracionesJuradas = ({
     {
       field: "actions",
       headerName: "Acciones",
-      width: 280,
+      flex: 2,
       type: "actions",
       headerAlign: "center",
       align: "center",
