@@ -6,6 +6,7 @@
   "/usuario/interno/:id": "/usuario-interno/:id",
   "/usuario/:id/habilitar/": "/usuario-interno/:id",
   "/usuario/:id/deshabilitar/": "/usuario-interno/:id",
+
   "/empresa/domicilio/": "/empresaDomicilio",
   "/empresa/:id/domicilio/": "/empresaDomicilio?empresaId=:id",
   "/empresa/:id/domicilio/planta/": "/empresaDomicilio/planta?empresaId=:id",
@@ -18,14 +19,22 @@
   "/empresa/ramo": "/ramo",
   "/empresa/restringida/": "/cuit-restringido/",
   "/empresa/restringida/:id": "/cuit-restringido/:id",
+
   "/auth/login/usuario": "/auth-login-usuario",
   "/provincia/:provinciaId/localidad": "/localidad?provinciaId=:provinciaId",
   "/camara/categoria": "/categoria",
   "/entidad/aporte": "/entidad-aporte",
-  "/empresa/:empresaId/ddjj/": "/DDJJConsulta?empresaId=:empresaId",
-  "/empresa/:empresaId/ddjj/:id": "/DDJJConsulta/:id?empresaId=:empresaId",
-  "/empresa/:empresaId/ddjj/:id/presentar": "/DDJJConsulta/:id",
-  "/empresa/:empresaId/ddjj/periodo/:periodo/existe": "/DDJJConsulta?empresaId=:empresaId&periodo=:periodo",
+
+  "/v1/empresa/:empresaId/ddjj/": "/DDJJConsulta?empresaId=:empresaId",
+  "/v1/empresa/:empresaId/ddjj/:id": "/DDJJConsulta/:id?empresaId=:empresaId",
+  "/v1/empresa/:empresaId/ddjj/:id/presentar": "/DDJJConsulta/:id",
+  "/v1/empresa/:empresaId/ddjj/periodo/:periodo/existe": "/DDJJConsulta?empresaId=:empresaId&periodo=:periodo",
+
+  "/v2/empresa/:empresaId/ddjj/": "/DDJJ?empresaId=:empresaId",
+  "/v2/empresa/:empresaId/ddjj/:id": "/DDJJ/:id?empresaId=:empresaId",
+  "/v2/empresa/:empresaId/ddjj/:id/presentar": "/DDJJ/:id",
+  "/v2/empresa/:empresaId/ddjj/periodo/:periodo/existe": "/DDJJ?empresaId=:empresaId&periodo=:periodo",
+
   "/rol/:id/funcionalidad": "/rol/funcionalidad/getRel?rolId=:id",
   "/funcionalidad/:codigo/rol/:rolId": "/rolFuncionalidad/?rolId=:rolId&funcionalidad=:codigo",
   "/aportes/detalle/": "/aportesDetalle/",

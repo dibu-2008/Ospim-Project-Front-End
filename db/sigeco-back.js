@@ -5,13 +5,25 @@ module.exports = (req, res, next) => {
   //console.log("Middleware - SIGECO - req.body:" + req.body);
 
   function getAPI() {
+    let regEx = /([DDJJConsulta]|[DDJJ])/i;
     if (
       req.method === "GET" &&
-      req.url.startsWith("/DDJJConsulta?") &&
+      regEx.test(req.url) &&
+      //req.url.startsWith("*/DDJJConsulta?") &&
       req.query.empresaId &&
       req.query.periodo
     ) {
       return "DDJJ-PERIODO-VALIDAR";
+    }
+    console.log("req.method:" + req.method);
+    console.log("req.url:" + req.url);
+    console.log("req.query.empresaId:" + req.query.empresaId);
+    if (
+      req.method === "POST" &&
+      req.url.startsWith("/DDJJ?") &&
+      req.query.empresaId
+    ) {
+      return "DDJJ-ALTA-V2";
     }
 
     if (
@@ -121,6 +133,9 @@ module.exports = (req, res, next) => {
       break;
     case "DDJJ-ALTA":
       DDJJSetParams();
+      break;
+    case "DDJJ-ALTA-V2":
+      DDJJSetParamsV2();
       break;
     case "DDJJ-MODI":
       DDJJSetParams();
@@ -410,14 +425,62 @@ module.exports = (req, res, next) => {
     }
   }
 
+  function DDJJSetParamsV2() {
+    let empresaId = req.query.empresaId;
+    if (empresaId != ":empresaId") {
+      req.body.empresaId = empresaId;
+      req.body.estado = "PE";
+      req.body.secuencia = null;
+
+      let vecAfiliados = req.body.afiliados;
+      let vecAfiliadosNew = vecAfiliados.map(function callback(
+        element,
+        index,
+        array
+      ) {
+        // Return value for new_array
+        element.aportes = DDJJSetParamsAporteV2(
+          element.remunerativo,
+          element.UOMASocio,
+          element.ANTIMASocio
+        );
+
+        return element;
+      });
+      req.body.afiliados = vecAfiliadosNew;
+
+      next();
+    } else {
+      res.status(401).jsonp({
+        tipo: "ERROR_APP_BUSINESS",
+        ticket: "TK-156270",
+        codigo: "CODIGO_INVALIDO",
+        descripcion: "Debe indicar la empresa de la DDJJ .",
+      });
+    }
+  }
+
+  function DDJJSetParamsAporteV2(remuneracion, bUOMASocio, bANTIMASocio) {
+    let aportes = [];
+    let imp = remuneracion * 0.02;
+    let impArt46 = 2570 * 0.02;
+    aportes[0] = { aporte: "ART46", importe: impArt46 };
+    if (bUOMASocio) {
+      aportes[1] = { aporte: "UOMACS", importe: imp };
+      aportes[2] = { aporte: "UOMAAS", importe: imp };
+      if (bANTIMASocio) {
+        aportes[3] = { aporte: "ANTIMACS", importe: 7500 };
+      }
+    }
+    return aportes;
+  }
+
   function DDJJSetParams() {
     console.log("DDJJAlta - Hola");
-    var empresaId = req.query.empresaId;
+    let empresaId = req.query.empresaId;
     if (empresaId != ":empresaId") {
       console.log("empresaId: " + empresaId);
-      if (empresaId) {
-        req.body.empresaId = empresaId;
-      }
+      req.body.empresaId = empresaId;
       req.body.estado = "PE";
       req.body.secuencia = null;
       req.body.totalART46 = genRand(100000, 1000000, 2);
