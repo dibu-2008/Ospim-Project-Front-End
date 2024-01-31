@@ -79,12 +79,74 @@ function castearMisDDJJ(ddjjResponse) {
   return ddjjResponse;
 }
 
+function misDDJJColumnaAporteGet(ddjjResponse) {
+  //toma todas las ddjj de la consulta de "Mis DDJJ" y arma "vector de Columnas Aportes"
+  //Ejemplo: ['UOMACU', 'ART46', 'UOMASC']
+  let vecAportes = ddjjResponse.map((item) => item.aportes).flat();
+  let colAportes = vecAportes.reduce((acc, item) => {
+    if (!acc.includes(item.codigo)) {
+      acc.push(item.codigo);
+    }
+    return acc;
+  }, []);
+  console.log("misDDJJColumnaAporteGet() - colAportes: ");
+  console.log(colAportes);
+  return colAportes;
+}
+
+function ddjjTotalesAportes(ddjj, colAportes) {
+  //toma una ddjj de la consulta de "Mis DDJJ" y arma "vector de Columnas Totales por Aportes"
+  console.log("ddjjTotalesAportes() - ddjj: ");
+  console.log(ddjj);
+
+  let vecAportes = ddjj.aportes;
+
+  let vecAportesConTotales = [];
+  colAportes.forEach((element) => {
+    vecAportesConTotales.push({ codigo: element, importe: 0 });
+  });
+
+  vecAportes.forEach((aporte) => {
+    vecAportesConTotales.forEach((total) => {
+      if (total.codigo == aporte.codigo) {
+        total.importe = total.importe + aporte.importe;
+      }
+    });
+  });
+  console.log(
+    "ddjjTotalesAportes() - ddjj.id: " + ddjj.id + " - vecAportesConTotales: "
+  );
+  console.log(vecAportesConTotales);
+  return vecAportesConTotales;
+}
+
+function castearMisDDJJ(ddjjResponse) {
+  let colAportes = misDDJJColumnaAporteGet(ddjjResponse);
+  ddjjResponse.forEach((dj) => {
+    let colAportesConTotales = ddjjTotalesAportes(dj, colAportes);
+
+    colAportesConTotales.forEach((regTot) => {
+      dj["total" + regTot.codigo] = regTot.importe;
+    });
+  });
+  console.log("castearMisDDJJ() - ddjjResponse - NUEVO:");
+  console.log(ddjjResponse);
+  return ddjjResponse;
+}
+
+
 export const GrillaMisDeclaracionesJuradas = ({
   rows_mis_ddjj,
   setRowsMisDdjj,
   token,
   idEmpresa,
   setTabState,
+  setPeriodo,
+  handleAcceptPeriodoDDJJ,
+  rowsAltaDDJJ,
+  setRowsAltaDDJJ,
+  setPeticion,
+  setIdDDJJ
 }) => {
   const [rowModesModel, setRowModesModel] = useState({});
 
@@ -130,9 +192,38 @@ export const GrillaMisDeclaracionesJuradas = ({
     }
   };
 
-  const handleEditClick = (id) => () => {
-    // setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+  const handleEditClick = (id, row) => () => {
+
     setTabState(0);
+
+    // PERIODO
+    const periodoRow = row.periodo;
+
+    // Crear un objeto Date a partir de la cadena de fecha
+    const fecha = new Date(periodoRow);
+
+    // Obtener el mes y el año
+    const mes = fecha.getMonth() + 1; // Sumar 1 porque los meses van de 0 a 11
+    const anio = fecha.getFullYear();
+
+    // Agregar 1 al mes antes de pasar a dayjs
+    setPeriodo(dayjs(`${anio}-${mes + 1}`));
+
+    handleAcceptPeriodoDDJJ();
+
+    const afiliados = row.afiliados;
+
+    const updateRowsAltaDDJJ = afiliados.map((item, index) => ({
+      id: index + 1,
+      ...item,
+    }));
+
+    setPeticion("PUT");
+
+    setIdDDJJ(id);
+
+    setRowsAltaDDJJ(updateRowsAltaDDJJ)
+      
   };
 
   const handleSaveClick = (id) => () => {
