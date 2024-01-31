@@ -112,7 +112,6 @@ export const GrillaPasoTres = ({ rowsAltaDDJJ, setRowsAltaDDJJ, token, camaras, 
             id: params.id,
             field: 'categoria',
             value: soloCategorias[0],
-            value: ''
         });
 
         setCategoriasFiltradas(soloCategorias);
