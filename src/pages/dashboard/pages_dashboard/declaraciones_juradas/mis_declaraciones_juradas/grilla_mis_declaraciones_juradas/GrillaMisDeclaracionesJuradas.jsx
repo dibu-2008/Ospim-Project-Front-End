@@ -227,7 +227,7 @@ export const GrillaMisDeclaracionesJuradas = ({
     {
       field: "secuencia",
       headerName: "Numero",
-      width: 180,
+      flex: 1,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -254,6 +254,7 @@ export const GrillaMisDeclaracionesJuradas = ({
       field: "total" + elem,
       headerName: "Total " + elem,
       width: 180,
+
       editable: true,
       headerAlign: "center",
       align: "center",
