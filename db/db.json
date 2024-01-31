@@ -747,19 +747,771 @@
       "descripcion": "Formosa"
     }
   ],
-  "DDJJConsulta": [
+  "DDJJ-V2-CONSUL": [
     {
-      "id": 150,
+      "id": 120,
       "estado": "PR",
       "empresaId": 1,
-      "periodo": "2023-12-01T00:00:00.000Z",
+      "periodo": "2023-11-01T00:00:00.000Z",
       "secuencia": 0,
-      "totalART46": 15168.26,
-      "totalAntimaCS": 35598.75,
-      "totalUomaCS": 1265333,
-      "totalUomaAS": 2659887.01,
-      "totalCuotaUsu": 0
+      "aportes": [
+        {
+          "codigo": "UOMACU",
+          "importe": 9725.75
+        },
+        {
+          "codigo": "ART46",
+          "importe": 5200.52
+        },
+        {
+          "codigo": "UOMACU",
+          "importe": 9725.75
+        }
+      ]
     },
+    {
+      "id": 121,
+      "estado": "PE",
+      "empresaId": 1,
+      "periodo": "2023-11-01T00:00:00.000Z",
+      "secuencia": 1,
+      "aportes": [
+        {
+          "codigo": "UOMACU",
+          "importe": 9725.75
+        },
+        {
+          "codigo": "UOMACS",
+          "importe": 120500.25
+        },
+        {
+          "codigo": "ART46",
+          "importe": 5200.52
+        },
+        {
+          "codigo": "UOMACU",
+          "importe": 9725.75
+        }
+      ]
+    },
+    {
+      "periodo": "2023-10-01T00:00:00.000Z",
+      "id": 204,
+      "estado": "PE",
+      "empresaId": 2,
+      "secuencia": null,
+      "aportes": [
+        {
+          "aporte": "ART46",
+          "importe": 5200.52
+        },
+        {
+          "aporte": "UOMACS",
+          "importe": 3041.5
+        },
+        {
+          "aporte": "UOMAAS",
+          "importe": 3041.5
+        },
+        {
+          "aporte": "ANTIMACS",
+          "importe": 15000
+        }
+      ]
+    },
+    {
+      "periodo": "2023-10-01T00:00:00.000Z",
+      "afiliados": [
+        {
+          "cuil": "23279737229",
+          "inte": null,
+          "apellido": "Vázquez",
+          "nombre": "Lot",
+          "fechaIngreso": "2001-01-01T00:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "UOMASocio": true,
+          "ANTIMASocio": true
+        },
+        {
+          "cuil": "20294465996",
+          "inte": 1,
+          "apellido": "Querubín",
+          "nombre": "Tapia",
+          "fechaIngreso": "2010-01-01T00:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "UOMASocio": true,
+          "ANTIMASocio": true
+        }
+      ],
+      "id": 205
+    }
+  ],
+  "DDJJ": [
+    {
+      "id": 120,
+      "estado": "PR",
+      "empresaId": 1,
+      "periodo": "2023-11-01T00:00:00.000Z",
+      "secuencia": 0,
+      "afiliados": [
+        {
+          "cuil": "23279737229",
+          "inte": null,
+          "apellido": "Vázquez",
+          "nombre": "Lot",
+          "fechaIngreso": "2001-01-01T00:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "UOMASocio": false,
+          "ANTIMASocio": false,
+          "aportes": [
+            {
+              "codigo": "UOMACU",
+              "importe": 9725.75
+            },
+            {
+              "codigo": "ART46",
+              "importe": 2600.26
+            }
+          ]
+        },
+        {
+          "cuil": "20294465996",
+          "inte": 1,
+          "apellido": "Querubín",
+          "nombre": "Tapia",
+          "fechaIngreso": "2010-01-01T00:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "UOMASocio": false,
+          "ANTIMASocio": false,
+          "aportes": [
+            {
+              "codigo": "UOMACU",
+              "importe": 9725.75
+            },
+            {
+              "codigo": "ART46",
+              "importe": 2600.26
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 121,
+      "estado": "PE",
+      "empresaId": 1,
+      "periodo": "2023-11-01T00:00:00.000Z",
+      "secuencia": 1,
+      "afiliados": [
+        {
+          "cuil": "23279737229",
+          "inte": null,
+          "apellido": "Vázquez",
+          "nombre": "Lot",
+          "fechaIngreso": "2001-01-01T00:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "UOMASocio": false,
+          "ANTIMASocio": false,
+          "aportes": [
+            {
+              "codigo": "UOMACU",
+              "importe": 9725.75
+            },
+            {
+              "codigo": "ART46",
+              "importe": 2600.26
+            }
+          ]
+        },
+        {
+          "cuil": "20294465996",
+          "inte": 1,
+          "apellido": "Querubín",
+          "nombre": "Tapia",
+          "fechaIngreso": "2010-01-01T00:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "UOMASocio": false,
+          "ANTIMASocio": false,
+          "aportes": [
+            {
+              "codigo": "UOMACU",
+              "importe": 9725.75
+            },
+            {
+              "codigo": "ART46",
+              "importe": 2600.26
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 110,
+      "estado": "PE",
+      "empresaId": 1,
+      "periodo": "2023-10-01T00:00:00.000Z",
+      "secuencia": 0,
+      "afiliados": [
+        {
+          "cuil": "23279737229",
+          "inte": null,
+          "apellido": "Vázquez",
+          "nombre": "Lot",
+          "fechaIngreso": "2001-01-01T00:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "UOMASocio": true,
+          "ANTIMASocio": true,
+          "aportes": [
+            {
+              "codigo": "UOMACS",
+              "importe": 1303.33
+            },
+            {
+              "codigo": "UOMAAS",
+              "importe": 2000.01
+            },
+            {
+              "codigo": "ANTIMACS",
+              "importe": 7500
+            },
+            {
+              "codigo": "ART46",
+              "importe": 2600.26
+            }
+          ]
+        },
+        {
+          "cuil": "20294465996",
+          "inte": 1,
+          "apellido": "Querubín",
+          "nombre": "Tapia",
+          "fechaIngreso": "2010-01-01T00:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "UOMASocio": true,
+          "ANTIMASocio": true,
+          "aportes": [
+            {
+              "codigo": "UOMACS",
+              "importe": 1303.33
+            },
+            {
+              "codigo": "UOMAAS",
+              "importe": 2000.01
+            },
+            {
+              "codigo": "ANTIMACS",
+              "importe": 7500
+            },
+            {
+              "codigo": "ART46",
+              "importe": 2600.26
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 100,
+      "estado": "PE",
+      "empresaId": 1,
+      "periodo": "2023-09-01T00:00:00.000Z",
+      "secuencia": 0,
+      "afiliados": [
+        {
+          "cuil": "23279737229",
+          "inte": null,
+          "apellido": "Vázquez",
+          "nombre": "Lot",
+          "fechaIngreso": "2001-01-01T00:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "UOMASocio": true,
+          "ANTIMASocio": true,
+          "aportes": [
+            {
+              "codigo": "UOMACS",
+              "importe": 1303.33
+            },
+            {
+              "codigo": "UOMAAS",
+              "importe": 2000.01
+            },
+            {
+              "codigo": "ANTIMACS",
+              "importe": 7500
+            },
+            {
+              "codigo": "ART46",
+              "importe": 2600.26
+            }
+          ]
+        },
+        {
+          "cuil": "20294465996",
+          "inte": 1,
+          "apellido": "Querubín",
+          "nombre": "Tapia",
+          "fechaIngreso": "2010-01-01T00:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "UOMASocio": true,
+          "ANTIMASocio": true,
+          "aportes": [
+            {
+              "codigo": "UOMACS",
+              "importe": 1303.33
+            },
+            {
+              "codigo": "UOMAAS",
+              "importe": 2000.01
+            },
+            {
+              "codigo": "ANTIMACS",
+              "importe": 7500
+            },
+            {
+              "codigo": "ART46",
+              "importe": 2600.26
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 101,
+      "estado": "PR",
+      "empresaId": 1,
+      "periodo": "2023-09-01T00:00:00.000Z",
+      "secuencia": 1,
+      "afiliados": [
+        {
+          "cuil": "23279737229",
+          "inte": null,
+          "apellido": "Vázquez",
+          "nombre": "Lot",
+          "fechaIngreso": "2001-01-01T00:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "UOMASocio": true,
+          "ANTIMASocio": false,
+          "aportes": [
+            {
+              "codigo": "UOMACS",
+              "importe": 3500.75
+            },
+            {
+              "codigo": "UOMAAS",
+              "importe": 1750.01
+            },
+            {
+              "codigo": "ART46",
+              "importe": 2600.26
+            }
+          ]
+        },
+        {
+          "cuil": "20294465996",
+          "inte": 1,
+          "apellido": "Querubín",
+          "nombre": "Tapia",
+          "fechaIngreso": "2010-01-01T00:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "UOMASocio": true,
+          "ANTIMASocio": false,
+          "aportes": [
+            {
+              "codigo": "UOMACS",
+              "importe": 3500.75
+            },
+            {
+              "codigo": "UOMAAS",
+              "importe": 1750.01
+            },
+            {
+              "codigo": "ART46",
+              "importe": 2600.26
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 200,
+      "estado": "PR",
+      "empresaId": 2,
+      "periodo": "2023-09-01T00:00:00.000Z",
+      "secuencia": 2,
+      "afiliados": [
+        {
+          "cuil": "23279737229",
+          "inte": null,
+          "apellido": "Vázquez",
+          "nombre": "Lot",
+          "fechaIngreso": "2001-01-01T00:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "UOMASocio": true,
+          "ANTIMASocio": false,
+          "aportes": [
+            {
+              "codigo": "UOMACS",
+              "importe": 3500.75
+            },
+            {
+              "codigo": "UOMAAS",
+              "importe": 1750.01
+            },
+            {
+              "codigo": "ART46",
+              "importe": 2600.26
+            }
+          ]
+        },
+        {
+          "cuil": "20294465996",
+          "inte": 1,
+          "apellido": "Querubín",
+          "nombre": "Tapia",
+          "fechaIngreso": "2010-01-01T00:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "UOMASocio": true,
+          "ANTIMASocio": false,
+          "aportes": [
+            {
+              "codigo": "UOMACS",
+              "importe": 3500.75
+            },
+            {
+              "codigo": "UOMAAS",
+              "importe": 1750.01
+            },
+            {
+              "codigo": "ART46",
+              "importe": 2600.26
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 201,
+      "estado": "PR",
+      "empresaId": 2,
+      "periodo": "2023-09-01T00:00:00.000Z",
+      "secuencia": 1,
+      "afiliados": [
+        {
+          "cuil": "23279737229",
+          "inte": null,
+          "apellido": "Vázquez",
+          "nombre": "Lot",
+          "fechaIngreso": "2001-01-01T00:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "UOMASocio": true,
+          "ANTIMASocio": false,
+          "aportes": [
+            {
+              "codigo": "UOMACS",
+              "importe": 3500.75
+            },
+            {
+              "codigo": "UOMAAS",
+              "importe": 1750.01
+            },
+            {
+              "codigo": "ART46",
+              "importe": 2600.26
+            }
+          ]
+        },
+        {
+          "cuil": "20294465996",
+          "inte": 1,
+          "apellido": "Querubín",
+          "nombre": "Tapia",
+          "fechaIngreso": "2010-01-01T00:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "UOMASocio": true,
+          "ANTIMASocio": false,
+          "aportes": [
+            {
+              "codigo": "UOMACS",
+              "importe": 3500.75
+            },
+            {
+              "codigo": "UOMAAS",
+              "importe": 1750.01
+            },
+            {
+              "codigo": "ART46",
+              "importe": 2600.26
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 202,
+      "periodo": "2023-10-01T00:00:00.000Z",
+      "empresaId": "1",
+      "estado": "PE",
+      "secuencia": null,
+      "afiliados": [
+        {
+          "cuil": "23279737229",
+          "inte": null,
+          "apellido": "Vázquez",
+          "nombre": "Lot",
+          "fechaIngreso": "2001-01-01T00:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "UOMASocio": true,
+          "ANTIMASocio": false,
+          "aportes": [
+            {
+              "codigo": "UOMACS",
+              "importe": 3500.75
+            },
+            {
+              "codigo": "UOMAAS",
+              "importe": 1750.01
+            },
+            {
+              "codigo": "ART46",
+              "importe": 2600.26
+            }
+          ]
+        },
+        {
+          "cuil": "20294465996",
+          "inte": 1,
+          "apellido": "Querubín",
+          "nombre": "Tapia",
+          "fechaIngreso": "2010-01-01T00:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "UOMASocio": true,
+          "ANTIMASocio": false,
+          "aportes": [
+            {
+              "codigo": "UOMACS",
+              "importe": 3500.75
+            },
+            {
+              "codigo": "UOMAAS",
+              "importe": 1750.01
+            },
+            {
+              "codigo": "ART46",
+              "importe": 2600.26
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 203,
+      "periodo": "2023-10-01T00:00:00.000Z",
+      "empresaId": "1",
+      "estado": "PE",
+      "secuencia": null,
+      "afiliados": [
+        {
+          "cuil": "23279737229",
+          "inte": null,
+          "apellido": "Vázquez",
+          "nombre": "Lot",
+          "fechaIngreso": "2001-01-01T00:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "UOMASocio": true,
+          "ANTIMASocio": false,
+          "aportes": [
+            {
+              "codigo": "UOMACS",
+              "importe": 3500.75
+            },
+            {
+              "codigo": "UOMAAS",
+              "importe": 1750.01
+            },
+            {
+              "codigo": "ART46",
+              "importe": 2600.26
+            }
+          ]
+        },
+        {
+          "cuil": "20294465996",
+          "inte": 1,
+          "apellido": "Querubín",
+          "nombre": "Tapia",
+          "fechaIngreso": "2010-01-01T00:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "UOMASocio": true,
+          "ANTIMASocio": false,
+          "aportes": [
+            {
+              "codigo": "UOMACS",
+              "importe": 3500.75
+            },
+            {
+              "codigo": "UOMAAS",
+              "importe": 1750.01
+            },
+            {
+              "codigo": "ART46",
+              "importe": 2600.26
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "periodo": "2023-10-01T00:00:00.000Z",
+      "afiliados": [
+        {
+          "cuil": "23279737229",
+          "inte": null,
+          "apellido": "Vázquez",
+          "nombre": "Lot",
+          "fechaIngreso": "2001-01-01T00:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "UOMASocio": true,
+          "ANTIMASocio": true,
+          "aportes": [
+            {
+              "aporte": "ART46",
+              "importe": 1520.75
+            },
+            {
+              "aporte": "UOMACS",
+              "importe": 1520.75
+            },
+            {
+              "aporte": "UOMAAS",
+              "importe": 1520.75
+            },
+            {
+              "aporte": "ANTIMACS",
+              "importe": 7500
+            }
+          ]
+        },
+        {
+          "cuil": "20294465996",
+          "inte": 1,
+          "apellido": "Querubín",
+          "nombre": "Tapia",
+          "fechaIngreso": "2010-01-01T00:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "UOMASocio": true,
+          "ANTIMASocio": true,
+          "aportes": [
+            {
+              "aporte": "ART46",
+              "importe": 1520.75
+            },
+            {
+              "aporte": "UOMACS",
+              "importe": 1520.75
+            },
+            {
+              "aporte": "UOMAAS",
+              "importe": 1520.75
+            },
+            {
+              "aporte": "ANTIMACS",
+              "importe": 7500
+            }
+          ]
+        }
+      ],
+      "id": 204
+    }
+  ],
+  "DDJJConsulta": [
     {
       "id": 120,
       "estado": "PR",
@@ -767,9 +1519,9 @@
       "periodo": "2023-11-01T00:00:00.000Z",
       "secuencia": 0,
       "totalART46": 15600.26,
-      "totalAntimaCS": 77598.75,
-      "totalUomaCS": 1365333,
-      "totalUomaAS": 2659887.01,
+      "totalAntimaCS": 77999.75,
+      "totalUomaCS": 250600,
+      "totalUomaAS": 100.01,
       "totalCuotaUsu": 0
     },
     {
@@ -778,11 +1530,11 @@
       "empresaId": 1,
       "periodo": "2023-11-01T00:00:00.000Z",
       "secuencia": 1,
-      "totalART46": 25600.26,
-      "totalAntimaCS": 75598.75,
-      "totalUomaCS": 1365333,
-      "totalUomaAS": 2659887.01,
-      "totalCuotaUsu": 1000
+      "totalART46": 160209.26,
+      "totalAntimaCS": 25000.75,
+      "totalUomaCS": 130688,
+      "totalUomaAS": 1209600.01,
+      "totalCuotaUsu": 10000
     },
     {
       "id": 110,
@@ -802,11 +1554,11 @@
       "empresaId": 1,
       "periodo": "2023-09-01T00:00:00.000Z",
       "secuencia": 0,
-      "totalART46": 20600.26,
-      "totalAntimaCS": 70598.75,
-      "totalUomaCS": 1305333,
-      "totalUomaAS": 2009887.01,
-      "totalCuotaUsu": 100
+      "totalART46": 28680.26,
+      "totalAntimaCS": 65598.75,
+      "totalUomaCS": 1305444,
+      "totalUomaAS": 1559887.01,
+      "totalCuotaUsu": 0
     },
     {
       "id": 101,
@@ -816,7 +1568,7 @@
       "secuencia": 1,
       "totalART46": 26000.26,
       "totalAntimaCS": 70598.75,
-      "totalUomaCS": 1305333,
+      "totalUomaCS": 200159.2,
       "totalUomaAS": 200000.01,
       "totalCuotaUsu": 10
     },
@@ -845,9 +1597,19 @@
       "totalCuotaUsu": 10
     },
     {
+      "id": 202,
       "periodo": "2023-10-01T00:00:00.000Z",
+      "empresaId": "1",
+      "estado": "PE",
+      "secuencia": null,
+      "totalART46": 940868.93,
+      "totalAntimaCS": 519949.91,
+      "totalUomaCS": 605240.74,
+      "totalUomaAS": 217441.68,
+      "totalCuotaUsu": 334984.99,
       "afiliados": [
         {
+          "id": 1,
           "cuil": "23279737229",
           "inte": 1,
           "apellido": "Vázquez",
@@ -864,19 +1626,106 @@
           "aporteArt46": true,
           "aporteAntimaCs": true
         }
+      ]
+    },
+    {
+      "id": 203,
+      "periodo": "2023-10-01T00:00:00.000Z",
+      "empresaId": "1",
+      "estado": "PE",
+      "secuencia": null,
+      "totalART46": 381356.55,
+      "totalAntimaCS": 975734.25,
+      "totalUomaCS": 813855.05,
+      "totalUomaAS": 351067.9,
+      "totalCuotaUsu": 825044.14,
+      "afiliados": [
+        {
+          "cuil": "23279737229",
+          "inte": null,
+          "apellido": "Vázquez",
+          "nombre": "Lot",
+          "fechaIngreso": "2001-01-01T00:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "aporteUomaCs": true,
+          "aporteUomaAs": true,
+          "aporteCuotaUsu": true,
+          "aporteArt46": true,
+          "aporteAntimaCs": true
+        },
+        {
+          "cuil": "20294465996",
+          "inte": 1,
+          "apellido": "Querubín",
+          "nombre": "Tapia",
+          "fechaIngreso": "2010-01-01T00:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "aporteUomaCs": true,
+          "aporteUomaAs": true,
+          "aporteCuotaUsu": true,
+          "aporteArt46": true,
+          "aporteAntimaCs": true
+        }
+      ]
+    },
+    {
+      "periodo": "2023-10-01T00:00:00.000Z",
+      "afiliados": [
+        {
+          "cuil": "23279737229",
+          "inte": null,
+          "apellido": "Vázquez",
+          "nombre": "Lot",
+          "fechaIngreso": "2001-01-01T00:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "aporteUomaCs": true,
+          "aporteUomaAs": true,
+          "aporteCuotaUsu": true,
+          "aporteArt46": true,
+          "aporteAntimaCs": true
+        },
+        {
+          "cuil": "20294465996",
+          "inte": 1,
+          "apellido": "Querubín",
+          "nombre": "Tapia",
+          "fechaIngreso": "2010-01-01T00:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "aporteUomaCs": true,
+          "aporteUomaAs": true,
+          "aporteCuotaUsu": true,
+          "aporteArt46": true,
+          "aporteAntimaCs": true
+        }
       ],
       "empresaId": "1",
       "estado": "PE",
       "secuencia": null,
-      "totalART46": 940868.93,
-      "totalAntimaCS": 519949.91,
-      "totalUomaCS": 605240.74,
-      "totalUomaAS": 217441.68,
-      "totalCuotaUsu": 334984.99,
-      "id": 202
+      "totalART46": 503796.49,
+      "totalAntimaCS": 128865.3,
+      "totalUomaCS": 435589.53,
+      "totalUomaAS": 349102.76,
+      "totalCuotaUsu": 175158.5,
+      "id": 204
     },
     {
-      "periodo": "2023-02-01T00:00:00.000Z",
+      "periodo": "2023-10-01T00:00:00.000Z",
       "afiliados": [
         {
           "cuil": "20949118682",
@@ -890,7 +1739,24 @@
           "noRemunerativo": "988540.90",
           "aporteUomaCs": true,
           "aporteUomaAs": true,
-          "aporteCuotaUsu": false,
+          "aporteCuotaUsu": true,
+          "aporteArt46": true,
+          "aporteAntimaCs": true
+        },
+        {
+          "cuil": "20294465996",
+          "inte": 1,
+          "apellido": "Querubín",
+          "nombre": "Tapia",
+          "fechaIngreso": "2010-01-01T00:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "aporteUomaCs": true,
+          "aporteUomaAs": true,
+          "aporteCuotaUsu": true,
           "aporteArt46": true,
           "aporteAntimaCs": true
         }
@@ -1027,6 +1893,12 @@
       "codigo": "ART46",
       "descripcion": "Art. 46",
       "cuenta": "89652/7"
+    },
+    {
+      "codigo": "UOMACSXX-PRUEBA",
+      "descripcion": "UOMA Cuota Social XXXX-PRUEBA2",
+      "cuenta": "118888/7",
+      "id": 6
     }
   ],
   "aportesDetalle": [

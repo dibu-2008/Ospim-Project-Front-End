@@ -8,7 +8,7 @@ const MESSAGE_HTTP_DELETED = import.meta.env.VITE_MESSAGE_HTTP_DELETED;
 
 export const obtenerMisDeclaracionesJuradas = async (idEmpresa, token) => {
 
-    const URL = `${BACKEND_URL}/empresa/${idEmpresa}/ddjj`;
+    const URL = `${BACKEND_URL}/v2/empresa/${idEmpresa}/ddjj`;
 
     const showSwalError = (descripcion) => {
         Swal.fire({
