@@ -781,6 +781,10 @@
           "importe": 9725.75
         },
         {
+          "codigo": "UOMACS",
+          "importe": 120500.25
+        },
+        {
           "codigo": "ART46",
           "importe": 5200.52
         },
@@ -814,6 +818,40 @@
           "importe": 15000
         }
       ]
+    },
+    {
+      "periodo": "2023-10-01T00:00:00.000Z",
+      "afiliados": [
+        {
+          "cuil": "23279737229",
+          "inte": null,
+          "apellido": "Vázquez",
+          "nombre": "Lot",
+          "fechaIngreso": "2001-01-01T00:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "UOMASocio": true,
+          "ANTIMASocio": true
+        },
+        {
+          "cuil": "20294465996",
+          "inte": 1,
+          "apellido": "Querubín",
+          "nombre": "Tapia",
+          "fechaIngreso": "2010-01-01T00:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "UOMASocio": true,
+          "ANTIMASocio": true
+        }
+      ],
+      "id": 205
     }
   ],
   "DDJJ": [

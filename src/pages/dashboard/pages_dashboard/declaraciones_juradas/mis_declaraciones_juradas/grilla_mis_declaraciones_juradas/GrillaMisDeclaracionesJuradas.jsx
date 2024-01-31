@@ -24,45 +24,60 @@ import { PDFViewer, PDFDownloadLink } from "@react-pdf/renderer";
 import { MyDocument } from "./MiPdf";
 import Swal from "sweetalert2";
 
-/* function EditToolbar(props) {
+function misDDJJColumnaAporteGet(ddjjResponse) {
+  //toma todas las ddjj de la consulta de "Mis DDJJ" y arma "vector de Columnas Aportes"
+  //Ejemplo: ['UOMACU', 'ART46', 'UOMASC']
+  let vecAportes = ddjjResponse.map((item) => item.aportes).flat();
+  let colAportes = vecAportes.reduce((acc, item) => {
+    if (!acc.includes(item.codigo)) {
+      acc.push(item.codigo);
+    }
+    return acc;
+  }, []);
+  console.log("misDDJJColumnaAporteGet() - colAportes: ");
+  console.log(colAportes);
+  return colAportes;
+}
 
-    const { setRowsMisDdjj, rows_mis_ddjj, setRowModesModel } = props;
+function ddjjTotalesAportes(ddjj, colAportes) {
+  //toma una ddjj de la consulta de "Mis DDJJ" y arma "vector de Columnas Totales por Aportes"
+  console.log("ddjjTotalesAportes() - ddjj: ");
+  console.log(ddjj);
 
-    const handleClick = () => {
-        const maxId = Math.max(...rows_mis_ddjj.map((row) => row.id), 0);
+  let vecAportes = ddjj.aportes;
 
-        const newId = maxId + 1;
+  let vecAportesConTotales = [];
+  colAportes.forEach((element) => {
+    vecAportesConTotales.push({ codigo: element, importe: 0 });
+  });
 
-        const id = newId;
+  vecAportes.forEach((aporte) => {
+    vecAportesConTotales.forEach((total) => {
+      if (total.codigo == aporte.codigo) {
+        total.importe = total.importe + aporte.importe;
+      }
+    });
+  });
+  console.log(
+    "ddjjTotalesAportes() - ddjj.id: " + ddjj.id + " - vecAportesConTotales: "
+  );
+  console.log(vecAportesConTotales);
+  return vecAportesConTotales;
+}
 
-        setRowsMisDdjj((oldRows) => [
-            {
-                id,
-                periodo: "",
-                numero: "",
-                totalUomaCS: "",
-                totalUomaAS: "",
-                totalCuotaUsu: "",
-                totalART46: "",
-                totalAntimaCS: "",
-                isNew: true
-            },
-            ...oldRows,
-        ]);
-        setRowModesModel((oldModel) => ({
-            ...oldModel,
-            [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
-        }));
-    };
+function castearMisDDJJ(ddjjResponse) {
+  let colAportes = misDDJJColumnaAporteGet(ddjjResponse);
+  ddjjResponse.forEach((dj) => {
+    let colAportesConTotales = ddjjTotalesAportes(dj, colAportes);
 
-    return (
-        <GridToolbarContainer>
-            <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-                Nuevo Registro
-            </Button>
-        </GridToolbarContainer>
-    );
-} */
+    colAportesConTotales.forEach((regTot) => {
+      dj["total" + regTot.codigo] = regTot.importe;
+    });
+  });
+  console.log("castearMisDDJJ() - ddjjResponse - NUEVO:");
+  console.log(ddjjResponse);
+  return ddjjResponse;
+}
 
 export const GrillaMisDeclaracionesJuradas = ({
   rows_mis_ddjj,
@@ -73,12 +88,17 @@ export const GrillaMisDeclaracionesJuradas = ({
 }) => {
   const [rowModesModel, setRowModesModel] = useState({});
 
+  let colAportes = [];
+
   useEffect(() => {
     const ObtenerMisDeclaracionesJuradas = async () => {
-      const ddjjResponse = await obtenerMisDeclaracionesJuradas(
-        idEmpresa,
-        token
-      );
+      let ddjjResponse = await obtenerMisDeclaracionesJuradas(idEmpresa, token);
+
+      //Agrego las columnas deTotales de Aportes
+      ddjjResponse = await castearMisDDJJ(ddjjResponse);
+
+      console.log("castearMisDDJJ() - ddjjResponse - NUEVO:");
+      console.log(ddjjResponse);
 
       setRowsMisDdjj(ddjjResponse.map((item) => ({ id: item.id, ...item })));
     };
@@ -182,7 +202,8 @@ export const GrillaMisDeclaracionesJuradas = ({
     style: "currency",
   });
 
-  const columns = [
+  //1ro seteo columans fijas
+  let columns = [
     {
       field: "periodo",
       headerName: "Periodo",
@@ -222,156 +243,127 @@ export const GrillaMisDeclaracionesJuradas = ({
         }
       },
     },
-    {
-      field: "totalUomaCS",
-      headerName: "Total UOMA CS",
-      width: 180,
-      editable: true,
-      headerAlign: "center",
-      align: "center",
-      headerClassName: "header--cell",
-      valueFormatter: (params) => formatter.format(params.value || 0),
-    },
-    {
-      field: "totalUomaAS",
-      headerName: "Total UOMA AS",
-      width: 180,
-      editable: true,
-      headerAlign: "center",
-      align: "center",
-      headerClassName: "header--cell",
-      valueFormatter: (params) => formatter.format(params.value || 0),
-    },
-    {
-      field: "totalCuotaUsu",
-      headerName: "Total Cuota Usu",
-      width: 180,
-      editable: true,
-      headerAlign: "center",
-      align: "center",
-      headerClassName: "header--cell",
-      valueFormatter: (params) => formatter.format(params.value || 0),
-    },
-    {
-      field: "totalART46",
-      headerName: "Total ART 46",
-      width: 180,
-      editable: true,
-      headerAlign: "center",
-      align: "center",
-      headerClassName: "header--cell",
-      valueFormatter: (params) => formatter.format(params.value || 0),
-    },
-    {
-      field: "totalAntimaCS",
-      headerName: "Total Antima CS",
-      width: 180,
-      editable: true,
-      headerAlign: "center",
-      align: "center",
-      headerClassName: "header--cell",
-      valueFormatter: (params) => formatter.format(params.value || 0),
-    },
-    {
-      field: "actions",
-      headerName: "Acciones",
-      width: 280,
-      type: "actions",
-      headerAlign: "center",
-      align: "center",
-      headerClassName: "header--cell",
-      getActions: ({ id, row }) => {
-        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
-
-        if (isInEditMode) {
-          return [
-            <GridActionsCellItem
-              icon={<SaveIcon />}
-              label="Save"
-              sx={{
-                color: "primary.main",
-              }}
-              onClick={handleSaveClick(id)}
-            />,
-            <GridActionsCellItem
-              icon={<CancelIcon />}
-              label="Cancel"
-              className="textPrimary"
-              onClick={handleCancelClick(id)}
-              color="inherit"
-            />,
-          ];
-        }
-
-        if (row.estado === "PE") {
-          return [
-            <Button
-              sx={{
-                width: "160px",
-              }}
-              onClick={() => PresentarDeclaracionesJuradas(id)}
-              variant="contained"
-            >
-              Presentar
-            </Button>,
-            <GridActionsCellItem
-              icon={<EditIcon />}
-              label="Edit"
-              className="textPrimary"
-              onClick={handleEditClick(id)}
-              color="inherit"
-            />,
-            <GridActionsCellItem
-              icon={<DeleteIcon />}
-              label="Delete"
-              onClick={handleDeleteClick(id)}
-              color="inherit"
-            />,
-            <PDFDownloadLink
-              document={<MyDocument rows_mis_ddjj={rows_mis_ddjj} />}
-              fileName="ddjj.pdf"
-            >
-              <GridActionsCellItem
-                icon={<LocalPrintshopIcon />}
-                label="Print"
-                color="inherit"
-              />
-            </PDFDownloadLink>,
-          ];
-        } else {
-          return [
-            <Button
-              sx={{
-                width: "160px",
-                marginLeft: "-40px",
-              }}
-              variant="contained"
-            >
-              Generar Boleta
-            </Button>,
-            <GridActionsCellItem
-              icon={<EditIcon />}
-              label="Edit"
-              className="textPrimary"
-              onClick={handleEditClick(id)}
-              color="inherit"
-            />,
-            <PDFDownloadLink
-              document={<MyDocument rows_mis_ddjj={rows_mis_ddjj} />}
-              fileName="ddjj.pdf"
-            >
-              <GridActionsCellItem
-                icon={<LocalPrintshopIcon />}
-                label="Print"
-                color="inherit"
-              />
-              ,
-            </PDFDownloadLink>,
-          ];
-        }
-      },
-    },
   ];
+
+  colAportes = misDDJJColumnaAporteGet(rows_mis_ddjj);
+  console.log("colAportes - A:");
+  console.log(colAportes);
+
+  colAportes.forEach((elem) => {
+    columns.push({
+      field: "total" + elem,
+      headerName: "Total " + elem,
+      width: 180,
+      editable: true,
+      headerAlign: "center",
+      align: "center",
+      headerClassName: "header--cell",
+      valueFormatter: (params) => formatter.format(params.value || 0),
+    });
+  });
+
+  console.log("columns - A:");
+  console.log(columns);
+
+  columns.push({
+    field: "actions",
+    headerName: "Acciones",
+    width: 280,
+    type: "actions",
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header--cell",
+    getActions: ({ id, row }) => {
+      const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+
+      if (isInEditMode) {
+        return [
+          <GridActionsCellItem
+            icon={<SaveIcon />}
+            label="Save"
+            sx={{
+              color: "primary.main",
+            }}
+            onClick={handleSaveClick(id)}
+          />,
+          <GridActionsCellItem
+            icon={<CancelIcon />}
+            label="Cancel"
+            className="textPrimary"
+            onClick={handleCancelClick(id)}
+            color="inherit"
+          />,
+        ];
+      }
+
+      if (row.estado === "PE") {
+        return [
+          <Button
+            sx={{
+              width: "160px",
+            }}
+            onClick={() => PresentarDeclaracionesJuradas(id)}
+            variant="contained"
+          >
+            Presentar
+          </Button>,
+          <GridActionsCellItem
+            icon={<EditIcon />}
+            label="Edit"
+            className="textPrimary"
+            onClick={handleEditClick(id)}
+            color="inherit"
+          />,
+          <GridActionsCellItem
+            icon={<DeleteIcon />}
+            label="Delete"
+            onClick={handleDeleteClick(id)}
+            color="inherit"
+          />,
+          <PDFDownloadLink
+            document={<MyDocument rows_mis_ddjj={rows_mis_ddjj} />}
+            fileName="ddjj.pdf"
+          >
+            <GridActionsCellItem
+              icon={<LocalPrintshopIcon />}
+              label="Print"
+              color="inherit"
+            />
+          </PDFDownloadLink>,
+        ];
+      } else {
+        return [
+          <Button
+            sx={{
+              width: "160px",
+              marginLeft: "-40px",
+            }}
+            variant="contained"
+          >
+            Generar Boleta
+          </Button>,
+          <GridActionsCellItem
+            icon={<EditIcon />}
+            label="Edit"
+            className="textPrimary"
+            onClick={handleEditClick(id)}
+            color="inherit"
+          />,
+          <PDFDownloadLink
+            document={<MyDocument rows_mis_ddjj={rows_mis_ddjj} />}
+            fileName="ddjj.pdf"
+          >
+            <GridActionsCellItem
+              icon={<LocalPrintshopIcon />}
+              label="Print"
+              color="inherit"
+            />
+            ,
+          </PDFDownloadLink>,
+        ];
+      }
+    },
+  });
 
   return (
     <div
