@@ -17,6 +17,7 @@ import CancelIcon from "@mui/icons-material/Close";
 import LocalPrintshopIcon from "@mui/icons-material/LocalPrintshop";
 import {
   eliminarDeclaracionJurada,
+  obtenerMiDeclaracionJurada,
   obtenerMisDeclaracionesJuradas,
   presentarDeclaracionJurada,
 } from "./GrillaMisDeclaracionesJuradasApi";
@@ -35,15 +36,11 @@ function misDDJJColumnaAporteGet(ddjjResponse) {
     }
     return acc;
   }, []);
-  console.log("misDDJJColumnaAporteGet() - colAportes: ");
-  console.log(colAportes);
   return colAportes;
 }
 
 function ddjjTotalesAportes(ddjj, colAportes) {
   //toma una ddjj de la consulta de "Mis DDJJ" y arma "vector de Columnas Totales por Aportes"
-  console.log("ddjjTotalesAportes() - ddjj: ");
-  console.log(ddjj);
 
   let vecAportes = ddjj.aportes;
 
@@ -59,10 +56,6 @@ function ddjjTotalesAportes(ddjj, colAportes) {
       }
     });
   });
-  console.log(
-    "ddjjTotalesAportes() - ddjj.id: " + ddjj.id + " - vecAportesConTotales: "
-  );
-  console.log(vecAportesConTotales);
   return vecAportesConTotales;
 }
 
@@ -75,8 +68,6 @@ function castearMisDDJJ(ddjjResponse) {
       dj["total" + regTot.codigo] = regTot.importe;
     });
   });
-  console.log("castearMisDDJJ() - ddjjResponse - NUEVO:");
-  console.log(ddjjResponse);
   return ddjjResponse;
 }
 
@@ -103,9 +94,6 @@ export const GrillaMisDeclaracionesJuradas = ({
 
       //Agrego las columnas deTotales de Aportes
       ddjjResponse = await castearMisDDJJ(ddjjResponse);
-
-      console.log("castearMisDDJJ() - ddjjResponse - NUEVO:");
-      console.log(ddjjResponse);
 
       setRowsMisDdjj(ddjjResponse.map((item) => ({ id: item.id, ...item })));
     };
@@ -137,26 +125,25 @@ export const GrillaMisDeclaracionesJuradas = ({
     }
   };
 
-  const handleEditClick = (id, row) => () => {
+  const handleEditClick = (id, row) => async () => {
 
     setTabState(0);
 
-    // PERIODO
-    const periodoRow = row.periodo;
+    const ddjj = await obtenerMiDeclaracionJurada(idEmpresa, id, token);
 
-    // Crear un objeto Date a partir de la cadena de fecha
-    const fecha = new Date(periodoRow);
+    const periodoResponse = ddjj.periodo;
+    const fecha = new Date(periodoResponse);
 
-    // Obtener el mes y el año
     const mes = fecha.getMonth() + 1; // Sumar 1 porque los meses van de 0 a 11
     const anio = fecha.getFullYear();
 
-    // Agregar 1 al mes antes de pasar a dayjs
     setPeriodo(dayjs(`${anio}-${mes + 1}`));
 
     handleAcceptPeriodoDDJJ();
 
-    /* const afiliados = row.afiliados;
+    const afiliados = ddjj.afiliados;
+
+    console.log("afiliados", afiliados);
 
     const updateRowsAltaDDJJ = afiliados.map((item, index) => ({
       id: index + 1,
@@ -167,7 +154,7 @@ export const GrillaMisDeclaracionesJuradas = ({
 
     setIdDDJJ(id);
 
-    setRowsAltaDDJJ(updateRowsAltaDDJJ) */
+    setRowsAltaDDJJ(updateRowsAltaDDJJ) 
       
   };
 
@@ -271,10 +258,12 @@ export const GrillaMisDeclaracionesJuradas = ({
       valueGetter: (params) => {
         // Si secuencia es 0 es "Original" sino es "Rectificativa"+secuencia
         // TODO : Tener en cuenta en valor de la secuencia cuando venga en null
-        if (params.value === 0) {
+        if(params.value === null){
+          return "Original Nulo";
+        } else if (params.value === 0) {
           return "Original";
         } else {
-          console.log(params.value);
+          
           return "Rectificativa " + params.value;
         }
       },
@@ -282,8 +271,6 @@ export const GrillaMisDeclaracionesJuradas = ({
   ];
 
   colAportes = misDDJJColumnaAporteGet(rows_mis_ddjj);
-  console.log("colAportes - A:");
-  console.log(colAportes);
 
   colAportes.forEach((elem) => {
     columns.push({
@@ -298,9 +285,6 @@ export const GrillaMisDeclaracionesJuradas = ({
       valueFormatter: (params) => formatter.format(params.value || 0),
     });
   });
-
-  console.log("columns - A:");
-  console.log(columns);
 
   columns.push({
     field: "actions",

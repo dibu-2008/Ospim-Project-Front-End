@@ -180,7 +180,7 @@ export const crearAltaDeclaracionJurada = async (token, empresaId, ddjj) => {
 
 export const actualizarDeclaracionJurada = async (token, empresaId, ddjj, idDDJJ) => {
 
-    const URL = `${BACKEND_URL}/empresa/${empresaId}/ddjj/${idDDJJ}`;
+    const URL = `${BACKEND_URL}/v2/empresa/${empresaId}/ddjj/${idDDJJ}`;
 
     const showSwalError = (descripcion) => {
         Swal.fire({
