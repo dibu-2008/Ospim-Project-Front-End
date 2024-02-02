@@ -130,7 +130,9 @@ export const MisAltaDeclaracionesJuradas = ({periodo, setPeriodo}) => {
                 aporteUomaAs: item.aporteSolUoma,
                 aporteCuotaUsuaria: item.cuotaUsuf,
                 aporteArt46: item.art46,
-                aporteAntimaCs: item.amtima
+                aporteAntimaCs: item.amtima,
+                UOMASocio: true,
+                ANTIMASocio: true
             }))
         }
 

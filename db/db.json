@@ -852,6 +852,31 @@
         }
       ],
       "id": 205
+    },
+    {
+      "periodo": "2025-08-01T00:00:00.000Z",
+      "afiliados": [
+        {
+          "cuil": "20949118682",
+          "inte": 0,
+          "apellido": "Salinas",
+          "nombre": "Luis",
+          "fechaIngreso": "2024-02-08T03:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "FAIM",
+          "categoria": "C",
+          "remunerativo": "123000.68",
+          "noRemunerativo": "23000.56",
+          "aporteUomaCs": false,
+          "aporteUomaAs": false,
+          "aporteCuotaUsuaria": false,
+          "aporteArt46": true,
+          "aporteAntimaCs": false,
+          "UOMASocio": true,
+          "ANTIMASocio": true
+        }
+      ],
+      "id": 206
     }
   ],
   "DDJJ": [
