@@ -34,6 +34,38 @@ export const obtenerMisDeclaracionesJuradas = async (idEmpresa, token) => {
   }
 };
 
+export const obtenerMiDeclaracionJurada = async (idEmpresa, idDeclaracionJurada, token) => {
+
+  const URL = `${BACKEND_URL}/v2/empresa/${idEmpresa}/ddjj/${idDeclaracionJurada}`;
+
+  const showSwalError = (descripcion) => {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: descripcion,
+      showConfirmButton: false,
+      timer: 3000,
+    });
+  }
+
+  try {
+
+    const declaracionJuradaResponse = await axios.get(URL, {
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    const declaracionJurada = await declaracionJuradaResponse.data;
+
+    return declaracionJurada || {};
+
+  }
+  catch (error) {
+    errorBackendResponse(error, showSwalError);
+  }
+}
+
 export const presentarDeclaracionJurada = async (
   idEmpresa,
   idDeclaracionJurada,

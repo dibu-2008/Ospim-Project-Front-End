@@ -123,7 +123,9 @@ export const MisAltaDeclaracionesJuradas = ({
                 aporteUomaAs: item.aporteSolUoma,
                 aporteCuotaUsu: item.cuotaUsuf,
                 aporteArt46: item.art46,
-                aporteAntimaCs: item.amtima
+                aporteAntimaCs: item.amtima,
+                UOMASocio: peticion === "PUT" ? item.UOMASocio : false,
+                ANTIMASocio: true
             }))
         }
 
