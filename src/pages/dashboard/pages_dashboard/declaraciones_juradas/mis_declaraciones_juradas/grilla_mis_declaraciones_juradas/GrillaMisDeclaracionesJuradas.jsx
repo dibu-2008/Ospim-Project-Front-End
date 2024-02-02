@@ -23,6 +23,7 @@ import {
 import { PDFViewer, PDFDownloadLink } from "@react-pdf/renderer";
 import { MyDocument } from "./MiPdf";
 import Swal from "sweetalert2";
+import dayjs from "dayjs";
 
 function misDDJJColumnaAporteGet(ddjjResponse) {
   //toma todas las ddjj de la consulta de "Mis DDJJ" y arma "vector de Columnas Aportes"
@@ -155,7 +156,7 @@ export const GrillaMisDeclaracionesJuradas = ({
 
     handleAcceptPeriodoDDJJ();
 
-    const afiliados = row.afiliados;
+    /* const afiliados = row.afiliados;
 
     const updateRowsAltaDDJJ = afiliados.map((item, index) => ({
       id: index + 1,
@@ -166,7 +167,7 @@ export const GrillaMisDeclaracionesJuradas = ({
 
     setIdDDJJ(id);
 
-    setRowsAltaDDJJ(updateRowsAltaDDJJ)
+    setRowsAltaDDJJ(updateRowsAltaDDJJ) */
       
   };
 
@@ -347,7 +348,7 @@ export const GrillaMisDeclaracionesJuradas = ({
             icon={<EditIcon />}
             label="Edit"
             className="textPrimary"
-            onClick={handleEditClick(id)}
+            onClick={handleEditClick(id, row)}
             color="inherit"
           />,
           <GridActionsCellItem
@@ -382,7 +383,7 @@ export const GrillaMisDeclaracionesJuradas = ({
             icon={<EditIcon />}
             label="Edit"
             className="textPrimary"
-            onClick={handleEditClick(id)}
+            onClick={handleEditClick(id, row)}
             color="inherit"
           />,
           <PDFDownloadLink
