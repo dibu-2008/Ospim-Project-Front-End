@@ -136,7 +136,8 @@ export const obtenerPlantaEmpresas = async (token, empresaId) => {
 
 export const crearAltaDeclaracionJurada = async (token, empresaId, ddjj) => {
 
-    const URL = `${BACKEND_URL}/empresa/${empresaId}/ddjj`;
+    // const URL = `${BACKEND_URL}/empresa/${empresaId}/ddjj`;
+    const URL = `${BACKEND_URL}/v2/empresa/${empresaId}/ddjj`;
 
     const showSwalError = (descripcion) => {
         Swal.fire({
