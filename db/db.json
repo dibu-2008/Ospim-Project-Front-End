@@ -881,61 +881,34 @@
   ],
   "DDJJ": [
     {
-      "id": 120,
-      "estado": "PR",
-      "empresaId": 1,
       "periodo": "2023-11-01T00:00:00.000Z",
-      "secuencia": 0,
       "afiliados": [
         {
           "cuil": "23279737229",
-          "inte": null,
           "apellido": "Vázquez",
           "nombre": "Lot",
           "fechaIngreso": "2001-01-01T00:00:00.000Z",
-          "empresaDomicilioId": 3,
           "camara": "CAENA",
           "categoria": "D",
           "remunerativo": 545000.7,
           "noRemunerativo": 25000,
           "UOMASocio": false,
-          "ANTIMASocio": false,
-          "aportes": [
-            {
-              "codigo": "UOMACU",
-              "importe": 9725.75
-            },
-            {
-              "codigo": "ART46",
-              "importe": 2600.26
-            }
-          ]
+          "ANTIMASocio": true
         },
         {
           "cuil": "20294465996",
-          "inte": 1,
           "apellido": "Querubín",
           "nombre": "Tapia",
           "fechaIngreso": "2010-01-01T00:00:00.000Z",
-          "empresaDomicilioId": 3,
           "camara": "CAENA",
           "categoria": "D",
           "remunerativo": 545000.7,
           "noRemunerativo": 25000,
           "UOMASocio": false,
-          "ANTIMASocio": false,
-          "aportes": [
-            {
-              "codigo": "UOMACU",
-              "importe": 9725.75
-            },
-            {
-              "codigo": "ART46",
-              "importe": 2600.26
-            }
-          ]
+          "ANTIMASocio": true
         }
-      ]
+      ],
+      "id": 120
     },
     {
       "periodo": "2023-11-01T00:00:00.000Z",
