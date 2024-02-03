@@ -72,7 +72,7 @@ export const presentarDeclaracionJurada = async (
   estado,
   token
 ) => {
-  const URL = `${BACKEND_URL}/empresa/${idEmpresa}/ddjj/${idDeclaracionJurada}/presentar`;
+  const URL = `${BACKEND_URL}/v2/empresa/${idEmpresa}/ddjj/${idDeclaracionJurada}/presentar`;
 
   const showSwalError = (descripcion) => {
     Swal.fire({
