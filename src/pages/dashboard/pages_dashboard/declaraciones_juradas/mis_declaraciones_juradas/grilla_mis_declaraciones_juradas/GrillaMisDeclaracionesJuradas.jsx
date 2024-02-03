@@ -92,6 +92,8 @@ export const GrillaMisDeclaracionesJuradas = ({
     const ObtenerMisDeclaracionesJuradas = async () => {
       let ddjjResponse = await obtenerMisDeclaracionesJuradas(idEmpresa, token);
 
+      console.log("ddjjResponse", ddjjResponse);
+
       //Agrego las columnas deTotales de Aportes
       ddjjResponse = await castearMisDDJJ(ddjjResponse);
 
