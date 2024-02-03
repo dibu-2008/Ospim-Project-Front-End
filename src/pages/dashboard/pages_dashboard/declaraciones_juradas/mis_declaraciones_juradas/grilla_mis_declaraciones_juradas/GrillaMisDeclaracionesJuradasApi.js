@@ -7,7 +7,8 @@ const MESSAGE_HTTP_UPDATED = import.meta.env.VITE_MESSAGE_HTTP_UPDATED;
 const MESSAGE_HTTP_DELETED = import.meta.env.VITE_MESSAGE_HTTP_DELETED;
 
 export const obtenerMisDeclaracionesJuradas = async (idEmpresa, token) => {
-  const URL = `${BACKEND_URL}/v2/empresa/${idEmpresa}/ddjj`;
+
+  const URL = `${BACKEND_URL}/empresa/${idEmpresa}/ddjj/totales`;
 
   const showSwalError = (descripcion) => {
     Swal.fire({
@@ -36,7 +37,7 @@ export const obtenerMisDeclaracionesJuradas = async (idEmpresa, token) => {
 
 export const obtenerMiDeclaracionJurada = async (idEmpresa, idDeclaracionJurada, token) => {
 
-  const URL = `${BACKEND_URL}/v2/empresa/${idEmpresa}/ddjj/${idDeclaracionJurada}`;
+  const URL = `${BACKEND_URL}/empresa/${idEmpresa}/ddjj/${idDeclaracionJurada}`;
 
   const showSwalError = (descripcion) => {
     Swal.fire({
@@ -72,7 +73,7 @@ export const presentarDeclaracionJurada = async (
   estado,
   token
 ) => {
-  const URL = `${BACKEND_URL}/v2/empresa/${idEmpresa}/ddjj/${idDeclaracionJurada}/presentar`;
+  const URL = `${BACKEND_URL}/empresa/${idEmpresa}/ddjj/${idDeclaracionJurada}/presentar`;
 
   const showSwalError = (descripcion) => {
     Swal.fire({
