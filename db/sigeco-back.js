@@ -5,6 +5,14 @@ module.exports = (req, res, next) => {
   //console.log("Middleware - SIGECO - req.body:" + req.body);
 
   function getAPI() {
+    if (
+      req.method === "GET" &&
+      req.url.startsWith("/empresa/") &&
+      req.url.endsWith("/ddjj/validar")
+    ) {
+      return "DDJJ-VALIDAR-NIVEL2";
+    }
+
     let regEx = /([DDJJConsulta]|[DDJJ])/i;
     if (
       req.method === "GET" &&
@@ -159,12 +167,42 @@ module.exports = (req, res, next) => {
     case "APORTE-DETALLE-ALTA":
       AporteDetalleAlta();
       break;
+    case "DDJJ-VALIDAR-NIVEL2":
+      ddjjValidarN2();
+      break;
     case "----":
       // code block
       next();
       break;
     default:
     // code block
+  }
+
+  function ddjjValidarN2() {
+    res.status(200).jsonp({
+      errores: [
+        {
+          codigo: "APORTE",
+          cuil: 20265656565,
+          descripcion: "Deve completar los aportes de los Empleados.",
+        },
+        {
+          codigo: "REMU",
+          cuil: 20265656565,
+          descripcion: "Deve completar las remuneraciones de los Empleados.",
+        },
+        {
+          codigo: "CAMARA",
+          cuil: 20294465996,
+          descripcion: "Deve completar las Camaras de los Empleados.",
+        },
+        {
+          codigo: "FECHAING",
+          cuil: 20294465996,
+          descripcion: "Deve completar las Fechas de Ingreso de los Empleados.",
+        },
+      ],
+    });
   }
 
   function AporteDetalleAlta() {
