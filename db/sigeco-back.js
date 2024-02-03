@@ -436,7 +436,7 @@ module.exports = (req, res, next) => {
   }
 
   function validarPeriodo() {
-    var ddjj = req.app.db.__wrapped__.DDJJConsulta;
+    var ddjj = req.app.db.__wrapped__.DDJJ;
 
     var empresaId = req.query.empresaId;
     var periodo = new Date(
