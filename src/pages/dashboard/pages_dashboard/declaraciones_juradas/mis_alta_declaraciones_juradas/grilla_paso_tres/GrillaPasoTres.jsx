@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useRef } from "react";
 import {
     GridRowModes,
     DataGrid,
@@ -17,10 +17,11 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import SearchIcon from '@mui/icons-material/Search';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import * as locales from '@mui/material/locale';
-import { Checkbox, Box, Button, TextField, Select, MenuItem } from "@mui/material";
+import { Checkbox, Box, Button, TextField, Select, MenuItem, appBarClasses } from "@mui/material";
 import { obtenerAfiliados, obtenerCategorias } from "../MisAltaDeclaracionesJuradasApi";
 
 function EditToolbar(props) {
+    
     const { setRowsAltaDDJJ, rowsAltaDDJJ, setRowModesModel } = props;
 
     const handleClick = () => {
@@ -64,20 +65,22 @@ function EditToolbar(props) {
     );
 }
 
-export const GrillaPasoTres = ({ 
-    rowsAltaDDJJ, 
-    setRowsAltaDDJJ, 
-    token, 
-    camaras, 
-    categoriasFiltradas, 
-    setCategoriasFiltradas, 
-    setAfiliado, 
-    todasLasCategorias, 
-    plantas, 
+export const GrillaPasoTres = ({
+    rowsAltaDDJJ,
+    setRowsAltaDDJJ,
+    token,
+    camaras,
+    categoriasFiltradas,
+    setCategoriasFiltradas,
+    afiliado,
+    setAfiliado,
+    todasLasCategorias,
+    plantas,
 }) => {
 
     const [locale, setLocale] = useState('esES');
     const [rowModesModel, setRowModesModel] = useState({});
+    const [selectedRowId, setSelectedRowId] = useState(null);
 
     const theme = useTheme();
     const themeWithLocale = useMemo(
@@ -92,19 +95,40 @@ export const GrillaPasoTres = ({
 
         setAfiliado(afiliadoEncontrado);
 
-        // Actualizar el estado con el nuevo objeto usando setEditCellValue
-        params.api.setEditCellValue({
-            id: params.id,
-            field: 'apellido',
-            value: afiliadoEncontrado.apellido,
-        });
+        if (afiliadoEncontrado) {
 
-        params.api.setEditCellValue({
-            id: params.id,
-            field: 'nombre',
-            value: afiliadoEncontrado.nombre,
-        });
+            // Apellido
+            params.api.setEditCellValue({
+                id: params.id,
+                field: 'apellido',
+                value: afiliadoEncontrado.apellido,
+            });
 
+            const textFieldApellido = document.getElementById('apellido' + params.row.id);
+            const abueloApellido = textFieldApellido.parentNode.parentNode;
+            abueloApellido.style.display = 'block';
+
+            // Nombre
+            params.api.setEditCellValue({
+                id: params.id,
+                field: 'nombre',
+                value: afiliadoEncontrado.nombre,
+            });
+
+            const textFieldNombre = document.getElementById('nombre' + params.row.id);
+            const abueloNombre = textFieldNombre.parentNode.parentNode;
+            abueloNombre.style.display = 'block';
+
+
+        } else {
+            const textFieldApellido = document.getElementById('apellido' + params.row.id);
+            const abueloApellido = textFieldApellido.parentNode.parentNode;
+            abueloApellido.style.display = 'block';
+
+            const textFieldNombre = document.getElementById('nombre' + params.row.id);
+            const abueloNombre = textFieldNombre.parentNode.parentNode;
+            abueloNombre.style.display = 'block';
+        }
     };
 
     const filtroDeCategoria = async (params, codigoCamara) => {
@@ -192,7 +216,7 @@ export const GrillaPasoTres = ({
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                         <TextField
                             fullWidth
-                            value={params.value}
+                            value={params.value || ''}
                             onChange={(event) => {
                                 const newValue = event.target.value;
                                 params.api.setEditCellValue({
@@ -234,28 +258,63 @@ export const GrillaPasoTres = ({
             align: "center",
             headerClassName: 'header--cell',
             renderEditCell: (params) => {
+
                 return (
-                    <TextField
-                        fullWidth
-                        value={params.value}
-                        readOnly
-                        // readOnly={!params.row.isNew} Hacer readonly si no es una nueva fila
-                        sx={{
-                            '& .MuiOutlinedInput-root': {
-                                '& fieldset': {
-                                    borderColor: 'transparent', // Color del borde cuando no está enfocado
+
+                    afiliado?.apellido ?
+
+                        <TextField
+                            id={params.row.id ? 'apellido' + params.row.id.toString() : ''}
+                            fullWidth
+                            value={params.value || ''}
+                            sx={{
+                                '& .MuiOutlinedInput-root': {
+                                    '& fieldset': {
+                                        borderColor: 'transparent', 
+                                    },
+                                    '&:hover fieldset': {
+                                        borderColor: 'transparent', 
+                                    },
+                                    '&.Mui-focused fieldset': {
+                                        borderColor: 'transparent', 
+                                    },
                                 },
-                                '&:hover fieldset': {
-                                    borderColor: 'transparent', // Color del borde al pasar el ratón
+                            }}
+                        />
+                        :
+                        <TextField
+                            id={params.row.id ? 'apellido' + params.row.id.toString() : ''}
+                            fullWidth
+                            value={params.value || ''}
+                            onChange={(event) => {
+
+                                const newValue = event.target.value;
+
+                                params.api.setEditCellValue({
+                                    id: params.id,
+                                    field: 'apellido',
+                                    value: newValue,
+                                });
+                                
+                            }}
+                            sx={{
+                                '& .MuiOutlinedInput-root': {
+                                    '& fieldset': {
+                                        backgroundColor: params.row.cuil === '' ? 'white' : 'transparent',
+                                        borderColor: 'transparent',
+                                    },
+                                    '&:hover fieldset': {
+                                        borderColor: 'transparent',
+                                    },
+                                    '&.Mui-focused fieldset': {
+                                        borderColor: 'transparent',
+                                    },
                                 },
-                                '&.Mui-focused fieldset': {
-                                    borderColor: 'transparent', // Color del borde cuando está enfocado
-                                },
-                            },
-                        }}
-                    />
+                            }}
+                        />
                 );
-            },
+            }
+
         },
         {
             field: "nombre",
@@ -267,26 +326,56 @@ export const GrillaPasoTres = ({
             align: "center",
             headerClassName: 'header--cell',
             renderEditCell: (params) => {
+
                 return (
+                    afiliado?.nombre ?
+
                     <TextField
-                        fullWidth
-                        value={params.value}
-                        readOnly
-                        // readOnly={!params.row.isNew} Hacer readonly si no es una nueva fila
-                        sx={{
-                            '& .MuiOutlinedInput-root': {
-                                '& fieldset': {
-                                    borderColor: 'transparent', // Color del borde cuando no está enfocado
+                            id={params.row.id ? 'nombre' + params.row.id.toString() : ''}
+                            fullWidth
+                            value={params.value || ''}
+                            sx={{
+                                '& .MuiOutlinedInput-root': {
+                                    '& fieldset': {
+                                        borderColor: 'transparent', 
+                                    },
+                                    '&:hover fieldset': {
+                                        borderColor: 'transparent', 
+                                    },
+                                    '&.Mui-focused fieldset': {
+                                        borderColor: 'transparent', 
+                                    },
                                 },
-                                '&:hover fieldset': {
-                                    borderColor: 'transparent', // Color del borde al pasar el ratón
+                            }}
+                        />
+                        :
+                        <TextField
+                            id={params.row.id ? 'nombre' + params.row.id.toString() : ''}
+                            fullWidth
+                            value={params.value || ''}
+                            onChange={(event) => {
+                                const newValue = event.target.value;
+                                params.api.setEditCellValue({
+                                    id: params.id,
+                                    field: 'nombre',
+                                    value: newValue,
+                                });
+                            }}
+                            sx={{
+                                '& .MuiOutlinedInput-root': {
+                                    '& fieldset': {
+                                        backgroundColor: params.row.cuil === '' ? 'white' : 'transparent',
+                                        borderColor: 'transparent',
+                                    },
+                                    '&:hover fieldset': {
+                                        borderColor: 'transparent',
+                                    },
+                                    '&.Mui-focused fieldset': {
+                                        borderColor: 'transparent',
+                                    },
                                 },
-                                '&.Mui-focused fieldset': {
-                                    borderColor: 'transparent', // Color del borde cuando está enfocado
-                                },
-                            },
-                        }}
-                    />
+                            }}
+                        />
                 );
             },
         },
@@ -299,22 +388,27 @@ export const GrillaPasoTres = ({
             align: "center",
             type: "singleSelect",
             valueOptions: camaras.map((camara) => {
-                return { value: camara.codigo, label: camara.descripcion, key: camara.codigo }; // Agrega la propiedad 'key'
+                return { value: camara.codigo, label: camara.descripcion }; // Agrega la propiedad 'key'
             }),
             headerClassName: 'header--cell',
             renderEditCell: (params) => {
+
                 return (
                     <Select
                         fullWidth
-                        value={params.value}
+                        value={params.value || ''}
                         onChange={(event) => {
-                            const newValue = event.target.value;
+
+
+                            params.api.setEditCellValue({ id: params.id, field: 'categoria', value: '' });
                             params.api.setEditCellValue({
                                 id: params.id,
                                 field: 'camara',
-                                value: newValue,
+                                value: event.target.value,
                             });
+
                         }}
+
                     >
                         {camaras.map((camara) => {
                             return (
