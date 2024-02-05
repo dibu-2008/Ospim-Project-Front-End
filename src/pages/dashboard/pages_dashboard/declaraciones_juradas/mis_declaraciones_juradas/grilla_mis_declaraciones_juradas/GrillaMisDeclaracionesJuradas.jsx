@@ -90,9 +90,8 @@ export const GrillaMisDeclaracionesJuradas = ({
 
   useEffect(() => {
     const ObtenerMisDeclaracionesJuradas = async () => {
-      let ddjjResponse = await obtenerMisDeclaracionesJuradas(idEmpresa, token);
 
-      console.log("ddjjResponse", ddjjResponse);
+      let ddjjResponse = await obtenerMisDeclaracionesJuradas(idEmpresa, token);
 
       //Agrego las columnas deTotales de Aportes
       ddjjResponse = await castearMisDDJJ(ddjjResponse);
@@ -144,8 +143,6 @@ export const GrillaMisDeclaracionesJuradas = ({
     handleAcceptPeriodoDDJJ();
 
     const afiliados = ddjj.afiliados;
-
-    console.log("afiliados", afiliados);
 
     const updateRowsAltaDDJJ = afiliados.map((item, index) => ({
       id: index + 1,

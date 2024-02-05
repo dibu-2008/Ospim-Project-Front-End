@@ -119,11 +119,11 @@ export const MisAltaDeclaracionesJuradas = ({
                 categoria: item.categoria,
                 remunerativo: item.remunerativo,
                 noRemunerativo: item.noRemunerativo,
-                aporteUomaCs: item.cuotaSocUoma,
+                /* aporteUomaCs: item.cuotaSocUoma,
                 aporteUomaAs: item.aporteSolUoma,
                 aporteCuotaUsu: item.cuotaUsuf,
                 aporteArt46: item.art46,
-                aporteAntimaCs: item.amtima,
+                aporteAntimaCs: item.amtima, */
                 UOMASocio: peticion === "PUT" ? item.UOMASocio : false,
                 ANTIMASocio: true
             }))
@@ -278,6 +278,7 @@ export const MisAltaDeclaracionesJuradas = ({
                     camaras={camaras}
                     categoriasFiltradas={categoriasFiltradas}
                     setCategoriasFiltradas={setCategoriasFiltradas}
+                    afiliado={afiliado}
                     setAfiliado={setAfiliado}
                     todasLasCategorias={todasLasCategorias}
                     plantas={plantas}
