@@ -26,7 +26,7 @@ const AppRouter = () => {
   return (
     <>
       <Routes>
-        <Route path="/" element={<NavBar />}>
+        {/* <Route path="/" element={<NavBar />}> */}
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
           <Route
@@ -51,7 +51,7 @@ const AppRouter = () => {
           </Route>
           <Route path="registercompany" element={<RegistroEmpresa />} />
           <Route index element={<Navigate to="/login" />} />
-        </Route>
+        {/* </Route> */}
       </Routes>
     </>
   );

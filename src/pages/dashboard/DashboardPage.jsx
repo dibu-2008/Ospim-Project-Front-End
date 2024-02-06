@@ -11,43 +11,204 @@ import CategoryIcon from '@mui/icons-material/Category';
 import CloseIcon from '@mui/icons-material/Close';
 import CoPresentIcon from '@mui/icons-material/CoPresent';
 import NetworkLockedIcon from '@mui/icons-material/NetworkLocked';
-import { Link, Outlet } from 'react-router-dom';
+import { Link, useNavigate, useLocation, Outlet, NavLink } from 'react-router-dom';
+import './DashboardPage.css';
+
+// Drawer 
+import Box from '@mui/material/Box';
+import { styled, useTheme } from '@mui/material/styles';
+import MuiDrawer from '@mui/material/Drawer';
+import MuiAppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import List from '@mui/material/List';
+import CssBaseline from '@mui/material/CssBaseline';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import MailIcon from '@mui/icons-material/Mail';
+
+
+const drawerWidth = 240;
+
+const openedMixin = (theme) => ({
+  width: drawerWidth,
+  transition: theme.transitions.create('width', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.enteringScreen,
+  }),
+  overflowX: 'hidden',
+});
+
+const closedMixin = (theme) => ({
+  transition: theme.transitions.create('width', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  overflowX: 'hidden',
+  width: `calc(${theme.spacing(7)} + 1px)`,
+  [theme.breakpoints.up('sm')]: {
+    width: `calc(${theme.spacing(8)} + 1px)`,
+  },
+});
+
+const DrawerHeader = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'flex-end',
+  padding: theme.spacing(0, 1),
+  // necessary for content to be below app bar
+  ...theme.mixins.toolbar,
+}));
+
+const AppBar = styled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop !== 'open',
+})(({ theme, open }) => ({
+  zIndex: theme.zIndex.drawer + 1,
+  transition: theme.transitions.create(['width', 'margin'], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(open && {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  }),
+}));
+
+const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
+  ({ theme, open }) => ({
+    width: drawerWidth,
+    flexShrink: 0,
+    whiteSpace: 'nowrap',
+    boxSizing: 'border-box',
+    ...(open && {
+      ...openedMixin(theme),
+      '& .MuiDrawer-paper': openedMixin(theme),
+    }),
+    ...(!open && {
+      ...closedMixin(theme),
+      '& .MuiDrawer-paper': closedMixin(theme),
+    }),
+  }),
+);
+
+// Drawer final ************************
 
 const DashboardPage = () => {
 
+  const navigate = useNavigate();
   const [value, setValue] = useState(0);
 
+  const onLogout = () => {
+    navigate('/login', { replace: true })
+    localStorage.removeItem('stateLogin')
+  }
+
+  // Drawer inicio 
+  const theme = useTheme();
+  const [open, setOpen] = React.useState(false);
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
+  const handleDrawerToggle = () => {
+    setOpen(!open);
+  }
+
+  // Drawer final ************************
+
   return (
-    <div className="container_dashboard_register_company">
-      <BottomNavigation
-        showLabels
-        value={value}
-        onChange={(event, newValue) => {
-          setValue(newValue);
-        }}
-        sx={{ width: '100%'}}
-      >
-        <BottomNavigationAction label="Inicio" icon={<HomeIcon />} component={Link} to="./inicio" />
-        <BottomNavigationAction label="Publicaciones" icon={<LibraryBooksIcon />} component={Link} to="./publicaciones" />
-        <BottomNavigationAction label="Feriados" icon={<LibraryBooksIcon />} component={Link} to="./feriados" />
-        <BottomNavigationAction label="DDJJ" icon={<LibraryBooksIcon />} component={Link} to="./ddjj" />
-        <BottomNavigationAction label="Boletas" icon={<StyleIcon />} component={Link} to="./boletas" />
-        <BottomNavigationAction label="Pagos" icon={<AccountBalanceWalletIcon />} component={Link} to="./pagos" />
-        <BottomNavigationAction label="Datos" icon={<PersonIcon />} component={Link} to="./misdatos" />
-        {/* <BottomNavigationAction label="Categorias" icon={<CategoryIcon />} component={Link} to="./categorias" /> */}
-        <BottomNavigationAction label="Cuits Restringidos" icon={<NetworkLockedIcon />} component={Link} to="./cuitsrestringidos" />
-        <BottomNavigationAction label="Roles" icon={<CoPresentIcon />} component={Link} to="./roles" />
-        <BottomNavigationAction 
-          label="Alta Usuario Interno" 
-          icon={<PersonIcon />} 
-          component={Link} to="./altausuariointerno" 
-        />
-        {/* <BottomNavigationAction label="Salir" icon={<CloseIcon />} /> */}
-      </BottomNavigation>
+    <>
+      <Box sx={{ display: 'flex' }}>
+        <Drawer variant="permanent" open={open}>
+          <DrawerHeader>
+          <IconButton 
+              color="inherit"
+              aria-label="toggle drawer"
+              onClick={handleDrawerToggle}
+              edge="start"
+            >
+              {open ? <ChevronLeftIcon className='icon-toggle'/> : <ChevronRightIcon className='icon-toggle' />}
+            </IconButton>
+          </DrawerHeader>
+          <Divider />
+          <List
+            style={{
+              marginTop: 50,
+            }}
+          >
+            <ListItem disablePadding sx={{ display: 'block' }}>
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? 'initial' : 'center',
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : 'auto',
+                    justifyContent: 'center',
+                    display: 'flex',
+                    flexDirection: 'column',
+                  }}
+                >
+                  <NavLink to="./inicio" className="icon-container">
+                    <HomeIcon className='icon-link' /> { open && <span className='icon-link'>Inicio</span> }
+                  </NavLink>
+                  <NavLink to="./publicaciones" className="icon-container">
+                    <LibraryBooksIcon className='icon-link' /> {open && <span className='icon-link'>Publicaciones</span> }
+                  </NavLink>
+                  <NavLink to="./feriados" className="icon-container">
+                    <LibraryBooksIcon className='icon-link' /> {open && <span className='icon-link'>Feridos</span> }
+                  </NavLink>
+                  <NavLink to="./ddjj" className="icon-container">
+                    <LibraryBooksIcon className='icon-link' /> { open && <span className='icon-link'>Declaraciones Juaradas</span> }
+                  </NavLink>
+                  <NavLink to="./boletas" className="icon-container">
+                    <StyleIcon className='icon-link' /> { open && <span className='icon-link'>Boletas</span> }
+                  </NavLink>
+                  <NavLink to="./pagos" className="icon-container">
+                    <AccountBalanceWalletIcon className='icon-link' /> { open && <span className='icon-link'>Pagos</span> }
+                  </NavLink>
+                  <NavLink to="./misdatos" className="icon-container">
+                    <PersonIcon className='icon-link' /> { open && <span className='icon-link'>Mis Datos</span> }
+                  </NavLink>
+                  <NavLink to="./cuitsrestringidos" className="icon-container">
+                    <NetworkLockedIcon className='icon-link' /> { open && <span className='icon-link'>Cuits Restringidos</span> }
+                  </NavLink>
+                  <NavLink to="./roles" className="icon-container">
+                    <CoPresentIcon className='icon-link' /> { open && <span className='icon-link'>Roles</span> }
+                  </NavLink>
+                </ListItemIcon>
 
-      <Outlet />
-
-    </div>
+              </ListItemButton>
+            </ListItem>
+          </List>
+          <Divider />
+        </Drawer>
+        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+          <Outlet />
+        </Box>
+      </Box>
+    </>
   );
 };
 

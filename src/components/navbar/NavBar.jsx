@@ -33,9 +33,8 @@ const NavBar = () => {
             </div>
           </div>
         </Link>
-
         {
-          localStateParse?.logged ? (
+          localStateParse?.logged && (
             <div className="user">
               {/* <span className="username">{state?.name}</span> */}
               <ButtonOutlinedComponent
@@ -43,14 +42,8 @@ const NavBar = () => {
                 onClick={onLogout}
               />
             </div>
-          ) : (
-            <nav>
-              <Link to="/login">Iniciar sesión</Link>
-              <Link to="/register">Registrarse</Link>
-            </nav>
-          )
+          ) 
         }
-
       </header>
 
       <Outlet />

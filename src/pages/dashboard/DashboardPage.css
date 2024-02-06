@@ -1,0 +1,15 @@
+.icon-toggle {
+	color : #1A76D2 !important;
+}
+.icon-container {
+    display: flex;
+	padding: 10px;
+    align-items: center; /* Esto centra verticalmente los elementos */
+    text-decoration: none;
+}
+
+.icon-container .icon-link {
+    display: flex; /* Asegura que el texto esté alineado verticalmente */
+    align-items: center; /* Centra verticalmente el texto */
+    margin-top: 0; /* Elimina el margen superior */
+}
