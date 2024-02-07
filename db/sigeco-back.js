@@ -5,11 +5,7 @@ module.exports = (req, res, next) => {
   //console.log("Middleware - SIGECO - req.body:" + req.body);
 
   function getAPI() {
-    if (
-      req.method === "GET" &&
-      req.url.startsWith("/empresa/") &&
-      req.url.endsWith("/ddjj/validar")
-    ) {
+    if (req.method === "GET" && req.url.startsWith("/DDJJ/validar")) {
       return "DDJJ-VALIDAR-NIVEL2";
     }
 
