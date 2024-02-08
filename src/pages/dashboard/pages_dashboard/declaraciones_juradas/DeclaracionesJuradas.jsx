@@ -97,6 +97,7 @@ export const DeclaracionesJuradas = () => {
         <Box sx={{ width: '100%' }}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider', marginTop: '50px' }}>
             <Tabs
+              
               value={tabState}
               onChange={handleChangeTabState}
             >
@@ -114,7 +115,7 @@ export const DeclaracionesJuradas = () => {
               />
             </Tabs>
           </Box>
-          <CustomTabPanel value={tabState} index={0}>
+          <CustomTabPanel value={tabState} index={0} >
             <MisAltaDeclaracionesJuradas
               periodo={periodo}
               periodoIso={periodoIso}

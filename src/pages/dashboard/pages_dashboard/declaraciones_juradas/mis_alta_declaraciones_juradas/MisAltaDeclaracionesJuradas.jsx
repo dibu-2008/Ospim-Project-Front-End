@@ -147,7 +147,6 @@ export const MisAltaDeclaracionesJuradas = ({
                 <Stack
                     spacing={4}
                     direction="row"
-
                     alignItems="center"
                 >
                     <h5 className='title_periodo'>Período</h5>

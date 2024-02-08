@@ -1,0 +1,10 @@
+.cuits_restringidos_container {
+    margin: 50px auto;
+    width: 90%;
+}
+
+.cuits_restringidos_container h1 {
+    color: #1A76D2;
+    margin-bottom: 65px;
+    text-align: left !important;
+}

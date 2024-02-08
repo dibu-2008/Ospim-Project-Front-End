@@ -11,5 +11,6 @@
 .icon-container .icon-link {
     display: flex; /* Asegura que el texto esté alineado verticalmente */
     align-items: center; /* Centra verticalmente el texto */
-    margin-top: 0; /* Elimina el margen superior */
+    margin-left: 10px;
+    color : #1A76D2 !important;
 }

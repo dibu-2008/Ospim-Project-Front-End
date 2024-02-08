@@ -364,67 +364,102 @@
   ],
   "publicaciones": [
     {
-      "id": 4,
-      "titulo": "Nota FUTURA",
-      "cuerpo": "Nota FUTURA dice: kjlfdh fjkds fkljd hgfjkd ghfjdk gkjfd hgjkfd sghjkfd sghjkfds ghkjfds hgjkfd hhgjkfds kjhgfd gkfds FIN.-",
-      "vigenciaDesde": "2026-06-01T00:00:00.000Z",
-      "vigenciaHasta": "2028-07-20T00:00:00.000Z"
+      "titulo": "Publicacion 01",
+      "cuerpo": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit repellendus quibusdam doloremque, error quidem dignissimos nam dolorum vero exercitationem, blanditiis itaque omnis quisquam unde tempora officiis inventore, aspernatur explicabo aliquam.",
+      "vigenciaDesde": "2024-02-07T00:00:00.000Z",
+      "vigenciaHasta": "2025-02-07T00:00:00.000Z",
+      "id": 14
     },
     {
-      "titulo": "fsfsd",
-      "cuerpo": "sdfsd",
-      "vigenciaDesde": "2024-01-11T00:00:00.000Z",
-      "vigenciaHasta": "2024-01-26T00:00:00.000Z",
-      "id": 6
+      "titulo": "Publicacion 02",
+      "cuerpo": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius iure sit hic deserunt, repudiandae necessitatibus unde quam optio laborum illo magnam expedita ab voluptatem! Perspiciatis atque officiis nostrum temporibus repellendus.",
+      "vigenciaDesde": "2024-02-07T00:00:00.000Z",
+      "vigenciaHasta": "2025-02-07T00:00:00.000Z",
+      "id": 15
     },
     {
-      "titulo": "dfsdf",
-      "cuerpo": "sdfdsss",
-      "vigenciaDesde": "2024-01-04T00:00:00.000Z",
-      "vigenciaHasta": "2024-01-19T00:00:00.000Z",
-      "id": 7
+      "titulo": "Publicacion 03",
+      "cuerpo": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa voluptas distinctio recusandae? Dicta placeat atque ad ipsum iusto. Dolore, ullam nemo. Minima illum libero autem soluta obcaecati nesciunt deleniti! Ea!",
+      "vigenciaDesde": "2024-02-07T00:00:00.000Z",
+      "vigenciaHasta": "2025-02-07T00:00:00.000Z",
+      "id": 16
     },
     {
-      "titulo": "Nota 1",
-      "cuerpo": "Nota 1 dice: kjlfdh fjkds fkljd hgfjkd ghfjdk gkjfd hgjkfd sghjkfd sghjkfds ghkjfds hgjkfd hhgjkfds kjhgfd gkfds FIN.-",
-      "vigenciaDesde": "2023-12-01T00:00:00.000Z",
-      "vigenciaHasta": "2023-12-31T00:00:00.000Z",
-      "id": 8
+      "titulo": "Publicacion 04",
+      "cuerpo": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique magni, repellendus eveniet aliquid tempora consectetur ullam doloribus? Consectetur, eaque vero corporis quidem architecto quod quae. Sit eum maiores soluta iste!",
+      "vigenciaDesde": "2024-02-07T00:00:00.000Z",
+      "vigenciaHasta": "2025-02-07T00:00:00.000Z",
+      "id": 17
     },
     {
-      "titulo": "Nota 2",
-      "cuerpo": "Nota 2 dice: kjlfdh fjkds fkljd hgfjkd ghfjdk gkjfd hgjkfd sghjkfd sghjkfds ghkjfds hgjkfd hhgjkfds kjhgfd gkfds FIN.-",
-      "vigenciaDesde": "2023-12-01T00:00:00.000Z",
-      "vigenciaHasta": "2023-12-31T00:00:00.000Z",
-      "id": 9
+      "titulo": "Publicacion 05",
+      "cuerpo": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ex dolore consequatur ipsam deserunt adipisci recusandae nulla aliquid vero! Eveniet dolores excepturi repellat architecto laborum necessitatibus reiciendis, ad obcaecati. Asperiores, quam.",
+      "vigenciaDesde": "2024-02-07T00:00:00.000Z",
+      "vigenciaHasta": "2025-02-07T00:00:00.000Z",
+      "id": 18
     },
     {
-      "titulo": "Nota 3",
-      "cuerpo": "Nota 3 dice: kjlfdh fjkds fkljd hgfjkd ghfjdk gkjfd hgjkfd sghjkfd sghjkfds ghkjfds hgjkfd hhgjkfds kjhgfd gkfds FIN.-",
-      "vigenciaDesde": "2023-12-01T00:00:00.000Z",
-      "vigenciaHasta": "2023-12-31T00:00:00.000Z",
-      "id": 10
+      "titulo": "Publicacion 06",
+      "cuerpo": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus, atque molestiae laboriosam fugit nemo quas velit quos. Enim blanditiis temporibus dolore quo modi aperiam soluta officia esse ipsam non suscipit!",
+      "vigenciaDesde": "2024-02-07T00:00:00.000Z",
+      "vigenciaHasta": "2025-02-07T00:00:00.000Z",
+      "id": 19
     },
     {
-      "titulo": "Nota 4",
-      "cuerpo": "Nota 4 dice: kjlfdh fjkds fkljd hgfjkd ghfjdk gkjfd hgjkfd sghjkfd sghjkfds ghkjfds hgjkfd hhgjkfds kjhgfd gkfds FIN.-",
-      "vigenciaDesde": "2023-12-01T00:00:00.000Z",
-      "vigenciaHasta": "2023-12-31T00:00:00.000Z",
-      "id": 11
+      "titulo": "Publicacion 07",
+      "cuerpo": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto amet consequuntur eos. Blanditiis veniam ad reprehenderit distinctio ab, aliquam maxime, labore id error. Sequi provident expedita adipisci odio laudantium alias!",
+      "vigenciaDesde": "2024-02-07T00:00:00.000Z",
+      "vigenciaHasta": "2025-02-07T00:00:00.000Z",
+      "id": 20
     },
     {
-      "titulo": "Nota 5",
-      "cuerpo": "Nota 5 dice: kjlfdh fjkds fkljd hgfjkd ghfjdk gkjfd hgjkfd sghjkfd sghjkfds ghkjfds hgjkfd hhgjkfds kjhgfd gkfds FIN.-",
-      "vigenciaDesde": "2023-12-01T00:00:00.000Z",
-      "vigenciaHasta": "2023-12-31T00:00:00.000Z",
-      "id": 12
+      "titulo": "Publicacion 08",
+      "cuerpo": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis facilis itaque ratione quidem saepe. Quis repudiandae ullam minima, error aliquid dolor quos dignissimos, voluptatum voluptas eius neque modi veritatis autem.",
+      "vigenciaDesde": "2024-02-07T00:00:00.000Z",
+      "vigenciaHasta": "2025-02-07T00:00:00.000Z",
+      "id": 21
     },
     {
-      "titulo": "sss",
-      "cuerpo": "ssss",
-      "vigenciaDesde": "2024-01-10T00:00:00.000Z",
-      "vigenciaHasta": "2024-01-17T00:00:00.000Z",
-      "id": 13
+      "titulo": "Publicacion 09",
+      "cuerpo": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi quaerat unde tempore eveniet inventore recusandae nihil dolor error commodi ipsa? Voluptate similique voluptatum modi suscipit rerum ab dolore minus voluptas.",
+      "vigenciaDesde": "2024-02-07T00:00:00.000Z",
+      "vigenciaHasta": "2025-02-07T00:00:00.000Z",
+      "id": 22
+    },
+    {
+      "titulo": "Publicacion 10",
+      "cuerpo": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi quaerat unde tempore eveniet inventore recusandae nihil dolor error commodi ipsa? Voluptate similique voluptatum modi suscipit rerum ab dolore minus voluptas.",
+      "vigenciaDesde": "2024-02-07T00:00:00.000Z",
+      "vigenciaHasta": "2025-02-07T00:00:00.000Z",
+      "id": 23
+    },
+    {
+      "titulo": "Publicacion 11",
+      "cuerpo": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi quaerat unde tempore eveniet inventore recusandae nihil dolor error commodi ipsa? Voluptate similique voluptatum modi suscipit rerum ab dolore minus voluptas.",
+      "vigenciaDesde": "2024-02-07T00:00:00.000Z",
+      "vigenciaHasta": "2025-02-07T00:00:00.000Z",
+      "id": 24
+    },
+    {
+      "titulo": "Publicacion 12",
+      "cuerpo": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi quaerat unde tempore eveniet inventore recusandae nihil dolor error commodi ipsa? Voluptate similique voluptatum modi suscipit rerum ab dolore minus voluptas.",
+      "vigenciaDesde": "2024-02-07T00:00:00.000Z",
+      "vigenciaHasta": "2025-02-07T00:00:00.000Z",
+      "id": 25
+    },
+    {
+      "titulo": "Publicacion 13",
+      "cuerpo": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi quaerat unde tempore eveniet inventore recusandae nihil dolor error commodi ipsa? Voluptate similique voluptatum modi suscipit rerum ab dolore minus voluptas.",
+      "vigenciaDesde": "2024-02-07T00:00:00.000Z",
+      "vigenciaHasta": "2025-02-07T00:00:00.000Z",
+      "id": 26
+    },
+    {
+      "titulo": "Publicacion 14",
+      "cuerpo": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi quaerat unde tempore eveniet inventore recusandae nihil dolor error commodi ipsa? Voluptate similique voluptatum modi suscipit rerum ab dolore minus voluptas.",
+      "vigenciaDesde": "2024-02-07T00:00:00.000Z",
+      "vigenciaHasta": "2025-02-07T00:00:00.000Z",
+      "id": 27
     }
   ],
   "publicacionesVigentes": [
@@ -539,31 +574,43 @@
       "id": 2
     },
     {
-      "empresaId": 1,
       "tipo": "REAL",
       "provinciaId": 3,
-      "localidadId": 3,
+      "localidadId": 265,
       "calle": "San Luis de las camelias II",
-      "calleNro": "1077",
       "piso": "7",
       "depto": "B",
-      "oficina": null,
+      "oficina": "12",
       "cp": "1417",
       "planta": "Planta 5",
+      "empresaId": 1,
       "id": 3
     },
     {
       "tipo": "FISCAL",
       "provinciaId": 10,
+      "localidadId": 1893,
+      "calle": "Ancon",
+      "piso": "2",
+      "depto": "A",
+      "oficina": "3",
+      "cp": "1212",
+      "planta": "Planta 44",
+      "empresaId": 1,
+      "id": 4
+    },
+    {
+      "tipo": "REAL",
+      "provinciaId": 10,
       "localidadId": 308,
-      "calle": "Calle",
+      "calle": "Honduras",
       "piso": "Piso",
       "depto": "Depto",
       "oficina": "Ofi",
       "cp": "1212",
       "planta": "Planta 44",
       "empresaId": 1,
-      "id": 4
+      "id": 5
     },
     {
       "tipo": "REAL",
@@ -578,6 +625,97 @@
       "planta": "Planta 1",
       "empresaId": "2",
       "id": 6
+    },
+    {
+      "tipo": "FISCAL",
+      "provinciaId": 16,
+      "localidadId": 242,
+      "calle": "San Pedro",
+      "piso": "2",
+      "depto": "3",
+      "oficina": "23",
+      "cp": "1212",
+      "planta": "Planta 3",
+      "empresaId": "1",
+      "id": 7
+    },
+    {
+      "tipo": "REAL",
+      "provinciaId": 3,
+      "localidadId": 265,
+      "calle": "Villegas",
+      "piso": "4",
+      "depto": "9",
+      "oficina": "5",
+      "cp": "3432",
+      "planta": "Planta 23",
+      "empresaId": "1",
+      "id": 8
+    },
+    {
+      "tipo": "REAL",
+      "provinciaId": 10,
+      "localidadId": 308,
+      "calle": "Ravignani",
+      "piso": "2",
+      "depto": "4",
+      "oficina": "7",
+      "cp": "3434",
+      "planta": "Planta 21",
+      "empresaId": "1",
+      "id": 9
+    },
+    {
+      "tipo": "REAL",
+      "provinciaId": 10,
+      "localidadId": 477,
+      "calle": "San Luis",
+      "piso": "3",
+      "depto": "5",
+      "oficina": "9",
+      "cp": "8989",
+      "planta": "Planta 4",
+      "empresaId": "1",
+      "id": 10
+    },
+    {
+      "tipo": "FISCAL",
+      "provinciaId": 16,
+      "localidadId": 242,
+      "calle": "Samuel Spiro",
+      "piso": "4",
+      "depto": "7",
+      "oficina": "12",
+      "cp": "3466",
+      "planta": "Planta 6",
+      "empresaId": "1",
+      "id": 11
+    },
+    {
+      "tipo": "FISCAL",
+      "provinciaId": 16,
+      "localidadId": 83,
+      "calle": "San Juan",
+      "piso": "3",
+      "depto": "6",
+      "oficina": "2",
+      "cp": "7676",
+      "planta": "Planta 8",
+      "empresaId": "1",
+      "id": 12
+    },
+    {
+      "tipo": "REAL",
+      "provinciaId": 10,
+      "localidadId": 1893,
+      "calle": "Luis Maria Campos",
+      "piso": "12",
+      "depto": "2",
+      "oficina": "3",
+      "cp": "3232",
+      "planta": "Planta 23",
+      "empresaId": "1",
+      "id": 13
     }
   ],
   "empresaContacto": [
@@ -616,6 +754,36 @@
       "prefijo": "019",
       "valor": "3234-0404",
       "id": 12
+    },
+    {
+      "tipo": "TEL2",
+      "prefijo": "012",
+      "valor": "2233-5566",
+      "id": 13
+    },
+    {
+      "tipo": "MAIL",
+      "prefijo": "",
+      "valor": "system@fit.com.ar",
+      "id": 14
+    },
+    {
+      "tipo": "MAIL",
+      "prefijo": "",
+      "valor": "luis@systemscorp.com",
+      "id": 15
+    },
+    {
+      "tipo": "TEL2",
+      "prefijo": "011",
+      "valor": "1234-5678",
+      "id": 16
+    },
+    {
+      "tipo": "WHATSAP",
+      "prefijo": "014",
+      "valor": "3434-8080",
+      "id": 17
     }
   ],
   "empresaContactoTipo": [
@@ -794,6 +962,257 @@
         }
       ]
     },
+    {
+      "id": 122,
+      "estado": "PE",
+      "empresaId": 1,
+      "periodo": "2023-12-01T00:00:00.000Z",
+      "secuencia": 1,
+      "aportes": [
+        {
+          "codigo": "UOMACU",
+          "importe": 10725.75
+        },
+        {
+          "codigo": "UOMACS",
+          "importe": 130800.25
+        },
+        {
+          "codigo": "ART46",
+          "importe": 7200.52
+        },
+        {
+          "codigo": "UOMACU",
+          "importe": 5725.75
+        }
+      ]
+    },
+    {
+      "id": 123,
+      "estado": "PR",
+      "empresaId": 1,
+      "periodo": "2023-09-01T00:00:00.000Z",
+      "secuencia": 0,
+      "aportes": [
+        {
+          "codigo": "UOMACU",
+          "importe": 12350.75
+        },
+        {
+          "codigo": "UOMACS",
+          "importe": 145850.25
+        },
+        {
+          "codigo": "ART46",
+          "importe": 9250.60
+        },
+        {
+          "codigo": "UOMACU",
+          "importe": 8975.75
+        }
+      ]
+    },
+    {
+      "id": 124,
+      "estado": "PR",
+      "empresaId": 1,
+      "periodo": "2023-10-01T00:00:00.000Z",
+      "secuencia": 1,
+      "aportes": [
+        {
+          "codigo": "UOMACU",
+          "importe": 13500.50
+        },
+        {
+          "codigo": "UOMACS",
+          "importe": 150000.00
+        },
+        {
+          "codigo": "ART46",
+          "importe": 9500.75
+        },
+        {
+          "codigo": "UOMACU",
+          "importe": 9100.25
+        }
+      ]
+    },
+    {
+      "id": 125,
+      "estado": "PR",
+      "empresaId": 1,
+      "periodo": "2023-11-01T00:00:00.000Z",
+      "secuencia": 2,
+      "aportes": [
+        {
+          "codigo": "UOMACU",
+          "importe": 14000.00
+        },
+        {
+          "codigo": "UOMACS",
+          "importe": 155000.50
+        },
+        {
+          "codigo": "ART46",
+          "importe": 9750.25
+        },
+        {
+          "codigo": "UOMACU",
+          "importe": 9200.75
+        }
+      ]
+    },
+    {
+      "id": 126,
+      "estado": "PR",
+      "empresaId": 1,
+      "periodo": "2023-12-01T00:00:00.000Z",
+      "secuencia": 3,
+      "aportes": [
+        {
+          "codigo": "UOMACU",
+          "importe": 14250.75
+        },
+        {
+          "codigo": "UOMACS",
+          "importe": 160000.75
+        },
+        {
+          "codigo": "ART46",
+          "importe": 9900.50
+        },
+        {
+          "codigo": "UOMACU",
+          "importe": 9300.25
+        }
+      ]
+    }
+    ,
+    {
+      "id": 127,
+      "estado": "PR",
+      "empresaId": 2,
+      "periodo": "2023-09-01T00:00:00.000Z",
+      "secuencia": 2,
+      "aportes": [
+        {
+          "codigo": "UOMACU",
+          "importe": 13000.00
+        },
+        {
+          "codigo": "UOMACS",
+          "importe": 145000.50
+        },
+        {
+          "codigo": "ART46",
+          "importe": 9250.25
+        },
+        {
+          "codigo": "UOMACU",
+          "importe": 9100.75
+        }
+      ]
+    },
+    {
+      "id": 128,
+      "estado": "PR",
+      "empresaId": 2,
+      "periodo": "2023-10-01T00:00:00.000Z",
+      "secuencia": 2,
+      "aportes": [
+        {
+          "codigo": "UOMACU",
+          "importe": 13500.00
+        },
+        {
+          "codigo": "UOMACS",
+          "importe": 150000.50
+        },
+        {
+          "codigo": "ART46",
+          "importe": 9500.25
+        },
+        {
+          "codigo": "UOMACU",
+          "importe": 9200.75
+        }
+      ]
+    },
+    {
+      "id": 129,
+      "estado": "PR",
+      "empresaId": 1,
+      "periodo": "2024-01-01T00:00:00.000Z",
+      "secuencia": 4,
+      "aportes": [
+        {
+          "codigo": "UOMACU",
+          "importe": 14500.25
+        },
+        {
+          "codigo": "UOMACS",
+          "importe": 165000.25
+        },
+        {
+          "codigo": "ART46",
+          "importe": 10000.25
+        },
+        {
+          "codigo": "UOMACU",
+          "importe": 9500.75
+        }
+      ]
+    },
+    {
+      "id": 130,
+      "estado": "PR",
+      "empresaId": 1,
+      "periodo": "2024-02-01T00:00:00.000Z",
+      "secuencia": 5,
+      "aportes": [
+        {
+          "codigo": "UOMACU",
+          "importe": 14750.50
+        },
+        {
+          "codigo": "UOMACS",
+          "importe": 170000.50
+        },
+        {
+          "codigo": "ART46",
+          "importe": 10250.50
+        },
+        {
+          "codigo": "UOMACU",
+          "importe": 9700.00
+        }
+      ]
+    },
+    {
+      "id": 131,
+      "estado": "PR",
+      "empresaId": 1,
+      "periodo": "2024-03-01T00:00:00.000Z",
+      "secuencia": 6,
+      "aportes": [
+        {
+          "codigo": "UOMACU",
+          "importe": 15000.00
+        },
+        {
+          "codigo": "UOMACS",
+          "importe": 175000.75
+        },
+        {
+          "codigo": "ART46",
+          "importe": 10500.75
+        },
+        {
+          "codigo": "UOMACU",
+          "importe": 9900.25
+        }
+      ]
+    },    
     {
       "periodo": "2023-10-01T00:00:00.000Z",
       "id": 204,
@@ -1533,14 +1952,64 @@
     },
     {
       "cuit": "30789154023",
-      "observacion": "Observacion ",
+      "observacion": "Observacion por falta de pago de deudas previsionales",
       "id": 9
     },
     {
       "cuit": "30789154024",
-      "observacion": "Aaaaaaaa",
+      "observacion": "Cuit restrigdo por lavado de guita",
       "id": 10
-    }
+    },
+    {
+      "cuit": "30789154024",
+      "observacion": "Cuit restringido por lavado de dinero",
+      "id": 11
+    },
+    {
+      "cuit": "30789154024",
+      "observacion": "Cuit con actividad sospechosa",
+      "id": 12
+    },
+    {
+      "cuit": "30789154024",
+      "observacion": "Cuit bajo investigación",
+      "id": 13
+    },
+    {
+      "cuit": "30789154024",
+      "observacion": "Cuit vinculado a transacciones ilícitas",
+      "id": 14
+    },
+    {
+      "cuit": "30789154024",
+      "observacion": "Cuit asociado a evasión fiscal",
+      "id": 15
+    },
+    {
+      "cuit": "30789154024",
+      "observacion": "Cuit con irregularidades financieras",
+      "id": 16
+    },
+    {
+      "cuit": "30789154024",
+      "observacion": "Cuit relacionado con actividades fraudulentas",
+      "id": 17
+    },
+    {
+      "cuit": "30789154024",
+      "observacion": "Cuit en lista de vigilancia",
+      "id": 18
+    },
+    {
+      "cuit": "30789154024",
+      "observacion": "Cuit con historial de deudas impagas",
+      "id": 19
+    },
+    {
+      "cuit": "30789154024",
+      "observacion": "Cuit bajo sospecha de lavado de activos",
+      "id": 20
+    }    
   ],
   "aportes": [
     {

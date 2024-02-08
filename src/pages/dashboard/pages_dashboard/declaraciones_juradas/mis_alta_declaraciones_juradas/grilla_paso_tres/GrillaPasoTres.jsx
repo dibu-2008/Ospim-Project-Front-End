@@ -206,7 +206,7 @@ export const GrillaPasoTres = ({
             field: "cuil",
             type: "string",
             headerName: "CUIL",
-            width: 180,
+            flex: 1.6,
             editable: true,
             headerAlign: "center",
             align: "center",
@@ -252,7 +252,7 @@ export const GrillaPasoTres = ({
             field: "apellido",
             type: "string",
             headerName: "Apellido",
-            width: 150,
+            flex: 1,
             editable: true,
             headerAlign: "center",
             align: "center",
@@ -320,7 +320,7 @@ export const GrillaPasoTres = ({
             field: "nombre",
             type: "string",
             headerName: "Nombre",
-            width: 150,
+            flex: 1,
             editable: true,
             headerAlign: "center",
             align: "center",
@@ -382,7 +382,7 @@ export const GrillaPasoTres = ({
         {
             field: "camara",
             headerName: "Camara",
-            width: 150,
+            flex: 1,
             editable: true,
             headerAlign: "center",
             align: "center",
@@ -430,7 +430,7 @@ export const GrillaPasoTres = ({
             field: "categoria",
             type: "singleSelect",
             headerName: "Categoria",
-            width: 150,
+            flex: 1,
             editable: true,
             headerAlign: "center",
             align: "center",
@@ -441,7 +441,7 @@ export const GrillaPasoTres = ({
             field: "fechaIngreso",
             type: "date",
             headerName: "Fecha Ingreso",
-            width: 150,
+            flex: 1,
             editable: true,
             headerAlign: "center",
             align: "center",
@@ -461,7 +461,7 @@ export const GrillaPasoTres = ({
             field: "empresaDomicilioId",
             type: "singleSelect",
             headerName: "Planta",
-            width: 150,
+            flex: 1,
             editable: true,
             headerAlign: "center",
             align: "center",
@@ -473,7 +473,7 @@ export const GrillaPasoTres = ({
         {
             field: "remunerativo",
             headerName: "Remunerativo",
-            width: 150,
+            flex: 1,
             editable: true,
             headerAlign: "center",
             align: "center",
@@ -492,7 +492,7 @@ export const GrillaPasoTres = ({
                     </span>
                 </div>
             ),
-            width: 150,
+            flex: 1,
             editable: true,
             headerAlign: "center",
             align: "center",
@@ -510,7 +510,7 @@ export const GrillaPasoTres = ({
                     </span>
                 </div>
             ),
-            width: 150,
+            flex: 1,
             editable: true,
             headerAlign: "center",
             align: "center",
@@ -547,7 +547,7 @@ export const GrillaPasoTres = ({
                     </span>
                 </div>
             ),
-            width: 150,
+            flex: 1,
             editable: true,
             headerAlign: "center",
             align: "center",
@@ -583,7 +583,7 @@ export const GrillaPasoTres = ({
                     </span>
                 </div>
             ),
-            width: 150,
+            flex: 1,
             editable: true,
             headerAlign: "center",
             align: "center",
@@ -623,7 +623,7 @@ export const GrillaPasoTres = ({
                     </span>
                 </div>
             ),
-            width: 150,
+            flex: 1,
             editable: false,
             headerAlign: "center",
             align: "center",
@@ -649,7 +649,7 @@ export const GrillaPasoTres = ({
         {
             field: "aporteAntimaCs",
             headerName: "AMTIMA",
-            width: 130,
+            flex: 1,
             editable: true,
             headerAlign: "center",
             align: "center",
@@ -678,7 +678,7 @@ export const GrillaPasoTres = ({
             field: "actions",
             type: "actions",
             headerName: "Acciones",
-            width: 130,
+            flex: 1,
             headerAlign: "center",
             align: "center",
             headerClassName: 'header--cell',
@@ -725,13 +725,10 @@ export const GrillaPasoTres = ({
     ];
 
     return (
-        <div
-
-        >
-
+        <div>
             <Box
                 sx={{
-                    height: "400px",
+                    height: "auto",
                     width: "100%",
                     "& .actions": {
                         color: "text.secondary",

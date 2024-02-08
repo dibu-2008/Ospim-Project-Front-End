@@ -17,14 +17,17 @@ import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import { actualizarCuitRestringido, crearCuitRestringido, eliminarCuitRestringido, obtenerCuitsRestringidos } from './CuitsRestringidosApi';
 import Swal from 'sweetalert2';
+import './CuitsRestringidos.css';
 
 function EditToolbar(props) {
-  const { setRows, rows, setRowModesModel } = props;
+  const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
 
   const handleClick = () => {
     const maxId = Math.max(...rows.map((row) => row.id), 0);
     const newId = maxId + 1;
     const id = newId;
+;
+    volverPrimerPagina()
 
     setRows((oldRows) => [
       { id, cuit: "", observacion: "", isNew: true },
@@ -50,6 +53,17 @@ export const CuitsRestringidos = () => {
   const [locale, setLocale] = useState('esES');
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
+  const [paginationModel, setPaginationModel] = useState({
+    pageSize: 10,
+    page: 0,
+  });
+
+  const volverPrimerPagina = () => {
+    setPaginationModel((prevPaginationModel) => ({
+      ...prevPaginationModel,
+      page: 0,
+    }));
+  };
 
   const TOKEN = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.usuario.token;
 
@@ -164,7 +178,7 @@ export const CuitsRestringidos = () => {
     {
       field: "cuit",
       headerName: "CUIT",
-      flex:1,
+      flex: 1,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -173,7 +187,7 @@ export const CuitsRestringidos = () => {
     {
       field: "observacion",
       headerName: "Observacion",
-      flex:1,
+      flex: 1,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -186,7 +200,7 @@ export const CuitsRestringidos = () => {
       headerAlign: "center",
       align: "center",
       headerClassName: 'header--cell',
-      flex:1,
+      flex: 1,
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
@@ -230,16 +244,11 @@ export const CuitsRestringidos = () => {
   ];
 
   return (
-    <div
-      style={{
-        margin: '50px auto',
-        height: 400,
-        width: "70%",
-      }}>
+    <div className='cuits_restringidos_container'>
       <h1>Administracion de Cuits restringidos</h1>
       <Box
         sx={{
-          height: "400px",
+          height: "600px",
           width: "100%",
         }}
       >
@@ -256,7 +265,7 @@ export const CuitsRestringidos = () => {
               toolbar: EditToolbar,
             }}
             slotProps={{
-              toolbar: { setRows, rows, setRowModesModel },
+              toolbar: { setRows, rows, setRowModesModel, volverPrimerPagina },
             }}
             sx={{
               '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
@@ -270,13 +279,9 @@ export const CuitsRestringidos = () => {
                 backgroundColor: '#1A76D2 !important',
               },
             }}
-            initialState={{
-              ...rows.initialState,
-              pagination: {
-                paginationModel: { pageSize: 5 },
-              },
-            }}
-            pageSizeOptions={[5, 10, 25]}
+            paginationModel={paginationModel}
+            onPaginationModelChange={setPaginationModel}
+            pageSizeOptions={[10, 15, 25]}
           />
         </ThemeProvider>
       </Box>

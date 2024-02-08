@@ -13,6 +13,7 @@ import { showSwalSuccess } from "./LoginShowAlert.js";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
 import "./LoginPage.css";
+import { Button, TextField } from "@mui/material";
 
 const VITE_WELCOME_PORTAL = import.meta.env.VITE_WELCOME_PORTAL;
 
@@ -132,8 +133,8 @@ export const LoginPage = () => {
           <div className="contenedor_form">
             <form onSubmit={onLoginInternalUser}>
               <h1>Iniciar Sesión</h1>
-              <div className="input-group">
-                <InputComponent
+              <div className="input-group contenedor_usuario">
+                <TextField
                   type="text"
                   name="user"
                   id="user"
@@ -141,6 +142,7 @@ export const LoginPage = () => {
                   onChange={onInputChangeUser}
                   autoComplete="off"
                   label="Usuario"
+                  className="input_data"
                 />
                 {showAlertUser && (
                   <Stack sx={{ width: "100%" }} spacing={2}>
@@ -149,7 +151,7 @@ export const LoginPage = () => {
                 )}
               </div>
               <div className="input-group">
-                <InputComponent
+                <TextField
                   type="password"
                   name="passwordLoginInternalUser"
                   id="passwordLoginInternalUser"
@@ -157,6 +159,7 @@ export const LoginPage = () => {
                   onChange={onInputChangePassword}
                   autoComplete="off"
                   label="Contraseña"
+                  className="input_data"
                 />
                 {showAlertPassword && (
                   <Stack sx={{ width: "100%" }} spacing={2}>
@@ -164,12 +167,16 @@ export const LoginPage = () => {
                   </Stack>
                 )}
               </div>
-              <ButtonComponent
-                styles={{
+              <Button
+                variant="contained"
+                sx={{
                   marginTop: showAlertUser && showAlertPassword ? "50px" : "120px",
                 }}
-                name={"SIGUIENTE"}
-              />
+                type="submit"
+                className="siguiente"
+              >
+                SIGUIENTE
+              </Button>
               <div className="container_btn_pass_firts">
                 <a>Recupero de Contraseña</a>
                 <a onClick={redirectToRegister}>Ingreso por primera vez</a>

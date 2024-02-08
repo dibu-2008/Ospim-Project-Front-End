@@ -1,5 +1,5 @@
-import React from 'react';
 import { useState } from 'react';
+import logo from '../../assets/logo.svg';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import HomeIcon from '@mui/icons-material/Home';
@@ -11,6 +11,10 @@ import CategoryIcon from '@mui/icons-material/Category';
 import CloseIcon from '@mui/icons-material/Close';
 import CoPresentIcon from '@mui/icons-material/CoPresent';
 import NetworkLockedIcon from '@mui/icons-material/NetworkLocked';
+import DateRangeIcon from '@mui/icons-material/DateRange';
+import PreviewIcon from '@mui/icons-material/Preview';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 import { Link, useNavigate, useLocation, Outlet, NavLink } from 'react-router-dom';
 import './DashboardPage.css';
 
@@ -36,7 +40,7 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 
 
-const drawerWidth = 240;
+const drawerWidth = 270;
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -116,16 +120,7 @@ const DashboardPage = () => {
   }
 
   // Drawer inicio 
-  const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
-
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
+  const [open, setOpen] = useState(false);
 
   const handleDrawerToggle = () => {
     setOpen(!open);
@@ -137,14 +132,20 @@ const DashboardPage = () => {
     <>
       <Box sx={{ display: 'flex' }}>
         <Drawer variant="permanent" open={open}>
-          <DrawerHeader>
-          <IconButton 
+          <DrawerHeader sx={{ marginTop:2 , marginBottom: 2}}>
+            <img 
+              src={logo} 
+              alt="imagen del logo" 
+              style={{ marginRight: 140 }}
+            />
+            <IconButton
               color="inherit"
               aria-label="toggle drawer"
               onClick={handleDrawerToggle}
               edge="start"
             >
-              {open ? <ChevronLeftIcon className='icon-toggle'/> : <ChevronRightIcon className='icon-toggle' />}
+              
+              {open ? <ChevronLeftIcon className='icon-toggle' /> : <ChevronRightIcon className='icon-toggle' />}
             </IconButton>
           </DrawerHeader>
           <Divider />
@@ -171,38 +172,73 @@ const DashboardPage = () => {
                   }}
                 >
                   <NavLink to="./inicio" className="icon-container">
-                    <HomeIcon className='icon-link' /> { open && <span className='icon-link'>Inicio</span> }
+                    <HomeIcon className='icon-link' /> {open && <span className='icon-link'>Inicio</span>}
                   </NavLink>
                   <NavLink to="./publicaciones" className="icon-container">
-                    <LibraryBooksIcon className='icon-link' /> {open && <span className='icon-link'>Publicaciones</span> }
+                    <PreviewIcon className='icon-link' /> {open && <span className='icon-link'>Publicaciones</span>}
                   </NavLink>
                   <NavLink to="./feriados" className="icon-container">
-                    <LibraryBooksIcon className='icon-link' /> {open && <span className='icon-link'>Feridos</span> }
+                    <DateRangeIcon className='icon-link' /> {open && <span className='icon-link'>Feriados</span>}
                   </NavLink>
                   <NavLink to="./ddjj" className="icon-container">
-                    <LibraryBooksIcon className='icon-link' /> { open && <span className='icon-link'>Declaraciones Juaradas</span> }
+                    <LibraryBooksIcon className='icon-link' /> {open && <span className='icon-link'>Declaraciones Juaradas</span>}
                   </NavLink>
                   <NavLink to="./boletas" className="icon-container">
-                    <StyleIcon className='icon-link' /> { open && <span className='icon-link'>Boletas</span> }
+                    <StyleIcon className='icon-link' /> {open && <span className='icon-link'>Boletas</span>}
                   </NavLink>
                   <NavLink to="./pagos" className="icon-container">
-                    <AccountBalanceWalletIcon className='icon-link' /> { open && <span className='icon-link'>Pagos</span> }
+                    <AccountBalanceWalletIcon className='icon-link' /> {open && <span className='icon-link'>Pagos</span>}
                   </NavLink>
                   <NavLink to="./misdatos" className="icon-container">
-                    <PersonIcon className='icon-link' /> { open && <span className='icon-link'>Mis Datos</span> }
+                    <PersonIcon className='icon-link' /> {open && <span className='icon-link'>Datos Empresa</span>}
                   </NavLink>
                   <NavLink to="./cuitsrestringidos" className="icon-container">
-                    <NetworkLockedIcon className='icon-link' /> { open && <span className='icon-link'>Cuits Restringidos</span> }
+                    <NetworkLockedIcon className='icon-link' /> {open && <span className='icon-link'>Cuits Restringidos</span>}
                   </NavLink>
                   <NavLink to="./roles" className="icon-container">
-                    <CoPresentIcon className='icon-link' /> { open && <span className='icon-link'>Roles</span> }
+                    <CoPresentIcon className='icon-link' /> {open && <span className='icon-link'>Roles</span>}
                   </NavLink>
+                  <NavLink to="./altausuariointerno" className="icon-container">
+                    <PersonAddIcon className='icon-link' /> {open && <span className='icon-link'>Alta Usuario Interno</span>}
+                  </NavLink>
+
                 </ListItemIcon>
 
               </ListItemButton>
             </ListItem>
           </List>
           <Divider />
+          <List
+            style={{
+              marginTop: 40,
+              marginLeft: 5
+            }}
+          >
+            <ListItem disablePadding sx={{ display: 'block' }}>
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? 'initial' : 'center',
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : 'auto',
+                    justifyContent: 'center',
+                    display: 'flex',
+                    flexDirection: 'column',
+                  }}
+                >
+
+                  <NavLink className="icon-container" onClick={onLogout} >
+                    <DisabledByDefaultIcon className='icon-link' /> {open && <span className='icon-link'>Salir</span>}
+                  </NavLink>
+                </ListItemIcon>
+              </ListItemButton>
+            </ListItem>
+          </List>
         </Drawer>
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
           <Outlet />

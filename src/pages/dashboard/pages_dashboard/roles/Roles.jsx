@@ -1,3 +1,4 @@
+import { MisDeclaracionesJuradas } from '../declaraciones_juradas/mis_declaraciones_juradas/MisDeclaracionesJuradas';
 import './Roles.css';
 
 export const Roles = () => {
