@@ -15,6 +15,7 @@ import Tab from "@mui/material/Tab";
 import { getEmpresa, getRamo, modificarEmpresa } from "./DatosEmpresaApi";
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import * as locales from '@mui/material/locale';
+import './DatosEmpresa.css';
 
 // Logica de los tabs inicio
 function CustomTabPanel(props) {
@@ -127,12 +128,7 @@ export const DatosEmpresa = () => {
   }
 
   return (
-    <div
-      style={{
-        margin: "50px auto",
-        width: "70%",
-      }}
-    >
+    <div className="datos_empresa_container">
       <h1>Mis datos empresas</h1>
 
       <form
@@ -150,7 +146,7 @@ export const DatosEmpresa = () => {
           type="text"
           name="cuit"
           value={cuit}
-          /* onChange={OnChangeCuit} */
+          /// onChange={OnChangeCuit} 
           autoComplete="off"
           label="CUIT"
         />

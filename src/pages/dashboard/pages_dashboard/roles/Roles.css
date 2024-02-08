@@ -1,5 +1,10 @@
 .roles_container {
     margin: 50px auto;
-    height: 400px;
-    width: 80%;
+    width: 90%;
+}
+
+.roles_container h1 {
+    color: #1A76D2;
+    margin-bottom: 65px;
+    text-align: left !important;
 }

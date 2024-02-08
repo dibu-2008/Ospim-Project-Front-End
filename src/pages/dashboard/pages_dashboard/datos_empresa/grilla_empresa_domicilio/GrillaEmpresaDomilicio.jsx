@@ -27,14 +27,14 @@ import {
 import Swal from "sweetalert2";
 
 function EditToolbar(props) {
-  const { setRowsDomicilio, rows_domicilio, setRowModesModel } = props;
+  const { setRowsDomicilio, rows_domicilio, setRowModesModel, volverPrimerPagina } = props;
 
   const handleClick = () => {
     const maxId = Math.max(...rows_domicilio.map((row) => row.id), 0);
-
     const newId = maxId + 1;
-
     const id = newId;
+
+    volverPrimerPagina();
 
     setRowsDomicilio((oldRows) => [
       {
@@ -74,6 +74,17 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token,
   const [tipoDomicilio, setTipoDomicilio] = useState([]);
   const [provincias, setProvincias] = useState([]);
   const [localidades, setLocalidades] = useState([]);
+  const [paginationModel, setPaginationModel] = useState({
+    pageSize: 10,
+    page: 0,
+  });
+
+  const volverPrimerPagina = () => {
+    setPaginationModel((prevPaginationModel) => ({
+      ...prevPaginationModel,
+      page: 0,
+    }));
+  };
 
   const getTipoDomicilio = async () => {
     const tiposResponse = await obtenerTipoDomicilio(token);
@@ -265,7 +276,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token,
     {
       field: "tipo",
       headerName: "Tipo",
-      width: 100,
+      flex: 1,
       editable: true,
       type: "singleSelect",
       headerAlign: "center",
@@ -278,7 +289,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token,
     {
       field: "provinciaId",
       headerName: "Provincia",
-      width: 150,
+      flex: 2,
       editable: true,
       type: "singleSelect",
       headerAlign: "center",
@@ -331,7 +342,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token,
     {
       field: "localidadId",
       headerName: "Localidad",
-      width: 150,
+      flex: 2,
       editable: true,
       type: "singleSelect",
       headerAlign: "center",
@@ -380,7 +391,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token,
     {
       field: "calle",
       headerName: "Calle",
-      width: 100,
+      flex: 2,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -389,7 +400,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token,
     {
       field: "piso",
       headerName: "Piso",
-      width: 100,
+      flex: 1,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -398,7 +409,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token,
     {
       field: "depto",
       headerName: "Depto",
-      width: 100,
+      flex: 1,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -407,7 +418,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token,
     {
       field: "oficina",
       headerName: "Oficina",
-      width: 100,
+      flex: 1,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -416,7 +427,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token,
     {
       field: "cp",
       headerName: "CP",
-      width: 100,
+      flex: 1,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -425,7 +436,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token,
     {
       field: "planta",
       headerName: "Planta",
-      width: 100,
+      flex: 1,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -435,7 +446,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token,
       field: "actions",
       type: "actions",
       headerName: "Acciones",
-      width: 100,
+      flex: 2,
       headerAlign: "center",
       align: "center",
       headerClassName: 'header--cell',
@@ -484,7 +495,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token,
   return (
     <Box
       sx={{
-        height: "400px",
+        height: "600px",
         width: "100%",
         overflowX: "scroll",
         "& .actions": {
@@ -512,6 +523,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token,
             setRowsDomicilio,
             rows_domicilio: rowsDomicilio,
             setRowModesModel,
+            volverPrimerPagina,
           },
         }}
         sx={{
@@ -527,13 +539,9 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token,
         localeText={{
           noRowsLabel: "",
         }}
-        initialState={{
-          ...rowsDomicilio.initialState,
-          pagination: {
-            paginationModel: { pageSize: 5 },
-          },
-        }}
-        pageSizeOptions={[5, 10, 25]}
+        paginationModel={paginationModel}
+        onPaginationModelChange={setPaginationModel}
+        pageSizeOptions={[10, 15, 25]}
       />
     </Box>
   );

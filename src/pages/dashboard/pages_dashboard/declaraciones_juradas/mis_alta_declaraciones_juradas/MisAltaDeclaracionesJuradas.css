@@ -150,6 +150,7 @@ h5 {
     border-radius: 10px;
     box-shadow: 0px 0px 10px 0px #1A76D2;
     height: 133px;
+    width: 100%;
 }
 
 .formulario_container .paso {
