@@ -169,7 +169,7 @@ export const crearAltaDeclaracionJurada = async (token, empresaId, ddjj) => {
 
         return altaDeclaracionJuradaResponse.data;
 
-    }catch (error) {
+    } catch (error) {
 
         errorBackendResponse(error, showSwalError);
 
@@ -189,7 +189,7 @@ export const actualizarDeclaracionJurada = async (token, empresaId, ddjj, idDDJJ
             showConfirmButton: false,
             timer: 2000,
         })
-    } 
+    }
 
     const showSwallSuccess = () => {
         Swal.fire({
@@ -210,7 +210,7 @@ export const actualizarDeclaracionJurada = async (token, empresaId, ddjj, idDDJJ
 
         showSwallSuccess();
 
-        if(actualizarDeclaracionJuradaResponse.status === 200) {
+        if (actualizarDeclaracionJuradaResponse.status === 200) {
             showSwallSuccess();
         }
 
@@ -222,9 +222,78 @@ export const actualizarDeclaracionJurada = async (token, empresaId, ddjj, idDDJJ
 }
 
 
+export const validarAltaDeclaracionJurada = async (token, empresaId, ddjj) => {
+    const URL = `${BACKEND_URL}/empresa/${empresaId}/ddjj/validar`;
 
+    const showSwalError = (descripcion) => {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: descripcion,
+            showConfirmButton: true,
+        });
+    };
 
+    try {
+        const validarDDJJResponse = await axios.post(URL, ddjj, {
+            headers: {
+                'Authorization': token
+            }
+        });
 
+        return validarDDJJResponse.data || [];
 
+    } catch (error) {
 
+        if (error.response && error.response.data) {
 
+            const { errores, codigo, descripcion, ticket, tipo } = error.response.data;
+
+            /* const mensajesUnicos = new Set(); 
+
+            errores.errores.forEach(error => {
+                if (!mensajesUnicos.has(error.descripcion)) {
+                    mensajesUnicos.add(error.descripcion);
+                }
+            });
+
+            const mensajesFormateados = Array.from(mensajesUnicos).map((mensaje, index) => {
+                return `<p>${index + 1} - ${mensaje}</p>`;
+            }).join('');
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                html: `${mensajesFormateados}<br><br><input type="checkbox" id="guardarErrores" name="guardarErrores" value="true">
+                      <label for="guardarErrores">¿Deseas guardar la declaración jurada con errores?</label>`,
+                showConfirmButton: true,
+                confirmButtonText: 'Aceptar',
+                showCancelButton: true,
+                cancelButtonText: 'Cancelar',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    if (result.isConfirmed) {
+                        
+                        const guardarErrores = document.getElementById('guardarErrores').checked;
+
+                        if (guardarErrores) {
+                            Swal.fire({
+                                icon: 'info',
+                                title: 'Declaración jurada guardada con errores',
+                                showConfirmButton: false,
+                                timer: 2000,
+                            });
+                        }
+
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        
+                        // Reiniciar la pagina web
+                        window.location.reload();
+                    }
+                }
+            }); */
+
+            return errores || [];
+        }
+    }
+};

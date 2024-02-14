@@ -53,6 +53,7 @@ export const DeclaracionesJuradas = () => {
   const [tabState, setTabState] = useState(0);
   const [peticion, setPeticion] = useState("");
   const [idDDJJ, setIdDDJJ] = useState(null);
+  
 
   const theme = useTheme();
 

@@ -11,16 +11,17 @@ import dayjs from 'dayjs';
 import esLocale from 'dayjs/locale/es';
 import './MisAltaDeclaracionesJuradas.css';
 import { GrillaPasoTres } from './grilla_paso_tres/GrillaPasoTres';
-import { actualizarDeclaracionJurada, crearAltaDeclaracionJurada, obtenerCamaras, obtenerCategorias, obtenerPlantaEmpresas } from './MisAltaDeclaracionesJuradasApi';
+import { actualizarDeclaracionJurada, crearAltaDeclaracionJurada, obtenerCamaras, obtenerCategorias, obtenerPlantaEmpresas, validarAltaDeclaracionJurada } from './MisAltaDeclaracionesJuradasApi';
+import Swal from 'sweetalert2'
 
-export const MisAltaDeclaracionesJuradas = ({ 
-    periodo, 
-    periodoIso, 
-    handleChangePeriodo, 
-    handleAcceptPeriodoDDJJ, 
-    rowsAltaDDJJ, 
-    setRowsAltaDDJJ, 
-    peticion, 
+export const MisAltaDeclaracionesJuradas = ({
+    periodo,
+    periodoIso,
+    handleChangePeriodo,
+    handleAcceptPeriodoDDJJ,
+    rowsAltaDDJJ,
+    setRowsAltaDDJJ,
+    peticion,
     idDDJJ,
 }) => {
 
@@ -36,10 +37,11 @@ export const MisAltaDeclaracionesJuradas = ({
     const [plantas, setPlantas] = useState([]);
     const [selectedFileName, setSelectedFileName] = useState('');
     const [mostrarPeriodos, setMostrarPeriodos] = useState(false);
+    const [validacionResponse, setValidacionResponse] = useState([]);
     const TOKEN = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.usuario.token;
     const ID_EMPRESA = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.empresa.id;
 
-    
+
     const handleChangeOtroPeriodo = (date) => setOtroPeriodo(date);
 
     const handleAcceptOtroPeriodo = () => {
@@ -109,35 +111,72 @@ export const MisAltaDeclaracionesJuradas = ({
         const altaDDJJFinal = {
             periodo: periodoIso,
             afiliados: rowsAltaDDJJ.map((item) => ({
-                cuil: item.cuil,
-                inte: afiliado.inter,
-                apellido: item.apellido,
-                nombre: item.nombre,
-                fechaIngreso: item.fechaIngreso,
-                empresaDomicilioId: item.planta,
-                camara: item.camara,
-                categoria: item.categoria,
-                remunerativo: item.remunerativo,
-                noRemunerativo: item.noRemunerativo,
-                /* aporteUomaCs: item.cuotaSocUoma,
-                aporteUomaAs: item.aporteSolUoma,
-                aporteCuotaUsu: item.cuotaUsuf,
-                aporteArt46: item.art46,
-                aporteAntimaCs: item.amtima, */
-                UOMASocio: peticion === "PUT" ? item.UOMASocio : false,
-                ANTIMASocio: true
+                cuil: !item.cuil ? null : item.cuil,
+                inte: null,
+                apellido: !item.apellido ? null : item.apellido,
+                nombre: !item.nombre ? null : item.nombre,
+                fechaIngreso: !item.fechaIngreso ? null : item.fechaIngreso,
+                empresaDomicilioId: !item.empresaDomicilioId ? null : item.empresaDomicilioId,
+                camara: !item.camara ? null : item.camara,
+                categoria: !item.categoria ? null : item.categoria,
+                remunerativo: !item.remunerativo ? null : item.remunerativo,
+                noRemunerativo: !item.noRemunerativo ? null : item.noRemunerativo,
+                UOMASocio: item.aporteUomaCs && item.aporteUomaAs && item.aporteArt46 ? true : false,
+                ANTIMASocio: item.aporteUomaCs && item.aporteUomaAs && item.aporteArt46 && item.aporteAntimaCs ? true : false,
             }))
         }
 
-        if(peticion === "PUT"){
+        const erroresResponse = await validarAltaDeclaracionJurada(TOKEN, ID_EMPRESA, altaDDJJFinal);
+        setValidacionResponse(erroresResponse);
 
-            await actualizarDeclaracionJurada(TOKEN, ID_EMPRESA, altaDDJJFinal, idDDJJ);
+        // Validar si validacionResponse es igual a {errores: Array(6)}
+        if (erroresResponse.errores) {
 
-        }else {
+            const mensajesUnicos = new Set();
 
-            await crearAltaDeclaracionJurada(TOKEN, ID_EMPRESA, altaDDJJFinal);
+            erroresResponse.errores.forEach(error => {
+                if (!mensajesUnicos.has(error.descripcion)) {
+                    mensajesUnicos.add(error.descripcion);
+                }
+            });
+
+
+            const mensajesFormateados = Array.from(mensajesUnicos).map((mensaje, index) => {
+                return `<p>${index + 1} - ${mensaje}</p>`;
+            }).join('');
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                html: `${mensajesFormateados}<br>
+                      <label for="guardarErrores">¿Deseas guardar la declaración jurada con errores?</label>`,
+                showConfirmButton: true,
+                confirmButtonText: 'Aceptar',
+                showCancelButton: true,
+                cancelButtonText: 'Cancelar',
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+
+                    console.log("Aceptar...")
+
+                    /* if (peticion === "PUT") {
+
+                        await actualizarDeclaracionJurada(TOKEN, ID_EMPRESA, altaDDJJFinal, idDDJJ);
+
+                    } else {
+
+                        await crearAltaDeclaracionJurada(TOKEN, ID_EMPRESA, altaDDJJFinal);
+                    } */
+
+                } else {
+
+                    console.log("Cancelar...")
+
+                    // limpiar la grilla
+                    setRowsAltaDDJJ([]);
+                }
+            });
         }
-        
     }
 
     return (
@@ -281,6 +320,7 @@ export const MisAltaDeclaracionesJuradas = ({
                     setAfiliado={setAfiliado}
                     todasLasCategorias={todasLasCategorias}
                     plantas={plantas}
+                    validacionResponse={validacionResponse}
                 />
                 <div
                     className='botones_container'
