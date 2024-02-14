@@ -104,10 +104,6 @@ export const MisAltaDeclaracionesJuradas = ({
 
     const guardarDeclaracionJurada = async () => {
 
-        console.log('rowsAltaDDJJ', rowsAltaDDJJ);
-
-        console.log('id de ddjj: ', idDDJJ);
-
         const altaDDJJFinal = {
             periodo: periodoIso,
             afiliados: rowsAltaDDJJ.map((item) => ({

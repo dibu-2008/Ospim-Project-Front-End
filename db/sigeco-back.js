@@ -4,12 +4,12 @@ module.exports = (req, res, next) => {
   console.log("Middleware - SIGECO - req.url: " + req.method + "->" + req.url);
   //console.log("Middleware - SIGECO - req.body:" + req.body);
 
-  function getAPI() {
+  function getAPI(req, res) {
     if (req.method === "GET" && req.url.startsWith("/DDJJ/imprimir/")) {
       return "DDJJ-IMPRIMIR";
     }
 
-    if (req.method === "GET" && req.url.startsWith("/DDJJ/validar")) {
+    if (req.method === "POST" && req.url.startsWith("/DDJJ/validar")) {
       return "DDJJ-VALIDAR-NIVEL2";
     }
 
