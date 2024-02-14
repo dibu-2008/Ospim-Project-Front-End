@@ -5,6 +5,10 @@ module.exports = (req, res, next) => {
   //console.log("Middleware - SIGECO - req.body:" + req.body);
 
   function getAPI() {
+    if (req.method === "GET" && req.url.startsWith("/DDJJ/imprimir/")) {
+      return "DDJJ-IMPRIMIR";
+    }
+
     if (req.method === "GET" && req.url.startsWith("/DDJJ/validar")) {
       return "DDJJ-VALIDAR-NIVEL2";
     }
@@ -142,6 +146,9 @@ module.exports = (req, res, next) => {
     case "DDJJ-ALTA-V2":
       DDJJSetParamsV2();
       break;
+    case "DDJJ-IMPRIMIR":
+      DDJJImprimir();
+      break;
     case "DDJJ-MODI":
       DDJJSetParams();
       break;
@@ -172,6 +179,11 @@ module.exports = (req, res, next) => {
       break;
     default:
     // code block
+  }
+
+  function DDJJImprimir() {
+    const file = `${__dirname}/ddjj_2.pdf`;
+    res.download(file); // Set disposition and send it.
   }
 
   function ddjjValidarN2() {
