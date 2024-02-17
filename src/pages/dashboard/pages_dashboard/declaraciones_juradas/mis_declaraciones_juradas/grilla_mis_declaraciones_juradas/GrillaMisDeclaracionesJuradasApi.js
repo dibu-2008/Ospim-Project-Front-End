@@ -177,3 +177,36 @@ export const obtenerAportes = async (idEmpresa, token) => {
     errorBackendResponse(error, showSwalError);
   }
 };
+
+
+export const imprimirDeclaracionJurada = async (idEmpresa, idDeclaracionJurada, token) => {
+  const URL = `${BACKEND_URL}/empresa/${idEmpresa}/ddjj/${idDeclaracionJurada}/imprimir`;
+
+  const showSwalError = (descripcion) => {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: descripcion,
+      showConfirmButton: false,
+      timer: 3000,
+    });
+  };
+
+  try {
+    const imprimirDeclaracionJuradaResponse = await axios.get(URL, {
+      headers: {
+        Authorization: token,
+      },
+      responseType: "blob",
+    });
+
+    const url = window.URL.createObjectURL(new Blob([imprimirDeclaracionJuradaResponse.data]));
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", `DeclaracionJurada${idDeclaracionJurada}.pdf`);
+    document.body.appendChild(link);
+    link.click();
+  } catch (error) {
+    errorBackendResponse(error, showSwalError);
+  }
+}

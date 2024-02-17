@@ -17,6 +17,7 @@ import CancelIcon from "@mui/icons-material/Close";
 import LocalPrintshopIcon from "@mui/icons-material/LocalPrintshop";
 import {
   eliminarDeclaracionJurada,
+  imprimirDeclaracionJurada,
   obtenerMiDeclaracionJurada,
   obtenerMisDeclaracionesJuradas,
   presentarDeclaracionJurada,
@@ -164,6 +165,10 @@ export const GrillaMisDeclaracionesJuradas = ({
   const handleSaveClick = (id) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
+
+  const declaracionJuradasImpresion = async (idDDJJ) => {
+    await imprimirDeclaracionJurada(idEmpresa, idDDJJ, token);
+  }
 
   const handleDeleteClick = (id) => async () => {
     const showSwalConfirm = async () => {
@@ -342,7 +347,13 @@ export const GrillaMisDeclaracionesJuradas = ({
             onClick={handleDeleteClick(id)}
             color="inherit"
           />,
-          <PDFDownloadLink
+          <GridActionsCellItem
+              icon={<LocalPrintshopIcon />}
+              label="Print"
+              color="inherit"
+              onClick={() => declaracionJuradasImpresion(id)}
+            />,
+          /* <PDFDownloadLink
             document={<MyDocument rows_mis_ddjj={rows_mis_ddjj} />}
             fileName="ddjj.pdf"
           >
@@ -351,7 +362,7 @@ export const GrillaMisDeclaracionesJuradas = ({
               label="Print"
               color="inherit"
             />
-          </PDFDownloadLink>,
+          </PDFDownloadLink>, */
         ];
       } else {
         return [
@@ -371,7 +382,13 @@ export const GrillaMisDeclaracionesJuradas = ({
             onClick={handleEditClick(id, row)}
             color="inherit"
           />,
-          <PDFDownloadLink
+          <GridActionsCellItem
+              icon={<LocalPrintshopIcon />}
+              label="Print"
+              color="inherit"
+              onClick={() => declaracionJuradasImpresion(id)}
+            />,
+          /* <PDFDownloadLink
             document={<MyDocument rows_mis_ddjj={rows_mis_ddjj} />}
             fileName="ddjj.pdf"
           >
@@ -381,7 +398,7 @@ export const GrillaMisDeclaracionesJuradas = ({
               color="inherit"
             />
             ,
-          </PDFDownloadLink>,
+          </PDFDownloadLink>, */
         ];
       }
     },
@@ -438,9 +455,9 @@ export const GrillaMisDeclaracionesJuradas = ({
           pageSizeOptions={[10, 15, 25]}
         />
       </Box>
-      <PDFViewer style={{ width: "100%", height: "500px" }}>
+      {/* <PDFViewer style={{ width: "100%", height: "500px" }}>
         <MyDocument rows_mis_ddjj={rows_mis_ddjj} />
-      </PDFViewer>
+      </PDFViewer> */}
     </div>
   );
 };
