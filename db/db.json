@@ -1635,5 +1635,168 @@
       "categoria": null,
       "antiguedad": null
     }
+  ],
+  "boletas": {
+    "declaracion_jurada_id": 5048119,
+    "detalle_boletas": [
+      {
+        "codigo": "UOMACS",
+        "descripcion": "UOMA Cuota Social",
+        "vencimiento": "2024-02-21",
+        "periodo": "01-2024",
+        "total_acumulado": 13410,
+        "interes": 0,
+        "ajuste": 0,
+        "afiliados": [
+          {
+            "cuil": "27367071112",
+            "apellido": "Nelo",
+            "nombre": "Rosario",
+            "capital": 8400
+          },
+          {
+            "cuil": "273712728848",
+            "apellido": "Nelo",
+            "nombre": "Manfredo",
+            "capital": 7610
+          },
+          {
+            "cuil": "273712728848",
+            "apellido": "Nelo",
+            "nombre": "Sabario",
+            "capital": 5800
+          }
+        ]
+      },
+      {
+        "codigo": "ART46",
+        "descripcion": "Art. 46",
+        "vencimiento": "2024-02-21",
+        "periodo": "01-2024",
+        "total_acumulado": 1484,
+        "interes": 0,
+        "ajuste": 0,
+        "afiliados": [
+          {
+            "cuil": "27367071112",
+            "apellido": "Nelo",
+            "nombre": "Rosario",
+            "capital": 520
+          },
+          {
+            "cuil": "273712728848",
+            "apellido": "Nelo",
+            "nombre": "Manfredo",
+            "capital": 482
+          },
+          {
+            "cuil": "273712728848",
+            "apellido": "Nelo",
+            "nombre": "Sabario",
+            "capital": 482
+          }
+        ]
+      },
+      {
+        "codigo": "ANTIMACS",
+        "descripcion": "ANTIMA Cuota Social",
+        "vencimiento": "2024-02-21",
+        "periodo": "01-2024",
+        "total_acumulado": 7800,
+        "interes": 0,
+        "ajuste": 0,
+        "afiliados": [
+          {
+            "cuil": "27367071112",
+            "apellido": "Nelo",
+            "nombre": "Rosario",
+            "capital": 7800
+          }
+        ]
+      }
+    ]
+  },
+  "boletas_guardadas": [
+    {
+      "declaracion_jurada_id": 5048119,
+      "detalle_boletas": [
+        {
+          "codigo": "UOMACS",
+          "descripcion": "UOMA Cuota Social",
+          "vencimiento": "2024-02-21",
+          "periodo": "01-2024",
+          "total_acumulado": 13410,
+          "interes": 0,
+          "ajuste": 0,
+          "afiliados": [
+            {
+              "cuil": "27367071112",
+              "apellido": "Nelo",
+              "nombre": "Rosario",
+              "capital": 8400
+            },
+            {
+              "cuil": "273712728848",
+              "apellido": "Nelo",
+              "nombre": "Manfredo",
+              "capital": 7610
+            },
+            {
+              "cuil": "273712728848",
+              "apellido": "Nelo",
+              "nombre": "Sabario",
+              "capital": 5800
+            }
+          ]
+        },
+        {
+          "codigo": "ART46",
+          "descripcion": "Art. 46",
+          "vencimiento": "2024-02-21",
+          "periodo": "01-2024",
+          "total_acumulado": 1484,
+          "interes": 0,
+          "ajuste": 0,
+          "afiliados": [
+            {
+              "cuil": "27367071112",
+              "apellido": "Nelo",
+              "nombre": "Rosario",
+              "capital": 520
+            },
+            {
+              "cuil": "273712728848",
+              "apellido": "Nelo",
+              "nombre": "Manfredo",
+              "capital": 482
+            },
+            {
+              "cuil": "273712728848",
+              "apellido": "Nelo",
+              "nombre": "Sabario",
+              "capital": 482
+            }
+          ]
+        },
+        {
+          "codigo": "ANTIMACS",
+          "descripcion": "ANTIMA Cuota Social",
+          "vencimiento": "2024-02-21",
+          "periodo": "01-2024",
+          "total_acumulado": 7800,
+          "interes": 0,
+          "ajuste": 0,
+          "afiliados": [
+            {
+              "cuil": "27367071112",
+              "apellido": "Nelo",
+              "nombre": "Rosario",
+              "capital": 7800
+            }
+          ]
+        }
+      ],
+      "id": 1
+    }
   ]
 }

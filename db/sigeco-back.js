@@ -108,6 +108,19 @@ module.exports = (req, res, next) => {
     ) {
       return "APORTE-DETALLE-ALTA";
     }
+
+    if (req.method === "GET" && req.url.startsWith("/empresa/ddjj/boletas") )
+    {
+      return "BOLETA-DETALLE"
+    }
+    if (req.method === "POST" && req.url.startsWith("empresa/ddjj/boleta/calcular-interes") )
+    {
+      return "CALCULAR-INTERES"
+    } 
+    if (req.method === "GET" && req.url.startsWith("/empresa/ddjj/boleta/codigo")){
+      return "BOLETA-DDJJ-CODIGO"
+    }
+
     return "----";
   }
 
@@ -169,6 +182,15 @@ module.exports = (req, res, next) => {
       break;
     case "DDJJ-VALIDAR-NIVEL2":
       ddjjValidarN2();
+      break;
+    case "BOLETA-DETALLE":
+      getBoletaDetalle();
+      break;
+    case "CALCULAR-INTERES":
+      calcularInteres();
+      break;
+    case "BOLETA-DDJJ-CODIGO":
+      getBoletaByDDJJIDandCodigo();
       break;
     case "----":
       // code block
@@ -546,4 +568,42 @@ module.exports = (req, res, next) => {
     var power = Math.pow(10, decimalPlaces);
     return Math.floor(rand * power) / power;
   }
+
+
+  function getBoletaDetalle(){
+    const declaracion_jurada_id       = req.query.ddjj_id
+    const boletasDetalle              = req.app.db.__wrapped__.boletas;
+    const tieneBoletasParaDeclaracion = boletasDetalle.declaracion_jurada_id == declaracion_jurada_id
+    const error404 = {descripcion: "No se encontraron boletas para la declaracion jurada"}
+    
+    tieneBoletasParaDeclaracion ? res.status(200).jsonp(boletasDetalle) : res.status(404).jsonp(error404)
+  }
+
+  function  calcula_diferencia_de_dias(dia_mayor, dia_menor) {
+    return (new Date(dia_mayor) - new Date(dia_menor)) / (1000 * 60 * 60 * 24);
+  } 
+
+  function calcularInteres(){
+    const { codigoBoleta } = req.query
+    const { intencion_de_pago } = req.body
+    const interes_diario = 0.01  
+    const boleta = req.app.db.__wrapped__.boletas.detalle_boletas.find(boleta => boleta.codigo === codigoBoleta)
+    console.log(boleta)
+    const diferencia_en_dias  = calcula_diferencia_de_dias(intencion_de_pago, boleta.vencimiento)
+    if (diferencia_en_dias >= 0){
+      const monto_interes = boleta.total_acumulado * interes_diario *  diferencia_en_dias
+      boleta.total_acumulado += monto_interes
+      boleta.interes = monto_interes
+    }
+    res.status(200).jsonp({intencion_de_pago,boleta}) 
+  }
+
+  function getBoletaByDDJJIDandCodigo(){
+    const { ddjj_id, codigo } = req.query
+    const BOLETAS_BY_DDDJJ = req.app.db.__wrapped__.boletas_guardadas.find(boletasddjj => boletasddjj.declaracion_jurada_id == ddjj_id )
+    const BOLETA_BY_CODIGO = BOLETAS_BY_DDDJJ.detalle_boletas.find(boleta => boleta.codigo == codigo)
+    res.status(200).jsonp(BOLETA_BY_CODIGO)
+    
+  }
+
 };

@@ -29,11 +29,19 @@
   "/empresa/:empresaId/ddjj/:id": "/DDJJ/:id?empresaId=:empresaId",
   "/empresa/:empresaId/ddjj/:id/presentar": "/DDJJ/:id",
   "/empresa/:empresaId/ddjj/periodo/:periodo/existe": "/DDJJ?empresaId=:empresaId&periodo=:periodo",
+  
 
   "/rol/:id/funcionalidad": "/rol/funcionalidad/getRel?rolId=:id",
   "/funcionalidad/:codigo/rol/:rolId": "/rolFuncionalidad/?rolId=:rolId&funcionalidad=:codigo",
   "/aportes/detalle/": "/aportesDetalle/",
   "/aportes/:codigo": "/aportes/?codigo=:codigo",
   "/aportes/:codigo/detalle/:id": "/aportesDetalle/:id",
-  "/aportes/:codigo/detalle/": "/aportesDetalle/?aporte=:codigo"
+  "/aportes/:codigo/detalle/": "/aportesDetalle/?aporte=:codigo",
+
+  "/boletas/detalle/:declaracion_jurada_id": "/boletasDetalle/?declaracion_jurada_id=:declaracion_jurada_id",
+  "/boletas/calcular_interes": "/boletas/calcular_interes",
+  "/empresa/:empresaId/ddjj/:ddjjId/boletas":"/empresa/ddjj/boletas/?ddjj_id=:ddjjId",
+  "/empresa/:empresaId/ddjj/:ddjjId/boleta/:boletaCodigo/calcular-interes":"empresa/ddjj/boleta/calcular-interes/?codigoBoleta=:boletaCodigo",
+  "/empresa/:empresaId/ddjj/:ddjjId/codigo-boleta/:codigoBoleta":"/empresa/ddjj/boleta/codigo/?ddjj_id=:ddjjId&codigo=:codigoBoleta"
+
 }
