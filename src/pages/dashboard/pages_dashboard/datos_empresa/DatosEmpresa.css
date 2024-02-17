@@ -1,0 +1,10 @@
+.datos_empresa_container {
+    margin: 50px auto;
+    width: 90%;
+}
+
+.datos_empresa_container h1 {
+    color: #1A76D2;
+    margin-bottom: 65px;
+    text-align: left !important;
+}

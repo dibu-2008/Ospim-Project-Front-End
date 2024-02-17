@@ -53,6 +53,7 @@ export const DeclaracionesJuradas = () => {
   const [tabState, setTabState] = useState(0);
   const [peticion, setPeticion] = useState("");
   const [idDDJJ, setIdDDJJ] = useState(null);
+  
 
   const theme = useTheme();
 
@@ -97,6 +98,7 @@ export const DeclaracionesJuradas = () => {
         <Box sx={{ width: '100%' }}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider', marginTop: '50px' }}>
             <Tabs
+              
               value={tabState}
               onChange={handleChangeTabState}
             >
@@ -114,7 +116,7 @@ export const DeclaracionesJuradas = () => {
               />
             </Tabs>
           </Box>
-          <CustomTabPanel value={tabState} index={0}>
+          <CustomTabPanel value={tabState} index={0} >
             <MisAltaDeclaracionesJuradas
               periodo={periodo}
               periodoIso={periodoIso}

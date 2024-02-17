@@ -23,7 +23,7 @@ import Box from "@mui/material/Box";
 import Swal from "sweetalert2";
 
 function EditToolbar(props) {
-  const { setRows, rows, setRowModesModel } = props;
+  const { setRows, rows, setRowModesModel, volverPrimerPagina  } = props;
 
   const handleClick = () => {
     const maxId = Math.max(...rows.map((row) => row.id), 0);
@@ -31,6 +31,8 @@ function EditToolbar(props) {
     const newId = maxId + 1;
 
     const id = newId;
+
+    volverPrimerPagina();
 
     setRows((oldRows) => [
       { id, tipo: "", prefijo: "", valor: "", isNew: true },
@@ -55,6 +57,17 @@ export const GrillaEmpresaContacto = ({ rows, setRows, token }) => {
 
   const [rowModesModel, setRowModesModel] = useState({});
   const [tipoContacto, setTipoContacto] = useState([]);
+  const [paginationModel, setPaginationModel] = useState({
+    pageSize: 10,
+    page: 0,
+  });
+
+  const volverPrimerPagina = () => {
+    setPaginationModel((prevPaginationModel) => ({
+      ...prevPaginationModel,
+      page: 0,
+    }));
+  };
 
   useEffect(() => {
     const getTipoContacto = async () => {
@@ -249,7 +262,7 @@ export const GrillaEmpresaContacto = ({ rows, setRows, token }) => {
   return (
     <Box
       sx={{
-        height: "400px",
+        height: "600px",
         width: "100%",
         overflowX: "scroll",
         "& .actions": {
@@ -272,7 +285,7 @@ export const GrillaEmpresaContacto = ({ rows, setRows, token }) => {
           toolbar: EditToolbar,
         }}
         slotProps={{
-          toolbar: { setRows, rows, setRowModesModel },
+          toolbar: { setRows, rows, setRowModesModel, volverPrimerPagina },
         }}
         sx={{
           '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
@@ -286,13 +299,9 @@ export const GrillaEmpresaContacto = ({ rows, setRows, token }) => {
             backgroundColor: '#1A76D2 !important',
           },
         }}
-        initialState={{
-          ...rows.initialState,
-          pagination: {
-            paginationModel: { pageSize: 5 },
-          },
-        }}
-        pageSizeOptions={[5, 10, 25]}
+        paginationModel={paginationModel}
+            onPaginationModelChange={setPaginationModel}
+            pageSizeOptions={[10, 15, 25]}
       />
     </Box>
   );

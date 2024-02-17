@@ -68,7 +68,7 @@ export const Feriados = () => {
   const [filasFeriado, setFilasFeriado] = useState([]);
   const [modeloFila, setModeloFila] = useState({});
   const [paginacion, setPaginacion] = useState({
-    pageSize: 5,
+    pageSize: 10,
     page: 0,
   });
 
@@ -260,7 +260,7 @@ export const Feriados = () => {
       <h1>Administración de feriados</h1>
       <Box
         sx={{
-          height: "400px",
+          height: "600px",
           width: "100%",
           "& .actions": {
             color: "text.secondary",
@@ -292,7 +292,7 @@ export const Feriados = () => {
             }}
             paginationModel={paginacion}
             onPaginationModelChange={setPaginacion}
-            pageSizeOptions={[5, 10, 25]}
+            pageSizeOptions={[10, 15, 25]}
           />
         </ProveedorTemas>
       </Box>

@@ -85,6 +85,10 @@ export const GrillaMisDeclaracionesJuradas = ({
   setIdDDJJ
 }) => {
   const [rowModesModel, setRowModesModel] = useState({});
+  const [paginationModel, setPaginationModel] = useState({
+    pageSize: 10,
+    page: 0,
+  });
 
   let colAportes = [];
 
@@ -256,7 +260,6 @@ export const GrillaMisDeclaracionesJuradas = ({
       headerClassName: "header--cell",
       valueGetter: (params) => {
         // Si secuencia es 0 es "Original" sino es "Rectificativa"+secuencia
-        // TODO : Tener en cuenta en valor de la secuencia cuando venga en null
         if(params.value === null){
           return "Original Nulo";
         } else if (params.value === 0) {
@@ -275,8 +278,7 @@ export const GrillaMisDeclaracionesJuradas = ({
     columns.push({
       field: "total" + elem,
       headerName: "Total " + elem,
-      width: 180,
-
+      flex: 1,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -288,7 +290,7 @@ export const GrillaMisDeclaracionesJuradas = ({
   columns.push({
     field: "actions",
     headerName: "Acciones",
-    width: 280,
+    flex: 2,
     type: "actions",
     headerAlign: "center",
     align: "center",
@@ -396,7 +398,7 @@ export const GrillaMisDeclaracionesJuradas = ({
       <Box
         sx={{
           margin: "0 auto",
-          height: "400px",
+          height: "600px",
           width: "100%%",
           "& .actions": {
             color: "text.secondary",
@@ -431,13 +433,9 @@ export const GrillaMisDeclaracionesJuradas = ({
               backgroundColor: "#ccc",
             },
           }}
-          initialState={{
-            ...rows_mis_ddjj.initialState,
-            pagination: {
-              paginationModel: { pageSize: 5 },
-            },
-          }}
-          pageSizeOptions={[5, 10, 25]}
+          paginationModel={paginationModel}
+          onPaginationModelChange={setPaginationModel}
+          pageSizeOptions={[10, 15, 25]}
         />
       </Box>
       <PDFViewer style={{ width: "100%", height: "500px" }}>

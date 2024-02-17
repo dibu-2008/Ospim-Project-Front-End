@@ -21,7 +21,7 @@ import { Checkbox, Box, Button, TextField, Select, MenuItem, appBarClasses } fro
 import { obtenerAfiliados, obtenerCategorias } from "../MisAltaDeclaracionesJuradasApi";
 
 function EditToolbar(props) {
-    
+
     const { setRowsAltaDDJJ, rowsAltaDDJJ, setRowModesModel } = props;
 
     const handleClick = () => {
@@ -41,18 +41,18 @@ function EditToolbar(props) {
                 categoria: "",
                 remunerativo: "",
                 noRemunerativo: "",
-                cuotaSocUoma: false,
-                aporteSolUoma: false,
-                cuotaUsuf: false,
-                art46: true,
-                amtima: false,
+                aporteUomaCs: false,
+                aporteUomaAs: false,
+                aporteCuotaUsu: false,
+                aporteArt46: true,
+                aporteAntimaCs: false,
                 isNew: true
             },
             ...oldRows,
         ]);
         setRowModesModel((oldModel) => ({
-            [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
             ...oldModel,
+            [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
         }));
     };
 
@@ -76,7 +76,10 @@ export const GrillaPasoTres = ({
     setAfiliado,
     todasLasCategorias,
     plantas,
+    validacionResponse
 }) => {
+
+    // Validacion response deberia de hacer una logica con rowsAltaDDJJ para ver si hay errores y mostrarlos en la grilla
 
     const [locale, setLocale] = useState('esES');
     const [rowModesModel, setRowModesModel] = useState({});
@@ -94,7 +97,7 @@ export const GrillaPasoTres = ({
         const afiliadoEncontrado = afiliados.find((afiliado) => afiliado.cuil === cuilElegido);
 
         setAfiliado(afiliadoEncontrado);
-
+        // TODO : Mirar el tema de la logica de busqueda por que tambien podria poder escribir sin buscar el cuil
         if (afiliadoEncontrado) {
 
             // Apellido
@@ -136,11 +139,11 @@ export const GrillaPasoTres = ({
         //const categoriasResponse = await obtenerCategorias(token);
 
         const filtroCategorias = todasLasCategorias.filter((categoria) => categoria.camara === codigoCamara);
-        console.log("categoriasFiltradas: ", filtroCategorias);
+        //console.log("categoriasFiltradas: ", filtroCategorias);
 
-        // armar un array solo de categorias
+        //armar un array solo de categorias
         const soloCategorias = filtroCategorias.map((item) => item.categoria);
-        console.log("soloCategorias: ", soloCategorias);
+        //console.log("soloCategorias: ", soloCategorias);
 
         params.api.setEditCellValue({
             id: params.id,
@@ -206,15 +209,17 @@ export const GrillaPasoTres = ({
             field: "cuil",
             type: "string",
             headerName: "CUIL",
-            width: 180,
+            flex: 1.6,
             editable: true,
             headerAlign: "center",
             align: "center",
             headerClassName: 'header--cell',
             renderEditCell: (params) => {
+                
                 return (
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                         <TextField
+                            id={params.row.id ? 'cuil' + params.row.id.toString() : ''}
                             fullWidth
                             value={params.value || ''}
                             onChange={(event) => {
@@ -224,6 +229,10 @@ export const GrillaPasoTres = ({
                                     field: 'cuil',
                                     value: newValue,
                                 });
+                                // Darle background color verde cuando escriba el cuil
+                                /* const textField = document.getElementById('cuil' + params.row.id);
+                                textField.style.backgroundColor = 'transparent'; */
+
                             }}
                             sx={{
                                 '& .MuiOutlinedInput-root': {
@@ -252,7 +261,7 @@ export const GrillaPasoTres = ({
             field: "apellido",
             type: "string",
             headerName: "Apellido",
-            width: 150,
+            flex: 1,
             editable: true,
             headerAlign: "center",
             align: "center",
@@ -270,13 +279,13 @@ export const GrillaPasoTres = ({
                             sx={{
                                 '& .MuiOutlinedInput-root': {
                                     '& fieldset': {
-                                        borderColor: 'transparent', 
+                                        borderColor: 'transparent',
                                     },
                                     '&:hover fieldset': {
-                                        borderColor: 'transparent', 
+                                        borderColor: 'transparent',
                                     },
                                     '&.Mui-focused fieldset': {
-                                        borderColor: 'transparent', 
+                                        borderColor: 'transparent',
                                     },
                                 },
                             }}
@@ -295,7 +304,7 @@ export const GrillaPasoTres = ({
                                     field: 'apellido',
                                     value: newValue,
                                 });
-                                
+
                             }}
                             sx={{
                                 '& .MuiOutlinedInput-root': {
@@ -320,7 +329,7 @@ export const GrillaPasoTres = ({
             field: "nombre",
             type: "string",
             headerName: "Nombre",
-            width: 150,
+            flex: 1,
             editable: true,
             headerAlign: "center",
             align: "center",
@@ -330,20 +339,20 @@ export const GrillaPasoTres = ({
                 return (
                     afiliado?.nombre ?
 
-                    <TextField
+                        <TextField
                             id={params.row.id ? 'nombre' + params.row.id.toString() : ''}
                             fullWidth
                             value={params.value || ''}
                             sx={{
                                 '& .MuiOutlinedInput-root': {
                                     '& fieldset': {
-                                        borderColor: 'transparent', 
+                                        borderColor: 'transparent',
                                     },
                                     '&:hover fieldset': {
-                                        borderColor: 'transparent', 
+                                        borderColor: 'transparent',
                                     },
                                     '&.Mui-focused fieldset': {
-                                        borderColor: 'transparent', 
+                                        borderColor: 'transparent',
                                     },
                                 },
                             }}
@@ -382,7 +391,7 @@ export const GrillaPasoTres = ({
         {
             field: "camara",
             headerName: "Camara",
-            width: 150,
+            flex: 1,
             editable: true,
             headerAlign: "center",
             align: "center",
@@ -430,18 +439,19 @@ export const GrillaPasoTres = ({
             field: "categoria",
             type: "singleSelect",
             headerName: "Categoria",
-            width: 150,
+            flex: 1,
             editable: true,
             headerAlign: "center",
             align: "center",
             headerClassName: 'header--cell',
             valueOptions: categoriasFiltradas
+
         },
         {
             field: "fechaIngreso",
             type: "date",
             headerName: "Fecha Ingreso",
-            width: 150,
+            flex: 1,
             editable: true,
             headerAlign: "center",
             align: "center",
@@ -461,7 +471,7 @@ export const GrillaPasoTres = ({
             field: "empresaDomicilioId",
             type: "singleSelect",
             headerName: "Planta",
-            width: 150,
+            flex: 1,
             editable: true,
             headerAlign: "center",
             align: "center",
@@ -472,8 +482,9 @@ export const GrillaPasoTres = ({
         },
         {
             field: "remunerativo",
+            type: "string",
             headerName: "Remunerativo",
-            width: 150,
+            flex: 1,
             editable: true,
             headerAlign: "center",
             align: "center",
@@ -492,7 +503,7 @@ export const GrillaPasoTres = ({
                     </span>
                 </div>
             ),
-            width: 150,
+            flex: 1,
             editable: true,
             headerAlign: "center",
             align: "center",
@@ -510,7 +521,7 @@ export const GrillaPasoTres = ({
                     </span>
                 </div>
             ),
-            width: 150,
+            flex: 1,
             editable: true,
             headerAlign: "center",
             align: "center",
@@ -547,7 +558,7 @@ export const GrillaPasoTres = ({
                     </span>
                 </div>
             ),
-            width: 150,
+            flex: 1,
             editable: true,
             headerAlign: "center",
             align: "center",
@@ -583,7 +594,7 @@ export const GrillaPasoTres = ({
                     </span>
                 </div>
             ),
-            width: 150,
+            flex: 1,
             editable: true,
             headerAlign: "center",
             align: "center",
@@ -623,7 +634,7 @@ export const GrillaPasoTres = ({
                     </span>
                 </div>
             ),
-            width: 150,
+            flex: 1,
             editable: false,
             headerAlign: "center",
             align: "center",
@@ -649,7 +660,7 @@ export const GrillaPasoTres = ({
         {
             field: "aporteAntimaCs",
             headerName: "AMTIMA",
-            width: 130,
+            flex: 1,
             editable: true,
             headerAlign: "center",
             align: "center",
@@ -678,7 +689,7 @@ export const GrillaPasoTres = ({
             field: "actions",
             type: "actions",
             headerName: "Acciones",
-            width: 130,
+            flex: 1,
             headerAlign: "center",
             align: "center",
             headerClassName: 'header--cell',
@@ -725,19 +736,24 @@ export const GrillaPasoTres = ({
     ];
 
     return (
-        <div
-
-        >
-
+        <div>
             <Box
                 sx={{
-                    height: "400px",
+                    height: "auto",
                     width: "100%",
                     "& .actions": {
                         color: "text.secondary",
                     },
                     "& .textPrimary": {
                         color: "text.primary",
+                    },
+                    '& .cold': {
+                        backgroundColor: '#b9d5ff91',
+                        color: '#1a3e72',
+                    },
+                    '& .hot': {
+                        backgroundColor: '#ff943975',
+                        color: '#1a3e72',
                     },
                 }}
             >
@@ -778,6 +794,23 @@ export const GrillaPasoTres = ({
                             },
                         }}
                         pageSizeOptions={[5, 10, 25]}
+                        getCellClassName={(params) => {
+                            let cellClassName = '';
+                        
+                            validacionResponse?.errores?.forEach((error) => {
+                                if (params.row.cuil === error.cuil && params.field === error.codigo) {
+                                    cellClassName = 'hot';
+                                }
+                            });
+                        
+                            // Action no implementar estilos hot o cold
+                            if (params.field === 'actions') {
+                                cellClassName = '';
+                            }
+                        
+                            return cellClassName;
+                        }}
+                        
                     />
                 </ThemeProvider>
             </Box>

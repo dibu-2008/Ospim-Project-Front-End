@@ -23,7 +23,7 @@ export const Publicaciones = () => {
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
   const [paginationModel, setPaginationModel] = useState({
-    pageSize: 5,
+    pageSize: 10,
     page: 0,
   });
 
@@ -267,7 +267,7 @@ export const Publicaciones = () => {
       <h1>Administracion de Publicaciones</h1>
       <Box
         sx={{
-          height: "400px",
+          height: "600px",
           width: "100%",
           "& .actions": {
             color: "text.secondary",
@@ -307,7 +307,7 @@ export const Publicaciones = () => {
             }}
             paginationModel={paginationModel}
             onPaginationModelChange={setPaginationModel}
-            pageSizeOptions={[5, 10, 25]}
+            pageSizeOptions={[10, 15, 25]}
           />
         </ThemeProvider>
       </Box>

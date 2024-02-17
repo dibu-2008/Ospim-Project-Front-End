@@ -34,7 +34,7 @@ export const CarouselText = ({contenido}) => {
               height: '400px',
               borderRadius: '10px',
               width: '100%',
-              border: '2px solid #1A76D2',
+              paddingTop: '10px',
               boxShadow: '0px 0px 10px 0px #1A76D2',
             }}
           >

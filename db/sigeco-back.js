@@ -1,15 +1,15 @@
 module.exports = (req, res, next) => {
-  console.log("Middleware - SIGECO - INIT - getAPI: " + getAPI());
+  console.log("Middleware - SIGECO - INIT - getAPI: " + getAPI(req, res));
 
   console.log("Middleware - SIGECO - req.url: " + req.method + "->" + req.url);
   //console.log("Middleware - SIGECO - req.body:" + req.body);
 
-  function getAPI() {
-    if (
-      req.method === "GET" &&
-      req.url.startsWith("/empresa/") &&
-      req.url.endsWith("/ddjj/validar")
-    ) {
+  function getAPI(req, res) {
+    if (req.method === "GET" && req.url.startsWith("/DDJJ/imprimir/")) {
+      return "DDJJ-IMPRIMIR";
+    }
+
+    if (req.method === "POST" && req.url.startsWith("/DDJJ/validar")) {
       return "DDJJ-VALIDAR-NIVEL2";
     }
 
@@ -124,7 +124,7 @@ module.exports = (req, res, next) => {
     return "----";
   }
 
-  switch (getAPI()) {
+  switch (getAPI(req, res)) {
     case "DDJJ-MISDDJJ-CONSULTA":
       ddjjGenerarTotales();
       break;
@@ -159,6 +159,9 @@ module.exports = (req, res, next) => {
     case "DDJJ-ALTA-V2":
       DDJJSetParamsV2();
       break;
+    case "DDJJ-IMPRIMIR":
+      DDJJImprimir();
+      break;
     case "DDJJ-MODI":
       DDJJSetParams();
       break;
@@ -181,7 +184,7 @@ module.exports = (req, res, next) => {
       AporteDetalleAlta();
       break;
     case "DDJJ-VALIDAR-NIVEL2":
-      ddjjValidarN2();
+      ddjjValidarN2(req, res);
       break;
     case "BOLETA-DETALLE":
       getBoletaDetalle();
@@ -199,6 +202,17 @@ module.exports = (req, res, next) => {
     default:
     // code block
   }
+
+  function DDJJImprimir() {
+    const file = `${__dirname}/ddjj_2.pdf`;
+    res.download(file); // Set disposition and send it.
+  }
+
+  /* function ddjjValidarN2(req, res) {
+
+    console.log("XXXXXXX : ", req.body);
+
+    // []
 
   function ddjjValidarN2() {
     res.status(200).jsonp({
@@ -225,6 +239,51 @@ module.exports = (req, res, next) => {
         },
       ],
     });
+  } */
+
+  function ddjjValidarN2(req, res) {
+    // Validar que todos los campos estén llenos excepto "inte"
+    const afiliados = req.body.afiliados;
+    console.log(afiliados)
+    const errores = [];
+
+    afiliados.forEach((afiliado, index)=> {
+      Object.entries(afiliado).forEach(([key, value]) => {
+        if (key !== 'inte' && (value === null || value === undefined)) {
+          errores.push({
+            //codigo: `CAMPO_${key.toUpperCase()}_VACIO`,
+            codigo: key,
+            cuil: afiliado.cuil,
+            descripcion: `El campo '${key}' está vacío.`,
+            indice: index
+          });
+        }
+      });
+    });
+
+    if (errores.length > 0) {
+      res.status(400).jsonp(
+        {
+          codigo: "ERROR_VALIDACION_NIVEL",
+          ticket: "TK-156269",
+          descripcion: "Errores en la validación de la DDJJ.",
+          tipo: "ERROR_APP_BUSINESS",
+          errores : {
+            errores : errores 
+          }
+        }
+      );
+    } else {
+      res.status(200).jsonp({
+        mensaje: "Todos los campos están llenos excepto 'inte'.",
+        afiliados
+      });
+    }
+  }
+
+  function DDJJImprimir() {
+    const file = `${__dirname}/ddjj_2.pdf`;
+    res.download(file); // Set disposition and send it.
   }
 
   function AporteDetalleAlta() {
@@ -380,7 +439,7 @@ module.exports = (req, res, next) => {
     const { camaraCodigo, descripcion } = req.body;
     console.log(
       "Middleware - SIGECO - categoriasURL() - INIT - camaraCodigo:" +
-        camaraCodigo
+      camaraCodigo
     );
     if (
       camaraCodigo != "CAENA" &&
@@ -443,7 +502,7 @@ module.exports = (req, res, next) => {
 
       console.log(
         "Middleware - SIGECO - validarLoguinDFA() - res.statusCode: " +
-          res.statusCode
+        res.statusCode
       );
     } else {
       const response = {
