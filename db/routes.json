@@ -38,8 +38,6 @@
   "/aportes/:codigo/detalle/:id": "/aportesDetalle/:id",
   "/aportes/:codigo/detalle/": "/aportesDetalle/?aporte=:codigo",
 
-  "/boletas/detalle/:declaracion_jurada_id": "/boletasDetalle/?declaracion_jurada_id=:declaracion_jurada_id",
-  "/boletas/calcular_interes": "/boletas/calcular_interes",
   "/empresa/:empresaId/ddjj/:ddjjId/boletas":"/empresa/ddjj/boletas/?ddjj_id=:ddjjId",
   "/empresa/:empresaId/ddjj/:ddjjId/boleta/:boletaCodigo/calcular-interes":"empresa/ddjj/boleta/calcular-interes/?codigoBoleta=:boletaCodigo",
   "/empresa/:empresaId/ddjj/:ddjjId/codigo-boleta/:codigoBoleta":"/empresa/ddjj/boleta/codigo/?ddjj_id=:ddjjId&codigo=:codigoBoleta"
