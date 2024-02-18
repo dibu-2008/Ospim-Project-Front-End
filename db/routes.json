@@ -7,6 +7,7 @@
   "/usuario/:id/habilitar/": "/usuario-interno/:id",
   "/usuario/:id/deshabilitar/": "/usuario-interno/:id",
 
+  "/empresa/public/domicilio/tipo": "/empresaDomicilioTipo",
   "/empresa/domicilio/": "/empresaDomicilio",
   "/empresa/:id/domicilio/": "/empresaDomicilio?empresaId=:id",
   "/empresa/:id/domicilio/planta/": "/empresaDomicilio/planta?empresaId=:id",
@@ -21,6 +22,8 @@
   "/empresa/restringida/:id": "/cuit-restringido/:id",
 
   "/auth/login/usuario": "/auth-login-usuario",
+  "/public/provincia": "/provincia",
+  "/public/provincia/:provinciaId/localidad": "/localidad?provinciaId=:provinciaId",
   "/provincia/:provinciaId/localidad": "/localidad?provinciaId=:provinciaId",
   "/camara/categoria": "/categoria",
   "/entidad/aporte": "/entidad-aporte",

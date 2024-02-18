@@ -4,7 +4,6 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { errorBackendResponse } from "../../errors/errorBackendResponse";
 
-
 export const logon = async (usuario, clave) => {
   const URL = `${BACKEND_URL}/auth/login`;
 
@@ -28,15 +27,12 @@ export const logon = async (usuario, clave) => {
 
     return logon || {};
   } catch (error) {
-
     errorBackendResponse(error, showSwalError);
   }
 };
 
-
 export const usuarioLogueadoHabilitadoDFA = async (token) => {
-
-  const URL = `${BACKEND_URL}/auth/dfa/usuario-loguedo-habilitado`
+  const URL = `${BACKEND_URL}/auth/dfa/usuario-loguedo-habilitado`;
 
   const showSwalError = (descripcion) => {
     Swal.fire({
@@ -46,10 +42,9 @@ export const usuarioLogueadoHabilitadoDFA = async (token) => {
       showConfirmButton: false,
       timer: 3000,
     });
-  }
+  };
 
   try {
-
     const usuarioResponse = await axios.get(URL, {
       headers: {
         Authorization: token,
@@ -57,14 +52,12 @@ export const usuarioLogueadoHabilitadoDFA = async (token) => {
     });
     const usuario = await usuarioResponse.data;
     return usuario || {};
-
   } catch (error) {
     errorBackendResponse(error, showSwalError);
   }
-}
+};
 
-export const logonDFA = async(token,codigo) => {
-  
+export const logonDFA = async (token, codigo) => {
   const URL = `${BACKEND_URL}/auth/login-dfa`;
 
   const showSwalError = (descripcion) => {
@@ -93,8 +86,7 @@ export const logonDFA = async(token,codigo) => {
   } catch (error) {
     errorBackendResponse(error, showSwalError);
   }
-}
-
+};
 
 export const consultarUsuarioLogueado = async (token) => {
   const URL = `${BACKEND_URL}/auth/login/usuario`;
@@ -123,4 +115,3 @@ export const consultarUsuarioLogueado = async (token) => {
     errorBackendResponse(error, showSwalError);
   }
 };
-
