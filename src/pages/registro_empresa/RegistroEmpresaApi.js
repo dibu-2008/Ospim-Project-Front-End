@@ -27,7 +27,7 @@ export const getRamo = async () => {
 };
 
 export const registrarEmpresa = async (usuarioEmpresa) => {
-  const URL = `${BACKEND_URL}/usuario/empresa`;
+  const URL = `${BACKEND_URL}/usuario/empresa/public`;
 
   const showSwalError = (descripcion) => {
     Swal.fire({

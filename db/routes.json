@@ -1,6 +1,7 @@
 {
   "/ospim/contacto/": "/ospim-contacto",
   "/publicaciones/vigentes": "/publicacionesVigentes",
+  "/usuario/empresa/public": "/usuario-empresa-alta",
   "/usuario/empresa/": "/usuario-empresa-alta",
   "/usuario/interno": "/usuario-interno",
   "/usuario/interno/:id": "/usuario-interno/:id",
@@ -17,6 +18,7 @@
   "/empresa/contacto/": "/empresaContacto",
   "/empresa/:empresaId/contacto": "/empresaContacto/",
   "/empresa/:empresaId/contacto/:id": "/empresaContacto/:id",
+  "/empresa/public/ramo": "/ramo",
   "/empresa/ramo": "/ramo",
   "/empresa/restringida/": "/cuit-restringido/",
   "/empresa/restringida/:id": "/cuit-restringido/:id",
