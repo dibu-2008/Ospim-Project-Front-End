@@ -50,6 +50,10 @@ export const obtenerProvincias = async () => {
 };
 
 export const obtenerLocalidades = async (idProvincia) => {
+  if (idProvincia == null) {
+    return [];
+  }
+
   const URL = `${BACKEND_URL}/public/provincia/${idProvincia}/localidad`;
 
   const showSwalError = (descripcion) => {
