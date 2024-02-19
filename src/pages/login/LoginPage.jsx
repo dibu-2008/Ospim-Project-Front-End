@@ -14,6 +14,7 @@ import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
 import "./LoginPage.css";
 import { Button, TextField } from "@mui/material";
+import { ThreeDots } from 'react-loader-spinner'
 
 const VITE_WELCOME_PORTAL = import.meta.env.VITE_WELCOME_PORTAL;
 
@@ -53,9 +54,9 @@ export const LoginPage = () => {
     setShowAlertPassword(false);
   };
 
-  const usuarioInfoFinal = (usuarioLogueado, token, tokenRefresco)=>{
+  const usuarioInfoFinal = (usuarioLogueado, token, tokenRefresco) => {
 
-    if(usuarioLogueado.hasOwnProperty('usuario')){
+    if (usuarioLogueado.hasOwnProperty('usuario')) {
       usuarioLogueado.usuario.token = token;
       usuarioLogueado.usuario.tokenRefresco = tokenRefresco;
       navigate("/dashboard/inicio", {
@@ -167,6 +168,16 @@ export const LoginPage = () => {
                   </Stack>
                 )}
               </div>
+              <ThreeDots
+                visible={true}
+                height="80"
+                width="80"
+                color="#1A76D2"
+                radius="9"
+                ariaLabel="three-dots-loading"
+                wrapperStyle={{}}
+                wrapperClass=""
+              />
               <Button
                 variant="contained"
                 sx={{
