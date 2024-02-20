@@ -92,6 +92,7 @@ export const DatosEmpresa = () => {
   useEffect(() => {
     const ObtenerRamos = async () => {
       const ramos = await getRamo(TOKEN);
+      console.log(ramos);
       setRamos(ramos);
       //const ramoEncontrado = ramos.find((ramo)=>ramo.id === ramo);
       //setRamo(ramoEncontrado.id);
