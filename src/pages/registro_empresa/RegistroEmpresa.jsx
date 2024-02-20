@@ -2,8 +2,8 @@ import { useState } from "react";
 import { InputComponent } from "../../components/InputComponent";
 import { ButtonComponent } from "../../components/ButtonComponent";
 import { useFormRegisterCompany } from "../../hooks/useFormRegisterCompany";
-import { SelectComponent } from "../../components/SelectComponent";
-import { v4 as uuidv4 } from "uuid";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 import { GrillaRegistroDomilicio } from "./grilla_registro_domicilio/GrillaRegistroDomicilio";
 import { registrarEmpresa, getRamo } from "./RegistroEmpresaApi";
 import TextField from "@mui/material/TextField";
@@ -13,8 +13,6 @@ import AddIcon from "@mui/icons-material/Add";
 import { useEffect } from "react";
 
 export const RegistroEmpresa = () => {
-  const [search, setSearch] = useState("");
-  const [companiesDto, setCompaniesDto] = useState({});
   const [additionalEmail, setAddionalEmail] = useState([]);
   const [emailAlternativos, setEmailAlternativos] = useState([]);
   const [additionalPhone, setAdditionalPhone] = useState([]);
@@ -22,20 +20,13 @@ export const RegistroEmpresa = () => {
   const [idPhoneAlternativos, setIdPhoneAlternativos] = useState(2);
   const [idEmailAlternativos, setIdEmailAlternativos] = useState(2);
   const [rows, setRows] = useState([]);
-  const [ramoo, setRamo] = useState("");
+  const [ramoAux, setRamoAux] = useState("");
   const [ramos, setRamos] = useState([]);
 
   useEffect(() => {
     const getRamos = async () => {
       const ramosResponse = await getRamo();
-      //{ value: "Ramo A", label: "Ramo A" },
-
-      setRamos(
-        ramosResponse.map((item) => ({
-          value: item.id,
-          label: item.descripcion,
-        }))
-      );
+      setRamos(ramosResponse);
     };
 
     getRamos();
@@ -139,12 +130,7 @@ export const RegistroEmpresa = () => {
         value: e.target.value,
       },
     });
-  };
-
-  const onInputChangeSearchCompany = ({ target }) => {
-    const { name, value } = target;
-
-    setSearch(value);
+    setRamoAux(e.target.value);
   };
 
   const handleAddEmail = () => {
@@ -505,13 +491,19 @@ export const RegistroEmpresa = () => {
             </div>
           </div>
           <div className="input-group">
-            <SelectComponent
-              name="ramo"
-              value={ramo}
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={ramoAux}
+              label="Seleccionar ramo"
               onChange={OnChangeRamos}
-              label="Ramo"
-              options={ramos}
-            />
+            >
+              {ramos.map((option, index) => (
+                <MenuItem key={index} value={option.id}>
+                  {option.descripcion}
+                </MenuItem>
+              ))}
+            </Select>
           </div>
           <div
             className="input-group"
