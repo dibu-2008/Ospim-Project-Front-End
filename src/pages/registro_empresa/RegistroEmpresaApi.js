@@ -23,11 +23,12 @@ export const getRamo = async () => {
     return ramos || [];
   } catch (error) {
     errorBackendResponse(error, showSwalError);
+    return [];
   }
 };
 
 export const registrarEmpresa = async (usuarioEmpresa) => {
-  const URL = `${BACKEND_URL}/usuario/empresa/public`;
+  const URL = `${BACKEND_URL}/usuario/empresa/public/`;
 
   const showSwalError = (descripcion) => {
     Swal.fire({

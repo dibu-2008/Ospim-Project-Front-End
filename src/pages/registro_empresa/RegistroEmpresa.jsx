@@ -505,6 +505,7 @@ export const RegistroEmpresa = () => {
               ))}
             </Select>
           </div>
+
           <div
             className="input-group"
             style={{

@@ -76,7 +76,8 @@ export const GrillaRegistroDomilicio = ({ rows, setRows }) => {
     const getTipoDomicilio = async () => {
       const tiposResponse = await obtenerTipoDomicilio();
 
-      setTipoDomicilio(tiposResponse.map((item) => ({ ...item })));
+      if (tiposResponse)
+        setTipoDomicilio(tiposResponse.map((item) => ({ ...item })));
     };
 
     getTipoDomicilio();
@@ -86,7 +87,8 @@ export const GrillaRegistroDomilicio = ({ rows, setRows }) => {
     const getProvincias = async () => {
       const provinciasResponse = await obtenerProvincias();
       console.log(provinciasResponse);
-      setProvincias(provinciasResponse.map((item) => ({ ...item })));
+      if (provinciasResponse)
+        setProvincias(provinciasResponse.map((item) => ({ ...item })));
     };
 
     getProvincias();
