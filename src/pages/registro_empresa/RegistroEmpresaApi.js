@@ -55,8 +55,10 @@ export const registrarEmpresa = async (usuarioEmpresa) => {
     if (empresaRegistrada.status === 201) {
       console.log("Empresa registrada");
       showSwalSuccess();
+      return true;
     }
   } catch (error) {
     errorBackendResponse(error, showSwalError);
   }
+  return false;
 };

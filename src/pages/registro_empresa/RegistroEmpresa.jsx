@@ -19,9 +19,9 @@ export const RegistroEmpresa = () => {
   const [phoneAlternativos, setPhoneAlternativos] = useState([]);
   const [idPhoneAlternativos, setIdPhoneAlternativos] = useState(2);
   const [idEmailAlternativos, setIdEmailAlternativos] = useState(2);
-  const [rows, setRows] = useState([]);
   const [ramoAux, setRamoAux] = useState("");
   const [ramos, setRamos] = useState([]);
+  const [rowsDomicilio, setRowsDomicilio] = useState([]);
 
   useEffect(() => {
     const getRamos = async () => {
@@ -77,7 +77,7 @@ export const RegistroEmpresa = () => {
       telefono_prefijo: prefijo_first,
       whatsapp: whatsapp,
       whatsapp_prefijo: whatsapp_prefijo,
-      ramoId: ramo,
+      ramoId: ramoAux,
     };
 
     if (
@@ -131,11 +131,11 @@ export const RegistroEmpresa = () => {
       }
     }
 
-    if (rows && rows.length > 0) {
-      usuarioEmpresa[domicilios] = rows.map((row) => ({
+    if (rowsDomicilio && rowsDomicilio.length > 0) {
+      usuarioEmpresa["domicilios"] = rowsDomicilio.map((row) => ({
         tipo: row.tipo,
-        provincia: row.provinciaId,
-        localidad: row.localidadId,
+        provinciaId: row.provinciaId,
+        localidadId: row.localidadId,
         calle: row.calle,
         piso: row.piso,
         depto: row.depto,
@@ -145,16 +145,17 @@ export const RegistroEmpresa = () => {
       }));
     }
 
-    console.log(phoneAlternativos);
+    console.log(usuarioEmpresa);
 
-    await registrarEmpresa(usuarioEmpresa);
+    const rta = await registrarEmpresa(usuarioEmpresa);
 
-    setAddionalEmail([]);
-    setEmailAlternativos([]);
-    setAdditionalPhone([]);
-    setRows([]);
-
-    OnResetFormRegisterCompany();
+    if (rta) {
+      setAddionalEmail([]);
+      setEmailAlternativos([]);
+      setAdditionalPhone([]);
+      setRowsDomicilio([]);
+      OnResetFormRegisterCompany();
+    }
   };
 
   const OnChangeRamos = (e) => {
@@ -559,7 +560,10 @@ export const RegistroEmpresa = () => {
             por lo menos el Domicilio Fiscal)
           </p>
 
-          <GrillaRegistroDomilicio rows={rows} setRows={setRows} />
+          <GrillaRegistroDomilicio
+            rows={rowsDomicilio}
+            setRows={setRowsDomicilio}
+          />
 
           <ButtonComponent
             styles={{
