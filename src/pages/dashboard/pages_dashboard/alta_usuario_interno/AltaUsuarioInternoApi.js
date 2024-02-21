@@ -43,16 +43,6 @@ export const obtenerRoles = async (token) => {
 export const crearUsuarioInterno = async (token, usuarioInterno) => {
   const URL = `${BACKEND_URL}/usuario/interno`;
 
-  const showSwalError = (descripcion) => {
-    Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      text: descripcion,
-      showConfirmButton: false,
-      timer: 3000,
-    });
-  };
-
   const showSwalSuccess = () => {
     Swal.fire({
       icon: "success",

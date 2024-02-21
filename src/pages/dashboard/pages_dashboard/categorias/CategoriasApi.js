@@ -97,16 +97,6 @@ export const actualizarCategoria = async (idCategoria, categoria, token) => {
 export const eliminarCategoria = async (idCategoria, token) => {
   const URL = `${BACKEND_URL}/categoria/${idCategoria}`;
 
-  const showSwalError = (descripcion) => {
-    Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      text: descripcion,
-      showConfirmButton: false,
-      timer: 3000,
-    });
-  };
-
   const showSwallSuccess = () => {
     Swal.fire({
       icon: "success",
@@ -127,6 +117,6 @@ export const eliminarCategoria = async (idCategoria, token) => {
       showSwallSuccess();
     }
   } catch (error) {
-    errorBackendResponse(error, showSwalError);
+    errorBackendResponse(error);
   }
 };
