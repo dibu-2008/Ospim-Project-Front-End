@@ -2,8 +2,8 @@ import { useState } from "react";
 import { InputComponent } from "../../components/InputComponent";
 import { ButtonComponent } from "../../components/ButtonComponent";
 import { useFormRegisterCompany } from "../../hooks/useFormRegisterCompany";
-import { SelectComponent } from "../../components/SelectComponent";
-import { v4 as uuidv4 } from "uuid";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 import { GrillaRegistroDomilicio } from "./grilla_registro_domicilio/GrillaRegistroDomicilio";
 import { registrarEmpresa, getRamo } from "./RegistroEmpresaApi";
 import TextField from "@mui/material/TextField";
@@ -13,29 +13,20 @@ import AddIcon from "@mui/icons-material/Add";
 import { useEffect } from "react";
 
 export const RegistroEmpresa = () => {
-  const [search, setSearch] = useState("");
-  const [companiesDto, setCompaniesDto] = useState({});
   const [additionalEmail, setAddionalEmail] = useState([]);
   const [emailAlternativos, setEmailAlternativos] = useState([]);
   const [additionalPhone, setAdditionalPhone] = useState([]);
   const [phoneAlternativos, setPhoneAlternativos] = useState([]);
   const [idPhoneAlternativos, setIdPhoneAlternativos] = useState(2);
   const [idEmailAlternativos, setIdEmailAlternativos] = useState(2);
-  const [rows, setRows] = useState([]);
-  const [ramoo, setRamo] = useState("");
+  const [ramoAux, setRamoAux] = useState("");
   const [ramos, setRamos] = useState([]);
+  const [rowsDomicilio, setRowsDomicilio] = useState([]);
 
   useEffect(() => {
     const getRamos = async () => {
       const ramosResponse = await getRamo();
-      //{ value: "Ramo A", label: "Ramo A" },
-
-      setRamos(
-        ramosResponse.map((item) => ({
-          value: item.id,
-          label: item.descripcion,
-        }))
-      );
+      setRamos(ramosResponse);
     };
 
     getRamos();
@@ -77,8 +68,8 @@ export const RegistroEmpresa = () => {
   const OnSubmitRegisterCompany = async (e) => {
     e.preventDefault();
 
-    const usuarioEmpresa = {
-      razonsocial: razonSocial,
+    let usuarioEmpresa = {
+      razonSocial: razonSocial,
       cuit: cuit,
       clave: password,
       email: email_first,
@@ -86,8 +77,15 @@ export const RegistroEmpresa = () => {
       telefono_prefijo: prefijo_first,
       whatsapp: whatsapp,
       whatsapp_prefijo: whatsapp_prefijo,
-      ramo: ramo,
-      telefonosAlternativos: [
+      ramoId: ramoAux,
+    };
+
+    if (
+      phoneAlternativos &&
+      phoneAlternativos.length > 0 &&
+      (prefijo_second || phone_second)
+    ) {
+      usuarioEmpresa[telefonosAlternativos] = [
         {
           prefijo: prefijo_second,
           nro: phone_second,
@@ -98,38 +96,66 @@ export const RegistroEmpresa = () => {
           nro: phone.nro,
           //id: phone.id
         })),
-      ],
-      emailAlternativos: [
+      ];
+    } else {
+      if (
+        phoneAlternativos &&
+        phoneAlternativos.length > 0 &&
+        (prefijo_second || phone_second)
+      )
+        usuarioEmpresa[telefonosAlternativos] = [
+          {
+            prefijo: prefijo_second,
+            nro: phone_second,
+            //id: 1
+          },
+        ];
+    }
+
+    if (emailAlternativos && emailAlternativos.length > 0 && email_second) {
+      usuarioEmpresa[emailAlternativos] = [
         {
           email: email_second,
-          //id: 1
         },
         ...emailAlternativos.map((email) => ({
           email: email.email,
-          //id: email.id
         })),
-      ],
-      domicilios: rows.map((row) => ({
+      ];
+    } else {
+      if (emailAlternativos && emailAlternativos.length > 0 && email_second) {
+        usuarioEmpresa[emailAlternativos] = [
+          {
+            email: email_second,
+          },
+        ];
+      }
+    }
+
+    if (rowsDomicilio && rowsDomicilio.length > 0) {
+      usuarioEmpresa["domicilios"] = rowsDomicilio.map((row) => ({
         tipo: row.tipo,
-        provincia: row.provinciaId,
-        localidad: row.localidadId,
+        provinciaId: row.provinciaId,
+        localidadId: row.localidadId,
         calle: row.calle,
         piso: row.piso,
         depto: row.depto,
         oficina: row.oficina,
         cp: row.cp,
         planta: row.planta,
-      })),
-    };
+      }));
+    }
 
-    await registrarEmpresa(usuarioEmpresa);
+    console.log(usuarioEmpresa);
 
-    setAddionalEmail([]);
-    setEmailAlternativos([]);
-    setAdditionalPhone([]);
-    setRows([]);
+    const rta = await registrarEmpresa(usuarioEmpresa);
 
-    OnResetFormRegisterCompany();
+    if (rta) {
+      setAddionalEmail([]);
+      setEmailAlternativos([]);
+      setAdditionalPhone([]);
+      setRowsDomicilio([]);
+      OnResetFormRegisterCompany();
+    }
   };
 
   const OnChangeRamos = (e) => {
@@ -139,12 +165,7 @@ export const RegistroEmpresa = () => {
         value: e.target.value,
       },
     });
-  };
-
-  const onInputChangeSearchCompany = ({ target }) => {
-    const { name, value } = target;
-
-    setSearch(value);
+    setRamoAux(e.target.value);
   };
 
   const handleAddEmail = () => {
@@ -505,14 +526,21 @@ export const RegistroEmpresa = () => {
             </div>
           </div>
           <div className="input-group">
-            <SelectComponent
-              name="ramo"
-              value={ramo}
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={ramoAux}
+              label="Seleccionar ramo"
               onChange={OnChangeRamos}
-              label="Ramo"
-              options={ramos}
-            />
+            >
+              {ramos.map((option, index) => (
+                <MenuItem key={index} value={option.id}>
+                  {option.descripcion}
+                </MenuItem>
+              ))}
+            </Select>
           </div>
+
           <div
             className="input-group"
             style={{
@@ -532,7 +560,10 @@ export const RegistroEmpresa = () => {
             por lo menos el Domicilio Fiscal)
           </p>
 
-          <GrillaRegistroDomilicio rows={rows} setRows={setRows} />
+          <GrillaRegistroDomilicio
+            rows={rowsDomicilio}
+            setRows={setRowsDomicilio}
+          />
 
           <ButtonComponent
             styles={{

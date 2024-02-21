@@ -13,9 +13,9 @@ import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { getEmpresa, getRamo, modificarEmpresa } from "./DatosEmpresaApi";
-import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
-import * as locales from '@mui/material/locale';
-import './DatosEmpresa.css';
+import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
+import * as locales from "@mui/material/locale";
+import "./DatosEmpresa.css";
 
 // Logica de los tabs inicio
 function CustomTabPanel(props) {
@@ -52,16 +52,12 @@ function a11yProps(index) {
 }
 
 export const DatosEmpresa = () => {
+  const TOKEN = JSON.parse(localStorage.getItem("stateLogin")).usuarioLogueado
+    .usuario.token;
+  const ID_EMPRESA = JSON.parse(localStorage.getItem("stateLogin"))
+    .usuarioLogueado.empresa.id;
 
-  const TOKEN = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.usuario.token;
-  const ID_EMPRESA = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.empresa.id;
-  /* const ID = STATE.usuarioLogueado.empresa.id;
-  const TOKEN = STATE.usuarioLogueado.usuario.token;
-  const CUIT = STATE.usuarioLogueado.empresa.cuit;
-  const RAZONSOCIAL = STATE.usuarioLogueado.empresa.razonSocial;
-  const RAMO = STATE.usuarioLogueado.empresa.ramoId; */
-
-  const [locale, setLocale] = useState('esES');
+  const [locale, setLocale] = useState("esES");
   const [rowsContacto, setRowsContacto] = useState([]);
   const [rowsDomicilio, setRowsDomicilio] = useState([]);
   const [idEmpresa, setIdEmpresa] = useState("");
@@ -75,7 +71,7 @@ export const DatosEmpresa = () => {
 
   const themeWithLocale = useMemo(
     () => createTheme(theme, locales[locale]),
-    [locale, theme],
+    [locale, theme]
   );
 
   useEffect(() => {
@@ -94,14 +90,9 @@ export const DatosEmpresa = () => {
       const ramos = await getRamo(TOKEN);
       console.log(ramos);
       setRamos(ramos);
-      //const ramoEncontrado = ramos.find((ramo)=>ramo.id === ramo);
-      //setRamo(ramoEncontrado.id);
-    }
+    };
     ObtenerRamos();
-
-  }, [])
-
-
+  }, []);
 
   const handleChangeTabState = (event, newValue) => {
     setTabState(newValue);
@@ -125,8 +116,8 @@ export const DatosEmpresa = () => {
       razonSocial: razonSocial,
       ramoId: ramo,
     };
-    await modificarEmpresa(TOKEN, idEmpresa, empresa)
-  }
+    await modificarEmpresa(TOKEN, idEmpresa, empresa);
+  };
 
   return (
     <div className="datos_empresa_container">
@@ -147,7 +138,7 @@ export const DatosEmpresa = () => {
           type="text"
           name="cuit"
           value={cuit}
-          /// onChange={OnChangeCuit} 
+          /// onChange={OnChangeCuit}
           autoComplete="off"
           label="CUIT"
         />

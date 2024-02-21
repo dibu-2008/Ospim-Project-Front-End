@@ -23,11 +23,12 @@ export const getRamo = async () => {
     return ramos || [];
   } catch (error) {
     errorBackendResponse(error, showSwalError);
+    return [];
   }
 };
 
 export const registrarEmpresa = async (usuarioEmpresa) => {
-  const URL = `${BACKEND_URL}/usuario/empresa/public`;
+  const URL = `${BACKEND_URL}/usuario/empresa/public/`;
 
   const showSwalError = (descripcion) => {
     Swal.fire({
@@ -54,8 +55,10 @@ export const registrarEmpresa = async (usuarioEmpresa) => {
     if (empresaRegistrada.status === 201) {
       console.log("Empresa registrada");
       showSwalSuccess();
+      return true;
     }
   } catch (error) {
     errorBackendResponse(error, showSwalError);
   }
+  return false;
 };
