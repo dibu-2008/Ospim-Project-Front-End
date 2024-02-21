@@ -1,7 +1,7 @@
 {
   "/ospim/contacto/": "/ospim-contacto",
   "/publicaciones/vigentes": "/publicacionesVigentes",
-  "/usuario/empresa/public": "/usuario-empresa-alta",
+  "/usuario/empresa/public/": "/usuario-empresa-alta",
   "/usuario/empresa/": "/usuario-empresa-alta",
   "/usuario/interno": "/usuario-interno",
   "/usuario/interno/:id": "/usuario-interno/:id",

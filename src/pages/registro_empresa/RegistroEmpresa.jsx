@@ -68,8 +68,8 @@ export const RegistroEmpresa = () => {
   const OnSubmitRegisterCompany = async (e) => {
     e.preventDefault();
 
-    const usuarioEmpresa = {
-      razonsocial: razonSocial,
+    let usuarioEmpresa = {
+      razonSocial: razonSocial,
       cuit: cuit,
       clave: password,
       email: email_first,
@@ -77,8 +77,15 @@ export const RegistroEmpresa = () => {
       telefono_prefijo: prefijo_first,
       whatsapp: whatsapp,
       whatsapp_prefijo: whatsapp_prefijo,
-      ramo: ramo,
-      telefonosAlternativos: [
+      ramoId: ramo,
+    };
+
+    if (
+      phoneAlternativos &&
+      phoneAlternativos.length > 0 &&
+      (prefijo_second || phone_second)
+    ) {
+      usuarioEmpresa[telefonosAlternativos] = [
         {
           prefijo: prefijo_second,
           nro: phone_second,
@@ -89,18 +96,43 @@ export const RegistroEmpresa = () => {
           nro: phone.nro,
           //id: phone.id
         })),
-      ],
-      emailAlternativos: [
+      ];
+    } else {
+      if (
+        phoneAlternativos &&
+        phoneAlternativos.length > 0 &&
+        (prefijo_second || phone_second)
+      )
+        usuarioEmpresa[telefonosAlternativos] = [
+          {
+            prefijo: prefijo_second,
+            nro: phone_second,
+            //id: 1
+          },
+        ];
+    }
+
+    if (emailAlternativos && emailAlternativos.length > 0 && email_second) {
+      usuarioEmpresa[emailAlternativos] = [
         {
           email: email_second,
-          //id: 1
         },
         ...emailAlternativos.map((email) => ({
           email: email.email,
-          //id: email.id
         })),
-      ],
-      domicilios: rows.map((row) => ({
+      ];
+    } else {
+      if (emailAlternativos && emailAlternativos.length > 0 && email_second) {
+        usuarioEmpresa[emailAlternativos] = [
+          {
+            email: email_second,
+          },
+        ];
+      }
+    }
+
+    if (rows && rows.length > 0) {
+      usuarioEmpresa[domicilios] = rows.map((row) => ({
         tipo: row.tipo,
         provincia: row.provinciaId,
         localidad: row.localidadId,
@@ -110,8 +142,10 @@ export const RegistroEmpresa = () => {
         oficina: row.oficina,
         cp: row.cp,
         planta: row.planta,
-      })),
-    };
+      }));
+    }
+
+    console.log(phoneAlternativos);
 
     await registrarEmpresa(usuarioEmpresa);
 

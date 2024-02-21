@@ -56,11 +56,6 @@ export const DatosEmpresa = () => {
     .usuario.token;
   const ID_EMPRESA = JSON.parse(localStorage.getItem("stateLogin"))
     .usuarioLogueado.empresa.id;
-  /* const ID = STATE.usuarioLogueado.empresa.id;
-  const TOKEN = STATE.usuarioLogueado.usuario.token;
-  const CUIT = STATE.usuarioLogueado.empresa.cuit;
-  const RAZONSOCIAL = STATE.usuarioLogueado.empresa.razonSocial;
-  const RAMO = STATE.usuarioLogueado.empresa.ramoId; */
 
   const [locale, setLocale] = useState("esES");
   const [rowsContacto, setRowsContacto] = useState([]);
@@ -94,8 +89,6 @@ export const DatosEmpresa = () => {
     const ObtenerRamos = async () => {
       const ramos = await getRamo(TOKEN);
       setRamos(ramos);
-      //const ramoEncontrado = ramos.find((ramo)=>ramo.id === ramo);
-      //setRamo(ramoEncontrado.id);
     };
     ObtenerRamos();
   }, []);
