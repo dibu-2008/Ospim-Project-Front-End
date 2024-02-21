@@ -6,39 +6,19 @@ import { errorBackendResponse } from "../../errors/errorBackendResponse";
 export const getRamo = async () => {
   const URL = `${BACKEND_URL}/empresa/public/ramo`;
 
-  const showSwalError = (descripcion) => {
-    Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      text: descripcion,
-      showConfirmButton: false,
-      timer: 3000,
-    });
-  };
-
   try {
     const ramoResponse = await axios.get(URL);
     const ramos = await ramoResponse.data;
 
     return ramos || [];
   } catch (error) {
-    errorBackendResponse(error, showSwalError);
+    errorBackendResponse(error);
     return [];
   }
 };
 
 export const registrarEmpresa = async (usuarioEmpresa) => {
   const URL = `${BACKEND_URL}/usuario/empresa/public/`;
-
-  const showSwalError = (descripcion) => {
-    Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      text: descripcion,
-      showConfirmButton: false,
-      timer: 3000,
-    });
-  };
 
   const showSwalSuccess = () => {
     Swal.fire({
@@ -58,7 +38,7 @@ export const registrarEmpresa = async (usuarioEmpresa) => {
       return true;
     }
   } catch (error) {
-    errorBackendResponse(error, showSwalError);
+    errorBackendResponse(error);
   }
   return false;
 };

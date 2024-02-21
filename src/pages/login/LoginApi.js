@@ -6,15 +6,9 @@ import { errorBackendResponse } from "../../errors/errorBackendResponse";
 
 export const logon = async (usuario, clave) => {
   const URL = `${BACKEND_URL}/auth/login`;
-
-  const showSwalError = (descripcion) => {
-    Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      text: descripcion,
-      showConfirmButton: false,
-      timer: 3000,
-    });
+  let jsonResponse = {
+    token: null,
+    tokenRefresco: null,
   };
 
   try {
@@ -27,7 +21,8 @@ export const logon = async (usuario, clave) => {
 
     return logon || {};
   } catch (error) {
-    errorBackendResponse(error, showSwalError);
+    errorBackendResponse(error);
+    return jsonResponse;
   }
 };
 

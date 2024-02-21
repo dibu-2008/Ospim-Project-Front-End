@@ -1,255 +1,166 @@
-import { errorBackendResponse } from '../../../../../errors/errorBackendResponse';
-import axios from 'axios'
-import Swal from 'sweetalert2'
+import { errorBackendResponse } from "../../../../../errors/errorBackendResponse";
+import axios from "axios";
+import Swal from "sweetalert2";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const MESSAGE_HTTP_CREATED = import.meta.env.VITE_MESSAGE_HTTP_CREATED;
 const MESSAGE_HTTP_UPDATED = import.meta.env.VITE_MESSAGE_HTTP_UPDATED;
 const MESSAGE_HTTP_DELETED = import.meta.env.VITE_MESSAGE_HTTP_DELETED;
 
 export const obtenerAfiliados = async (token, cuil) => {
+  const URL = `${BACKEND_URL}/afiliado/?cuil=${cuil}`;
 
-    const URL = `${BACKEND_URL}/afiliado/?cuil=${cuil}`;
+  try {
+    const afiliadosResponse = await axios.get(URL, {
+      headers: {
+        Authorization: token,
+      },
+    });
+    const afiliados = await afiliadosResponse.data;
 
-    const showSwalError = (descripcion) => {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: descripcion,
-            showConfirmButton: false,
-            timer: 3000,
-        })
-    }
-
-    try {
-
-        const afiliadosResponse = await axios.get(URL, {
-            headers: {
-                'Authorization': token
-            }
-        });
-        const afiliados = await afiliadosResponse.data;
-
-        return afiliados || [];
-
-    } catch (error) {
-
-        errorBackendResponse(error, showSwalError);
-
-    }
-}
+    return afiliados || [];
+  } catch (error) {
+    errorBackendResponse(error);
+  }
+};
 
 export const obtenerCamaras = async (token) => {
+  const URL = `${BACKEND_URL}/camara`;
 
-    const URL = `${BACKEND_URL}/camara`;
+  try {
+    const camarasResponse = await axios.get(URL, {
+      headers: {
+        Authorization: token,
+      },
+    });
+    const camaras = await camarasResponse.data;
 
-    const showSwalError = (descripcion) => {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: descripcion,
-            showConfirmButton: false,
-            timer: 3000,
-        })
-    }
-
-    try {
-
-        const camarasResponse = await axios.get(URL, {
-            headers: {
-                'Authorization': token
-            }
-        });
-        const camaras = await camarasResponse.data;
-
-        return camaras || [];
-
-    } catch (error) {
-
-        errorBackendResponse(error, showSwalError);
-
-    }
-}
+    return camaras || [];
+  } catch (error) {
+    errorBackendResponse(error);
+  }
+};
 
 export const obtenerCategorias = async (token) => {
+  const URL = `${BACKEND_URL}/categoria`;
 
-    const URL = `${BACKEND_URL}/categoria`;
+  try {
+    const categoriasResponse = await axios.get(URL, {
+      headers: {
+        Authorization: token,
+      },
+    });
+    const categorias = await categoriasResponse.data;
 
-    const showSwalError = (descripcion) => {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: descripcion,
-            showConfirmButton: false,
-            timer: 3000,
-        })
-    }
-
-    try {
-
-        const categoriasResponse = await axios.get(URL, {
-            headers: {
-                'Authorization': token
-            }
-        });
-        const categorias = await categoriasResponse.data;
-
-        return categorias || [];
-
-    } catch (error) {
-
-        errorBackendResponse(error, showSwalError);
-
-    }
-}
+    return categorias || [];
+  } catch (error) {
+    errorBackendResponse(error);
+  }
+};
 
 export const obtenerPlantaEmpresas = async (token, empresaId) => {
+  const URL = `${BACKEND_URL}/empresa/${empresaId}/domicilio/planta`;
 
-    const URL = `${BACKEND_URL}/empresa/${empresaId}/domicilio/planta`;
+  try {
+    const plantasResponse = await axios.get(URL, {
+      headers: {
+        Authorization: token,
+      },
+    });
+    const plantas = await plantasResponse.data;
 
-    const showSwalError = (descripcion) => {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: descripcion,
-            showConfirmButton: false,
-            timer: 3000,
-        })
-    }
-
-    try {
-
-        const plantasResponse = await axios.get(URL, {
-            headers: {
-                'Authorization': token
-            }
-        });
-        const plantas = await plantasResponse.data;
-
-        return plantas || [];
-
-    } catch (error) {
-
-        errorBackendResponse(error, showSwalError);
-    }
-
-}
+    return plantas || [];
+  } catch (error) {
+    errorBackendResponse(error);
+  }
+};
 
 export const crearAltaDeclaracionJurada = async (token, empresaId, ddjj) => {
+  const URL = `${BACKEND_URL}/empresa/${empresaId}/ddjj`;
 
-    const URL = `${BACKEND_URL}/empresa/${empresaId}/ddjj`;
+  const showSwallSuccess = () => {
+    Swal.fire({
+      icon: "success",
+      title: MESSAGE_HTTP_CREATED,
+      showConfirmButton: false,
+      timer: 2000,
+    });
+  };
 
-    const showSwalError = (descripcion) => {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: descripcion,
-            showConfirmButton: true,
-        })
+  try {
+    const altaDeclaracionJuradaResponse = await axios.post(URL, ddjj, {
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    showSwallSuccess();
+
+    return altaDeclaracionJuradaResponse.data;
+  } catch (error) {
+    errorBackendResponse(error);
+  }
+};
+
+export const actualizarDeclaracionJurada = async (
+  token,
+  empresaId,
+  ddjj,
+  idDDJJ
+) => {
+  const URL = `${BACKEND_URL}/empresa/${empresaId}/ddjj/${idDDJJ}`;
+
+  const showSwallSuccess = () => {
+    Swal.fire({
+      icon: "success",
+      title: MESSAGE_HTTP_UPDATED,
+      showConfirmButton: false,
+      timer: 2000,
+    });
+  };
+
+  try {
+    const actualizarDeclaracionJuradaResponse = await axios.put(URL, ddjj, {
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    showSwallSuccess();
+
+    if (actualizarDeclaracionJuradaResponse.status === 200) {
+      showSwallSuccess();
     }
-
-    const showSwallSuccess = () => {
-
-        Swal.fire({
-            icon: 'success',
-            title: MESSAGE_HTTP_CREATED,
-            showConfirmButton: false,
-            timer: 2000,
-        })
-    }
-
-    try {
-
-        const altaDeclaracionJuradaResponse = await axios.post(URL, ddjj, {
-            headers: {
-                'Authorization': token
-            }
-        });
-
-        showSwallSuccess();
-
-        return altaDeclaracionJuradaResponse.data;
-
-    } catch (error) {
-
-        errorBackendResponse(error, showSwalError);
-
-    }
-
-}
-
-export const actualizarDeclaracionJurada = async (token, empresaId, ddjj, idDDJJ) => {
-
-    const URL = `${BACKEND_URL}/empresa/${empresaId}/ddjj/${idDDJJ}`;
-
-    const showSwalError = (descripcion) => {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: descripcion,
-            showConfirmButton: false,
-            timer: 2000,
-        })
-    }
-
-    const showSwallSuccess = () => {
-        Swal.fire({
-            icon: 'success',
-            title: MESSAGE_HTTP_UPDATED,
-            showConfirmButton: false,
-            timer: 2000,
-        })
-    }
-
-    try {
-
-        const actualizarDeclaracionJuradaResponse = await axios.put(URL, ddjj, {
-            headers: {
-                'Authorization': token
-            }
-        });
-
-        showSwallSuccess();
-
-        if (actualizarDeclaracionJuradaResponse.status === 200) {
-            showSwallSuccess();
-        }
-
-    } catch (error) {
-
-        errorBackendResponse(error, showSwalError);
-
-    }
-}
-
+  } catch (error) {
+    errorBackendResponse(error);
+  }
+};
 
 export const validarAltaDeclaracionJurada = async (token, empresaId, ddjj) => {
-    const URL = `${BACKEND_URL}/empresa/${empresaId}/ddjj/validar`;
+  const URL = `${BACKEND_URL}/empresa/${empresaId}/ddjj/validar`;
 
-    const showSwalError = (descripcion) => {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: descripcion,
-            showConfirmButton: true,
-        });
-    };
+  const showSwalError = (descripcion) => {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: descripcion,
+      showConfirmButton: true,
+    });
+  };
 
-    try {
-        const validarDDJJResponse = await axios.post(URL, ddjj, {
-            headers: {
-                'Authorization': token
-            }
-        });
+  try {
+    const validarDDJJResponse = await axios.post(URL, ddjj, {
+      headers: {
+        Authorization: token,
+      },
+    });
 
-        return validarDDJJResponse.data || [];
+    return validarDDJJResponse.data || [];
+  } catch (error) {
+    if (error.response && error.response.data) {
+      const { errores, codigo, descripcion, ticket, tipo } =
+        error.response.data;
 
-    } catch (error) {
-
-        if (error.response && error.response.data) {
-
-            const { errores, codigo, descripcion, ticket, tipo } = error.response.data;
-
-            /* const mensajesUnicos = new Set(); 
+      /* const mensajesUnicos = new Set(); 
 
             errores.errores.forEach(error => {
                 if (!mensajesUnicos.has(error.descripcion)) {
@@ -293,7 +204,7 @@ export const validarAltaDeclaracionJurada = async (token, empresaId, ddjj) => {
                 }
             }); */
 
-            return errores || [];
-        }
+      return errores || [];
     }
+  }
 };

@@ -1,12 +1,13 @@
-import { consultarUsuarioLogueado, logon, logonDFA, usuarioLogueadoHabilitadoDFA } from "./LoginApi.js";
+import {
+  consultarUsuarioLogueado,
+  logon,
+  logonDFA,
+  usuarioLogueadoHabilitadoDFA,
+} from "./LoginApi.js";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useEffect } from "react";
 import { useFormLoginInternalUser } from "../../hooks/useFormLoginInternalUser.js";
-/* ANTES 
-import { InputComponent } from "../../components/InputComponent.jsx";
-import { ButtonComponent } from "../../components/ButtonComponent.jsx"; 
-*/
-// Ahora 
 import { InputComponent } from "@components/InputComponent.jsx";
 import { ButtonComponent } from "@components/ButtonComponent.jsx";
 import { showSwalSuccess } from "./LoginShowAlert.js";
@@ -14,12 +15,11 @@ import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
 import "./LoginPage.css";
 import { Button, TextField } from "@mui/material";
-import { ThreeDots } from 'react-loader-spinner'
+import { ThreeDots } from "react-loader-spinner";
 
 const VITE_WELCOME_PORTAL = import.meta.env.VITE_WELCOME_PORTAL;
 
 export const LoginPage = () => {
-
   const navigate = useNavigate();
 
   const {
@@ -32,13 +32,19 @@ export const LoginPage = () => {
     passwordLoginInternalUser: "",
   });
 
+  const [showSpinner, setShowSpinner] = useState(true);
   const [showInternalUserForm, setShowInternalUserForm] = useState(true);
   const [showVerificationForm, setShowVerificationForm] = useState(false);
-  const [verificationCode, setVerificationCode] = useState("310279");
-  const [token, setToken] = useState(null);
   const [showAlertUser, setShowAlertUser] = useState(false);
   const [showAlertPassword, setShowAlertPassword] = useState(false);
+  const [verificationCode, setVerificationCode] = useState("310279");
+  const [token, setToken] = useState(null);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setShowSpinner(false);
+    }, 1000);
+  }, []);
 
   const onVerificationCodeChange = (e) => {
     setVerificationCode(e.target.value);
@@ -46,17 +52,24 @@ export const LoginPage = () => {
 
   const onInputChangeUser = (e) => {
     OnInputChangeLoginInternalUser(e);
-    setShowAlertUser(false);
+    if (e.target.value && e.target.value.length > 0) {
+      setShowAlertUser(false);
+    } else {
+      setShowAlertUser(true);
+    }
   };
 
   const onInputChangePassword = (e) => {
     OnInputChangeLoginInternalUser(e);
-    setShowAlertPassword(false);
+    if (e.target.value && e.target.value.length > 0) {
+      setShowAlertPassword(false);
+    } else {
+      setShowAlertPassword(true);
+    }
   };
 
   const usuarioInfoFinal = (usuarioLogueado, token, tokenRefresco) => {
-
-    if (usuarioLogueado.hasOwnProperty('usuario')) {
+    if (usuarioLogueado.hasOwnProperty("usuario")) {
       usuarioLogueado.usuario.token = token;
       usuarioLogueado.usuario.tokenRefresco = tokenRefresco;
       navigate("/dashboard/inicio", {
@@ -67,11 +80,10 @@ export const LoginPage = () => {
         },
       });
     }
-  }
+  };
 
   const onLoginInternalUser = async (e) => {
     e.preventDefault();
-
 
     if (user === "" || passwordLoginInternalUser === "") {
       if (user === "") setShowAlertUser(true);
@@ -79,28 +91,29 @@ export const LoginPage = () => {
       return false;
     }
 
-    const { token, tokenRefresco } = await logon(user, passwordLoginInternalUser);
+    const { token, tokenRefresco } = await logon(
+      user,
+      passwordLoginInternalUser
+    );
 
-    const usuarioHabilitadoDFA = await usuarioLogueadoHabilitadoDFA(token);
+    if (token) {
+      const usuarioHabilitadoDFA = await usuarioLogueadoHabilitadoDFA(token);
 
-    if (usuarioHabilitadoDFA) {
-      setShowInternalUserForm(false);
-      setShowVerificationForm(true);
+      if (usuarioHabilitadoDFA) {
+        setShowInternalUserForm(false);
+        setShowVerificationForm(true);
+      } else {
+        setToken(token);
+        setRefreshToken(tokenRefresco);
+        OnResetFormLoginInternalUser();
+        showSwalSuccess(VITE_WELCOME_PORTAL);
 
-    } else {
+        const usuarioLogueado = await consultarUsuarioLogueado(token);
 
-      setToken(token);
-      setRefreshToken(tokenRefresco);
-      OnResetFormLoginInternalUser();
-      showSwalSuccess(VITE_WELCOME_PORTAL);
-
-      const usuarioLogueado = await consultarUsuarioLogueado(token);
-
-      usuarioInfoFinal(usuarioLogueado, token, tokenRefresco);
+        usuarioInfoFinal(usuarioLogueado, token, tokenRefresco);
+      }
     }
-
     OnResetFormLoginInternalUser();
-
   };
 
   const redirectToRegister = () => {
@@ -115,7 +128,6 @@ export const LoginPage = () => {
     const logonDfa = await logonDFA(token, verificationCode);
 
     if (logonDfa) {
-
       showSwalSuccess(VITE_WELCOME_PORTAL);
 
       const { token, tokenRefresco } = logonDfa;
@@ -125,7 +137,6 @@ export const LoginPage = () => {
       usuarioInfoFinal(usuarioLogueado, token, tokenRefresco);
     }
   };
-
 
   return (
     <div className="wrapper_container">
@@ -169,7 +180,7 @@ export const LoginPage = () => {
                 )}
               </div>
               <ThreeDots
-                visible={true}
+                visible={showSpinner}
                 height="80"
                 width="80"
                 color="#1A76D2"
@@ -181,7 +192,8 @@ export const LoginPage = () => {
               <Button
                 variant="contained"
                 sx={{
-                  marginTop: showAlertUser && showAlertPassword ? "50px" : "120px",
+                  marginTop:
+                    showAlertUser && showAlertPassword ? "50px" : "120px",
                 }}
                 type="submit"
                 className="siguiente"
