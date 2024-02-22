@@ -11,16 +11,6 @@ export const getRamo = async (token) => {
 
   const URL = `${BACKEND_URL}/empresa/ramo`;
 
-  const showSwalError = (descripcion) => {
-    Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      text: descripcion,
-      showConfirmButton: false,
-      timer: 3000,
-    });
-  };
-
   try {
     const ramoResponse = await axios.get(URL, {
       headers: {
@@ -31,7 +21,7 @@ export const getRamo = async (token) => {
 
     return ramos || [];
   } catch (error) {
-    errorBackendResponse(error, showSwalError);
+    errorBackendResponse(error);
     return [];
   }
 };
@@ -40,16 +30,6 @@ export const getEmpresa = async (token) => {
   if (!token) return [];
 
   const URL = `${BACKEND_URL}/auth/login/usuario`;
-
-  const showSwalError = (descripcion) => {
-    Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      text: descripcion,
-      showConfirmButton: false,
-      timer: 3000,
-    });
-  };
 
   try {
     const empresaResponse = await axios.get(URL, {
@@ -61,22 +41,12 @@ export const getEmpresa = async (token) => {
 
     return empresa || [];
   } catch (error) {
-    errorBackendResponse(error, showSwalError);
+    errorBackendResponse(error);
   }
 };
 
 export const modificarEmpresa = async (token, empresaId, empresaInfo) => {
   const URL = `${BACKEND_URL}/empresa/${empresaId}`;
-
-  const showSwalError = (descripcion) => {
-    Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      text: descripcion,
-      showConfirmButton: false,
-      timer: 3000,
-    });
-  };
 
   const showSwallSuccess = () => {
     Swal.fire({
@@ -98,6 +68,6 @@ export const modificarEmpresa = async (token, empresaId, empresaInfo) => {
       showSwallSuccess();
     }
   } catch (error) {
-    errorBackendResponse(error, showSwalError);
+    errorBackendResponse(error);
   }
 };

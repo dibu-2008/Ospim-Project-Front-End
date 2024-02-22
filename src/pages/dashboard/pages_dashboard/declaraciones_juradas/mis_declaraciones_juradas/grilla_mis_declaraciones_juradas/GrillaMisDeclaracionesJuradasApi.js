@@ -7,18 +7,7 @@ const MESSAGE_HTTP_UPDATED = import.meta.env.VITE_MESSAGE_HTTP_UPDATED;
 const MESSAGE_HTTP_DELETED = import.meta.env.VITE_MESSAGE_HTTP_DELETED;
 
 export const obtenerMisDeclaracionesJuradas = async (idEmpresa, token) => {
-
   const URL = `${BACKEND_URL}/empresa/${idEmpresa}/ddjj/totales`;
-
-  const showSwalError = (descripcion) => {
-    Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      text: descripcion,
-      showConfirmButton: false,
-      timer: 3000,
-    });
-  };
 
   try {
     const declaracionesJuradasResponse = await axios.get(URL, {
@@ -31,26 +20,18 @@ export const obtenerMisDeclaracionesJuradas = async (idEmpresa, token) => {
 
     return declaracionesJuradas || [];
   } catch (error) {
-    errorBackendResponse(error, showSwalError);
+    errorBackendResponse(error);
   }
 };
 
-export const obtenerMiDeclaracionJurada = async (idEmpresa, idDeclaracionJurada, token) => {
-
+export const obtenerMiDeclaracionJurada = async (
+  idEmpresa,
+  idDeclaracionJurada,
+  token
+) => {
   const URL = `${BACKEND_URL}/empresa/${idEmpresa}/ddjj/${idDeclaracionJurada}`;
 
-  const showSwalError = (descripcion) => {
-    Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      text: descripcion,
-      showConfirmButton: false,
-      timer: 3000,
-    });
-  }
-
   try {
-
     const declaracionJuradaResponse = await axios.get(URL, {
       headers: {
         Authorization: token,
@@ -60,12 +41,10 @@ export const obtenerMiDeclaracionJurada = async (idEmpresa, idDeclaracionJurada,
     const declaracionJurada = await declaracionJuradaResponse.data;
 
     return declaracionJurada || {};
-
+  } catch (error) {
+    errorBackendResponse(error);
   }
-  catch (error) {
-    errorBackendResponse(error, showSwalError);
-  }
-}
+};
 
 export const presentarDeclaracionJurada = async (
   idEmpresa,
@@ -74,16 +53,6 @@ export const presentarDeclaracionJurada = async (
   token
 ) => {
   const URL = `${BACKEND_URL}/empresa/${idEmpresa}/ddjj/${idDeclaracionJurada}/presentar`;
-
-  const showSwalError = (descripcion) => {
-    Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      text: descripcion,
-      showConfirmButton: false,
-      timer: 2000,
-    });
-  };
 
   const showSwallSuccess = () => {
     Swal.fire({
@@ -105,7 +74,7 @@ export const presentarDeclaracionJurada = async (
       showSwallSuccess();
     }
   } catch (error) {
-    errorBackendResponse(error, showSwalError);
+    errorBackendResponse(error);
   }
 };
 
@@ -115,16 +84,6 @@ export const eliminarDeclaracionJurada = async (
   token
 ) => {
   const URL = `${BACKEND_URL}/empresa/${idEmpresa}/ddjj/${idDeclaracionJurada}`;
-
-  const showSwalError = (descripcion) => {
-    Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      text: descripcion,
-      showConfirmButton: false,
-      timer: 2000,
-    });
-  };
 
   const showSwallSuccess = () => {
     Swal.fire({
@@ -146,22 +105,12 @@ export const eliminarDeclaracionJurada = async (
       showSwallSuccess();
     }
   } catch (error) {
-    errorBackendResponse(error, showSwalError);
+    errorBackendResponse(error);
   }
 };
 
 export const obtenerAportes = async (idEmpresa, token) => {
   const URL = `${BACKEND_URL}/aportes/`;
-
-  const showSwalError = (descripcion) => {
-    Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      text: descripcion,
-      showConfirmButton: false,
-      timer: 3000,
-    });
-  };
 
   try {
     const aportesResponse = await axios.get(URL, {
@@ -174,23 +123,16 @@ export const obtenerAportes = async (idEmpresa, token) => {
 
     return aportes || [];
   } catch (error) {
-    errorBackendResponse(error, showSwalError);
+    errorBackendResponse(error);
   }
 };
 
-
-export const imprimirDeclaracionJurada = async (idEmpresa, idDeclaracionJurada, token) => {
+export const imprimirDeclaracionJurada = async (
+  idEmpresa,
+  idDeclaracionJurada,
+  token
+) => {
   const URL = `${BACKEND_URL}/empresa/${idEmpresa}/ddjj/${idDeclaracionJurada}/imprimir`;
-
-  const showSwalError = (descripcion) => {
-    Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      text: descripcion,
-      showConfirmButton: false,
-      timer: 3000,
-    });
-  };
 
   try {
     const imprimirDeclaracionJuradaResponse = await axios.get(URL, {
@@ -200,13 +142,18 @@ export const imprimirDeclaracionJurada = async (idEmpresa, idDeclaracionJurada, 
       responseType: "blob",
     });
 
-    const url = window.URL.createObjectURL(new Blob([imprimirDeclaracionJuradaResponse.data]));
+    const url = window.URL.createObjectURL(
+      new Blob([imprimirDeclaracionJuradaResponse.data])
+    );
     const link = document.createElement("a");
     link.href = url;
-    link.setAttribute("download", `DeclaracionJurada${idDeclaracionJurada}.pdf`);
+    link.setAttribute(
+      "download",
+      `DeclaracionJurada${idDeclaracionJurada}.pdf`
+    );
     document.body.appendChild(link);
     link.click();
   } catch (error) {
-    errorBackendResponse(error, showSwalError);
+    errorBackendResponse(error);
   }
-}
+};
