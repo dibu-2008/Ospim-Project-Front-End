@@ -646,15 +646,18 @@ module.exports = (req, res, next) => {
     const { codigoBoleta } = req.query
     const { intencion_de_pago } = req.body
     const interes_diario = 0.01  
-    const boleta = req.app.db.__wrapped__.boletas.detalle_boletas.find(boleta => boleta.codigo === codigoBoleta)
-    console.log(boleta)
+    const boletaOrig = req.app.db.__wrapped__.boletas.detalle_boletas.find(boleta => boleta.codigo === codigoBoleta)
+    const boleta = JSON.parse(JSON.stringify(boletaOrig))
     const diferencia_en_dias  = calcula_diferencia_de_dias(intencion_de_pago, boleta.vencimiento)
+    
     if (diferencia_en_dias >= 0){
       const monto_interes = boleta.total_acumulado * interes_diario *  diferencia_en_dias
       boleta.total_acumulado += monto_interes
       boleta.interes = monto_interes
     }
-    res.status(200).jsonp({intencion_de_pago,boleta}) 
+    
+    boleta.intencion_de_pago = intencion_de_pago
+    res.status(200).jsonp({...boleta}) 
   }
 
   function getBoletaByDDJJIDandCodigo(){
@@ -662,7 +665,6 @@ module.exports = (req, res, next) => {
     const BOLETAS_BY_DDDJJ = req.app.db.__wrapped__.boletas_guardadas.find(boletasddjj => boletasddjj.declaracion_jurada_id == ddjj_id )
     const BOLETA_BY_CODIGO = BOLETAS_BY_DDDJJ.detalle_boletas.find(boleta => boleta.codigo == codigo)
     res.status(200).jsonp(BOLETA_BY_CODIGO)
-    
   }
 
 };

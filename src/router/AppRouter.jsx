@@ -19,6 +19,7 @@ import { RegistroEmpresa } from "../pages/registro_empresa/RegistroEmpresa";
 import { CuitsRestringidos } from "../pages/dashboard/pages_dashboard/cuits-restringidos/CuitsRestringidos";
 import { Boletas } from "../pages/dashboard/pages_dashboard/boletas/Boletas";
 import { Roles } from "@/pages/dashboard/pages_dashboard/roles/Roles";
+import { GenerarBoletas } from "@/pages/dashboard/pages_dashboard/generar_boletas/GenerarBoletas";
 
 const PagosPage = () => <div>Contenido de la página de pagos</div>;
 
@@ -48,6 +49,8 @@ const AppRouter = () => {
             <Route path="altausuariointerno" element={<AltaUsuarioInterno />} />
             <Route path="cuitsrestringidos" element={<CuitsRestringidos />} />
             <Route path="roles" element={<Roles />} />
+            <Route path="generarboletas" element={<GenerarBoletas />} />
+            
           </Route>
           <Route path="registercompany" element={<RegistroEmpresa />} />
           <Route index element={<Navigate to="/login" />} />
