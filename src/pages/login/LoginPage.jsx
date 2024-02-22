@@ -21,6 +21,14 @@ const VITE_WELCOME_PORTAL = import.meta.env.VITE_WELCOME_PORTAL;
 
 export const LoginPage = () => {
   const navigate = useNavigate();
+  const [showSpinner, setShowSpinner] = useState(true);
+  const [showInternalUserForm, setShowInternalUserForm] = useState(true);
+  const [showVerificationForm, setShowVerificationForm] = useState(false);
+  const [showAlertUser, setShowAlertUser] = useState(false);
+  const [showAlertPassword, setShowAlertPassword] = useState(false);
+  const [verificationCode, setVerificationCode] = useState("310279");
+  const [token, setToken] = useState(null);
+  const [refreshToken, setRefreshToken] = useState(null);
 
   const {
     user,
@@ -31,14 +39,6 @@ export const LoginPage = () => {
     user: "",
     passwordLoginInternalUser: "",
   });
-
-  const [showSpinner, setShowSpinner] = useState(true);
-  const [showInternalUserForm, setShowInternalUserForm] = useState(true);
-  const [showVerificationForm, setShowVerificationForm] = useState(false);
-  const [showAlertUser, setShowAlertUser] = useState(false);
-  const [showAlertPassword, setShowAlertPassword] = useState(false);
-  const [verificationCode, setVerificationCode] = useState("310279");
-  const [token, setToken] = useState(null);
 
   useEffect(() => {
     setTimeout(() => {
@@ -68,10 +68,10 @@ export const LoginPage = () => {
     }
   };
 
-  const usuarioInfoFinal = (usuarioLogueado, token, tokenRefresco) => {
+  const usuarioInfoFinal = (usuarioLogueado, token, refreshToken) => {
     if (usuarioLogueado.hasOwnProperty("usuario")) {
       usuarioLogueado.usuario.token = token;
-      usuarioLogueado.usuario.tokenRefresco = tokenRefresco;
+      usuarioLogueado.usuario.tokenRefresco = refreshToken;
       navigate("/dashboard/inicio", {
         replace: true,
         state: {
@@ -84,34 +84,49 @@ export const LoginPage = () => {
 
   const onLoginInternalUser = async (e) => {
     e.preventDefault();
-
     if (user === "" || passwordLoginInternalUser === "") {
       if (user === "") setShowAlertUser(true);
       if (passwordLoginInternalUser === "") setShowAlertPassword(true);
       return false;
     }
 
-    const { token, tokenRefresco } = await logon(
-      user,
-      passwordLoginInternalUser
-    );
+    const loginDto = await logon(user, passwordLoginInternalUser);
 
-    if (token) {
-      const usuarioHabilitadoDFA = await usuarioLogueadoHabilitadoDFA(token);
-
-      if (usuarioHabilitadoDFA) {
+    if (loginDto && loginDto.token) {
+      console.log("EXISTE loginDto.token");
+      const usuarioHabilitadoDFA = await usuarioLogueadoHabilitadoDFA(
+        loginDto.token
+      );
+      let bUsuarioHabilitadoDFA = false;
+      if (usuarioHabilitadoDFA && usuarioHabilitadoDFA == "true") {
+        bUsuarioHabilitadoDFA = true;
+      }
+      console.log(bUsuarioHabilitadoDFA);
+      if (bUsuarioHabilitadoDFA) {
+        console.log("usuarioHabilitadoDFA: TRUE !!!");
         setShowInternalUserForm(false);
         setShowVerificationForm(true);
       } else {
-        setToken(token);
-        setRefreshToken(tokenRefresco);
-        OnResetFormLoginInternalUser();
+        console.log("usuarioHabilitadoDFA: FALSE !!!");
+        setToken(loginDto.token);
+        setRefreshToken(loginDto.tokenRefresco);
+        //OnResetFormLoginInternalUser();
+
+        const usuarioLogueado = await consultarUsuarioLogueado(loginDto.token);
+        console.log("usuarioLogueado: ");
+        console.log(usuarioLogueado);
+
+        usuarioInfoFinal(
+          usuarioLogueado,
+          loginDto.token,
+          loginDto.tokenRefresco
+        );
+
         showSwalSuccess(VITE_WELCOME_PORTAL);
-
-        const usuarioLogueado = await consultarUsuarioLogueado(token);
-
-        usuarioInfoFinal(usuarioLogueado, token, tokenRefresco);
       }
+    } else {
+      console.log(loginDto);
+      console.log("onLoginInternalUser - INIT-loginDto:NO EXISTE");
     }
     OnResetFormLoginInternalUser();
   };
@@ -130,11 +145,11 @@ export const LoginPage = () => {
     if (logonDfa) {
       showSwalSuccess(VITE_WELCOME_PORTAL);
 
-      const { token, tokenRefresco } = logonDfa;
+      const { token, refreshToken } = logonDfa;
 
       const usuarioLogueado = await consultarUsuarioLogueado(token);
 
-      usuarioInfoFinal(usuarioLogueado, token, tokenRefresco);
+      usuarioInfoFinal(usuarioLogueado, token, refreshToken);
     }
   };
 

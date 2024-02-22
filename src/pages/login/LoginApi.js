@@ -65,7 +65,7 @@ export const logonDFA = async (token, codigo) => {
 
 export const consultarUsuarioLogueado = async (token) => {
   const URL = `${BACKEND_URL}/auth/login/usuario`;
-
+  console.log("consultarUsuarioLogueado - INIT");
   try {
     const usuarioLogeadoResponse = await axios.get(URL, {
       headers: {
@@ -77,6 +77,7 @@ export const consultarUsuarioLogueado = async (token) => {
 
     return usuarioLogeado || {};
   } catch (error) {
+    console.log("consultarUsuarioLogueado - ERRROR");
     errorBackendResponse(error);
   }
 };
