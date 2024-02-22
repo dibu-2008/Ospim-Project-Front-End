@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { InputComponent } from "../../components/InputComponent";
 import { ButtonComponent } from "../../components/ButtonComponent";
 import { useFormRegisterCompany } from "../../hooks/useFormRegisterCompany";
@@ -9,8 +9,10 @@ import { registrarEmpresa, getRamo } from "./RegistroEmpresaApi";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Fab from "@mui/material/Fab";
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
 import AddIcon from "@mui/icons-material/Add";
-import { useEffect } from "react";
+import "./RegistroEmpresa.css";
 
 export const RegistroEmpresa = () => {
   const [additionalEmail, setAddionalEmail] = useState([]);
@@ -32,6 +34,8 @@ export const RegistroEmpresa = () => {
     getRamos();
     console.log(ramos);
   }, []);
+
+  
 
   const {
     cuit,
@@ -197,22 +201,13 @@ export const RegistroEmpresa = () => {
 
   return (
     <main>
-      <div className="container_dashboard_register_company">
+      <div className="registro_empresa_container">
         <form
-          sx={{
-            backgroundColor: "#000",
-          }}
           onSubmit={OnSubmitRegisterCompany}
           className="form_register_company"
         >
           <h1>Bienvenidos a OSPIM</h1>
-          <h3
-            style={{
-              marginBottom: "60px",
-            }}
-          >
-            Formulario de registro
-          </h3>
+          <h3>Formulario de registro</h3>
           <div className="input-group">
             <TextField
               type="text"
@@ -526,19 +521,32 @@ export const RegistroEmpresa = () => {
             </div>
           </div>
           <div className="input-group">
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={ramoAux}
-              label="Seleccionar ramo"
-              onChange={OnChangeRamos}
+            <Box
+              sx={{
+                textAlign: "left",
+                color: "#606060",
+                width: "100%",
+              }}
             >
-              {ramos.map((option, index) => (
-                <MenuItem key={index} value={option.id}>
-                  {option.descripcion}
-                </MenuItem>
-              ))}
-            </Select>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">
+                  Seleccionar ramo
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={ramoAux}
+                  label="Seleccionar ramo"
+                  onChange={OnChangeRamos}
+                >
+                  {ramos.map((option, index) => (
+                    <MenuItem key={index} value={option.id}>
+                      {option.descripcion}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
           </div>
 
           <div

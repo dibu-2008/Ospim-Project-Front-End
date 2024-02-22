@@ -1,0 +1,16 @@
+.registro_empresa_container {
+    margin: 50px auto;
+    width: 90%;
+}
+
+.registro_empresa_container h1 {
+    color: #1A76D2;
+    margin-bottom: 15px;
+    text-align: left !important;
+}
+
+.registro_empresa_container h3{
+    color: #1A76D2;
+    margin-bottom: 25px;
+    text-align: left !important;
+}
