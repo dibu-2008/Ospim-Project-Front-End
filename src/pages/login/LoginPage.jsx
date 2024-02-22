@@ -5,8 +5,7 @@ import {
   usuarioLogueadoHabilitadoDFA,
 } from "./LoginApi.js";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useFormLoginInternalUser } from "../../hooks/useFormLoginInternalUser.js";
 import { InputComponent } from "@components/InputComponent.jsx";
 import { ButtonComponent } from "@components/ButtonComponent.jsx";
@@ -15,7 +14,7 @@ import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
 import "./LoginPage.css";
 import { Button, TextField } from "@mui/material";
-import { ThreeDots } from "react-loader-spinner";
+import { ThreeCircles } from "react-loader-spinner";
 
 const VITE_WELCOME_PORTAL = import.meta.env.VITE_WELCOME_PORTAL;
 
@@ -52,20 +51,12 @@ export const LoginPage = () => {
 
   const onInputChangeUser = (e) => {
     OnInputChangeLoginInternalUser(e);
-    if (e.target.value && e.target.value.length > 0) {
-      setShowAlertUser(false);
-    } else {
-      setShowAlertUser(true);
-    }
+    setShowAlertUser(false);
   };
 
   const onInputChangePassword = (e) => {
     OnInputChangeLoginInternalUser(e);
-    if (e.target.value && e.target.value.length > 0) {
-      setShowAlertPassword(false);
-    } else {
-      setShowAlertPassword(true);
-    }
+    setShowAlertPassword(false);
   };
 
   const usuarioInfoFinal = (usuarioLogueado, token, refreshToken) => {
@@ -153,6 +144,16 @@ export const LoginPage = () => {
     }
   };
 
+  useEffect(() => {
+    if (showVerificationForm) {
+      const timer = setTimeout(() => {
+        setShowInputComponent(true);
+        setShowLoading(false);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [showVerificationForm]); // useEffect se ejecutará cuando showVerificationForm cambie
+
   return (
     <div className="wrapper_container">
       {showInternalUserForm && (
@@ -194,16 +195,6 @@ export const LoginPage = () => {
                   </Stack>
                 )}
               </div>
-              <ThreeDots
-                visible={showSpinner}
-                height="80"
-                width="80"
-                color="#1A76D2"
-                radius="9"
-                ariaLabel="three-dots-loading"
-                wrapperStyle={{}}
-                wrapperClass=""
-              />
               <Button
                 variant="contained"
                 sx={{
@@ -226,18 +217,33 @@ export const LoginPage = () => {
       {showVerificationForm && (
         <div className="wrapper">
           <div className="contenedor_form_code">
-            <h1>Ingrese el codigó</h1>
+            <h1>Ingrese su token de validacion</h1>
+
             <form onSubmit={onVerificationCodeSubmit}>
               <div className="input_group_code">
-                <InputComponent
-                  type="number"
-                  name="verificationCode"
-                  id="verificationCode"
-                  value={verificationCode}
-                  onChange={onVerificationCodeChange}
-                  autoComplete="off"
-                  label="Contraseña"
+                <ThreeCircles
+                  visible={showLoading}
+                  height="100"
+                  width="100"
+                  color="#1A76D2"
+                  ariaLabel="three-circles-loading"
+                  wrapperStyle={{
+                    margin: "0 auto",
+                  }}
+                  wrapperClass=""
                 />
+                {showInputComponent && (
+                  <TextField
+                    type="text"
+                    name="verificationCode"
+                    id="verificationCode"
+                    value={verificationCode}
+                    onChange={onVerificationCodeChange}
+                    autoComplete="off"
+                    label="Código"
+                    className="input_data"
+                  />
+                )}
               </div>
               <ButtonComponent
                 styles={{
