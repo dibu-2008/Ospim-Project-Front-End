@@ -45,10 +45,14 @@ export const LoginPage = () => {
     }, 1000);
   }, []);
 
-  const onVerificationCodeChange = (e) => {
-    setVerificationCode(e.target.value);
+  //Link a Registrar Compania
+  const redirectToRegister = () => {
+    navigate("/registercompany", {
+      replace: true,
+    });
   };
 
+  //Eventos para Form de Loguin (usuario-clave)
   const onInputChangeUser = (e) => {
     OnInputChangeLoginInternalUser(e);
     setShowAlertUser(false);
@@ -59,20 +63,7 @@ export const LoginPage = () => {
     setShowAlertPassword(false);
   };
 
-  const usuarioInfoFinal = (usuarioLogueado, token, refreshToken) => {
-    if (usuarioLogueado.hasOwnProperty("usuario")) {
-      usuarioLogueado.usuario.token = token;
-      usuarioLogueado.usuario.tokenRefresco = refreshToken;
-      navigate("/dashboard/inicio", {
-        replace: true,
-        state: {
-          logged: true,
-          usuarioLogueado,
-        },
-      });
-    }
-  };
-
+  //Submit Form de Loguin
   const onLoginInternalUser = async (e) => {
     e.preventDefault();
     if (user === "" || passwordLoginInternalUser === "") {
@@ -85,15 +76,13 @@ export const LoginPage = () => {
 
     if (loginDto && loginDto.token) {
       console.log("EXISTE loginDto.token");
-      const usuarioHabilitadoDFA = await usuarioLogueadoHabilitadoDFA(
-        loginDto.token
-      );
-      let bUsuarioHabilitadoDFA = false;
-      if (usuarioHabilitadoDFA && usuarioHabilitadoDFA == "true") {
-        bUsuarioHabilitadoDFA = true;
+      const usuarioConDFA = await usuarioLogueadoHabilitadoDFA(loginDto.token);
+      let bUsuarioConDFA = false;
+      if (usuarioConDFA && usuarioConDFA == "true") {
+        bUsuarioConDFA = true;
       }
-      console.log(bUsuarioHabilitadoDFA);
-      if (bUsuarioHabilitadoDFA) {
+      console.log(bUsuarioConDFA);
+      if (bUsuarioConDFA) {
         console.log("usuarioHabilitadoDFA: TRUE !!!");
         setShowInternalUserForm(false);
         setShowVerificationForm(true);
@@ -107,7 +96,7 @@ export const LoginPage = () => {
         console.log("usuarioLogueado: ");
         console.log(usuarioLogueado);
 
-        usuarioInfoFinal(
+        getUsuarioLogueadoInfo(
           usuarioLogueado,
           loginDto.token,
           loginDto.tokenRefresco
@@ -122,12 +111,12 @@ export const LoginPage = () => {
     OnResetFormLoginInternalUser();
   };
 
-  const redirectToRegister = () => {
-    navigate("/registercompany", {
-      replace: true,
-    });
+  //Eventos para Form DFA  (Token)
+  const onVerificationCodeChange = (e) => {
+    setVerificationCode(e.target.value);
   };
 
+  //Submit Formulario DFA (Token)
   const onVerificationCodeSubmit = async (e) => {
     e.preventDefault();
 
@@ -140,7 +129,30 @@ export const LoginPage = () => {
 
       const usuarioLogueado = await consultarUsuarioLogueado(token);
 
-      usuarioInfoFinal(usuarioLogueado, token, refreshToken);
+      getUsuarioLogueadoInfo(usuarioLogueado, token, refreshToken);
+    }
+  };
+
+  //Consulta Datos Usuario Logueado
+  const getUsuarioLogueadoInfo = (usuarioLogueado, token, refreshToken) => {
+    console.log("usuarioInfoFinal - init");
+    console.log(usuarioLogueado);
+    if (usuarioLogueado.hasOwnProperty("usuario")) {
+      usuarioLogueado.usuario.token = token;
+      usuarioLogueado.usuario.tokenRefresco = refreshToken;
+      console.log(usuarioLogueado);
+      navigate("/dashboard/inicio", {
+        replace: true,
+        state: {
+          logged: true,
+          usuarioLogueado,
+        },
+      });
+      console.log("HIZO navigate() !! ");
+    } else {
+      console.log(
+        "usuarioInfoFinal - usuarioLogueado.hasOwnProperty() = FALSE"
+      );
     }
   };
 
@@ -217,7 +229,7 @@ export const LoginPage = () => {
       {showVerificationForm && (
         <div className="wrapper">
           <div className="contenedor_form_code">
-            <h1>Ingrese su token de validacion</h1>
+            <h1>Ingrese Token de validaci&oacute;n</h1>
 
             <form onSubmit={onVerificationCodeSubmit}>
               <div className="input_group_code">
