@@ -88,6 +88,7 @@ export const DatosEmpresa = () => {
   useEffect(() => {
     const ObtenerRamos = async () => {
       const ramos = await getRamo(TOKEN);
+      console.log(ramos);
       setRamos(ramos);
     };
     ObtenerRamos();

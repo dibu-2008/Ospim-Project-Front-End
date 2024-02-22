@@ -1,13 +1,12 @@
-import {
-  consultarUsuarioLogueado,
-  logon,
-  logonDFA,
-  usuarioLogueadoHabilitadoDFA,
-} from "./LoginApi.js";
+import { consultarUsuarioLogueado, logon, logonDFA, usuarioLogueadoHabilitadoDFA } from "./LoginApi.js";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useFormLoginInternalUser } from "../../hooks/useFormLoginInternalUser.js";
+/* ANTES 
+import { InputComponent } from "../../components/InputComponent.jsx";
+import { ButtonComponent } from "../../components/ButtonComponent.jsx"; 
+*/
+// Ahora 
 import { InputComponent } from "@components/InputComponent.jsx";
 import { ButtonComponent } from "@components/ButtonComponent.jsx";
 import { showSwalSuccess } from "./LoginShowAlert.js";
@@ -15,11 +14,12 @@ import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
 import "./LoginPage.css";
 import { Button, TextField } from "@mui/material";
-import { ThreeDots } from "react-loader-spinner";
+import { ThreeCircles } from 'react-loader-spinner'
 
 const VITE_WELCOME_PORTAL = import.meta.env.VITE_WELCOME_PORTAL;
 
 export const LoginPage = () => {
+
   const navigate = useNavigate();
 
   const {
@@ -32,19 +32,14 @@ export const LoginPage = () => {
     passwordLoginInternalUser: "",
   });
 
-  const [showSpinner, setShowSpinner] = useState(true);
   const [showInternalUserForm, setShowInternalUserForm] = useState(true);
   const [showVerificationForm, setShowVerificationForm] = useState(false);
-  const [showAlertUser, setShowAlertUser] = useState(false);
-  const [showAlertPassword, setShowAlertPassword] = useState(false);
   const [verificationCode, setVerificationCode] = useState("310279");
   const [token, setToken] = useState(null);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setShowSpinner(false);
-    }, 1000);
-  }, []);
+  const [showAlertUser, setShowAlertUser] = useState(false);
+  const [showAlertPassword, setShowAlertPassword] = useState(false);
+  const [showInputComponent, setShowInputComponent] = useState(false);
+  const [showLoading, setShowLoading] = useState(true);
 
   const onVerificationCodeChange = (e) => {
     setVerificationCode(e.target.value);
@@ -52,24 +47,17 @@ export const LoginPage = () => {
 
   const onInputChangeUser = (e) => {
     OnInputChangeLoginInternalUser(e);
-    if (e.target.value && e.target.value.length > 0) {
-      setShowAlertUser(false);
-    } else {
-      setShowAlertUser(true);
-    }
+    setShowAlertUser(false);
   };
 
   const onInputChangePassword = (e) => {
     OnInputChangeLoginInternalUser(e);
-    if (e.target.value && e.target.value.length > 0) {
-      setShowAlertPassword(false);
-    } else {
-      setShowAlertPassword(true);
-    }
+    setShowAlertPassword(false);
   };
 
   const usuarioInfoFinal = (usuarioLogueado, token, tokenRefresco) => {
-    if (usuarioLogueado.hasOwnProperty("usuario")) {
+
+    if (usuarioLogueado.hasOwnProperty('usuario')) {
       usuarioLogueado.usuario.token = token;
       usuarioLogueado.usuario.tokenRefresco = tokenRefresco;
       navigate("/dashboard/inicio", {
@@ -80,10 +68,11 @@ export const LoginPage = () => {
         },
       });
     }
-  };
+  }
 
   const onLoginInternalUser = async (e) => {
     e.preventDefault();
+
 
     if (user === "" || passwordLoginInternalUser === "") {
       if (user === "") setShowAlertUser(true);
@@ -91,29 +80,28 @@ export const LoginPage = () => {
       return false;
     }
 
-    const { token, tokenRefresco } = await logon(
-      user,
-      passwordLoginInternalUser
-    );
+    const { token, tokenRefresco } = await logon(user, passwordLoginInternalUser);
 
-    if (token) {
-      const usuarioHabilitadoDFA = await usuarioLogueadoHabilitadoDFA(token);
+    const usuarioHabilitadoDFA = await usuarioLogueadoHabilitadoDFA(token);
 
-      if (usuarioHabilitadoDFA) {
-        setShowInternalUserForm(false);
-        setShowVerificationForm(true);
-      } else {
-        setToken(token);
-        setRefreshToken(tokenRefresco);
-        OnResetFormLoginInternalUser();
-        showSwalSuccess(VITE_WELCOME_PORTAL);
+    if (usuarioHabilitadoDFA) {
+      setShowInternalUserForm(false);
+      setShowVerificationForm(true);
 
-        const usuarioLogueado = await consultarUsuarioLogueado(token);
+    } else {
 
-        usuarioInfoFinal(usuarioLogueado, token, tokenRefresco);
-      }
+      setToken(token);
+      setRefreshToken(tokenRefresco);
+      OnResetFormLoginInternalUser();
+      showSwalSuccess(VITE_WELCOME_PORTAL);
+
+      const usuarioLogueado = await consultarUsuarioLogueado(token);
+
+      usuarioInfoFinal(usuarioLogueado, token, tokenRefresco);
     }
+
     OnResetFormLoginInternalUser();
+
   };
 
   const redirectToRegister = () => {
@@ -128,6 +116,7 @@ export const LoginPage = () => {
     const logonDfa = await logonDFA(token, verificationCode);
 
     if (logonDfa) {
+
       showSwalSuccess(VITE_WELCOME_PORTAL);
 
       const { token, tokenRefresco } = logonDfa;
@@ -137,6 +126,18 @@ export const LoginPage = () => {
       usuarioInfoFinal(usuarioLogueado, token, tokenRefresco);
     }
   };
+
+  useEffect(() => {
+    if (showVerificationForm) {
+      const timer = setTimeout(() => {
+        setShowInputComponent(true);
+        setShowLoading(false);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [showVerificationForm]); // useEffect se ejecutará cuando showVerificationForm cambie
+  
+
 
   return (
     <div className="wrapper_container">
@@ -179,21 +180,10 @@ export const LoginPage = () => {
                   </Stack>
                 )}
               </div>
-              <ThreeDots
-                visible={showSpinner}
-                height="80"
-                width="80"
-                color="#1A76D2"
-                radius="9"
-                ariaLabel="three-dots-loading"
-                wrapperStyle={{}}
-                wrapperClass=""
-              />
               <Button
                 variant="contained"
                 sx={{
-                  marginTop:
-                    showAlertUser && showAlertPassword ? "50px" : "120px",
+                  marginTop: showAlertUser && showAlertPassword ? "50px" : "120px",
                 }}
                 type="submit"
                 className="siguiente"
@@ -211,18 +201,35 @@ export const LoginPage = () => {
       {showVerificationForm && (
         <div className="wrapper">
           <div className="contenedor_form_code">
-            <h1>Ingrese el codigó</h1>
+            <h1>Ingrese su token de validacion</h1>
+            
             <form onSubmit={onVerificationCodeSubmit}>
               <div className="input_group_code">
-                <InputComponent
-                  type="number"
-                  name="verificationCode"
-                  id="verificationCode"
-                  value={verificationCode}
-                  onChange={onVerificationCodeChange}
-                  autoComplete="off"
-                  label="Contraseña"
+                <ThreeCircles
+                  visible={showLoading}
+                  height="100"
+                  width="100"
+                  color="#1A76D2"
+                  ariaLabel="three-circles-loading"
+                  wrapperStyle={{
+                    margin : "0 auto",
+                  }}
+                  wrapperClass=""
                 />
+                {
+                  showInputComponent && (
+                    <TextField
+                      type="text"
+                      name="verificationCode"
+                      id="verificationCode"
+                      value={verificationCode}
+                      onChange={onVerificationCodeChange}
+                      autoComplete="off"
+                      label="Código"
+                      className="input_data"
+                    />
+                  )
+                }
               </div>
               <ButtonComponent
                 styles={{
@@ -237,3 +244,4 @@ export const LoginPage = () => {
     </div>
   );
 };
+
