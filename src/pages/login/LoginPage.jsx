@@ -1,12 +1,12 @@
-import { consultarUsuarioLogueado, logon, logonDFA, usuarioLogueadoHabilitadoDFA } from "./LoginApi.js";
+import {
+  consultarUsuarioLogueado,
+  logon,
+  logonDFA,
+  usuarioLogueadoHabilitadoDFA,
+} from "./LoginApi.js";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useFormLoginInternalUser } from "../../hooks/useFormLoginInternalUser.js";
-/* ANTES 
-import { InputComponent } from "../../components/InputComponent.jsx";
-import { ButtonComponent } from "../../components/ButtonComponent.jsx"; 
-*/
-// Ahora 
 import { InputComponent } from "@components/InputComponent.jsx";
 import { ButtonComponent } from "@components/ButtonComponent.jsx";
 import { showSwalSuccess } from "./LoginShowAlert.js";
@@ -14,13 +14,20 @@ import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
 import "./LoginPage.css";
 import { Button, TextField } from "@mui/material";
-import { ThreeCircles } from 'react-loader-spinner'
+import { ThreeCircles } from "react-loader-spinner";
 
 const VITE_WELCOME_PORTAL = import.meta.env.VITE_WELCOME_PORTAL;
 
 export const LoginPage = () => {
-
   const navigate = useNavigate();
+  const [showSpinner, setShowSpinner] = useState(true);
+  const [showInternalUserForm, setShowInternalUserForm] = useState(true);
+  const [showVerificationForm, setShowVerificationForm] = useState(false);
+  const [showAlertUser, setShowAlertUser] = useState(false);
+  const [showAlertPassword, setShowAlertPassword] = useState(false);
+  const [verificationCode, setVerificationCode] = useState("310279");
+  const [token, setToken] = useState(null);
+  const [refreshToken, setRefreshToken] = useState(null);
 
   const {
     user,
@@ -32,14 +39,11 @@ export const LoginPage = () => {
     passwordLoginInternalUser: "",
   });
 
-  const [showInternalUserForm, setShowInternalUserForm] = useState(true);
-  const [showVerificationForm, setShowVerificationForm] = useState(false);
-  const [verificationCode, setVerificationCode] = useState("310279");
-  const [token, setToken] = useState(null);
-  const [showAlertUser, setShowAlertUser] = useState(false);
-  const [showAlertPassword, setShowAlertPassword] = useState(false);
-  const [showInputComponent, setShowInputComponent] = useState(false);
-  const [showLoading, setShowLoading] = useState(true);
+  useEffect(() => {
+    setTimeout(() => {
+      setShowSpinner(false);
+    }, 1000);
+  }, []);
 
   const onVerificationCodeChange = (e) => {
     setVerificationCode(e.target.value);
@@ -55,11 +59,10 @@ export const LoginPage = () => {
     setShowAlertPassword(false);
   };
 
-  const usuarioInfoFinal = (usuarioLogueado, token, tokenRefresco) => {
-
-    if (usuarioLogueado.hasOwnProperty('usuario')) {
+  const usuarioInfoFinal = (usuarioLogueado, token, refreshToken) => {
+    if (usuarioLogueado.hasOwnProperty("usuario")) {
       usuarioLogueado.usuario.token = token;
-      usuarioLogueado.usuario.tokenRefresco = tokenRefresco;
+      usuarioLogueado.usuario.tokenRefresco = refreshToken;
       navigate("/dashboard/inicio", {
         replace: true,
         state: {
@@ -68,40 +71,55 @@ export const LoginPage = () => {
         },
       });
     }
-  }
+  };
 
   const onLoginInternalUser = async (e) => {
     e.preventDefault();
-
-
     if (user === "" || passwordLoginInternalUser === "") {
       if (user === "") setShowAlertUser(true);
       if (passwordLoginInternalUser === "") setShowAlertPassword(true);
       return false;
     }
 
-    const { token, tokenRefresco } = await logon(user, passwordLoginInternalUser);
+    const loginDto = await logon(user, passwordLoginInternalUser);
 
-    const usuarioHabilitadoDFA = await usuarioLogueadoHabilitadoDFA(token);
+    if (loginDto && loginDto.token) {
+      console.log("EXISTE loginDto.token");
+      const usuarioHabilitadoDFA = await usuarioLogueadoHabilitadoDFA(
+        loginDto.token
+      );
+      let bUsuarioHabilitadoDFA = false;
+      if (usuarioHabilitadoDFA && usuarioHabilitadoDFA == "true") {
+        bUsuarioHabilitadoDFA = true;
+      }
+      console.log(bUsuarioHabilitadoDFA);
+      if (bUsuarioHabilitadoDFA) {
+        console.log("usuarioHabilitadoDFA: TRUE !!!");
+        setShowInternalUserForm(false);
+        setShowVerificationForm(true);
+      } else {
+        console.log("usuarioHabilitadoDFA: FALSE !!!");
+        setToken(loginDto.token);
+        setRefreshToken(loginDto.tokenRefresco);
+        //OnResetFormLoginInternalUser();
 
-    if (usuarioHabilitadoDFA) {
-      setShowInternalUserForm(false);
-      setShowVerificationForm(true);
+        const usuarioLogueado = await consultarUsuarioLogueado(loginDto.token);
+        console.log("usuarioLogueado: ");
+        console.log(usuarioLogueado);
 
+        usuarioInfoFinal(
+          usuarioLogueado,
+          loginDto.token,
+          loginDto.tokenRefresco
+        );
+
+        showSwalSuccess(VITE_WELCOME_PORTAL);
+      }
     } else {
-
-      setToken(token);
-      setRefreshToken(tokenRefresco);
-      OnResetFormLoginInternalUser();
-      showSwalSuccess(VITE_WELCOME_PORTAL);
-
-      const usuarioLogueado = await consultarUsuarioLogueado(token);
-
-      usuarioInfoFinal(usuarioLogueado, token, tokenRefresco);
+      console.log(loginDto);
+      console.log("onLoginInternalUser - INIT-loginDto:NO EXISTE");
     }
-
     OnResetFormLoginInternalUser();
-
   };
 
   const redirectToRegister = () => {
@@ -116,14 +134,13 @@ export const LoginPage = () => {
     const logonDfa = await logonDFA(token, verificationCode);
 
     if (logonDfa) {
-
       showSwalSuccess(VITE_WELCOME_PORTAL);
 
-      const { token, tokenRefresco } = logonDfa;
+      const { token, refreshToken } = logonDfa;
 
       const usuarioLogueado = await consultarUsuarioLogueado(token);
 
-      usuarioInfoFinal(usuarioLogueado, token, tokenRefresco);
+      usuarioInfoFinal(usuarioLogueado, token, refreshToken);
     }
   };
 
@@ -136,8 +153,6 @@ export const LoginPage = () => {
       return () => clearTimeout(timer);
     }
   }, [showVerificationForm]); // useEffect se ejecutará cuando showVerificationForm cambie
-  
-
 
   return (
     <div className="wrapper_container">
@@ -183,7 +198,8 @@ export const LoginPage = () => {
               <Button
                 variant="contained"
                 sx={{
-                  marginTop: showAlertUser && showAlertPassword ? "50px" : "120px",
+                  marginTop:
+                    showAlertUser && showAlertPassword ? "50px" : "120px",
                 }}
                 type="submit"
                 className="siguiente"
@@ -202,7 +218,7 @@ export const LoginPage = () => {
         <div className="wrapper">
           <div className="contenedor_form_code">
             <h1>Ingrese su token de validacion</h1>
-            
+
             <form onSubmit={onVerificationCodeSubmit}>
               <div className="input_group_code">
                 <ThreeCircles
@@ -212,24 +228,22 @@ export const LoginPage = () => {
                   color="#1A76D2"
                   ariaLabel="three-circles-loading"
                   wrapperStyle={{
-                    margin : "0 auto",
+                    margin: "0 auto",
                   }}
                   wrapperClass=""
                 />
-                {
-                  showInputComponent && (
-                    <TextField
-                      type="text"
-                      name="verificationCode"
-                      id="verificationCode"
-                      value={verificationCode}
-                      onChange={onVerificationCodeChange}
-                      autoComplete="off"
-                      label="Código"
-                      className="input_data"
-                    />
-                  )
-                }
+                {showInputComponent && (
+                  <TextField
+                    type="text"
+                    name="verificationCode"
+                    id="verificationCode"
+                    value={verificationCode}
+                    onChange={onVerificationCodeChange}
+                    autoComplete="off"
+                    label="Código"
+                    className="input_data"
+                  />
+                )}
               </div>
               <ButtonComponent
                 styles={{
@@ -244,4 +258,3 @@ export const LoginPage = () => {
     </div>
   );
 };
-
