@@ -208,7 +208,7 @@ export const RegistroEmpresa = () => {
         >
           <h1>Bienvenidos a OSPIM</h1>
           <h3>Formulario de registro</h3>
-          <div className="input-group">
+          {/* <div className="input-group">
             <TextField
               type="text"
               name="cuit"
@@ -217,8 +217,8 @@ export const RegistroEmpresa = () => {
               autoComplete="off"
               label="CUIT"
             />
-          </div>
-          <div className="input-group">
+          </div> */}
+          {/* <div className="input-group">
             <TextField
               type="text"
               name="razonSocial"
@@ -227,8 +227,8 @@ export const RegistroEmpresa = () => {
               autoComplete="off"
               label="Razón Social"
             />
-          </div>
-          <div className="input-group">
+          </div> */}
+          {/* <div className="input-group">
             <TextField
               type="email"
               id="email_first"
@@ -240,8 +240,8 @@ export const RegistroEmpresa = () => {
               }}
               label="E-mail principal N° 1"
             />
-          </div>
-          <div
+          </div> */}
+          {/* <div
             style={{
               position: "relative",
             }}
@@ -274,8 +274,8 @@ export const RegistroEmpresa = () => {
                 <AddIcon />
               </Fab>
             </Box>
-          </div>
-          {additionalEmail.map((input) => (
+          </div> */}
+          {/* {additionalEmail.map((input) => (
             <div className="input-group" key={input.id}>
               <TextField
                 type="email"
@@ -297,8 +297,8 @@ export const RegistroEmpresa = () => {
                 }}
               />
             </div>
-          ))}
-          <div className="input-group">
+          ))} */}
+          {/* <div className="input-group">
             <InputComponent
               type="password"
               name="password"
@@ -308,8 +308,8 @@ export const RegistroEmpresa = () => {
               variant="filled"
               label="Contraseña"
             />
-          </div>
-          <div className="input-group">
+          </div> */}
+          {/* <div className="input-group">
             <InputComponent
               type="password"
               name="repeatPassword"
@@ -319,8 +319,8 @@ export const RegistroEmpresa = () => {
               variant="filled"
               label="Repetir Contraseña"
             />
-          </div>
-          <div className="input-group">
+          </div> */}
+          {/* <div className="input-group">
             <div
               style={{
                 display: "flex",
@@ -360,8 +360,8 @@ export const RegistroEmpresa = () => {
                 />
               </div>
             </div>
-          </div>
-          <div className="input-group">
+          </div> */}
+          {/* <div className="input-group">
             <div
               style={{
                 display: "flex",
@@ -417,8 +417,8 @@ export const RegistroEmpresa = () => {
                 </Box>
               </div>
             </div>
-          </div>
-          {additionalPhone.map((input) => (
+          </div> */}
+          {/* {additionalPhone.map((input) => (
             <div className="input-group" key={input.id}>
               <div
                 style={{
@@ -477,7 +477,7 @@ export const RegistroEmpresa = () => {
                 </div>
               </div>
             </div>
-          ))}
+          ))} */}
           <div className="input-group">
             <div
               style={{
