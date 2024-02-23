@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState, useEffect, useMemo } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
@@ -14,14 +14,19 @@ import {
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
 
-import { useState } from "react";
 import {
   obtenerLocalidades,
   obtenerProvincias,
   obtenerTipoDomicilio,
 } from "./GrillaRegistroDomicilioApi";
-import { useEffect } from "react";
 import { MenuItem, Select } from "@mui/material";
+import {
+  createTheme as CrearTema,
+  ThemeProvider as ProveedorTemas,
+  useTheme as usarTema
+} from '@mui/material/styles';
+import * as localizaciones from '@mui/material/locale';
+import Swal from "sweetalert2";
 
 function EditToolbar(props) {
   const { setRows, rows, setRowModesModel } = props;
@@ -71,6 +76,11 @@ export const GrillaRegistroDomilicio = ({ rows, setRows }) => {
   const [provincias, setProvincias] = useState([]);
   const [provinciaSeleccionada, setProvinciaSeleccionada] = useState(null);
   const [localidades, setLocalidades] = useState([]);
+  const [localizacion, setLocalizacion] = useState('esES');
+  const [paginacion, setPaginacion] = useState({
+    pageSize: 10,
+    page: 0,
+  });
 
   useEffect(() => {
     const getTipoDomicilio = async () => {
@@ -82,6 +92,13 @@ export const GrillaRegistroDomilicio = ({ rows, setRows }) => {
 
     getTipoDomicilio();
   }, []);
+
+  const tema = usarTema();
+
+  const temaConlocalizacion = useMemo(
+    () => CrearTema(tema, localizaciones[localizacion]),
+    [localizacion, tema],
+  );
 
   useEffect(() => {
     const getProvincias = async () => {
@@ -112,16 +129,25 @@ export const GrillaRegistroDomilicio = ({ rows, setRows }) => {
     }
   };
 
+  const volverPrimerPagina = () => {
+    setPaginacion((paginacionAnterior) => ({
+      ...paginacionAnterior,
+      page: 0,
+    }));
+  };
+
   const handleEditClick = (id) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
 
   const handleSaveClick = (id) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+    showSwallAgregarDomicilio();
   };
 
   const handleDeleteClick = (id) => () => {
     setRows(rows.filter((row) => row.id !== id));
+    showSwallEliminarDomicilio();
   };
 
   const handleCancelClick = (id) => () => {
@@ -146,12 +172,32 @@ export const GrillaRegistroDomilicio = ({ rows, setRows }) => {
     setRowModesModel(newRowModesModel);
   };
 
+  const showSwallAgregarDomicilio = () => {
+    Swal.fire({
+      icon: "success",
+      title: "Se agrego el domicilio correctamente",
+      showConfirmButton: false,
+      timer: 2000,
+    });
+  };
+
+  const showSwallEliminarDomicilio = () => {
+    Swal.fire({
+      icon: "success",
+      title: "Se elimino el domicilio correctamente",
+      showConfirmButton: false,
+      timer: 2000,
+    });
+  };
+
   const columns = [
     {
       field: "tipo",
       headerName: "Tipo",
-      width: 120,
+      flex: 1,
       editable: true,
+      headerAlign: "center",
+      headerClassName: 'header--cell',
       type: "singleSelect",
       getOptionValue: (dato) => dato.codigo,
       getOptionLabel: (dato) => dato.descripcion,
@@ -160,8 +206,10 @@ export const GrillaRegistroDomilicio = ({ rows, setRows }) => {
     {
       field: "provinciaId",
       headerName: "Provincia",
-      width: 200,
+      flex: 1,
       editable: true,
+      headerClassName: 'header--cell',
+      headerAlign: "center",
       type: "singleSelect",
       getOptionValue: (dato) => dato.id,
       getOptionLabel: (dato) => dato.descripcion,
@@ -196,9 +244,11 @@ export const GrillaRegistroDomilicio = ({ rows, setRows }) => {
     {
       field: "localidadId",
       headerName: "Localidad",
-      width: 220,
+      headerClassName: 'header--cell',
+      flex: 1,
       editable: true,
       type: "singleSelect",
+      headerAlign: "center",
       getOptionValue: (dato) => dato.id,
       getOptionLabel: (dato) => dato.descripcion,
       valueOptions: localidades,
@@ -206,44 +256,58 @@ export const GrillaRegistroDomilicio = ({ rows, setRows }) => {
     {
       field: "calle",
       headerName: "Calle",
-      width: 120,
+      headerAlign: "center",
+      headerClassName: 'header--cell',
+      flex: 1,
       editable: true,
     },
     {
       field: "piso",
       headerName: "Piso",
-      width: 80,
+      headerAlign: "center",
+      headerClassName: 'header--cell',
+      flex: 1,
       editable: true,
     },
     {
       field: "depto",
       headerName: "Depto",
-      width: 80,
+      headerAlign: "center",
+      headerClassName: 'header--cell',
+      flex: 1,
       editable: true,
     },
     {
       field: "oficina",
       headerName: "Oficina",
-      width: 100,
+      headerAlign: "center",
+      headerClassName: 'header--cell',
+      flex: 1,
       editable: true,
     },
     {
       field: "cp",
       headerName: "CP",
-      width: 80,
+      headerAlign: "center",
+      headerClassName: 'header--cell',
+      flex: 1,
       editable: true,
     },
     {
       field: "planta",
       headerName: "Planta",
-      width: 100,
+      headerAlign: "center",
+      headerClassName: 'header--cell',
+      flex: 1,
       editable: true,
     },
     {
       field: "actions",
+      headerAlign: "center",
+      headerClassName: 'header--cell',
       type: "actions",
       headerName: "Acciones",
-      width: 100,
+      flex: 2,
       cellClassName: "actions",
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
@@ -300,25 +364,31 @@ export const GrillaRegistroDomilicio = ({ rows, setRows }) => {
         },
       }}
     >
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        editMode="row"
-        rowModesModel={rowModesModel}
-        onRowModesModelChange={handleRowModesModelChange}
-        onRowEditStop={handleRowEditStop}
-        processRowUpdate={processRowUpdate}
-        slots={{
-          toolbar: EditToolbar,
-        }}
-        slotProps={{
-          toolbar: {
-            setRows,
-            rows,
-            setRowModesModel,
-          },
-        }}
-      />
-    </Box>
+      <ProveedorTemas theme={temaConlocalizacion}>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          editMode="row"
+          rowModesModel={rowModesModel}
+          onRowModesModelChange={handleRowModesModelChange}
+          onRowEditStop={handleRowEditStop}
+          processRowUpdate={processRowUpdate}
+          slots={{
+            toolbar: EditToolbar,
+          }}
+          slotProps={{
+            toolbar: {
+              setRows,
+              rows,
+              setRowModesModel,
+              volverPrimerPagina,
+            },
+          }}
+          paginationModel={paginacion}
+          onPaginationModelChange={setPaginacion}
+          pageSizeOptions={[10, 15, 25]}
+        />
+      </ProveedorTemas>
+    </Box >
   );
 };
