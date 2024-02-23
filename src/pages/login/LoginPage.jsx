@@ -28,6 +28,8 @@ export const LoginPage = () => {
   const [verificationCode, setVerificationCode] = useState("310279");
   const [token, setToken] = useState(null);
   const [refreshToken, setRefreshToken] = useState(null);
+  const [showLoading, setShowLoading] = useState(true);
+  const [showInputComponent, setShowInputComponent] = useState(false);
 
   const {
     user,
@@ -78,7 +80,7 @@ export const LoginPage = () => {
       console.log("EXISTE loginDto.token");
       const usuarioConDFA = await usuarioLogueadoHabilitadoDFA(loginDto.token);
       let bUsuarioConDFA = false;
-      if (usuarioConDFA && usuarioConDFA == "true") {
+      if (usuarioConDFA && usuarioConDFA.valor) {
         bUsuarioConDFA = true;
       }
       console.log(bUsuarioConDFA);

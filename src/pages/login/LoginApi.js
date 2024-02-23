@@ -1,8 +1,7 @@
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-
 import axios from "axios";
-import Swal from "sweetalert2";
 import { errorBackendResponse } from "../../errors/errorBackendResponse";
+
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 export const logon = async (usuario, clave) => {
   const URL = `${BACKEND_URL}/auth/login`;
@@ -16,10 +15,10 @@ export const logon = async (usuario, clave) => {
       usuario: usuario,
       clave: clave,
     };
-    const logonResponse = await axios.post(URL, logonDto);
-    const logon = await logonResponse.data;
+    const response = await axios.post(URL, logonDto);
+    const data = await response.data;
 
-    return logon || {};
+    return data || {};
   } catch (error) {
     errorBackendResponse(error);
     return jsonResponse;
@@ -30,13 +29,13 @@ export const usuarioLogueadoHabilitadoDFA = async (token) => {
   const URL = `${BACKEND_URL}/auth/dfa/usuario-loguedo-habilitado`;
 
   try {
-    const usuarioResponse = await axios.get(URL, {
+    const response = await axios.get(URL, {
       headers: {
         Authorization: token,
       },
     });
-    const usuario = await usuarioResponse.data;
-    return usuario || {};
+    const data = await response.data;
+    return data || {};
   } catch (error) {
     errorBackendResponse(error);
   }
@@ -50,14 +49,14 @@ export const logonDFA = async (token, codigo) => {
   };
 
   try {
-    const loginDfaResponse = await axios.post(URL, codigoVerificacion, {
+    const response = await axios.post(URL, codigoVerificacion, {
       headers: {
         Authorization: token,
       },
     });
-    const loginDfa = await loginDfaResponse.data;
+    const data = await response.data;
 
-    return loginDfa || {};
+    return data || {};
   } catch (error) {
     errorBackendResponse(error);
   }
@@ -67,15 +66,15 @@ export const consultarUsuarioLogueado = async (token) => {
   const URL = `${BACKEND_URL}/auth/login/usuario`;
   console.log("consultarUsuarioLogueado - INIT");
   try {
-    const usuarioLogeadoResponse = await axios.get(URL, {
+    const response = await axios.get(URL, {
       headers: {
         Authorization: token,
       },
     });
 
-    const usuarioLogeado = await usuarioLogeadoResponse.data;
+    const data = await response.data;
 
-    return usuarioLogeado || {};
+    return data || {};
   } catch (error) {
     console.log("consultarUsuarioLogueado - ERRROR");
     errorBackendResponse(error);

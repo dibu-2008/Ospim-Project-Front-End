@@ -13,31 +13,22 @@ export const Inicio = () => {
   const [datosContacto, setDatosContacto] = useState([]);
   const [contenido, setContenido] = useState([]);
 
-  const TOKEN = JSON.parse(localStorage.getItem("stateLogin")).usuarioLogueado
-    .usuario.token;
-  console.log("Inicio - TOKEN");
-  console.log(TOKEN);
   useEffect(() => {
     const getDatosContacto = async () => {
-      const datos = await ObtenerDatosDeContacto(TOKEN);
-
-      setDatosContacto(datos);
+      const datosContacto = await ObtenerDatosDeContacto();
+      setDatosContacto(datosContacto);
     };
-
     getDatosContacto();
   }, []);
 
   useEffect(() => {
-    const getContenido = async () => {
-      const contenidos = await ObtenerPublicacionesVigentes(
-        TOKEN,
-        "/publicacionesVigentes"
-      );
-
-      setContenido(contenidos);
+    const getPublicacionesVigentes = async () => {
+      const consContenidos = await ObtenerPublicacionesVigentes();
+      console.log("getPublicacionesVigentes() - consContenidos");
+      console.log(consContenidos);
+      setContenido(consContenidos);
     };
-
-    getContenido();
+    getPublicacionesVigentes();
   }, []);
 
   return (
@@ -49,7 +40,6 @@ export const Inicio = () => {
           UOMA, OSPIM y AMTIMA
         </p>
       </div>
-
       <div className="contacto">
         <h2>Contacto</h2>
         <div className="contacto_child">
@@ -63,19 +53,19 @@ export const Inicio = () => {
               <span>
                 <EmailIcon />
               </span>
-              {datosContacto[0]?.email}
+              {datosContacto ? datosContacto.email : ""}
             </div>
             <div>
               <span>
                 <LocalPhoneIcon />
               </span>
-              {datosContacto[0]?.telefono}
+              {datosContacto ? datosContacto.telefono : ""}
             </div>
             <div>
               <span>
                 <WhatsAppIcon />
               </span>
-              {datosContacto[0]?.whasap}
+              {datosContacto ? datosContacto.whasap : ""}
             </div>
           </div>
 

@@ -1,11 +1,4 @@
 {
-  "ospim-contacto": [
-    {
-      "email": "ospim@gmail.com",
-      "telefono": "15-5988-2246",
-      "whasap": "15-5555-8000"
-    }
-  ],
   "entidad": [
     {
       "codigo": "UOMA",
@@ -460,6 +453,20 @@
       "vigenciaDesde": "2024-02-07T00:00:00.000Z",
       "vigenciaHasta": "2025-02-07T00:00:00.000Z",
       "id": 27
+    },
+    {
+      "titulo": "Titulo Pabada 1",
+      "cuerpo": "Cuerpo Pabada 1",
+      "vigenciaDesde": "2023-12-05",
+      "vigenciaHasta": "2023-12-30",
+      "id": 28
+    },
+    {
+      "titulo": "prueba 2",
+      "cuerpo": "2222",
+      "vigenciaDesde": "2000-01-01T00:00:00.000Z",
+      "vigenciaHasta": "2033-02-20T00:00:00.000Z",
+      "id": 29
     }
   ],
   "publicacionesVigentes": [
