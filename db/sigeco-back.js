@@ -5,6 +5,10 @@ module.exports = (req, res, next) => {
   //console.log("Middleware - SIGECO - req.body:" + req.body);
 
   function getAPI(req, res) {
+    if (req.method === "GET" && req.url.startsWith("/ospim/contacto/")) {
+      return "OSPIM-CONTACTO";
+    }
+
     if (req.method === "GET" && req.url.startsWith("/DDJJ/imprimir/")) {
       return "DDJJ-IMPRIMIR";
     }
@@ -173,6 +177,8 @@ module.exports = (req, res, next) => {
     case "DDJJ-VALIDAR-NIVEL2":
       ddjjValidarN2(req, res);
       break;
+    case "OSPIM-CONTACTO":
+      getOspimContacto();
     case "----":
       // code block
       next();
@@ -186,75 +192,48 @@ module.exports = (req, res, next) => {
     res.download(file); // Set disposition and send it.
   }
 
-  /* function ddjjValidarN2(req, res) {
-
-    console.log("XXXXXXX : ", req.body);
-
-    // []
-
-  function ddjjValidarN2() {
-    res.status(200).jsonp({
-      errores: [
-        {
-          codigo: "APORTE",
-          cuil: 20265656565,
-          descripcion: "Deve completar los aportes de los Empleados.",
-        },
-        {
-          codigo: "REMU",
-          cuil: 20265656565,
-          descripcion: "Deve completar las remuneraciones de los Empleados.",
-        },
-        {
-          codigo: "CAMARA",
-          cuil: 20294465996,
-          descripcion: "Deve completar las Camaras de los Empleados.",
-        },
-        {
-          codigo: "FECHAING",
-          cuil: 20294465996,
-          descripcion: "Deve completar las Fechas de Ingreso de los Empleados.",
-        },
-      ],
-    });
-  } */
+  function getOspimContacto() {
+    let contacto = {};
+    contacto.email = "mesadeayuda@ospim.com.ar";
+    contacto.telefono = "011-4502-2075";
+    contacto.whasap = "15-4569-4545";
+    res.status(200).send(contacto);
+  }
 
   function ddjjValidarN2(req, res) {
     // Validar que todos los campos estén llenos excepto "inte"
     const afiliados = req.body.afiliados;
-    console.log(afiliados)
+    console.log(afiliados);
     const errores = [];
 
-    afiliados.forEach((afiliado, index)=> {
+    afiliados.forEach((afiliado, index) => {
       Object.entries(afiliado).forEach(([key, value]) => {
-        if (key !== 'inte' && (value === null || value === undefined)) {
+        if (key !== "inte" && (value === null || value === undefined)) {
           errores.push({
             //codigo: `CAMPO_${key.toUpperCase()}_VACIO`,
             codigo: key,
             cuil: afiliado.cuil,
             descripcion: `El campo '${key}' está vacío.`,
-            indice: index
+            indice: index,
           });
         }
       });
     });
 
     if (errores.length > 0) {
-      res.status(400).jsonp(
-        {
-          codigo: "ERROR_VALIDACION_NIVEL",
-          ticket: "TK-156269",
-          descripcion: "Errores en la validación de la DDJJ.",
-          tipo: "ERROR_APP_BUSINESS",
-          errores : {
-            errores : errores 
-          }
-        }
-      );
+      res.status(400).jsonp({
+        codigo: "ERROR_VALIDACION_NIVEL",
+        ticket: "TK-156269",
+        descripcion: "Errores en la validación de la DDJJ.",
+        tipo: "ERROR_APP_BUSINESS",
+        errores: {
+          errores: errores,
+        },
+      });
     } else {
       res.status(200).jsonp({
         mensaje: "Todos los campos están llenos excepto 'inte'.",
-        afiliados
+        afiliados,
       });
     }
   }
@@ -417,7 +396,7 @@ module.exports = (req, res, next) => {
     const { camaraCodigo, descripcion } = req.body;
     console.log(
       "Middleware - SIGECO - categoriasURL() - INIT - camaraCodigo:" +
-      camaraCodigo
+        camaraCodigo
     );
     if (
       camaraCodigo != "CAENA" &&
@@ -480,7 +459,7 @@ module.exports = (req, res, next) => {
 
       console.log(
         "Middleware - SIGECO - validarLoguinDFA() - res.statusCode: " +
-        res.statusCode
+          res.statusCode
       );
     } else {
       const response = {

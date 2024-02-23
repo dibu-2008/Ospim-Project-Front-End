@@ -1,21 +1,26 @@
+import axios from "axios";
+import Swal from "sweetalert2";
+import { errorBackendResponse } from "../../../../errors/errorBackendResponse";
+
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const MESSAGE_HTTP_CREATED = import.meta.env.VITE_MESSAGE_HTTP_CREATED;
 const MESSAGE_HTTP_UPDATED = import.meta.env.VITE_MESSAGE_HTTP_UPDATED;
 const MESSAGE_HTTP_DELETED = import.meta.env.VITE_MESSAGE_HTTP_DELETED;
 
-import axios from "axios";
-import Swal from "sweetalert2";
-import { errorBackendResponse } from "../../../../errors/errorBackendResponse";
+const TOKEN = JSON.parse(localStorage.getItem("stateLogin")).usuarioLogueado
+  .usuario.token;
 
-export const obtenerPublicaciones = async (token) => {
+const oHeaders = {
+  headers: {
+    Authorization: TOKEN,
+  },
+};
+
+export const obtenerPublicaciones = async () => {
   const URL = `${BACKEND_URL}/publicaciones`;
 
   try {
-    const novedadesResponse = await axios.get(URL, {
-      headers: {
-        Authorization: token,
-      },
-    });
+    const novedadesResponse = await axios.get(URL, oHeaders);
     const novedades = await novedadesResponse.data;
 
     return novedades || [];
@@ -24,8 +29,9 @@ export const obtenerPublicaciones = async (token) => {
   }
 };
 
-export const crearPublicacion = async (publicacion, token) => {
+export const crearPublicacion = async (publicacion) => {
   const URL = `${BACKEND_URL}/publicaciones`;
+  const idDto = { id: null };
 
   const showSwallSuccess = () => {
     Swal.fire({
@@ -37,25 +43,19 @@ export const crearPublicacion = async (publicacion, token) => {
   };
 
   try {
-    const publicacionCreada = await axios.post(URL, publicacion, {
-      headers: {
-        Authorization: token,
-      },
-    });
+    const publicacionCreada = await axios.post(URL, publicacion, oHeaders);
 
     if (publicacionCreada.status === 201) {
       showSwallSuccess();
+      return publicacionCreada.data || {};
     }
   } catch (error) {
     errorBackendResponse(error);
+    return idDto;
   }
 };
 
-export const actualizarPublicacion = async (
-  publicacionId,
-  publicacion,
-  token
-) => {
+export const actualizarPublicacion = async (publicacionId, publicacion) => {
   const URL = `${BACKEND_URL}/publicaciones/${publicacionId}`;
 
   const showSwallSuccess = () => {
@@ -68,11 +68,7 @@ export const actualizarPublicacion = async (
   };
 
   try {
-    const publicacionEditada = await axios.put(URL, publicacion, {
-      headers: {
-        Authorization: token,
-      },
-    });
+    const publicacionEditada = await axios.put(URL, publicacion, oHeaders);
 
     if (publicacionEditada.status === 200) {
       showSwallSuccess();
@@ -82,7 +78,7 @@ export const actualizarPublicacion = async (
   }
 };
 
-export const eliminarPublicacion = async (publicacionId, token) => {
+export const eliminarPublicacion = async (publicacionId) => {
   const URL = `${BACKEND_URL}/publicaciones/${publicacionId}`;
 
   const showSwallSuccess = () => {
@@ -95,11 +91,7 @@ export const eliminarPublicacion = async (publicacionId, token) => {
   };
 
   try {
-    const publicacionEliminada = await axios.delete(URL, {
-      headers: {
-        Authorization: token,
-      },
-    });
+    const publicacionEliminada = await axios.delete(URL, oHeaders);
 
     console.log(publicacionEliminada);
 

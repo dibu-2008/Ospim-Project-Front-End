@@ -1,5 +1,10 @@
 import { useState, useEffect, useMemo } from "react";
-import { crearPublicacion, obtenerPublicaciones, actualizarPublicacion, eliminarPublicacion } from "./PublicacionesApi";
+import {
+  crearPublicacion,
+  obtenerPublicaciones,
+  actualizarPublicacion,
+  eliminarPublicacion,
+} from "./PublicacionesApi";
 import { EditarNuevaFila } from "./PublicacionNueva";
 import {
   GridRowModes,
@@ -12,15 +17,14 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
-import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
-import * as locales from '@mui/material/locale';
-import Swal from 'sweetalert2'
-import "./Publicaciones.css";  
-import { ThreeCircles } from 'react-loader-spinner';
+import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
+import * as locales from "@mui/material/locale";
+import Swal from "sweetalert2";
+import "./Publicaciones.css";
+import { ThreeCircles } from "react-loader-spinner";
 
 export const Publicaciones = () => {
-
-  const [locale, setLocale] = useState('esES');
+  const [locale, setLocale] = useState("esES");
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
   const [showDataGrid, setShowDataGrid] = useState(false);
@@ -30,18 +34,17 @@ export const Publicaciones = () => {
     page: 0,
   });
 
-  const TOKEN = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.usuario.token;
-
   const theme = useTheme();
 
   const themeWithLocale = useMemo(
     () => createTheme(theme, locales[locale]),
-    [locale, theme],
+    [locale, theme]
   );
 
+  //Consulta rows de la Grilla
   useEffect(() => {
     const ObtenerPublicaciones = async () => {
-      const publicaciones = await obtenerPublicaciones(TOKEN);
+      const publicaciones = await obtenerPublicaciones();
       setRows(publicaciones.map((item, index) => ({ ...item, id: item.id })));
     };
 
@@ -70,34 +73,26 @@ export const Publicaciones = () => {
   };
 
   const handleDeleteClick = (id) => async () => {
-
-    /* setRowModesModel((oldModel) => {
-      const newModel = { ...oldModel };
-      delete newModel[id];
-      return newModel;
-    }); */
-
     const showSwalConfirm = async () => {
       try {
         Swal.fire({
-          title: '¿Estás seguro?',
+          title: "¿Estás seguro?",
           text: "¡No podrás revertir esto!",
-          icon: 'warning',
+          icon: "warning",
           showCancelButton: true,
-          confirmButtonColor: '#1A76D2',
-          cancelButtonColor: '#6c757d',
-          confirmButtonText: 'Si, bórralo!'
+          confirmButtonColor: "#1A76D2",
+          cancelButtonColor: "#6c757d",
+          confirmButtonText: "Si, bórralo!",
         }).then(async (result) => {
           if (result.isConfirmed) {
             setRows((oldRows) => oldRows.filter((row) => row.id !== id));
-            await eliminarPublicacion(id, TOKEN);
+            await eliminarPublicacion(id);
           }
         });
       } catch (error) {
-        console.error('Error al ejecutar eliminarFeriado:', error);
+        console.error("Error al ejecutar eliminarFeriado:", error);
       }
     };
-
     showSwalConfirm();
   };
 
@@ -135,7 +130,8 @@ export const Publicaciones = () => {
         vigenciaHasta: fechaHastaFormateada,
       };
 
-      await crearPublicacion(nuevaPublicacion, TOKEN);
+      const { id } = await crearPublicacion(nuevaPublicacion);
+      updatedRow.id = id;
     } else {
       const publicacionEditada = {
         titulo: newRow.titulo,
@@ -144,7 +140,7 @@ export const Publicaciones = () => {
         vigenciaHasta: fechaHastaFormateada,
       };
 
-      await actualizarPublicacion(newRow.id, publicacionEditada, TOKEN);
+      await actualizarPublicacion(newRow.id, publicacionEditada);
     }
 
     return updatedRow;
@@ -154,14 +150,14 @@ export const Publicaciones = () => {
     setRowModesModel(newRowModesModel);
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     const timer = setTimeout(() => {
       setShowDataGrid(true);
     }, 2000);
 
     return () => clearTimeout(timer);
+  });
 
-  })
   const columns = [
     {
       field: "titulo",
@@ -171,7 +167,7 @@ export const Publicaciones = () => {
       editable: true,
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
     },
     {
       field: "cuerpo",
@@ -181,7 +177,7 @@ export const Publicaciones = () => {
       editable: true,
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell header--cell--left',
+      headerClassName: "header--cell header--cell--left",
     },
     {
       field: "vigenciaDesde",
@@ -191,9 +187,8 @@ export const Publicaciones = () => {
       editable: true,
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell header--cell--left',
+      headerClassName: "header--cell header--cell--left",
       valueFormatter: (params) => {
-
         const date = new Date(params.value);
 
         const day = date.getUTCDate().toString().padStart(2, "0");
@@ -211,9 +206,8 @@ export const Publicaciones = () => {
       editable: true,
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell header--cell--left',
+      headerClassName: "header--cell header--cell--left",
       valueFormatter: (params) => {
-
         const date = new Date(params.value);
 
         const day = date.getUTCDate().toString().padStart(2, "0");
@@ -230,8 +224,9 @@ export const Publicaciones = () => {
       type: "actions",
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell header--cell--left',
-      getActions: ({ id }) => {
+      headerClassName: "header--cell header--cell--left",
+      getActions: ({ row }) => {
+        const id = row.id;
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
         if (isInEditMode) {
@@ -288,85 +283,84 @@ export const Publicaciones = () => {
           },
         }}
       >
-        {
-          !showDataGrid && (
-            <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100%",
-          }}
-        >
-          <ThreeCircles
-            visible={true}
-            height="100"
-            width="100"
-            color="#1A76D2"
-            ariaLabel="three-circles-loading"
-            wrapperStyle={{}}
-            wrapperClass=""
-          />
-          <ThreeCircles
-            visible={true}
-            height="100"
-            width="100"
-            color="#1A76D2"
-            ariaLabel="three-circles-loading"
-            wrapperStyle={{}}
-            wrapperClass=""
-          />
-          <ThreeCircles
-            visible={true}
-            height="100"
-            width="100"
-            color="#1A76D2"
-            ariaLabel="three-circles-loading"
-            wrapperStyle={{}}
-            wrapperClass=""
-          />
-        </div>
-          )
-        }
-        {
-          showDataGrid && (
-            <ThemeProvider theme={themeWithLocale}>
-              <DataGrid
-                rows={rows}
-                columns={columns}
-                editMode="row"
-                rowModesModel={rowModesModel}
-                onRowModesModelChange={handleRowModesModelChange}
-                onRowEditStop={handleRowEditStop}
-                processRowUpdate={processRowUpdate}
-                slots={{
-                  toolbar: EditarNuevaFila,
-                }}
-                slotProps={{
-                  toolbar: { setRows, rows, setRowModesModel, volverPrimerPagina },
-                }}
-                sx={{
-                  '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
-                    width: '8px',
-                    visibility: 'visible',
-                  },
-                  '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
-                    backgroundColor: '#ccc',
-                  },
-                  '& .css-1iyq7zh-MuiDataGrid-columnHeaders': {
-                    backgroundColor: '#1A76D2 !important',
-                  },
-                }}
-                paginationModel={paginationModel}
-                onPaginationModelChange={setPaginationModel}
-                pageSizeOptions={[10, 15, 25]}
-              />
-            </ThemeProvider>
-          )
-        }
+        {!showDataGrid && (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
+            }}
+          >
+            <ThreeCircles
+              visible={true}
+              height="100"
+              width="100"
+              color="#1A76D2"
+              ariaLabel="three-circles-loading"
+              wrapperStyle={{}}
+              wrapperClass=""
+            />
+            <ThreeCircles
+              visible={true}
+              height="100"
+              width="100"
+              color="#1A76D2"
+              ariaLabel="three-circles-loading"
+              wrapperStyle={{}}
+              wrapperClass=""
+            />
+            <ThreeCircles
+              visible={true}
+              height="100"
+              width="100"
+              color="#1A76D2"
+              ariaLabel="three-circles-loading"
+              wrapperStyle={{}}
+              wrapperClass=""
+            />
+          </div>
+        )}
+        {showDataGrid && (
+          <ThemeProvider theme={themeWithLocale}>
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              editMode="row"
+              rowModesModel={rowModesModel}
+              onRowModesModelChange={handleRowModesModelChange}
+              onRowEditStop={handleRowEditStop}
+              processRowUpdate={processRowUpdate}
+              slots={{
+                toolbar: EditarNuevaFila,
+              }}
+              slotProps={{
+                toolbar: {
+                  setRows,
+                  rows,
+                  setRowModesModel,
+                  volverPrimerPagina,
+                },
+              }}
+              sx={{
+                "& .MuiDataGrid-virtualScroller::-webkit-scrollbar": {
+                  width: "8px",
+                  visibility: "visible",
+                },
+                "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb": {
+                  backgroundColor: "#ccc",
+                },
+                "& .css-1iyq7zh-MuiDataGrid-columnHeaders": {
+                  backgroundColor: "#1A76D2 !important",
+                },
+              }}
+              paginationModel={paginationModel}
+              onPaginationModelChange={setPaginationModel}
+              pageSizeOptions={[10, 15, 25]}
+            />
+          </ThemeProvider>
+        )}
       </Box>
     </div>
   );
 };
-
-

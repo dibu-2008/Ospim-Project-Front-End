@@ -1,4 +1,9 @@
-import { consultarUsuarioLogueado, logon, logonDFA, usuarioLogueadoHabilitadoDFA } from "./LoginApi.js";
+import {
+  consultarUsuarioLogueado,
+  logon,
+  logonDFA,
+  usuarioLogueadoHabilitadoDFA,
+} from "./LoginApi.js";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useFormLoginInternalUser } from "../../hooks/useFormLoginInternalUser.js";
@@ -9,13 +14,22 @@ import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
 import "./LoginPage.css";
 import { Button, TextField } from "@mui/material";
-import { ThreeCircles } from 'react-loader-spinner'
+import { ThreeCircles } from "react-loader-spinner";
 
 const VITE_WELCOME_PORTAL = import.meta.env.VITE_WELCOME_PORTAL;
 
 export const LoginPage = () => {
-
   const navigate = useNavigate();
+  const [showSpinner, setShowSpinner] = useState(true);
+  const [showInternalUserForm, setShowInternalUserForm] = useState(true);
+  const [showVerificationForm, setShowVerificationForm] = useState(false);
+  const [showAlertUser, setShowAlertUser] = useState(false);
+  const [showAlertPassword, setShowAlertPassword] = useState(false);
+  const [verificationCode, setVerificationCode] = useState("310279");
+  const [token, setToken] = useState(null);
+  const [refreshToken, setRefreshToken] = useState(null);
+  const [showLoading, setShowLoading] = useState(true);
+  const [showInputComponent, setShowInputComponent] = useState(false);
 
   const {
     user,
@@ -27,19 +41,20 @@ export const LoginPage = () => {
     passwordLoginInternalUser: "",
   });
 
-  const [showInternalUserForm, setShowInternalUserForm] = useState(true);
-  const [showVerificationForm, setShowVerificationForm] = useState(false);
-  const [verificationCode, setVerificationCode] = useState("310279");
-  const [token, setToken] = useState(null);
-  const [showAlertUser, setShowAlertUser] = useState(false);
-  const [showAlertPassword, setShowAlertPassword] = useState(false);
-  const [showInputComponent, setShowInputComponent] = useState(false);
-  const [showLoading, setShowLoading] = useState(true);
+  useEffect(() => {
+    setTimeout(() => {
+      setShowSpinner(false);
+    }, 1000);
+  }, []);
 
-  const onVerificationCodeChange = (e) => {
-    setVerificationCode(e.target.value);
+  //Link a Registrar Compania
+  const redirectToRegister = () => {
+    navigate("/registercompany", {
+      replace: true,
+    });
   };
 
+  //Eventos para Form de Loguin (usuario-clave)
   const onInputChangeUser = (e) => {
     OnInputChangeLoginInternalUser(e);
     setShowAlertUser(false);
@@ -50,11 +65,84 @@ export const LoginPage = () => {
     setShowAlertPassword(false);
   };
 
-  const usuarioInfoFinal = (usuarioLogueado, token, tokenRefresco) => {
+  //Submit Form de Loguin
+  const onLoginInternalUser = async (e) => {
+    e.preventDefault();
+    if (user === "" || passwordLoginInternalUser === "") {
+      if (user === "") setShowAlertUser(true);
+      if (passwordLoginInternalUser === "") setShowAlertPassword(true);
+      return false;
+    }
 
-    if (usuarioLogueado.hasOwnProperty('usuario')) {
+    const loginDto = await logon(user, passwordLoginInternalUser);
+
+    if (loginDto && loginDto.token) {
+      console.log("EXISTE loginDto.token");
+      const usuarioConDFA = await usuarioLogueadoHabilitadoDFA(loginDto.token);
+      let bUsuarioConDFA = false;
+      if (usuarioConDFA && usuarioConDFA.valor) {
+        bUsuarioConDFA = true;
+      }
+      console.log(bUsuarioConDFA);
+      if (bUsuarioConDFA) {
+        console.log("usuarioHabilitadoDFA: TRUE !!!");
+        setShowInternalUserForm(false);
+        setShowVerificationForm(true);
+      } else {
+        console.log("usuarioHabilitadoDFA: FALSE !!!");
+        setToken(loginDto.token);
+        setRefreshToken(loginDto.tokenRefresco);
+        //OnResetFormLoginInternalUser();
+
+        const usuarioLogueado = await consultarUsuarioLogueado(loginDto.token);
+        console.log("usuarioLogueado: ");
+        console.log(usuarioLogueado);
+
+        getUsuarioLogueadoInfo(
+          usuarioLogueado,
+          loginDto.token,
+          loginDto.tokenRefresco
+        );
+
+        showSwalSuccess(VITE_WELCOME_PORTAL);
+      }
+    } else {
+      console.log(loginDto);
+      console.log("onLoginInternalUser - INIT-loginDto:NO EXISTE");
+    }
+    OnResetFormLoginInternalUser();
+  };
+
+  //Eventos para Form DFA  (Token)
+  const onVerificationCodeChange = (e) => {
+    setVerificationCode(e.target.value);
+  };
+
+  //Submit Formulario DFA (Token)
+  const onVerificationCodeSubmit = async (e) => {
+    e.preventDefault();
+
+    const logonDfa = await logonDFA(token, verificationCode);
+
+    if (logonDfa) {
+      showSwalSuccess(VITE_WELCOME_PORTAL);
+
+      const { token, refreshToken } = logonDfa;
+
+      const usuarioLogueado = await consultarUsuarioLogueado(token);
+
+      getUsuarioLogueadoInfo(usuarioLogueado, token, refreshToken);
+    }
+  };
+
+  //Consulta Datos Usuario Logueado
+  const getUsuarioLogueadoInfo = (usuarioLogueado, token, refreshToken) => {
+    console.log("usuarioInfoFinal - init");
+    console.log(usuarioLogueado);
+    if (usuarioLogueado.hasOwnProperty("usuario")) {
       usuarioLogueado.usuario.token = token;
-      usuarioLogueado.usuario.tokenRefresco = tokenRefresco;
+      usuarioLogueado.usuario.tokenRefresco = refreshToken;
+      console.log(usuarioLogueado);
       navigate("/dashboard/inicio", {
         replace: true,
         state: {
@@ -62,63 +150,11 @@ export const LoginPage = () => {
           usuarioLogueado,
         },
       });
-    }
-  }
-
-  const onLoginInternalUser = async (e) => {
-    e.preventDefault();
-
-
-    if (user === "" || passwordLoginInternalUser === "") {
-      if (user === "") setShowAlertUser(true);
-      if (passwordLoginInternalUser === "") setShowAlertPassword(true);
-      return false;
-    }
-
-    const { token, tokenRefresco } = await logon(user, passwordLoginInternalUser);
-
-    const usuarioHabilitadoDFA = await usuarioLogueadoHabilitadoDFA(token);
-
-    if (usuarioHabilitadoDFA) {
-      setShowInternalUserForm(false);
-      setShowVerificationForm(true);
-
+      console.log("HIZO navigate() !! ");
     } else {
-
-      setToken(token);
-      setRefreshToken(tokenRefresco);
-      OnResetFormLoginInternalUser();
-      showSwalSuccess(VITE_WELCOME_PORTAL);
-
-      const usuarioLogueado = await consultarUsuarioLogueado(token);
-
-      usuarioInfoFinal(usuarioLogueado, token, tokenRefresco);
-    }
-
-    OnResetFormLoginInternalUser();
-
-  };
-
-  const redirectToRegister = () => {
-    navigate("/registercompany", {
-      replace: true,
-    });
-  };
-
-  const onVerificationCodeSubmit = async (e) => {
-    e.preventDefault();
-
-    const logonDfa = await logonDFA(token, verificationCode);
-
-    if (logonDfa) {
-
-      showSwalSuccess(VITE_WELCOME_PORTAL);
-
-      const { token, tokenRefresco } = logonDfa;
-
-      const usuarioLogueado = await consultarUsuarioLogueado(token);
-
-      usuarioInfoFinal(usuarioLogueado, token, tokenRefresco);
+      console.log(
+        "usuarioInfoFinal - usuarioLogueado.hasOwnProperty() = FALSE"
+      );
     }
   };
 
@@ -131,8 +167,6 @@ export const LoginPage = () => {
       return () => clearTimeout(timer);
     }
   }, [showVerificationForm]); // useEffect se ejecutará cuando showVerificationForm cambie
-  
-
 
   return (
     <div className="wrapper_container">
@@ -178,7 +212,8 @@ export const LoginPage = () => {
               <Button
                 variant="contained"
                 sx={{
-                  marginTop: showAlertUser && showAlertPassword ? "50px" : "120px",
+                  marginTop:
+                    showAlertUser && showAlertPassword ? "50px" : "120px",
                 }}
                 type="submit"
                 className="siguiente"
@@ -196,8 +231,8 @@ export const LoginPage = () => {
       {showVerificationForm && (
         <div className="wrapper">
           <div className="contenedor_form_code">
-            <h1>Ingrese su token de validacion</h1>
-            
+            <h1>Ingrese Token de validaci&oacute;n</h1>
+
             <form onSubmit={onVerificationCodeSubmit}>
               <div className="input_group_code">
                 <ThreeCircles
@@ -207,24 +242,22 @@ export const LoginPage = () => {
                   color="#1A76D2"
                   ariaLabel="three-circles-loading"
                   wrapperStyle={{
-                    margin : "0 auto",
+                    margin: "0 auto",
                   }}
                   wrapperClass=""
                 />
-                {
-                  showInputComponent && (
-                    <TextField
-                      type="text"
-                      name="verificationCode"
-                      id="verificationCode"
-                      value={verificationCode}
-                      onChange={onVerificationCodeChange}
-                      autoComplete="off"
-                      label="Código"
-                      className="input_data"
-                    />
-                  )
-                }
+                {showInputComponent && (
+                  <TextField
+                    type="text"
+                    name="verificationCode"
+                    id="verificationCode"
+                    value={verificationCode}
+                    onChange={onVerificationCodeChange}
+                    autoComplete="off"
+                    label="Código"
+                    className="input_data"
+                  />
+                )}
               </div>
               <ButtonComponent
                 styles={{
