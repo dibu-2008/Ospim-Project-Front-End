@@ -1,26 +1,18 @@
 import axios from "axios";
 import Swal from "sweetalert2";
 import { errorBackendResponse } from "../../../../errors/errorBackendResponse";
+import { getHttpHeader } from "@/http_header/getHttpHeader";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const MESSAGE_HTTP_CREATED = import.meta.env.VITE_MESSAGE_HTTP_CREATED;
 const MESSAGE_HTTP_UPDATED = import.meta.env.VITE_MESSAGE_HTTP_UPDATED;
 const MESSAGE_HTTP_DELETED = import.meta.env.VITE_MESSAGE_HTTP_DELETED;
 
-const TOKEN = JSON.parse(localStorage.getItem("stateLogin")).usuarioLogueado
-  .usuario.token;
-
-const oHeaders = {
-  headers: {
-    Authorization: TOKEN,
-  },
-};
-
 export const obtenerPublicaciones = async () => {
   const URL = `${BACKEND_URL}/publicaciones`;
 
   try {
-    const novedadesResponse = await axios.get(URL, oHeaders);
+    const novedadesResponse = await axios.get(URL, getHttpHeader());
     const novedades = await novedadesResponse.data;
 
     return novedades || [];
@@ -43,7 +35,7 @@ export const crearPublicacion = async (publicacion) => {
   };
 
   try {
-    const publicacionCreada = await axios.post(URL, publicacion, oHeaders);
+    const publicacionCreada = await axios.post(URL, publicacion, getHttpHeader());
 
     if (publicacionCreada.status === 201) {
       showSwallSuccess();
@@ -68,7 +60,7 @@ export const actualizarPublicacion = async (publicacionId, publicacion) => {
   };
 
   try {
-    const publicacionEditada = await axios.put(URL, publicacion, oHeaders);
+    const publicacionEditada = await axios.put(URL, publicacion, getHttpHeader());
 
     if (publicacionEditada.status === 200) {
       showSwallSuccess();
@@ -91,7 +83,7 @@ export const eliminarPublicacion = async (publicacionId) => {
   };
 
   try {
-    const publicacionEliminada = await axios.delete(URL, oHeaders);
+    const publicacionEliminada = await axios.delete(URL, getHttpHeader());
 
     console.log(publicacionEliminada);
 

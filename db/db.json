@@ -467,6 +467,20 @@
       "vigenciaDesde": "2000-01-01T00:00:00.000Z",
       "vigenciaHasta": "2033-02-20T00:00:00.000Z",
       "id": 29
+    },
+    {
+      "titulo": "publi",
+      "cuerpo": "xdfsdfds",
+      "vigenciaDesde": "2024-02-22T00:00:00.000Z",
+      "vigenciaHasta": "2024-02-24T00:00:00.000Z",
+      "id": 30
+    },
+    {
+      "titulo": "Titulo Pabada 1",
+      "cuerpo": "Cuerpo Pabada 1",
+      "vigenciaDesde": "2023-12-05",
+      "vigenciaHasta": "2023-12-30",
+      "id": 31
     }
   ],
   "publicacionesVigentes": [

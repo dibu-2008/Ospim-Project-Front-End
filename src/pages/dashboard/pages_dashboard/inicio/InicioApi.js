@@ -1,13 +1,8 @@
+import { getHttpHeader } from "@/http_header/getHttpHeader";
 import { errorBackendResponse } from "../../../../errors/errorBackendResponse";
 import axios from "axios";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-const TOKEN = JSON.parse(localStorage.getItem("stateLogin")).usuarioLogueado
-  .usuario.token;
-const oHeader = {
-  headers: {
-    Authorization: TOKEN,
-  },
-};
+
 
 export const ObtenerDatosDeContacto = async () => {
   const contacto = {
@@ -42,7 +37,7 @@ export const ObtenerPublicacionesVigentes = async () => {
   const URL = `${BACKEND_URL}/publicaciones/vigentes`;
 
   try {
-    const response = await axios.get(URL, oHeader);
+    const response = await axios.get(URL, getHttpHeader);
     const data = await response.data;
     console.log("ObtenerPublicacionesVigentes - novedades:");
     console.log(data);
