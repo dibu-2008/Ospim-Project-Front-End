@@ -163,7 +163,7 @@ export const AltaUsuarioInterno = () => {
     {
       field: 'apellido',
       headerName: 'Apellido',
-      width: 200,
+      flex: 1,
       type: 'string',
       editable: true,
       headerAlign: "center",
@@ -173,7 +173,7 @@ export const AltaUsuarioInterno = () => {
     {
       field: 'nombre',
       headerName: 'Nombre',
-      width: 200,
+      flex: 1,
       type: 'string',
       editable: true,
       headerAlign: "center",
@@ -183,7 +183,7 @@ export const AltaUsuarioInterno = () => {
     {
       field: 'descripcion',
       headerName: 'Usuario',
-      width: 200,
+      flex: 1,
       type: 'string',
       editable: true,
       headerAlign: "center",
@@ -193,7 +193,7 @@ export const AltaUsuarioInterno = () => {
     {
       field: 'email',
       headerName: 'Email',
-      width: 225,
+      flex: 2,
       type: 'string',
       editable: true,
       headerAlign: "center",
@@ -203,7 +203,7 @@ export const AltaUsuarioInterno = () => {
     {
       field: 'clave',
       headerName: 'Contraseña',
-      width: 200,
+      flex: 1,
       type: 'string',
       editable: true,
       headerAlign: "center",
@@ -213,7 +213,7 @@ export const AltaUsuarioInterno = () => {
     {
       field: 'repetirClave',
       headerName: 'Repetir Contraseña',
-      width: 200,
+      flex: 1,
       type: 'string',
       editable: true,
       headerAlign: "center",
@@ -227,7 +227,7 @@ export const AltaUsuarioInterno = () => {
     {
       field: 'rolId',
       headerName: 'Rol',
-      width: 200,
+      flex: 2,
       type: 'singleSelect',
       editable: true,
       headerAlign: "center",
@@ -240,7 +240,7 @@ export const AltaUsuarioInterno = () => {
     {
       field: 'habilitado',
       headerName: 'Habilitado',
-      width: 170,
+      flex: 2,
       type: 'string',
       headerAlign: "center",
       align: "center",
@@ -257,7 +257,7 @@ export const AltaUsuarioInterno = () => {
     {
       field: 'actions',
       headerName: 'Acciones',
-      width: 200,
+      flex: 2,
       type: 'actions',
       headerAlign: "center",
       align: "center",
@@ -309,8 +309,8 @@ export const AltaUsuarioInterno = () => {
       <h1>Alta Usuario Interno</h1>
       <Box
         sx={{
-          height: "400px",
-          width: "90%",
+          height: "600px",
+          width: "100%",
           overflowX: "auto",
           "& .actions": {
             color: "text.secondary",

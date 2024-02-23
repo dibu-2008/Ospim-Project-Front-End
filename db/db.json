@@ -255,6 +255,10 @@
     {
       "fecha": "2024-01-10T00:00:00.000Z",
       "id": 29
+    },
+    {
+      "fecha": "2024-02-22T00:00:00.000Z",
+      "id": 30
     }
   ],
   "usuario-interno": [
@@ -356,13 +360,6 @@
     }
   ],
   "publicaciones": [
-    {
-      "titulo": "Publicacion 01",
-      "cuerpo": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit repellendus quibusdam doloremque, error quidem dignissimos nam dolorum vero exercitationem, blanditiis itaque omnis quisquam unde tempora officiis inventore, aspernatur explicabo aliquam.",
-      "vigenciaDesde": "2024-02-07T00:00:00.000Z",
-      "vigenciaHasta": "2025-02-07T00:00:00.000Z",
-      "id": 14
-    },
     {
       "titulo": "Publicacion 02",
       "cuerpo": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius iure sit hic deserunt, repudiandae necessitatibus unde quam optio laborum illo magnam expedita ab voluptatem! Perspiciatis atque officiis nostrum temporibus repellendus.",
@@ -481,6 +478,13 @@
       "vigenciaDesde": "2023-12-05",
       "vigenciaHasta": "2023-12-30",
       "id": 31
+    },
+    {
+      "titulo": "sdfsdfd",
+      "cuerpo": "sdfsdf",
+      "vigenciaDesde": "2024-02-21T00:00:00.000Z",
+      "vigenciaHasta": "2024-02-21T00:00:00.000Z",
+      "id": 32
     }
   ],
   "publicacionesVigentes": [
@@ -1421,7 +1425,7 @@
     {
       "//": "DDJJ ********************************************************************************** 02",
       "id": 121,
-      "estado": "PE",
+      "estado": "PR",
       "empresaId": 1,
       "periodo": "2023-10-01T00:00:00.000Z",
       "secuencia": 0,

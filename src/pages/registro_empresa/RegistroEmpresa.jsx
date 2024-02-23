@@ -13,6 +13,7 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import AddIcon from "@mui/icons-material/Add";
 import "./RegistroEmpresa.css";
+import NavBar from "@/components/navbar/NavBar";
 
 export const RegistroEmpresa = () => {
   const [additionalEmail, setAddionalEmail] = useState([]);
@@ -201,6 +202,7 @@ export const RegistroEmpresa = () => {
 
   return (
     <main>
+      <NavBar />
       <div className="registro_empresa_container">
         <form
           onSubmit={OnSubmitRegisterCompany}

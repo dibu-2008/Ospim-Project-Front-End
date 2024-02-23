@@ -140,7 +140,7 @@ export const MisDeclaracionesJuradas = ({
                         variant="contained"
                         onClick={exportarDeclaracionesJuradas}
                     >Exportar</Button>
-                    <CSVLink data={data}>Download Excel File</CSVLink>
+                    <CSVLink data={data}>Exportar CSV</CSVLink>
                     {/* <CSVLink data={csvData} filename={"misddjj.csv"}>Download me</CSVLink>; */}
                    
                     {/* <CSVDownload data={rows_mis_ddjj} target="_blank" />; */}

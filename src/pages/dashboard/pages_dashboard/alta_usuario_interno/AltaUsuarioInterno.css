@@ -1,11 +1,15 @@
 .usuario_interno_container{
-    margin-top: 50px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
+    margin: 50px auto;
+    width: 90%;
 }
+
+.usuario_interno_container h1{
+    color: #1A76D2;
+    margin-bottom: 65px;
+    text-align: left !important;
+}
+
+
 .habilitado--cell {
     background-color: rgba(128, 128, 128, 0.62);
     font-weight: bold;

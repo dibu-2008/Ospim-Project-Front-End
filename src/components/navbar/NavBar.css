@@ -9,6 +9,8 @@ header {
 	color: #fff;
 	min-width: 600px;
 	z-index: 3;
+	width: 86%;
+	margin: 0 auto;
 }
 
 header div {
