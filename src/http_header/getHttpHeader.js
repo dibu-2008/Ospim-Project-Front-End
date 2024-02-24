@@ -1,15 +1,16 @@
 export const getHttpHeader = () => {
+  let auxStateLogin = localStorage.getItem("stateLogin");
+  let TOKEN = null;
 
-    if (localStorage.getItem("stateLogin") != null && localStorage.getItem("stateLogin").hasOwnProperty("usuarioLogueado")) {
-
-        const TOKEN = JSON.parse(localStorage.getItem("stateLogin")).usuarioLogueado
-            .usuario.token;
-        return {
-            headers: {
-                Authorization: TOKEN,
-            },
-        };
-
+  if (auxStateLogin != null) {
+    auxStateLogin = JSON.parse(localStorage.getItem("stateLogin"));
+    if (auxStateLogin.hasOwnProperty("usuarioLogueado")) {
+      TOKEN = auxStateLogin.usuarioLogueado.usuario.token;
+      console.log("getHttpHeader - OK!! - TOKEN: ");
+      console.log(TOKEN);
+      let oHeader = { headers: { Authorization: TOKEN } };
+      return oHeader;
     }
-
-}
+  }
+  return {};
+};
