@@ -13,26 +13,26 @@ import {
   DataGrid as GrillaDatos,
   GridToolbarContainer as GrillaContenedorBarraHerramientas,
   GridActionsCellItem as CeldaAcciones,
-  GridRowEditStopReasons as GrillaFilaParaEditar
+  GridRowEditStopReasons as GrillaFilaParaEditar,
 } from "@mui/x-data-grid";
 import {
   actualizarFeriado,
   crearFeriado,
   eliminarFeriado,
-  obtenerFeriados
+  obtenerFeriados,
 } from "./FeriadosApi";
 import {
   createTheme as CrearTema,
   ThemeProvider as ProveedorTemas,
-  useTheme as usarTema
-} from '@mui/material/styles';
-import * as localizaciones from '@mui/material/locale';
-import Swal from 'sweetalert2'
+  useTheme as usarTema,
+} from "@mui/material/styles";
+import * as localizaciones from "@mui/material/locale";
+import Swal from "sweetalert2";
 import "./Feriados.css";
 
 const crearNuevoFeriado = (props) => {
-
-  const { filasFeriado, setFilasFeriado, setModeloFila, volverPrimerPagina } = props;
+  const { filasFeriado, setFilasFeriado, setModeloFila, volverPrimerPagina } =
+    props;
 
   const nuevoRegistro = () => {
     const maxId = Math.max(...filasFeriado.map((row) => row.id), 0);
@@ -49,22 +49,23 @@ const crearNuevoFeriado = (props) => {
       [id]: { mode: ModosFila.Edit, fieldToFocus: "name" },
       ...filasAnteriores,
     }));
-
   };
-
 
   return (
     <GrillaContenedorBarraHerramientas>
-      <Button color="primary" startIcon={<IconoAgregar />} onClick={nuevoRegistro}>
+      <Button
+        color="primary"
+        startIcon={<IconoAgregar />}
+        onClick={nuevoRegistro}
+      >
         Nuevo Registro
       </Button>
     </GrillaContenedorBarraHerramientas>
   );
-}
+};
 
 export const Feriados = () => {
-
-  const [localizacion, setLocalizacion] = useState('esES');
+  const [localizacion, setLocalizacion] = useState("esES");
   const [filasFeriado, setFilasFeriado] = useState([]);
   const [modeloFila, setModeloFila] = useState({});
   const [paginacion, setPaginacion] = useState({
@@ -72,25 +73,22 @@ export const Feriados = () => {
     page: 0,
   });
 
-  const TOKEN = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.usuario.token;
-
   const tema = usarTema();
 
   const temaConlocalizacion = useMemo(
     () => CrearTema(tema, localizaciones[localizacion]),
-    [localizacion, tema],
+    [localizacion, tema]
   );
 
   useEffect(() => {
     const ObtenerFeriados = async () => {
-
-      const feriadosResponse = await obtenerFeriados(TOKEN);
-      setFilasFeriado(feriadosResponse.map((item) => ({ id: item.id, ...item })));
-
+      const feriadosResponse = await obtenerFeriados();
+      setFilasFeriado(
+        feriadosResponse.map((item) => ({ id: item.id, ...item }))
+      );
     };
 
     ObtenerFeriados();
-
   }, []);
 
   const volverPrimerPagina = () => {
@@ -109,28 +107,27 @@ export const Feriados = () => {
   };
 
   const eliminarFila = (id) => async () => {
-
     const confirmarEliminarRegistro = async () => {
-
       try {
         Swal.fire({
-          title: '¿Estás seguro?',
+          title: "¿Estás seguro?",
           text: "¡No podrás revertir esto!",
-          icon: 'warning',
+          icon: "warning",
           showCancelButton: true,
-          confirmButtonColor: '#1A76D2',
-          cancelButtonColor: '#6c757d',
-          confirmButtonText: 'Si, bórralo!'
+          confirmButtonColor: "#1A76D2",
+          cancelButtonColor: "#6c757d",
+          confirmButtonText: "Si, bórralo!",
         }).then(async (respuesta) => {
           if (respuesta.isConfirmed) {
+            setFilasFeriado((filasAnteriores) =>
+              filasAnteriores.filter((row) => row.id !== id)
+            );
 
-            setFilasFeriado((filasAnteriores) => filasAnteriores.filter((row) => row.id !== id));
-
-            await eliminarFeriado(id, TOKEN);
+            await eliminarFeriado(id);
           }
         });
       } catch (error) {
-        console.error('Error al ejecutar eliminarFeriado:', error);
+        console.error("Error al ejecutar eliminarFeriado:", error);
       }
     };
 
@@ -150,7 +147,6 @@ export const Feriados = () => {
   };
 
   const procesarActualizarFila = async (nuevaFila) => {
-
     const filaActualizada = { ...nuevaFila, esNueva: false };
 
     const fecha = new Date(nuevaFila.fecha);
@@ -160,25 +156,26 @@ export const Feriados = () => {
     const fechaFormateada = fecha.toISOString();
 
     if (nuevaFila.esNueva) {
-
       const feriadoNuevo = {
         fecha: fechaFormateada,
         descripcion: nuevaFila.descripcion,
       };
 
-      await crearFeriado(feriadoNuevo, TOKEN);
-
+      await crearFeriado(feriadoNuevo);
     } else {
-
       const feriadoEditado = {
         fecha: fechaFormateada,
         descripcion: nuevaFila.descripcion,
       };
 
-      await actualizarFeriado(nuevaFila.id, feriadoEditado, TOKEN);
+      await actualizarFeriado(nuevaFila.id, feriadoEditado);
     }
 
-    setFilasFeriado(filasFeriado.map((row) => (row.id === nuevaFila.id ? filaActualizada : row)));
+    setFilasFeriado(
+      filasFeriado.map((row) =>
+        row.id === nuevaFila.id ? filaActualizada : row
+      )
+    );
 
     return filaActualizada;
   };
@@ -192,9 +189,8 @@ export const Feriados = () => {
       editable: true,
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
       valueFormatter: ({ value }) => {
-
         const fecha = new Date(value);
 
         const dia = fecha.getUTCDate().toString().padStart(2, "0");
@@ -212,9 +208,8 @@ export const Feriados = () => {
       cellClassName: "actions",
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
       getActions: ({ row }) => {
-
         const { id } = row;
         const ModoEdicion = modeloFila[id]?.mode === ModosFila.Edit;
 
@@ -251,7 +246,6 @@ export const Feriados = () => {
           />,
         ];
       },
-
     },
   ];
 
@@ -278,17 +272,17 @@ export const Feriados = () => {
             processRowUpdate={procesarActualizarFila}
             slots={{ toolbar: crearNuevoFeriado }}
             slotProps={{
-              toolbar: { 
-                filasFeriado, 
-                setFilasFeriado, 
-                setModeloFila, 
-                volverPrimerPagina 
+              toolbar: {
+                filasFeriado,
+                setFilasFeriado,
+                setModeloFila,
+                volverPrimerPagina,
               },
             }}
             sx={{
-              '& .css-1iyq7zh-MuiDataGrid-columnHeaders': {
-                backgroundColor: '#1A76D2 !important',
-              }
+              "& .css-1iyq7zh-MuiDataGrid-columnHeaders": {
+                backgroundColor: "#1A76D2 !important",
+              },
             }}
             paginationModel={paginacion}
             onPaginationModelChange={setPaginacion}
@@ -298,4 +292,4 @@ export const Feriados = () => {
       </Box>
     </div>
   );
-}
+};
