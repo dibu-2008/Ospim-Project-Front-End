@@ -1,93 +1,61 @@
-import { errorBackendResponse } from "../../../../errors/errorBackendResponse";
-import axios from "axios";
-import Swal from "sweetalert2";
-import { getHttpHeader } from "@/http_header/getHttpHeader";
+import {
+  consultar,
+  crear,
+  actualizar,
+  eliminar,
+} from "@components/axios/axiosCrud";
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-const MESSAGE_HTTP_CREATED = import.meta.env.VITE_MESSAGE_HTTP_CREATED;
-const MESSAGE_HTTP_UPDATED = import.meta.env.VITE_MESSAGE_HTTP_UPDATED;
-const MESSAGE_HTTP_DELETED = import.meta.env.VITE_MESSAGE_HTTP_DELETED;
+const URL_ENTITY = "/feriados";
 
-export const obtenerFeriados = async () => {
-  const URL = `${BACKEND_URL}/feriados`;
-
+export const consultarFeriados = async () => {
   try {
-    const feriadosResponse = await axios.get(URL, getHttpHeader());
-    const feriados = await feriadosResponse.data;
+    const data = await consultar(URL_ENTITY);
 
-    return feriados || [];
+    //const data = await response.data;
+    console.log("xx-feriadosData: ");
+    console.log(data);
+
+    return data || [];
   } catch (error) {
-    errorBackendResponse(error);
+    console.log("obtenerFeriados() - ERROR-catch - error: ");
+    console.log(error);
+    return [];
   }
 };
 
 export const crearFeriado = async (nuevoFeriado) => {
-  const URL = `${BACKEND_URL}/feriados`;
-
-  const showSwallSuccess = () => {
-    Swal.fire({
-      icon: "success",
-      title: MESSAGE_HTTP_CREATED,
-      showConfirmButton: false,
-      timer: 2000,
-    });
-  };
-
   try {
-    const feriadoResponse = await axios.post(
-      URL,
-      nuevoFeriado,
-      getHttpHeader()
-    );
-
-    if (feriadoResponse.status === 201) {
-      showSwallSuccess();
-    }
+    const data = await crear(URL_ENTITY, nuevoFeriado);
+    const id = ({ id } = data);
+    showSwallSuccess(MESSAGE_HTTP_CREATED);
+    return id;
   } catch (error) {
     errorBackendResponse(error);
+    return {};
   }
 };
 
 export const actualizarFeriado = async (idFeriado, feriado) => {
-  const URL = `${BACKEND_URL}/feriados/${idFeriado}`;
-
-  const showSwallSuccess = () => {
-    Swal.fire({
-      icon: "success",
-      title: MESSAGE_HTTP_UPDATED,
-      showConfirmButton: false,
-      timer: 2000,
-    });
-  };
-
   try {
-    const feriadoResponse = await axios.put(URL, feriado, getHttpHeader());
-
-    if (feriadoResponse.status === 200) {
-      showSwallSuccess();
+    const bResponse = await actualizar(URL_ENTITY, idFeriado, feriado);
+    console.log("actualizarFeriado - bResponse:");
+    console.log(bResponse);
+    if (bResponse) {
+      showSwallSuccess(MESSAGE_HTTP_UPDATED);
+      return true;
     }
   } catch (error) {
     errorBackendResponse(error);
   }
+  return false;
 };
 
 export const eliminarFeriado = async (idFeriado) => {
-  const URL = `${BACKEND_URL}/feriados/${idFeriado}`;
-
-  const showSwallSuccess = () => {
-    Swal.fire({
-      icon: "success",
-      title: MESSAGE_HTTP_DELETED,
-      showConfirmButton: false,
-      timer: 2000,
-    });
-  };
-
   try {
-    const feriadoResponse = await axios.delete(URL, getHttpHeader());
+    const bResponse = await eliminar(URL_ENTITY, idFeriado);
 
-    if (feriadoResponse.status === 200) {
-      showSwallSuccess();
+    if (bResponse) {
+      showSwallSuccess(MESSAGE_HTTP_DELETED);
     }
   } catch (error) {
     errorBackendResponse(error);

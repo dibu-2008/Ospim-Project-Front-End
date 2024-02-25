@@ -5,33 +5,129 @@ const ERROR_MESSAGE = import.meta.env.VITE_ERROR_MESSAGE;
 const ERROR_BODY = import.meta.env.VITE_ERROR_BODY;
 
 const showSwalError = (descripcion) => {
-  Swal.fire({
-    icon: "error",
-    title: "Error de Validación",
-    text: descripcion,
-    showConfirmButton: false,
-    timer: 3000,
-  });
+  console.log("showSwalError - INIT");
+  descripcion = descripcion
+    .replace(":", "")
+    .replace("{", "")
+    .replace("}", "")
+    .replace("[", "")
+    .replace("]", "");
+
+  try {
+    Swal.fire({
+      icon: "error",
+      title: "Error de Validación",
+      text: descripcion,
+      showConfirmButton: false,
+      timer: 3000,
+    });
+  } catch (error) {
+    console.log("showSwalError - ERROR - BUG");
+    console.log(error);
+  }
+  console.log("showSwalError - FIN");
 };
 
 export const errorBackendResponse = (error) => {
+  console.log("errorBackendResponse() - ");
   try {
-    if (error.response && error.response.data) {
-      const { codigo, descripcion, ticket, tipo } = error.response.data;
-
-      if (tipo === ERROR_BUSINESS) {
-        showSwalError(descripcion);
-        console.error(descripcion);
-      } else {
-        showSwalError(`${ERROR_MESSAGE} ${ticket}`);
-        console.error("Ticket: " + ticket + " - Descripcion: " + descripcion);
-      }
-    } else {
+    if (!error) {
+      console.log("- Parametro error NULO ");
       showSwalError(`${ERROR_MESSAGE}`);
-      console.error(`${ERROR_BODY} : ${error}`);
+      return false;
+    }
+
+    if (error.response) {
+      // The client was given an error response (5xx, 4xx)
+      console.log("error.response: ");
+      console.log(error.response);
+
+      if (error.response.status == 401) {
+        //TODO: hacer navigate
+        showSwalError("Su Sesion expiró. Debe loguearse nuevamente.");
+        console.log("HTTP - ERROR 401 - VOY AL LOGUIN ");
+        //window.location.href = "/";
+        return false;
+      }
+      if (error.response.status == 404) {
+        console.log("- HTTP Error 404.");
+        if (error.response.config.url) {
+          console.log("- URL INCORRECTA: " + error.response.config.url);
+        }
+        showSwalError(`${ERROR_MESSAGE}`);
+        return false;
+      }
+
+      if (!error.response.data) {
+        console.log("- error.response: No existe .data");
+        console.log("error.response: ");
+        console.log(error.response);
+        showSwalError(`${ERROR_MESSAGE}`);
+        return false;
+      }
+
+      let oJsonResponse = null;
+      try {
+        oJsonResponse = error.response.data;
+      } catch (errorNew) {
+        console.log("- ERROR cast Response a oJsonResponse: ");
+        console.log("error.response.data: ");
+        console.log(error.response.data);
+        console.log(`${ERROR_BODY} : ${errorNew}`);
+        showSwalError(`${ERROR_MESSAGE}`);
+        return false;
+      }
+
+      if (
+        !oJsonResponse.hasOwnProperty("ticket") ||
+        !oJsonResponse.hasOwnProperty("tipo")
+      ) {
+        console.log("- Backend Response con formato INCORRECTO: ");
+        console.log(oJsonResponse);
+        console.log(`${ERROR_BODY} : ${oJsonResponse}`);
+        showSwalError(`${ERROR_MESSAGE}`);
+        return false;
+      }
+
+      if (oJsonResponse.tipo === ERROR_BUSINESS) {
+        console.log("- oJsonResponse.tipo=ERROR_BUSINESS -> oJsonResponse: ");
+        console.log(oJsonResponse);
+        console.log(`${ERROR_BODY} : ${oJsonResponse}`);
+        console.log("oJsonResponse.descripcion: ");
+        console.log(oJsonResponse.descripcion);
+        showSwalError("" + oJsonResponse.descripcion);
+        return true;
+      }
+
+      showSwalError(`${ERROR_MESSAGE} ${oJsonResponse.ticket}`);
+      console.log(
+        "Ticket: " +
+          oJsonResponse.ticket +
+          " - Descripcion: " +
+          oJsonResponse.descripcion
+      );
+      console.log("error.response: ");
+      console.log(error.response);
+      return true;
+    } else if (error.request) {
+      // The client never received a response, and the request was never left
+      console.log("- Backend Response NULL - error.request :");
+      console.log(error.request);
+
+      console.log("error.request.status: ");
+      console.log(error.request.status);
+
+      showSwalError(`${ERROR_MESSAGE}`);
+      return true;
+    } else {
+      // Anything else
+      console.log("- Backend Response UNKNOWN: ");
+      console.log("error:", error.message);
+      showSwalError(`${ERROR_MESSAGE}`);
+      return true;
     }
   } catch (error) {
-    showSwalError(`${ERROR_MESSAGE}`);
     console.error(`${ERROR_BODY} : ${error}`);
+    showSwalError(`${ERROR_MESSAGE}`);
   }
 };

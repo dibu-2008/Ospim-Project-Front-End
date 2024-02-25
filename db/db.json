@@ -161,27 +161,22 @@
   "feriados": [
     {
       "fecha": "2023-03-31T00:00:00.000Z",
-      "descripcion": "Día de los Inocentes",
       "id": 3
     },
     {
       "id": 5,
-      "fecha": "2023-07-04T00:00:00.000Z",
-      "descripcion": "Día de la Independencia"
+      "fecha": "2023-07-04T00:00:00.000Z"
     },
     {
       "id": 6,
-      "fecha": "2023-09-15T00:00:00.000Z",
-      "descripcion": "Día de la Independencia de México"
+      "fecha": "2023-09-15T00:00:00.000Z"
     },
     {
       "fecha": "2024-02-13T00:00:00.000Z",
-      "descripcion": "Carnaval",
       "id": 7
     },
     {
       "fecha": "2024-01-11T03:00:00.000Z",
-      "descripcion": "AAAAA",
       "id": 11
     },
     {

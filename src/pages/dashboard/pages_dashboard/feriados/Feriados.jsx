@@ -19,7 +19,7 @@ import {
   actualizarFeriado,
   crearFeriado,
   eliminarFeriado,
-  obtenerFeriados,
+  consultarFeriados,
 } from "./FeriadosApi";
 import {
   createTheme as CrearTema,
@@ -82,7 +82,9 @@ export const Feriados = () => {
 
   useEffect(() => {
     const ObtenerFeriados = async () => {
-      const feriadosResponse = await obtenerFeriados();
+      const feriadosResponse = await consultarFeriados();
+      console.log("xxx - feriadosResponse: ");
+      console.log(feriadosResponse);
       setFilasFeriado(
         feriadosResponse.map((item) => ({ id: item.id, ...item }))
       );
