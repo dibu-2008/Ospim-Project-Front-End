@@ -41,11 +41,8 @@ function EditToolbar(props) {
                 categoria: "",
                 remunerativo: "",
                 noRemunerativo: "",
-                aporteUomaCs: false,
-                aporteUomaAs: false,
-                aporteCuotaUsu: false,
-                aporteArt46: true,
-                aporteAntimaCs: false,
+                adheridoSindicato: false,
+                pagaMutual: false,
                 isNew: true
             },
             ...oldRows,
@@ -209,7 +206,7 @@ export const GrillaPasoTres = ({
             field: "cuil",
             type: "string",
             headerName: "CUIL",
-            flex: 1.6,
+            flex: 2,
             editable: true,
             headerAlign: "center",
             align: "center",
@@ -261,7 +258,7 @@ export const GrillaPasoTres = ({
             field: "apellido",
             type: "string",
             headerName: "Apellido",
-            flex: 1,
+            flex: 1.5,
             editable: true,
             headerAlign: "center",
             align: "center",
@@ -329,7 +326,7 @@ export const GrillaPasoTres = ({
             field: "nombre",
             type: "string",
             headerName: "Nombre",
-            flex: 1,
+            flex: 1.5,
             editable: true,
             headerAlign: "center",
             align: "center",
@@ -511,179 +508,32 @@ export const GrillaPasoTres = ({
             valueFormatter: (params) => formatter.format(params.value || 0),
         },
         {
-            field: "aporteUomaCs",
-            renderHeader: () => (
-                <div style={{ textAlign: 'center', color: '#fff', fontSize: '0.8rem' }}>
-                    <span role="img" aria-label="enjoy">
-                        Cuota Social
-                        <br />
-                        Uoma
-                    </span>
-                </div>
-            ),
+            field: "adheridoSindicato",
+            type: "singleSelect",
+            headerName: "Adherido a sindicato",
             flex: 1,
             editable: true,
             headerAlign: "center",
             align: "center",
             headerClassName: 'header--cell',
-            renderEditCell: (params) => {
-                return (
-                    <Checkbox
-                        value={params.value}
-                        checked={(params.value)}
-                        onChange={(event) => {
-                            const isChecked = event.target.checked;
-                            params.api.setEditCellValue({ id: params.id, field: 'aporteUomaCs', value: isChecked });
-                            params.api.setEditCellValue({ id: params.id, field: 'aporteUomaAs', value: isChecked });
-                            // deshabilitar el campo de cuotaUsuf
-                            params.api.setEditCellValue({ id: params.id, field: 'aporteCuotaUsu', value: false, editable: false });
-                        }}
-                    />
-
-                )
-            },
-            renderCell: (params) => (
-                params.value ? <CheckBoxIcon sx={{ color: '#1A76D2' }} /> : <CheckBoxOutlineBlankIcon sx={{ color: '#1A76D2' }} />
-            ),
+            valueOptions: [
+                { value: true, label: 'Si' },
+                { value: false, label: 'No' },
+            ],
         },
         {
-            field: "aporteUomaAs",
-            headerName: "Aporte Sol UOMA",
-            renderHeader: () => (
-                <div style={{ textAlign: 'center', color: '#fff', fontSize: '0.8rem' }}>
-                    <span role="img" aria-label="enjoy">
-                        Aporte Solidario
-                        <br />
-                        Uoma
-                    </span>
-                </div>
-            ),
+            field: "pagaMutual",
+            type: "singleSelect",
+            headerName: "Paga mutual",
             flex: 1,
             editable: true,
             headerAlign: "center",
             align: "center",
             headerClassName: 'header--cell',
-            renderEditCell: (params) => {
-                return (
-                    <Checkbox
-                        value={params.value}
-                        checked={(params.value)}
-                        onChange={(event) => {
-                            const isChecked = event.target.checked;
-                            params.api.setEditCellValue({ id: params.id, field: 'aporteUomaCs', value: isChecked });
-                            params.api.setEditCellValue({ id: params.id, field: 'aporteUomaAs', value: isChecked });
-                            // deshabilitar el campo de cuotaUsuf
-                            params.api.setEditCellValue({ id: params.id, field: 'aporteCuotaUsu', value: false, editable: false });
-                        }}
-                    />
-
-                )
-            },
-            renderCell: (params) => (
-                params.value ? <CheckBoxIcon sx={{ color: '#1A76D2' }} /> : <CheckBoxOutlineBlankIcon sx={{ color: '#1A76D2' }} />
-            ),
-        },
-        {
-            field: "aporteCuotaUsu",
-            renderHeader: () => (
-                <div style={{ textAlign: 'center', color: '#fff', fontSize: '0.8rem' }}>
-                    <span role="img" aria-label="enjoy">
-                        Cuota
-                        <br />
-                        Usufructo
-                    </span>
-                </div>
-            ),
-            flex: 1,
-            editable: true,
-            headerAlign: "center",
-            align: "center",
-            headerClassName: 'header--cell',
-            renderEditCell: (params) => {
-                return (
-                    <Checkbox
-                        value={params.value}
-                        checked={(params.value)}
-                        onChange={(event) => {
-                            const isChecked = event.target.checked;
-                            params.api.setEditCellValue({ id: params.id, field: 'aporteCuotaUsu', value: isChecked });
-                            console.log("Click en cuota usufructo...")
-                            // deshabilitar el campo de cuotaSocUoma
-                            params.api.setEditCellValue({ id: params.id, field: 'aporteUomaCs', value: false, editable: false });
-                            // deshabilitar el campo de aporteSolUoma
-                            params.api.setEditCellValue({ id: params.id, field: 'aporteUomaAs', value: false, editable: false });
-                            // deshabilitar el campo de amtima
-                            params.api.setEditCellValue({ id: params.id, field: 'aporteAntimaCs', value: false, editable: false });
-                        }}
-                    />
-
-                )
-            },
-            renderCell: (params) => (
-                params.value ? <CheckBoxIcon sx={{ color: '#1A76D2' }} /> : <CheckBoxOutlineBlankIcon sx={{ color: '#1A76D2' }} />
-            ),
-        },
-        {
-            field: "aporteArt46",
-            renderHeader: () => (
-                <div style={{ textAlign: 'center', color: '#fff', fontSize: '0.8rem' }}>
-                    <span role="img" aria-label="enjoy">
-                        Articulo
-                        <br />
-                        46
-                    </span>
-                </div>
-            ),
-            flex: 1,
-            editable: false,
-            headerAlign: "center",
-            align: "center",
-            headerClassName: 'header--cell',
-            cellClassName: 'art46--cell',
-            renderEditCell: (params) => {
-                return (
-                    <Checkbox
-                        value={params.value}
-                        checked={(params.value)}
-                        onChange={(event) => {
-                            const isChecked = event.target.checked;
-                            params.api.setEditCellValue({ id: params.id, field: 'aporteArt46', value: isChecked });
-                        }}
-                    />
-
-                )
-            },
-            renderCell: (params) => (
-                params.value ? <CheckBoxIcon sx={{ color: '#1A76D2' }} /> : <CheckBoxOutlineBlankIcon sx={{ color: '#1A76D2' }} />
-            ),
-        },
-        {
-            field: "aporteAntimaCs",
-            headerName: "AMTIMA",
-            flex: 1,
-            editable: true,
-            headerAlign: "center",
-            align: "center",
-            headerClassName: 'header--cell',
-            renderEditCell: (params) => {
-                return (
-                    <Checkbox
-                        value={params.value}
-                        checked={(params.value)}
-                        onChange={(event) => {
-                            const isChecked = event.target.checked;
-                            params.api.setEditCellValue({ id: params.id, field: 'aporteAntimaCs', value: isChecked });
-                            params.api.setEditCellValue({ id: params.id, field: 'aporteUomaAs', value: isChecked });
-                            params.api.setEditCellValue({ id: params.id, field: 'aporteUomaCs', value: isChecked });
-                            // deshabilitar el campo de cuotaUsuf
-                            params.api.setEditCellValue({ id: params.id, field: 'aporteCuotaUsu', value: false, editable: false });
-                        }}
-                    />
-                )
-            },
-            renderCell: (params) => (
-                params.value ? <CheckBoxIcon sx={{ color: '#1A76D2' }} /> : <CheckBoxOutlineBlankIcon sx={{ color: '#1A76D2' }} />
-            ),
+            valueOptions: [
+                { value: true, label: 'Si' },
+                { value: false, label: 'No' },
+            ],
         },
         {
             field: "actions",

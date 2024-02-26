@@ -12,7 +12,9 @@ import esLocale from 'dayjs/locale/es';
 import './MisAltaDeclaracionesJuradas.css';
 import { GrillaPasoTres } from './grilla_paso_tres/GrillaPasoTres';
 import { actualizarDeclaracionJurada, crearAltaDeclaracionJurada, obtenerCamaras, obtenerCategorias, obtenerPlantaEmpresas, validarAltaDeclaracionJurada } from './MisAltaDeclaracionesJuradasApi';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
+import XLSX from 'xlsx';
+
 
 export const MisAltaDeclaracionesJuradas = ({
     periodo,
@@ -38,9 +40,21 @@ export const MisAltaDeclaracionesJuradas = ({
     const [selectedFileName, setSelectedFileName] = useState('');
     const [mostrarPeriodos, setMostrarPeriodos] = useState(false);
     const [validacionResponse, setValidacionResponse] = useState([]);
+    const [afiliadoImportado, setAfiliadoImportado] = useState([]);
     const TOKEN = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.usuario.token;
     const ID_EMPRESA = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.empresa.id;
 
+    useEffect(() => {
+        // imprimir en consola rowsAltaDDJJ
+        console.log(rowsAltaDDJJ);
+
+        // imprimir en consola la fecha del primero de diciembre del 2022 con el objeto dayjs
+        console.log(dayjs('2022-12-01').locale(esLocale).format('MMMM YYYY'));
+        console.log(dayjs('2024-02-15').locale(esLocale).format('MMMM YYYY'));
+        // formato dia mes año
+        console.log(dayjs('2024-02-15').locale(esLocale).format('DD MMMM YYYY'));
+
+    }, [rowsAltaDDJJ]);
 
     const handleChangeOtroPeriodo = (date) => setOtroPeriodo(date);
 
@@ -93,9 +107,63 @@ export const MisAltaDeclaracionesJuradas = ({
 
     }, []);
 
+    const importarAfiliado = ()=>{
+        setRowsAltaDDJJ(afiliadoImportado);
+    }
+
     const handleFileChange = (event) => {
         const file = event.target.files[0];
+
         setSelectedFileName(file ? file.name : '');
+
+        if (file) {
+
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const sheetName = workbook.SheetNames[0];
+                const sheet = workbook.Sheets[sheetName];
+                const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+                const arraySinEncabezado = rows.slice(1);
+
+                console.log(arraySinEncabezado);
+
+                const arrayTransformado = arraySinEncabezado.map((item, index) => {
+
+                    const fechaOriginal = item[5];
+                    const partes = fechaOriginal.split('/');
+                    const anio = partes[2].length === 2 ? '20' + partes[2] : partes[2]; 
+                    const mes = partes[1].padStart(2, '0'); 
+                    const dia = partes[0]; 
+                    const fechaFormateada = `${anio}-${mes}-${dia}`;
+
+                    return {
+                        id: index + 1,
+                        cuil: item[0],
+                        apellido: item[1],
+                        nombre: item[2],
+                        camara: item[3],
+                        categoria: item[4],
+                        fechaIngreso: fechaFormateada,
+                        empresaDomicilioId: plantas.find(plantas => plantas.planta === item[6])?.id,
+                        remunerativo: item[7],
+                        noRemunerativo: item[8],
+                        adheridoSindicato: item[9] === 'Si',
+                        pagaMutual: item[10] === 'Si'
+                    };
+                });
+
+                setAfiliadoImportado(arrayTransformado);
+                // setRowsAltaDDJJ(arrayTransformado);
+
+            };
+
+            reader.readAsArrayBuffer(file);
+
+        }
     };
 
     const handleElegirOtroChange = (event) => {
@@ -117,8 +185,10 @@ export const MisAltaDeclaracionesJuradas = ({
                 categoria: !item.categoria ? null : item.categoria,
                 remunerativo: !item.remunerativo ? null : item.remunerativo,
                 noRemunerativo: !item.noRemunerativo ? null : item.noRemunerativo,
-                UOMASocio: item.aporteUomaCs && item.aporteUomaAs && item.aporteArt46 ? true : false,
-                ANTIMASocio: item.aporteUomaCs && item.aporteUomaAs && item.aporteArt46 && item.aporteAntimaCs ? true : false,
+                /* UOMASocio: item.aporteUomaCs && item.aporteUomaAs && item.aporteArt46 ? true : false,
+                ANTIMASocio: item.aporteUomaCs && item.aporteUomaAs && item.aporteArt46 && item.aporteAntimaCs ? true : false, */
+                UOMASocio: false,
+                ANTIMASocio: false,
             }))
         }
 
@@ -229,6 +299,7 @@ export const MisAltaDeclaracionesJuradas = ({
                         sx={{
                             padding: '6px 52px',
                         }}
+                        onClick={importarAfiliado}
                     >Subir</Button>
                 </div>
                 <div className='copiar_periodo_container'>
