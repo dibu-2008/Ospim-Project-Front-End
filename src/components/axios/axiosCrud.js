@@ -1,78 +1,93 @@
 import oAxios from "@components/axios/axiosInstace";
-import Swal from "sweetalert2";
-import { errorBackendResponse } from "@/errors/errorBackendResponse";
-
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-const MESSAGE_HTTP_CREATED = import.meta.env.VITE_MESSAGE_HTTP_CREATED;
-const MESSAGE_HTTP_UPDATED = import.meta.env.VITE_MESSAGE_HTTP_UPDATED;
-const MESSAGE_HTTP_DELETED = import.meta.env.VITE_MESSAGE_HTTP_DELETED;
-
-const showSwallSuccess = (MESSAGE_HTTP) => {
-  Swal.fire({
-    icon: "success",
-    title: MESSAGE_HTTP,
-    showConfirmButton: false,
-    timer: 2000,
-  });
-};
 
 export const consultar = async (UrlApi) => {
-  const URL = `${BACKEND_URL}${UrlApi}`;
   try {
-    const response = await oAxios.get(URL);
+    const response = await oAxios.get(UrlApi);
     const data = await response.data;
     console.log(data);
     return data || [];
   } catch (error) {
-    console.log("axiosCrud.get() - ERROR-catch - error: ");
-    console.log(error);
+    console.log(
+      `axiosCrud.consultar() - ERROR - UrlApi: ${UrlApi} - error: ${JSON.stringify(
+        error
+      )}`
+    );
     return [];
   }
 };
 
 export const crear = async (UrlApi, oEntidad) => {
-  const URL = `${BACKEND_URL}${UrlApi}`;
   try {
-    const response = await oAxios.post(URL, oEntidad);
-    if (response.status === 201) {
-      showSwallSuccess(MESSAGE_HTTP_CREATED);
-      return response.data || {};
+    const response = await oAxios.post(UrlApi, oEntidad);
+    if (response.status !== 201) {
+      console.log(
+        `axiosCrud.crear() - ERROR 2 - UrlApi: ${UrlApi} - response.status !== 201 - response: ${JSON.stringify(
+          response
+        )}`
+      );
+      return {};
     }
+    return response.data || {};
   } catch (error) {
-    console.log("xxx axiousCrud - crear - errorBackendResponse() ");
-    //errorBackendResponse(error);
+    console.log("axiosCrud.crear() - catch() - ");
+    if (error && error.response && error.response.data) {
+      return error.response.data;
+    } else {
+      console.log(
+        "axiosCrud.crear() - catch() - error: " + JSON.stringify(error)
+      );
+      return {};
+    }
   }
-  return {};
 };
 
-export const actualizar = async (UrlApi, idEntidad, oEntidad) => {
-  const URL = `${BACKEND_URL}${UrlApi}/${idEntidad}`;
+export const actualizar = async (UrlApi, oEntidad) => {
+  const URL = `${UrlApi}/${oEntidad.id}`;
   try {
     const response = await oAxios.put(URL, oEntidad);
-    console.log("response.status: ");
-    console.log(response.status);
-    if (response.status !== 204) {
-      errorBackendResponse(response);
+    if (response.status !== 204 && response.status !== 200) {
+      //JsonServer devuelve 200
+      console.log(
+        `axiosCrud.actualizar() - ERROR 2 - UrlApi: ${UrlApi} - response.status !== 204 - response: ${JSON.stringify(
+          response
+        )} `
+      );
       return false;
     }
-    showSwallSuccess(MESSAGE_HTTP_UPDATED);
     return true;
   } catch (error) {
-    errorBackendResponse(error);
+    console.log(`axiosCrud.actualizar() - UrlApi: ${UrlApi} - catch() - `);
+    if (error && error.response && error.response.data) {
+      return error.response.data;
+    } else {
+      console.log(
+        "axiosCrud.actualizar() - catch() - error: " + JSON.stringify(error)
+      );
+      return false;
+    }
   }
-  return false;
 };
 
-export const eliminar = async (UrlApi, idEntidad) => {
-  const URL = `${BACKEND_URL}${UrlApi}/${idEntidad}`;
+export const eliminar = async (UrlApi, id) => {
+  const URL = `${UrlApi}/${id}`;
   try {
     const response = await oAxios.delete(URL);
-    if (response.status === 200) {
-      showSwallSuccess(MESSAGE_HTTP_DELETED);
-      return true;
+    if (response.status !== 200) {
+      console.log(
+        `axiosCrud.eliminar() - ERROR 2 - UrlApi: ${UrlApi} - response: ${response}`
+      );
+      return false;
     }
+    return true;
   } catch (error) {
-    errorBackendResponse(error);
+    console.log(`axiosCrud.eliminar() - UrlApi: ${UrlApi} - catch() - `);
+    if (error && error.response && error.response.data) {
+      return error.response.data;
+    } else {
+      console.log(
+        "axiosCrud.eliminar() - catch() - error: " + JSON.stringify(error)
+      );
+      return false;
+    }
   }
-  return false;
 };

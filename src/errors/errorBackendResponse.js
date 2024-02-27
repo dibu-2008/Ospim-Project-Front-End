@@ -21,15 +21,30 @@ const showSwalError = (descripcion) => {
       showConfirmButton: false,
       timer: 3000,
     });
+    console.log("showSwalError - ESTOOOO ????!! ");
   } catch (error) {
     console.log("showSwalError - ERROR - BUG");
-    console.log(error);
+    console.log(error.toJSON());
   }
   console.log("showSwalError - FIN");
 };
 
+export const sigecoErrorHandler = (responseData) => {
+  if (responseData) {
+    if (responseData.tipo) {
+      if (responseData.tipo === ERROR_BUSINESS) {
+        showSwalError("" + responseData.descripcion);
+      } else {
+        showSwalError(`${ERROR_MESSAGE} ${responseData.ticket}`);
+      }
+    }
+  }
+};
+
 export const errorBackendResponse = (error) => {
-  console.log("errorBackendResponse() - ");
+  console.log("errorBackendResponse() - error: ");
+  console.log(error.toJSON());
+
   try {
     if (!error) {
       console.log("- Parametro error NULO ");
@@ -41,22 +56,6 @@ export const errorBackendResponse = (error) => {
       // The client was given an error response (5xx, 4xx)
       console.log("error.response: ");
       console.log(error.response);
-
-      if (error.response.status == 401) {
-        //TODO: hacer navigate
-        showSwalError("Su Sesion expiró. Debe loguearse nuevamente.");
-        console.log("HTTP - ERROR 401 - VOY AL LOGUIN ");
-        //window.location.href = "/";
-        return false;
-      }
-      if (error.response.status == 404) {
-        console.log("- HTTP Error 404.");
-        if (error.response.config.url) {
-          console.log("- URL INCORRECTA: " + error.response.config.url);
-        }
-        showSwalError(`${ERROR_MESSAGE}`);
-        return false;
-      }
 
       if (!error.response.data) {
         console.log("- error.response: No existe .data");

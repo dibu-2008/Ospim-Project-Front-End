@@ -163,7 +163,9 @@ export const Feriados = () => {
         descripcion: nuevaFila.descripcion,
       };
 
-      await crearFeriado(feriadoNuevo);
+      //await crearFeriado(feriadoNuevo);
+      const { id } = await crearFeriado(feriadoNuevo);
+      nuevaFila.id = id;
     } else {
       const feriadoEditado = {
         fecha: fechaFormateada,

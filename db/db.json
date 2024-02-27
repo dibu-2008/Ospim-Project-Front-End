@@ -2671,14 +2671,9 @@
   ],
   "cuit-restringido": [
     {
-      "id": 2,
-      "cuit": "30789154021",
-      "observacion": "Cuit restringido por incumplimiento fiscal"
-    },
-    {
       "id": 3,
       "cuit": "40518267004",
-      "observacion": "Cuit restringido por falta de presentación de documentación"
+      "observacion": "xx"
     },
     {
       "id": 4,
@@ -2691,14 +2686,9 @@
       "observacion": "Cuit restringido por no cumplir con obligaciones tributarias"
     },
     {
-      "id": 6,
-      "cuit": "50231489005",
-      "observacion": "Cuit restringido por falta de pago de deudas previsionales"
-    },
-    {
       "id": 7,
       "cuit": "16784026309",
-      "observacion": "Cuit restringido por inconsistencias en la presentación de declaraciones juradas"
+      "observacion": "Cuit rxxx estringido por inconsistencias en la presentación de declaraciones juradas"
     },
     {
       "id": 8,
@@ -2712,18 +2702,8 @@
     },
     {
       "cuit": "30789154024",
-      "observacion": "Cuit restrigdo por lavado de guita",
-      "id": 10
-    },
-    {
-      "cuit": "30789154024",
       "observacion": "Cuit restringido por lavado de dinero",
       "id": 11
-    },
-    {
-      "cuit": "30789154024",
-      "observacion": "Cuit con actividad sospechosa",
-      "id": 12
     },
     {
       "cuit": "30789154024",
@@ -2764,6 +2744,11 @@
       "cuit": "30789154024",
       "observacion": "Cuit bajo sospecha de lavado de activos",
       "id": 20
+    },
+    {
+      "cuit": "ddedd",
+      "observacion": "dddddxxxx",
+      "id": 21
     }
   ],
   "aportes": [
