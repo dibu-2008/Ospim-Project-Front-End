@@ -1,96 +1,93 @@
-import axios from "axios";
+import {
+  consultar,
+  crear,
+  actualizar,
+  eliminar,
+} from "@components/axios/axiosCrud";
+import { showErrorBackeEnd } from "@components/axios/showErrorBackeEnd";
 import Swal from "sweetalert2";
-import { errorBackendResponse } from "../../../../errors/errorBackendResponse";
-import { getHttpHeader } from "@/http_header/getHttpHeader";
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-const MESSAGE_HTTP_CREATED = import.meta.env.VITE_MESSAGE_HTTP_CREATED;
-const MESSAGE_HTTP_UPDATED = import.meta.env.VITE_MESSAGE_HTTP_UPDATED;
-const MESSAGE_HTTP_DELETED = import.meta.env.VITE_MESSAGE_HTTP_DELETED;
+const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
+const HTTP_MSG_MODI = import.meta.env.VITE_HTTP_MSG_MODI;
+const HTTP_MSG_BAJA = import.meta.env.VITE_HTTP_MSG_BAJA;
+const HTTP_MSG_ALTA_ERROR = import.meta.env.VITE_HTTP_MSG_ALTA_ERROR;
+const HTTP_MSG_MODI_ERROR = import.meta.env.VITE_HTTP_MSG_MODI_ERROR;
+const HTTP_MSG_BAJA_ERROR = import.meta.env.VITE_HTTP_MSG_BAJA_ERROR;
 
-export const obtenerPublicaciones = async () => {
-  const URL = `${BACKEND_URL}/publicaciones`;
+const URL_ENTITY = "/publicaciones";
 
+const showSwallSuccess = (MESSAGE_HTTP) => {
+  Swal.fire({
+    icon: "success",
+    title: MESSAGE_HTTP,
+    showConfirmButton: false,
+    timer: 2000,
+  });
+};
+
+export const consultarPublicaciones = async () => {
   try {
-    const novedadesResponse = await axios.get(URL, getHttpHeader());
-    const novedades = await novedadesResponse.data;
-
-    return novedades || [];
+    const data = await consultar(URL_ENTITY);
+    return data || [];
   } catch (error) {
-    errorBackendResponse(error);
+    return [];
   }
 };
 
-export const crearPublicacion = async (publicacion) => {
-  const URL = `${BACKEND_URL}/publicaciones`;
-  const idDto = { id: null };
-
-  const showSwallSuccess = () => {
-    Swal.fire({
-      icon: "success",
-      title: MESSAGE_HTTP_CREATED,
-      showConfirmButton: false,
-      timer: 2000,
-    });
-  };
-
+export const crearPublicacion = async (nuevoReg) => {
   try {
-    const publicacionCreada = await axios.post(URL, publicacion, getHttpHeader());
-
-    if (publicacionCreada.status === 201) {
-      showSwallSuccess();
-      return publicacionCreada.data || {};
+    const data = await crear(URL_ENTITY, nuevoReg);
+    if (data && data.id) {
+      showSwallSuccess(HTTP_MSG_ALTA);
+      return data;
+    } else {
+      showErrorBackeEnd(HTTP_MSG_ALTA_ERROR, data);
+      return {};
     }
   } catch (error) {
-    errorBackendResponse(error);
-    return idDto;
+    console.log(
+      `crearCuitRestringido() - ERROR 1 - nuevoReg: ${JSON.stringify(
+        nuevoReg
+      )} - error: ${JSON.stringify(error)}`
+    );
+    console.log("crearCuitRestringido - ERROR - return {}   ");
+    return {};
   }
 };
 
-export const actualizarPublicacion = async (publicacionId, publicacion) => {
-  const URL = `${BACKEND_URL}/publicaciones/${publicacionId}`;
-
-  const showSwallSuccess = () => {
-    Swal.fire({
-      icon: "success",
-      title: MESSAGE_HTTP_UPDATED,
-      showConfirmButton: false,
-      timer: 2000,
-    });
-  };
-
+export const actualizarPublicacion = async (reg) => {
   try {
-    const publicacionEditada = await axios.put(URL, publicacion, getHttpHeader());
-
-    if (publicacionEditada.status === 200) {
-      showSwallSuccess();
+    const response = await actualizar(URL_ENTITY, reg);
+    if (response == true) {
+      showSwallSuccess(HTTP_MSG_MODI);
+      return true;
+    } else {
+      showErrorBackeEnd(HTTP_MSG_MODI_ERROR, response);
+      return false;
     }
   } catch (error) {
-    errorBackendResponse(error);
+    console.log(
+      `actualizarCuitRestringido() - ERROR 1 - error: ${JSON.stringify(error)}`
+    );
+    return false;
   }
 };
 
-export const eliminarPublicacion = async (publicacionId) => {
-  const URL = `${BACKEND_URL}/publicaciones/${publicacionId}`;
-
-  const showSwallSuccess = () => {
-    Swal.fire({
-      icon: "success",
-      title: MESSAGE_HTTP_DELETED,
-      showConfirmButton: false,
-      timer: 2000,
-    });
-  };
-
+export const eliminarPublicacion = async (id) => {
   try {
-    const publicacionEliminada = await axios.delete(URL, getHttpHeader());
+    const response = await eliminar(URL_ENTITY, id);
 
-    console.log(publicacionEliminada);
-
-    if (publicacionEliminada.status === 200) {
-      showSwallSuccess();
+    if (response == true) {
+      showSwallSuccess(HTTP_MSG_BAJA);
+      return true;
+    } else {
+      showErrorBackeEnd(HTTP_MSG_BAJA_ERROR, response);
+      return false;
     }
   } catch (error) {
-    errorBackendResponse(error);
+    console.log(
+      `eliminarCuitRestringido() - ERROR 1 - error: ${JSON.stringify(error)}`
+    );
+    return false;
   }
 };

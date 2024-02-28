@@ -1,4 +1,4 @@
-import * as locales from '@mui/material/locale';
+import * as locales from "@mui/material/locale";
 import { useState, useEffect, useMemo } from "react";
 import {
   GridRowModes,
@@ -7,7 +7,7 @@ import {
   GridActionsCellItem,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
-import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
+import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
@@ -15,19 +15,23 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
-import { actualizarCuitRestringido, crearCuitRestringido, eliminarCuitRestringido, obtenerCuitsRestringidos } from './CuitsRestringidosApi';
-import Swal from 'sweetalert2';
-import './CuitsRestringidos.css';
+import {
+  consultarCuitRestringido,
+  crearCuitRestringido,
+  actualizarCuitRestringido,
+  eliminarCuitRestringido,
+} from "./CuitsRestringidosApi";
+import Swal from "sweetalert2";
+import "./CuitsRestringidos.css";
 
 function EditToolbar(props) {
   const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
 
-  const handleClick = () => {
+  const altaHandleClick = () => {
     const maxId = Math.max(...rows.map((row) => row.id), 0);
     const newId = maxId + 1;
     const id = newId;
-;
-    volverPrimerPagina()
+    volverPrimerPagina();
 
     setRows((oldRows) => [
       { id, cuit: "", observacion: "", isNew: true },
@@ -41,7 +45,7 @@ function EditToolbar(props) {
 
   return (
     <GridToolbarContainer>
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
+      <Button color="primary" startIcon={<AddIcon />} onClick={altaHandleClick}>
         Nuevo Registro
       </Button>
     </GridToolbarContainer>
@@ -49,8 +53,7 @@ function EditToolbar(props) {
 }
 
 export const CuitsRestringidos = () => {
-
-  const [locale, setLocale] = useState('esES');
+  const [locale, setLocale] = useState("esES");
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
   const [paginationModel, setPaginationModel] = useState({
@@ -65,29 +68,20 @@ export const CuitsRestringidos = () => {
     }));
   };
 
-  const TOKEN = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.usuario.token;
-
   const theme = useTheme();
 
   const themeWithLocale = useMemo(
     () => createTheme(theme, locales[locale]),
-    [locale, theme],
+    [locale, theme]
   );
 
   useEffect(() => {
-
     const ObtenerCuitsRestringidos = async () => {
-
-      const cuitsRestringidosResponse = await obtenerCuitsRestringidos(TOKEN);
-
-      setRows(cuitsRestringidosResponse.map((item) => ({ id: item.id, ...item })))
-
-    }
-
+      const response = await consultarCuitRestringido();
+      setRows(response.map((item) => ({ id: item.id, ...item })));
+    };
     ObtenerCuitsRestringidos();
-
   }, []);
-
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -104,25 +98,24 @@ export const CuitsRestringidos = () => {
   };
 
   const handleDeleteClick = (id) => async () => {
-
     const showSwalConfirm = async () => {
       try {
         Swal.fire({
-          title: '¿Estás seguro?',
+          title: "¿Estás seguro?",
           text: "¡No podrás revertir esto!",
-          icon: 'warning',
+          icon: "warning",
           showCancelButton: true,
-          confirmButtonColor: '#1A76D2',
-          cancelButtonColor: '#6c757d',
-          confirmButtonText: 'Si, bórralo!'
+          confirmButtonColor: "#1A76D2",
+          cancelButtonColor: "#6c757d",
+          confirmButtonText: "Si, bórralo!",
         }).then(async (result) => {
           if (result.isConfirmed) {
-            setRows(rows.filter((row) => row.id !== id));
-            await eliminarCuitRestringido(id, TOKEN);
+            const bBajaOk = await eliminarCuitRestringido(id);
+            if (bBajaOk) setRows(rows.filter((row) => row.id !== id));
           }
         });
       } catch (error) {
-        console.error('Error al ejecutar eliminarFeriado:', error);
+        console.error("Error al ejecutar eliminarFeriado:", error);
       }
     };
 
@@ -141,33 +134,58 @@ export const CuitsRestringidos = () => {
     }
   };
 
-  const processRowUpdate = async (newRow) => {
-
-    const updatedRow = { ...newRow, isNew: false };
-
-    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-
+  const processRowUpdate = async (newRow, oldRow) => {
+    let bOk = false;
+    console.log("1 - processRowUpdate - newRow: " + JSON.stringify(newRow));
     if (newRow.isNew) {
+      console.log("2 - processRowUpdate - ALTA ");
+      try {
+        delete newRow.id;
+        delete newRow.isNew;
+        const data = await crearCuitRestringido(newRow);
+        console.log("data: " + JSON.stringify(data));
+        if (data && data.id) {
+          newRow.id = data.id;
+          newRow.isNew = false;
+          bOk = true;
 
-      const nuevoCuitRestringido = {
-        cuit: newRow.cuit,
-        observacion: newRow.observacion,
-      };
-
-      await crearCuitRestringido(nuevoCuitRestringido, TOKEN);
-
+          console.log("ALTA - rows: ");
+          console.log(rows);
+          const newRows = rows.map((row) => (row.isNew ? newRow : row));
+          console.log(newRows);
+          setRows(newRows);
+        } else {
+          console.log("alta sin ID generado");
+        }
+      } catch (error) {
+        console.log(
+          "X - processRowUpdate - ALTA - ERROR: " + JSON.stringify(error)
+        );
+      }
     } else {
-
-      const cuitRestringido = {
-        cuit: newRow.cuit,
-        observacion: newRow.observacion,
-      };
-
-      await actualizarCuitRestringido(newRow.id, cuitRestringido, TOKEN)
-
+      console.log("3 - processRowUpdate - MODI ");
+      try {
+        delete newRow.isNew;
+        bOk = await actualizarCuitRestringido(newRow);
+        console.log("4 - processRowUpdate - MODI - bOk: " + bOk);
+        newRow.isNew = false;
+        if (bOk) {
+          setRows(rows.map((row) => (row.id === newRow.id ? newRow : row)));
+        }
+      } catch (error) {
+        console.log(
+          "X - processRowUpdate - MODI - ERROR: " + JSON.stringify(error)
+        );
+      }
     }
 
-    return updatedRow;
+    console.log("5 -processRowUpdate-FIN-newRow: " + JSON.stringify(newRow));
+
+    if (bOk) {
+      return newRow;
+    } else {
+      return oldRow;
+    }
   };
 
   const handleRowModesModelChange = (newRowModesModel) => {
@@ -182,7 +200,7 @@ export const CuitsRestringidos = () => {
       editable: true,
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
     },
     {
       field: "observacion",
@@ -191,7 +209,7 @@ export const CuitsRestringidos = () => {
       editable: true,
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
     },
     {
       field: "actions",
@@ -199,7 +217,7 @@ export const CuitsRestringidos = () => {
       headerName: "Acciones",
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
       flex: 1,
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
@@ -208,7 +226,7 @@ export const CuitsRestringidos = () => {
           return [
             <GridActionsCellItem
               icon={<SaveIcon />}
-              label="Save"
+              label="Guardar"
               sx={{
                 color: "primary.main",
               }}
@@ -216,7 +234,7 @@ export const CuitsRestringidos = () => {
             />,
             <GridActionsCellItem
               icon={<CancelIcon />}
-              label="Cancel"
+              label="Cancelar"
               className="textPrimary"
               onClick={handleCancelClick(id)}
               color="inherit"
@@ -244,7 +262,7 @@ export const CuitsRestringidos = () => {
   ];
 
   return (
-    <div className='cuits_restringidos_container'>
+    <div className="cuits_restringidos_container">
       <h1>Administracion de Cuits restringidos</h1>
       <Box
         sx={{
@@ -260,7 +278,9 @@ export const CuitsRestringidos = () => {
             rowModesModel={rowModesModel}
             onRowModesModelChange={handleRowModesModelChange}
             onRowEditStop={handleRowEditStop}
-            processRowUpdate={processRowUpdate}
+            processRowUpdate={(updatedRow, originalRow) =>
+              processRowUpdate(updatedRow, originalRow)
+            }
             slots={{
               toolbar: EditToolbar,
             }}
@@ -268,15 +288,15 @@ export const CuitsRestringidos = () => {
               toolbar: { setRows, rows, setRowModesModel, volverPrimerPagina },
             }}
             sx={{
-              '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
-                width: '8px',
-                visibility: 'visible',
+              "& .MuiDataGrid-virtualScroller::-webkit-scrollbar": {
+                width: "8px",
+                visibility: "visible",
               },
-              '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
-                backgroundColor: '#ccc',
+              "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb": {
+                backgroundColor: "#ccc",
               },
-              '& .css-1iyq7zh-MuiDataGrid-columnHeaders': {
-                backgroundColor: '#1A76D2 !important',
+              "& .css-1iyq7zh-MuiDataGrid-columnHeaders": {
+                backgroundColor: "#1A76D2 !important",
               },
             }}
             paginationModel={paginationModel}
@@ -286,5 +306,5 @@ export const CuitsRestringidos = () => {
         </ThemeProvider>
       </Box>
     </div>
-  )
-}
+  );
+};

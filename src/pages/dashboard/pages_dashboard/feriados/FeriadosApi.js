@@ -1,105 +1,98 @@
-import { errorBackendResponse } from "../../../../errors/errorBackendResponse";
-import axios from "axios";
+import {
+  consultar,
+  crear,
+  actualizar,
+  eliminar,
+} from "@components/axios/axiosCrud";
+import { showErrorBackeEnd } from "@components/axios/showErrorBackeEnd";
 import Swal from "sweetalert2";
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-const MESSAGE_HTTP_CREATED = import.meta.env.VITE_MESSAGE_HTTP_CREATED;
-const MESSAGE_HTTP_UPDATED = import.meta.env.VITE_MESSAGE_HTTP_UPDATED;
-const MESSAGE_HTTP_DELETED = import.meta.env.VITE_MESSAGE_HTTP_DELETED;
 
-export const obtenerFeriados = async (token) => {
-  const URL = `${BACKEND_URL}/feriados`;
+const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
+const HTTP_MSG_MODI = import.meta.env.VITE_HTTP_MSG_MODI;
+const HTTP_MSG_BAJA = import.meta.env.VITE_HTTP_MSG_BAJA;
+const HTTP_MSG_ALTA_ERROR = import.meta.env.VITE_HTTP_MSG_ALTA_ERROR;
+const HTTP_MSG_MODI_ERROR = import.meta.env.VITE_HTTP_MSG_MODI_ERROR;
+const HTTP_MSG_BAJA_ERROR = import.meta.env.VITE_HTTP_MSG_BAJA_ERROR;
 
+const URL_ENTITY = "/feriados";
+
+const showSwallSuccess = (MESSAGE_HTTP) => {
+  Swal.fire({
+    icon: "success",
+    title: MESSAGE_HTTP,
+    showConfirmButton: false,
+    timer: 2000,
+  });
+};
+
+export const consultarFeriados = async () => {
   try {
-    const feriadosResponse = await axios.get(URL, {
-      headers: {
-        Authorization: token,
-      },
-    });
-    const feriados = await feriadosResponse.data;
-
-    return feriados || [];
+    const data = await consultar(URL_ENTITY);
+    return data || [];
   } catch (error) {
-    errorBackendResponse(error);
+    console.log(
+      "obtenerFeriados() - ERROR-catch - error: " + JSON.stringify(data)
+    );
+    return [];
   }
 };
 
-export const crearFeriado = async (nuevoFeriado, token) => {
-  const URL = `${BACKEND_URL}/feriados`;
-
-  const showSwallSuccess = () => {
-    Swal.fire({
-      icon: "success",
-      title: MESSAGE_HTTP_CREATED,
-      showConfirmButton: false,
-      timer: 2000,
-    });
-  };
-
+export const crearFeriado = async (nuevoReg) => {
   try {
-    const feriadoResponse = await axios.post(URL, nuevoFeriado, {
-      headers: {
-        Authorization: token,
-      },
-    });
-
-    if (feriadoResponse.status === 201) {
-      showSwallSuccess();
+    console.log("crearFeriado - nuevoReg: " + JSON.stringify(nuevoReg));
+    const data = await crear(URL_ENTITY, nuevoReg);
+    if (data && data.id) {
+      showSwallSuccess(HTTP_MSG_ALTA);
+      return data;
+    } else {
+      showErrorBackeEnd(HTTP_MSG_ALTA_ERROR, data);
+      return {};
     }
   } catch (error) {
-    errorBackendResponse(error);
+    console.log("error:");
+    console.log(error);
+    console.log(
+      `crearFeriado() - ERROR 1 - nuevoReg: ${JSON.stringify(
+        nuevoReg
+      )} - error: ${JSON.stringify(error)}`
+    );
+    return {};
   }
 };
 
-export const actualizarFeriado = async (idFeriado, feriado, token) => {
-  const URL = `${BACKEND_URL}/feriados/${idFeriado}`;
-
-  const showSwallSuccess = () => {
-    Swal.fire({
-      icon: "success",
-      title: MESSAGE_HTTP_UPDATED,
-      showConfirmButton: false,
-      timer: 2000,
-    });
-  };
-
+export const actualizarFeriado = async (idFeriado, feriado) => {
   try {
-    const feriadoResponse = await axios.put(URL, feriado, {
-      headers: {
-        Authorization: token,
-      },
-    });
-
-    if (feriadoResponse.status === 200) {
-      showSwallSuccess();
+    const response = await actualizar(URL_ENTITY, idFeriado, feriado);
+    if (response == true) {
+      showSwallSuccess(HTTP_MSG_MODI);
+      return true;
+    } else {
+      showErrorBackeEnd(HTTP_MSG_MODI_ERROR, response);
+      return false;
     }
   } catch (error) {
-    errorBackendResponse(error);
+    console.log(
+      `actualizarFeriado() - ERROR 1 - error: ${JSON.stringify(error)}`
+    );
+    return false;
   }
 };
 
-export const eliminarFeriado = async (idFeriado, token) => {
-  const URL = `${BACKEND_URL}/feriados/${idFeriado}`;
-
-  const showSwallSuccess = () => {
-    Swal.fire({
-      icon: "success",
-      title: MESSAGE_HTTP_DELETED,
-      showConfirmButton: false,
-      timer: 2000,
-    });
-  };
-
+export const eliminarFeriado = async (idFeriado) => {
   try {
-    const feriadoResponse = await axios.delete(URL, {
-      headers: {
-        Authorization: token,
-      },
-    });
+    const response = await eliminar(URL_ENTITY, idFeriado);
 
-    if (feriadoResponse.status === 200) {
-      showSwallSuccess();
+    if (response == true) {
+      showSwallSuccess(HTTP_MSG_BAJA);
+      return true;
+    } else {
+      showErrorBackeEnd(HTTP_MSG_BAJA_ERROR, response);
+      return false;
     }
   } catch (error) {
-    errorBackendResponse(error);
+    console.log(
+      `eliminarFeriado() - ERROR 1 - error: ${JSON.stringify(error)}`
+    );
+    return false;
   }
 };
