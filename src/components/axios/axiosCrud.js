@@ -72,7 +72,8 @@ export const eliminar = async (UrlApi, id) => {
   const URL = `${UrlApi}/${id}`;
   try {
     const response = await oAxios.delete(URL);
-    if (response.status !== 200) {
+    if (response.status !== 204 && response.status !== 200) {
+      //JsonServer devuelve 200
       console.log(
         `axiosCrud.eliminar() - ERROR 2 - UrlApi: ${UrlApi} - response: ${response}`
       );

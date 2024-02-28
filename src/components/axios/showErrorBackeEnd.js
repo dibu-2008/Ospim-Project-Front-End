@@ -15,12 +15,17 @@ export const showErrorBackeEnd = (HTTP_MSG, rta) => {
   try {
     console.log("typeof: " + typeof rta);
     if (rta && rta.tipo && rta.descripcion && rta.ticket) {
-      console.log("emitirError - IF => TRUE !! ");
+      console.log("showErrorBackeEnd - IF => TRUE !! ");
       if (rta.tipo === ERROR_BUSINESS) {
-        console.log("emitirError - showSwalError => " + rta.descripcion);
+        console.log(
+          "showErrorBackeEnd - showSwalError => rta.descripcion: " +
+            rta.descripcion
+        );
         showSwalError("" + rta.descripcion);
       } else {
-        console.log("emitirError - showSwalError => " + rta.ticket);
+        console.log(
+          "showErrorBackeEnd - showSwalError => rta.ticket:" + rta.ticket
+        );
         showSwalError(`${ERROR_MESSAGE} ${rta.ticket}`);
       }
       console.log("emitirError - return TRUE - ");
@@ -29,12 +34,11 @@ export const showErrorBackeEnd = (HTTP_MSG, rta) => {
       showSwalError(HTTP_MSG);
     }
   } catch (error) {
+    console.log("showErrorBackeEnd - catch() - rta:" + JSON.stringify(rta));
     console.log(
-      "emitirError - ERROR - rta:" +
-        JSON.stringify(rta) +
-        " - error: " +
-        JSON.stringify(error)
+      "showErrorBackeEnd - catch() -  - error: " + JSON.stringify(error)
     );
+
     showSwalError(HTTP_MSG);
   }
 };

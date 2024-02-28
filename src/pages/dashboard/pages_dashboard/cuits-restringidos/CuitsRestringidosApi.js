@@ -30,7 +30,10 @@ export const consultarCuitRestringido = async () => {
     const data = await consultar(URL_ENTITY);
     return data || [];
   } catch (error) {
-    console.log("consultarCuitsRestringidos() - errorBackendResponse - CALL ");
+    console.log(
+      "consultarCuitsRestringidos() - ERROR-catch - error: " +
+        JSON.stringify(data)
+    );
     return [];
   }
 };
@@ -55,7 +58,6 @@ export const crearCuitRestringido = async (nuevoReg) => {
         nuevoReg
       )} - error: ${JSON.stringify(error)}`
     );
-    console.log("crearCuitRestringido - ERROR - return {}   ");
     return {};
   }
 };
@@ -74,7 +76,6 @@ export const actualizarCuitRestringido = async (reg) => {
       return false;
     }
   } catch (error) {
-    console.log("actualizarCuitRestringido - errorBackendResponse - CALL ");
     console.log(
       `actualizarCuitRestringido() - ERROR 1 - error: ${JSON.stringify(error)}`
     );

@@ -27,7 +27,7 @@ import "./CuitsRestringidos.css";
 function EditToolbar(props) {
   const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
 
-  const handleClick = () => {
+  const altaHandleClick = () => {
     const maxId = Math.max(...rows.map((row) => row.id), 0);
     const newId = maxId + 1;
     const id = newId;
@@ -45,7 +45,7 @@ function EditToolbar(props) {
 
   return (
     <GridToolbarContainer>
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
+      <Button color="primary" startIcon={<AddIcon />} onClick={altaHandleClick}>
         Nuevo Registro
       </Button>
     </GridToolbarContainer>
@@ -77,10 +77,8 @@ export const CuitsRestringidos = () => {
 
   useEffect(() => {
     const ObtenerCuitsRestringidos = async () => {
-      const cuitsRestringidosResponse = await consultarCuitRestringido();
-      setRows(
-        cuitsRestringidosResponse.map((item) => ({ id: item.id, ...item }))
-      );
+      const response = await consultarCuitRestringido();
+      setRows(response.map((item) => ({ id: item.id, ...item })));
     };
     ObtenerCuitsRestringidos();
   }, []);
@@ -228,7 +226,7 @@ export const CuitsRestringidos = () => {
           return [
             <GridActionsCellItem
               icon={<SaveIcon />}
-              label="Save"
+              label="Guardar"
               sx={{
                 color: "primary.main",
               }}
@@ -236,7 +234,7 @@ export const CuitsRestringidos = () => {
             />,
             <GridActionsCellItem
               icon={<CancelIcon />}
-              label="Cancel"
+              label="Cancelar"
               className="textPrimary"
               onClick={handleCancelClick(id)}
               color="inherit"
