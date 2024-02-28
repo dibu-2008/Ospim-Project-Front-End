@@ -653,7 +653,7 @@ module.exports = (req, res, next) => {
     if (diferencia_en_dias >= 0){
       const monto_interes = boleta.total_acumulado * interes_diario *  diferencia_en_dias
       boleta.total_acumulado += monto_interes
-      boleta.interes = monto_interes
+      boleta.interes = parseFloat(monto_interes.toFixed(2))
     }
     
     boleta.intencion_de_pago = intencion_de_pago

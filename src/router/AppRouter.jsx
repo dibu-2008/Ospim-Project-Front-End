@@ -18,6 +18,7 @@ import { AltaUsuarioInterno } from "../pages/dashboard/pages_dashboard/alta_usua
 import { RegistroEmpresa } from "../pages/registro_empresa/RegistroEmpresa";
 import { CuitsRestringidos } from "../pages/dashboard/pages_dashboard/cuits-restringidos/CuitsRestringidos";
 import { Boletas } from "../pages/dashboard/pages_dashboard/boletas/Boletas";
+import { DetalleBoleta } from "@/pages/dashboard/pages_dashboard/boletas/DetalleBoleta";
 import { Roles } from "@/pages/dashboard/pages_dashboard/roles/Roles";
 import { GenerarBoletas } from "@/pages/dashboard/pages_dashboard/generar_boletas/GenerarBoletas";
 
@@ -50,6 +51,8 @@ const AppRouter = () => {
             <Route path="cuitsrestringidos" element={<CuitsRestringidos />} />
             <Route path="roles" element={<Roles />} />
             <Route path="generarboletas" element={<GenerarBoletas />} />
+            <Route path="detalleboleta" element={<DetalleBoleta />} />
+
             
           </Route>
           <Route path="registercompany" element={<RegistroEmpresa />} />

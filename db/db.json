@@ -2850,6 +2850,7 @@
   ],
   "boletas": {
     "declaracion_jurada_id": 5048119,
+    "periodo": "01-2024",
     "detalle_boletas": [
       {
         "codigo": "UOMACS",
@@ -2932,44 +2933,13 @@
             "capital": 7800
           }
         ]
-      },
-      {
-        "codigo": "PRUEBA",
-        "descripcion": "Prueba",
-        "vencimiento": "2024-02-21",
-        "periodo": "01-2024",
-        "total_acumulado": 1484,
-        "interes": 0,
-        "ajuste": 0,
-        "afiliados": [
-          {
-            "cuil": "27367071112",
-            "apellido": "Nelo",
-            "nombre": "Rosario",
-            "remunerativo": 200000,
-            "capital": 520
-          },
-          {
-            "cuil": "2731722324248",
-            "apellido": "Nelo",
-            "nombre": "Manfredo",
-            "remunerativo": 100000,
-            "capital": 482
-          },
-          {
-            "cuil": "273712728848",
-            "apellido": "Nelo",
-            "nombre": "Sabario",
-            "remunerativo": 200000,
-            "capital": 482
-          }
-        ]
       }
     ]
   },
   "boletas_guardadas": [
     {
       "declaracion_jurada_id": 5048119,
+      "periodo": "01-2024",
       "detalle_boletas": [
         {
           "codigo": "UOMACS",
@@ -2984,18 +2954,21 @@
               "cuil": "27367071112",
               "apellido": "Nelo",
               "nombre": "Rosario",
+              "remunerativo": 200000,
               "capital": 8400
             },
             {
               "cuil": "2731722324248",
               "apellido": "Nelo",
               "nombre": "Manfredo",
+              "remunerativo": 100000,
               "capital": 7610
             },
             {
               "cuil": "273712728848",
               "apellido": "Nelo",
               "nombre": "Sabario",
+              "remunerativo": 100000,
               "capital": 5800
             }
           ]
@@ -3013,18 +2986,21 @@
               "cuil": "27367071112",
               "apellido": "Nelo",
               "nombre": "Rosario",
+              "remunerativo": 200000,
               "capital": 520
             },
             {
               "cuil": "2731722324248",
               "apellido": "Nelo",
               "nombre": "Manfredo",
+              "remunerativo": 100000,
               "capital": 482
             },
             {
               "cuil": "273712728848",
               "apellido": "Nelo",
               "nombre": "Sabario",
+              "remunerativo": 100000,
               "capital": 482
             }
           ]
@@ -3042,6 +3018,7 @@
               "cuil": "27367071112",
               "apellido": "Nelo",
               "nombre": "Rosario",
+              "remunerativo": 200000,
               "capital": 7800
             }
           ]
@@ -3175,14 +3152,15 @@
     },
     {
       "declaracion_jurada_id": 5048119,
+      "periodo": "01-2024",
       "detalle_boletas": [
         {
           "codigo": "UOMACS",
           "descripcion": "UOMA Cuota Social",
           "vencimiento": "2024-02-21",
           "periodo": "01-2024",
-          "total_acumulado": 13678.2,
-          "interes": 268.2,
+          "total_acumulado": 13946.4,
+          "interes": 536.4,
           "ajuste": 0,
           "afiliados": [
             {
@@ -3207,15 +3185,48 @@
               "capital": 5800
             }
           ],
-          "intencion_de_pago": "2024-02-23"
+          "intencion_de_pago": "2024-02-25"
+        },
+        {
+          "codigo": "Test1",
+          "descripcion": "Test1",
+          "vencimiento": "2024-02-21",
+          "periodo": "01-2024",
+          "total_acumulado": 13812.3,
+          "interes": 402.3,
+          "ajuste": 0,
+          "afiliados": [
+            {
+              "cuil": "27367071112",
+              "apellido": "Nelo",
+              "nombre": "Rosario",
+              "remunerativo": 200000,
+              "capital": 8400
+            },
+            {
+              "cuil": "2731722324248",
+              "apellido": "Nelo",
+              "nombre": "Manfredo",
+              "remunerativo": 100000,
+              "capital": 7610
+            },
+            {
+              "cuil": "273712728848",
+              "apellido": "Nelo",
+              "nombre": "Sabario",
+              "remunerativo": 100000,
+              "capital": 5800
+            }
+          ],
+          "intencion_de_pago": "2024-02-24"
         },
         {
           "codigo": "ART46",
           "descripcion": "Art. 46",
           "vencimiento": "2024-02-21",
           "periodo": "01-2024",
-          "total_acumulado": 1513.68,
-          "interes": 29.68,
+          "total_acumulado": 1573.04,
+          "interes": 89.04,
           "ajuste": 0,
           "afiliados": [
             {
@@ -3240,15 +3251,15 @@
               "capital": 482
             }
           ],
-          "intencion_de_pago": "2024-02-23"
+          "intencion_de_pago": "2024-02-27"
         },
         {
           "codigo": "ANTIMACS",
           "descripcion": "ANTIMA Cuota Social",
           "vencimiento": "2024-02-21",
           "periodo": "01-2024",
-          "total_acumulado": 7956,
-          "interes": 156,
+          "total_acumulado": 8034,
+          "interes": 234,
           "ajuste": 0,
           "afiliados": [
             {
@@ -3259,40 +3270,7 @@
               "capital": 7800
             }
           ],
-          "intencion_de_pago": "2024-02-23"
-        },
-        {
-          "codigo": "PRUEBA",
-          "descripcion": "Prueba",
-          "vencimiento": "2024-02-21",
-          "periodo": "01-2024",
-          "total_acumulado": 1513.68,
-          "interes": 29.68,
-          "ajuste": 0,
-          "afiliados": [
-            {
-              "cuil": "27367071112",
-              "apellido": "Nelo",
-              "nombre": "Rosario",
-              "remunerativo": 200000,
-              "capital": 520
-            },
-            {
-              "cuil": "2731722324248",
-              "apellido": "Nelo",
-              "nombre": "Manfredo",
-              "remunerativo": 100000,
-              "capital": 482
-            },
-            {
-              "cuil": "273712728848",
-              "apellido": "Nelo",
-              "nombre": "Sabario",
-              "remunerativo": 200000,
-              "capital": 482
-            }
-          ],
-          "intencion_de_pago": "2024-02-23"
+          "intencion_de_pago": "2024-02-24"
         }
       ],
       "id": 3
