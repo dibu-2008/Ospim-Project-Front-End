@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import {
   crearPublicacion,
-  obtenerPublicaciones,
+  consultarPublicaciones,
   actualizarPublicacion,
   eliminarPublicacion,
 } from "./PublicacionesApi";
@@ -43,12 +43,12 @@ export const Publicaciones = () => {
 
   //Consulta rows de la Grilla
   useEffect(() => {
-    const ObtenerPublicaciones = async () => {
-      const publicaciones = await obtenerPublicaciones();
+    const obtenerPublicaciones = async () => {
+      const publicaciones = await consultarPublicaciones();
       setRows(publicaciones.map((item, index) => ({ ...item, id: item.id })));
     };
 
-    ObtenerPublicaciones();
+    obtenerPublicaciones();
   }, []);
 
   const volverPrimerPagina = () => {
@@ -85,8 +85,8 @@ export const Publicaciones = () => {
           confirmButtonText: "Si, bórralo!",
         }).then(async (result) => {
           if (result.isConfirmed) {
-            setRows((oldRows) => oldRows.filter((row) => row.id !== id));
-            await eliminarPublicacion(id);
+            const bBajaOk = await eliminarPublicacion(id);
+            if (bBajaOk) setRows(rows.filter((row) => row.id !== id));
           }
         });
       } catch (error) {
@@ -108,42 +108,57 @@ export const Publicaciones = () => {
     }
   };
 
-  const processRowUpdate = async (newRow) => {
-    const updatedRow = { ...newRow, isNew: false };
+  const processRowUpdate = async (newRow, oldRow) => {
+    let bOk = false;
 
-    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-
-    const fechaDesde = new Date(newRow.vigenciaDesde);
-    const fechaHasta = new Date(newRow.vigenciaHasta);
-
+    const fechaDesdeOri = new Date(newRow.vigenciaDesde);
+    const fechaHastaOri = new Date(newRow.vigenciaHasta);
     fechaDesde.setUTCHours(0, 0, 0, 0);
     fechaHasta.setUTCHours(0, 0, 0, 0);
+    const fechaDesdeFormateada = fechaDesdeOri.toISOString();
+    const fechaHastaFormateada = fechaHastaOri.toISOString();
 
-    const fechaDesdeFormateada = fechaDesde.toISOString();
-    const fechaHastaFormateada = fechaHasta.toISOString();
-
+    newRow.vigenciaDesde = fechaDesdeFormateada;
+    newRow.vigenciaHasta = fechaHastaFormateada;
     if (newRow.isNew) {
-      const nuevaPublicacion = {
-        titulo: newRow.titulo,
-        cuerpo: newRow.cuerpo,
-        vigenciaDesde: fechaDesdeFormateada,
-        vigenciaHasta: fechaHastaFormateada,
-      };
-
-      const { id } = await crearPublicacion(nuevaPublicacion);
-      updatedRow.id = id;
+      try {
+        delete newRow.id;
+        delete newRow.isNew;
+        const data = await crearPublicacion(newRow);
+        if (data && data.id) {
+          newRow.id = data.id;
+          newRow.isNew = false;
+          bOk = true;
+          const newRows = rows.map((row) => (row.isNew ? newRow : row));
+          setRows(newRows);
+        }
+      } catch (error) {
+        console.log(
+          "X - processRowUpdate - ALTA - ERROR: " + JSON.stringify(error)
+        );
+      }
     } else {
-      const publicacionEditada = {
-        titulo: newRow.titulo,
-        cuerpo: newRow.cuerpo,
-        vigenciaDesde: fechaDesdeFormateada,
-        vigenciaHasta: fechaHastaFormateada,
-      };
-
-      await actualizarPublicacion(newRow.id, publicacionEditada);
+      try {
+        delete newRow.isNew;
+        bOk = await actualizarPublicacion(newRow);
+        newRow.isNew = false;
+        if (bOk) {
+          setRows(rows.map((row) => (row.id === newRow.id ? newRow : row)));
+        }
+      } catch (error) {
+        console.log(
+          "X - processRowUpdate - MODI - ERROR: " + JSON.stringify(error)
+        );
+      }
     }
+    newRow.vigenciaDesde = fechaDesdeOri;
+    newRow.vigenciaHasta = fechaHastaOri;
 
-    return updatedRow;
+    if (bOk) {
+      return newRow;
+    } else {
+      return oldRow;
+    }
   };
 
   const handleRowModesModelChange = (newRowModesModel) => {
@@ -330,7 +345,9 @@ export const Publicaciones = () => {
               rowModesModel={rowModesModel}
               onRowModesModelChange={handleRowModesModelChange}
               onRowEditStop={handleRowEditStop}
-              processRowUpdate={processRowUpdate}
+              processRowUpdate={(updatedRow, originalRow) =>
+                processRowUpdate(updatedRow, originalRow)
+              }
               slots={{
                 toolbar: EditarNuevaFila,
               }}
