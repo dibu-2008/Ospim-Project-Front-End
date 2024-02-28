@@ -107,8 +107,16 @@ export const MisAltaDeclaracionesJuradas = ({
 
     }, []);
 
-    const importarAfiliado = ()=>{
+    const importarAfiliado = () => {
         setRowsAltaDDJJ(afiliadoImportado);
+    }
+
+    const formatearFecha = (fecha) => {
+        const partes = fecha.split('/');
+        const anio = partes[2].length === 2 ? '20' + partes[2] : partes[2];
+        const mes = partes[1].padStart(2, '0');
+        const dia = partes[0];
+        return `${anio}-${mes}-${dia}`;
     }
 
     const handleFileChange = (event) => {
@@ -133,13 +141,6 @@ export const MisAltaDeclaracionesJuradas = ({
 
                 const arrayTransformado = arraySinEncabezado.map((item, index) => {
 
-                    const fechaOriginal = item[5];
-                    const partes = fechaOriginal.split('/');
-                    const anio = partes[2].length === 2 ? '20' + partes[2] : partes[2]; 
-                    const mes = partes[1].padStart(2, '0'); 
-                    const dia = partes[0]; 
-                    const fechaFormateada = `${anio}-${mes}-${dia}`;
-
                     return {
                         id: index + 1,
                         cuil: item[0],
@@ -147,7 +148,7 @@ export const MisAltaDeclaracionesJuradas = ({
                         nombre: item[2],
                         camara: item[3],
                         categoria: item[4],
-                        fechaIngreso: fechaFormateada,
+                        fechaIngreso: formatearFecha(item[5]),
                         empresaDomicilioId: plantas.find(plantas => plantas.planta === item[6])?.id,
                         remunerativo: item[7],
                         noRemunerativo: item[8],
@@ -408,3 +409,15 @@ export const MisAltaDeclaracionesJuradas = ({
         </div>
     )
 }
+
+// Como debe de venir la respuesa de la API
+
+/* cuilesValidados = [
+    {
+     int nullo que no existe el afiliado
+    }
+]
+ */
+
+// int si existe o no en la base de datos
+// validacion validar si el cuil es correcto
