@@ -42,9 +42,13 @@
 
   "/empresa/:empresaId/ddjj/:ddjjId/boletas":"/empresa/ddjj/boletas/?ddjj_id=:ddjjId",
   "/empresa/:empresaId/ddjj/:ddjjId/boleta/:boletaCodigo/calcular-interes":"empresa/ddjj/boleta/calcular-interes/?codigoBoleta=:boletaCodigo",
+  "/empresa/:empresaId/ddjj/:ddjjId/calcular-intereses":"/empresa/ddjj/calcular-intereses",
   "/empresa/:empresaId/ddjj/:ddjjId/codigo-boleta/:codigoBoleta":"/empresa/ddjj/boleta/codigo/?ddjj_id=:ddjjId&codigo=:codigoBoleta",
   "/empresa/:empresaId/ddjj/:ddjjId/guardar-boletas":"/boletas_guardadas",
-  "/empresa/:empresaId/boletas":"/boletas_guardadas"
+  "/empresa/:empresaId/boletas":"/boletas_guardadas",
+  "/empresa/:empresaId/ddjj/:Id/boleta-pago/concepto/:concepto/imprimir-detalle":"/empresa/ddjj/boleta-pago/concepto/imprimir-detalle",
+  "/empresa/:empresaId/ddjj/:Id/boleta-pago/concepto/:concepto/imprimir-boleta":"/empresa/ddjj/boleta-pago/concepto/imprimir-boleta",
+  "/empresa/:empresaId/periodo/:periodo/tiene-rectificativa" :"/empresa/periodo/tiene-rectificativa?empresaId=:empresaId&periodo=:periodo"
 
 
 }

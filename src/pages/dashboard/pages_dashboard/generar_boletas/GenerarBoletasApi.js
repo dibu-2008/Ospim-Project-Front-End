@@ -8,8 +8,17 @@ export const getBoletasByDDJJid = async (empresa_id, ddjj_id ) => {
     return axios.get(URL)
 }
 
-export const calcularInteres = async(empresa_id, ddjj_id, boleta_codigo, intencion_de_pago) => {
+export const calcularInteresBoleta = async(empresa_id, ddjj_id, boleta_codigo, intencion_de_pago) => {
     const URL = `${BACKEND_URL}/empresa/${ empresa_id }/ddjj/${ ddjj_id }/boleta/${boleta_codigo}/calcular-interes`;
+    const body = { 
+        "intencion_de_pago" : intencion_de_pago
+    }
+    return axios.post(URL, body)
+}
+
+
+export const calcularInteresBoletas = async(empresa_id, ddjj_id, intencion_de_pago) => {
+    const URL = `${BACKEND_URL}/empresa/${ empresa_id }/ddjj/${ ddjj_id }/calcular-intereses`;
     const body = { 
         "intencion_de_pago" : intencion_de_pago
     }

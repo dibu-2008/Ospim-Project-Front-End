@@ -2,8 +2,10 @@ import React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Button from '@mui/material/Button';
 import "./Boletas.css"
 import { Box } from '@mui/system';
+import { downloadPdfDetalle, downloadPdfBoleta } from './BoletasApi';
 
 const COLUMNS_AFILIADOS = [
   { field: 'cuil', headerName: 'CUIL', width: 200 },
@@ -22,10 +24,17 @@ export const DetalleBoleta = () => {
   }));
   console.log(afiliadosRows)
 
+
   const existeDato = dato => dato ? dato: ''
   return (
       <div className='boletas_container'>
         <h1>Detalle boleta {boletaDetalle.descripcion}</h1>
+        <Button onClick={downloadPdfDetalle}>
+          Descargar Detalle
+        </Button>
+        <Button onClick={downloadPdfBoleta}>
+          Descargar Boleta
+        </Button>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead className='titulos'>
@@ -103,12 +112,13 @@ export const DetalleBoleta = () => {
                   Total Final
                 </TableCell>
                 <TableCell>
-                  {existeDato(boletaDetalle.total_acumulado)}
+                  {existeDato(boletaDetalle.total_final)}
                 </TableCell>
               </TableRow>
             </TableBody>
           </Table>
         </TableContainer>
+
       </div>
   );
 };

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Paper, Button, MenuItem, Select, Box } from '@mui/material';
-import { calcularInteres, generarBoletasPost, getBoletasByDDJJid } from './GenerarBoletasApi';
+import { calcularInteresBoleta,calcularInteresBoletas, generarBoletasPost, getBoletasByDDJJid } from './GenerarBoletasApi';
 import "./GenerarBoletas.css";
 //import { Margin } from '@mui/icons-material';
 //import { width } from '@mui/system';
@@ -12,13 +12,14 @@ export const GenerarBoletas = () => {
     const [boletas, setBoletas] = useState({});
     const [showDetail, setShowDetail] = useState(false);
     const [afiliados, setAfiliados] = useState([]);
+    const [primeraSeleccion, setPrimeraSeleccion] = useState(true)
 
     useEffect(() => {
         const fetchData = async () => {
           try {
             const response = await getBoletasByDDJJid(ID_EMPRESA,DDJJ_ID);
             setBoletas(response.data);
-            setAfiliados(ordenarAfiliadosBoletas(response.data))
+            setAfiliados(ordenarAfiliadosBoletas(response.data));
           } catch (error) {
             console.error('Error al obtener las boletas:', error);
           }
@@ -51,14 +52,26 @@ export const GenerarBoletas = () => {
         return afiliadosArray
     } 
 
-    const setIntencionDePago = (codigo, fecha) =>{
-        const boletaIndex = boletas.detalle_boletas.findIndex(element => element.codigo === codigo);
+    const setInteresInDetalleBoleta = (boletaIndex, response) => {
+        const newDetalleBoletas = [...boletas.detalle_boletas];
+        newDetalleBoletas[boletaIndex] = response.data;
+        setBoletas({ ...boletas, detalle_boletas: newDetalleBoletas });
+        console.log(boletas)
+    }
     
-        calcularInteres(123, DDJJ_ID, codigo, fecha).then(response => {
-            const newDetalleBoletas = [...boletas.detalle_boletas]; 
-            newDetalleBoletas[boletaIndex] = response.data; 
-            setBoletas({ ...boletas, detalle_boletas: newDetalleBoletas });
-        });
+    const setIntencionDePago = (codigo, fecha) => {
+        if (primeraSeleccion) {
+            setPrimeraSeleccion(false);
+            calcularInteresBoletas(123, DDJJ_ID, fecha).then(response => {
+                setBoletas(prevBoletas => ({ ...prevBoletas, detalle_boletas: response.data }));
+            });
+
+        } else {
+            const boletaIndex = boletas.detalle_boletas.findIndex(element => element.codigo === codigo);
+            calcularInteresBoleta(123, DDJJ_ID, codigo, fecha).then(response => {
+                setInteresInDetalleBoleta(boletaIndex, response);
+            });
+        }
     }
 
     const toggleDetail = () => setShowDetail(!showDetail);
@@ -104,7 +117,7 @@ export const GenerarBoletas = () => {
                                 <TableCell key={boleta.codigo}>
                                     <TextField type="date" 
                                     inputProps={{min:hoy}}
-                                    defaultValue={boleta.intencion_de_pago?boleta.intencion_de_pago: ''} 
+                                    value={boleta.intencion_de_pago}
                                     onChange={event => setIntencionDePago(boleta.codigo, event.target.value)}/>
                                 </TableCell>
                             ))}
@@ -184,7 +197,7 @@ export const GenerarBoletas = () => {
                         <TableRow>
                             <TableCell className='cwbcb' >Total Final</TableCell>
                             {boletas.detalle_boletas && boletas.detalle_boletas.map((boleta) => (
-                                <TableCell key={boleta.codigo} style={{ backgroundColor: 'lightblue' }}>{boleta.total_acumulado}</TableCell>
+                                <TableCell key={boleta.codigo} style={{ backgroundColor: 'lightblue' }}>{boleta.total_final}</TableCell>
                             ))}
                         </TableRow>
                     </TableBody>

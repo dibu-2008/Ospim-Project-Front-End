@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { TextField, Button, IconButton } from '@mui/material';
+import { TextField, Button, IconButton, Box } from '@mui/material';
 import { Visibility as VisibilityIcon, Print as PrintIcon, Edit as EditIcon } from '@mui/icons-material';
 import { DataGrid } from '@mui/x-data-grid';
 import { useNavigate } from 'react-router-dom';  // Importa useNavigate
-import { getBoletasByEmpresa } from './BoletasApi';
+import { getBoletasByEmpresa, downloadPdfBoleta } from './BoletasApi';
 import './Boletas.css';
 
 
@@ -82,7 +82,13 @@ export const Boletas = () => {
           <Button variant="contained" onClick={handleExport}>Exportar</Button>
         </div>
       </div>
-      <div style={{ height: 400, width: '100%' }}>
+      <Box style={{ height: 400, width: '100%' }} 
+                sx={{
+                  width: '100%',
+                  '& .MuiDataGrid-columnHeaders': {
+                    backgroundColor: '#1A76D2',
+                    color:'white'
+                  }}}>
         <DataGrid
           rows={boletasVisibles}
           columns={[
@@ -102,7 +108,7 @@ export const Boletas = () => {
                   <IconButton size='small' onClick={() => handleViewClick(params.row)}>
                     <VisibilityIcon />
                   </IconButton>
-                  <IconButton size='small'>
+                  <IconButton size='small' onClick={downloadPdfBoleta}>
                     <PrintIcon />
                   </IconButton>
                   <IconButton size='small'>
@@ -114,7 +120,7 @@ export const Boletas = () => {
           ]}
           pageSize={10}
         />
-      </div>
+      </Box>
     </div>
   );
 };

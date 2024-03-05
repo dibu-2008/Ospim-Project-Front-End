@@ -7,15 +7,15 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 //const MESSAGE_HTTP_DELETED = import.meta.env.VITE_MESSAGE_HTTP_DELETED;
 
 
-export const getBoletasByDDJJid = async (empresa_id, ddjj_id ) => {   
-    const URL = `${BACKEND_URL}/empresa/${ empresa_id }/ddjj/${ ddjj_id }/boletas`;
-    return axios.get(URL)
+export const generarBoletaSinDDJJ = async (empresa_id, body) => {
+    const URL = `${BACKEND_URL}/empresa/${empresa_id}/guardar-boleta-sin-ddjj`
+    return axios.post(URL, { ...body })
 }
 
-export const getBoletasByEmpresa = async(empresa_id) =>{
-    const URL = `${BACKEND_URL}/empresa/${ empresa_id }/boletas`;
+export const tieneRectificativa = async(empresa_id, periodo) => {
+    const URL =  `${BACKEND_URL}/empresa/${empresa_id}/periodo/${periodo}/tiene-rectificativa` 
     return axios.get(URL)
-} 
+}
 
 
 export const downloadPdfDetalle = async () => {

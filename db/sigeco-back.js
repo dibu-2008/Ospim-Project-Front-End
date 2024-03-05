@@ -17,7 +17,7 @@ module.exports = (req, res, next) => {
     if (
       req.method === "GET" &&
       regEx.test(req.url) &&
-      //req.url.startsWith("*/DDJJConsulta?") &&
+      !req.url.startsWith("/empresa/periodo/tiene-rectificativa") &&
       req.query.empresaId &&
       req.query.periodo
     ) {
@@ -117,10 +117,24 @@ module.exports = (req, res, next) => {
     {
       return "CALCULAR-INTERES"
     } 
-    if (req.method === "GET" && req.url.startsWith("/empresa/ddjj/boleta/codigo")){
+    if (req.method === "POST" && req.url.startsWith("/empresa/ddjj/calcular-interes") )
+    {
+      return "CALCULAR-INTERESES"
+    } 
+    if (req.method === "GET" && req.url.startsWith("/empresa/ddjj/boleta/codigo"))
+    {
       return "BOLETA-DDJJ-CODIGO"
     }
-
+    if (req.method === "GET" && req.url.startsWith("/empresa/ddjj/boleta-pago/concepto/imprimir-detalle")){
+      return "DETALLE-BOLETA-IMPRIMIR"
+    }
+    if (req.method ==="GET" && req.url.startsWith("/empresa/ddjj/boleta-pago/concepto/imprimir-boleta")){
+      return "BOLETA-IMPRIMIR"
+    }
+    if (req.method === "GET" && req.url.startsWith("/empresa/periodo/tiene-rectificativa")){
+      return "TIENE-RECTIFICATIVA"
+    }
+      
     return "----";
   }
 
@@ -192,8 +206,20 @@ module.exports = (req, res, next) => {
     case "CALCULAR-INTERES":
       calcularInteres();
       break;
+    case "CALCULAR-INTERESES":
+      calcularInteresBoletas();
+      break;
     case "BOLETA-DDJJ-CODIGO":
       getBoletaByDDJJIDandCodigo();
+      break;
+    case "DETALLE-BOLETA-IMPRIMIR":
+      getBoletaDetalleImpresa();
+      break;
+    case "BOLETA-IMPRIMIR":
+      getBoletaImpresa();
+      break;
+    case "TIENE-RECTIFICATIVA":
+      tieneRectificativa();
       break;
     case "----":
       // code block
@@ -652,12 +678,32 @@ module.exports = (req, res, next) => {
     
     if (diferencia_en_dias >= 0){
       const monto_interes = boleta.total_acumulado * interes_diario *  diferencia_en_dias
-      boleta.total_acumulado += monto_interes
+      boleta.total_final = boleta.total_acumulado + monto_interes
       boleta.interes = parseFloat(monto_interes.toFixed(2))
     }
     
     boleta.intencion_de_pago = intencion_de_pago
     res.status(200).jsonp({...boleta}) 
+  }
+
+  function calcularInteresBoletas(){
+    //Calcula el interes de todas las boletas de una sola vez
+    const { intencion_de_pago } = req.body
+    const interes_diario = 0.01
+    const boletasOrig = req.app.db.__wrapped__.boletas
+    const boletas = JSON.parse(JSON.stringify(boletasOrig))
+  
+    const boletasActualizadas = boletas.detalle_boletas.map(boleta =>{
+      const diferencia_en_dias = calcula_diferencia_de_dias(intencion_de_pago, boleta.vencimiento)
+      if (diferencia_en_dias >= 0){
+        const monto_interes = boleta.total_acumulado * interes_diario *  diferencia_en_dias
+        boleta.total_final = boleta.total_acumulado + monto_interes
+        boleta.interes = parseFloat(monto_interes.toFixed(2))
+      }
+  
+      return {...boleta, intencion_de_pago}
+    })
+    res.status(200).jsonp(boletasActualizadas)
   }
 
   function getBoletaByDDJJIDandCodigo(){
@@ -667,4 +713,22 @@ module.exports = (req, res, next) => {
     res.status(200).jsonp(BOLETA_BY_CODIGO)
   }
 
+  function getBoletaDetalleImpresa(){
+    console.log("entre en impresion detalle de boleta")
+    const file = `${__dirname}/detalle_boleta.pdf`;
+    res.download(file); // Set disposition and send it.
+  }
+
+  function getBoletaImpresa(){
+    console.log("entre en impresion de boleta")
+    const file = `${__dirname}/boletas.pdf`;
+    res.download(file); // Set disposition and send it.
+  }
+
+  function tieneRectificativa(){
+    const {empresaId, periodo} = req.query
+    const rectificativa = empresaId == 1 && periodo == '2024-01'
+    
+    res.status(200).jsonp({rectificativa})
+  }
 };
