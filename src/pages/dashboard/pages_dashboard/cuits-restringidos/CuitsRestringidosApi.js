@@ -1,10 +1,5 @@
-import {
-  consultar,
-  crear,
-  actualizar,
-  eliminar,
-} from "@components/axios/axiosCrud";
-import { showErrorBackeEnd } from "@components/axios/showErrorBackeEnd";
+import { axiosCrud } from "@components/axios/axiosCrud";
+import { showErrorBackEnd } from "@/components/axios/showErrorBackEnd";
 import Swal from "sweetalert2";
 
 const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
@@ -25,9 +20,27 @@ const showSwallSuccess = (MESSAGE_HTTP) => {
   });
 };
 
-export const consultarCuitRestringido = async () => {
+export const axiosCuitsRestringidos = {
+  consultar: async function (UrlApi) {
+    return consultar(UrlApi);
+  },
+
+  crear: async function (UrlApi, oEntidad) {
+    return crear(UrlApi, oEntidad);
+  },
+
+  actualizar: async function (UrlApi, oEntidad) {
+    return actualizar(UrlApi, oEntidad);
+  },
+
+  eliminar: async function (UrlApi, id) {
+    return eliminar(UrlApi, id);
+  },
+};
+
+export const consultar = async () => {
   try {
-    const data = await consultar(URL_ENTITY);
+    const data = await axiosCrud.consultar(URL_ENTITY);
     return data || [];
   } catch (error) {
     console.log(
@@ -38,9 +51,9 @@ export const consultarCuitRestringido = async () => {
   }
 };
 
-export const crearCuitRestringido = async (nuevoReg) => {
+export const crear = async (nuevoReg) => {
   try {
-    const data = await crear(URL_ENTITY, nuevoReg);
+    const data = await axiosCrud.crear(URL_ENTITY, nuevoReg);
     console.log("crearCuitRestringido - data: " + JSON.stringify(data));
     if (data && data.id) {
       console.log("crearCuitRestringido - data.id: " + data.id);
@@ -48,7 +61,7 @@ export const crearCuitRestringido = async (nuevoReg) => {
       console.log("crearCuitRestringido - PRE RETURN - data: " + data);
       return data;
     } else {
-      showErrorBackeEnd(HTTP_MSG_ALTA_ERROR, data);
+      showErrorBackEnd(HTTP_MSG_ALTA_ERROR, data);
       console.log("crearCuitRestringido - ERROR - return {}   ");
       return {};
     }
@@ -62,9 +75,9 @@ export const crearCuitRestringido = async (nuevoReg) => {
   }
 };
 
-export const actualizarCuitRestringido = async (reg) => {
+export const actualizar = async (reg) => {
   try {
-    const response = await actualizar(URL_ENTITY, reg);
+    const response = await axiosCrud.actualizar(URL_ENTITY, reg);
     console.log(
       "actualizarCuitRestringido - response:" + JSON.stringify(response)
     );
@@ -72,7 +85,7 @@ export const actualizarCuitRestringido = async (reg) => {
       showSwallSuccess(HTTP_MSG_MODI);
       return true;
     } else {
-      showErrorBackeEnd(HTTP_MSG_MODI_ERROR, response);
+      showErrorBackEnd(HTTP_MSG_MODI_ERROR, response);
       return false;
     }
   } catch (error) {
@@ -83,15 +96,15 @@ export const actualizarCuitRestringido = async (reg) => {
   }
 };
 
-export const eliminarCuitRestringido = async (id) => {
+export const eliminar = async (id) => {
   try {
-    const response = await eliminar(URL_ENTITY, id);
+    const response = await axiosCrud.eliminar(URL_ENTITY, id);
 
     if (response == true) {
       showSwallSuccess(HTTP_MSG_BAJA);
       return true;
     } else {
-      showErrorBackeEnd(HTTP_MSG_BAJA_ERROR, response);
+      showErrorBackEnd(HTTP_MSG_BAJA_ERROR, response);
       return false;
     }
   } catch (error) {

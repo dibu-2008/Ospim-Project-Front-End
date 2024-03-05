@@ -124,6 +124,10 @@
     {
       "descripcion": "CONTADURIA",
       "id": 8
+    },
+    {
+      "descripcion": "PRUEBA III",
+      "id": 9
     }
   ],
   "funcionalidad": [

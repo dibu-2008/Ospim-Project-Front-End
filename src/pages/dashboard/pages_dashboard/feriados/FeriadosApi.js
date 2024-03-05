@@ -1,10 +1,5 @@
-import {
-  consultar,
-  crear,
-  actualizar,
-  eliminar,
-} from "@components/axios/axiosCrud";
-import { showErrorBackeEnd } from "@components/axios/showErrorBackeEnd";
+import { axiosCrud } from "@components/axios/axiosCrud";
+import { showErrorBackEnd } from "@/components/axios/showErrorBackEnd";
 import Swal from "sweetalert2";
 
 const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
@@ -25,9 +20,27 @@ const showSwallSuccess = (MESSAGE_HTTP) => {
   });
 };
 
-export const consultarFeriados = async () => {
+export const axiosFeriados = {
+  consultar: async function (UrlApi) {
+    return consultar(UrlApi);
+  },
+
+  crear: async function (UrlApi, oEntidad) {
+    return crear(UrlApi, oEntidad);
+  },
+
+  actualizar: async function (UrlApi, oEntidad) {
+    return actualizar(UrlApi, oEntidad);
+  },
+
+  eliminar: async function (UrlApi, id) {
+    return eliminar(UrlApi, id);
+  },
+};
+
+export const consultar = async () => {
   try {
-    const data = await consultar(URL_ENTITY);
+    const data = await axiosCrud.consultar(URL_ENTITY);
     return data || [];
   } catch (error) {
     console.log(
@@ -37,15 +50,15 @@ export const consultarFeriados = async () => {
   }
 };
 
-export const crearFeriado = async (nuevoReg) => {
+export const crear = async (nuevoReg) => {
   try {
     console.log("crearFeriado - nuevoReg: " + JSON.stringify(nuevoReg));
-    const data = await crear(URL_ENTITY, nuevoReg);
+    const data = await axiosCrud.crear(URL_ENTITY, nuevoReg);
     if (data && data.id) {
       showSwallSuccess(HTTP_MSG_ALTA);
       return data;
     } else {
-      showErrorBackeEnd(HTTP_MSG_ALTA_ERROR, data);
+      showErrorBackEnd(HTTP_MSG_ALTA_ERROR, data);
       return {};
     }
   } catch (error) {
@@ -60,14 +73,14 @@ export const crearFeriado = async (nuevoReg) => {
   }
 };
 
-export const actualizarFeriado = async (idFeriado, feriado) => {
+export const actualizar = async (feriado) => {
   try {
-    const response = await actualizar(URL_ENTITY, idFeriado, feriado);
+    const response = await axiosCrud.actualizar(URL_ENTITY, feriado);
     if (response == true) {
       showSwallSuccess(HTTP_MSG_MODI);
       return true;
     } else {
-      showErrorBackeEnd(HTTP_MSG_MODI_ERROR, response);
+      showErrorBackEnd(HTTP_MSG_MODI_ERROR, response);
       return false;
     }
   } catch (error) {
@@ -78,15 +91,15 @@ export const actualizarFeriado = async (idFeriado, feriado) => {
   }
 };
 
-export const eliminarFeriado = async (idFeriado) => {
+export const eliminar = async (id) => {
   try {
-    const response = await eliminar(URL_ENTITY, idFeriado);
+    const response = await axiosCrud.eliminar(URL_ENTITY, id);
 
     if (response == true) {
       showSwallSuccess(HTTP_MSG_BAJA);
       return true;
     } else {
-      showErrorBackeEnd(HTTP_MSG_BAJA_ERROR, response);
+      showErrorBackEnd(HTTP_MSG_BAJA_ERROR, response);
       return false;
     }
   } catch (error) {

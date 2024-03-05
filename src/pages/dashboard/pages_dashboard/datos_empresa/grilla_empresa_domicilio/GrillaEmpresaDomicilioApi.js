@@ -1,161 +1,160 @@
-import { errorBackendResponse } from "../../../../../errors/errorBackendResponse";
-import axios from "axios";
+import oAxios from "@components/axios/axiosInstace";
+import { showErrorBackEnd } from "@/components/axios/showErrorBackEnd";
 import Swal from "sweetalert2";
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-const MESSAGE_HTTP_CREATED = import.meta.env.VITE_MESSAGE_HTTP_CREATED;
-const MESSAGE_HTTP_UPDATED = import.meta.env.VITE_MESSAGE_HTTP_UPDATED;
-const MESSAGE_HTTP_DELETED = import.meta.env.VITE_MESSAGE_HTTP_DELETED;
 
-export const obtenerTipoDomicilio = async (token) => {
-  const URL = `${BACKEND_URL}/empresa/domicilio/tipo`;
+const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
+const HTTP_MSG_MODI = import.meta.env.VITE_HTTP_MSG_MODI;
+const HTTP_MSG_BAJA = import.meta.env.VITE_HTTP_MSG_BAJA;
+const HTTP_MSG_ALTA_ERROR = import.meta.env.VITE_HTTP_MSG_ALTA_ERROR;
+const HTTP_MSG_MODI_ERROR = import.meta.env.VITE_HTTP_MSG_MODI_ERROR;
+const HTTP_MSG_BAJA_ERROR = import.meta.env.VITE_HTTP_MSG_BAJA_ERROR;
 
+const showSwallSuccess = (MESSAGE_HTTP) => {
+  Swal.fire({
+    icon: "success",
+    title: MESSAGE_HTTP,
+    showConfirmButton: false,
+    timer: 2000,
+  });
+};
+
+export const obtenerTipoDomicilio = async () => {
+  const URL = "/empresa/domicilio/tipo";
   try {
-    const tipoDomicilioResponse = await axios.get(URL, {
-      headers: {
-        Authorization: token,
-      },
-    });
-    const tipoDomicilio = await tipoDomicilioResponse.data;
-
+    const response = await oAxios.get(URL);
+    const tipoDomicilio = await response.data;
     return tipoDomicilio || [];
   } catch (error) {
-    errorBackendResponse(error);
+    showErrorBackEnd(error);
   }
 };
 
-export const obtenerProvincias = async (token) => {
-  const URL = `${BACKEND_URL}/provincia`;
-
+export const obtenerProvincias = async () => {
+  const URL = "/provincia";
   try {
-    const provinciasResponse = await axios.get(URL, {
-      headers: {
-        Authorization: token,
-      },
-    });
-    const provincias = await provinciasResponse.data;
-
+    const response = await oAxios.get(URL);
+    const provincias = await response.data;
     return provincias || [];
   } catch (error) {
-    errorBackendResponse(error);
+    showErrorBackEnd(error);
   }
 };
 
-export const obtenerLocalidades = async (token, idProvincia) => {
-  const URL = `${BACKEND_URL}/provincia/${idProvincia}/localidad`;
-
+export const obtenerLocalidades = async (idProvincia) => {
+  const URL = `/provincia/${idProvincia}/localidad`;
   try {
-    const localidadesResponse = await axios.get(URL, {
-      headers: {
-        Authorization: token,
-      },
-    });
-    const localidades = await localidadesResponse.data;
-
+    const response = await oAxios.get(URL);
+    const localidades = await response.data;
     return localidades || [];
   } catch (error) {
-    errorBackendResponse(error);
+    showErrorBackEnd(error);
   }
 };
 
-export const obtenerDomicilios = async (token, empresaId) => {
-  const URL = `${BACKEND_URL}/empresa/${empresaId}/domicilio`;
-
+export const obtenerDomicilios = async (empresaId) => {
+  const URL = `/empresa/${empresaId}/domicilio`;
   try {
-    const filasDomicilioResponse = await axios.get(URL, {
-      headers: {
-        Authorization: token,
-      },
-    });
-    const filasDomicilio = await filasDomicilioResponse.data;
-
-    return filasDomicilio || [];
+    const response = await oAxios.get(URL);
+    const data = await response.data;
+    return data || [];
   } catch (error) {
-    errorBackendResponse(error);
+    showErrorBackEnd(error);
   }
 };
 
-export const crearDomicilio = async (nuevoDomicilio, empresaId, token) => {
-  const URL = `${BACKEND_URL}/empresa/${empresaId}/domicilio`;
-
-  const showSwallSuccess = () => {
-    Swal.fire({
-      icon: "success",
-      title: MESSAGE_HTTP_CREATED,
-      showConfirmButton: false,
-      timer: 2000,
-    });
-  };
-
+export const crearDomicilio = async (empresaId, domicilio) => {
+  const URL = `/empresa/${empresaId}/domicilio`;
   try {
-    const response = await axios.post(URL, nuevoDomicilio, {
-      headers: {
-        Authorization: token,
-      },
-    });
-
-    if (response.status === 201) {
-      showSwallSuccess();
+    const response = await oAxios.post(URL, domicilio);
+    if (response.status === 201 || response.status === 200) {
+      const data = response.data;
+      if (data && data.id) {
+        showSwallSuccess(HTTP_MSG_ALTA);
+        return data;
+      } else {
+        showErrorBackEnd(HTTP_MSG_ALTA_ERROR, data);
+        return {};
+      }
+    } else {
+      showErrorBackEnd(HTTP_MSG_ALTA_ERROR, response.data);
+      return {};
     }
   } catch (error) {
-    errorBackendResponse(error);
+    console.log("crearDomicilio() - ERROR-Catch:" + JSON.stringify(error));
+    showErrorBackEnd(HTTP_MSG_ALTA_ERROR, error);
+    return {};
   }
 };
 
-export const actualizarDomicilio = async (
-  idDomicilio,
-  domicilio,
-  token,
-  empresaId
-) => {
-  const URL = `${BACKEND_URL}/empresa/${empresaId}/domicilio/${idDomicilio}`;
-
-  const showSwallSuccess = () => {
-    Swal.fire({
-      icon: "success",
-      title: MESSAGE_HTTP_UPDATED,
-      showConfirmButton: false,
-      timer: 2000,
-    });
-  };
-
+export const actualizarDomicilio = async (empresaId, domicilio) => {
+  const URL = `/empresa/${empresaId}/domicilio/${domicilio.id}`;
   try {
-    const response = await axios.put(URL, domicilio, {
-      headers: {
-        Authorization: token,
-      },
-    });
-
-    if (response.status === 200) {
-      showSwallSuccess();
+    const response = await oAxios.put(URL, domicilio);
+    if (response.status === 204 || response.status === 200) {
+      showSwallSuccess(HTTP_MSG_MODI);
+      return true;
+    } else {
+      console.log(
+        `actualizarDomicilio() - ERROR-UrlApi: ${URL} - response: ${response}`
+      );
+      return false;
     }
   } catch (error) {
-    errorBackendResponse(error);
+    console.log("actualizarContacto() - ERROR-catch: " + JSON.stringify(error));
+    showErrorBackEnd(HTTP_MSG_MODI_ERROR, error);
+    return false;
   }
 };
 
-export const eliminarDomicilio = async (idDomicilio, token, empresaId) => {
-  const URL = `${BACKEND_URL}/empresa/${empresaId}/domicilio/${idDomicilio}`;
-
-  const showSwallSuccess = () => {
-    Swal.fire({
-      icon: "success",
-      title: MESSAGE_HTTP_DELETED,
-      showConfirmButton: false,
-      timer: 2000,
-    });
-  };
-
+export const eliminarDomicilio = async (empresaId, idDomicilio) => {
+  const URL = `/empresa/${empresaId}/domicilio/${idDomicilio}`;
   try {
-    const response = await axios.delete(URL, {
-      headers: {
-        Authorization: token,
-      },
-    });
-
-    if (response.status === 200) {
-      showSwallSuccess();
+    const response = await oAxios.delete(URL);
+    if (response.status === 200 || response.status === 204) {
+      showSwallSuccess(HTTP_MSG_BAJA);
+      return true;
+    } else {
+      console.log(
+        `eliminarDomicilio() - ERROR-URL: ${URL} - response.status !== 204 - response: ${JSON.stringify(
+          response
+        )} `
+      );
+      showErrorBackEnd(HTTP_MSG_BAJA_ERROR, response);
+      return false;
     }
   } catch (error) {
-    errorBackendResponse(error);
+    console.log("eliminarDomicilio() - ERROR-catch: " + JSON.stringify(error));
+    showErrorBackEnd(HTTP_MSG_BAJA_ERROR, error);
+    return false;
   }
+};
+
+export const axiosDomicilio = {
+  obtenerTipo: async function () {
+    return obtenerTipoDomicilio();
+  },
+
+  obtenerProvincias: async function () {
+    return obtenerProvincias();
+  },
+
+  obtenerLocalidades: async function (provinciaId) {
+    return obtenerLocalidades(provinciaId);
+  },
+
+  obtenerDomicilios: async function (empresaId) {
+    return obtenerDomicilios(empresaId);
+  },
+
+  crear: async function (idEmpresa, registro) {
+    return crearDomicilio(idEmpresa, registro);
+  },
+
+  actualizar: async function (idEmpresa, registro) {
+    return actualizarDomicilio(idEmpresa, registro);
+  },
+
+  eliminar: async function (idEmpresa, idContacto) {
+    return eliminarDomicilio(idEmpresa, idContacto);
+  },
 };

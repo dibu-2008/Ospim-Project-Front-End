@@ -1,10 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import {
-  crearPublicacion,
-  consultarPublicaciones,
-  actualizarPublicacion,
-  eliminarPublicacion,
-} from "./PublicacionesApi";
+import { axiosPublicaciones } from "./PublicacionesApi";
 import { EditarNuevaFila } from "./PublicacionNueva";
 import {
   GridRowModes,
@@ -44,7 +39,7 @@ export const Publicaciones = () => {
   //Consulta rows de la Grilla
   useEffect(() => {
     const obtenerPublicaciones = async () => {
-      const publicaciones = await consultarPublicaciones();
+      const publicaciones = await axiosPublicaciones.consultar();
       setRows(publicaciones.map((item, index) => ({ ...item, id: item.id })));
     };
 
@@ -85,7 +80,7 @@ export const Publicaciones = () => {
           confirmButtonText: "Si, bórralo!",
         }).then(async (result) => {
           if (result.isConfirmed) {
-            const bBajaOk = await eliminarPublicacion(id);
+            const bBajaOk = await axiosPublicaciones.eliminar(id);
             if (bBajaOk) setRows(rows.filter((row) => row.id !== id));
           }
         });
@@ -111,20 +106,27 @@ export const Publicaciones = () => {
   const processRowUpdate = async (newRow, oldRow) => {
     let bOk = false;
 
-    const fechaDesdeOri = new Date(newRow.vigenciaDesde);
-    const fechaHastaOri = new Date(newRow.vigenciaHasta);
-    fechaDesde.setUTCHours(0, 0, 0, 0);
-    fechaHasta.setUTCHours(0, 0, 0, 0);
-    const fechaDesdeFormateada = fechaDesdeOri.toISOString();
-    const fechaHastaFormateada = fechaHastaOri.toISOString();
+    let fechaDesdeOri = null;
+    let fechaHastaOri = null;
+    if (newRow.vigenciaDesde) {
+      fechaDesdeOri = new Date(newRow.vigenciaDesde);
+      fechaDesdeOri.setUTCHours(0, 0, 0, 0);
+      const fechaDesdeFormateada = fechaDesdeOri.toISOString();
+      newRow.vigenciaDesde = fechaDesdeFormateada;
+    }
+    if (newRow.vigenciaHasta) {
+      fechaHastaOri = new Date(newRow.vigenciaHasta);
+      fechaHastaOri.setUTCHours(0, 0, 0, 0);
+      const fechaHastaFormateada = fechaHastaOri.toISOString();
+      newRow.vigenciaHasta = fechaHastaFormateada;
+    }
 
-    newRow.vigenciaDesde = fechaDesdeFormateada;
-    newRow.vigenciaHasta = fechaHastaFormateada;
     if (newRow.isNew) {
+      console.log("processRowUpdate - ALTA");
       try {
         delete newRow.id;
         delete newRow.isNew;
-        const data = await crearPublicacion(newRow);
+        const data = await axiosPublicaciones.crear(newRow);
         if (data && data.id) {
           newRow.id = data.id;
           newRow.isNew = false;
@@ -138,9 +140,10 @@ export const Publicaciones = () => {
         );
       }
     } else {
+      console.log("processRowUpdate - MODI");
       try {
         delete newRow.isNew;
-        bOk = await actualizarPublicacion(newRow);
+        bOk = await axiosPublicaciones.actualizar(newRow);
         newRow.isNew = false;
         if (bOk) {
           setRows(rows.map((row) => (row.id === newRow.id ? newRow : row)));
@@ -151,8 +154,9 @@ export const Publicaciones = () => {
         );
       }
     }
-    newRow.vigenciaDesde = fechaDesdeOri;
-    newRow.vigenciaHasta = fechaHastaOri;
+
+    if (fechaDesdeOri) newRow.vigenciaDesde = fechaDesdeOri;
+    if (fechaHastaOri) newRow.vigenciaHasta = fechaHastaOri;
 
     if (bOk) {
       return newRow;

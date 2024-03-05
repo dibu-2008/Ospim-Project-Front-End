@@ -1,73 +1,73 @@
-import { errorBackendResponse } from "../../../../errors/errorBackendResponse";
-import axios from "axios";
+import oAxios from "@components/axios/axiosInstace";
+import { showErrorBackEnd } from "@/components/axios/showErrorBackEnd";
 import Swal from "sweetalert2";
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-const MESSAGE_HTTP_CREATED = import.meta.env.VITE_MESSAGE_HTTP_CREATED;
-const MESSAGE_HTTP_UPDATED = import.meta.env.VITE_MESSAGE_HTTP_UPDATED;
-const MESSAGE_HTTP_DELETED = import.meta.env.VITE_MESSAGE_HTTP_DELETED;
+const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
+const HTTP_MSG_MODI = import.meta.env.VITE_HTTP_MSG_MODI;
+const HTTP_MSG_BAJA = import.meta.env.VITE_HTTP_MSG_BAJA;
+const HTTP_MSG_ALTA_ERROR = import.meta.env.VITE_HTTP_MSG_ALTA_ERROR;
+const HTTP_MSG_MODI_ERROR = import.meta.env.VITE_HTTP_MSG_MODI_ERROR;
+const HTTP_MSG_BAJA_ERROR = import.meta.env.VITE_HTTP_MSG_BAJA_ERROR;
+const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
 
-export const getRamo = async (token) => {
-  if (!token) return [];
+const showSwallSuccess = (MESSAGE_HTTP) => {
+  Swal.fire({
+    icon: "success",
+    title: MESSAGE_HTTP,
+    showConfirmButton: false,
+    timer: 2000,
+  });
+};
 
-  const URL = `${BACKEND_URL}/empresa/ramo`;
-
+export const consultarRamo = async () => {
+  const URL = `/empresa/ramo`;
   try {
-    const ramoResponse = await axios.get(URL, {
-      headers: {
-        Authorization: token,
-      },
-    });
-    const ramos = await ramoResponse.data;
-
-    return ramos || [];
+    const response = await oAxios.get(URL);
+    const data = await response.data;
+    return data || [];
   } catch (error) {
-    errorBackendResponse(error);
+    console.log("getRamo() - ERROR-catch - error: " + JSON.stringify(error));
+    showErrorBackEnd(HTTP_MSG_CONSUL_ERROR, error);
     return [];
   }
 };
 
-export const getEmpresa = async (token) => {
-  if (!token) return [];
-
-  const URL = `${BACKEND_URL}/auth/login/usuario`;
-
+export const consultarEmpresa = async () => {
+  const URL = "/auth/login/usuario";
   try {
-    const empresaResponse = await axios.get(URL, {
-      headers: {
-        Authorization: token,
-      },
-    });
-    const empresa = await empresaResponse.data;
-
-    return empresa || [];
+    const response = await oAxios.get(URL);
+    const data = await response.data;
+    return data || [];
   } catch (error) {
-    errorBackendResponse(error);
+    console.log("getEmpresa() - ERROR-catch - error: " + JSON.stringify(error));
+    showErrorBackEnd(HTTP_MSG_CONSUL_ERROR, error);
   }
 };
 
-export const modificarEmpresa = async (token, empresaId, empresaInfo) => {
-  const URL = `${BACKEND_URL}/empresa/${empresaId}`;
-
-  const showSwallSuccess = () => {
-    Swal.fire({
-      icon: "success",
-      title: MESSAGE_HTTP_UPDATED,
-      showConfirmButton: false,
-      timer: 2000,
-    });
-  };
-
+export const actualizar = async (registro) => {
+  const URL = `/empresa/${registro.id}`;
   try {
-    const empresaResponse = await axios.put(URL, empresaInfo, {
-      headers: {
-        Authorization: token,
-      },
-    });
-
-    if (empresaResponse.status === 200) {
-      showSwallSuccess();
+    const oRegistro = { ...registro };
+    delete oRegistro.id;
+    const response = await oAxios.put(URL, oRegistro);
+    if (response.status === 200 || response.status === 204) {
+      showSwallSuccess(HTTP_MSG_MODI);
     }
   } catch (error) {
-    errorBackendResponse(error);
+    console.log("actualizar() - ERROR-catch - error: " + JSON.stringify(error));
+    showErrorBackEnd(HTTP_MSG_MODI_ERROR, error);
   }
+};
+
+export const axiosDatosEmpre = {
+  consultarEmpresa: async function () {
+    return consultarEmpresa();
+  },
+
+  consultarRamo: async function () {
+    return consultarRamo();
+  },
+
+  actualizar: async function (oEntidad) {
+    return actualizar(oEntidad);
+  },
 };
