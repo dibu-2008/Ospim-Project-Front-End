@@ -1,4 +1,4 @@
-import oAxios from "@components/axios/axiosInstace";
+import { axiosCrud } from "@components/axios/axiosCrud";
 import { showErrorBackEnd } from "@/components/axios/showErrorBackEnd";
 import swal from "@components/swal/swal";
 
@@ -13,11 +13,9 @@ const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
 export const consultarRamo = async () => {
   const URL = `/empresa/ramo`;
   try {
-    const response = await oAxios.get(URL);
-    const data = await response.data;
+    const data = await axiosCrud.consultar(URL);
     return data || [];
   } catch (error) {
-    console.log("getRamo() - ERROR-catch - error: " + JSON.stringify(error));
     showErrorBackEnd(HTTP_MSG_CONSUL_ERROR, error);
     return [];
   }
@@ -26,12 +24,11 @@ export const consultarRamo = async () => {
 export const consultarEmpresa = async () => {
   const URL = "/auth/login/usuario";
   try {
-    const response = await oAxios.get(URL);
-    const data = await response.data;
+    const data = await axiosCrud.consultar(URL);
     return data || [];
   } catch (error) {
-    console.log("getEmpresa() - ERROR-catch - error: " + JSON.stringify(error));
     showErrorBackEnd(HTTP_MSG_CONSUL_ERROR, error);
+    return [];
   }
 };
 
@@ -40,13 +37,15 @@ export const actualizar = async (registro) => {
   try {
     const oRegistro = { ...registro };
     delete oRegistro.id;
-    const response = await oAxios.put(URL, oRegistro);
-    if (response.status === 200 || response.status === 204) {
+    const response = await axiosCrud.actualizar(URL, oRegistro);
+    if (response == true) {
       swal.showSuccess(HTTP_MSG_MODI);
+      return true;
     }
+    throw response;
   } catch (error) {
-    console.log("actualizar() - ERROR-catch - error: " + JSON.stringify(error));
     showErrorBackEnd(HTTP_MSG_MODI_ERROR, error);
+    return false;
   }
 };
 

@@ -8,6 +8,7 @@ const HTTP_MSG_BAJA = import.meta.env.VITE_HTTP_MSG_BAJA;
 const HTTP_MSG_ALTA_ERROR = import.meta.env.VITE_HTTP_MSG_ALTA_ERROR;
 const HTTP_MSG_MODI_ERROR = import.meta.env.VITE_HTTP_MSG_MODI_ERROR;
 const HTTP_MSG_BAJA_ERROR = import.meta.env.VITE_HTTP_MSG_BAJA_ERROR;
+const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
 
 const URL_ENTITY = "/roles";
 
@@ -79,7 +80,7 @@ export const actualizar = async (registro) => {
     }
     throw response;
   } catch (error) {
-    showErrorBackEnd(HTTP_MSG_MODI_ERROR, response);
+    showErrorBackEnd(HTTP_MSG_MODI_ERROR, error);
     return false;
   }
 };
@@ -90,9 +91,6 @@ export const eliminar = async (id) => {
     if (response == true) {
       swal.showSuccess(HTTP_MSG_BAJA);
       return true;
-    } else {
-      showErrorBackEnd(HTTP_MSG_BAJA_ERROR, response);
-      return false;
     }
     throw response;
   } catch (error) {
