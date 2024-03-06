@@ -1,7 +1,7 @@
 import { axiosCrud } from "@components/axios/axiosCrud";
 import oAxios from "@components/axios/axiosInstace";
 import { showErrorBackEnd } from "@/components/axios/showErrorBackEnd";
-import Swal from "sweetalert2";
+import swal from "@/components/swal/swal";
 
 const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
 const HTTP_MSG_MODI = import.meta.env.VITE_HTTP_MSG_MODI;
@@ -11,15 +11,6 @@ const HTTP_MSG_MODI_ERROR = import.meta.env.VITE_HTTP_MSG_MODI_ERROR;
 const HTTP_MSG_BAJA_ERROR = import.meta.env.VITE_HTTP_MSG_BAJA_ERROR;
 
 const URL_ENTITY = "/usuario/interno";
-
-const showSwallSuccess = (MESSAGE_HTTP) => {
-  Swal.fire({
-    icon: "success",
-    title: MESSAGE_HTTP,
-    showConfirmButton: false,
-    timer: 2000,
-  });
-};
 
 export const consultar = async () => {
   try {
@@ -38,7 +29,7 @@ export const crear = async (registro) => {
     console.log("crearRoles - registro: " + JSON.stringify(registro));
     const data = await axiosCrud.crear(URL_ENTITY, registro);
     if (data && data.id) {
-      showSwallSuccess(HTTP_MSG_ALTA);
+      swal.showSuccess(HTTP_MSG_ALTA);
       return data;
     } else {
       showErrorBackEnd(HTTP_MSG_ALTA_ERROR, data);
@@ -60,7 +51,7 @@ export const actualizar = async (registro) => {
   try {
     const response = await axiosCrud.actualizar(URL_ENTITY, registro);
     if (response == true) {
-      showSwallSuccess(HTTP_MSG_MODI);
+      swal.showSuccess(HTTP_MSG_MODI);
       return true;
     } else {
       showErrorBackEnd(HTTP_MSG_MODI_ERROR, response);
@@ -79,7 +70,7 @@ export const eliminar = async (id) => {
     const response = await axiosCrud.eliminar(URL_ENTITY, id);
 
     if (response == true) {
-      showSwallSuccess(HTTP_MSG_BAJA);
+      swal.showSuccess(HTTP_MSG_BAJA);
       return true;
     } else {
       showErrorBackEnd(HTTP_MSG_BAJA_ERROR, response);
@@ -104,7 +95,7 @@ export const habilitar = async (id, habilitar) => {
   try {
     const response = await oAxios.patch(URL, habilitar);
     if (response.status === 200 || response.status === 204) {
-      showSwallSuccess(HTTP_MSG_MODI);
+      swal.showSuccess(HTTP_MSG_MODI);
     } else {
       showErrorBackEnd(HTTP_MSG_MODI_ERROR, response);
     }

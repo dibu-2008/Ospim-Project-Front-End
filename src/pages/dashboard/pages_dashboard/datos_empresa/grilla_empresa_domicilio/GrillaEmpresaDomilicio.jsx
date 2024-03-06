@@ -240,7 +240,11 @@ export const GrillaEmpresaDomilicio = ({ idEmpresa, rows, setRows }) => {
 
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
 
-    return updatedRow;
+    if (bOk) {
+      return newRow;
+    } else {
+      return oldRow;
+    }
   };
 
   const handleRowModesModelChange = (newRowModesModel) => {

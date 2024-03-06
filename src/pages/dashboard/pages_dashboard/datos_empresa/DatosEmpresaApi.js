@@ -1,6 +1,7 @@
 import oAxios from "@components/axios/axiosInstace";
 import { showErrorBackEnd } from "@/components/axios/showErrorBackEnd";
-import Swal from "sweetalert2";
+import swal from "@components/swal/swal";
+
 const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
 const HTTP_MSG_MODI = import.meta.env.VITE_HTTP_MSG_MODI;
 const HTTP_MSG_BAJA = import.meta.env.VITE_HTTP_MSG_BAJA;
@@ -8,15 +9,6 @@ const HTTP_MSG_ALTA_ERROR = import.meta.env.VITE_HTTP_MSG_ALTA_ERROR;
 const HTTP_MSG_MODI_ERROR = import.meta.env.VITE_HTTP_MSG_MODI_ERROR;
 const HTTP_MSG_BAJA_ERROR = import.meta.env.VITE_HTTP_MSG_BAJA_ERROR;
 const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
-
-const showSwallSuccess = (MESSAGE_HTTP) => {
-  Swal.fire({
-    icon: "success",
-    title: MESSAGE_HTTP,
-    showConfirmButton: false,
-    timer: 2000,
-  });
-};
 
 export const consultarRamo = async () => {
   const URL = `/empresa/ramo`;
@@ -50,7 +42,7 @@ export const actualizar = async (registro) => {
     delete oRegistro.id;
     const response = await oAxios.put(URL, oRegistro);
     if (response.status === 200 || response.status === 204) {
-      showSwallSuccess(HTTP_MSG_MODI);
+      swal.showSuccess(HTTP_MSG_MODI);
     }
   } catch (error) {
     console.log("actualizar() - ERROR-catch - error: " + JSON.stringify(error));

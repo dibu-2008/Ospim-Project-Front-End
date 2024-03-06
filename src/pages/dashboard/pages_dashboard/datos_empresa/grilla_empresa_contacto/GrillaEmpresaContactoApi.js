@@ -1,6 +1,6 @@
 import oAxios from "@components/axios/axiosInstace";
 import { showErrorBackEnd } from "@/components/axios/showErrorBackEnd";
-import Swal from "sweetalert2";
+import swal from "@components/swal/swal";
 
 const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
 const HTTP_MSG_MODI = import.meta.env.VITE_HTTP_MSG_MODI;
@@ -9,15 +9,6 @@ const HTTP_MSG_ALTA_ERROR = import.meta.env.VITE_HTTP_MSG_ALTA_ERROR;
 const HTTP_MSG_MODI_ERROR = import.meta.env.VITE_HTTP_MSG_MODI_ERROR;
 const HTTP_MSG_BAJA_ERROR = import.meta.env.VITE_HTTP_MSG_BAJA_ERROR;
 const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
-
-const showSwallSuccess = (MESSAGE_HTTP) => {
-  Swal.fire({
-    icon: "success",
-    title: MESSAGE_HTTP,
-    showConfirmButton: false,
-    timer: 2000,
-  });
-};
 
 export const obtenerTipo = async () => {
   const URL = "/empresa/contacto/tipo";
@@ -54,7 +45,7 @@ export const crearContacto = async (idEmpresa, contacto) => {
     if (response.status === 201 || response.status === 200) {
       const data = response.data;
       if (data && data.id) {
-        showSwallSuccess(HTTP_MSG_ALTA);
+        swal.showSuccess(HTTP_MSG_ALTA);
         return data;
       } else {
         showErrorBackEnd(HTTP_MSG_ALTA_ERROR, data);
@@ -76,7 +67,7 @@ export const actualizarContacto = async (idEmpresa, contacto) => {
   try {
     const response = await oAxios.put(URL, contacto);
     if (response.status === 204 || response.status === 200) {
-      showSwallSuccess(HTTP_MSG_MODI);
+      swal.showSuccess(HTTP_MSG_MODI);
       return true;
     } else {
       console.log(
@@ -96,7 +87,7 @@ export const eliminarContacto = async (idEmpresa, idContacto) => {
   try {
     const response = await oAxios.delete(URL);
     if (response.status === 200 || response.status === 204) {
-      showSwallSuccess(HTTP_MSG_BAJA);
+      swal.showSuccess(HTTP_MSG_BAJA);
       return true;
     } else {
       console.log(

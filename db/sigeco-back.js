@@ -5,7 +5,7 @@ module.exports = (req, res, next) => {
   //console.log("Middleware - SIGECO - req.body:" + req.body);
 
   function getAPI(req, res) {
-    if (req.method === "GET" && req.url.startsWith("/ospim/contacto/")) {
+    if (req.method === "GET" && req.url == "/ospim/contacto") {
       return "OSPIM-CONTACTO";
     }
 

@@ -30,7 +30,7 @@ export const axiosConsultar = async (UrlApi) => {
         error
       )}`
     );
-    return [];
+    throw error;
   }
 };
 
