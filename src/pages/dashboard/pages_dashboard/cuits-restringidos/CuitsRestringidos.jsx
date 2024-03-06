@@ -23,7 +23,7 @@ function EditToolbar(props) {
   const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
 
   const altaHandleClick = () => {
-    const maxId = Math.max(...rows.map((row) => row.id), 0);
+    const maxId = rows ? Math.max(...rows.map((row) => row.id), 0) : 1;
     const newId = maxId + 1;
     const id = newId;
     volverPrimerPagina();

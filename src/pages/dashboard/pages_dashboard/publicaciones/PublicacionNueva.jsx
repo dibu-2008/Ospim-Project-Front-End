@@ -1,7 +1,4 @@
-import {
-  GridRowModes,
-  GridToolbarContainer,
-} from "@mui/x-data-grid";
+import { GridRowModes, GridToolbarContainer } from "@mui/x-data-grid";
 
 import AddIcon from "@mui/icons-material/Add";
 import Button from "@mui/material/Button";
@@ -10,8 +7,7 @@ export const EditarNuevaFila = (props) => {
   const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
 
   const handleClick = () => {
-
-    const maxId = Math.max(...rows.map((row) => row.id), 0);
+    const maxId = rows ? Math.max(...rows.map((row) => row.id), 0) : 1;
     const newId = maxId + 1;
     const id = newId;
 

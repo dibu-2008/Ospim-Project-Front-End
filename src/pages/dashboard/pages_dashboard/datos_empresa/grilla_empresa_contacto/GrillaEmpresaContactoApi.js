@@ -48,7 +48,7 @@ export const crearContacto = async (idEmpresa, contacto) => {
 };
 
 export const actualizarContacto = async (idEmpresa, contacto) => {
-  const URL = `/empresa/${idEmpresa}/contacto/${contacto.id}`;
+  const URL = `/empresa/${idEmpresa}/contacto`;
   try {
     const response = await axiosCrud.actualizar(URL, contacto);
     if (response == true) {
@@ -63,9 +63,9 @@ export const actualizarContacto = async (idEmpresa, contacto) => {
 };
 
 export const eliminarContacto = async (idEmpresa, idContacto) => {
-  const URL = `/empresa/${idEmpresa}/contacto/${idContacto}`;
+  const URL = `/empresa/${idEmpresa}/contacto`;
   try {
-    const response = await axiosCrud.eliminar(URL);
+    const response = await axiosCrud.eliminar(URL, idContacto);
     if (response == true) {
       swal.showSuccess(HTTP_MSG_BAJA);
       return true;

@@ -23,16 +23,16 @@ import { MenuItem, Select } from "@mui/material";
 import {
   createTheme as CrearTema,
   ThemeProvider as ProveedorTemas,
-  useTheme as usarTema
-} from '@mui/material/styles';
-import * as localizaciones from '@mui/material/locale';
+  useTheme as usarTema,
+} from "@mui/material/styles";
+import * as localizaciones from "@mui/material/locale";
 import Swal from "sweetalert2";
 
 function EditToolbar(props) {
   const { setRows, rows, setRowModesModel } = props;
 
   const handleClick = () => {
-    const maxId = Math.max(...rows.map((row) => row.id), 0);
+    const maxId = rows ? Math.max(...rows.map((row) => row.id), 0) : 1;
 
     const newId = maxId + 1;
 
@@ -76,7 +76,7 @@ export const GrillaRegistroDomilicio = ({ rows, setRows }) => {
   const [provincias, setProvincias] = useState([]);
   const [provinciaSeleccionada, setProvinciaSeleccionada] = useState(null);
   const [localidades, setLocalidades] = useState([]);
-  const [localizacion, setLocalizacion] = useState('esES');
+  const [localizacion, setLocalizacion] = useState("esES");
   const [paginacion, setPaginacion] = useState({
     pageSize: 10,
     page: 0,
@@ -97,7 +97,7 @@ export const GrillaRegistroDomilicio = ({ rows, setRows }) => {
 
   const temaConlocalizacion = useMemo(
     () => CrearTema(tema, localizaciones[localizacion]),
-    [localizacion, tema],
+    [localizacion, tema]
   );
 
   useEffect(() => {
@@ -197,7 +197,7 @@ export const GrillaRegistroDomilicio = ({ rows, setRows }) => {
       flex: 1,
       editable: true,
       headerAlign: "center",
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
       type: "singleSelect",
       getOptionValue: (dato) => dato.codigo,
       getOptionLabel: (dato) => dato.descripcion,
@@ -208,7 +208,7 @@ export const GrillaRegistroDomilicio = ({ rows, setRows }) => {
       headerName: "Provincia",
       flex: 1,
       editable: true,
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
       headerAlign: "center",
       type: "singleSelect",
       getOptionValue: (dato) => dato.id,
@@ -244,7 +244,7 @@ export const GrillaRegistroDomilicio = ({ rows, setRows }) => {
     {
       field: "localidadId",
       headerName: "Localidad",
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
       flex: 1,
       editable: true,
       type: "singleSelect",
@@ -257,7 +257,7 @@ export const GrillaRegistroDomilicio = ({ rows, setRows }) => {
       field: "calle",
       headerName: "Calle",
       headerAlign: "center",
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
       flex: 1,
       editable: true,
     },
@@ -265,7 +265,7 @@ export const GrillaRegistroDomilicio = ({ rows, setRows }) => {
       field: "piso",
       headerName: "Piso",
       headerAlign: "center",
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
       flex: 1,
       editable: true,
     },
@@ -273,7 +273,7 @@ export const GrillaRegistroDomilicio = ({ rows, setRows }) => {
       field: "depto",
       headerName: "Depto",
       headerAlign: "center",
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
       flex: 1,
       editable: true,
     },
@@ -281,7 +281,7 @@ export const GrillaRegistroDomilicio = ({ rows, setRows }) => {
       field: "oficina",
       headerName: "Oficina",
       headerAlign: "center",
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
       flex: 1,
       editable: true,
     },
@@ -289,7 +289,7 @@ export const GrillaRegistroDomilicio = ({ rows, setRows }) => {
       field: "cp",
       headerName: "CP",
       headerAlign: "center",
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
       flex: 1,
       editable: true,
     },
@@ -297,14 +297,14 @@ export const GrillaRegistroDomilicio = ({ rows, setRows }) => {
       field: "planta",
       headerName: "Planta",
       headerAlign: "center",
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
       flex: 1,
       editable: true,
     },
     {
       field: "actions",
       headerAlign: "center",
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
       type: "actions",
       headerName: "Acciones",
       flex: 2,
@@ -389,6 +389,6 @@ export const GrillaRegistroDomilicio = ({ rows, setRows }) => {
           pageSizeOptions={[10, 15, 25]}
         />
       </ProveedorTemas>
-    </Box >
+    </Box>
   );
 };

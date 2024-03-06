@@ -62,6 +62,7 @@ export const axiosCrear = async (UrlApi, oEntidad) => {
 export const axiosActualizar = async (UrlApi, oEntidad) => {
   const URL = `${UrlApi}/${oEntidad.id}`;
   try {
+    delete oEntidad.id;
     const response = await oAxios.put(URL, oEntidad);
     if (response.status !== 204 && response.status !== 200) {
       //JsonServer devuelve 200

@@ -117,7 +117,6 @@ export const DatosEmpresa = () => {
       ramoId: ramo,
       id: idEmpresa,
     };
-    //await modificarEmpresa(TOKEN, idEmpresa, empresa);
     await axiosDatosEmpre.actualizar(empresa);
   };
 

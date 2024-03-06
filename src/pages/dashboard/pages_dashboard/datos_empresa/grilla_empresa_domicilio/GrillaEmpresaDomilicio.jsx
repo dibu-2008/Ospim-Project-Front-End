@@ -20,7 +20,7 @@ function EditToolbar(props) {
   const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
 
   const handleClick = () => {
-    const maxId = Math.max(...rows.map((row) => row.id), 0);
+    const maxId = rows ? Math.max(...rows.map((row) => row.id), 0) : 1;
     const newId = maxId + 1;
     const id = newId;
 
@@ -88,6 +88,8 @@ export const GrillaEmpresaDomilicio = ({ idEmpresa, rows, setRows }) => {
   const getLocalidades = async (provinciaId) => {
     if (provinciaId) {
       return await axiosDomicilio.obtenerLocalidades(provinciaId);
+    } else {
+      return [];
     }
   };
 

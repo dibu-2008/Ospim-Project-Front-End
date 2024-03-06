@@ -85,9 +85,9 @@ export const actualizarDomicilio = async (empresaId, domicilio) => {
 };
 
 export const eliminarDomicilio = async (empresaId, idDomicilio) => {
-  const URL = `/empresa/${empresaId}/domicilio/${idDomicilio}`;
+  const URL = `/empresa/${empresaId}/domicilio`;
   try {
-    const response = await axiosCrud.eliminar(URL);
+    const response = await axiosCrud.eliminar(URL, idDomicilio);
     if (response == true) {
       swal.showSuccess(HTTP_MSG_BAJA);
       return true;

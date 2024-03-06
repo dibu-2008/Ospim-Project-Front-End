@@ -33,11 +33,11 @@ export const consultarEmpresa = async () => {
 };
 
 export const actualizar = async (registro) => {
-  const URL = `/empresa/${registro.id}`;
+  const URL = "/empresa";
   try {
-    const oRegistro = { ...registro };
-    delete oRegistro.id;
-    const response = await axiosCrud.actualizar(URL, oRegistro);
+    console.log("registro: ");
+    console.log(registro);
+    const response = await axiosCrud.actualizar(URL, registro);
     if (response == true) {
       swal.showSuccess(HTTP_MSG_MODI);
       return true;
