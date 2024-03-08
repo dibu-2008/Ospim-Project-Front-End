@@ -178,7 +178,7 @@ export const GrillaMisDeclaracionesJuradas = ({
           confirmButtonText: "Si, bórralo!",
         }).then(async (result) => {
           if (result.isConfirmed) {
-            const bRta = axiosDDJJ.eliminar(idEmpresa, id);
+            const bRta = await axiosDDJJ.eliminar(idEmpresa, id);
             if (bRta)
               setRowsMisDdjj(rows_mis_ddjj.filter((row) => row.id !== id));
           }
