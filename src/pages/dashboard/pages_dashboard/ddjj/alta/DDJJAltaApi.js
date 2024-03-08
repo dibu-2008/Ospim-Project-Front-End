@@ -17,7 +17,10 @@ export const obtenerAfiliados = async (cuil) => {
     const data = await axiosCrud.consultar(URL);
     return data || [];
   } catch (error) {
-    showErrorBackEnd(HTTP_MSG_CONSUL_ERROR, error);
+    showErrorBackEnd(
+      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
+      error
+    );
     return [];
   }
 };
@@ -28,7 +31,10 @@ export const obtenerCamaras = async () => {
     const data = await axiosCrud.consultar(URL);
     return data || [];
   } catch (error) {
-    showErrorBackEnd(HTTP_MSG_CONSUL_ERROR, error);
+    showErrorBackEnd(
+      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
+      error
+    );
     return [];
   }
 };
@@ -39,7 +45,10 @@ export const obtenerCategorias = async () => {
     const data = await axiosCrud.consultar(URL);
     return data || [];
   } catch (error) {
-    showErrorBackEnd(HTTP_MSG_CONSUL_ERROR, error);
+    showErrorBackEnd(
+      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
+      error
+    );
     return [];
   }
 };
@@ -50,7 +59,10 @@ export const obtenerPlantaEmpresas = async (empresaId) => {
     const data = await axiosCrud.consultar(URL);
     return data || [];
   } catch (error) {
-    showErrorBackEnd(HTTP_MSG_CONSUL_ERROR, error);
+    showErrorBackEnd(
+      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
+      error
+    );
     return [];
   }
 };

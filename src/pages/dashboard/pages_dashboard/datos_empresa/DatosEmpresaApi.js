@@ -16,7 +16,10 @@ export const consultarRamo = async () => {
     const data = await axiosCrud.consultar(URL);
     return data || [];
   } catch (error) {
-    showErrorBackEnd(HTTP_MSG_CONSUL_ERROR, error);
+    showErrorBackEnd(
+      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
+      error
+    );
     return [];
   }
 };
@@ -27,7 +30,10 @@ export const consultarEmpresa = async () => {
     const data = await axiosCrud.consultar(URL);
     return data || [];
   } catch (error) {
-    showErrorBackEnd(HTTP_MSG_CONSUL_ERROR, error);
+    showErrorBackEnd(
+      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
+      error
+    );
     return [];
   }
 };

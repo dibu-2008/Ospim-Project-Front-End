@@ -21,15 +21,13 @@ export const axiosCrud = {
 export const axiosConsultar = async (UrlApi) => {
   try {
     const response = await oAxios.get(UrlApi);
-    const data = await response.data;
-    console.log(data);
-    return data || [];
+    if (response.status != 200) {
+      throw response;
+    }
+    const data = response.data || {};
+    return data;
   } catch (error) {
-    console.log(
-      `axiosCrud.consultar() - ERROR - UrlApi: ${UrlApi} - error: ${JSON.stringify(
-        error
-      )}`
-    );
+    console.log(`axiosCrud.consultar() - ERROR - UrlApi: ${UrlApi} `);
     throw error;
   }
 };

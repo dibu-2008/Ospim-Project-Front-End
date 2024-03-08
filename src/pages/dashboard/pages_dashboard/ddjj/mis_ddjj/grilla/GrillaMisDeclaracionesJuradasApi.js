@@ -17,7 +17,10 @@ export const obtenerAportes = async () => {
     const data = await axiosCrud.consultar(URL);
     return data || [];
   } catch (error) {
-    showErrorBackEnd(HTTP_MSG_CONSUL_ERROR, error);
+    showErrorBackEnd(
+      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
+      error
+    );
     return [];
   }
 };
@@ -25,10 +28,20 @@ export const obtenerAportes = async () => {
 export const obtenerMisDeclaracionesJuradas = async (empresaId) => {
   const URL = `/empresa/${empresaId}/ddjj/totales`;
   try {
-    const data = axiosCrud.consultar(URL);
+    const data = await axiosCrud.consultar(URL);
     return data || [];
   } catch (error) {
-    showErrorBackEnd(HTTP_MSG_CONSUL_ERROR, error);
+    console.log(
+      "obtenerMisDeclaracionesJuradas() - catch-error - URL: " +
+        URL +
+        " - status: " +
+        error.status
+    );
+
+    showErrorBackEnd(
+      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
+      error
+    );
     return [];
   }
 };
@@ -36,10 +49,13 @@ export const obtenerMisDeclaracionesJuradas = async (empresaId) => {
 export const obtenerMiDeclaracionJurada = async (empresaId, ddjjId) => {
   const URL = `/empresa/${empresaId}/ddjj/${ddjjId}`;
   try {
-    const data = axiosCrud.consultar(URL);
+    const data = await axiosCrud.consultar(URL);
     return data || {};
   } catch (error) {
-    showErrorBackEnd(HTTP_MSG_CONSUL_ERROR, error);
+    showErrorBackEnd(
+      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
+      error
+    );
     return [];
   }
 };

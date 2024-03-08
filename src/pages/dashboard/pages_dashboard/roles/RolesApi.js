@@ -39,7 +39,10 @@ export const consultar = async () => {
     const data = await axiosCrud.consultar(URL_ENTITY);
     return data || [];
   } catch (error) {
-    showErrorBackEnd(HTTP_MSG_CONSUL_ERROR, error);
+    showErrorBackEnd(
+      HTTP_MSG_CONSUL_ERROR + ` (${URL_ENTITY} - status: ${error.status})`,
+      error
+    );
     return [];
   }
 };
@@ -50,8 +53,9 @@ export const deUsuarioConsultar = async () => {
     const data = await axiosCrud.consultar(URL);
     return data || [];
   } catch (error) {
-    console.log(
-      "deUsuarioConsultar() - ERROR-catch - error: " + JSON.stringify(data)
+    showErrorBackEnd(
+      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
+      error
     );
     return [];
   }

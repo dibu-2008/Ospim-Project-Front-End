@@ -16,7 +16,10 @@ export const obtenerTipoDomicilio = async () => {
     const data = await axiosCrud.consultar(URL);
     return data || [];
   } catch (error) {
-    showErrorBackEnd(HTTP_MSG_CONSUL_ERROR, error);
+    showErrorBackEnd(
+      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
+      error
+    );
     return [];
   }
 };
@@ -27,7 +30,10 @@ export const obtenerProvincias = async () => {
     const data = await axiosCrud.consultar(URL);
     return data || [];
   } catch (error) {
-    showErrorBackEnd(HTTP_MSG_CONSUL_ERROR, error);
+    showErrorBackEnd(
+      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
+      error
+    );
     return [];
   }
 };
@@ -38,7 +44,10 @@ export const obtenerLocalidades = async (idProvincia) => {
     const data = await axiosCrud.consultar(URL);
     return data || [];
   } catch (error) {
-    showErrorBackEnd(HTTP_MSG_CONSUL_ERROR, error);
+    showErrorBackEnd(
+      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
+      error
+    );
     return [];
   }
 };
@@ -49,7 +58,10 @@ export const obtenerDomicilios = async (empresaId) => {
     const data = await axiosCrud.consultar(URL);
     return data || [];
   } catch (error) {
-    showErrorBackEnd(HTTP_MSG_CONSUL_ERROR, error);
+    showErrorBackEnd(
+      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
+      error
+    );
     return [];
   }
 };

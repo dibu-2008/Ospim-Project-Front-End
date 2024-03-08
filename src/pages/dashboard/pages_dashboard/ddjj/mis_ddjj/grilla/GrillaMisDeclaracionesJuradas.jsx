@@ -89,7 +89,7 @@ export const GrillaMisDeclaracionesJuradas = ({
 
   useEffect(() => {
     const ObtenerMisDeclaracionesJuradas = async () => {
-      let ddjjResponse = awaitaxiosDDJJ.consultar(idEmpresa);
+      let ddjjResponse = await axiosDDJJ.consultar(idEmpresa);
       //let ddjjResponse = await obtenerMisDeclaracionesJuradas(idEmpresa, token);
 
       //Agrego las columnas deTotales de Aportes

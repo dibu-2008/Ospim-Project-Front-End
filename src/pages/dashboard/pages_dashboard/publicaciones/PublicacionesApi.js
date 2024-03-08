@@ -1,6 +1,6 @@
 import { axiosCrud } from "@components/axios/axiosCrud";
 import { showErrorBackEnd } from "@/components/axios/showErrorBackEnd";
-import Swal from "sweetalert2";
+import swal from "@/components/swal/swal";
 
 const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
 const HTTP_MSG_MODI = import.meta.env.VITE_HTTP_MSG_MODI;
@@ -10,15 +10,6 @@ const HTTP_MSG_MODI_ERROR = import.meta.env.VITE_HTTP_MSG_MODI_ERROR;
 const HTTP_MSG_BAJA_ERROR = import.meta.env.VITE_HTTP_MSG_BAJA_ERROR;
 
 const URL_ENTITY = "/publicaciones";
-
-const showSwallSuccess = (MESSAGE_HTTP) => {
-  Swal.fire({
-    icon: "success",
-    title: MESSAGE_HTTP,
-    showConfirmButton: false,
-    timer: 2000,
-  });
-};
 
 export const axiosPublicaciones = {
   consultar: async function (UrlApi) {
@@ -43,6 +34,10 @@ export const consultar = async () => {
     const data = await axiosCrud.consultar(URL_ENTITY);
     return data || [];
   } catch (error) {
+    showErrorBackEnd(
+      HTTP_MSG_CONSUL_ERROR + ` (${URL_ENTITY} - status: ${error.status})`,
+      error
+    );
     return [];
   }
 };
@@ -51,7 +46,7 @@ export const crear = async (nuevoReg) => {
   try {
     const data = await axiosCrud.crear(URL_ENTITY, nuevoReg);
     if (data && data.id) {
-      showSwallSuccess(HTTP_MSG_ALTA);
+      swal.showSuccess(HTTP_MSG_ALTA);
       return data;
     } else {
       showErrorBackEnd(HTTP_MSG_ALTA_ERROR, data);
@@ -72,7 +67,7 @@ export const actualizar = async (reg) => {
   try {
     const response = await axiosCrud.actualizar(URL_ENTITY, reg);
     if (response == true) {
-      showSwallSuccess(HTTP_MSG_MODI);
+      swal.showSuccess(HTTP_MSG_MODI);
       return true;
     } else {
       showErrorBackEnd(HTTP_MSG_MODI_ERROR, response);
@@ -91,7 +86,7 @@ export const eliminar = async (id) => {
     const response = await axiosCrud.eliminar(URL_ENTITY, id);
 
     if (response == true) {
-      showSwallSuccess(HTTP_MSG_BAJA);
+      swal.showSuccess(HTTP_MSG_BAJA);
       return true;
     } else {
       showErrorBackEnd(HTTP_MSG_BAJA_ERROR, response);

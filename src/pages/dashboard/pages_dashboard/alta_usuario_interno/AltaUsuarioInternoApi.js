@@ -18,7 +18,16 @@ export const consultar = async () => {
     const data = await axiosCrud.consultar(URL_ENTITY);
     return data || [];
   } catch (error) {
-    showErrorBackEnd(HTTP_MSG_CONSUL_ERROR, error);
+    console.log(
+      "consultar() - catch-error - URL: " +
+        URL_ENTITY +
+        " - status: " +
+        error.status
+    );
+    showErrorBackEnd(
+      HTTP_MSG_CONSUL_ERROR + ` (${URL_ENTITY} - status: ${error.status})`,
+      error
+    );
     return [];
   }
 };
