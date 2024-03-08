@@ -13,12 +13,7 @@ import {
   GridActionsCellItem,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
-
-import {
-  obtenerLocalidades,
-  obtenerProvincias,
-  obtenerTipoDomicilio,
-} from "./GrillaRegistroDomicilioApi";
+import { axiosDomicilios } from "./GrillaRegistroDomicilioApi";
 import { MenuItem, Select } from "@mui/material";
 import {
   createTheme as CrearTema,
@@ -82,17 +77,6 @@ export const GrillaRegistroDomilicio = ({ rows, setRows }) => {
     page: 0,
   });
 
-  useEffect(() => {
-    const getTipoDomicilio = async () => {
-      const tiposResponse = await obtenerTipoDomicilio();
-
-      if (tiposResponse)
-        setTipoDomicilio(tiposResponse.map((item) => ({ ...item })));
-    };
-
-    getTipoDomicilio();
-  }, []);
-
   const tema = usarTema();
 
   const temaConlocalizacion = useMemo(
@@ -101,25 +85,27 @@ export const GrillaRegistroDomilicio = ({ rows, setRows }) => {
   );
 
   useEffect(() => {
-    const getProvincias = async () => {
-      const provinciasResponse = await obtenerProvincias();
-      console.log(provinciasResponse);
-      if (provinciasResponse)
-        setProvincias(provinciasResponse.map((item) => ({ ...item })));
+    const getTipoDomicilio = async () => {
+      const data = await axiosDomicilios.getTipoDomicilio();
+      if (data) setTipoDomicilio(data.map((item) => ({ ...item })));
     };
+    getTipoDomicilio();
+  }, []);
 
+  useEffect(() => {
+    const getProvincias = async () => {
+      const data = await axiosDomicilios.getProvincias();
+      console.log(data);
+      if (data) setProvincias(data.map((item) => ({ ...item })));
+    };
     getProvincias();
   }, []);
 
   useEffect(() => {
     const getLocalidades = async () => {
-      const localidadesResponse = await obtenerLocalidades(
-        provinciaSeleccionada
-      );
-
-      setLocalidades(localidadesResponse.map((item) => ({ ...item })));
+      const data = await axiosDomicilios.getLocalidades(provinciaSeleccionada);
+      setLocalidades(data.map((item) => ({ ...item })));
     };
-
     getLocalidades();
   }, [provinciaSeleccionada]);
 

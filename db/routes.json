@@ -1,4 +1,5 @@
 {
+  "/afiliados/cuil/:cuil": "/afiliado/?cuil=:cuil",
   "/publicaciones/vigentes": "/publicacionesVigentes",
   "/usuario/empresa/public/": "/usuario-empresa-alta",
   "/usuario/empresa/": "/usuario-empresa-alta",

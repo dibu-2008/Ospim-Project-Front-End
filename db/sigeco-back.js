@@ -17,6 +17,70 @@ module.exports = (req, res, next) => {
       return "DDJJ-VALIDAR-NIVEL2";
     }
 
+    if (
+      req.method === "POST" &&
+      req.url.endsWith("/ddjj/upload/nomina/validaCuil")
+    ) {
+      console.log("URL:", req.url);
+
+      const [cuil1, cuil2, cuil3] = req.body;
+
+      // Si todos los cuiles tienes 11 caracteres, se envía una respuesta exitosa
+      if (cuil1.length === 11 && cuil2.length === 11 && cuil3.length === 11) {
+        const jsonExitoso = [
+          {
+            cuil: "20949118682",
+            inter: 0,
+            apellido: "Salinas",
+            nombre: "luis",
+            cuilValido: true,
+          },
+          {
+            cuil: "20949118782",
+            inter: null,
+            apellido: null,
+            nombre: null,
+            cuilValido: true,
+          },
+          {
+            cuil: "21345667876",
+            inter: null,
+            apellido: null,
+            nombre: null,
+            cuilValido: true,
+          },
+        ];
+
+        res.json(jsonExitoso);
+      } else {
+        const jsonFallido = [
+          {
+            cuil: cuil1,
+            inter: 0,
+            apellido: "Salinas",
+            nombre: "luis",
+            cuilValido: true,
+          },
+          {
+            cuil: cuil2,
+            inter: null,
+            apellido: null,
+            nombre: null,
+            cuilValido: true,
+          },
+          {
+            cuil: cuil3,
+            inter: null,
+            apellido: null,
+            nombre: null,
+            cuilValido: false,
+          },
+        ];
+
+        res.json(jsonFallido);
+      }
+    }
+
     let regEx = /([DDJJConsulta]|[DDJJ])/i;
     if (
       req.method === "GET" &&

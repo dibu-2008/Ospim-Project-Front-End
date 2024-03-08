@@ -1,14 +1,14 @@
-import { useState, useMemo, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Box from '@mui/material/Box';
-import './DeclaracionesJuradas.css';
-import { MisDeclaracionesJuradas } from './mis_declaraciones_juradas/MisDeclaracionesJuradas';
-import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
-import * as locales from '@mui/material/locale';
-import { MisAltaDeclaracionesJuradas } from './mis_alta_declaraciones_juradas/MisAltaDeclaracionesJuradas';
-import dayjs from 'dayjs';
+import { useState, useMemo, useEffect } from "react";
+import PropTypes from "prop-types";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Box from "@mui/material/Box";
+import "./DDJJ.css";
+import { MisDeclaracionesJuradas } from "./mis_ddjj/ConsultaMisDDJJ";
+import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
+import * as locales from "@mui/material/locale";
+import { MisAltaDeclaracionesJuradas } from "./alta/DDJJAlta";
+import dayjs from "dayjs";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -39,27 +39,25 @@ CustomTabPanel.propTypes = {
 function a11yProps(index) {
   return {
     id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
   };
 }
 
 export const DeclaracionesJuradas = () => {
-
   const [rowsAltaDDJJ, setRowsAltaDDJJ] = useState([]);
   const [rows_mis_ddjj, setRowsMisDdjj] = useState([]);
   const [periodo, setPeriodo] = useState(null);
   const [periodoIso, setPeriodoIso] = useState(null);
-  const [locale, setLocale] = useState('esES');
+  const [locale, setLocale] = useState("esES");
   const [tabState, setTabState] = useState(0);
   const [peticion, setPeticion] = useState("");
   const [idDDJJ, setIdDDJJ] = useState(null);
-  
 
   const theme = useTheme();
 
   const themeWithLocale = useMemo(
     () => createTheme(theme, locales[locale]),
-    [locale, theme],
+    [locale, theme]
   );
 
   const handleChangeTabState = (event, newValue) => {
@@ -67,11 +65,10 @@ export const DeclaracionesJuradas = () => {
   };
 
   const handleChangePeriodo = (date) => {
-    setPeriodo(date)
+    setPeriodo(date);
   };
 
   const handleAcceptPeriodoDDJJ = () => {
-
     if (periodo && periodo.$d) {
       const { $d: fecha } = periodo;
       const fechaFormateada = new Date(fecha);
@@ -83,40 +80,39 @@ export const DeclaracionesJuradas = () => {
       const fechaISO = fechaFormateada.toISOString(); // 2026-02-01T00:00:00.000Z
       setPeriodoIso(fechaISO);
     }
-  }
+  };
 
   useEffect(() => {
-
     handleAcceptPeriodoDDJJ();
-
   }, [periodo]);
 
   return (
-    <div className='declaraciones_juradas_container'>
+    <div className="declaraciones_juradas_container">
       <h1>Administracion declaraciones juradas</h1>
       <ThemeProvider theme={themeWithLocale}>
-        <Box sx={{ width: '100%' }}>
-          <Box sx={{ borderBottom: 1, borderColor: 'divider', marginTop: '50px' }}>
-            <Tabs
-              
-              value={tabState}
-              onChange={handleChangeTabState}
-            >
+        <Box sx={{ width: "100%" }}>
+          <Box
+            sx={{ borderBottom: 1, borderColor: "divider", marginTop: "50px" }}
+          >
+            <Tabs value={tabState} onChange={handleChangeTabState}>
               <Tab
-                label="Alta Declaracion Jurada" {...a11yProps(0)}
-                sx={{ fontSize: '1.2rem' }}
+                label="Alta Declaracion Jurada"
+                {...a11yProps(0)}
+                sx={{ fontSize: "1.2rem" }}
               />
               <Tab
-                label="Mis Declaraciones Juradas" {...a11yProps(1)}
-                sx={{ fontSize: '1.2rem' }}
+                label="Mis Declaraciones Juradas"
+                {...a11yProps(1)}
+                sx={{ fontSize: "1.2rem" }}
               />
               <Tab
-                label="Mis Pagos" {...a11yProps(2)}
-                sx={{ fontSize: '1.2rem' }}
+                label="Mis Pagos"
+                {...a11yProps(2)}
+                sx={{ fontSize: "1.2rem" }}
               />
             </Tabs>
           </Box>
-          <CustomTabPanel value={tabState} index={0} >
+          <CustomTabPanel value={tabState} index={0}>
             <MisAltaDeclaracionesJuradas
               periodo={periodo}
               periodoIso={periodoIso}
@@ -148,4 +144,4 @@ export const DeclaracionesJuradas = () => {
       </ThemeProvider>
     </div>
   );
-}
+};

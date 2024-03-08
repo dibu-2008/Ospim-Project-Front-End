@@ -107,7 +107,7 @@ export const axiosEliminar = async (UrlApi, id) => {
       console.log(
         "axiosCrud.eliminar() - catch() - error: " + JSON.stringify(error)
       );
-      return false;
     }
+    return false;
   }
 };

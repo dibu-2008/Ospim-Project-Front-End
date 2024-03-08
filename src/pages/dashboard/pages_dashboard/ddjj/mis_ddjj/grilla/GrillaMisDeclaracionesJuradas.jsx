@@ -15,13 +15,7 @@ import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import LocalPrintshopIcon from "@mui/icons-material/LocalPrintshop";
-import {
-  eliminarDeclaracionJurada,
-  imprimirDeclaracionJurada,
-  obtenerMiDeclaracionJurada,
-  obtenerMisDeclaracionesJuradas,
-  presentarDeclaracionJurada,
-} from "./GrillaMisDeclaracionesJuradasApi";
+import { axiosDDJJ } from "./GrillaMisDeclaracionesJuradasApi";
 import { PDFViewer, PDFDownloadLink } from "@react-pdf/renderer";
 import { MyDocument } from "./MiPdf";
 import Swal from "sweetalert2";
@@ -83,7 +77,7 @@ export const GrillaMisDeclaracionesJuradas = ({
   rowsAltaDDJJ,
   setRowsAltaDDJJ,
   setPeticion,
-  setIdDDJJ
+  setIdDDJJ,
 }) => {
   const [rowModesModel, setRowModesModel] = useState({});
   const [paginationModel, setPaginationModel] = useState({
@@ -95,8 +89,8 @@ export const GrillaMisDeclaracionesJuradas = ({
 
   useEffect(() => {
     const ObtenerMisDeclaracionesJuradas = async () => {
-
-      let ddjjResponse = await obtenerMisDeclaracionesJuradas(idEmpresa, token);
+      let ddjjResponse = awaitaxiosDDJJ.consultar(idEmpresa);
+      //let ddjjResponse = await obtenerMisDeclaracionesJuradas(idEmpresa, token);
 
       //Agrego las columnas deTotales de Aportes
       ddjjResponse = await castearMisDDJJ(ddjjResponse);
@@ -116,11 +110,12 @@ export const GrillaMisDeclaracionesJuradas = ({
       estado: updatedRow.estado,
     };
 
-    await presentarDeclaracionJurada(idEmpresa, id, estado, token);
-
-    setRowsMisDdjj(
-      rows_mis_ddjj.map((row) => (row.id === id ? updatedRow : row))
-    );
+    const bRta = await axiosDDJJ.presentar(idEmpresa, id);
+    //await presentarDeclaracionJurada(idEmpresa, id, estado, token);
+    if (bRta)
+      setRowsMisDdjj(
+        rows_mis_ddjj.map((row) => (row.id === id ? updatedRow : row))
+      );
 
     return updatedRow;
   };
@@ -132,10 +127,10 @@ export const GrillaMisDeclaracionesJuradas = ({
   };
 
   const handleEditClick = (id, row) => async () => {
-
     setTabState(0);
 
-    const ddjj = await obtenerMiDeclaracionJurada(idEmpresa, id, token);
+    const ddjj = await axiosDDJJ.getDDJJ(idEmpresa, id);
+    //const ddjj = await obtenerMiDeclaracionJurada(idEmpresa, id, token);
 
     const periodoResponse = ddjj.periodo;
     const fecha = new Date(periodoResponse);
@@ -158,8 +153,7 @@ export const GrillaMisDeclaracionesJuradas = ({
 
     setIdDDJJ(id);
 
-    setRowsAltaDDJJ(updateRowsAltaDDJJ) 
-      
+    setRowsAltaDDJJ(updateRowsAltaDDJJ);
   };
 
   const handleSaveClick = (id) => () => {
@@ -167,8 +161,9 @@ export const GrillaMisDeclaracionesJuradas = ({
   };
 
   const declaracionJuradasImpresion = async (idDDJJ) => {
-    await imprimirDeclaracionJurada(idEmpresa, idDDJJ, token);
-  }
+    await axiosDDJJ.imprimir(idEmpresa, idDDJJ);
+    //await imprimirDeclaracionJurada(idEmpresa, idDDJJ, token);
+  };
 
   const handleDeleteClick = (id) => async () => {
     const showSwalConfirm = async () => {
@@ -183,9 +178,9 @@ export const GrillaMisDeclaracionesJuradas = ({
           confirmButtonText: "Si, bórralo!",
         }).then(async (result) => {
           if (result.isConfirmed) {
-            setRowsMisDdjj(rows_mis_ddjj.filter((row) => row.id !== id));
-
-            await eliminarDeclaracionJurada(idEmpresa, id, token);
+            const bRta = axiosDDJJ.eliminar(idEmpresa, id);
+            if (bRta)
+              setRowsMisDdjj(rows_mis_ddjj.filter((row) => row.id !== id));
           }
         });
       } catch (error) {
@@ -265,12 +260,11 @@ export const GrillaMisDeclaracionesJuradas = ({
       headerClassName: "header--cell",
       valueGetter: (params) => {
         // Si secuencia es 0 es "Original" sino es "Rectificativa"+secuencia
-        if(params.value === null){
+        if (params.value === null) {
           return "Original Nulo";
         } else if (params.value === 0) {
           return "Original";
         } else {
-          
           return "Rectificativa " + params.value;
         }
       },
@@ -348,11 +342,11 @@ export const GrillaMisDeclaracionesJuradas = ({
             color="inherit"
           />,
           <GridActionsCellItem
-              icon={<LocalPrintshopIcon />}
-              label="Print"
-              color="inherit"
-              onClick={() => declaracionJuradasImpresion(id)}
-            />,
+            icon={<LocalPrintshopIcon />}
+            label="Print"
+            color="inherit"
+            onClick={() => declaracionJuradasImpresion(id)}
+          />,
           /* <PDFDownloadLink
             document={<MyDocument rows_mis_ddjj={rows_mis_ddjj} />}
             fileName="ddjj.pdf"
@@ -383,11 +377,11 @@ export const GrillaMisDeclaracionesJuradas = ({
             color="inherit"
           />,
           <GridActionsCellItem
-              icon={<LocalPrintshopIcon />}
-              label="Print"
-              color="inherit"
-              onClick={() => declaracionJuradasImpresion(id)}
-            />,
+            icon={<LocalPrintshopIcon />}
+            label="Print"
+            color="inherit"
+            onClick={() => declaracionJuradasImpresion(id)}
+          />,
           /* <PDFDownloadLink
             document={<MyDocument rows_mis_ddjj={rows_mis_ddjj} />}
             fileName="ddjj.pdf"

@@ -26,10 +26,7 @@ import {
   MenuItem,
   appBarClasses,
 } from "@mui/material";
-import {
-  obtenerAfiliados,
-  obtenerCategorias,
-} from "../MisAltaDeclaracionesJuradasApi";
+import { axiosDDJJ } from "../DDJJAltaApi";
 
 function EditToolbar(props) {
   const { setRowsAltaDDJJ, rowsAltaDDJJ, setRowModesModel } = props;
@@ -98,7 +95,8 @@ export const GrillaPasoTres = ({
   );
 
   const ObtenerAfiliados = async (params, cuilElegido) => {
-    const afiliados = await obtenerAfiliados(token, cuilElegido);
+    const afiliados = await axiosDDJJ.getAfiliado(cuilElegido);
+    //const afiliados = await obtenerAfiliados(token, cuilElegido);
     const afiliadoEncontrado = afiliados.find(
       (afiliado) => afiliado.cuil === cuilElegido
     );
