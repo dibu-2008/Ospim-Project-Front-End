@@ -12,7 +12,7 @@ const HTTP_MSG_BAJA_ERROR = import.meta.env.VITE_HTTP_MSG_BAJA_ERROR;
 const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
 
 export const obtenerAfiliados = async (cuil) => {
-  const URL = `${BACKEND_URL}/afiliado/cuil/${cuil}`;
+  const URL = `/afiliados/cuil/${cuil}`;
   try {
     const data = await axiosCrud.consultar(URL);
     return data || [];

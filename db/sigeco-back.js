@@ -284,7 +284,13 @@ module.exports = (req, res, next) => {
       });
     });
 
-    if (errores.length > 0) {
+    res.status(200).jsonp({
+      mensaje: "Todos los campos están llenos excepto 'inte'.",
+      afiliados,
+      errores
+    });
+
+    /* if (errores.length > 0) {
       res.status(400).jsonp({
         codigo: "ERROR_VALIDACION_NIVEL",
         ticket: "TK-156269",
@@ -299,7 +305,7 @@ module.exports = (req, res, next) => {
         mensaje: "Todos los campos están llenos excepto 'inte'.",
         afiliados,
       });
-    }
+    } */
   }
 
   function DDJJImprimir() {

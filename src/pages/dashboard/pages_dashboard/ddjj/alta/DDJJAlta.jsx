@@ -190,7 +190,8 @@ export const MisAltaDeclaracionesJuradas = ({
       })),
     };
 
-    const erroresResponse = axiosDDJJ.validar(ID_EMPRESA, altaDDJJFinal);
+    const erroresResponse = await axiosDDJJ.validar(ID_EMPRESA, altaDDJJFinal);
+    console.log(erroresResponse);
     setValidacionResponse(erroresResponse);
 
     // Validar si validacionResponse es igual a {errores: Array(6)}

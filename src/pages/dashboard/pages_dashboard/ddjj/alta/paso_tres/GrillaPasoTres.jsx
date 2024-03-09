@@ -32,7 +32,7 @@ function EditToolbar(props) {
   const { setRowsAltaDDJJ, rowsAltaDDJJ, setRowModesModel } = props;
 
   const handleClick = () => {
-    const maxId = rows ? Math.max(...rowsAltaDDJJ.map((row) => row.id), 0) : 1;
+    const maxId = rowsAltaDDJJ ? Math.max(...rowsAltaDDJJ.map((row) => row.id), 0) : 1;
     const newId = maxId + 1;
     const id = newId;
 
