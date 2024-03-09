@@ -1,171 +1,86 @@
-import { errorBackendResponse } from "../../../../errors/errorBackendResponse";
-import axios from 'axios'
-import Swal from 'sweetalert2'
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-const MESSAGE_HTTP_CREATED = import.meta.env.VITE_MESSAGE_HTTP_CREATED;
-const MESSAGE_HTTP_UPDATED = import.meta.env.VITE_MESSAGE_HTTP_UPDATED;
-const MESSAGE_HTTP_DELETED = import.meta.env.VITE_MESSAGE_HTTP_DELETED;
+import { axiosCrud } from "@components/axios/axiosCrud";
+import { showErrorBackEnd } from "@/components/axios/showErrorBackEnd";
+import swal from "@/components/swal/swal";
 
-export const obtenerFeriados = async (token) => {
+const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
+const HTTP_MSG_MODI = import.meta.env.VITE_HTTP_MSG_MODI;
+const HTTP_MSG_BAJA = import.meta.env.VITE_HTTP_MSG_BAJA;
+const HTTP_MSG_ALTA_ERROR = import.meta.env.VITE_HTTP_MSG_ALTA_ERROR;
+const HTTP_MSG_MODI_ERROR = import.meta.env.VITE_HTTP_MSG_MODI_ERROR;
+const HTTP_MSG_BAJA_ERROR = import.meta.env.VITE_HTTP_MSG_BAJA_ERROR;
+const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
 
-    const URL = `${BACKEND_URL}/feriados`;
+const URL_ENTITY = "/feriados";
 
-    const showSwalError = (descripcion) => {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: descripcion,
-            showConfirmButton: false,
-            timer: 3000,
-        })
+export const axiosFeriados = {
+  consultar: async function (UrlApi) {
+    return consultar(UrlApi);
+  },
+
+  crear: async function (UrlApi, oEntidad) {
+    return crear(UrlApi, oEntidad);
+  },
+
+  actualizar: async function (UrlApi, oEntidad) {
+    return actualizar(UrlApi, oEntidad);
+  },
+
+  eliminar: async function (UrlApi, id) {
+    return eliminar(UrlApi, id);
+  },
+};
+
+export const consultar = async () => {
+  try {
+    const data = await axiosCrud.consultar(URL_ENTITY);
+    return data || [];
+  } catch (error) {
+    showErrorBackEnd(
+      HTTP_MSG_CONSUL_ERROR + ` (${URL_ENTITY} - status: ${error.status})`,
+      error
+    );
+    return [];
+  }
+};
+
+export const crear = async (registro) => {
+  try {
+    const data = await axiosCrud.crear(URL_ENTITY, registro);
+    if (data && data.id) {
+      swal.showSuccess(HTTP_MSG_ALTA);
+      return data;
     }
+    throw data;
+  } catch (error) {
+    showErrorBackEnd(HTTP_MSG_ALTA_ERROR, error);
+    return {};
+  }
+};
 
-    try {
-
-        const feriadosResponse = await axios.get(URL, {
-            headers: {
-                'Authorization': token
-            }
-        });
-        const feriados = await feriadosResponse.data;
-
-        return feriados || [];
-
+export const actualizar = async (registro) => {
+  try {
+    const response = await axiosCrud.actualizar(URL_ENTITY, registro);
+    if (response == true) {
+      swal.showSuccess(HTTP_MSG_MODI);
+      return true;
     }
-    catch (error) {
+    throw response;
+  } catch (error) {
+    showErrorBackEnd(HTTP_MSG_MODI_ERROR, error);
+    return false;
+  }
+};
 
-        errorBackendResponse(error, showSwalError);
-
+export const eliminar = async (id) => {
+  try {
+    const response = await axiosCrud.eliminar(URL_ENTITY, id);
+    if (response == true) {
+      swal.showSuccess(HTTP_MSG_BAJA);
+      return true;
     }
-}
-
-export const crearFeriado = async (nuevoFeriado, token) => {
-
-    const URL = `${BACKEND_URL}/feriados`;
-
-    const showSwalError = (descripcion) => {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: descripcion,
-            showConfirmButton: false,
-            timer: 2000,
-        })
-    }
-
-    const showSwallSuccess = () => {
-        Swal.fire({
-            icon: 'success',
-            title: MESSAGE_HTTP_CREATED,
-            showConfirmButton: false,
-            timer: 2000,
-        })
-    }
-
-    try {
-
-        const feriadoResponse = await axios.post(URL, nuevoFeriado, {
-            headers: {
-                'Authorization': token
-            }
-        });
-
-        if (feriadoResponse.status === 201) {
-            showSwallSuccess();
-        }
-
-    }
-    catch (error) {
-
-        errorBackendResponse(error, showSwalError);
-
-    }
-}
-
-export const actualizarFeriado = async (idFeriado, feriado, token) => {
-
-    const URL = `${BACKEND_URL}/feriados/${idFeriado}`;
-
-    const showSwalError = (descripcion) => {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: descripcion,
-            showConfirmButton: false,
-            timer: 2000,
-        })
-    }
-
-    const showSwallSuccess = () => {
-        Swal.fire({
-            icon: 'success',
-            title: MESSAGE_HTTP_UPDATED,
-            showConfirmButton: false,
-            timer: 2000,
-        })
-    }
-
-    try {
-
-        const feriadoResponse = await axios.put(URL, feriado, {
-            headers: {
-                'Authorization': token
-            }
-        });
-
-        if (feriadoResponse.status === 200) {
-            showSwallSuccess();
-        }
-
-    }
-    catch (error) {
-
-        errorBackendResponse(error, showSwalError);
-
-    }
-
-}
-
-export const eliminarFeriado = async (idFeriado, token) => {
-
-    const URL = `${BACKEND_URL}/feriados/${idFeriado}`;
-
-    const showSwalError = (descripcion) => {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: descripcion,
-            showConfirmButton: false,
-            timer: 2000,
-        })
-    }
-
-    const showSwallSuccess = () => {
-        Swal.fire({
-            icon: 'success',
-            title: MESSAGE_HTTP_DELETED,
-            showConfirmButton: false,
-            timer: 2000,
-        })
-    }
-
-    try {
-
-        const feriadoResponse = await axios.delete(URL, {
-            headers: {
-                'Authorization': token
-            }
-        });
-
-        if (feriadoResponse.status === 200) {
-            showSwallSuccess();
-        }
-
-    }
-    catch (error) {
-
-        errorBackendResponse(error, showSwalError);
-
-    }
-
-}
+    throw response;
+  } catch (error) {
+    showErrorBackEnd(HTTP_MSG_BAJA_ERROR, error);
+    return false;
+  }
+};

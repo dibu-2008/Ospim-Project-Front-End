@@ -1,62 +1,80 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { InputComponent } from "../../components/InputComponent";
 import { ButtonComponent } from "../../components/ButtonComponent";
 import { useFormRegisterCompany } from "../../hooks/useFormRegisterCompany";
-import { SelectComponent } from "../../components/SelectComponent";
-import { v4 as uuidv4 } from 'uuid';
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 import { GrillaRegistroDomilicio } from "./grilla_registro_domicilio/GrillaRegistroDomicilio";
-import { registrarEmpresa } from "./RegistroEmpresaApi";
-import TextField from '@mui/material/TextField';
-import Box from '@mui/material/Box';
-import Fab from '@mui/material/Fab';
-import AddIcon from '@mui/icons-material/Add';
-import { useEffect } from "react";
-
+import { registrarEmpresa, getRamo } from "./RegistroEmpresaApi";
+import TextField from "@mui/material/TextField";
+import Box from "@mui/material/Box";
+import Fab from "@mui/material/Fab";
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
+import AddIcon from "@mui/icons-material/Add";
+import "./RegistroEmpresa.css";
+import NavBar from "@/components/navbar/NavBar";
 
 export const RegistroEmpresa = () => {
-
-  const [search, setSearch] = useState('');
-  const [companiesDto, setCompaniesDto] = useState({});
   const [additionalEmail, setAddionalEmail] = useState([]);
   const [emailAlternativos, setEmailAlternativos] = useState([]);
   const [additionalPhone, setAdditionalPhone] = useState([]);
   const [phoneAlternativos, setPhoneAlternativos] = useState([]);
   const [idPhoneAlternativos, setIdPhoneAlternativos] = useState(2);
   const [idEmailAlternativos, setIdEmailAlternativos] = useState(2);
-  const [rows, setRows] = useState([]);
-  const [ramoo, setRamo] = useState('');
+  const [ramoAux, setRamoAux] = useState("");
   const [ramos, setRamos] = useState([]);
+  const [rowsDomicilio, setRowsDomicilio] = useState([]);
 
-  useEffect(() => {}, [])
+  useEffect(() => {
+    const getRamos = async () => {
+      const ramosResponse = await getRamo();
+      setRamos(ramosResponse);
+    };
+
+    getRamos();
+    console.log(ramos);
+  }, []);
+
+  
 
   const {
-    cuit, razonSocial, email_first, email_second,
-    password, repeatPassword, prefijo_first, phone_first,
-    prefijo_second, phone_second,
-    whatsapp, whatsapp_prefijo, ramo,
+    cuit,
+    razonSocial,
+    email_first,
+    email_second,
+    password,
+    repeatPassword,
+    prefijo_first,
+    phone_first,
+    prefijo_second,
+    phone_second,
+    whatsapp,
+    whatsapp_prefijo,
+    ramo,
     OnInputChangeRegisterCompany,
-    OnResetFormRegisterCompany
+    OnResetFormRegisterCompany,
   } = useFormRegisterCompany({
-    cuit: '',
-    razonSocial: '',
-    email_first: '',
-    email_second: '',
-    password: '',
-    repeatPassword: '',
-    prefijo_first: '',
-    phone_first: '',
-    prefijo_second: '',
-    phone_second: '',
-    whatsapp: '',
-    whatsapp_prefijo: '',
-    ramo: '',
-  })
+    cuit: "",
+    razonSocial: "",
+    email_first: "",
+    email_second: "",
+    password: "",
+    repeatPassword: "",
+    prefijo_first: "",
+    phone_first: "",
+    prefijo_second: "",
+    phone_second: "",
+    whatsapp: "",
+    whatsapp_prefijo: "",
+    ramo: "",
+  });
 
   const OnSubmitRegisterCompany = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    const usuarioEmpresa = {
-      razonsocial: razonSocial,
+    let usuarioEmpresa = {
+      razonSocial: razonSocial,
       cuit: cuit,
       clave: password,
       email: email_first,
@@ -64,8 +82,15 @@ export const RegistroEmpresa = () => {
       telefono_prefijo: prefijo_first,
       whatsapp: whatsapp,
       whatsapp_prefijo: whatsapp_prefijo,
-      ramo: ramo,
-      telefonosAlternativos: [
+      ramoId: ramoAux,
+    };
+
+    if (
+      phoneAlternativos &&
+      phoneAlternativos.length > 0 &&
+      (prefijo_second || phone_second)
+    ) {
+      usuarioEmpresa[telefonosAlternativos] = [
         {
           prefijo: prefijo_second,
           nro: phone_second,
@@ -75,103 +100,116 @@ export const RegistroEmpresa = () => {
           prefijo: phone.prefijo,
           nro: phone.nro,
           //id: phone.id
-        }))
-      ],
-      emailAlternativos: [
+        })),
+      ];
+    } else {
+      if (
+        phoneAlternativos &&
+        phoneAlternativos.length > 0 &&
+        (prefijo_second || phone_second)
+      )
+        usuarioEmpresa[telefonosAlternativos] = [
+          {
+            prefijo: prefijo_second,
+            nro: phone_second,
+            //id: 1
+          },
+        ];
+    }
+
+    if (emailAlternativos && emailAlternativos.length > 0 && email_second) {
+      usuarioEmpresa[emailAlternativos] = [
         {
           email: email_second,
-          //id: 1
         },
         ...emailAlternativos.map((email) => ({
           email: email.email,
-          //id: email.id
-        }))
-      ],
-      domicilios: rows.map((row) => ({
+        })),
+      ];
+    } else {
+      if (emailAlternativos && emailAlternativos.length > 0 && email_second) {
+        usuarioEmpresa[emailAlternativos] = [
+          {
+            email: email_second,
+          },
+        ];
+      }
+    }
+
+    if (rowsDomicilio && rowsDomicilio.length > 0) {
+      usuarioEmpresa["domicilios"] = rowsDomicilio.map((row) => ({
         tipo: row.tipo,
-        provincia: row.provinciaId,
-        localidad: row.localidadId,
+        provinciaId: row.provinciaId,
+        localidadId: row.localidadId,
         calle: row.calle,
         piso: row.piso,
         depto: row.depto,
         oficina: row.oficina,
         cp: row.cp,
         planta: row.planta,
-      }))
+      }));
     }
 
-    await registrarEmpresa(usuarioEmpresa);
+    console.log(usuarioEmpresa);
 
-    setAddionalEmail([]);
-    setEmailAlternativos([]);
-    setAdditionalPhone([]);
-    setRows([]);
+    const rta = await registrarEmpresa(usuarioEmpresa);
 
-    OnResetFormRegisterCompany();
-  }
+    if (rta) {
+      setAddionalEmail([]);
+      setEmailAlternativos([]);
+      setAdditionalPhone([]);
+      setRowsDomicilio([]);
+      OnResetFormRegisterCompany();
+    }
+  };
 
   const OnChangeRamos = (e) => {
     OnInputChangeRegisterCompany({
       target: {
-        name: 'ramos',
-        value: e.target.value
-      }
-    })
-  }
-
-  const onInputChangeSearchCompany = ({ target }) => {
-
-    const { name, value } = target;
-
-    setSearch(value);
-
-  }
+        name: "ramos",
+        value: e.target.value,
+      },
+    });
+    setRamoAux(e.target.value);
+  };
 
   const handleAddEmail = () => {
-
     setIdEmailAlternativos(idEmailAlternativos + 1);
 
     const values = [...additionalEmail];
     const newEmail = {
       email: "",
-      id: idEmailAlternativos
+      id: idEmailAlternativos,
     };
     values.push(newEmail);
-    setEmailAlternativos([...emailAlternativos, newEmail])
+    setEmailAlternativos([...emailAlternativos, newEmail]);
     setAddionalEmail(values);
-
-  }
+  };
 
   const handleAddPhone = () => {
-
     setIdPhoneAlternativos(idPhoneAlternativos + 1);
 
     const values = [...additionalPhone];
     const newPhone = {
       prefijo: "",
       nro: "",
-      id: idPhoneAlternativos
+      id: idPhoneAlternativos,
     };
     values.push(newPhone);
-    setPhoneAlternativos([...phoneAlternativos, newPhone])
+    setPhoneAlternativos([...phoneAlternativos, newPhone]);
     setAdditionalPhone(values);
-  }
+  };
 
   return (
     <main>
-      <div className="container_dashboard_register_company">
+      <NavBar />
+      <div className="registro_empresa_container">
         <form
-          sx={{
-            backgroundColor: '#000',
-          }}
           onSubmit={OnSubmitRegisterCompany}
-          className="form_register_company">
+          className="form_register_company"
+        >
           <h1>Bienvenidos a OSPIM</h1>
-          <h3
-            style={{
-              marginBottom: '60px',
-            }}
-          >Formulario de registro</h3>
+          <h3>Formulario de registro</h3>
           <div className="input-group">
             <TextField
               type="text"
@@ -200,16 +238,17 @@ export const RegistroEmpresa = () => {
               value={email_first}
               onChange={OnInputChangeRegisterCompany}
               inputProps={{
-                autoComplete: 'new-password',
+                autoComplete: "new-password",
               }}
               label="E-mail principal N° 1"
             />
-          </div>
+          </div> 
           <div
             style={{
-              position: 'relative',
+              position: "relative",
             }}
-            className="input-group">
+            className="input-group"
+          >
             <TextField
               type="email"
               id="email_second"
@@ -217,19 +256,20 @@ export const RegistroEmpresa = () => {
               value={email_second}
               onChange={OnInputChangeRegisterCompany}
               inputProps={{
-                autoComplete: 'new-password',
+                autoComplete: "new-password",
               }}
               label="E-mail Alternativo N° 2"
             />
-            <Box sx={{ '& > :not(style)': { m: 1 } }}>
+            <Box sx={{ "& > :not(style)": { m: 1 } }}>
               <Fab
                 size="small"
-                color="primary" aria-label="add"
+                color="primary"
+                aria-label="add"
                 style={{
-                  position: 'absolute',
-                  marginTop: '-48px',
-                  marginLeft: '255px',
-                  zIndex: '1',
+                  position: "absolute",
+                  marginTop: "-48px",
+                  marginLeft: "255px",
+                  zIndex: "1",
                 }}
                 onClick={handleAddEmail}
               >
@@ -237,31 +277,29 @@ export const RegistroEmpresa = () => {
               </Fab>
             </Box>
           </div>
-          {
-            additionalEmail.map((input) => (
-              <div className="input-group" key={input.id}>
-                <TextField
-                  type="email"
-                  id={String(input.id)}
-                  name={`additionalEmail_${input.id}`}
-                  inputProps={{
-                    autoComplete: 'new-password',
-                  }}
-                  label="Correo Electrónico Adicional"
-                  value={input.email}
-                  onChange={(e) => {
-                    const values = [...additionalEmail];
-                    values.map((item) => {
-                      if (item.id === input.id) {
-                        item.email = e.target.value;
-                      }
-                    });
-                    setEmailAlternativos(values);
-                  }}
-                />
-              </div>
-            ))
-          }
+          {additionalEmail.map((input) => (
+            <div className="input-group" key={input.id}>
+              <TextField
+                type="email"
+                id={String(input.id)}
+                name={`additionalEmail_${input.id}`}
+                inputProps={{
+                  autoComplete: "new-password",
+                }}
+                label="Correo Electrónico Adicional"
+                value={input.email}
+                onChange={(e) => {
+                  const values = [...additionalEmail];
+                  values.map((item) => {
+                    if (item.id === input.id) {
+                      item.email = e.target.value;
+                    }
+                  });
+                  setEmailAlternativos(values);
+                }}
+              />
+            </div>
+          ))} 
           <div className="input-group">
             <InputComponent
               type="password"
@@ -283,7 +321,7 @@ export const RegistroEmpresa = () => {
               variant="filled"
               label="Repetir Contraseña"
             />
-          </div>
+          </div> 
           <div className="input-group">
             <div
               style={{
@@ -292,9 +330,11 @@ export const RegistroEmpresa = () => {
                 marginBottom: "10px",
               }}
             >
-              <div style={{
-                width: '20%',
-              }}>
+              <div
+                style={{
+                  width: "20%",
+                }}
+              >
                 <TextField
                   type="number"
                   name="prefijo_first"
@@ -306,7 +346,7 @@ export const RegistroEmpresa = () => {
               </div>
               <div
                 style={{
-                  width: '80%',
+                  width: "80%",
                 }}
               >
                 <TextField
@@ -317,12 +357,12 @@ export const RegistroEmpresa = () => {
                   autoComplete="off"
                   label="Teléfono principal N° 1"
                   sx={{
-                    width: '100%',
+                    width: "100%",
                   }}
                 />
               </div>
             </div>
-          </div>
+          </div> 
           <div className="input-group">
             <div
               style={{
@@ -331,9 +371,11 @@ export const RegistroEmpresa = () => {
                 marginBottom: "10px",
               }}
             >
-              <div style={{
-                width: '20%',
-              }}>
+              <div
+                style={{
+                  width: "20%",
+                }}
+              >
                 <TextField
                   type="number"
                   name="prefijo_second"
@@ -345,7 +387,7 @@ export const RegistroEmpresa = () => {
               </div>
               <div
                 style={{
-                  width: '80%',
+                  width: "80%",
                 }}
               >
                 <TextField
@@ -356,91 +398,88 @@ export const RegistroEmpresa = () => {
                   autoComplete="off"
                   label="Teléfono Alternativo N° 1"
                   sx={{
-                    width: '100%',
+                    width: "100%",
                   }}
                 />
-                <Box sx={{ '& > :not(style)': { m: 1 } }}>
+                <Box sx={{ "& > :not(style)": { m: 1 } }}>
                   <Fab
                     size="small"
-                    color="primary" aria-label="add"
+                    color="primary"
+                    aria-label="add"
                     style={{
-                      position: 'absolute',
-                      marginTop: '-48px',
-                      marginLeft: '205px',
-                      zIndex: '1',
+                      position: "absolute",
+                      marginTop: "-48px",
+                      marginLeft: "205px",
+                      zIndex: "1",
                     }}
                     onClick={handleAddPhone}
                   >
                     <AddIcon />
                   </Fab>
                 </Box>
-
               </div>
-
             </div>
           </div>
-          {
-            additionalPhone.map((input) => (
-              <div className="input-group" key={input.id}>
+          {additionalPhone.map((input) => (
+            <div className="input-group" key={input.id}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginBottom: "10px",
+                }}
+              >
                 <div
                   style={{
-                    display: "flex",
-                    alignItems: "center",
-                    marginBottom: "10px",
+                    width: "20%",
                   }}
                 >
-                  <div style={{
-                    width: '20%',
-                  }}>
-
-                    <TextField
-                      type="number"
-                      name={`prefijoAdditional_${input.id}`}
-                      value={input.prefijo}
-                      onChange={(e) => {
-                        const values = [...additionalPhone];
-                        values.map((item) => {
-                          if (item.id === input.id) {
-                            item.prefijo = e.target.value;
-                          }
-                        });
-                        setPhoneAlternativos(values);
-                      }}
-                      autoComplete="off"
-                      label="Prefijo"
-                    />
-                  </div>
-
-                  <div
-                    style={{
-                      width: '80%',
+                  <TextField
+                    type="number"
+                    name={`prefijoAdditional_${input.id}`}
+                    value={input.prefijo}
+                    onChange={(e) => {
+                      const values = [...additionalPhone];
+                      values.map((item) => {
+                        if (item.id === input.id) {
+                          item.prefijo = e.target.value;
+                        }
+                      });
+                      setPhoneAlternativos(values);
                     }}
-                  >
-                    <TextField
-                      type="number"
-                      name={`phoneAdditional_${input.id}`}
-                      value={input.nro}
-                      onChange={(e) => {
-                        const values = [...additionalPhone];
-                        values.map((item) => {
-                          if (item.id === input.id) {
-                            item.nro = e.target.value;
-                          }
-                        });
-                        setPhoneAlternativos(values);
-                      }}
-                      autoComplete="off"
-                      label="Teléfono Alternativo"
-                      sx={{
-                        width: '100%',
-                      }}
-                    />
-                  </div>
+                    autoComplete="off"
+                    label="Prefijo"
+                  />
                 </div>
 
+                <div
+                  style={{
+                    width: "80%",
+                  }}
+                >
+                  <TextField
+                    type="number"
+                    name={`phoneAdditional_${input.id}`}
+                    value={input.nro}
+                    onChange={(e) => {
+                      const values = [...additionalPhone];
+                      values.map((item) => {
+                        if (item.id === input.id) {
+                          item.nro = e.target.value;
+                        }
+                      });
+                      setPhoneAlternativos(values);
+                    }}
+                    autoComplete="off"
+                    label="Teléfono Alternativo"
+                    sx={{
+                      width: "100%",
+                    }}
+                  />
+                </div>
               </div>
-            ))
-          }
+            </div>
+          ))}
           <div className="input-group">
             <div
               style={{
@@ -449,9 +488,11 @@ export const RegistroEmpresa = () => {
                 marginBottom: "10px",
               }}
             >
-              <div style={{
-                width: '20%',
-              }}>
+              <div
+                style={{
+                  width: "20%",
+                }}
+              >
                 <InputComponent
                   type="number"
                   name="whatsapp_prefijo"
@@ -461,11 +502,10 @@ export const RegistroEmpresa = () => {
                   variant="filled"
                   label="Prefijo"
                 />
-
               </div>
               <div
                 style={{
-                  width: '80%',
+                  width: "80%",
                 }}
               >
                 <TextField
@@ -476,26 +516,41 @@ export const RegistroEmpresa = () => {
                   autoComplete="off"
                   label="Whatsapp"
                   sx={{
-                    width: '100%',
+                    width: "100%",
                   }}
                 />
               </div>
             </div>
-
           </div>
           <div className="input-group">
-            <SelectComponent
-              name="ramo"
-              value={ramo}
-              onChange={OnChangeRamos}
-              label="Ramo"
-              options={[
-                { value: "Ramo A", label: "Ramo A" },
-                { value: "Ramo B", label: "Ramo B" },
-                { value: "Ramo C", label: "Ramo C" },
-              ]}
-            />
+            <Box
+              sx={{
+                textAlign: "left",
+                color: "#606060",
+                width: "100%",
+              }}
+            >
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">
+                  Seleccionar ramo
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={ramoAux}
+                  label="Seleccionar ramo"
+                  onChange={OnChangeRamos}
+                >
+                  {ramos.map((option, index) => (
+                    <MenuItem key={index} value={option.id}>
+                      {option.descripcion}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
           </div>
+
           <div
             className="input-group"
             style={{
@@ -514,12 +569,12 @@ export const RegistroEmpresa = () => {
             Domicilios declarados: (Para completar el registro, deberá agregar
             por lo menos el Domicilio Fiscal)
           </p>
-       
+
           <GrillaRegistroDomilicio
-            rows={rows}
-            setRows={setRows}
+            rows={rowsDomicilio}
+            setRows={setRowsDomicilio}
           />
-          
+
           <ButtonComponent
             styles={{
               width: "auto",
@@ -532,6 +587,5 @@ export const RegistroEmpresa = () => {
         </form>
       </div>
     </main>
-  )
-}
-
+  );
+};

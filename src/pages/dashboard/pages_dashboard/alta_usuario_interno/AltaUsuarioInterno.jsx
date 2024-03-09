@@ -1,61 +1,110 @@
-import { useEffect, useState, useMemo } from 'react';
-import { crearUsuarioInterno, deshabilitarUsuarioInterno, habilitarUsuarioInterno, actualizarUsuarioInterno, obtenerRoles, obtenerUsuariosInternos } from './AltaUsuarioInternoApi';
-import { AltaUsuarioInternoNuevo } from './AltaUsuarioInternoNuevo';
+import * as locales from "@mui/material/locale";
+import { useState, useEffect, useMemo } from "react";
+import { Box, Button } from "@mui/material";
+
+import { Add, Edit, DeleteOutlined, Save, Close } from "@mui/icons-material";
+import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import SaveIcon from "@mui/icons-material/Save";
+import CancelIcon from "@mui/icons-material/Close";
+import CloseIcon from "@mui/icons-material/Close";
+import CheckIcon from "@mui/icons-material/Check";
+
 import {
   GridRowModes,
   DataGrid,
+  GridToolbarContainer,
   GridActionsCellItem,
   GridRowEditStopReasons,
-} from '@mui/x-data-grid';
-import Box from "@mui/material/Box";
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import SaveIcon from '@mui/icons-material/Save';
-import CancelIcon from '@mui/icons-material/Close';
-import CloseIcon from '@mui/icons-material/Close';
-import CheckIcon from '@mui/icons-material/Check';
-import './AltaUsuarioInterno.css'
-import { Grid, IconButton } from '@mui/material';
-import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
-import * as locales from '@mui/material/locale';
+} from "@mui/x-data-grid";
+
+import { axiosUsuariosInternos } from "./AltaUsuarioInternoApi";
+import { axiosRoles } from "@pages/dashboard/pages_dashboard/roles/RolesApi";
+
+import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
+
+import Swal from "sweetalert2";
+import "./AltaUsuarioInterno.css";
+
+const crearNuevoRegistro = (props) => {
+  const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
+
+  const altaHandleClick = () => {
+    const maxId = rows ? Math.max(...rows.map((row) => row.id), 0) : 1;
+    const newId = maxId + 1;
+    const id = newId;
+    volverPrimerPagina();
+
+    //saque campo:         password2: "",
+    setRows((oldRows) => [
+      {
+        id,
+        apellido: "",
+        nombre: "",
+        descripcion: "",
+        email: "",
+        clave: "",
+        rolId: "",
+        habilitado: null,
+        isNew: true,
+      },
+      ...oldRows,
+    ]);
+    setRowModesModel((oldModel) => ({
+      [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
+      ...oldModel,
+    }));
+  };
+
+  return (
+    <GridToolbarContainer>
+      <Button color="primary" startIcon={<AddIcon />} onClick={altaHandleClick}>
+        Nuevo Registro
+      </Button>
+    </GridToolbarContainer>
+  );
+};
 
 export const AltaUsuarioInterno = () => {
-
-  const [locale, setLocale] = useState('esES');
+  const [locale, setLocale] = useState("esES");
   const [rowModesModel, setRowModesModel] = useState({});
-  const [rows, setRows] = useState([])
+  const [rows, setRows] = useState([]);
   const [roles, setRoles] = useState([]);
+  const [paginationModel, setPaginationModel] = useState({
+    pageSize: 10,
+    page: 0,
+  });
+
+  const volverPrimerPagina = () => {
+    setPaginationModel((prevPaginationModel) => ({
+      ...prevPaginationModel,
+      page: 0,
+    }));
+  };
 
   const theme = useTheme();
 
   const themeWithLocale = useMemo(
     () => createTheme(theme, locales[locale]),
-    [locale, theme],
+    [locale, theme]
   );
 
-  const TOKEN = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.usuario.token;
-
   useEffect(() => {
-
     const ObtenerUsuariosInternos = async () => {
-
-      const usuarios = await obtenerUsuariosInternos(TOKEN);
-      setRows(usuarios.map((item, index) => ({ ...item, id: item.id })));
-
+      const response = await axiosUsuariosInternos.consultar();
+      setRows(response.map((item) => ({ id: item.id, ...item })));
     };
-
     ObtenerUsuariosInternos();
-
   }, []);
 
   useEffect(() => {
     const ObtenerRol = async () => {
-      const rol = await obtenerRoles(TOKEN);
+      const rol = await axiosRoles.deUsuarioConsultar();
       setRoles(rol);
-    }
+    };
     ObtenerRol();
-
-  }, [])
+  }, []);
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -71,14 +120,29 @@ export const AltaUsuarioInterno = () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
-  const handleDeleteClick = (id) => () => {
-    setRows((oldRows) => oldRows.filter((row) => row.id !== id));
-    setRowModesModel((oldModel) => {
-      const newModel = { ...oldModel };
-      delete newModel[id];
-      return newModel;
-    });
-  }
+  const handleDeleteClick = (id) => async () => {
+    const showSwalConfirm = async () => {
+      try {
+        Swal.fire({
+          title: "¿Estás seguro?",
+          text: "¡No podrás revertir esto!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#1A76D2",
+          cancelButtonColor: "#6c757d",
+          confirmButtonText: "Si, bórralo!",
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            const bBajaOk = await axiosUsuariosInternos.eliminar(id);
+            if (bBajaOk) setRows(rows.filter((row) => row.id !== id));
+          }
+        });
+      } catch (error) {
+        console.error("Error al ejecutar eliminarRoles:", error);
+      }
+    };
+    showSwalConfirm();
+  };
 
   const handleCancelClick = (id) => () => {
     setRowModesModel({
@@ -92,176 +156,170 @@ export const AltaUsuarioInterno = () => {
     }
   };
 
-  const processRowUpdate = async (newRow) => {
-
-    const updatedRow = { ...newRow, isNew: false };
-
-    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-    // Recorda manejar el si y no con true y false
+  const processRowUpdate = async (newRow, oldRow) => {
+    console.log("processRowUpdate - INIT");
+    let bOk = false;
 
     if (newRow.isNew) {
-
-      const nuevoUsuario = {
-
-        descripcion: newRow.descripcion,
-        clave: newRow.clave,
-        rolId: newRow.rolId,
-        nombre: newRow.nombre,
-        apellido: newRow.apellido,
-        email: newRow.email,
-
+      console.log("processRowUpdate - ALTA");
+      try {
+        delete newRow.id;
+        delete newRow.repetirClave;
+        delete newRow.isNew;
+        const data = await axiosUsuariosInternos.crear(newRow);
+        if (data && data.id) {
+          newRow.id = data.id;
+          newRow.isNew = false;
+          bOk = true;
+          const newRows = rows.map((row) => (row.isNew ? newRow : row));
+          setRows(newRows);
+        } else {
+          console.log("alta sin ID generado");
+        }
+      } catch (error) {
+        console.log(
+          "X - processRowUpdate - ALTA - ERROR: " + JSON.stringify(error)
+        );
       }
-
-      await crearUsuarioInterno(TOKEN, nuevoUsuario);
-
     } else {
-
-      const usuario = {
-
-        descripcion: newRow.descripcion,
-        clave: newRow.clave,
-        rolId: newRow.rolId,
-        nombre: newRow.nombre,
-        apellido: newRow.apellido,
-        email: newRow.email,
-
+      console.log("3 - processRowUpdate - MODI ");
+      try {
+        delete newRow.isNew;
+        delete newRow.repetirClave;
+        bOk = await axiosUsuariosInternos.actualizar(newRow);
+        console.log("4 - processRowUpdate - MODI - bOk: " + bOk);
+        newRow.isNew = false;
+        if (bOk) {
+          setRows(rows.map((row) => (row.id === newRow.id ? newRow : row)));
+        }
+      } catch (error) {
+        console.log(
+          "X - processRowUpdate - MODI - ERROR: " + JSON.stringify(error)
+        );
       }
-
-      await actualizarUsuarioInterno(TOKEN, usuario, newRow.id);
-
     }
 
-    return updatedRow;
-  }
+    if (bOk) {
+      return newRow;
+    } else {
+      return oldRow;
+    }
+  };
 
   const handleRowModesModelChange = (newRowModesModel) => {
     setRowModesModel(newRowModesModel);
   };
 
   const handleHabilitar = (id) => async () => {
-
     const updatedRow = { ...rows.find((row) => row.id === id) };
     updatedRow.habilitado = !updatedRow.habilitado;
     setRows(rows.map((row) => (row.id === id ? updatedRow : row)));
 
-    const habilitado = {
-      habilitado: updatedRow.habilitado
-    }
-
-    if (updatedRow.habilitado) {
-
-      await habilitarUsuarioInterno(TOKEN, id, habilitado);
-
-    } else {
-
-      await deshabilitarUsuarioInterno(TOKEN, id, habilitado);
-
-    }
+    await axiosUsuariosInternos.habilitar(id, updatedRow.habilitado);
   };
 
   const columns = [
     {
-      field: 'apellido',
-      headerName: 'Apellido',
-      width: 200,
-      type: 'string',
+      field: "apellido",
+      headerName: "Apellido",
+      flex: 1,
+      type: "string",
       editable: true,
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
     },
     {
-      field: 'nombre',
-      headerName: 'Nombre',
-      width: 200,
-      type: 'string',
+      field: "nombre",
+      headerName: "Nombre",
+      flex: 1,
+      type: "string",
       editable: true,
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
     },
     {
-      field: 'descripcion',
-      headerName: 'Usuario',
-      width: 200,
-      type: 'string',
+      field: "descripcion",
+      headerName: "Usuario",
+      flex: 1,
+      type: "string",
       editable: true,
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
     },
     {
-      field: 'email',
-      headerName: 'Email',
-      width: 225,
-      type: 'string',
+      field: "email",
+      headerName: "Email",
+      flex: 2,
+      type: "string",
       editable: true,
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
     },
     {
-      field: 'clave',
-      headerName: 'Contraseña',
-      width: 200,
-      type: 'string',
+      field: "clave",
+      headerName: "Contraseña",
+      flex: 1,
+      type: "string",
       editable: true,
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
     },
     {
-      field: 'repetirClave',
-      headerName: 'Repetir Contraseña',
-      width: 200,
-      type: 'string',
+      field: "repetirClave",
+      headerName: "Repetir Contraseña",
+      flex: 1,
+      type: "string",
       editable: true,
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
       valueGetter: (params) => {
-
-        return params.row.clave
+        return params.row.clave;
       },
     },
     {
-      field: 'rolId',
-      headerName: 'Rol',
-      width: 200,
-      type: 'singleSelect',
+      field: "rolId",
+      headerName: "Rol",
+      flex: 2,
+      type: "singleSelect",
       editable: true,
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
       valueOptions: roles.map((item) => {
-        return { value: item.id, label: item.descripcion }
+        return { value: item.id, label: item.descripcion };
       }),
     },
     {
-      field: 'habilitado',
-      headerName: 'Habilitado',
-      width: 170,
-      type: 'string',
+      field: "habilitado",
+      headerName: "Habilitado",
+      flex: 2,
+      width: 40,
+      minWidth: 25,
+      maxWidth: 80,
+      type: "string",
       headerAlign: "center",
       align: "center",
       editable: false,
       valueGetter: (params) => {
-
-        //if (params.row.habilitado === null) return ("");
-
-        return params.row.habilitado ? "Si" : "No"
+        return params.row.habilitado ? "Si" : "No";
       },
-      headerClassName: 'header--cell',
-      cellClassName: 'habilitado--cell',
+      headerClassName: "header--cell",
+      cellClassName: "habilitado--cell",
     },
     {
-      field: 'actions',
-      headerName: 'Acciones',
-      width: 200,
-      type: 'actions',
+      field: "actions",
+      headerName: "Acciones",
+      flex: 2,
+      type: "actions",
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
       getActions: ({ id, row }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
@@ -271,7 +329,7 @@ export const AltaUsuarioInterno = () => {
               icon={<SaveIcon />}
               label="Save"
               sx={{
-                color: 'primary.main',
+                color: "primary.main",
               }}
               onClick={handleSaveClick(id)}
             />,
@@ -294,23 +352,29 @@ export const AltaUsuarioInterno = () => {
             color="inherit"
           />,
           <GridActionsCellItem
-            icon={row.habilitado ? <CloseIcon sx={{ color: 'red' }} /> : <CheckIcon sx={{ color: 'green' }} />}
+            icon={
+              row.habilitado ? (
+                <CloseIcon sx={{ color: "red" }} />
+              ) : (
+                <CheckIcon sx={{ color: "green" }} />
+              )
+            }
             label={row.habilitado ? "Cerrar" : "Abrir"}
             onClick={handleHabilitar(id)}
             color="inherit"
-          />
+          />,
         ];
       },
-    }
-  ]
+    },
+  ];
 
   return (
-    <div className='usuario_interno_container'>
+    <div className="usuario_interno_container">
       <h1>Alta Usuario Interno</h1>
       <Box
         sx={{
-          height: "400px",
-          width: "90%",
+          height: "600px",
+          width: "100%",
           overflowX: "auto",
           "& .actions": {
             color: "text.secondary",
@@ -328,23 +392,23 @@ export const AltaUsuarioInterno = () => {
             rowModesModel={rowModesModel}
             onRowModesModelChange={handleRowModesModelChange}
             onRowEditStop={handleRowEditStop}
-            processRowUpdate={processRowUpdate}
-            slots={{
-              toolbar: AltaUsuarioInternoNuevo,
-            }}
+            processRowUpdate={(updatedRow, originalRow) =>
+              processRowUpdate(updatedRow, originalRow)
+            }
+            slots={{ toolbar: crearNuevoRegistro }}
             slotProps={{
-              toolbar: { setRows, rows, setRowModesModel },
+              toolbar: { setRows, rows, setRowModesModel, volverPrimerPagina },
             }}
             sx={{
-              '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
-                width: '8px',
-                visibility: 'visible',
+              "& .MuiDataGrid-virtualScroller::-webkit-scrollbar": {
+                width: "8px",
+                visibility: "visible",
               },
-              '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
-                backgroundColor: '#ccc',
+              "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb": {
+                backgroundColor: "#ccc",
               },
-              '& .css-1iyq7zh-MuiDataGrid-columnHeaders': {
-                backgroundColor: '#1A76D2 !important',
+              "& .css-1iyq7zh-MuiDataGrid-columnHeaders": {
+                backgroundColor: "#1A76D2 !important",
               },
             }}
             initialState={{
@@ -358,5 +422,5 @@ export const AltaUsuarioInterno = () => {
         </ThemeProvider>
       </Box>
     </div>
-  )
-}
+  );
+};

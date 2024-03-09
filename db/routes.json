@@ -1,12 +1,14 @@
 {
-  "/ospim/contacto/": "/ospim-contacto",
+  "/afiliados/cuil/:cuil": "/afiliado/?cuil=:cuil",
   "/publicaciones/vigentes": "/publicacionesVigentes",
+  "/usuario/empresa/public/": "/usuario-empresa-alta",
   "/usuario/empresa/": "/usuario-empresa-alta",
   "/usuario/interno": "/usuario-interno",
   "/usuario/interno/:id": "/usuario-interno/:id",
   "/usuario/:id/habilitar/": "/usuario-interno/:id",
   "/usuario/:id/deshabilitar/": "/usuario-interno/:id",
 
+  "/empresa/public/domicilio/tipo": "/empresaDomicilioTipo",
   "/empresa/domicilio/": "/empresaDomicilio",
   "/empresa/:id/domicilio/": "/empresaDomicilio?empresaId=:id",
   "/empresa/:id/domicilio/planta/": "/empresaDomicilio/planta?empresaId=:id",
@@ -16,11 +18,14 @@
   "/empresa/contacto/": "/empresaContacto",
   "/empresa/:empresaId/contacto": "/empresaContacto/",
   "/empresa/:empresaId/contacto/:id": "/empresaContacto/:id",
+  "/empresa/public/ramo": "/ramo",
   "/empresa/ramo": "/ramo",
   "/empresa/restringida/": "/cuit-restringido/",
   "/empresa/restringida/:id": "/cuit-restringido/:id",
 
   "/auth/login/usuario": "/auth-login-usuario",
+  "/public/provincia": "/provincia",
+  "/public/provincia/:provinciaId/localidad": "/localidad?provinciaId=:provinciaId",
   "/provincia/:provinciaId/localidad": "/localidad?provinciaId=:provinciaId",
   "/camara/categoria": "/categoria",
   "/entidad/aporte": "/entidad-aporte",
@@ -33,7 +38,9 @@
   "/empresa/:empresaId/ddjj/periodo/:periodo/existe": "/DDJJ?empresaId=:empresaId&periodo=:periodo",
   
 
-  "/rol/:id/funcionalidad": "/rol/funcionalidad/getRel?rolId=:id",
+  "/roles/:id/funcionalidad": "/rol/funcionalidad/getRel?rolId=:id",
+  "/roles/:id": "/rol",
+  "/roles": "/rol",
   "/funcionalidad/:codigo/rol/:rolId": "/rolFuncionalidad/?rolId=:rolId&funcionalidad=:codigo",
   "/aportes/detalle/": "/aportesDetalle/",
   "/aportes/:codigo": "/aportes/?codigo=:codigo",

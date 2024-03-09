@@ -1,202 +1,106 @@
-import { errorBackendResponse } from "../../../../../errors/errorBackendResponse";
-import axios from "axios";
-import Swal from "sweetalert2";
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-const MESSAGE_HTTP_CREATED = import.meta.env.VITE_MESSAGE_HTTP_CREATED;
-const MESSAGE_HTTP_UPDATED = import.meta.env.VITE_MESSAGE_HTTP_UPDATED;
-const MESSAGE_HTTP_DELETED = import.meta.env.VITE_MESSAGE_HTTP_DELETED;
+import { axiosCrud } from "@components/axios/axiosCrud";
+import { showErrorBackEnd } from "@/components/axios/showErrorBackEnd";
+import swal from "@components/swal/swal";
 
+const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
+const HTTP_MSG_MODI = import.meta.env.VITE_HTTP_MSG_MODI;
+const HTTP_MSG_BAJA = import.meta.env.VITE_HTTP_MSG_BAJA;
+const HTTP_MSG_ALTA_ERROR = import.meta.env.VITE_HTTP_MSG_ALTA_ERROR;
+const HTTP_MSG_MODI_ERROR = import.meta.env.VITE_HTTP_MSG_MODI_ERROR;
+const HTTP_MSG_BAJA_ERROR = import.meta.env.VITE_HTTP_MSG_BAJA_ERROR;
+const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
 
-export const obtenerTipo = async (token) => {
+export const obtenerTipo = async () => {
+  const URL = "/empresa/contacto/tipo";
+  try {
+    const data = await axiosCrud.consultar(URL);
+    return data || [];
+  } catch (error) {
+    showErrorBackEnd(
+      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
+      error
+    );
+    return [];
+  }
+};
 
-    const URL = `${BACKEND_URL}/empresa/contacto/tipo`;
+export const obtenerDatosEmpresa = async (id) => {
+  const URL = `/empresa/${id}/contacto`;
+  try {
+    const data = await axiosCrud.consultar(URL);
+    return data || [];
+  } catch (error) {
+    showErrorBackEnd(
+      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
+      error
+    );
+    return [];
+  }
+};
 
-    const showSwalError = (descripcion) => {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: descripcion,
-            showConfirmButton: false,
-            timer: 3000,
-        })
+export const crearContacto = async (idEmpresa, contacto) => {
+  const URL = `/empresa/${idEmpresa}/contacto`;
+  try {
+    const data = await axiosCrud.crear(URL, contacto);
+    if (data && data.id) {
+      swal.showSuccess(HTTP_MSG_ALTA);
+      return data;
     }
+    throw data;
+  } catch (error) {
+    showErrorBackEnd(HTTP_MSG_ALTA_ERROR, error);
+    return {};
+  }
+};
 
-    try {
-
-        const tipoContactoResponse = await axios.get(URL, {
-            headers: {
-                'Authorization': token
-            }
-        });
-        const tipoContacto = await tipoContactoResponse.data;
-
-        return tipoContacto || [];
-
-    } catch (error) {
-
-        errorBackendResponse(error, showSwalError);
-
+export const actualizarContacto = async (idEmpresa, contacto) => {
+  const URL = `/empresa/${idEmpresa}/contacto`;
+  try {
+    const response = await axiosCrud.actualizar(URL, contacto);
+    if (response == true) {
+      swal.showSuccess(HTTP_MSG_MODI);
+      return true;
     }
-}
+    throw response;
+  } catch (error) {
+    showErrorBackEnd(HTTP_MSG_MODI_ERROR, error);
+    return false;
+  }
+};
 
-export const obtenerDatosEmpresa = async (token) => {
-
-    const URL = `${BACKEND_URL}/empresa/:empresaId/contacto`;
-
-    const showSwalError = (descripcion) => {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: descripcion,
-            showConfirmButton: false,
-            timer: 3000,
-        })
+export const eliminarContacto = async (idEmpresa, idContacto) => {
+  const URL = `/empresa/${idEmpresa}/contacto`;
+  try {
+    const response = await axiosCrud.eliminar(URL, idContacto);
+    if (response == true) {
+      swal.showSuccess(HTTP_MSG_BAJA);
+      return true;
     }
+    throw response;
+  } catch (error) {
+    showErrorBackEnd(HTTP_MSG_BAJA_ERROR, error);
+    return false;
+  }
+};
 
-    try {
+export const axiosContacto = {
+  obtenerTipo: async function () {
+    return obtenerTipo();
+  },
 
-        const empresaResponse = await axios.get(URL, {
-            headers: {
-                'Authorization': token
-            }
-        });
-        const empresa = await empresaResponse.data;
+  obtenerDatosEmpresa: async function (idEmpresa) {
+    return obtenerDatosEmpresa(idEmpresa);
+  },
 
-        return empresa || [];
+  crear: async function (idEmpresa, contacto) {
+    return crearContacto(idEmpresa, contacto);
+  },
 
-    } catch (error) {
+  actualizar: async function (idEmpresa, contacto) {
+    return actualizarContacto(idEmpresa, contacto);
+  },
 
-        errorBackendResponse(error, showSwalError);
-
-    }
-}
-
-export const crearContacto = async (nuevoContacto, token) => {
-
-    const URL = `${BACKEND_URL}/empresa/:empresaId/contacto`;
-
-    const showSwalError = (descripcion) => {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: descripcion,
-            showConfirmButton: false,
-            timer: 2000,
-        })
-    }
-
-    const showSwallSuccess = () => {
-        Swal.fire({
-            icon: 'success',
-            title: MESSAGE_HTTP_CREATED,
-            showConfirmButton: false,
-            timer: 2000,
-        })
-    }
-
-    try {
-
-        const contactoResponse = await axios.post(URL, nuevoContacto, {
-            headers: {
-                'Authorization': token
-            }
-        });
-        
-        if(contactoResponse.status === 201) {
-            showSwallSuccess();
-        }
-
-    } catch (error) {
-
-        errorBackendResponse(error, showSwalError);
-
-    }
-
-}
-
-export const actualizarContacto = async (idContacto, contacto, token) => {
-
-    const URL = `${BACKEND_URL}/empresa/:empresaId/contacto/${idContacto}`;
-
-    const showSwalError = (descripcion) => {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: descripcion,
-            showConfirmButton: false,
-            timer: 2000,
-        })
-    }
-
-    const showSwallSuccess = () => {
-        Swal.fire({
-            icon: 'success',
-            title: MESSAGE_HTTP_UPDATED,
-            showConfirmButton: false,
-            timer: 2000,
-        })
-    }
-
-    try {
-
-        const contactoResponse = await axios.put(URL, contacto, {
-            headers: {
-                'Authorization': token
-            }
-        });
-
-        console.log(contactoResponse);
-        
-        if(contactoResponse.status === 200) {
-            showSwallSuccess();
-        }
-
-    } catch (error) {
-
-        errorBackendResponse(error, showSwalError);
-
-    }
-
-}
-
-export const eliminarContacto = async (idContacto, token) => {
-
-    const URL = `${BACKEND_URL}/empresa/:empresaId/contacto/${idContacto}`;
-
-    const showSwalError = (descripcion) => {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: descripcion,
-            showConfirmButton: false,
-            timer: 3000,
-        })
-    }
-
-    const showSwallSuccess = () => {
-        Swal.fire({
-            icon: 'success',
-            title: MESSAGE_HTTP_DELETED,
-            showConfirmButton: false,
-            timer: 2000,
-        })
-    }
-
-    try {
-
-        const contactoResponse = await axios.delete(URL, {
-            headers: {
-                'Authorization': token
-            }
-        });
-        
-        if(contactoResponse.status === 200) {
-            showSwallSuccess();
-        }
-
-    } catch (error) {
-
-        errorBackendResponse(error, showSwalError);
-
-    }
-}
+  eliminar: async function (idEmpresa, idContacto) {
+    return eliminarContacto(idEmpresa, idContacto);
+  },
+};

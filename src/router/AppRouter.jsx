@@ -1,12 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Navigate } from "react-router";
-
-/* import { LoginPage, RegisterPage, DashboardPage } from "../pages"; */
-
 import PrivateRoute from "./PrivateRoute";
-import { DeclaracionesJuradas } from "../pages/dashboard/pages_dashboard/declaraciones_juradas/DeclaracionesJuradas";
+import { DeclaracionesJuradas } from "../pages/dashboard/pages_dashboard/ddjj/DDJJ";
 import { Inicio } from "../pages/dashboard/pages_dashboard/inicio/Inicio";
-/* import { Categorias } from "../pages/dashboard/pages_dashboard/categorias/Categorias"; */
 import NavBar from "../components/navbar/NavBar";
 import { DatosEmpresa } from "../pages/dashboard/pages_dashboard/datos_empresa/DatosEmpresa";
 import { Publicaciones } from "../pages/dashboard/pages_dashboard/publicaciones/Publicaciones";
@@ -56,7 +52,6 @@ const AppRouter = () => {
             <Route path="detalleboleta" element={<DetalleBoleta />} />
             <Route path="generarotrospagos" element={<GenerarOtrosPagos />} />
             <Route path="detalleotrospagos" errorElement={<DetalleOtrosPagos />}/>
-            
           </Route>
           <Route path="registercompany" element={<RegistroEmpresa />} />
           <Route index element={<Navigate to="/login" />} />

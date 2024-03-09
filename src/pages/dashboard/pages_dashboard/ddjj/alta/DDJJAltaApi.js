@@ -1,6 +1,7 @@
+import oAxios from "@components/axios/axiosInstace";
 import { axiosCrud } from "@components/axios/axiosCrud";
 import { showErrorBackEnd } from "@/components/axios/showErrorBackEnd";
-import swal from "@components/swal/swal";
+import swal from "@/components/swal/swal";
 
 const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
 const HTTP_MSG_MODI = import.meta.env.VITE_HTTP_MSG_MODI;
@@ -10,8 +11,8 @@ const HTTP_MSG_MODI_ERROR = import.meta.env.VITE_HTTP_MSG_MODI_ERROR;
 const HTTP_MSG_BAJA_ERROR = import.meta.env.VITE_HTTP_MSG_BAJA_ERROR;
 const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
 
-export const obtenerTipoDomicilio = async () => {
-  const URL = "/empresa/domicilio/tipo";
+export const obtenerAfiliados = async (cuil) => {
+  const URL = `/afiliados/cuil/${cuil}`;
   try {
     const data = await axiosCrud.consultar(URL);
     return data || [];
@@ -24,8 +25,8 @@ export const obtenerTipoDomicilio = async () => {
   }
 };
 
-export const obtenerProvincias = async () => {
-  const URL = "/provincia";
+export const obtenerCamaras = async () => {
+  const URL = "/camara";
   try {
     const data = await axiosCrud.consultar(URL);
     return data || [];
@@ -38,8 +39,8 @@ export const obtenerProvincias = async () => {
   }
 };
 
-export const obtenerLocalidades = async (idProvincia) => {
-  const URL = `/provincia/${idProvincia}/localidad`;
+export const obtenerCategorias = async () => {
+  const URL = "camara/categoria";
   try {
     const data = await axiosCrud.consultar(URL);
     return data || [];
@@ -52,8 +53,8 @@ export const obtenerLocalidades = async (idProvincia) => {
   }
 };
 
-export const obtenerDomicilios = async (empresaId) => {
-  const URL = `/empresa/${empresaId}/domicilio`;
+export const obtenerPlantaEmpresas = async (empresaId) => {
+  const URL = `/empresa/${empresaId}/domicilio/planta`;
   try {
     const data = await axiosCrud.consultar(URL);
     return data || [];
@@ -66,10 +67,10 @@ export const obtenerDomicilios = async (empresaId) => {
   }
 };
 
-export const crearDomicilio = async (empresaId, domicilio) => {
-  const URL = `/empresa/${empresaId}/domicilio`;
+export const crearAltaDeclaracionJurada = async (empresaId, registro) => {
+  const URL = `/empresa/${empresaId}/ddjj`;
   try {
-    const data = await axiosCrud.crear(URL, domicilio);
+    const data = await axiosCrud.crear(URL, registro);
     if (data && data.id) {
       swal.showSuccess(HTTP_MSG_ALTA);
       return data;
@@ -81,10 +82,14 @@ export const crearDomicilio = async (empresaId, domicilio) => {
   }
 };
 
-export const actualizarDomicilio = async (empresaId, domicilio) => {
-  const URL = `/empresa/${empresaId}/domicilio/${domicilio.id}`;
+export const actualizarDeclaracionJurada = async (
+  empresaId,
+  idDDJJ,
+  registro
+) => {
+  const URL = `/empresa/${empresaId}/ddjj/${idDDJJ}`;
   try {
-    const response = await axiosCrud.actualizar(URL, domicilio);
+    const response = await axiosCrud.actualizar(URL, registro);
     if (response == true) {
       swal.showSuccess(HTTP_MSG_MODI);
       return true;
@@ -96,47 +101,46 @@ export const actualizarDomicilio = async (empresaId, domicilio) => {
   }
 };
 
-export const eliminarDomicilio = async (empresaId, idDomicilio) => {
-  const URL = `/empresa/${empresaId}/domicilio`;
+export const validarAltaDeclaracionJurada = async (empresaId, registro) => {
+  const URL = `/empresa/${empresaId}/ddjj/validar`;
   try {
-    const response = await axiosCrud.eliminar(URL, idDomicilio);
-    if (response == true) {
-      swal.showSuccess(HTTP_MSG_BAJA);
-      return true;
-    }
-    throw response;
+    const validarDDJJResponse = await oAxios.post(URL, registro);
+    return validarDDJJResponse.data || [];
   } catch (error) {
-    showErrorBackEnd(HTTP_MSG_BAJA_ERROR, error);
-    return false;
+    if (error.response && error.response.data) {
+      const { errores, codigo, descripcion, ticket, tipo } =
+        error.response.data;
+      return errores || [];
+    }
   }
 };
 
-export const axiosDomicilio = {
-  obtenerTipo: async function () {
-    return obtenerTipoDomicilio();
+export const axiosDDJJ = {
+  getCamaras: async function () {
+    return obtenerCamaras();
   },
 
-  obtenerProvincias: async function () {
-    return obtenerProvincias();
+  getCategorias: async function () {
+    return obtenerCategorias();
   },
 
-  obtenerLocalidades: async function (provinciaId) {
-    return obtenerLocalidades(provinciaId);
+  getAfiliado: async function (cuil) {
+    return obtenerAfiliados(cuil);
   },
 
-  obtenerDomicilios: async function (empresaId) {
-    return obtenerDomicilios(empresaId);
+  getPlantas: async function (empresaId) {
+    return obtenerPlantaEmpresas(empresaId);
   },
 
-  crear: async function (idEmpresa, registro) {
-    return crearDomicilio(idEmpresa, registro);
+  crear: async function (empresaId, registro) {
+    return crearAltaDeclaracionJurada(empresaId, registro);
   },
 
-  actualizar: async function (idEmpresa, registro) {
-    return actualizarDomicilio(idEmpresa, registro);
+  actualizar: async function (empresaId, id, registro) {
+    return actualizarDeclaracionJurada(empresaId, id, registro);
   },
 
-  eliminar: async function (idEmpresa, idContacto) {
-    return eliminarDomicilio(idEmpresa, idContacto);
+  validar: async function (empresaId, registro) {
+    return validarAltaDeclaracionJurada(empresaId, registro);
   },
 };

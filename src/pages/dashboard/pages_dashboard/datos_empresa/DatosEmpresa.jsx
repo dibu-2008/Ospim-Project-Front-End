@@ -1,21 +1,23 @@
+import localStorageService from "@components/localStorage/localStorageService";
 import "./DatosEmpresa.css";
 import { useEffect, useState, useMemo } from "react";
 import { GrillaEmpresaContacto } from "./grilla_empresa_contacto/GrillaEmpresaContacto";
 import { GrillaEmpresaDomilicio } from "./grilla_empresa_domicilio/GrillaEmpresaDomilicio";
-import TextField from "@mui/material/TextField";
-import Box from "@mui/material/Box";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import Button from "@mui/material/Button";
+import {
+  Button,
+  Select,
+  FormControl,
+  MenuItem,
+  InputLabel,
+  Box,
+  TextField,
+  Tabs,
+  Tab,
+} from "@mui/material";
 import PropTypes from "prop-types";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import { getEmpresa, getRamo, modificarEmpresa } from "./DatosEmpresaApi";
-import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
-import * as locales from '@mui/material/locale';
-import './DatosEmpresa.css';
+import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
+import * as locales from "@mui/material/locale";
+import axiosDatosEmpre from "./DatosEmpresaApi";
 
 // Logica de los tabs inicio
 function CustomTabPanel(props) {
@@ -52,16 +54,9 @@ function a11yProps(index) {
 }
 
 export const DatosEmpresa = () => {
-
-  const TOKEN = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.usuario.token;
-  const ID_EMPRESA = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.empresa.id;
-  /* const ID = STATE.usuarioLogueado.empresa.id;
-  const TOKEN = STATE.usuarioLogueado.usuario.token;
-  const CUIT = STATE.usuarioLogueado.empresa.cuit;
-  const RAZONSOCIAL = STATE.usuarioLogueado.empresa.razonSocial;
-  const RAMO = STATE.usuarioLogueado.empresa.ramoId; */
-
-  const [locale, setLocale] = useState('esES');
+  const ID_EMPRESA = localStorageService.getEmpresaId();
+  console.log("DatosEmpresa - INIT - ID_EMPRESA: " + ID_EMPRESA);
+  const [locale, setLocale] = useState("esES");
   const [rowsContacto, setRowsContacto] = useState([]);
   const [rowsDomicilio, setRowsDomicilio] = useState([]);
   const [idEmpresa, setIdEmpresa] = useState("");
@@ -75,12 +70,13 @@ export const DatosEmpresa = () => {
 
   const themeWithLocale = useMemo(
     () => createTheme(theme, locales[locale]),
-    [locale, theme],
+    [locale, theme]
   );
 
   useEffect(() => {
     const ObtenerEmpresa = async () => {
-      const empresa = await getEmpresa(TOKEN);
+      const empresa = await axiosDatosEmpre.consultarEmpresa();
+      console.log("** ObtenerEmpresa - empresa: " + JSON.stringify(empresa));
       setCuit(empresa.empresa.cuit);
       setRazonSocial(empresa.empresa.razonSocial);
       setIdEmpresa(empresa.empresa.id);
@@ -91,16 +87,12 @@ export const DatosEmpresa = () => {
 
   useEffect(() => {
     const ObtenerRamos = async () => {
-      const ramos = await getRamo(TOKEN);
+      const ramos = await axiosDatosEmpre.consultarRamo();
+      console.log(ramos);
       setRamos(ramos);
-      //const ramoEncontrado = ramos.find((ramo)=>ramo.id === ramo);
-      //setRamo(ramoEncontrado.id);
-    }
+    };
     ObtenerRamos();
-
-  }, [])
-
-
+  }, []);
 
   const handleChangeTabState = (event, newValue) => {
     setTabState(newValue);
@@ -123,9 +115,10 @@ export const DatosEmpresa = () => {
     const empresa = {
       razonSocial: razonSocial,
       ramoId: ramo,
+      id: idEmpresa,
     };
-    await modificarEmpresa(TOKEN, idEmpresa, empresa)
-  }
+    await axiosDatosEmpre.actualizar(empresa);
+  };
 
   return (
     <div className="datos_empresa_container">
@@ -146,7 +139,7 @@ export const DatosEmpresa = () => {
           type="text"
           name="cuit"
           value={cuit}
-          /// onChange={OnChangeCuit} 
+          /// onChange={OnChangeCuit}
           autoComplete="off"
           label="CUIT"
         />
@@ -203,19 +196,18 @@ export const DatosEmpresa = () => {
         <CustomTabPanel value={tabState} index={0}>
           <ThemeProvider theme={themeWithLocale}>
             <GrillaEmpresaContacto
+              idEmpresa={ID_EMPRESA}
               rows={rowsContacto}
               setRows={setRowsContacto}
-              token={TOKEN}
             />
           </ThemeProvider>
         </CustomTabPanel>
         <CustomTabPanel value={tabState} index={1}>
           <ThemeProvider theme={themeWithLocale}>
             <GrillaEmpresaDomilicio
-              rowsDomicilio={rowsDomicilio}
-              setRowsDomicilio={setRowsDomicilio}
-              token={TOKEN}
-              ID_EMPRESA={ID_EMPRESA}
+              idEmpresa={ID_EMPRESA}
+              rows={rowsDomicilio}
+              setRows={setRowsDomicilio}
             />
           </ThemeProvider>
         </CustomTabPanel>

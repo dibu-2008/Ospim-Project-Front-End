@@ -47,12 +47,12 @@ form {
 	height: 100%;
 }
 /* TODO : Revisar si estos estilos se usan */
-.form_register_company {
+/* .form_register_company {
 	width: 100%;
 	margin: 80px 0px;
 	padding-inline: 64px;
 	align-items: flex-start;
-}
+} */
 
 .input-group {
 	display: flex;
@@ -61,16 +61,16 @@ form {
 	margin: 10px 0;
 	text-align: center;
 	max-width: 500px;
-}
+} 
 
-.container_btn_pass_firts {
+/* .container_btn_pass_firts {
 	width: 100%;
 	margin-top: 25px;
 	display: flex;
 	justify-content: space-between;
-}
+} */
 
-.container_btn_pass_firts a {
+/* .container_btn_pass_firts a {
 	cursor: pointer;
 	display: block;
 	text-align: center;
@@ -93,7 +93,7 @@ form {
 	width: 100%;
 	text-align: center;
 	color: #1a76d2;
-}
+} */
 
 
 
@@ -127,17 +127,17 @@ form {
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-	margin: 50px 0;
+	margin: 43px 0;
 	text-align: center;
 	max-width: 500px;
 }
 
-.form_register_company {
+/* .form_register_company {
 	width: 100%;
 	margin: 80px 0px;
 	padding-inline: 64px;
 	align-items: flex-start;
-}
+} */
 
 
 .container_btn_pass_firts {
@@ -165,12 +165,12 @@ form {
 	color: #1a76d2;
 }
 
-.internal_user {
+/* .internal_user {
 	margin: 0 auto;
 	width: 100%;
 	text-align: center;
 	color: #1a76d2;
-}
+} */
 
 
 /* RESPONSIVE */

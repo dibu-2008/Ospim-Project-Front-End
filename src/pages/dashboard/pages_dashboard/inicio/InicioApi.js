@@ -1,73 +1,40 @@
+import oAxios from "@components/axios/axiosInstace";
 import { errorBackendResponse } from "../../../../errors/errorBackendResponse";
-import axios from 'axios'
-import Swal from 'sweetalert2'
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-export const ObtenerDatosDeContacto = async (token) => {
+export const ObtenerDatosDeContacto = async () => {
+  /*
+  const contacto = {
+    email: "mesadeayuda@ospim.com.ar",
+    telefono: "011-4502-2075",
+    whasap: "15-4569-4545",
+  };
+  return contacto;
+  */
+  const URL = `/ospim/contacto`;
+  console.log("ObtenerDatosDeContacto - URL: ");
+  console.log(URL);
 
-    const URL = `${BACKEND_URL}/ospim/contacto`;
+  try {
+    const response = await oAxios.get(URL);
+    const data = await response.data;
+    return data || [];
+  } catch (error) {
+    console.log("ObtenerDatosDeContacto - ERROR 11 ");
+    console.log("ObtenerDatosDeContacto - ERROR - error: ");
+    console.log(error);
+    errorBackendResponse(error);
+  }
+};
 
-    const showSwalError = (descripcion) => {
+export const ObtenerPublicacionesVigentes = async () => {
+  const URL = `/publicaciones/vigentes`;
 
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: descripcion,
-            showConfirmButton: false,
-            timer: 3000,
-        })
-
-    }
-
-    try {
-
-        const contactoResponse = await axios.get(URL, {
-            headers: {
-                'Authorization': token
-            }
-        });
-
-        const contacto = await contactoResponse.data;
-
-        return contacto || [];
-
-    } catch (error) {
-
-        errorBackendResponse(error, showSwalError);
-
-    }
-
-}
-
-
-export const ObtenerPublicacionesVigentes = async (token, ruta) => {
-    
-        const URL = `${BACKEND_URL}${ruta}`;
-    
-        const showSwalError = (descripcion) => {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: descripcion,
-                showConfirmButton: false,
-                timer: 3000,
-            })
-        }
-    
-        try {
-            
-            const novedadesResponse = await axios.get(URL, {
-                headers: {
-                    'Authorization': token
-                }
-            });
-            const novedades = await novedadesResponse.data;
-    
-            return novedades || [];
-    
-        } catch (error) {
-    
-            errorBackendResponse(error, showSwalError);
-    
-        }  
-} 
+  try {
+    const response = await oAxios.get(URL);
+    const data = await response.data;
+    return data || [];
+  } catch (error) {
+    console.log("ObtenerPublicacionesVigentes - ERROR");
+    errorBackendResponse(error);
+  }
+};
