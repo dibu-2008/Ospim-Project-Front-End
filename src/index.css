@@ -19,6 +19,28 @@ body {
 	margin: 0 auto;
 }
 
+.link_animado {
+    position: relative;
+    text-decoration: none;
+    color: #1A76D2;
+}
+
+.link_animado::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background-color: #1A76D2;
+    transition: width 0.3s ease;
+}
+
+.link_animado:hover::after {
+    top: 25px;
+    width: 100%;
+}
+
 /* LOGIN STYLES */
 
 /* REGISTER COMPANY */
