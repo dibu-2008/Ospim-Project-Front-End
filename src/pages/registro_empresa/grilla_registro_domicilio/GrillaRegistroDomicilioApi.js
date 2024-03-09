@@ -1,31 +1,40 @@
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-import axios from "axios";
-import Swal from "sweetalert2";
-import { errorBackendResponse } from "../../../errors/errorBackendResponse";
+import { axiosCrud } from "@components/axios/axiosCrud";
+import { showErrorBackEnd } from "@/components/axios/showErrorBackEnd";
+import swal from "@/components/swal/swal";
+
+const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
+const HTTP_MSG_MODI = import.meta.env.VITE_HTTP_MSG_MODI;
+const HTTP_MSG_BAJA = import.meta.env.VITE_HTTP_MSG_BAJA;
+const HTTP_MSG_ALTA_ERROR = import.meta.env.VITE_HTTP_MSG_ALTA_ERROR;
+const HTTP_MSG_MODI_ERROR = import.meta.env.VITE_HTTP_MSG_MODI_ERROR;
+const HTTP_MSG_BAJA_ERROR = import.meta.env.VITE_HTTP_MSG_BAJA_ERROR;
+const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
 
 export const obtenerTipoDomicilio = async () => {
-  const URL = `${BACKEND_URL}/empresa/public/domicilio/tipo`;
-
+  const URL = "/empresa/public/domicilio/tipo";
   try {
-    const tipoDomicilioResponse = await axios.get(URL);
-    const tipoDomicilio = await tipoDomicilioResponse.data;
-
-    return tipoDomicilio || [];
+    const data = await axiosCrud.consultar(URL);
+    return data || [];
   } catch (error) {
-    errorBackendResponse(error);
+    showErrorBackEnd(
+      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
+      error
+    );
+    return [];
   }
 };
 
 export const obtenerProvincias = async () => {
-  const URL = `${BACKEND_URL}/public/provincia`;
-
+  const URL = "/public/provincia";
   try {
-    const provinciasResponse = await axios.get(URL);
-    const provincias = await provinciasResponse.data;
-
-    return provincias || [];
+    const data = await axiosCrud.consultar(URL);
+    return data || [];
   } catch (error) {
-    errorBackendResponse(error);
+    showErrorBackEnd(
+      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
+      error
+    );
+    return [];
   }
 };
 
@@ -33,15 +42,29 @@ export const obtenerLocalidades = async (idProvincia) => {
   if (idProvincia == null) {
     return [];
   }
-
-  const URL = `${BACKEND_URL}/public/provincia/${idProvincia}/localidad`;
-
+  const URL = `/public/provincia/${idProvincia}/localidad`;
   try {
-    const localidadesResponse = await axios.get(URL);
-    const localidades = await localidadesResponse.data;
-
-    return localidades || [];
+    const data = await axiosCrud.consultar(URL);
+    return data || [];
   } catch (error) {
-    errorBackendResponse(error);
+    showErrorBackEnd(
+      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
+      error
+    );
+    return [];
   }
+};
+
+export const axiosDomicilios = {
+  getTipoDomicilio: async function () {
+    return obtenerTipoDomicilio();
+  },
+
+  getProvincias: async function () {
+    return obtenerProvincias();
+  },
+
+  getLocalidades: async function (provinciaId) {
+    return obtenerLocalidades(provinciaId);
+  },
 };

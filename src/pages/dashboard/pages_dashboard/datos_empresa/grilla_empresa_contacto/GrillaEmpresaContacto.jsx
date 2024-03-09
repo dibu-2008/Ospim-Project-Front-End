@@ -6,27 +6,20 @@ import {
   GridActionsCellItem,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
-import Button from "@mui/material/Button";
+import { Button, Box } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
-import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
-import {
-  actualizarContacto,
-  crearContacto,
-  eliminarContacto,
-  obtenerDatosEmpresa,
-  obtenerTipo,
-} from "./GrillaEmpresaContactoApi";
-import Box from "@mui/material/Box";
+import SaveIcon from "@mui/icons-material/Save";
+import { axiosContacto } from "./GrillaEmpresaContactoApi";
 import Swal from "sweetalert2";
 
 function EditToolbar(props) {
-  const { setRows, rows, setRowModesModel, volverPrimerPagina  } = props;
+  const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
 
   const handleClick = () => {
-    const maxId = Math.max(...rows.map((row) => row.id), 0);
+    const maxId = rows ? Math.max(...rows.map((row) => row.id), 0) : 1;
 
     const newId = maxId + 1;
 
@@ -53,8 +46,7 @@ function EditToolbar(props) {
   );
 }
 
-export const GrillaEmpresaContacto = ({ rows, setRows, token }) => {
-
+export const GrillaEmpresaContacto = ({ idEmpresa, rows, setRows }) => {
   const [rowModesModel, setRowModesModel] = useState({});
   const [tipoContacto, setTipoContacto] = useState([]);
   const [paginationModel, setPaginationModel] = useState({
@@ -71,8 +63,7 @@ export const GrillaEmpresaContacto = ({ rows, setRows, token }) => {
 
   useEffect(() => {
     const getTipoContacto = async () => {
-      const tipo = await obtenerTipo(token);
-
+      const tipo = await axiosContacto.obtenerTipo();
       setTipoContacto(tipo.map((item) => ({ ...item })));
     };
     getTipoContacto();
@@ -80,8 +71,8 @@ export const GrillaEmpresaContacto = ({ rows, setRows, token }) => {
 
   useEffect(() => {
     const getDatosEmpresa = async () => {
-      const datosEmpresa = await obtenerDatosEmpresa(token);
-
+      console.log("** getDatosEmpresa - idEmpresa: " + idEmpresa);
+      const datosEmpresa = await axiosContacto.obtenerDatosEmpresa(idEmpresa);
       setRows(datosEmpresa.map((item) => ({ ...item, id: item.id })));
     };
     getDatosEmpresa();
@@ -102,25 +93,24 @@ export const GrillaEmpresaContacto = ({ rows, setRows, token }) => {
   };
 
   const handleDeleteClick = (id) => async () => {
-
     const showSwalConfirm = async () => {
       try {
         Swal.fire({
-          title: '¿Estás seguro?',
+          title: "¿Estás seguro?",
           text: "¡No podrás revertir esto!",
-          icon: 'warning',
+          icon: "warning",
           showCancelButton: true,
-          confirmButtonColor: '#1A76D2',
-          cancelButtonColor: '#6c757d',
-          confirmButtonText: 'Si, bórralo!'
+          confirmButtonColor: "#1A76D2",
+          cancelButtonColor: "#6c757d",
+          confirmButtonText: "Si, bórralo!",
         }).then(async (result) => {
           if (result.isConfirmed) {
-            setRows(rows.filter((row) => row.id !== id));
-            await eliminarContacto(id, token);
+            const bBajaOk = await axiosContacto.eliminar(idEmpresa, id);
+            if (bBajaOk) setRows(rows.filter((row) => row.id !== id));
           }
         });
       } catch (error) {
-        console.error('Error al ejecutar eliminarFeriado:', error);
+        console.error("Error al ejecutar eliminarContacto:", error);
       }
     };
 
@@ -139,33 +129,48 @@ export const GrillaEmpresaContacto = ({ rows, setRows, token }) => {
     }
   };
 
-  const processRowUpdate = async (newRow) => {
-
-    const updatedRow = { ...newRow, isNew: false };
-
+  const processRowUpdate = async (newRow, oldRow) => {
+    let bOk = false;
     if (newRow.isNew) {
-      const nuevoContacto = {
-        tipo: newRow.tipo,
-        prefijo: newRow.prefijo,
-        valor: newRow.valor,
-      };
-
-      await crearContacto(nuevoContacto, token);
-
+      try {
+        delete newRow.id;
+        delete newRow.isNew;
+        const data = await axiosContacto.crear(idEmpresa, newRow);
+        if (data && data.id) {
+          newRow.id = data.id;
+          newRow.isNew = false;
+          bOk = true;
+          const newRows = rows.map((row) => (row.isNew ? newRow : row));
+          setRows(newRows);
+        } else {
+          console.log("alta sin ID generado");
+        }
+      } catch (error) {
+        console.log(
+          "X - processRowUpdate - ALTA - ERROR: " + JSON.stringify(error)
+        );
+      }
     } else {
-
-      const contacto = {
-        tipo: newRow.tipo,
-        prefijo: newRow.prefijo,
-        valor: newRow.valor,
-      };
-
-      await actualizarContacto(newRow.id, contacto, token);
+      try {
+        delete newRow.isNew;
+        bOk = await axiosContacto.actualizar(idEmpresa, newRow);
+        console.log("4 - processRowUpdate - MODI - bOk: " + bOk);
+        newRow.isNew = false;
+        if (bOk) {
+          setRows(rows.map((row) => (row.id === newRow.id ? newRow : row)));
+        }
+      } catch (error) {
+        console.log(
+          "X - processRowUpdate - MODI - ERROR: " + JSON.stringify(error)
+        );
+      }
     }
 
-    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-
-    return updatedRow;
+    if (bOk) {
+      return newRow;
+    } else {
+      return oldRow;
+    }
   };
 
   const handleRowModesModelChange = (newRowModesModel) => {
@@ -181,7 +186,7 @@ export const GrillaEmpresaContacto = ({ rows, setRows, token }) => {
       type: "singleSelect",
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
       valueOptions: tipoContacto.map((item) => {
         return {
           value: item.codigo,
@@ -197,7 +202,7 @@ export const GrillaEmpresaContacto = ({ rows, setRows, token }) => {
       editable: true,
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
     },
     {
       field: "valor",
@@ -207,7 +212,7 @@ export const GrillaEmpresaContacto = ({ rows, setRows, token }) => {
       editable: true,
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
     },
     {
       field: "actions",
@@ -216,7 +221,7 @@ export const GrillaEmpresaContacto = ({ rows, setRows, token }) => {
       type: "actions",
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
@@ -280,7 +285,9 @@ export const GrillaEmpresaContacto = ({ rows, setRows, token }) => {
         rowModesModel={rowModesModel}
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
-        processRowUpdate={processRowUpdate}
+        processRowUpdate={(updatedRow, originalRow) =>
+          processRowUpdate(updatedRow, originalRow)
+        }
         slots={{
           toolbar: EditToolbar,
         }}
@@ -288,20 +295,20 @@ export const GrillaEmpresaContacto = ({ rows, setRows, token }) => {
           toolbar: { setRows, rows, setRowModesModel, volverPrimerPagina },
         }}
         sx={{
-          '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
-            width: '8px',
-            visibility: 'visible',
+          "& .MuiDataGrid-virtualScroller::-webkit-scrollbar": {
+            width: "8px",
+            visibility: "visible",
           },
-          '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
-            backgroundColor: '#ccc',
+          "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb": {
+            backgroundColor: "#ccc",
           },
-          '& .css-1iyq7zh-MuiDataGrid-columnHeaders': {
-            backgroundColor: '#1A76D2 !important',
+          "& .css-1iyq7zh-MuiDataGrid-columnHeaders": {
+            backgroundColor: "#1A76D2 !important",
           },
         }}
         paginationModel={paginationModel}
-            onPaginationModelChange={setPaginationModel}
-            pageSizeOptions={[10, 15, 25]}
+        onPaginationModelChange={setPaginationModel}
+        pageSizeOptions={[10, 15, 25]}
       />
     </Box>
   );

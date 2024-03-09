@@ -124,6 +124,10 @@
     {
       "descripcion": "CONTADURIA",
       "id": 8
+    },
+    {
+      "descripcion": "PRUEBA III",
+      "id": 9
     }
   ],
   "funcionalidad": [
@@ -356,39 +360,11 @@
   ],
   "publicaciones": [
     {
-      "titulo": "Publicacion 02",
-      "cuerpo": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius iure sit hic deserunt, repudiandae necessitatibus unde quam optio laborum illo magnam expedita ab voluptatem! Perspiciatis atque officiis nostrum temporibus repellendus.",
-      "vigenciaDesde": "2024-02-07T00:00:00.000Z",
-      "vigenciaHasta": "2025-02-07T00:00:00.000Z",
-      "id": 15
-    },
-    {
-      "titulo": "Publicacion 03",
-      "cuerpo": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa voluptas distinctio recusandae? Dicta placeat atque ad ipsum iusto. Dolore, ullam nemo. Minima illum libero autem soluta obcaecati nesciunt deleniti! Ea!",
-      "vigenciaDesde": "2024-02-07T00:00:00.000Z",
-      "vigenciaHasta": "2025-02-07T00:00:00.000Z",
-      "id": 16
-    },
-    {
-      "titulo": "Publicacion 04",
-      "cuerpo": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique magni, repellendus eveniet aliquid tempora consectetur ullam doloribus? Consectetur, eaque vero corporis quidem architecto quod quae. Sit eum maiores soluta iste!",
-      "vigenciaDesde": "2024-02-07T00:00:00.000Z",
-      "vigenciaHasta": "2025-02-07T00:00:00.000Z",
-      "id": 17
-    },
-    {
       "titulo": "Publicacion 05",
       "cuerpo": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ex dolore consequatur ipsam deserunt adipisci recusandae nulla aliquid vero! Eveniet dolores excepturi repellat architecto laborum necessitatibus reiciendis, ad obcaecati. Asperiores, quam.",
       "vigenciaDesde": "2024-02-07T00:00:00.000Z",
       "vigenciaHasta": "2025-02-07T00:00:00.000Z",
       "id": 18
-    },
-    {
-      "titulo": "Publicacion 06",
-      "cuerpo": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus, atque molestiae laboriosam fugit nemo quas velit quos. Enim blanditiis temporibus dolore quo modi aperiam soluta officia esse ipsam non suscipit!",
-      "vigenciaDesde": "2024-02-07T00:00:00.000Z",
-      "vigenciaHasta": "2025-02-07T00:00:00.000Z",
-      "id": 19
     },
     {
       "titulo": "Publicacion 07",
@@ -398,67 +374,11 @@
       "id": 20
     },
     {
-      "titulo": "Publicacion 08",
-      "cuerpo": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis facilis itaque ratione quidem saepe. Quis repudiandae ullam minima, error aliquid dolor quos dignissimos, voluptatum voluptas eius neque modi veritatis autem.",
-      "vigenciaDesde": "2024-02-07T00:00:00.000Z",
-      "vigenciaHasta": "2025-02-07T00:00:00.000Z",
-      "id": 21
-    },
-    {
-      "titulo": "Publicacion 09",
-      "cuerpo": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi quaerat unde tempore eveniet inventore recusandae nihil dolor error commodi ipsa? Voluptate similique voluptatum modi suscipit rerum ab dolore minus voluptas.",
-      "vigenciaDesde": "2024-02-07T00:00:00.000Z",
-      "vigenciaHasta": "2025-02-07T00:00:00.000Z",
-      "id": 22
-    },
-    {
-      "titulo": "Publicacion 10",
-      "cuerpo": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi quaerat unde tempore eveniet inventore recusandae nihil dolor error commodi ipsa? Voluptate similique voluptatum modi suscipit rerum ab dolore minus voluptas.",
-      "vigenciaDesde": "2024-02-07T00:00:00.000Z",
-      "vigenciaHasta": "2025-02-07T00:00:00.000Z",
-      "id": 23
-    },
-    {
-      "titulo": "Publicacion 11",
-      "cuerpo": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi quaerat unde tempore eveniet inventore recusandae nihil dolor error commodi ipsa? Voluptate similique voluptatum modi suscipit rerum ab dolore minus voluptas.",
-      "vigenciaDesde": "2024-02-07T00:00:00.000Z",
-      "vigenciaHasta": "2025-02-07T00:00:00.000Z",
-      "id": 24
-    },
-    {
-      "titulo": "Publicacion 12",
-      "cuerpo": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi quaerat unde tempore eveniet inventore recusandae nihil dolor error commodi ipsa? Voluptate similique voluptatum modi suscipit rerum ab dolore minus voluptas.",
-      "vigenciaDesde": "2024-02-07T00:00:00.000Z",
-      "vigenciaHasta": "2025-02-07T00:00:00.000Z",
-      "id": 25
-    },
-    {
-      "titulo": "Publicacion 13",
-      "cuerpo": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi quaerat unde tempore eveniet inventore recusandae nihil dolor error commodi ipsa? Voluptate similique voluptatum modi suscipit rerum ab dolore minus voluptas.",
-      "vigenciaDesde": "2024-02-07T00:00:00.000Z",
-      "vigenciaHasta": "2025-02-07T00:00:00.000Z",
-      "id": 26
-    },
-    {
-      "titulo": "Publicacion 14",
-      "cuerpo": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi quaerat unde tempore eveniet inventore recusandae nihil dolor error commodi ipsa? Voluptate similique voluptatum modi suscipit rerum ab dolore minus voluptas.",
-      "vigenciaDesde": "2024-02-07T00:00:00.000Z",
-      "vigenciaHasta": "2025-02-07T00:00:00.000Z",
-      "id": 27
-    },
-    {
       "titulo": "Titulo Pabada 1",
       "cuerpo": "Cuerpo Pabada 1",
       "vigenciaDesde": "2023-12-05",
       "vigenciaHasta": "2023-12-30",
       "id": 28
-    },
-    {
-      "titulo": "prueba 2",
-      "cuerpo": "2222",
-      "vigenciaDesde": "2000-01-01T00:00:00.000Z",
-      "vigenciaHasta": "2033-02-20T00:00:00.000Z",
-      "id": 29
     },
     {
       "titulo": "publi",
@@ -480,6 +400,13 @@
       "vigenciaDesde": "2024-02-21T00:00:00.000Z",
       "vigenciaHasta": "2024-02-21T00:00:00.000Z",
       "id": 32
+    },
+    {
+      "titulo": "titulo II",
+      "cuerpo": "Cuerpo de titulo II",
+      "vigenciaDesde": "2024-01-01T00:00:00.000Z",
+      "vigenciaHasta": "2025-02-14T00:00:00.000Z",
+      "id": 33
     }
   ],
   "publicacionesVigentes": [

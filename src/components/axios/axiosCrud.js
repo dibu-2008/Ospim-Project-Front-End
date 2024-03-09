@@ -1,22 +1,38 @@
 import oAxios from "@components/axios/axiosInstace";
 
-export const consultar = async (UrlApi) => {
+export const axiosCrud = {
+  consultar: async function (UrlApi) {
+    return axiosConsultar(UrlApi);
+  },
+
+  crear: async function (UrlApi, oEntidad) {
+    return axiosCrear(UrlApi, oEntidad);
+  },
+
+  actualizar: async function (UrlApi, oEntidad) {
+    return axiosActualizar(UrlApi, oEntidad);
+  },
+
+  eliminar: async function (UrlApi, id) {
+    return axiosEliminar(UrlApi, id);
+  },
+};
+
+export const axiosConsultar = async (UrlApi) => {
   try {
     const response = await oAxios.get(UrlApi);
-    const data = await response.data;
-    console.log(data);
-    return data || [];
+    if (response.status != 200) {
+      throw response;
+    }
+    const data = response.data || {};
+    return data;
   } catch (error) {
-    console.log(
-      `axiosCrud.consultar() - ERROR - UrlApi: ${UrlApi} - error: ${JSON.stringify(
-        error
-      )}`
-    );
-    return [];
+    console.log(`axiosCrud.consultar() - ERROR - UrlApi: ${UrlApi} `);
+    throw error;
   }
 };
 
-export const crear = async (UrlApi, oEntidad) => {
+export const axiosCrear = async (UrlApi, oEntidad) => {
   try {
     const response = await oAxios.post(UrlApi, oEntidad);
     if (response.status !== 201) {
@@ -41,9 +57,10 @@ export const crear = async (UrlApi, oEntidad) => {
   }
 };
 
-export const actualizar = async (UrlApi, oEntidad) => {
+export const axiosActualizar = async (UrlApi, oEntidad) => {
   const URL = `${UrlApi}/${oEntidad.id}`;
   try {
+    delete oEntidad.id;
     const response = await oAxios.put(URL, oEntidad);
     if (response.status !== 204 && response.status !== 200) {
       //JsonServer devuelve 200
@@ -68,7 +85,7 @@ export const actualizar = async (UrlApi, oEntidad) => {
   }
 };
 
-export const eliminar = async (UrlApi, id) => {
+export const axiosEliminar = async (UrlApi, id) => {
   const URL = `${UrlApi}/${id}`;
   try {
     const response = await oAxios.delete(URL);
@@ -88,7 +105,7 @@ export const eliminar = async (UrlApi, id) => {
       console.log(
         "axiosCrud.eliminar() - catch() - error: " + JSON.stringify(error)
       );
-      return false;
     }
+    return false;
   }
 };

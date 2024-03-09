@@ -49,10 +49,8 @@ oAxios.interceptors.response.use(
       console.log(
         "** oAxios.interceptors - RESPONSE - HTTP - ERROR 401 - VOY AL LOGUIN"
       );
-      //showSwalError("Su Sesion expiró. Debe loguearse nuevamente.");
       window.location.href = "/";
       console.log("HTTP - ERROR 401 - ya ajusto window.location.href  ");
-      return Promise.reject(error);
     }
 
     if (error.response.status == 404) {
@@ -64,7 +62,6 @@ oAxios.interceptors.response.use(
             ". verificar que el Backend este activo"
         );
       }
-      return Promise.reject(error);
     }
 
     if (error.response && error.response.data) {
@@ -73,8 +70,10 @@ oAxios.interceptors.response.use(
         "** oAxios.interceptors - RESPONSE - HTTP - oJsonResponse:" +
           JSON.stringify(oJsonResponse)
       );
-      return Promise.reject(error);
     }
+
+    error.status = error.response.status;
+    return Promise.reject(error);
   }
 );
 

@@ -1,29 +1,22 @@
-import { getHttpHeader } from "@/http_header/getHttpHeader";
+import oAxios from "@components/axios/axiosInstace";
 import { errorBackendResponse } from "../../../../errors/errorBackendResponse";
-import axios from "axios";
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-
 
 export const ObtenerDatosDeContacto = async () => {
+  /*
   const contacto = {
     email: "mesadeayuda@ospim.com.ar",
     telefono: "011-4502-2075",
     whasap: "15-4569-4545",
   };
   return contacto;
-
-  const URL = `${BACKEND_URL}/ospim/contacto`;
+  */
+  const URL = `/ospim/contacto`;
   console.log("ObtenerDatosDeContacto - URL: ");
   console.log(URL);
 
   try {
-    const response = await axios.get(URL, oHeader);
+    const response = await oAxios.get(URL);
     const data = await response.data;
-    console.log("ObtenerDatosDeContacto - contacto: ");
-    console.log(data);
-    console.log("ObtenerDatosDeContacto - token: ");
-    console.log(TOKEN);
-
     return data || [];
   } catch (error) {
     console.log("ObtenerDatosDeContacto - ERROR 11 ");
@@ -34,14 +27,11 @@ export const ObtenerDatosDeContacto = async () => {
 };
 
 export const ObtenerPublicacionesVigentes = async () => {
-  const URL = `${BACKEND_URL}/publicaciones/vigentes`;
+  const URL = `/publicaciones/vigentes`;
 
   try {
-    const response = await axios.get(URL, getHttpHeader);
+    const response = await oAxios.get(URL);
     const data = await response.data;
-    console.log("ObtenerPublicacionesVigentes - novedades:");
-    console.log(data);
-
     return data || [];
   } catch (error) {
     console.log("ObtenerPublicacionesVigentes - ERROR");

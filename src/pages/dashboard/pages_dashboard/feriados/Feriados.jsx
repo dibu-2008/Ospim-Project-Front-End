@@ -16,12 +16,7 @@ import {
   GridActionsCellItem,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
-import {
-  actualizarFeriado,
-  crearFeriado,
-  eliminarFeriado,
-  consultarFeriados,
-} from "./FeriadosApi";
+import { axiosFeriados } from "./FeriadosApi";
 import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 
 import Swal from "sweetalert2";
@@ -31,7 +26,7 @@ const crearNuevoRegistro = (props) => {
   const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
 
   const altaHandleClick = () => {
-    const maxId = Math.max(...rows.map((row) => row.id), 0);
+    const maxId = rows ? Math.max(...rows.map((row) => row.id), 0) : 1;
     const newId = maxId + 1;
     const id = newId;
     volverPrimerPagina();
@@ -77,7 +72,7 @@ export const Feriados = () => {
 
   useEffect(() => {
     const ObtenerFeriados = async () => {
-      const response = await consultarFeriados();
+      const response = await axiosFeriados.consultar();
       setRows(response.map((item) => ({ id: item.id, ...item })));
     };
     ObtenerFeriados();
@@ -110,7 +105,7 @@ export const Feriados = () => {
           confirmButtonText: "Si, bórralo!",
         }).then(async (result) => {
           if (result.isConfirmed) {
-            const bBajaOk = await eliminarFeriado(id);
+            const bBajaOk = await axiosFeriados.eliminar(id);
             if (bBajaOk) setRows(rows.filter((row) => row.id !== id));
           }
         });
@@ -147,7 +142,7 @@ export const Feriados = () => {
       try {
         delete newRow.id;
         delete newRow.isNew;
-        const data = await crearFeriado(newRow);
+        const data = await axiosFeriados.crear(newRow);
         if (data && data.id) {
           newRow.id = data.id;
           newRow.isNew = false;
@@ -166,7 +161,7 @@ export const Feriados = () => {
       console.log("3 - processRowUpdate - MODI ");
       try {
         delete newRow.isNew;
-        bOk = await actualizarFeriado(newRow);
+        bOk = await axiosFeriados.actualizar(newRow);
         console.log("4 - processRowUpdate - MODI - bOk: " + bOk);
         newRow.isNew = false;
         if (bOk) {

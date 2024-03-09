@@ -1,4 +1,5 @@
 {
+  "/afiliados/cuil/:cuil": "/afiliado/?cuil=:cuil",
   "/publicaciones/vigentes": "/publicacionesVigentes",
   "/usuario/empresa/public/": "/usuario-empresa-alta",
   "/usuario/empresa/": "/usuario-empresa-alta",
@@ -36,7 +37,9 @@
   "/empresa/:empresaId/ddjj/:id/presentar": "/DDJJ/:id",
   "/empresa/:empresaId/ddjj/periodo/:periodo/existe": "/DDJJ?empresaId=:empresaId&periodo=:periodo",
 
-  "/rol/:id/funcionalidad": "/rol/funcionalidad/getRel?rolId=:id",
+  "/roles/:id/funcionalidad": "/rol/funcionalidad/getRel?rolId=:id",
+  "/roles/:id": "/rol",
+  "/roles": "/rol",
   "/funcionalidad/:codigo/rol/:rolId": "/rolFuncionalidad/?rolId=:rolId&funcionalidad=:codigo",
   "/aportes/detalle/": "/aportesDetalle/",
   "/aportes/:codigo": "/aportes/?codigo=:codigo",

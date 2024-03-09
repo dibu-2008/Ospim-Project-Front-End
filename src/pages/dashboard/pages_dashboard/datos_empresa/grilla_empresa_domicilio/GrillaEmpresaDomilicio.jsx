@@ -7,36 +7,26 @@ import {
   GridActionsCellItem,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
-
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
+import { Box, Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
-import {
-  actualizarDomicilio,
-  crearDomicilio,
-  eliminarDomicilio,
-  obtenerDomicilios,
-  obtenerLocalidades,
-  obtenerProvincias,
-  obtenerTipoDomicilio,
-} from "./GrillaEmpresaDomicilioApi";
+import { axiosDomicilio } from "./GrillaEmpresaDomicilioApi";
 import Swal from "sweetalert2";
 
 function EditToolbar(props) {
-  const { setRowsDomicilio, rows_domicilio, setRowModesModel, volverPrimerPagina } = props;
+  const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
 
   const handleClick = () => {
-    const maxId = Math.max(...rows_domicilio.map((row) => row.id), 0);
+    const maxId = rows ? Math.max(...rows.map((row) => row.id), 0) : 1;
     const newId = maxId + 1;
     const id = newId;
 
     volverPrimerPagina();
 
-    setRowsDomicilio((oldRows) => [
+    setRows((oldRows) => [
       {
         id,
         tipo: "",
@@ -68,8 +58,7 @@ function EditToolbar(props) {
   );
 }
 
-export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token, ID_EMPRESA }) => {
-
+export const GrillaEmpresaDomilicio = ({ idEmpresa, rows, setRows }) => {
   const [rowModesModel, setRowModesModel] = useState({});
   const [tipoDomicilio, setTipoDomicilio] = useState([]);
   const [provincias, setProvincias] = useState([]);
@@ -87,27 +76,27 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token,
   };
 
   const getTipoDomicilio = async () => {
-    const tiposResponse = await obtenerTipoDomicilio(token);
-
-    setTipoDomicilio(tiposResponse.map((item) => ({ ...item })));
+    const response = await axiosDomicilio.obtenerTipo();
+    setTipoDomicilio(response.map((item) => ({ ...item })));
   };
 
   const getProvincias = async () => {
-    const provinciasResponse = await obtenerProvincias(token);
-    setProvincias(provinciasResponse.map((item) => ({ ...item })));
+    const response = await axiosDomicilio.obtenerProvincias();
+    setProvincias(response.map((item) => ({ ...item })));
   };
 
   const getLocalidades = async (provinciaId) => {
-    
     if (provinciaId) {
-      return await obtenerLocalidades(token, provinciaId);
+      return await axiosDomicilio.obtenerLocalidades(provinciaId);
+    } else {
+      return [];
     }
   };
 
   const getRowsDomicilio = async () => {
-    const domiciliosResponse = await obtenerDomicilios(token, ID_EMPRESA);
-    setRowsDomicilio(domiciliosResponse.map((item) => ({ ...item })));
-    getDatosLocalidad(domiciliosResponse.map((item) => ({ ...item })));
+    const response = await axiosDomicilio.obtenerDomicilios(idEmpresa);
+    setRows(response.map((item) => ({ ...item })));
+    getDatosLocalidad(response.map((item) => ({ ...item })));
   };
 
   const getDatosLocalidad = async (rowsDomicilio) => {
@@ -136,7 +125,6 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token,
   };
 
   const actualizarDatosLocalidad = async (provinciaId) => {
-    
     const options = localidades.filter((item) => {
       return item.provinciaId == provinciaId;
     });
@@ -179,26 +167,24 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token,
   };
 
   const handleDeleteClick = (id) => async () => {
-
     const showSwalConfirm = async () => {
       try {
         Swal.fire({
-          title: '¿Estás seguro?',
+          title: "¿Estás seguro?",
           text: "¡No podrás revertir esto!",
-          icon: 'warning',
+          icon: "warning",
           showCancelButton: true,
-          confirmButtonColor: '#1A76D2',
-          cancelButtonColor: '#6c757d',
-          confirmButtonText: 'Si, bórralo!'
+          confirmButtonColor: "#1A76D2",
+          cancelButtonColor: "#6c757d",
+          confirmButtonText: "Si, bórralo!",
         }).then(async (result) => {
           if (result.isConfirmed) {
-
-            setRowsDomicilio(rowsDomicilio.filter((row) => row.id !== id));
-            await eliminarDomicilio(id, token, ID_EMPRESA);
+            const bBajaOk = await axiosDomicilio.eliminar(idEmpresa, id);
+            if (bBajaOk) setRows(rows.filter((row) => row.id !== id));
           }
         });
       } catch (error) {
-        console.error('Error al ejecutar eliminarFeriado:', error);
+        console.error("Error al ejecutar eliminarDomicilio:", error);
       }
     };
 
@@ -211,56 +197,56 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token,
       [id]: { mode: GridRowModes.View, ignoreModifications: true },
     });
 
-    const editedRow = rowsDomicilio.find((row) => row.id === id);
+    const editedRow = rows.find((row) => row.id === id);
     if (editedRow.isNew) {
-      setRowsDomicilio(rowsDomicilio.filter((row) => row.id !== id));
+      setRows(rows.filter((row) => row.id !== id));
     }
   };
 
-  const processRowUpdate = async (newRow) => {
-
-    const updatedRow = { ...newRow, isNew: false };
-
+  const processRowUpdate = async (newRow, oldRow) => {
+    let bOk = false;
     if (newRow.isNew) {
-
-      const nuevoDomicilio = {
-        tipo: newRow.tipo,
-        provinciaId: newRow.provinciaId,
-        localidadId: newRow.localidadId,
-        calle: newRow.calle,
-        piso: newRow.piso,
-        depto: newRow.depto,
-        oficina: newRow.oficina,
-        cp: newRow.cp,
-        planta: newRow.planta,
-        empresaId: ID_EMPRESA,
-      };
-
-      await crearDomicilio(nuevoDomicilio, ID_EMPRESA, token);
-
+      try {
+        delete newRow.id;
+        delete newRow.isNew;
+        const data = await axiosDomicilio.crear(idEmpresa, newRow);
+        if (data && data.id) {
+          newRow.id = data.id;
+          newRow.isNew = false;
+          bOk = true;
+          const newRows = rows.map((row) => (row.isNew ? newRow : row));
+          setRows(newRows);
+        } else {
+          console.log("alta sin ID generado");
+        }
+      } catch (error) {
+        console.log(
+          "X - processRowUpdate - ALTA - ERROR: " + JSON.stringify(error)
+        );
+      }
     } else {
-
-      const domicilio = {
-        tipo: newRow.tipo,
-        provinciaId: newRow.provinciaId,
-        localidadId: newRow.localidadId,
-        calle: newRow.calle,
-        piso: newRow.piso,
-        depto: newRow.depto,
-        oficina: newRow.oficina,
-        cp: newRow.cp,
-        planta: newRow.planta,
-        empresaId: ID_EMPRESA,
-      };
-
-      await actualizarDomicilio(newRow.id, domicilio, token, ID_EMPRESA);
+      try {
+        delete newRow.isNew;
+        bOk = await axiosDomicilio.actualizar(idEmpresa, newRow);
+        console.log("4 - processRowUpdate - MODI - bOk: " + bOk);
+        newRow.isNew = false;
+        if (bOk) {
+          setRows(rows.map((row) => (row.id === newRow.id ? newRow : row)));
+        }
+      } catch (error) {
+        console.log(
+          "X - processRowUpdate - MODI - ERROR: " + JSON.stringify(error)
+        );
+      }
     }
 
-    setRowsDomicilio(
-      rowsDomicilio.map((row) => (row.id === newRow.id ? updatedRow : row))
-    );
+    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
 
-    return updatedRow;
+    if (bOk) {
+      return newRow;
+    } else {
+      return oldRow;
+    }
   };
 
   const handleRowModesModelChange = (newRowModesModel) => {
@@ -281,7 +267,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token,
       type: "singleSelect",
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
       getOptionValue: (dato) => dato.codigo,
       getOptionLabel: (dato) => dato.descripcion,
       valueOptions: tipoDomicilio,
@@ -294,7 +280,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token,
       type: "singleSelect",
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
       valueOptions: provincias,
       getOptionValue: (dato) => dato.id,
       getOptionLabel: (dato) => dato.descripcion,
@@ -304,15 +290,12 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token,
           <Select
             value={params.value}
             onChange={(e) => {
-
               // Limpiar el valor de la localidad
-              params.api.setEditCellValue(
-                { 
-                  id: params.id, 
-                  field: 'localidadId', 
-                  value: '' 
-                }
-              ); 
+              params.api.setEditCellValue({
+                id: params.id,
+                field: "localidadId",
+                value: "",
+              });
               params.api.setEditCellValue(
                 {
                   id: params.id,
@@ -347,7 +330,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token,
       type: "singleSelect",
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
       //valueOptions: localidadesList,
       valueOptions: ({ row }) => {
         var options = localidades.filter((item) => {
@@ -395,7 +378,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token,
       editable: true,
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
     },
     {
       field: "piso",
@@ -404,7 +387,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token,
       editable: true,
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
     },
     {
       field: "depto",
@@ -413,7 +396,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token,
       editable: true,
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
     },
     {
       field: "oficina",
@@ -422,7 +405,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token,
       editable: true,
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
     },
     {
       field: "cp",
@@ -431,7 +414,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token,
       editable: true,
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
     },
     {
       field: "planta",
@@ -440,7 +423,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token,
       editable: true,
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
     },
     {
       field: "actions",
@@ -449,7 +432,7 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token,
       flex: 2,
       headerAlign: "center",
       align: "center",
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
@@ -508,32 +491,34 @@ export const GrillaEmpresaDomilicio = ({ rowsDomicilio, setRowsDomicilio, token,
     >
       <DataGrid
         columns={columns}
-        rows={rowsDomicilio}
+        rows={rows}
         editMode="row"
         rowModesModel={rowModesModel}
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
         onCellEditStart={handleCellEditStart}
-        processRowUpdate={processRowUpdate}
+        processRowUpdate={(updatedRow, originalRow) =>
+          processRowUpdate(updatedRow, originalRow)
+        }
         slots={{
           toolbar: EditToolbar,
         }}
         slotProps={{
           toolbar: {
-            setRowsDomicilio,
-            rows_domicilio: rowsDomicilio,
+            setRows,
+            rows_domicilio: rows,
             setRowModesModel,
             volverPrimerPagina,
           },
         }}
         sx={{
           // ...
-          '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
-            width: '8px',
-            visibility: 'visible',
+          "& .MuiDataGrid-virtualScroller::-webkit-scrollbar": {
+            width: "8px",
+            visibility: "visible",
           },
-          '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
-            backgroundColor: '#ccc',
+          "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb": {
+            backgroundColor: "#ccc",
           },
         }}
         localeText={{

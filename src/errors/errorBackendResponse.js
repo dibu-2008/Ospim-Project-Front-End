@@ -1,41 +1,16 @@
-import Swal from "sweetalert2";
+import swal from "@components/swal/swal";
 
 const ERROR_BUSINESS = import.meta.env.VITE_ERROR_BUSINESS;
 const ERROR_MESSAGE = import.meta.env.VITE_ERROR_MESSAGE;
 const ERROR_BODY = import.meta.env.VITE_ERROR_BODY;
 
-const showSwalError = (descripcion) => {
-  console.log("showSwalError - INIT");
-  descripcion = descripcion
-    .replace(":", "")
-    .replace("{", "")
-    .replace("}", "")
-    .replace("[", "")
-    .replace("]", "");
-
-  try {
-    Swal.fire({
-      icon: "error",
-      title: "Error de Validación",
-      text: descripcion,
-      showConfirmButton: false,
-      timer: 3000,
-    });
-    console.log("showSwalError - ESTOOOO ????!! ");
-  } catch (error) {
-    console.log("showSwalError - ERROR - BUG");
-    console.log(error.toJSON());
-  }
-  console.log("showSwalError - FIN");
-};
-
 export const sigecoErrorHandler = (responseData) => {
   if (responseData) {
     if (responseData.tipo) {
       if (responseData.tipo === ERROR_BUSINESS) {
-        showSwalError("" + responseData.descripcion);
+        swal.showError("" + responseData.descripcion);
       } else {
-        showSwalError(`${ERROR_MESSAGE} ${responseData.ticket}`);
+        swal.showError(`${ERROR_MESSAGE} ${responseData.ticket}`);
       }
     }
   }
@@ -48,7 +23,7 @@ export const errorBackendResponse = (error) => {
   try {
     if (!error) {
       console.log("- Parametro error NULO ");
-      showSwalError(`${ERROR_MESSAGE}`);
+      swal.showError(`${ERROR_MESSAGE}`);
       return false;
     }
 
@@ -61,7 +36,7 @@ export const errorBackendResponse = (error) => {
         console.log("- error.response: No existe .data");
         console.log("error.response: ");
         console.log(error.response);
-        showSwalError(`${ERROR_MESSAGE}`);
+        swal.showError(`${ERROR_MESSAGE}`);
         return false;
       }
 
@@ -73,7 +48,7 @@ export const errorBackendResponse = (error) => {
         console.log("error.response.data: ");
         console.log(error.response.data);
         console.log(`${ERROR_BODY} : ${errorNew}`);
-        showSwalError(`${ERROR_MESSAGE}`);
+        swal.showError(`${ERROR_MESSAGE}`);
         return false;
       }
 
@@ -84,7 +59,7 @@ export const errorBackendResponse = (error) => {
         console.log("- Backend Response con formato INCORRECTO: ");
         console.log(oJsonResponse);
         console.log(`${ERROR_BODY} : ${oJsonResponse}`);
-        showSwalError(`${ERROR_MESSAGE}`);
+        swal.showError(`${ERROR_MESSAGE}`);
         return false;
       }
 
@@ -94,11 +69,11 @@ export const errorBackendResponse = (error) => {
         console.log(`${ERROR_BODY} : ${oJsonResponse}`);
         console.log("oJsonResponse.descripcion: ");
         console.log(oJsonResponse.descripcion);
-        showSwalError("" + oJsonResponse.descripcion);
+        swal.showError("" + oJsonResponse.descripcion);
         return true;
       }
 
-      showSwalError(`${ERROR_MESSAGE} ${oJsonResponse.ticket}`);
+      swal.showError(`${ERROR_MESSAGE} ${oJsonResponse.ticket}`);
       console.log(
         "Ticket: " +
           oJsonResponse.ticket +
@@ -116,17 +91,17 @@ export const errorBackendResponse = (error) => {
       console.log("error.request.status: ");
       console.log(error.request.status);
 
-      showSwalError(`${ERROR_MESSAGE}`);
+      swal.showError(`${ERROR_MESSAGE}`);
       return true;
     } else {
       // Anything else
       console.log("- Backend Response UNKNOWN: ");
       console.log("error:", error.message);
-      showSwalError(`${ERROR_MESSAGE}`);
+      swal.showError(`${ERROR_MESSAGE}`);
       return true;
     }
   } catch (error) {
     console.error(`${ERROR_BODY} : ${error}`);
-    showSwalError(`${ERROR_MESSAGE}`);
+    swal.showError(`${ERROR_MESSAGE}`);
   }
 };

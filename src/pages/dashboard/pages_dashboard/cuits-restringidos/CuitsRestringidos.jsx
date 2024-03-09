@@ -15,12 +15,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
-import {
-  consultarCuitRestringido,
-  crearCuitRestringido,
-  actualizarCuitRestringido,
-  eliminarCuitRestringido,
-} from "./CuitsRestringidosApi";
+import { axiosCuitsRestringidos } from "./CuitsRestringidosApi";
 import Swal from "sweetalert2";
 import "./CuitsRestringidos.css";
 
@@ -28,7 +23,7 @@ function EditToolbar(props) {
   const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
 
   const altaHandleClick = () => {
-    const maxId = Math.max(...rows.map((row) => row.id), 0);
+    const maxId = rows ? Math.max(...rows.map((row) => row.id), 0) : 1;
     const newId = maxId + 1;
     const id = newId;
     volverPrimerPagina();
@@ -77,7 +72,7 @@ export const CuitsRestringidos = () => {
 
   useEffect(() => {
     const ObtenerCuitsRestringidos = async () => {
-      const response = await consultarCuitRestringido();
+      const response = await axiosCuitsRestringidos.consultar();
       setRows(response.map((item) => ({ id: item.id, ...item })));
     };
     ObtenerCuitsRestringidos();
@@ -110,7 +105,7 @@ export const CuitsRestringidos = () => {
           confirmButtonText: "Si, bórralo!",
         }).then(async (result) => {
           if (result.isConfirmed) {
-            const bBajaOk = await eliminarCuitRestringido(id);
+            const bBajaOk = await axiosCuitsRestringidos.eliminar(id);
             if (bBajaOk) setRows(rows.filter((row) => row.id !== id));
           }
         });
@@ -142,7 +137,7 @@ export const CuitsRestringidos = () => {
       try {
         delete newRow.id;
         delete newRow.isNew;
-        const data = await crearCuitRestringido(newRow);
+        const data = await axiosCuitsRestringidos.crear(newRow);
         console.log("data: " + JSON.stringify(data));
         if (data && data.id) {
           newRow.id = data.id;
@@ -166,7 +161,7 @@ export const CuitsRestringidos = () => {
       console.log("3 - processRowUpdate - MODI ");
       try {
         delete newRow.isNew;
-        bOk = await actualizarCuitRestringido(newRow);
+        bOk = await axiosCuitsRestringidos.actualizar(newRow);
         console.log("4 - processRowUpdate - MODI - bOk: " + bOk);
         newRow.isNew = false;
         if (bOk) {

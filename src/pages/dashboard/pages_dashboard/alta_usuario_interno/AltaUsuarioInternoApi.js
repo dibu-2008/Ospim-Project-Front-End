@@ -1,161 +1,117 @@
-import { errorBackendResponse } from "../../../../errors/errorBackendResponse";
-import axios from "axios";
-import Swal from "sweetalert2";
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-const MESSAGE_HTTP_CREATED = import.meta.env.VITE_MESSAGE_HTTP_CREATED;
-const MESSAGE_HTTP_UPDATED = import.meta.env.VITE_MESSAGE_HTTP_UPDATED;
-const MESSAGE_HTTP_DELETED = import.meta.env.VITE_MESSAGE_HTTP_DELETED;
+import { axiosCrud } from "@components/axios/axiosCrud";
+import oAxios from "@components/axios/axiosInstace";
+import { showErrorBackEnd } from "@/components/axios/showErrorBackEnd";
+import swal from "@/components/swal/swal";
 
-export const obtenerUsuariosInternos = async (token) => {
-  const URL = `${BACKEND_URL}/usuario/interno`;
+const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
+const HTTP_MSG_MODI = import.meta.env.VITE_HTTP_MSG_MODI;
+const HTTP_MSG_BAJA = import.meta.env.VITE_HTTP_MSG_BAJA;
+const HTTP_MSG_ALTA_ERROR = import.meta.env.VITE_HTTP_MSG_ALTA_ERROR;
+const HTTP_MSG_MODI_ERROR = import.meta.env.VITE_HTTP_MSG_MODI_ERROR;
+const HTTP_MSG_BAJA_ERROR = import.meta.env.VITE_HTTP_MSG_BAJA_ERROR;
+const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
 
+const URL_ENTITY = "/usuario/interno";
+
+export const consultar = async () => {
   try {
-    const usuariosInternosResponse = await axios.get(URL, {
-      headers: {
-        Authorization: token,
-      },
-    });
-    const usuariosInternos = await usuariosInternosResponse.data;
-
-    return usuariosInternos || [];
+    const data = await axiosCrud.consultar(URL_ENTITY);
+    return data || [];
   } catch (error) {
-    errorBackendResponse(error);
+    console.log(
+      "consultar() - catch-error - URL: " +
+        URL_ENTITY +
+        " - status: " +
+        error.status
+    );
+    showErrorBackEnd(
+      HTTP_MSG_CONSUL_ERROR + ` (${URL_ENTITY} - status: ${error.status})`,
+      error
+    );
+    return [];
   }
 };
 
-export const obtenerRoles = async (token) => {
-  const URL = `${BACKEND_URL}/rol`;
-
+export const crear = async (registro) => {
   try {
-    const rolesResponse = await axios.get(URL, {
-      headers: {
-        Authorization: token,
-      },
-    });
-    const roles = await rolesResponse.data;
-
-    return roles || [];
+    const data = await axiosCrud.crear(URL_ENTITY, registro);
+    if (data && data.id) {
+      swal.showSuccess(HTTP_MSG_ALTA);
+      return data;
+    }
+    throw data;
   } catch (error) {
-    errorBackendResponse(error);
+    showErrorBackEnd(HTTP_MSG_ALTA_ERROR, error);
+    return {};
   }
 };
 
-export const crearUsuarioInterno = async (token, usuarioInterno) => {
-  const URL = `${BACKEND_URL}/usuario/interno`;
+export const actualizar = async (registro) => {
+  try {
+    const response = await axiosCrud.actualizar(URL_ENTITY, registro);
+    if (response == true) {
+      swal.showSuccess(HTTP_MSG_MODI);
+      return true;
+    }
+    throw response;
+  } catch (error) {
+    showErrorBackEnd(HTTP_MSG_MODI_ERROR, response);
+    return false;
+  }
+};
 
-  const showSwalSuccess = () => {
-    Swal.fire({
-      icon: "success",
-      title: MESSAGE_HTTP_CREATED,
-      showConfirmButton: false,
-      timer: 3000,
-    });
-  };
+export const eliminar = async (id) => {
+  try {
+    const response = await axiosCrud.eliminar(URL_ENTITY, id);
+    if (response == true) {
+      swal.showSuccess(HTTP_MSG_BAJA);
+      return true;
+    }
+    throw response;
+  } catch (error) {
+    showErrorBackEnd(HTTP_MSG_BAJA_ERROR, error);
+    return false;
+  }
+};
+
+export const habilitar = async (id, habilitar) => {
+  let URL;
+  if (habilitar) {
+    URL = `/usuario/${id}/habilitar`;
+  } else {
+    URL = `/usuario/${id}/deshabilitar`;
+  }
 
   try {
-    const usuarioCreado = await axios.post(URL, usuarioInterno, {
-      headers: {
-        Authorization: token,
-      },
-    });
-
-    if (usuarioCreado.status === 201) {
-      showSwalSuccess();
+    const response = await oAxios.patch(URL, habilitar);
+    if (response.status === 200 || response.status === 204) {
+      swal.showSuccess(HTTP_MSG_MODI);
+    } else {
+      showErrorBackEnd(HTTP_MSG_MODI_ERROR, response);
     }
   } catch (error) {
-    errorBackendResponse(error);
+    showErrorBackEnd(error);
   }
 };
 
-export const actualizarUsuarioInterno = async (
-  token,
-  usuarioInterno,
-  idUsuarioInterno
-) => {
-  const URL = `${BACKEND_URL}/usuario/interno/${idUsuarioInterno}`;
+export const axiosUsuariosInternos = {
+  consultar: async function (UrlApi) {
+    return consultar(UrlApi);
+  },
 
-  const showSwalSuccess = () => {
-    Swal.fire({
-      icon: "success",
-      title: MESSAGE_HTTP_UPDATED,
-      showConfirmButton: false,
-      timer: 3000,
-    });
-  };
+  crear: async function (oEntidad) {
+    return crear(oEntidad);
+  },
 
-  try {
-    const usuarioModificado = await axios.put(URL, usuarioInterno, {
-      headers: {
-        Authorization: token,
-      },
-    });
+  actualizar: async function (oEntidad) {
+    return actualizar(oEntidad);
+  },
 
-    if (usuarioModificado.status === 200) {
-      showSwalSuccess();
-    }
-  } catch (error) {
-    errorBackendResponse(error);
-  }
-};
+  eliminar: async function (id) {
+    return eliminar(id);
+  },
 
-export const habilitarUsuarioInterno = async (
-  token,
-  idUsuarioInterno,
-  habilitado
-) => {
-  const URL = `${BACKEND_URL}/usuario/${idUsuarioInterno}/habilitar`;
-
-  const showSwalSuccess = () => {
-    Swal.fire({
-      icon: "success",
-      title: MESSAGE_HTTP_UPDATED,
-      showConfirmButton: false,
-      timer: 3000,
-    });
-  };
-
-  try {
-    const usuarioHabilitado = await axios.patch(URL, habilitado, {
-      headers: {
-        Authorization: token,
-      },
-    });
-
-    if (usuarioHabilitado.status === 200) {
-      showSwalSuccess();
-    }
-  } catch (error) {
-    errorBackendResponse(error);
-  }
-};
-
-export const deshabilitarUsuarioInterno = async (
-  token,
-  idUsuarioInterno,
-  habilitado
-) => {
-  const URL = `${BACKEND_URL}/usuario/${idUsuarioInterno}/deshabilitar`;
-
-  const showSwalSuccess = () => {
-    Swal.fire({
-      icon: "success",
-      title: MESSAGE_HTTP_UPDATED,
-      showConfirmButton: false,
-      timer: 3000,
-    });
-  };
-
-  try {
-    const usuarioDeshabilitado = await axios.patch(URL, habilitado, {
-      headers: {
-        Authorization: token,
-      },
-    });
-
-    if (usuarioDeshabilitado.status === 200) {
-      showSwalSuccess();
-    }
-  } catch (error) {
-    errorBackendResponse(error);
-  }
+  habilitar: async function (id, habi) {
+    return habilitar(id, habi);
+  },
 };
