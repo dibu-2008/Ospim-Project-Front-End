@@ -75,7 +75,7 @@ export const GenerarOtrosPagos = () => {
                             onChange={(e) => setEntidad(e.target.value)}
                         >
                             <MenuItem value="UOMA">UOMA</MenuItem>
-                            <MenuItem value="ART46">ART46</MenuItem>
+                            <MenuItem value="OSPIM">OSPIM</MenuItem>
                             <MenuItem value="AMTIMA">AMTIMA</MenuItem>
                         </Select>
                     </FormControl>
