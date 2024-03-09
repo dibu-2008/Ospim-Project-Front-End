@@ -1,4 +1,4 @@
-import { localStorageService } from "@components/localStorage/localStorageService";
+import localStorageService from "@components/localStorage/localStorageService";
 import "./DatosEmpresa.css";
 import { useEffect, useState, useMemo } from "react";
 import { GrillaEmpresaContacto } from "./grilla_empresa_contacto/GrillaEmpresaContacto";
@@ -17,7 +17,7 @@ import {
 import PropTypes from "prop-types";
 import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 import * as locales from "@mui/material/locale";
-import { axiosDatosEmpre } from "./DatosEmpresaApi";
+import axiosDatosEmpre from "./DatosEmpresaApi";
 
 // Logica de los tabs inicio
 function CustomTabPanel(props) {

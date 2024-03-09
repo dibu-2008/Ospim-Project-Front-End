@@ -6,13 +6,13 @@ import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import "./ConsultaMisDDJJ.css";
 import { GrillaMisDeclaracionesJuradas } from "./grilla/GrillaMisDeclaracionesJuradas";
-import { obtenerMisDeclaracionesJuradas } from "./grilla/GrillaMisDeclaracionesJuradasApi";
+import { axiosDDJJ } from "./grilla/GrillaMisDeclaracionesJuradasApi";
 import { esES } from "@mui/x-date-pickers/locales";
 import dayjs from "dayjs";
 import esLocale from "dayjs/locale/es";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import { CSVLink, CSVDownload } from "react-csv";
-
+import localStorageService from "@/components/localStorage/localStorageService";
 export const MisDeclaracionesJuradas = ({
   rows_mis_ddjj,
   setRowsMisDdjj,
@@ -41,10 +41,7 @@ export const MisDeclaracionesJuradas = ({
     setAge(0);
     setOccupation("");
   };
-  const TOKEN = JSON.parse(localStorage.getItem("stateLogin")).usuarioLogueado
-    .usuario.token;
-  const ID_EMPRESA = JSON.parse(localStorage.getItem("stateLogin"))
-    .usuarioLogueado.empresa.id;
+  const ID_EMPRESA = localStorageService.getEmpresaId();
 
   const handleChangeDesde = (date) => setDesde(date);
 
@@ -52,10 +49,7 @@ export const MisDeclaracionesJuradas = ({
 
   const buscarDeclaracionesJuradas = async () => {
     try {
-      const ddjjResponse = await obtenerMisDeclaracionesJuradas(
-        ID_EMPRESA,
-        TOKEN
-      );
+      const ddjjResponse = await axiosDDJJ.consultar(ID_EMPRESA);
 
       if (desde && desde.$d && hasta && hasta.$d) {
         const { $d: $desde } = desde;
@@ -158,7 +152,6 @@ export const MisDeclaracionesJuradas = ({
         <GrillaMisDeclaracionesJuradas
           rows_mis_ddjj={rows_mis_ddjj}
           setRowsMisDdjj={setRowsMisDdjj}
-          token={TOKEN}
           idEmpresa={ID_EMPRESA}
           setTabState={setTabState}
           setPeriodo={setPeriodo}

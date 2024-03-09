@@ -68,3 +68,5 @@ export const axiosDatosEmpre = {
     return actualizar(oEntidad);
   },
 };
+
+export default axiosDatosEmpre;

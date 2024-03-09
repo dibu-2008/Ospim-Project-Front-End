@@ -6,8 +6,6 @@ export const getToken = () => {
     auxStateLogin = JSON.parse(localStorage.getItem("stateLogin"));
     if (auxStateLogin.hasOwnProperty("usuarioLogueado")) {
       TOKEN = auxStateLogin.usuarioLogueado.usuario.token;
-      console.log("getHttpHeader - OK!! - TOKEN: ");
-      console.log(TOKEN);
       return TOKEN;
     }
   }
@@ -30,7 +28,7 @@ export const getEmpresaId = () => {
   }
 };
 
-export const localStorageService = {
+const localStorageService = {
   getToken: function () {
     return getToken();
   },
@@ -38,3 +36,5 @@ export const localStorageService = {
     return getEmpresaId();
   },
 };
+
+export default localStorageService;

@@ -95,9 +95,9 @@ export const presentarDeclaracionJurada = async (empresaId, ddjjId) => {
 };
 
 export const eliminarDeclaracionJurada = async (empresaId, ddjjId) => {
-  const URL = `/empresa/${empresaId}/ddjj/${ddjjId}`;
+  const URL = `/empresa/${empresaId}/ddjj`;
   try {
-    const response = await axiosCrud.eliminar(URL);
+    const response = await axiosCrud.eliminar(URL, ddjjId);
     if (response == true) {
       swal.showSuccess(HTTP_MSG_BAJA);
       return true;

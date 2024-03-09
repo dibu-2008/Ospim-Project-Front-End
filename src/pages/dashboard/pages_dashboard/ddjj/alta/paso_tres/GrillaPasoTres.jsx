@@ -17,6 +17,7 @@ import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import SearchIcon from "@mui/icons-material/Search";
 import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 import * as locales from "@mui/material/locale";
+import formatter from "@/common/formatter";
 import {
   Checkbox,
   Box,
@@ -204,13 +205,6 @@ export const GrillaPasoTres = ({
   const handleRowModesModelChange = (newRowModesModel) => {
     setRowModesModel(newRowModesModel);
   };
-
-  const formatter = new Intl.NumberFormat("es-CL", {
-    minimumFractionDigits: 2,
-    useGrouping: true,
-    currency: "CLP",
-    style: "currency",
-  });
 
   const columns = [
     {
@@ -482,7 +476,7 @@ export const GrillaPasoTres = ({
       headerAlign: "center",
       align: "center",
       headerClassName: "header--cell",
-      valueFormatter: (params) => formatter.format(params.value || 0),
+      valueFormatter: (params) => formatter.currency.format(params.value || 0),
     },
     {
       field: "noRemunerativo",
@@ -501,7 +495,7 @@ export const GrillaPasoTres = ({
       headerAlign: "center",
       align: "center",
       headerClassName: "header--cell",
-      valueFormatter: (params) => formatter.format(params.value || 0),
+      valueFormatter: (params) => formatter.currency.format(params.value || 0),
     },
     {
       field: "adheridoSindicato",

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
+import formatter from "@/common/formatter";
 import {
   GridRowModes,
   DataGrid,
@@ -69,7 +70,6 @@ function castearMisDDJJ(ddjjResponse) {
 export const GrillaMisDeclaracionesJuradas = ({
   rows_mis_ddjj,
   setRowsMisDdjj,
-  token,
   idEmpresa,
   setTabState,
   setPeriodo,
@@ -90,7 +90,6 @@ export const GrillaMisDeclaracionesJuradas = ({
   useEffect(() => {
     const ObtenerMisDeclaracionesJuradas = async () => {
       let ddjjResponse = await axiosDDJJ.consultar(idEmpresa);
-      //let ddjjResponse = await obtenerMisDeclaracionesJuradas(idEmpresa, token);
 
       //Agrego las columnas deTotales de Aportes
       ddjjResponse = await castearMisDDJJ(ddjjResponse);
@@ -111,7 +110,6 @@ export const GrillaMisDeclaracionesJuradas = ({
     };
 
     const bRta = await axiosDDJJ.presentar(idEmpresa, id);
-    //await presentarDeclaracionJurada(idEmpresa, id, estado, token);
     if (bRta)
       setRowsMisDdjj(
         rows_mis_ddjj.map((row) => (row.id === id ? updatedRow : row))
@@ -130,7 +128,6 @@ export const GrillaMisDeclaracionesJuradas = ({
     setTabState(0);
 
     const ddjj = await axiosDDJJ.getDDJJ(idEmpresa, id);
-    //const ddjj = await obtenerMiDeclaracionJurada(idEmpresa, id, token);
 
     const periodoResponse = ddjj.periodo;
     const fecha = new Date(periodoResponse);
@@ -162,7 +159,6 @@ export const GrillaMisDeclaracionesJuradas = ({
 
   const declaracionJuradasImpresion = async (idDDJJ) => {
     await axiosDDJJ.imprimir(idEmpresa, idDDJJ);
-    //await imprimirDeclaracionJurada(idEmpresa, idDDJJ, token);
   };
 
   const handleDeleteClick = (id) => async () => {
@@ -177,8 +173,12 @@ export const GrillaMisDeclaracionesJuradas = ({
           cancelButtonColor: "#6c757d",
           confirmButtonText: "Si, bórralo!",
         }).then(async (result) => {
+          console.log(
+            "handleDeleteClick() - idEmpresa: " + idEmpresa + " id: " + id
+          );
           if (result.isConfirmed) {
             const bRta = await axiosDDJJ.eliminar(idEmpresa, id);
+            console.log("bRta: " + bRta);
             if (bRta)
               setRowsMisDdjj(rows_mis_ddjj.filter((row) => row.id !== id));
           }
@@ -221,13 +221,6 @@ export const GrillaMisDeclaracionesJuradas = ({
     setRowModesModel(newRowModesModel);
   };
 
-  const formatter = new Intl.NumberFormat("es-CL", {
-    minimumFractionDigits: 2,
-    useGrouping: true,
-    currency: "CLP",
-    style: "currency",
-  });
-
   //1ro seteo columans fijas
   let columns = [
     {
@@ -261,11 +254,11 @@ export const GrillaMisDeclaracionesJuradas = ({
       valueGetter: (params) => {
         // Si secuencia es 0 es "Original" sino es "Rectificativa"+secuencia
         if (params.value === null) {
-          return "Original Nulo";
+          return "Original";
         } else if (params.value === 0) {
           return "Original";
         } else {
-          return "Rectificativa " + params.value;
+          return "Rectif. " + params.value;
         }
       },
     },
@@ -282,7 +275,7 @@ export const GrillaMisDeclaracionesJuradas = ({
       headerAlign: "center",
       align: "center",
       headerClassName: "header--cell",
-      valueFormatter: (params) => formatter.format(params.value || 0),
+      valueFormatter: (params) => formatter.currency.format(params.value || 0),
     });
   });
 

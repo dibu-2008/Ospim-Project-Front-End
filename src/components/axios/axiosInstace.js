@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getToken } from "@/http_header/getHttpHeader";
+import localStorageService from "@/components/localStorage/localStorageService";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -14,13 +14,12 @@ oAxios.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
 oAxios.defaults.headers.common["Access-Control-Allow-Headers"] =
   "POST, GET, PUT, DELETE, OPTIONS, HEAD, Authorization, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Access-Control-Allow-Origin";
 oAxios.defaults.headers.common["Content-Type"] = "application/json";
-//oAxios.defaults.headers.common["Authorization"] = getToken();
 
 oAxios.interceptors.request.use(
   (req) => {
     req.headers = {
       ...req.headers,
-      Authorization: getToken(),
+      Authorization: localStorageService.getToken(),
     };
     return req;
   },
