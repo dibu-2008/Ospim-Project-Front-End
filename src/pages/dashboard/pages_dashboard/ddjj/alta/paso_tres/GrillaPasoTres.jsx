@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import {
   GridRowModes,
   DataGrid,
@@ -27,9 +27,10 @@ import {
   appBarClasses,
 } from "@mui/material";
 import { axiosDDJJ } from "../DDJJAltaApi";
+import './GrillaPasoTres.css';
 
 function EditToolbar(props) {
-  const { setRowsAltaDDJJ, rowsAltaDDJJ, setRowModesModel } = props;
+  const { setRowsAltaDDJJ, rowsAltaDDJJ, setRowsAltaDDJJAux, rowsAltaDDJJAux, setRowModesModel } = props;
 
   const handleClick = () => {
     const maxId = rowsAltaDDJJ ? Math.max(...rowsAltaDDJJ.map((row) => row.id), 0) : 1;
@@ -54,6 +55,26 @@ function EditToolbar(props) {
       },
       ...oldRows,
     ]);
+
+    setRowsAltaDDJJAux((oldRows) => [
+      {
+        id,
+        cuil: "",
+        apellido: "",
+        nombre: "",
+        camara: "",
+        fechaIngreso: "",
+        empresaDomicilioId: "",
+        categoria: "",
+        remunerativo: "",
+        noRemunerativo: "",
+        adheridoSindicato: false,
+        pagaMutual: false,
+        isNew: true,
+      },
+      ...oldRows,
+    ]);
+
     setRowModesModel((oldModel) => ({
       ...oldModel,
       [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
@@ -72,6 +93,8 @@ function EditToolbar(props) {
 export const GrillaPasoTres = ({
   rowsAltaDDJJ,
   setRowsAltaDDJJ,
+  rowsAltaDDJJAux,
+  setRowsAltaDDJJAux,
   token,
   camaras,
   categoriasFiltradas,
@@ -82,7 +105,7 @@ export const GrillaPasoTres = ({
   plantas,
   validacionResponse,
 }) => {
-  // Validacion response deberia de hacer una logica con rowsAltaDDJJ para ver si hay errores y mostrarlos en la grilla
+
 
   const [locale, setLocale] = useState("esES");
   const [rowModesModel, setRowModesModel] = useState({});
@@ -198,6 +221,14 @@ export const GrillaPasoTres = ({
       rowsAltaDDJJ.map((row) => (row.id === newRow.id ? updatedRow : row))
     );
 
+    console.log("rowsAltaDDJJ: ", rowsAltaDDJJ);
+
+    setRowsAltaDDJJAux(
+      rowsAltaDDJJAux.map((row) => (row.id === newRow.id ? updatedRow : row))
+    );
+
+    console.log("rowsAltaDDJJAux: ", rowsAltaDDJJAux);
+
     return updatedRow;
   };
 
@@ -211,6 +242,33 @@ export const GrillaPasoTres = ({
     currency: "CLP",
     style: "currency",
   });
+
+  const filasConErrores = () => {
+    // Mostrar las filas con errores
+    let errores = [];
+    validacionResponse?.errores?.forEach((error) => {
+      errores.push(error.cuil);
+    });
+
+    // Filtrar las filas con errores, consultando el cuil mediante el array de errores, usando includes para comparar
+    let filasConErrores = [];
+    rowsAltaDDJJ.forEach((row) => {
+      if (errores.includes(row.cuil)) {
+        filasConErrores.push(row);
+      }
+    });
+
+    console.log("Filas con errores: ", filasConErrores);
+
+    // Mostrar las filas con errores en la grilla
+    setRowsAltaDDJJ(filasConErrores);
+  };
+
+  const filasTodas = () => {
+    // Mostrar todas las filas
+    setRowsAltaDDJJ(rowsAltaDDJJAux);
+
+  };
 
   const columns = [
     {
@@ -616,7 +674,7 @@ export const GrillaPasoTres = ({
               toolbar: EditToolbar,
             }}
             slotProps={{
-              toolbar: { setRowsAltaDDJJ, rowsAltaDDJJ, setRowModesModel },
+              toolbar: { setRowsAltaDDJJ, rowsAltaDDJJ, setRowsAltaDDJJAux, rowsAltaDDJJAux, setRowModesModel },
             }}
             sx={{
               "& .MuiDataGrid-virtualScroller::-webkit-scrollbar": {
@@ -661,6 +719,28 @@ export const GrillaPasoTres = ({
             }}
           />
         </ThemeProvider>
+        <div
+          style={{
+            marginTop: "20px",
+          }}
+        >
+          <a
+            className="link_animado"
+            variant="contained"
+            style={{ padding: "6px auto", marginRight: "20px", cursor: "pointer" }}
+            onClick={filasConErrores}
+          >
+            Filas con errores
+          </a>
+          <a
+            className="link_animado"
+            variant="contained"
+            style={{ padding: "6px auto", cursor: "pointer" }}
+            onClick={filasTodas}
+          >
+            Todas las filas
+          </a>
+        </div>
       </Box>
     </div>
   );

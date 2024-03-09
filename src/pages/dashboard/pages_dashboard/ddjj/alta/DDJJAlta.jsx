@@ -29,6 +29,8 @@ export const MisAltaDeclaracionesJuradas = ({
   handleAcceptPeriodoDDJJ,
   rowsAltaDDJJ,
   setRowsAltaDDJJ,
+  rowsAltaDDJJAux,
+  setRowsAltaDDJJAux,
   peticion,
   idDDJJ,
 }) => {
@@ -377,6 +379,8 @@ export const MisAltaDeclaracionesJuradas = ({
         <GrillaPasoTres
           rowsAltaDDJJ={rowsAltaDDJJ}
           setRowsAltaDDJJ={setRowsAltaDDJJ}
+          rowsAltaDDJJAux={rowsAltaDDJJAux}
+          setRowsAltaDDJJAux={setRowsAltaDDJJAux}
           token={TOKEN}
           camaras={camaras}
           categoriasFiltradas={categoriasFiltradas}
@@ -397,7 +401,7 @@ export const MisAltaDeclaracionesJuradas = ({
         >
           <Button
             variant="contained" // Si quito esto se ve mejor ?????
-            sx={{ padding: "6px 52px" }}
+            sx={{ padding: "6px 52px", marginLeft: "10px" }}
             onClick={guardarDeclaracionJurada}
           >
             Guardar
