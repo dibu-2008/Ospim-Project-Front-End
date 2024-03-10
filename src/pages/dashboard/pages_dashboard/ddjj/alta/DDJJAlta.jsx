@@ -99,30 +99,36 @@ export const MisAltaDeclaracionesJuradas = ({
   useEffect(() => {
     const ObtenerPlantaEmpresas = async () => {
       const data = await axiosDDJJ.getPlantas(ID_EMPRESA);
+      console.log(data);
       setPlantas(data.map((item) => ({ id: item, ...item })));
     };
     ObtenerPlantaEmpresas();
   }, []);
 
   const importarAfiliado = async () => {
-
     const cuiles = afiliadoImportado.map((item) => item.cuil);
     const cuilesString = cuiles.map((item) => item.toString());
 
-    const cuilesResponse = await axiosDDJJ.validarCuiles(ID_EMPRESA, cuilesString);
-    
+    const cuilesResponse = await axiosDDJJ.validarCuiles(
+      ID_EMPRESA,
+      cuilesString
+    );
+
     // Si alguno de los cuiles el valor de cuilesValidados es igual a false
     if (cuilesResponse.some((item) => item.cuilValido === false)) {
-
       // imprimir en consola el cuil que tiene el valor de cuilValido igual a false
-      const cuilFallido = cuilesResponse.filter((item) => item.cuilValido === false)
+      const cuilFallido = cuilesResponse.filter(
+        (item) => item.cuilValido === false
+      );
       cuilFallido.forEach((item) => {
         console.log(item.cuil);
       });
 
-      const mensajesFormateados = cuilFallido.map((item, index) => {
-        return `<p>${item.cuil}</p>`;
-      }).join("")
+      const mensajesFormateados = cuilFallido
+        .map((item, index) => {
+          return `<p>${item.cuil}</p>`;
+        })
+        .join("");
 
       Swal.fire({
         icon: "error",
@@ -133,8 +139,7 @@ export const MisAltaDeclaracionesJuradas = ({
         showCancelButton: true,
         cancelButtonText: "Cancelar",
       });
-    }else {
-
+    } else {
       // swall de 1 segundo success
       Swal.fire({
         icon: "success",
@@ -144,7 +149,6 @@ export const MisAltaDeclaracionesJuradas = ({
       });
 
       setRowsAltaDDJJ(afiliadoImportado);
-
     }
   };
 

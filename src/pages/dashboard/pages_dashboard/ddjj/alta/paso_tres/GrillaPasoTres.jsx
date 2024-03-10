@@ -448,6 +448,8 @@ export const GrillaPasoTres = ({
       }),
       headerClassName: "header--cell",
       renderEditCell: (params) => {
+        console.log(rowsAltaDDJJ);
+
         return (
           <Select
             fullWidth
