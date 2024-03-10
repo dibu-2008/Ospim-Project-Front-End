@@ -128,8 +128,9 @@ export const GrillaMisDeclaracionesJuradas = ({
     setTabState(0);
 
     const ddjj = await axiosDDJJ.getDDJJ(idEmpresa, id);
+    console.log("ddjj: ", ddjj);
 
-    const periodoResponse = ddjj.periodo;
+    /* const periodoResponse = ddjj.periodo;
     const fecha = new Date(periodoResponse);
     const mes = fecha.getMonth() + 1; // Sumar 1 porque los meses van de 0 a 11
     const anio = fecha.getFullYear();
@@ -140,7 +141,7 @@ export const GrillaMisDeclaracionesJuradas = ({
 
     setPeticion("PUT");
     setIdDDJJ(id);
-    setRowsAltaDDJJ(ddjj.afiliados);
+    setRowsAltaDDJJ(ddjj.afiliados); */
   };
 
   const handleSaveClick = (id) => () => {
