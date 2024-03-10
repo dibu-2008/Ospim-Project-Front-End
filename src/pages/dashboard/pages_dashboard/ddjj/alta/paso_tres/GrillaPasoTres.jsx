@@ -243,6 +243,32 @@ export const GrillaPasoTres = ({
     setRowModesModel(newRowModesModel);
   };
 
+  const filasConErrores = () => {
+    // Mostrar las filas con errores
+    let errores = [];
+    validacionResponse?.errores?.forEach((error) => {
+      errores.push(error.cuil);
+    });
+
+    // Filtrar las filas con errores, consultando el cuil mediante el array de errores, usando includes para comparar
+    let filasConErrores = [];
+    rowsAltaDDJJ.forEach((row) => {
+      if (errores.includes(row.cuil)) {
+        filasConErrores.push(row);
+      }
+    });
+
+    console.log("Filas con errores: ", filasConErrores);
+
+    // Mostrar las filas con errores en la grilla
+    setRowsAltaDDJJ(filasConErrores);
+  };
+
+  const filasTodas = () => {
+    // Mostrar todas las filas
+    setRowsAltaDDJJ(rowsAltaDDJJAux);
+  };
+
   const columns = [
     {
       field: "cuil",
