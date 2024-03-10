@@ -34,9 +34,6 @@ export const MisAltaDeclaracionesJuradas = ({
   peticion,
   idDDJJ,
 }) => {
-  // const [rowsAltaDDJJ, setRowsAltaDDJJ] = useState([]);
-  // const [periodo, setPeriodo] = useState(null);
-  // const [periodoIso, setPeriodoIso] = useState(null);
   const [otroPeriodo, setOtroPeriodo] = useState(null);
   const [otroPeriodoIso, setOtroPeriodoIso] = useState(null);
   const [camaras, setCamaras] = useState([]);

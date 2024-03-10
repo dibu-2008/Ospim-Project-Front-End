@@ -124,14 +124,13 @@ export const GrillaMisDeclaracionesJuradas = ({
     }
   };
 
-  const handleEditClick = (id, row) => async () => {
+  const handleEditClick = (id) => async () => {
     setTabState(0);
 
     const ddjj = await axiosDDJJ.getDDJJ(idEmpresa, id);
 
     const periodoResponse = ddjj.periodo;
     const fecha = new Date(periodoResponse);
-
     const mes = fecha.getMonth() + 1; // Sumar 1 porque los meses van de 0 a 11
     const anio = fecha.getFullYear();
 
@@ -139,18 +138,9 @@ export const GrillaMisDeclaracionesJuradas = ({
 
     handleAcceptPeriodoDDJJ();
 
-    const afiliados = ddjj.afiliados;
-
-    const updateRowsAltaDDJJ = afiliados.map((item, index) => ({
-      id: index + 1,
-      ...item,
-    }));
-
     setPeticion("PUT");
-
     setIdDDJJ(id);
-
-    setRowsAltaDDJJ(updateRowsAltaDDJJ);
+    setRowsAltaDDJJ(ddjj.afiliados);
   };
 
   const handleSaveClick = (id) => () => {
@@ -325,7 +315,7 @@ export const GrillaMisDeclaracionesJuradas = ({
             icon={<EditIcon />}
             label="Edit"
             className="textPrimary"
-            onClick={handleEditClick(id, row)}
+            onClick={handleEditClick(id)}
             color="inherit"
           />,
           <GridActionsCellItem

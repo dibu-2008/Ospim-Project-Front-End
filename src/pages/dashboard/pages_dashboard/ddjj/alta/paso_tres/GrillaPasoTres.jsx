@@ -501,7 +501,7 @@ export const GrillaPasoTres = ({
     {
       field: "fechaIngreso",
       type: "date",
-      headerName: "Fecha Ingreso",
+      headerName: "Ingreso",
       flex: 1,
       editable: true,
       headerAlign: "center",
@@ -509,12 +509,12 @@ export const GrillaPasoTres = ({
       headerClassName: "header--cell",
       valueFormatter: (params) => {
         const date = new Date(params.value);
-
         const day = date.getUTCDate().toString().padStart(2, "0");
         const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
         const year = date.getUTCFullYear();
 
-        return `${day}-${month}-${year}`;
+        //return `${day}-${month}-${year}`;
+        return formatter.date(params.value);
       },
     },
     {
@@ -561,9 +561,18 @@ export const GrillaPasoTres = ({
       valueFormatter: (params) => formatter.currency.format(params.value || 0),
     },
     {
-      field: "adheridoSindicato",
+      field: "uomasocio",
       type: "singleSelect",
-      headerName: "Adherido a sindicato",
+      //headerName: "Adherido a sindicato",
+      renderHeader: () => (
+        <div style={{ textAlign: "center", color: "#fff", fontSize: "0.8rem" }}>
+          <span role="img" aria-label="enjoy">
+            Adherido
+            <br />
+            sindicato
+          </span>
+        </div>
+      ),
       flex: 1,
       editable: true,
       headerAlign: "center",
@@ -575,9 +584,18 @@ export const GrillaPasoTres = ({
       ],
     },
     {
-      field: "pagaMutual",
+      field: "antimasocio",
       type: "singleSelect",
-      headerName: "Paga mutual",
+      //headerName: "Paga mutual",
+      renderHeader: () => (
+        <div style={{ textAlign: "center", color: "#fff", fontSize: "0.8rem" }}>
+          <span role="img" aria-label="enjoy">
+            Paga
+            <br />
+            mutual
+          </span>
+        </div>
+      ),
       flex: 1,
       editable: true,
       headerAlign: "center",
