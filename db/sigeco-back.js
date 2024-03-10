@@ -284,7 +284,13 @@ module.exports = (req, res, next) => {
       });
     });
 
-    if (errores.length > 0) {
+    res.status(200).jsonp({
+      mensaje: "Todos los campos están llenos excepto 'inte'.",
+      afiliados,
+      errores
+    });
+
+    /* if (errores.length > 0) {
       res.status(400).jsonp({
         codigo: "ERROR_VALIDACION_NIVEL",
         ticket: "TK-156269",
@@ -299,7 +305,7 @@ module.exports = (req, res, next) => {
         mensaje: "Todos los campos están llenos excepto 'inte'.",
         afiliados,
       });
-    }
+    } */
   }
 
   function DDJJImprimir() {
@@ -460,7 +466,7 @@ module.exports = (req, res, next) => {
     const { camaraCodigo, descripcion } = req.body;
     console.log(
       "Middleware - SIGECO - categoriasURL() - INIT - camaraCodigo:" +
-        camaraCodigo
+      camaraCodigo
     );
     if (
       camaraCodigo != "CAENA" &&
@@ -523,7 +529,7 @@ module.exports = (req, res, next) => {
 
       console.log(
         "Middleware - SIGECO - validarLoguinDFA() - res.statusCode: " +
-          res.statusCode
+        res.statusCode
       );
     } else {
       const response = {
