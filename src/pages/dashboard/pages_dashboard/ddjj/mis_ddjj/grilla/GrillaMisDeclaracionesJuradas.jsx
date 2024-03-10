@@ -124,14 +124,17 @@ export const GrillaMisDeclaracionesJuradas = ({
     }
   };
 
-  const handleEditClick = (id) => async () => {
+  const handleEditClick = (id, row) => async () => {
     setTabState(0);
 
     const ddjj = await axiosDDJJ.getDDJJ(idEmpresa, id);
     console.log("ddjj: ", ddjj);
+    //const ddjj = await obtenerMiDeclaracionJurada(idEmpresa, id, token);
 
-    /* const periodoResponse = ddjj.periodo;
+    const periodoResponse = ddjj[0].periodo;
+    // periodoResponse pero ahora ddjj es un array de objetos
     const fecha = new Date(periodoResponse);
+
     const mes = fecha.getMonth() + 1; // Sumar 1 porque los meses van de 0 a 11
     const anio = fecha.getFullYear();
 
@@ -139,10 +142,22 @@ export const GrillaMisDeclaracionesJuradas = ({
 
     handleAcceptPeriodoDDJJ();
 
+    // Esto lo quito Diego, pero es necesario para actualizar el estado de la ddjj
+    const afiliados = ddjj[0].afiliados;
+    
+    // Los afiliados no tienen id, por eso se los agregamos
+    const updateRowsAltaDDJJ = afiliados.map((item, index) => ({
+      id: index + 1,
+      ...item,
+    }));
+
     setPeticion("PUT");
+
     setIdDDJJ(id);
-    setRowsAltaDDJJ(ddjj.afiliados); */
+
+    setRowsAltaDDJJ(updateRowsAltaDDJJ);
   };
+
 
   const handleSaveClick = (id) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
