@@ -223,14 +223,7 @@ export const GrillaMisDeclaracionesJuradas = ({
       align: "center",
       headerClassName: "header--cell",
       valueFormatter: (params) => {
-        const date = new Date(params.value);
-
-        //const day = date.getUTCDate().toString().padStart(2, "0");
-        const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
-        const year = date.getUTCFullYear();
-
-        //return `${day}-${month}-${year}`;
-        return `${month}/${year}`;
+        return formatter.periodo(params.value);
       },
     },
     {

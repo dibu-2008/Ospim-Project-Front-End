@@ -8,18 +8,36 @@ const formatCurrency = new Intl.NumberFormat("es-CL", {
 */
 
 const formatDate = (value) => {
-  const date = new Date(value);
+  try {
+    const date = new Date(value);
 
-  const day = date.getUTCDate().toString().padStart(2, "0");
-  const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
-  const year = date.getUTCFullYear();
+    const day = date.getUTCDate().toString().padStart(2, "0");
+    const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
+    const year = date.getUTCFullYear();
 
-  return `${day}/${month}/${year}`;
+    return `${day}/${month}/${year}`;
+  } catch (error) {
+    return "";
+  }
+};
+
+const formatPeriodo = (value) => {
+  try {
+    const date = new Date(value);
+
+    const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
+    const year = date.getUTCFullYear();
+
+    return `${month}/${year}`;
+  } catch (error) {
+    return "";
+  }
 };
 
 const formatter = {
   currency: formatCurrency,
   date: formatDate,
+  periodo: formatPeriodo,
 };
 
 export default formatter;

@@ -170,25 +170,13 @@ export const GrillaPasoTres = ({
     }
   };
 
-  const filtroDeCategoria = async (params, codigoCamara) => {
-    //const categoriasResponse = await obtenerCategorias(token);
-
+  const filtroDeCategoria = (codigoCamara) => {
     const filtroCategorias = todasLasCategorias.filter(
       (categoria) => categoria.camara === codigoCamara
     );
-    //console.log("categoriasFiltradas: ", filtroCategorias);
-
-    //armar un array solo de categorias
     const soloCategorias = filtroCategorias.map((item) => item.categoria);
-    //console.log("soloCategorias: ", soloCategorias);
-
-    params.api.setEditCellValue({
-      id: params.id,
-      field: "categoria",
-      value: soloCategorias[0],
-    });
-
     setCategoriasFiltradas(soloCategorias);
+    return soloCategorias;
   };
 
   const handleRowEditStop = (params, event) => {
@@ -198,6 +186,11 @@ export const GrillaPasoTres = ({
   };
 
   const handleEditClick = (id) => () => {
+    console.log("handleEditClick - id: " + id);
+    const editedRow = rowsAltaDDJJ.find((row) => row.id === id);
+    console.log("handleEditClick - editedRow: " + JSON.stringify(editedRow));
+
+    filtroDeCategoria(editedRow.camara);
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
 
@@ -477,7 +470,14 @@ export const GrillaPasoTres = ({
                 <MenuItem
                   key={camara.codigo}
                   value={camara.codigo}
-                  onClick={() => filtroDeCategoria(params, camara.codigo)}
+                  onClick={() => {
+                    const vec = filtroDeCategoria(camara.codigo);
+                    params.api.setEditCellValue({
+                      id: params.id,
+                      field: "categoria",
+                      value: vec[0],
+                    });
+                  }}
                 >
                   {camara.descripcion}
                 </MenuItem>
