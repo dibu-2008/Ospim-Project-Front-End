@@ -9,11 +9,11 @@ module.exports = (req, res, next) => {
       return "OSPIM-CONTACTO";
     }
 
-    if (req.method === "GET" && req.url.startsWith("/DDJJ/imprimir/")) {
+    if (req.method === "GET" && req.url.endsWith("/DDJJ/imprimir/")) {
       return "DDJJ-IMPRIMIR";
     }
 
-    if (req.method === "POST" && req.url.startsWith("/DDJJ/validar")) {
+    if (req.method === "POST" && req.url.endsWith("/ddjj/validar")) {
       return "DDJJ-VALIDAR-NIVEL2";
     }
 
@@ -287,7 +287,7 @@ module.exports = (req, res, next) => {
     res.status(200).jsonp({
       mensaje: "Todos los campos están llenos excepto 'inte'.",
       afiliados,
-      errores
+      errores,
     });
 
     /* if (errores.length > 0) {
@@ -466,7 +466,7 @@ module.exports = (req, res, next) => {
     const { camaraCodigo, descripcion } = req.body;
     console.log(
       "Middleware - SIGECO - categoriasURL() - INIT - camaraCodigo:" +
-      camaraCodigo
+        camaraCodigo
     );
     if (
       camaraCodigo != "CAENA" &&
@@ -529,7 +529,7 @@ module.exports = (req, res, next) => {
 
       console.log(
         "Middleware - SIGECO - validarLoguinDFA() - res.statusCode: " +
-        res.statusCode
+          res.statusCode
       );
     } else {
       const response = {

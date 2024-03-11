@@ -228,10 +228,11 @@ export const MisAltaDeclaracionesJuradas = ({
         noRemunerativo: !item.noRemunerativo ? null : item.noRemunerativo,
         /* UOMASocio: item.aporteUomaCs && item.aporteUomaAs && item.aporteArt46 ? true : false,
                 ANTIMASocio: item.aporteUomaCs && item.aporteUomaAs && item.aporteArt46 && item.aporteAntimaCs ? true : false, */
-        UOMASocio: false,
-        ANTIMASocio: false,
+        UOMASocio: item.uomasocio,
+        ANTIMASocio: item.antimasocio,
       })),
     };
+    console.log(rowsAltaDDJJ);
 
     const erroresResponse = await axiosDDJJ.validar(ID_EMPRESA, altaDDJJFinal);
     console.log(erroresResponse);

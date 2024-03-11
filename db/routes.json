@@ -33,7 +33,10 @@
   "/empresa/:empresaId/ddjj/:id/imprimir": "/DDJJ/imprimir/?empresaId=:empresaId&id=:id",
 
   "/empresa/:empresaId/ddjj/totales": "/DDJJ-V2-CONSUL?empresaId=:empresaId",
+
+  "/empresa/:empresaId/ddjj/validar": "/empresa/:empresaId/ddjj/validar",
   "/empresa/:empresaId/ddjj/:id": "/DDJJ/?id=:id&empresaId=:empresaId",
+
   "/empresa/:empresaId/ddjj/:id/presentar": "/DDJJ/:id",
   "/empresa/:empresaId/ddjj/periodo/:periodo/existe": "/DDJJ?empresaId=:empresaId&periodo=:periodo",
 
