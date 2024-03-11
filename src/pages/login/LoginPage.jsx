@@ -13,8 +13,9 @@ import { showSwalSuccess } from "./LoginShowAlert.js";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
 import "./LoginPage.css";
-import { Button, TextField } from "@mui/material";
+import { Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
 import { ThreeCircles } from "react-loader-spinner";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const VITE_WELCOME_PORTAL = import.meta.env.VITE_WELCOME_PORTAL;
 
@@ -30,6 +31,17 @@ export const LoginPage = () => {
   const [refreshToken, setRefreshToken] = useState(null);
   const [showLoading, setShowLoading] = useState(true);
   const [showInputComponent, setShowInputComponent] = useState(false);
+
+  /////////////////////////////////////////////////////////////////////////////////////////////
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+  /////////////////////////////////////////////////////////////////////////////////////////////
 
   const {
     user,
@@ -192,7 +204,7 @@ export const LoginPage = () => {
                   </Stack>
                 )}
               </div>
-              <div className="input-group">
+              {/* <div className="input-group">
                 <TextField
                   type="password"
                   name="passwordLoginInternalUser"
@@ -203,6 +215,37 @@ export const LoginPage = () => {
                   label="Contraseña"
                   className="input_data"
                 />
+                {showAlertPassword && (
+                  <Stack sx={{ width: "100%" }} spacing={2}>
+                    <Alert severity="error">Campo requerido</Alert>
+                  </Stack>
+                )}
+              </div> */}
+              <div className="input-group">
+                <FormControl variant="outlined">
+                  <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+                  <OutlinedInput
+                    type={showPassword ? 'text' : 'password'}
+                    name="passwordLoginInternalUser"
+                    id="passwordLoginInternalUser"
+                    value={passwordLoginInternalUser}
+                    onChange={onInputChangePassword}
+                    autoComplete="off"
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                          edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                    label="Password"
+                  />
+                </FormControl>
                 {showAlertPassword && (
                   <Stack sx={{ width: "100%" }} spacing={2}>
                     <Alert severity="error">Campo requerido</Alert>
@@ -221,8 +264,8 @@ export const LoginPage = () => {
                 SIGUIENTE
               </Button>
               <div className="container_btn_pass_firts">
-                <a>Recupero de Contraseña</a>
-                <a onClick={redirectToRegister}>Ingreso por primera vez</a>
+                <a className="link_animado">Recupero de Contraseña</a>
+                <a className="link_animado" onClick={redirectToRegister}>Ingreso por primera vez</a>
               </div>
             </form>
           </div>

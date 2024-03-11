@@ -46,6 +46,7 @@ function a11yProps(index) {
 
 export const DeclaracionesJuradas = () => {
   const [rowsAltaDDJJ, setRowsAltaDDJJ] = useState([]);
+  const [rowsAltaDDJJAux, setRowsAltaDDJJAux] = useState([]);
   const [rows_mis_ddjj, setRowsMisDdjj] = useState([]);
   const [periodo, setPeriodo] = useState(null);
   const [periodoIso, setPeriodoIso] = useState(null);
@@ -121,6 +122,8 @@ export const DeclaracionesJuradas = () => {
               handleAcceptPeriodoDDJJ={handleAcceptPeriodoDDJJ}
               rowsAltaDDJJ={rowsAltaDDJJ}
               setRowsAltaDDJJ={setRowsAltaDDJJ}
+              rowsAltaDDJJAux={rowsAltaDDJJAux}
+              setRowsAltaDDJJAux={setRowsAltaDDJJAux}
               peticion={peticion}
               idDDJJ={idDDJJ}
             />
