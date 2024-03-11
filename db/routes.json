@@ -51,7 +51,7 @@
   "/empresa/:empresaId/ddjj/:ddjjId/boleta/:boletaCodigo/calcular-interes":"empresa/ddjj/boleta/calcular-interes/?codigoBoleta=:boletaCodigo",
   "/empresa/:empresaId/ddjj/:ddjjId/calcular-intereses":"/empresa/ddjj/calcular-intereses",
   "/empresa/:empresaId/ddjj/:ddjjId/codigo-boleta/:codigoBoleta":"/empresa/ddjj/boleta/codigo/?ddjj_id=:ddjjId&codigo=:codigoBoleta",
-  "/empresa/:empresaId/ddjj/:ddjjId/guardar-boletas":"/boletas_guardadas",
+  "/empresa/:empresaId/ddjj/:ddjjId/guardar-boletas":"/empresa/ddjj/guardar-boletas",
   "/empresa/:empresaId/boletas":"/boletas_guardadas",
   "/empresa/:empresaId/ddjj/:Id/boleta-pago/concepto/:concepto/imprimir-detalle":"/empresa/ddjj/boleta-pago/concepto/imprimir-detalle",
   "/empresa/:empresaId/ddjj/:Id/boleta-pago/concepto/:concepto/imprimir-boleta":"/empresa/ddjj/boleta-pago/concepto/imprimir-boleta",

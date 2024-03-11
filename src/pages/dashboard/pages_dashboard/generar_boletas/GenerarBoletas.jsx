@@ -1,29 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Paper, Button, MenuItem, Select, Box } from '@mui/material';
-import { calcularInteresBoleta,calcularInteresBoletas, generarBoletasPost, getBoletasByDDJJid } from './GenerarBoletasApi';
+import { calcularInteresBoleta,calcularInteresBoletas, generarBoletasPost, getBoletasByDDJJid, axiosGenerarBoletas } from './GenerarBoletasApi';
 import "./GenerarBoletas.css";
-//import { Margin } from '@mui/icons-material';
-//import { width } from '@mui/system';
 
 export const GenerarBoletas = () => {
     const DDJJ_ID = 5048119
     const ID_EMPRESA = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.empresa.id;
 
-    const [boletas, setBoletas] = useState({});
-    const [showDetail, setShowDetail] = useState(false);
-    const [afiliados, setAfiliados] = useState([]);
-    const [primeraSeleccion, setPrimeraSeleccion] = useState(true)
+    const [ boletas, setBoletas ] = useState({});
+    const [ showDetail, setShowDetail ] = useState(false);
+    const [ afiliados, setAfiliados ] = useState([]);
+    const [ primeraSeleccion, setPrimeraSeleccion ] = useState(true)
+    const [ habilitaBoton, sethabilitaBoton ] = useState(true)
 
     useEffect(() => {
         const fetchData = async () => {
           try {
-            const response = await getBoletasByDDJJid(ID_EMPRESA,DDJJ_ID);
-            setBoletas(response.data);
-            setAfiliados(ordenarAfiliadosBoletas(response.data));
+            const data = await axiosGenerarBoletas.getBoletasByDDJJid(ID_EMPRESA,DDJJ_ID);
+            setBoletas(data)
+            setAfiliados(ordenarAfiliadosBoletas(data));
           } catch (error) {
             console.error('Error al obtener las boletas:', error);
           }
-
         };
     
         fetchData();
@@ -59,35 +57,25 @@ export const GenerarBoletas = () => {
         console.log(boletas)
     }
     
-    const setIntencionDePago = (codigo, fecha) => {
+    const setIntencionDePago = async  (codigo, fecha) => {
         if (primeraSeleccion) {
             setPrimeraSeleccion(false);
-            calcularInteresBoletas(123, DDJJ_ID, fecha).then(response => {
-                setBoletas(prevBoletas => ({ ...prevBoletas, detalle_boletas: response.data }));
-            });
+            const response = await axiosGenerarBoletas.calcularInteresBoletas(123,DDJJ_ID, fecha)
 
+            setBoletas(prevBoletas => ({...prevBoletas, detalle_boletas:response.data}))
+            sethabilitaBoton(false)
         } else {
             const boletaIndex = boletas.detalle_boletas.findIndex(element => element.codigo === codigo);
-            calcularInteresBoleta(123, DDJJ_ID, codigo, fecha).then(response => {
-                setInteresInDetalleBoleta(boletaIndex, response);
-            });
+            const response = await axiosGenerarBoletas.calcularInteresBoleta(123, DDJJ_ID, codigo, fecha)
+            setInteresInDetalleBoleta(boletaIndex, response)
+            sethabilitaBoton(false)
         }
     }
 
     const toggleDetail = () => setShowDetail(!showDetail);
 
-    const generarBoletas = async () => {
-        try {
-            const response = await generarBoletasPost(ID_EMPRESA, DDJJ_ID, boletas);
-            if (response.status === 201) {
-                window.location.href = "/dashboard/boletas";
-            } else {
-                console.error("Error al generar boletas");
-            }
-        } catch (error) {
-            console.error("Error al generar boletas:", error);
-        }
-    }
+    const generarBoletas = async () => await axiosGenerarBoletas.generarBoletasPost(ID_EMPRESA, DDJJ_ID, boletas)
+    
     const hoy =new Date().toISOString().split('T')[0]
     
     return (
@@ -204,7 +192,7 @@ export const GenerarBoletas = () => {
                 </Table>
             </TableContainer>
             <Box display="flex" justifyContent="flex-end" paddingTop="5em">
-                <Button variant="contained" onClick={()=> generarBoletas()} color="primary">
+                <Button variant="contained" onClick={()=> generarBoletas()} color="primary" disabled={habilitaBoton}>
                     Generar
                 </Button>
             </Box>

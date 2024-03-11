@@ -202,8 +202,10 @@ module.exports = (req, res, next) => {
     if (req.method === "GET" && req.url.startsWith("/empresa/periodo/tiene-rectificativa")){
       return "TIENE-RECTIFICATIVA"
     }
-      
-    return "----";
+    if (req.method === "POST" && req.url.startsWith("/empresa/ddjj/guardar-boletas")){
+      return "GUARDAR-BOLETAS"
+    }
+      return "----";
   }
 
   switch (getAPI(req, res)) {
@@ -288,6 +290,9 @@ module.exports = (req, res, next) => {
       break;
     case "TIENE-RECTIFICATIVA":
       tieneRectificativa();
+      break;
+    case "GUARDAR-BOLETAS":
+      gurdarBoletas();
       break;
     case "----":
       // code block
@@ -709,6 +714,18 @@ module.exports = (req, res, next) => {
     return (new Date(dia_mayor) - new Date(dia_menor)) / (1000 * 60 * 60 * 24);
   } 
 
+  function gurdarBoletas(){
+    const numero_boleta = req.app.db.__wrapped__.boletas_guardadas.length
+    console.log(req.body)
+    req.body.forEach( (element, index) =>{
+      
+      element.numero_boleta = numero_boleta + index
+      req.app.db.__wrapped__.boletas_guardadas.push(element) ;
+      req.app.db.write();
+    })
+    res.status(201).send(null)
+  }
+
   function calcularInteres(){
     const { codigoBoleta } = req.query
     const { intencion_de_pago } = req.body
@@ -739,6 +756,7 @@ module.exports = (req, res, next) => {
       if (diferencia_en_dias >= 0){
         const monto_interes = boleta.total_acumulado * interes_diario *  diferencia_en_dias
         boleta.total_final = boleta.total_acumulado + monto_interes
+        boleta.intencion_de_pago = intencion_de_pago
         boleta.interes = parseFloat(monto_interes.toFixed(2))
       }
   

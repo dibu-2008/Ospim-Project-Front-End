@@ -1,38 +1,42 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Typography, TextField, Button, MenuItem, FormControl, InputLabel, Select, Box, Grid } from '@mui/material';
-import { generarBoletaSinDDJJ, tieneRectificativa } from './OtrosPagosApi';
+import { generarBoletaSinDDJJ, axiosOtrosPagos } from './OtrosPagosApi';
+
 import "./OtrosPagos.css"
 
 
 export const GenerarOtrosPagos = () => {
-    const formatDate = (date) => date.toISOString().slice(0, 19).replace('T', ' ');
-    const [fechaPago, setFechaPago] = useState('');
+    
+    const [intencionDePago, setIntencionDePago] = useState('');
     const [entidad, setEntidad] = useState('');
     const [razonPago, setRazonPago] = useState('');
     const [nroActa, setNroActa] = useState('');
-    const [descripcionPago, setDescripcionPago] = useState('');
     const [importe, setImporte] = useState('');
-    const [tipoPagoUOMA, setTipoPagoUOMA] = useState('');
+    const [conceptoUOMA, setConceptoUOMA] = useState('');
     const [periodo, setPeriodo] = useState('')
     const [rectificativa, setRectificativa] = useState(false)
-    const fecha_alta = formatDate(new Date()) 
+    const [cuota, setCuota] = useState('')
+
     const ID_EMPRESA = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.empresa.id;
     
-    const handleChangePeriodo = (fecha) => {
+
+    
+    const handleChangePeriodo = async (fecha) => {
         setPeriodo(fecha)
-        tieneRectificativa(ID_EMPRESA, fecha).then( result => setRectificativa(result.data.rectificativa))
+        const isRectificativa = await axiosOtrosPagos.tieneRectificativa(ID_EMPRESA, fecha)
+        setRectificativa(isRectificativa.rectificativa)
     }
 
-    const handleGuardar = () => {
+    const handleImprimir = () => {
+
         const body = {
-            fecha_alta,
-            fechaPago,
+            conceptoUOMA,
+            intencionDePago,
             entidad,
             razonPago,
             nroActa,
-            descripcionPago,
-            importe,
-            tipoPagoUOMA
+            importe
+            
         }
         generarBoletaSinDDJJ(ID_EMPRESA, body)
         
@@ -60,8 +64,8 @@ export const GenerarOtrosPagos = () => {
                         label="Fecha de Pago"
                         type="date"
                         fullWidth
-                        value={fechaPago}
-                        onChange={(e) => setFechaPago(e.target.value)}
+                        value={intencionDePago}
+                        onChange={(e) => setIntencionDePago(e.target.value)}
                         InputLabelProps={{
                             shrink: true,
                         }}
@@ -98,8 +102,8 @@ export const GenerarOtrosPagos = () => {
                         <FormControl fullWidth>
                             <InputLabel>Tipo de Pago UOMA</InputLabel>
                             <Select
-                                value={tipoPagoUOMA}
-                                onChange={(e) => setTipoPagoUOMA(e.target.value)}
+                                value={conceptoUOMA}
+                                onChange={(e) => setConceptoUOMA(e.target.value)}
                             >
                                 <MenuItem value="Cuota Social">Cuota Social</MenuItem>
                                 <MenuItem value="Solidario">Solidario</MenuItem>
@@ -118,16 +122,16 @@ export const GenerarOtrosPagos = () => {
                             onChange={(e) => setNroActa(e.target.value)}
                         />
                     </Grid>}
-                <Grid item xs={12}>
-                    <TextField
-                        label="Descripción del Pago"
-                        multiline
-                        rows={4}
-                        fullWidth
-                        value={descripcionPago}
-                        onChange={(e) => setDescripcionPago(e.target.value)}
-                    />
-                </Grid>
+                    {razonPago !== "Acuerdo de Pago" &&
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            label="Cuota"
+                            fullWidth
+                            value={cuota}
+                            onChange={(e) => setCuota(e.target.value)}
+                        />
+                    </Grid>}
+
                 <Grid item xs={12}>
                     <TextField
                         label="Importe"
@@ -139,7 +143,10 @@ export const GenerarOtrosPagos = () => {
                 </Grid>
                 <Grid item xs={12}>
                     <Box display="flex" justifyContent="flex-end">
-                        <Button variant="contained" onClick={handleGuardar}>Guardar</Button>
+                        <Button 
+                        variant="contained" 
+                        disabled={ !periodo || !intencionDePago || !entidad || !razonPago || !importe } 
+                        onClick={handleImprimir}>Imprimir</Button>
                     </Box>
                 </Grid>
             </Grid>

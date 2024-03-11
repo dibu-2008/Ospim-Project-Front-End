@@ -9,6 +9,7 @@ import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 import * as locales from "@mui/material/locale";
 import { MisAltaDeclaracionesJuradas } from "./alta/DDJJAlta";
 import dayjs from "dayjs";
+import { Boletas } from "../boletas/Boletas";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -138,7 +139,7 @@ export const DeclaracionesJuradas = () => {
             />
           </CustomTabPanel>
           <CustomTabPanel value={tabState} index={2}>
-            Mis Pagos
+            <Boletas />
           </CustomTabPanel>
         </Box>
       </ThemeProvider>

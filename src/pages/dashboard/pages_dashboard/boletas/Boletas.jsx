@@ -17,11 +17,15 @@ export const Boletas = () => {
 
 
   useEffect(() => {
+    console.log()
     const fetchData = async () => {
       try {
         const response = await getBoletasByEmpresa(ID_EMPRESA);
+        console.log(response)
         setBoletas(response.data);
-        setBoletasVisibles(response.data.flatMap((boleta) => boleta.detalle_boletas.map((boletaDetalle, index) => ({ ...boletaDetalle, id: `${boleta.id}-${index}` }))));
+        //setBoletasVisibles(response.data.flatMap((boleta) => boleta.detalle_boletas.map((boletaDetalle, index) => ({ ...boletaDetalle, id: `${boleta.id}-${index}` }))));
+        setBoletasVisibles(response.data.flatMap((boleta) => ({ ...boleta, id: `${boleta.numero_boleta}` })));
+        //setBoletasVisibles(response.data)
       } catch (error) {
         console.error('Error al obtener las boletas:', error);
       }
@@ -38,13 +42,14 @@ export const Boletas = () => {
 
   const handleSearch = () => {
     const filteredBoletas = boletas.filter((boleta) => {
-      const fecha = boleta.detalle_boletas[0].periodo;
+      //const fecha = boleta.detalle_boletas[0].periodo;
+      const fecha = boleta.periodo;
       const [mes, anio] = fecha.split('-');
       const timestamp = new Date(`${anio}-${mes}-01`);
 
       return timestamp >= new Date(fromDate) && timestamp <= new Date(toDate);
     });
-    setBoletasVisibles(filteredBoletas.flatMap((boleta) => boleta.detalle_boletas.map((boletaDetalle, index) => ({ ...boletaDetalle, id: `${boletaDetalle.id}-${index}` }))));
+    setBoletasVisibles(filteredBoletas.flatMap((boleta) => ({ ...boleta, id: `${boleta.numero_boleta}` })));
   };
 
   const handleExport = () => {
@@ -54,7 +59,7 @@ export const Boletas = () => {
 
   return (
     <div className='boletas_container'>
-      <h1>Boletas</h1>
+      {window.location.href.split('/').slice(3).join('/') === "dashboard/ddjj" || <h1>Boletas</h1>}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} className='mb-4em'>
         <div>
           <p>Periodo</p>
@@ -94,7 +99,7 @@ export const Boletas = () => {
           columns={[
             { field: 'periodo', headerName: 'Periodo', flex: 1 },
             { field: 'tipo_declaracion', headerName: 'Tipo Declaración Jurada', flex: 1 },
-            { field: 'id', headerName: 'Número de Boleta', flex: 1 },
+            { field: 'numero_boleta', headerName: 'Número de Boleta', flex: 1 },
             { field: 'descripcion', headerName: 'Concepto', flex: 1 },
             { field: 'total_acumulado', headerName: 'Importe Boleta', flex: 1 },
             { field: 'intencion_de_pago', headerName: 'Fecha de Pago', flex: 1 },
