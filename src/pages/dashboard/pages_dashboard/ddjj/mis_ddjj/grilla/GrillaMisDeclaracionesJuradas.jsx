@@ -131,7 +131,7 @@ export const GrillaMisDeclaracionesJuradas = ({
     console.log("ddjj: ", ddjj);
     //const ddjj = await obtenerMiDeclaracionJurada(idEmpresa, id, token);
 
-    const periodoResponse = ddjj[0].periodo;
+    const periodoResponse = ddjj.periodo;
     // periodoResponse pero ahora ddjj es un array de objetos
     const fecha = new Date(periodoResponse);
 
@@ -143,7 +143,7 @@ export const GrillaMisDeclaracionesJuradas = ({
     handleAcceptPeriodoDDJJ();
 
     // Esto lo quito Diego, pero es necesario para actualizar el estado de la ddjj
-    const afiliados = ddjj[0].afiliados;
+    const afiliados = ddjj.afiliados;
     
     // Los afiliados no tienen id, por eso se los agregamos
     const updateRowsAltaDDJJ = afiliados.map((item, index) => ({

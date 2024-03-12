@@ -81,6 +81,10 @@ module.exports = (req, res, next) => {
       }
     }
 
+    if(req.method === "GET" && req.url.startsWith("/feriados/duplicar/")){
+      return "FERIADOS-DUPLICAR";
+    }
+
     let regEx = /([DDJJConsulta]|[DDJJ])/i;
     if (
       req.method === "GET" &&
@@ -241,6 +245,9 @@ module.exports = (req, res, next) => {
     case "DDJJ-VALIDAR-NIVEL2":
       ddjjValidarN2(req, res);
       break;
+    case "FERIADOS-DUPLICAR":
+      feriadosDuplicar();
+      break;
     case "OSPIM-CONTACTO":
       getOspimContacto();
     case "----":
@@ -312,6 +319,11 @@ module.exports = (req, res, next) => {
     const file = `${__dirname}/ddjj_2.pdf`;
     res.download(file); // Set disposition and send it.
   }
+
+  function feriadosDuplicar() {
+    res.status(200).jsonp(null);
+  }
+
 
   function AporteDetalleAlta() {
     let aporte = req.query.aporte;

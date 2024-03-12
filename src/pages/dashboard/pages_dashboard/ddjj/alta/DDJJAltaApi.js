@@ -103,6 +103,7 @@ export const actualizarDeclaracionJurada = async (
 
 export const validarAltaDeclaracionJurada = async (empresaId, registro) => {
   const URL = `/empresa/${empresaId}/ddjj/validar`;
+  console.log(URL);
   try {
     const validarDDJJResponse = await oAxios.post(URL, registro);
     return validarDDJJResponse.data || [];
@@ -114,6 +115,22 @@ export const validarAltaDeclaracionJurada = async (empresaId, registro) => {
     }
   }
 };
+
+export const validaCuil = async (empresaId, cuiles) => {
+  const URL = `/empresa/${empresaId}/ddjj/upload/nomina/validaCuil`;
+  console.log(cuiles);
+  try {
+    const validarCuilesResponse = await oAxios.post(URL, cuiles);
+    return validarCuilesResponse.data || [];
+  } catch (error) {
+    if (error.response && error.response.data) {
+      const { errores, codigo, descripcion, ticket, tipo } =
+        error.response.data;
+      return errores || [];
+    }
+  }
+
+}
 
 export const axiosDDJJ = {
   getCamaras: async function () {
@@ -142,5 +159,8 @@ export const axiosDDJJ = {
 
   validar: async function (empresaId, registro) {
     return validarAltaDeclaracionJurada(empresaId, registro);
+  },
+  validarCuiles: async function (empresaId, cuiles) {
+    return validaCuil(empresaId, cuiles);
   },
 };

@@ -28,6 +28,9 @@ export const axiosFeriados = {
   eliminar: async function (UrlApi, id) {
     return eliminar(UrlApi, id);
   },
+  duplicar: async function (anio) {
+    return duplicarFeriados(anio);
+  }
 };
 
 export const consultar = async () => {
@@ -84,3 +87,19 @@ export const eliminar = async (id) => {
     return false;
   }
 };
+
+export const duplicarFeriados = async (anio) => {
+
+  const URL = `${URL_ENTITY}/duplicar/${anio}`;
+
+  try {
+    const response = await axiosCrud.consultar(URL);
+    return response || [];
+  } catch (error) {
+    showErrorBackEnd(
+      HTTP_MSG_CONSUL_ERROR + ` (${URL_ENTITY} - status: ${error.status})`,
+      error
+    );
+    return [];
+  }
+}
