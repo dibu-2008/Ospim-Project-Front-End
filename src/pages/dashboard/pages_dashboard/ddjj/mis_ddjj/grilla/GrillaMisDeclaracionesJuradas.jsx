@@ -124,7 +124,7 @@ export const GrillaMisDeclaracionesJuradas = ({
     }
   };
 
-  const handleEditClick = (id) => async () => {
+  const handleEditClick = (id, row) => async () => {
     setTabState(0);
 
     const ddjj = await axiosDDJJ.getDDJJ(idEmpresa, id);
@@ -137,6 +137,16 @@ export const GrillaMisDeclaracionesJuradas = ({
     setPeriodo(dayjs(`${anio}-${mes + 1}`));
 
     handleAcceptPeriodoDDJJ();
+
+    // Esto lo quito Diego, pero es necesario para actualizar el estado de la ddjj
+    const afiliados = ddjj.afiliados;
+
+    //DIEGO: Los afiliado TIENEN ID. hay que areglar jsonServer !!!!
+    // Los afiliados no tienen id, por eso se los agregamos
+    //const updateRowsAltaDDJJ = afiliados.map((item, index) => ({
+    //  id: index + 1,
+    //  ...item,
+    //}));
 
     setPeticion("PUT");
     setIdDDJJ(id);
