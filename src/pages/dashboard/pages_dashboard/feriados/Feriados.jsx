@@ -22,8 +22,8 @@ import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 import Swal from "sweetalert2";
 import "./Feriados.css";
 import DateRangeIcon from "@mui/icons-material/DateRange";
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
 
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
@@ -35,19 +35,18 @@ import formatter from "@/common/formatter";
 import swal from "@/components/swal/swal";
 
 const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
   width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #1A76D2',
+  bgcolor: "background.paper",
+  border: "2px solid #1A76D2",
   boxShadow: 24,
   p: 4,
 };
 
 // Traerme las etiquetas del dom que tengas la clase .MuiDataGrid-cell--editable
-
 const crearNuevoRegistro = (props) => {
   const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
 
@@ -279,7 +278,6 @@ export const Feriados = () => {
     return () => clearTimeout(timeoutId);
   }, []);
 
-
   const columnas = [
     {
       field: "fecha",
@@ -291,13 +289,7 @@ export const Feriados = () => {
       align: "center",
       headerClassName: "header--cell",
       valueFormatter: ({ value }) => {
-        const fecha = new Date(value);
-
-        const dia = fecha.getUTCDate().toString().padStart(2, "0");
-        const mes = (fecha.getUTCMonth() + 1).toString().padStart(2, "0");
-        const anio = fecha.getUTCFullYear();
-
-        return `${dia}-${mes}-${anio}`;
+        return formatter.date(value);
       },
     },
     {
@@ -315,7 +307,8 @@ export const Feriados = () => {
         console.log("row", id) */
 
         // buscar el id en rows y obtener el numeroFila que siga esta logica numeroFila % 2 !== 0;
-        const isEvenRow = rows.find((row) => row.id === id).numeroFila % 2 !== 0;
+        const isEvenRow =
+          rows.find((row) => row.id === id).numeroFila % 2 !== 0;
 
         if (isInEditMode) {
           return [
@@ -357,9 +350,10 @@ export const Feriados = () => {
 
   return (
     <div className="feriados_container">
-      <h1>Administración de feriados
+      <h1>
+        Administración de feriados
         <DateRangeIcon
-          sx={{ marginLeft: '10px', fontSize: '2rem', cursor: 'pointer' }}
+          sx={{ marginLeft: "10px", fontSize: "2rem", cursor: "pointer" }}
           onClick={handleOpen}
         />
       </h1>

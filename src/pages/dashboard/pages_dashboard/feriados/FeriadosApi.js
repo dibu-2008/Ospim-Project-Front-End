@@ -28,9 +28,10 @@ export const axiosFeriados = {
   eliminar: async function (UrlApi, id) {
     return eliminar(UrlApi, id);
   },
+
   duplicar: async function (anio) {
     return duplicarFeriados(anio);
-  }
+  },
 };
 
 export const consultar = async () => {
@@ -89,7 +90,6 @@ export const eliminar = async (id) => {
 };
 
 export const duplicarFeriados = async (anio) => {
-
   const URL = `${URL_ENTITY}/duplicar/${anio}`;
 
   try {
@@ -105,4 +105,4 @@ export const duplicarFeriados = async (anio) => {
     );
     return [];
   }
-}
+};

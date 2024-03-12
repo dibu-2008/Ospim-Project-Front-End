@@ -14,7 +14,11 @@ import { DesktopDatePicker } from "@mui/x-date-pickers";
 import { CSVLink, CSVDownload } from "react-csv";
 import localStorageService from "@/components/localStorage/localStorageService";
 export const MisDeclaracionesJuradas = ({
+<<<<<<< HEAD
   setDDJJState={setDDJJState},
+=======
+  setDDJJState = { setDDJJState },
+>>>>>>> sigeco_front_diego
   rows_mis_ddjj,
   setRowsMisDdjj,
   setTabState,
@@ -151,7 +155,11 @@ export const MisDeclaracionesJuradas = ({
       </div>
       <Stack direction="row" justifyContent="center" alignItems="center">
         <GrillaMisDeclaracionesJuradas
+<<<<<<< HEAD
         setDDJJState={setDDJJState}
+=======
+          setDDJJState={setDDJJState}
+>>>>>>> sigeco_front_diego
           rows_mis_ddjj={rows_mis_ddjj}
           setRowsMisDdjj={setRowsMisDdjj}
           idEmpresa={ID_EMPRESA}

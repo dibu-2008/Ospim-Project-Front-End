@@ -9,11 +9,11 @@ module.exports = (req, res, next) => {
       return "OSPIM-CONTACTO";
     }
 
-    if (req.method === "GET" && req.url.startsWith("/DDJJ/imprimir/")) {
+    if (req.method === "GET" && req.url.endsWith("/DDJJ/imprimir/")) {
       return "DDJJ-IMPRIMIR";
     }
 
-    if (req.method === "POST" && req.url.startsWith("/DDJJ/validar")) {
+    if (req.method === "POST" && req.url.endsWith("/ddjj/validar")) {
       return "DDJJ-VALIDAR-NIVEL2";
     }
 
@@ -81,7 +81,7 @@ module.exports = (req, res, next) => {
       }
     }
 
-    if(req.method === "GET" && req.url.startsWith("/feriados/duplicar/")){
+    if (req.method === "GET" && req.url.startsWith("/feriados/duplicar/")) {
       return "FERIADOS-DUPLICAR";
     }
 
@@ -294,7 +294,7 @@ module.exports = (req, res, next) => {
     res.status(200).jsonp({
       mensaje: "Todos los campos están llenos excepto 'inte'.",
       afiliados,
-      errores
+      errores,
     });
 
     /* if (errores.length > 0) {
@@ -478,7 +478,7 @@ module.exports = (req, res, next) => {
     const { camaraCodigo, descripcion } = req.body;
     console.log(
       "Middleware - SIGECO - categoriasURL() - INIT - camaraCodigo:" +
-      camaraCodigo
+        camaraCodigo
     );
     if (
       camaraCodigo != "CAENA" &&
@@ -541,7 +541,7 @@ module.exports = (req, res, next) => {
 
       console.log(
         "Middleware - SIGECO - validarLoguinDFA() - res.statusCode: " +
-        res.statusCode
+          res.statusCode
       );
     } else {
       const response = {
@@ -600,8 +600,8 @@ module.exports = (req, res, next) => {
         // Return value for new_array
         element.aportes = DDJJSetParamsAporteV2(
           element.remunerativo,
-          element.UOMASocio,
-          element.ANTIMASocio
+          element.uomaSocio,
+          element.amtimaSocio
         );
 
         return element;
@@ -619,16 +619,16 @@ module.exports = (req, res, next) => {
     }
   }
 
-  function DDJJSetParamsAporteV2(remuneracion, bUOMASocio, bANTIMASocio) {
+  function DDJJSetParamsAporteV2(remuneracion, buomaSocio, bamtimaSocio) {
     let aportes = [];
     let imp = remuneracion * 0.02;
     let impArt46 = 2570 * 0.02;
     aportes[0] = { aporte: "ART46", importe: impArt46 };
-    if (bUOMASocio) {
+    if (buomaSocio) {
       aportes[1] = { aporte: "UOMACS", importe: imp };
       aportes[2] = { aporte: "UOMAAS", importe: imp };
-      if (bANTIMASocio) {
-        aportes[3] = { aporte: "ANTIMACS", importe: 7500 };
+      if (bamtimaSocio) {
+        aportes[3] = { aporte: "AMTIMACS", importe: 7500 };
       }
     }
     return aportes;
@@ -643,7 +643,7 @@ module.exports = (req, res, next) => {
       req.body.estado = "PE";
       req.body.secuencia = null;
       req.body.totalART46 = genRand(100000, 1000000, 2);
-      req.body.totalAntimaCS = genRand(100000, 1000000, 2);
+      req.body.totalAmtimaCS = genRand(100000, 1000000, 2);
       req.body.totalUomaCS = genRand(100000, 1000000, 2);
       req.body.totalUomaAS = genRand(100000, 1000000, 2);
       req.body.totalCuotaUsu = genRand(100000, 1000000, 2);

@@ -18,7 +18,9 @@ import dayjs from "dayjs";
 import esLocale from "dayjs/locale/es";
 import "./DDJJAlta.css";
 import { GrillaPasoTres } from "./paso_tres/GrillaPasoTres";
-import { actualizarDeclaracionJurada, axiosDDJJ, crearAltaDeclaracionJurada } from "./DDJJAltaApi";
+import { axiosDDJJ } from "./DDJJAltaApi";
+
+import localStorageService from "@/components/localStorage/localStorageService";
 import Swal from "sweetalert2";
 import XLSX from "xlsx";
 
@@ -47,10 +49,7 @@ export const MisAltaDeclaracionesJuradas = ({
   const [mostrarPeriodos, setMostrarPeriodos] = useState(false);
   const [validacionResponse, setValidacionResponse] = useState([]);
   const [afiliadoImportado, setAfiliadoImportado] = useState([]);
-  const TOKEN = JSON.parse(localStorage.getItem("stateLogin")).usuarioLogueado
-    .usuario.token;
-  const ID_EMPRESA = JSON.parse(localStorage.getItem("stateLogin"))
-    .usuarioLogueado.empresa.id;
+  const ID_EMPRESA = localStorageService.getEmpresaId();
 
   const handleChangeOtroPeriodo = (date) => setOtroPeriodo(date);
 
@@ -96,51 +95,8 @@ export const MisAltaDeclaracionesJuradas = ({
     ObtenerPlantaEmpresas();
   }, []);
 
-  const importarAfiliado = async () => {
-    const cuiles = afiliadoImportado.map((item) => item.cuil);
-    const cuilesString = cuiles.map((item) => item.toString());
-
-    const cuilesResponse = await axiosDDJJ.validarCuiles(
-      ID_EMPRESA,
-      cuilesString
-    );
-
-    // Si alguno de los cuiles el valor de cuilesValidados es igual a false
-    if (cuilesResponse.some((item) => item.cuilValido === false)) {
-      // imprimir en consola el cuil que tiene el valor de cuilValido igual a false
-      const cuilFallido = cuilesResponse.filter(
-        (item) => item.cuilValido === false
-      );
-      cuilFallido.forEach((item) => {
-        console.log(item.cuil);
-      });
-
-      const mensajesFormateados = cuilFallido
-        .map((item, index) => {
-          return `<p>${item.cuil}</p>`;
-        })
-        .join("");
-
-      Swal.fire({
-        icon: "error",
-        title: "Error de validacion",
-        html: `Cuiles con errores:<br>${mensajesFormateados}<br>`,
-        showConfirmButton: true,
-        confirmButtonText: "Aceptar",
-        showCancelButton: true,
-        cancelButtonText: "Cancelar",
-      });
-    } else {
-      // swall de 1 segundo success
-      Swal.fire({
-        icon: "success",
-        title: "Importación exitosa",
-        showConfirmButton: false,
-        timer: 1000,
-      });
-
-      setRowsAltaDDJJ(afiliadoImportado);
-    }
+  const importarAfiliado = () => {
+    setRowsAltaDDJJ(afiliadoImportado);
   };
 
   const formatearFecha = (fecha) => {
@@ -202,7 +158,6 @@ export const MisAltaDeclaracionesJuradas = ({
   };
 
   const guardarDeclaracionJurada = async () => {
-
     const DDJJ = {
       id: DDJJState.id,
       periodo: periodoIso,
@@ -229,6 +184,7 @@ export const MisAltaDeclaracionesJuradas = ({
     const validacionResponse = await axiosDDJJ.validar(ID_EMPRESA, DDJJ);
     setValidacionResponse(validacionResponse);
 
+    // Validar si validacionResponse es igual a {errores: Array(6)}
     if (validacionResponse.errores.length > 0) {
       const mensajesUnicos = new Set();
 
@@ -246,45 +202,45 @@ export const MisAltaDeclaracionesJuradas = ({
 
       Swal.fire({
         icon: "error",
-        title: "Oops...",
+        title: "Valiacion de Declaracion Jurada",
         html: `${mensajesFormateados}<br>
-                      <label for="guardarErrores">¿Deseas guardar la declaración jurada con errores?</label>`,
+                      <label for="guardarErrores">¿Deseas guardar la declaración jurada y corregir mas tardes los errores?</label>`,
         showConfirmButton: true,
         confirmButtonText: "Aceptar",
         showCancelButton: true,
         cancelButtonText: "Cancelar",
       }).then(async (result) => {
         if (result.isConfirmed) {
+          console.log("Aceptar...");
           if (peticion === "PUT") {
-            await actualizarDeclaracionJurada(ID_EMPRESA, altaDDJJ, DDJJ);
+            await axiosDDJJ.actualizar(ID_EMPRESA, DDJJ);
             alert("Declaracion jurada actualizada exitosamente");
             //setRowsAltaDDJJ([]);
           } else {
-            await crearAltaDeclaracionJurada(ID_EMPRESA, DDJJ);
+            await axiosDDJJ.crear(ID_EMPRESA, DDJJ);
             alert("Declaracion jurada guardada exitosamente");
             //setRowsAltaDDJJ([]);
           }
         } else {
-          console.log("Cancelar...");
-          setRowsAltaDDJJ([]);
+          console.log("Cancelar...se queda a corregir datos");
+          // NO limpiar la grilla.
+          // El usuario decidio corregir los errores antes de GRABAR.
+          // pero no hay que PERDER los datos.-
         }
       });
     } else {
-
+      console.log("no tiene errores...grabo directamente.");
       if (peticion === "PUT") {
         console.log("Dentro de PUT");
-
         //await actualizarDeclaracionJurada(ID_EMPRESA, altaDDJJFinal, altaDDJJFinal.id);
         await axiosDDJJ.actualizar(ID_EMPRESA, DDJJ);
-        //setRowsAltaDDJJ([]); 
+        //setRowsAltaDDJJ([]);
         // peticion put con fetch
-
       } else {
-
-        await crearAltaDeclaracionJurada(ID_EMPRESA, DDJJ);
+        await axiosDDJJ.crear(ID_EMPRESA, DDJJ);
         setRowsAltaDDJJ([]);
       }
-    } 
+    }
   };
 
   return (
@@ -425,7 +381,6 @@ export const MisAltaDeclaracionesJuradas = ({
           setRowsAltaDDJJ={setRowsAltaDDJJ}
           rowsAltaDDJJAux={rowsAltaDDJJAux}
           setRowsAltaDDJJAux={setRowsAltaDDJJAux}
-          token={TOKEN}
           camaras={camaras}
           categoriasFiltradas={categoriasFiltradas}
           setCategoriasFiltradas={setCategoriasFiltradas}
