@@ -103,6 +103,7 @@ export const actualizarDeclaracionJurada = async (
 
 export const validarAltaDeclaracionJurada = async (empresaId, registro) => {
   const URL = `/empresa/${empresaId}/ddjj/validar`;
+  console.log(URL);
   try {
     const validarDDJJResponse = await oAxios.post(URL, registro);
     return validarDDJJResponse.data || [];

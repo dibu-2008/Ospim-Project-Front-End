@@ -150,6 +150,8 @@ export const MisAltaDeclaracionesJuradas = ({
             noRemunerativo: item[8],
             adheridoSindicato: item[9] === "Si",
             pagaMutual: item[10] === "Si",
+            uomaSocio: item[9] === "Si",
+            amtimaSocio: item[10] === "Si",
           };
         });
 

@@ -128,6 +128,7 @@ export const GrillaMisDeclaracionesJuradas = ({
     setTabState(0);
 
     const ddjj = await axiosDDJJ.getDDJJ(idEmpresa, id);
+    console.log("ddjj: ", ddjj);
 
     const periodoResponse = ddjj.periodo;
     const fecha = new Date(periodoResponse);
