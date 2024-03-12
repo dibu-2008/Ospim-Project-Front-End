@@ -586,7 +586,7 @@ export const GrillaPasoTres = ({
       ],
     },
     {
-      field: "antimasocio",
+      field: "amtimaSocio",
       type: "singleSelect",
       //headerName: "Paga mutual",
       renderHeader: () => (

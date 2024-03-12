@@ -588,8 +588,8 @@ module.exports = (req, res, next) => {
         // Return value for new_array
         element.aportes = DDJJSetParamsAporteV2(
           element.remunerativo,
-          element.UOMASocio,
-          element.ANTIMASocio
+          element.uomaSocio,
+          element.amtimaSocio
         );
 
         return element;
@@ -607,15 +607,15 @@ module.exports = (req, res, next) => {
     }
   }
 
-  function DDJJSetParamsAporteV2(remuneracion, bUOMASocio, bANTIMASocio) {
+  function DDJJSetParamsAporteV2(remuneracion, buomaSocio, bamtimaSocio) {
     let aportes = [];
     let imp = remuneracion * 0.02;
     let impArt46 = 2570 * 0.02;
     aportes[0] = { aporte: "ART46", importe: impArt46 };
-    if (bUOMASocio) {
+    if (buomaSocio) {
       aportes[1] = { aporte: "UOMACS", importe: imp };
       aportes[2] = { aporte: "UOMAAS", importe: imp };
-      if (bANTIMASocio) {
+      if (bamtimaSocio) {
         aportes[3] = { aporte: "ANTIMACS", importe: 7500 };
       }
     }
