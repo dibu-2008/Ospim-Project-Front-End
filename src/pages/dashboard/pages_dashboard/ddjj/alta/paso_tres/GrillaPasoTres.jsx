@@ -104,7 +104,6 @@ export const GrillaPasoTres = ({
   setRowsAltaDDJJ,
   rowsAltaDDJJAux,
   setRowsAltaDDJJAux,
-  token,
   camaras,
   categoriasFiltradas,
   setCategoriasFiltradas,
@@ -126,6 +125,7 @@ export const GrillaPasoTres = ({
 
   const ObtenerAfiliados = async (params, cuilElegido) => {
     const afiliados = await axiosDDJJ.getAfiliado(cuilElegido);
+    console.log(afiliados);
     //const afiliados = await obtenerAfiliados(token, cuilElegido);
     const afiliadoEncontrado = afiliados.find(
       (afiliado) => afiliado.cuil === cuilElegido

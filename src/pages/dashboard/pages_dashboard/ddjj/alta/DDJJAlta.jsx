@@ -19,6 +19,7 @@ import esLocale from "dayjs/locale/es";
 import "./DDJJAlta.css";
 import { GrillaPasoTres } from "./paso_tres/GrillaPasoTres";
 import { axiosDDJJ } from "./DDJJAltaApi";
+import localStorageService from "@/components/localStorage/localStorageService";
 import Swal from "sweetalert2";
 import XLSX from "xlsx";
 
@@ -45,10 +46,7 @@ export const MisAltaDeclaracionesJuradas = ({
   const [mostrarPeriodos, setMostrarPeriodos] = useState(false);
   const [validacionResponse, setValidacionResponse] = useState([]);
   const [afiliadoImportado, setAfiliadoImportado] = useState([]);
-  const TOKEN = JSON.parse(localStorage.getItem("stateLogin")).usuarioLogueado
-    .usuario.token;
-  const ID_EMPRESA = JSON.parse(localStorage.getItem("stateLogin"))
-    .usuarioLogueado.empresa.id;
+  const ID_EMPRESA = localStorageService.getEmpresaId();
 
   useEffect(() => {
     // imprimir en consola rowsAltaDDJJ
@@ -212,9 +210,9 @@ export const MisAltaDeclaracionesJuradas = ({
 
       Swal.fire({
         icon: "error",
-        title: "Oops...",
+        title: "Valiacion de Declaracion Jurada",
         html: `${mensajesFormateados}<br>
-                      <label for="guardarErrores">¿Deseas guardar la declaración jurada con errores?</label>`,
+                      <label for="guardarErrores">¿Deseas guardar la declaración jurada y corregir mas tardes los errores?</label>`,
         showConfirmButton: true,
         confirmButtonText: "Aceptar",
         showCancelButton: true,
@@ -222,7 +220,6 @@ export const MisAltaDeclaracionesJuradas = ({
       }).then(async (result) => {
         if (result.isConfirmed) {
           console.log("Aceptar...");
-
           /* if (peticion === "PUT") {
 
                         await actualizarDeclaracionJurada(TOKEN, ID_EMPRESA, altaDDJJFinal, idDDJJ);
@@ -232,12 +229,14 @@ export const MisAltaDeclaracionesJuradas = ({
                         await crearAltaDeclaracionJurada(TOKEN, ID_EMPRESA, altaDDJJFinal);
                     } */
         } else {
-          console.log("Cancelar...");
-
-          // limpiar la grilla
-          setRowsAltaDDJJ([]);
+          console.log("Cancelar...se queda a corregir datos");
+          // NO limpiar la grilla.
+          // El usuario decidio corregir los errores antes de GRABAR.
+          // pero no hay que PERDER los datos.-
         }
       });
+    } else {
+      console.log("no tiene errores...grabo directamente.");
     }
   };
 
@@ -379,7 +378,6 @@ export const MisAltaDeclaracionesJuradas = ({
           setRowsAltaDDJJ={setRowsAltaDDJJ}
           rowsAltaDDJJAux={rowsAltaDDJJAux}
           setRowsAltaDDJJAux={setRowsAltaDDJJAux}
-          token={TOKEN}
           camaras={camaras}
           categoriasFiltradas={categoriasFiltradas}
           setCategoriasFiltradas={setCategoriasFiltradas}
