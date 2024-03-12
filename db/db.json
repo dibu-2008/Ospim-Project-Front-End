@@ -5,7 +5,7 @@
       "descripcion": "Union Obrera Molinera Argentina"
     },
     {
-      "codigo": "ANTIMA",
+      "codigo": "AMTIMA",
       "descripcion": "Asociación Mutual de los Trabajadores de la Industria Molinera"
     },
     {
@@ -39,7 +39,7 @@
       "calculo": "%"
     },
     {
-      "entidad_codigo": "ANTIMA",
+      "entidad_codigo": "AMTIMA",
       "codigo": "CF",
       "decripcion": "Cuota Fija",
       "calculo": "$"
@@ -1279,7 +1279,7 @@
           "importe": 3041.5
         },
         {
-          "aporte": "ANTIMACS",
+          "aporte": "AMTIMACS",
           "importe": 15000
         }
       ]
@@ -1375,7 +1375,7 @@
               "importe": 2000.01
             },
             {
-              "codigo": "ANTIMACS",
+              "codigo": "AMTIMACS",
               "importe": 7500
             },
             {
@@ -1407,7 +1407,7 @@
               "importe": 2000.01
             },
             {
-              "codigo": "ANTIMACS",
+              "codigo": "AMTIMACS",
               "importe": 7500
             },
             {
@@ -1449,7 +1449,7 @@
               "importe": 2000.01
             },
             {
-              "codigo": "ANTIMACS",
+              "codigo": "AMTIMACS",
               "importe": 7500
             },
             {
@@ -1481,7 +1481,7 @@
               "importe": 2000.01
             },
             {
-              "codigo": "ANTIMACS",
+              "codigo": "AMTIMACS",
               "importe": 7500
             },
             {
@@ -2368,7 +2368,7 @@
               "importe": 1520.75
             },
             {
-              "aporte": "ANTIMACS",
+              "aporte": "AMTIMACS",
               "importe": 7500
             }
           ]
@@ -2400,7 +2400,7 @@
               "importe": 1520.75
             },
             {
-              "aporte": "ANTIMACS",
+              "aporte": "AMTIMACS",
               "importe": 7500
             }
           ]
@@ -2703,8 +2703,8 @@
     },
     {
       "id": 4,
-      "codigo": "ANTIMACS",
-      "descripcion": "ANTIMA Cuota Social",
+      "codigo": "AMTIMACS",
+      "descripcion": "AMTIMA Cuota Social",
       "cuenta": "11598/5"
     },
     {
@@ -2757,8 +2757,8 @@
     },
     {
       "id": 4,
-      "entidad": "ANTIMA",
-      "aporte": "ANTIMACS",
+      "entidad": "AMTIMA",
+      "aporte": "AMTIMACS",
       "unidad": "E",
       "valor": 7500,
       "referencia": null,

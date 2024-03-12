@@ -616,7 +616,7 @@ module.exports = (req, res, next) => {
       aportes[1] = { aporte: "UOMACS", importe: imp };
       aportes[2] = { aporte: "UOMAAS", importe: imp };
       if (bamtimaSocio) {
-        aportes[3] = { aporte: "ANTIMACS", importe: 7500 };
+        aportes[3] = { aporte: "AMTIMACS", importe: 7500 };
       }
     }
     return aportes;
@@ -631,7 +631,7 @@ module.exports = (req, res, next) => {
       req.body.estado = "PE";
       req.body.secuencia = null;
       req.body.totalART46 = genRand(100000, 1000000, 2);
-      req.body.totalAntimaCS = genRand(100000, 1000000, 2);
+      req.body.totalAmtimaCS = genRand(100000, 1000000, 2);
       req.body.totalUomaCS = genRand(100000, 1000000, 2);
       req.body.totalUomaAS = genRand(100000, 1000000, 2);
       req.body.totalCuotaUsu = genRand(100000, 1000000, 2);

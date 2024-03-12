@@ -183,10 +183,10 @@ export const MisAltaDeclaracionesJuradas = ({
         categoria: !item.categoria ? null : item.categoria,
         remunerativo: !item.remunerativo ? null : item.remunerativo,
         noRemunerativo: !item.noRemunerativo ? null : item.noRemunerativo,
-        /* UOMASocio: item.aporteUomaCs && item.aporteUomaAs && item.aporteArt46 ? true : false,
-                ANTIMASocio: item.aporteUomaCs && item.aporteUomaAs && item.aporteArt46 && item.aporteAntimaCs ? true : false, */
-        UOMASocio: false,
-        ANTIMASocio: false,
+        /* uomaSocio: item.aporteUomaCs && item.aporteUomaAs && item.aporteArt46 ? true : false,
+                amtimaSocio: item.aporteUomaCs && item.aporteUomaAs && item.aporteArt46 && item.aporteAmtimaCs ? true : false, */
+        uomaSocio: false,
+        amtimaSocio: false,
       })),
     };
 
