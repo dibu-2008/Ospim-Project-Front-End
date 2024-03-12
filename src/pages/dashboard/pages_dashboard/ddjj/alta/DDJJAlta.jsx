@@ -19,11 +19,6 @@ import esLocale from "dayjs/locale/es";
 import "./DDJJAlta.css";
 import { GrillaPasoTres } from "./paso_tres/GrillaPasoTres";
 import { axiosDDJJ } from "./DDJJAltaApi";
-import {
-  actualizarDeclaracionJurada,
-  axiosDDJJ,
-  crearAltaDeclaracionJurada,
-} from "./DDJJAltaApi";
 
 import localStorageService from "@/components/localStorage/localStorageService";
 import Swal from "sweetalert2";
@@ -222,11 +217,11 @@ export const MisAltaDeclaracionesJuradas = ({
         if (result.isConfirmed) {
           console.log("Aceptar...");
           if (peticion === "PUT") {
-            await actualizarDeclaracionJurada(ID_EMPRESA, altaDDJJ, DDJJ);
+            await axiosDDJJ.actualizar(ID_EMPRESA, DDJJ);
             alert("Declaracion jurada actualizada exitosamente");
             //setRowsAltaDDJJ([]);
           } else {
-            await crearAltaDeclaracionJurada(ID_EMPRESA, DDJJ);
+            await axiosDDJJ.crear(ID_EMPRESA, DDJJ);
             alert("Declaracion jurada guardada exitosamente");
             //setRowsAltaDDJJ([]);
           }
@@ -246,7 +241,7 @@ export const MisAltaDeclaracionesJuradas = ({
         //setRowsAltaDDJJ([]);
         // peticion put con fetch
       } else {
-        await crearAltaDeclaracionJurada(ID_EMPRESA, DDJJ);
+        await axiosDDJJ.crear(ID_EMPRESA, DDJJ);
         setRowsAltaDDJJ([]);
       }
     }
