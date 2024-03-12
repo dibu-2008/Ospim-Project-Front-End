@@ -321,7 +321,7 @@ module.exports = (req, res, next) => {
   }
 
   function feriadosDuplicar() {
-    res.status(200).jsonp(null);
+    res.status(200).jsonp(true);
   }
 
 

@@ -231,17 +231,20 @@ export const Feriados = () => {
   };
 
   const obSubmitAnio = async (e) => {
+    
     e.preventDefault();
     const anio = fecha.$y;
 
     const response = await axiosFeriados.duplicar(anio);
 
-    console.log(response);
-
-
+    if (response) {
+      swal.showSuccess("Año duplicado correctamente");
+    }else {
+      swal.showError("Error al duplicar el año");  
+    }
+    
     handleClose();
 
-    swal.showSuccess("Año actualizado correctamente");
   }
 
   useEffect(() => {
