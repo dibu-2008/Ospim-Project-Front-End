@@ -1288,70 +1288,41 @@
   ],
   "DDJJ": [
     {
-      "//": "DDJJ ********************************************************************************** 01",
-      "id": 120,
-      "estado": "PR",
-      "empresaId": 1,
-      "periodo": "2023-11-01T00:00:00.000Z",
-      "secuencia": 0,
-      "afiliados": [
+      "periodo": "2024-02-01",
+      "empleados": [
         {
-          "cuil": "20949118682",
-          "inte": null,
-          "apellido": "Salinas",
-          "nombre": "Luis",
-          "fechaIngreso": "2001-01-01T00:00:00.000Z",
-          "empresaDomicilioId": 3,
-          "camara": "CAENA",
-          "categoria": "D",
-          "remunerativo": 545000.7,
-          "noRemunerativo": 25000,
-          "uomasocio": false,
-          "antimasocio": false,
-          "aportes": [
-            {
-              "codigo": "UOMACU",
-              "importe": 9725.75
-            },
-            {
-              "codigo": "ART46",
-              "importe": 2600.26
-            }
-          ]
+          "cuil": "20275889645",
+          "inte": 0,
+          "apellido": "Vasquez",
+          "nombre": "Clementino",
+          "fechaIngreso": "2015-01-01",
+          "empresaDomicilioId": 32,
+          "camara": "FAIM",
+          "categoria": "A",
+          "remunerativo": 135000.7,
+          "noRemunerativo": 15000,
+          "uomaSocio": false,
+          "antimaSocio": false
         },
         {
-          "cuil": "20294465996",
-          "inte": 1,
-          "apellido": "Carlos",
-          "nombre": "Sanchez",
-          "fechaIngreso": "2010-01-01T00:00:00.000Z",
-          "empresaDomicilioId": 3,
+          "cuil": "27418918786",
+          "inte": 0,
+          "apellido": "Chapa",
+          "nombre": "Gladys",
+          "fechaIngreso": "2010-01-01",
+          "empresaDomicilioId": 32,
           "camara": "CAENA",
           "categoria": "D",
-          "remunerativo": 545000.7,
-          "noRemunerativo": 25000,
-          "uomasocio": false,
-          "antimasocio": false,
-          "aportes": [
-            {
-              "codigo": "UOMACU",
-              "importe": 9725.75
-            },
-            {
-              "codigo": "ART46",
-              "importe": 2600.26
-            }
-          ]
+          "remunerativo": 645000.7,
+          "noRemunerativo": 65000,
+          "uomaSocio": true,
+          "antimaSocio": true
         }
-      ]
+      ],
+      "id": 120
     },
     {
-      "//": "DDJJ ********************************************************************************** 02",
-      "id": 121,
-      "estado": "PR",
-      "empresaId": 1,
       "periodo": "2023-10-01T00:00:00.000Z",
-      "secuencia": 0,
       "afiliados": [
         {
           "cuil": "23279737229",
@@ -1365,29 +1336,11 @@
           "remunerativo": 545000.7,
           "noRemunerativo": 25000,
           "uomasocio": true,
-          "antimasocio": true,
-          "aportes": [
-            {
-              "codigo": "UOMACS",
-              "importe": 1303.33
-            },
-            {
-              "codigo": "UOMAAS",
-              "importe": 2000.01
-            },
-            {
-              "codigo": "ANTIMACS",
-              "importe": 7500
-            },
-            {
-              "codigo": "ART46",
-              "importe": 2600.26
-            }
-          ]
+          "antimasocio": true
         },
         {
           "cuil": "20294465996",
-          "inte": 1,
+          "inte": null,
           "apellido": "Rodriguez",
           "nombre": "Alejandro",
           "fechaIngreso": "2010-01-01T00:00:00.000Z",
@@ -1397,27 +1350,10 @@
           "remunerativo": 545000.7,
           "noRemunerativo": 25000,
           "uomasocio": true,
-          "antimasocio": true,
-          "aportes": [
-            {
-              "codigo": "UOMACS",
-              "importe": 1303.33
-            },
-            {
-              "codigo": "UOMAAS",
-              "importe": 2000.01
-            },
-            {
-              "codigo": "ANTIMACS",
-              "importe": 7500
-            },
-            {
-              "codigo": "ART46",
-              "importe": 2600.26
-            }
-          ]
+          "antimasocio": true
         }
-      ]
+      ],
+      "id": 121
     },
     {
       "//": "DDJJ ********************************************************************************** 03",
@@ -2725,6 +2661,153 @@
         }
       ],
       "id": 214
+    },
+    {
+      "periodo": "2021-01-01T00:00:00.000Z",
+      "afiliados": [
+        {
+          "cuil": "20949118684",
+          "inte": null,
+          "apellido": "Capitan",
+          "nombre": "America",
+          "fechaIngreso": "2024-03-13T03:00:00.000Z",
+          "empresaDomicilioId": 8,
+          "camara": "FAIM",
+          "categoria": "D",
+          "remunerativo": "1",
+          "noRemunerativo": "2",
+          "uomasocio": false,
+          "antimasocio": false
+        }
+      ],
+      "empresaId": "1",
+      "id": 215
+    },
+    {
+      "periodo": "2021-01-01T00:00:00.000Z",
+      "afiliados": [
+        {
+          "cuil": "20949118622",
+          "inte": null,
+          "apellido": "aly",
+          "nombre": "baba",
+          "fechaIngreso": "2024-03-06T03:00:00.000Z",
+          "empresaDomicilioId": 11,
+          "camara": "FAIM",
+          "categoria": "B",
+          "remunerativo": "1",
+          "noRemunerativo": "1",
+          "uomasocio": true,
+          "antimasocio": true
+        }
+      ],
+      "empresaId": "1",
+      "id": 216
+    },
+    {
+      "periodo": null,
+      "afiliados": [
+        {
+          "cuil": "20949118683",
+          "inte": null,
+          "apellido": "wwwwwww",
+          "nombre": "wwwwwww",
+          "fechaIngreso": "2024-03-14T03:00:00.000Z",
+          "empresaDomicilioId": 5,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": "2",
+          "noRemunerativo": "2",
+          "uomasocio": false,
+          "antimasocio": false
+        }
+      ],
+      "empresaId": "1",
+      "id": 217
+    },
+    {
+      "periodo": null,
+      "afiliados": [
+        {
+          "cuil": "20949118645",
+          "inte": null,
+          "apellido": "fffff",
+          "nombre": "llllll",
+          "fechaIngreso": "2024-03-20T03:00:00.000Z",
+          "empresaDomicilioId": 11,
+          "camara": "CAENA",
+          "categoria": "C",
+          "remunerativo": "3",
+          "noRemunerativo": "3",
+          "uomasocio": false,
+          "antimasocio": false
+        }
+      ],
+      "empresaId": "1",
+      "id": 218
+    },
+    {
+      "periodo": null,
+      "afiliados": [
+        {
+          "cuil": "23456789876",
+          "inte": null,
+          "apellido": "aaaaaaaa",
+          "nombre": "qqqqqqq",
+          "fechaIngreso": "2024-03-05T03:00:00.000Z",
+          "empresaDomicilioId": 10,
+          "camara": "FAIM",
+          "categoria": "D",
+          "remunerativo": "3",
+          "noRemunerativo": "3",
+          "uomasocio": true,
+          "antimasocio": true
+        }
+      ],
+      "empresaId": "1",
+      "id": 219
+    },
+    {
+      "periodo": "2021-02-12T03:00:00.000Z",
+      "afiliados": [
+        {
+          "cuil": "222222222222",
+          "inte": null,
+          "apellido": "dfdsfd",
+          "nombre": "asdasd",
+          "fechaIngreso": "2024-02-28T03:00:00.000Z",
+          "empresaDomicilioId": 9,
+          "camara": "FAIM",
+          "categoria": "D",
+          "remunerativo": "3",
+          "noRemunerativo": "3",
+          "uomasocio": false,
+          "antimasocio": false
+        }
+      ],
+      "empresaId": "1",
+      "id": 220
+    },
+    {
+      "periodo": "2021-02-12T03:00:00.000Z",
+      "afiliados": [
+        {
+          "cuil": "20949118682",
+          "inte": null,
+          "apellido": "Salinas",
+          "nombre": "Luis",
+          "fechaIngreso": null,
+          "empresaDomicilioId": null,
+          "camara": null,
+          "categoria": null,
+          "remunerativo": null,
+          "noRemunerativo": null,
+          "uomasocio": false,
+          "antimasocio": false
+        }
+      ],
+      "empresaId": "1",
+      "id": 221
     }
   ],
   "afiliado": [
