@@ -44,6 +44,7 @@ function a11yProps(index) {
 }
 
 export const DeclaracionesJuradas = () => {
+  const [DDJJState, setDDJJState] = useState({});
   const [rowsAltaDDJJ, setRowsAltaDDJJ] = useState([]);
   const [rowsAltaDDJJAux, setRowsAltaDDJJAux] = useState([]);
   const [rows_mis_ddjj, setRowsMisDdjj] = useState([]);
@@ -115,7 +116,9 @@ export const DeclaracionesJuradas = () => {
           </Box>
           <CustomTabPanel value={tabState} index={0}>
             <MisAltaDeclaracionesJuradas
+              DDJJState={DDJJState}
               periodo={periodo}
+              setPeriodo={setPeriodo}
               periodoIso={periodoIso}
               handleChangePeriodo={handleChangePeriodo}
               handleAcceptPeriodoDDJJ={handleAcceptPeriodoDDJJ}
@@ -129,6 +132,7 @@ export const DeclaracionesJuradas = () => {
           </CustomTabPanel>
           <CustomTabPanel value={tabState} index={1}>
             <MisDeclaracionesJuradas
+              setDDJJState={setDDJJState}
               rows_mis_ddjj={rows_mis_ddjj}
               setRowsMisDdjj={setRowsMisDdjj}
               setTabState={setTabState}

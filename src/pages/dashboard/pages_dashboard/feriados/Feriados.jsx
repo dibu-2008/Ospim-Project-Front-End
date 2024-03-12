@@ -283,13 +283,7 @@ export const Feriados = () => {
       align: "center",
       headerClassName: "header--cell",
       valueFormatter: ({ value }) => {
-        const fecha = new Date(value);
-
-        const dia = fecha.getUTCDate().toString().padStart(2, "0");
-        const mes = (fecha.getUTCMonth() + 1).toString().padStart(2, "0");
-        const anio = fecha.getUTCFullYear();
-
-        return `${dia}-${mes}-${anio}`;
+        return formatter.date(value);
       },
     },
     {

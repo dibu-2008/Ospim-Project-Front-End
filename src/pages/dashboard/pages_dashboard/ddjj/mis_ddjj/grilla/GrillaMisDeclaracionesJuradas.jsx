@@ -68,6 +68,7 @@ function castearMisDDJJ(ddjjResponse) {
 }
 
 export const GrillaMisDeclaracionesJuradas = ({
+  setDDJJState,
   rows_mis_ddjj,
   setRowsMisDdjj,
   idEmpresa,
@@ -129,29 +130,25 @@ export const GrillaMisDeclaracionesJuradas = ({
 
     const ddjj = await axiosDDJJ.getDDJJ(idEmpresa, id);
     console.log("ddjj: ", ddjj);
+    const { periodo } = ddjj;
 
-    const periodoResponse = ddjj.periodo;
-    const fecha = new Date(periodoResponse);
-    const mes = fecha.getMonth() + 1; // Sumar 1 porque los meses van de 0 a 11
-    const anio = fecha.getFullYear();
+    const mes = new Date(periodo).getMonth() + 1;
+    const anio = new Date(periodo).getFullYear();
 
     setPeriodo(dayjs(`${anio}-${mes + 1}`));
 
     handleAcceptPeriodoDDJJ();
 
-    // Esto lo quito Diego, pero es necesario para actualizar el estado de la ddjj
-    const afiliados = ddjj.afiliados;
+    const { afiliados } = ddjj;
 
-    //DIEGO: Los afiliado TIENEN ID. hay que areglar jsonServer !!!!
-    // Los afiliados no tienen id, por eso se los agregamos
-    //const updateRowsAltaDDJJ = afiliados.map((item, index) => ({
-    //  id: index + 1,
-    //  ...item,
-    //}));
+    const updateRowsAltaDDJJ = afiliados.map((item, index) => ({
+      id: index + 1,
+      ...item,
+    }));
 
     setPeticion("PUT");
-    setIdDDJJ(id);
     setRowsAltaDDJJ(ddjj.afiliados);
+    setDDJJState(ddjj);
   };
 
   const handleSaveClick = (id) => () => {

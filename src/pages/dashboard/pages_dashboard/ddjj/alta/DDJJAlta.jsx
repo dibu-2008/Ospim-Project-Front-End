@@ -19,12 +19,20 @@ import esLocale from "dayjs/locale/es";
 import "./DDJJAlta.css";
 import { GrillaPasoTres } from "./paso_tres/GrillaPasoTres";
 import { axiosDDJJ } from "./DDJJAltaApi";
+import {
+  actualizarDeclaracionJurada,
+  axiosDDJJ,
+  crearAltaDeclaracionJurada,
+} from "./DDJJAltaApi";
+
 import localStorageService from "@/components/localStorage/localStorageService";
 import Swal from "sweetalert2";
 import XLSX from "xlsx";
 
 export const MisAltaDeclaracionesJuradas = ({
+  DDJJState,
   periodo,
+  setPeriodo,
   periodoIso,
   handleChangePeriodo,
   handleAcceptPeriodoDDJJ,
@@ -47,17 +55,6 @@ export const MisAltaDeclaracionesJuradas = ({
   const [validacionResponse, setValidacionResponse] = useState([]);
   const [afiliadoImportado, setAfiliadoImportado] = useState([]);
   const ID_EMPRESA = localStorageService.getEmpresaId();
-
-  useEffect(() => {
-    // imprimir en consola rowsAltaDDJJ
-    console.log(rowsAltaDDJJ);
-
-    // imprimir en consola la fecha del primero de diciembre del 2022 con el objeto dayjs
-    console.log(dayjs("2022-12-01").locale(esLocale).format("MMMM YYYY"));
-    console.log(dayjs("2024-02-15").locale(esLocale).format("MMMM YYYY"));
-    // formato dia mes año
-    console.log(dayjs("2024-02-15").locale(esLocale).format("DD MMMM YYYY"));
-  }, [rowsAltaDDJJ]);
 
   const handleChangeOtroPeriodo = (date) => setOtroPeriodo(date);
 
@@ -168,7 +165,8 @@ export const MisAltaDeclaracionesJuradas = ({
   };
 
   const guardarDeclaracionJurada = async () => {
-    const altaDDJJFinal = {
+    const DDJJ = {
+      id: DDJJState.id,
       periodo: periodoIso,
       afiliados: rowsAltaDDJJ.map((item) => ({
         cuil: !item.cuil ? null : item.cuil,
@@ -190,15 +188,16 @@ export const MisAltaDeclaracionesJuradas = ({
       })),
     };
 
-    const erroresResponse = await axiosDDJJ.validar(ID_EMPRESA, altaDDJJFinal);
-    console.log(erroresResponse);
-    setValidacionResponse(erroresResponse);
+    console.log("DECLARACION JURADA", DDJJ.id);
+
+    const validacionResponse = await axiosDDJJ.validar(ID_EMPRESA, DDJJ);
+    setValidacionResponse(validacionResponse);
 
     // Validar si validacionResponse es igual a {errores: Array(6)}
-    if (erroresResponse.errores) {
+    if (validacionResponse.errores.length > 0) {
       const mensajesUnicos = new Set();
 
-      erroresResponse.errores.forEach((error) => {
+      validacionResponse.errores.forEach((error) => {
         if (!mensajesUnicos.has(error.descripcion)) {
           mensajesUnicos.add(error.descripcion);
         }
@@ -222,14 +221,15 @@ export const MisAltaDeclaracionesJuradas = ({
       }).then(async (result) => {
         if (result.isConfirmed) {
           console.log("Aceptar...");
-          /* if (peticion === "PUT") {
-
-                        await actualizarDeclaracionJurada(TOKEN, ID_EMPRESA, altaDDJJFinal, idDDJJ);
-
-                    } else {
-
-                        await crearAltaDeclaracionJurada(TOKEN, ID_EMPRESA, altaDDJJFinal);
-                    } */
+          if (peticion === "PUT") {
+            await actualizarDeclaracionJurada(ID_EMPRESA, altaDDJJ, DDJJ);
+            alert("Declaracion jurada actualizada exitosamente");
+            //setRowsAltaDDJJ([]);
+          } else {
+            await crearAltaDeclaracionJurada(ID_EMPRESA, DDJJ);
+            alert("Declaracion jurada guardada exitosamente");
+            //setRowsAltaDDJJ([]);
+          }
         } else {
           console.log("Cancelar...se queda a corregir datos");
           // NO limpiar la grilla.
@@ -239,6 +239,16 @@ export const MisAltaDeclaracionesJuradas = ({
       });
     } else {
       console.log("no tiene errores...grabo directamente.");
+      if (peticion === "PUT") {
+        console.log("Dentro de PUT");
+        //await actualizarDeclaracionJurada(ID_EMPRESA, altaDDJJFinal, altaDDJJFinal.id);
+        await axiosDDJJ.actualizar(ID_EMPRESA, DDJJ);
+        //setRowsAltaDDJJ([]);
+        // peticion put con fetch
+      } else {
+        await crearAltaDeclaracionJurada(ID_EMPRESA, DDJJ);
+        setRowsAltaDDJJ([]);
+      }
     }
   };
 

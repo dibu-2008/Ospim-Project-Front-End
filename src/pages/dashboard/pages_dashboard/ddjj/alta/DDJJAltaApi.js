@@ -82,12 +82,10 @@ export const crearAltaDeclaracionJurada = async (empresaId, registro) => {
   }
 };
 
-export const actualizarDeclaracionJurada = async (
-  empresaId,
-  idDDJJ,
-  registro
-) => {
-  const URL = `/empresa/${empresaId}/ddjj/${idDDJJ}`;
+export const actualizarDeclaracionJurada = async (empresaId, registro) => {
+  const URL = `/empresa/${empresaId}/ddjj`;
+  console.log(URL);
+  console.log("DENTRO DE LA FUNCION ACTUALIZAR DDJJ ", registro);
   try {
     const response = await axiosCrud.actualizar(URL, registro);
     if (response == true) {
@@ -137,8 +135,8 @@ export const axiosDDJJ = {
     return crearAltaDeclaracionJurada(empresaId, registro);
   },
 
-  actualizar: async function (empresaId, id, registro) {
-    return actualizarDeclaracionJurada(empresaId, id, registro);
+  actualizar: async function (empresaId, registro) {
+    return actualizarDeclaracionJurada(empresaId, registro);
   },
 
   validar: async function (empresaId, registro) {
