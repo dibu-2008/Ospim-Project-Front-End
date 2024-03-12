@@ -235,7 +235,7 @@ export const MisAltaDeclaracionesJuradas = ({
     console.log(rowsAltaDDJJ);
 
     const erroresResponse = await axiosDDJJ.validar(ID_EMPRESA, altaDDJJFinal);
-    console.log(erroresResponse);
+    console.log("erroresResponse: " + JSON.stringify(erroresResponse));
     setValidacionResponse(erroresResponse);
 
     // Validar si validacionResponse es igual a {errores: Array(6)}
@@ -282,6 +282,8 @@ export const MisAltaDeclaracionesJuradas = ({
           setRowsAltaDDJJ([]);
         }
       });
+    } else {
+      console.log("Valido OK - SIN ERRORES");
     }
   };
 
