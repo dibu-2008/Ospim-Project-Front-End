@@ -97,11 +97,12 @@ export const MisAltaDeclaracionesJuradas = ({
 
   const importarAfiliado = () => {
     setRowsAltaDDJJ(afiliadoImportado);
+    setRowsAltaDDJJAux(afiliadoImportado);
   };
 
   const formatearFecha = (fecha) => {
-    const partes = fecha.split("/");
-    const anio = partes[2].length === 2 ? "20" + partes[2] : partes[2];
+    const partes = fecha?.split("/");
+    const anio = partes[2]?.length === 2 ? "20" + partes[2] : partes[2];
     const mes = partes[1].padStart(2, "0");
     const dia = partes[0];
     return `${anio}-${mes}-${dia}`;
@@ -140,8 +141,8 @@ export const MisAltaDeclaracionesJuradas = ({
             )?.id,
             remunerativo: item[7],
             noRemunerativo: item[8],
-            uomasocio: item[9] === "Si",
-            antimasocio: item[10] === "Si",
+            uomaSocio: item[9] === "Si",
+            amtimaSocio: item[10] === "Si",
           };
         });
 

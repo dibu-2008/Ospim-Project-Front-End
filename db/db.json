@@ -1310,7 +1310,7 @@
           "remunerativo": 135000.7,
           "noRemunerativo": 15000,
           "uomaSocio": false,
-          "antimaSocio": false
+          "amtimaSocio": false
         },
         {
           "cuil": "27418918786",
@@ -1324,7 +1324,7 @@
           "remunerativo": 645000.7,
           "noRemunerativo": 65000,
           "uomaSocio": true,
-          "antimaSocio": true
+          "amtimaSocio": true
         }
       ],
       "id": 120
@@ -1342,7 +1342,9 @@
           "camara": "CAENA",
           "categoria": "D",
           "remunerativo": 545000.7,
-          "noRemunerativo": 25000
+          "noRemunerativo": 25000,
+          "uomaSocio": true,
+          "amtimaSocio": true
         },
         {
           "cuil": "20294465996",
@@ -1354,7 +1356,9 @@
           "camara": "CAENA",
           "categoria": "D",
           "remunerativo": 545000.7,
-          "noRemunerativo": 25000
+          "noRemunerativo": 25000,
+          "uomaSocio": true,
+          "amtimaSocio": true
         }
       ],
       "id": 121
@@ -2510,7 +2514,7 @@
           "categoria": null,
           "remunerativo": null,
           "noRemunerativo": null,
-          "uomasocio": true,
+          "uomaSocio": true,
           "antimasocio": true
         }
       ],
@@ -2530,7 +2534,7 @@
           "categoria": "D",
           "remunerativo": 545000.7,
           "noRemunerativo": 25000,
-          "uomasocio": true,
+          "uomaSocio": true,
           "antimasocio": true
         },
         {
@@ -2544,7 +2548,7 @@
           "categoria": "D",
           "remunerativo": 545000.7,
           "noRemunerativo": 25000,
-          "uomasocio": true,
+          "uomaSocio": true,
           "antimasocio": true
         }
       ],
@@ -2564,7 +2568,7 @@
           "categoria": "D",
           "remunerativo": 545000.7,
           "noRemunerativo": 25000,
-          "uomasocio": true,
+          "uomaSocio": true,
           "antimasocio": true
         },
         {
@@ -2578,7 +2582,7 @@
           "categoria": "D",
           "remunerativo": 545000.7,
           "noRemunerativo": 25000,
-          "uomasocio": true,
+          "uomaSocio": true,
           "antimasocio": true
         }
       ],
@@ -2598,7 +2602,7 @@
           "categoria": "D",
           "remunerativo": 545000.7,
           "noRemunerativo": 25000,
-          "uomasocio": true,
+          "uomaSocio": true,
           "antimasocio": true
         },
         {
@@ -2612,7 +2616,7 @@
           "categoria": "D",
           "remunerativo": 545000.7,
           "noRemunerativo": 25000,
-          "uomasocio": true,
+          "uomaSocio": true,
           "antimasocio": true
         }
       ],
@@ -2632,7 +2636,7 @@
           "categoria": "C",
           "remunerativo": 1000,
           "noRemunerativo": 2000,
-          "uomasocio": true,
+          "uomaSocio": true,
           "antimasocio": true
         },
         {
@@ -2646,7 +2650,7 @@
           "categoria": "A",
           "remunerativo": 3000,
           "noRemunerativo": 6000,
-          "uomasocio": true,
+          "uomaSocio": true,
           "antimasocio": true
         },
         {
@@ -2660,7 +2664,7 @@
           "categoria": "D",
           "remunerativo": 4000,
           "noRemunerativo": 5000,
-          "uomasocio": true,
+          "uomaSocio": true,
           "antimasocio": true
         }
       ],
@@ -2680,7 +2684,7 @@
           "categoria": "D",
           "remunerativo": "1",
           "noRemunerativo": "2",
-          "uomasocio": false,
+          "uomaSocio": false,
           "antimasocio": false
         }
       ],
@@ -2701,7 +2705,7 @@
           "categoria": "B",
           "remunerativo": "1",
           "noRemunerativo": "1",
-          "uomasocio": true,
+          "uomaSocio": true,
           "antimasocio": true
         }
       ],
@@ -2722,7 +2726,7 @@
           "categoria": "D",
           "remunerativo": "2",
           "noRemunerativo": "2",
-          "uomasocio": false,
+          "uomaSocio": false,
           "antimasocio": false
         }
       ],
@@ -2743,7 +2747,7 @@
           "categoria": "C",
           "remunerativo": "3",
           "noRemunerativo": "3",
-          "uomasocio": false,
+          "uomaSocio": false,
           "antimasocio": false
         }
       ],
@@ -2764,7 +2768,7 @@
           "categoria": "D",
           "remunerativo": "3",
           "noRemunerativo": "3",
-          "uomasocio": true,
+          "uomaSocio": true,
           "antimasocio": true
         }
       ],
@@ -2785,7 +2789,7 @@
           "categoria": "D",
           "remunerativo": "3",
           "noRemunerativo": "3",
-          "uomasocio": false,
+          "uomaSocio": false,
           "antimasocio": false
         }
       ],
@@ -2806,7 +2810,7 @@
           "categoria": null,
           "remunerativo": null,
           "noRemunerativo": null,
-          "uomasocio": false,
+          "uomaSocio": false,
           "antimasocio": false
         }
       ],
