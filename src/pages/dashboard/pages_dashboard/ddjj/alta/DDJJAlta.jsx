@@ -410,7 +410,7 @@ export const MisAltaDeclaracionesJuradas = ({
             variant="contained"
             sx={{ padding: "6px 52px", marginLeft: "10px" }}
           >
-            Presentar
+            
           </Button>
         </div>
       </div>
