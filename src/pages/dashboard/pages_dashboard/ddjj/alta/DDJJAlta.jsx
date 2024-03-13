@@ -189,12 +189,9 @@ export const MisAltaDeclaracionesJuradas = ({
       }),
     };
 
-    console.log("DECLARACION JURADA", DDJJ.id);
-
     const validacionResponse = await axiosDDJJ.validar(ID_EMPRESA, DDJJ);
     setValidacionResponse(validacionResponse);
 
-    // Validar si validacionResponse es igual a {errores: Array(6)}
     if (validacionResponse.errores && validacionResponse.errores.length > 0) {
       const mensajesUnicos = new Set();
 
@@ -425,7 +422,7 @@ export const MisAltaDeclaracionesJuradas = ({
             variant="contained"
             sx={{ padding: "6px 52px", marginLeft: "10px" }}
           >
-            
+            Presentar
           </Button>
         </div>
       </div>

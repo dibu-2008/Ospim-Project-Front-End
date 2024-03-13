@@ -1347,79 +1347,55 @@
       ]
     },
     {
-      "//": "DDJJ ********************************************************************************** 02",
-      "id": 121,
-      "estado": "PR",
-      "empresaId": 1,
       "periodo": "2023-10-01T00:00:00.000Z",
-      "secuencia": 0,
       "afiliados": [
         {
-          "id": 1,
-          "cuil": "23279737229",
+          "cuil": 20949118682,
           "inte": null,
-          "apellido": "González",
-          "nombre": "Maria",
-          "fechaIngreso": "2001-01-01T00:00:00.000Z",
-          "empresaDomicilioId": 3,
-          "camara": "CAENA",
-          "categoria": "D",
-          "remunerativo": 545000.7,
-          "noRemunerativo": 25000,
+          "apellido": "Salinas",
+          "nombre": "Luis",
+          "fechaIngreso": "2024-02-15",
+          "empresaDomicilioId": 8,
+          "camara": "FAIM",
+          "categoria": "C",
+          "remunerativo": 1000,
+          "noRemunerativo": 2000,
           "uomaSocio": true,
           "amtimaSocio": true,
-          "aportes": [
-            {
-              "codigo": "UOMACS",
-              "importe": 1303.33
-            },
-            {
-              "codigo": "UOMAAS",
-              "importe": 2000.01
-            },
-            {
-              "codigo": "AMTIMACS",
-              "importe": 7500
-            },
-            {
-              "codigo": "ART46",
-              "importe": 2600.26
-            }
-          ]
+          "id": 1
         },
         {
-          "cuil": "20294465996",
-          "inte": 1,
-          "apellido": "Rodriguez",
-          "nombre": "Alejandro",
-          "fechaIngreso": "2010-01-01T00:00:00.000Z",
-          "empresaDomicilioId": 3,
+          "cuil": 20949118782,
+          "inte": null,
+          "apellido": "Bueno",
+          "nombre": "Diego",
+          "fechaIngreso": "2024-03-15",
+          "empresaDomicilioId": 10,
+          "camara": "CAENA",
+          "categoria": "A",
+          "remunerativo": 3000,
+          "noRemunerativo": 6000,
+          "uomaSocio": false,
+          "amtimaSocio": false,
+          "id": 2
+        },
+        {
+          "cuil": 21345667876,
+          "inte": null,
+          "apellido": "Lopez",
+          "nombre": "Jose",
+          "fechaIngreso": "2024-04-18",
+          "empresaDomicilioId": 10,
           "camara": "CAENA",
           "categoria": "D",
-          "remunerativo": 545000.7,
-          "noRemunerativo": 25000,
+          "remunerativo": 4000,
+          "noRemunerativo": 5000,
           "uomaSocio": true,
-          "amtimaSocio": true,
-          "aportes": [
-            {
-              "codigo": "UOMACS",
-              "importe": 1303.33
-            },
-            {
-              "codigo": "UOMAAS",
-              "importe": 2000.01
-            },
-            {
-              "codigo": "AMTIMACS",
-              "importe": 7500
-            },
-            {
-              "codigo": "ART46",
-              "importe": 2600.26
-            }
-          ]
+          "amtimaSocio": false,
+          "id": 3
         }
-      ]
+      ],
+      "id": 121
     },
     {
       "//": "DDJJ ********************************************************************************** 03",
@@ -1430,6 +1406,7 @@
       "secuencia": 0,
       "afiliados": [
         {
+          "id": 1,
           "cuil": "23279737229",
           "inte": null,
           "apellido": "Martínez",
@@ -1462,6 +1439,7 @@
           ]
         },
         {
+          "id": 2,
           "cuil": "20294465996",
           "inte": 1,
           "apellido": "López",
@@ -1504,6 +1482,7 @@
       "secuencia": 1,
       "afiliados": [
         {
+          "id": 1,
           "cuil": "23279737229",
           "inte": null,
           "apellido": "García",
@@ -1532,6 +1511,7 @@
           ]
         },
         {
+          "id": 2,
           "cuil": "20294465996",
           "inte": 1,
           "apellido": "Fernández",
@@ -1569,6 +1549,7 @@
       "secuencia": 1,
       "afiliados": [
         {
+          "id": 1,
           "cuil": "23279737229",
           "inte": null,
           "apellido": "García",
@@ -1597,6 +1578,7 @@
           ]
         },
         {
+          "id": 2,
           "cuil": "20294465996",
           "inte": 1,
           "apellido": "Fernández",
@@ -1634,6 +1616,7 @@
       "secuencia": 2,
       "afiliados": [
         {
+          "id": 1,
           "cuil": "23279737229",
           "inte": null,
           "apellido": "Ruiz",
@@ -1662,6 +1645,7 @@
           ]
         },
         {
+          "id": 2,
           "cuil": "20294465996",
           "inte": 1,
           "apellido": "Romero",
@@ -1699,6 +1683,7 @@
       "secuencia": 3,
       "afiliados": [
         {
+          "id": 1,
           "cuil": "23279737229",
           "inte": null,
           "apellido": "Garcia",
@@ -1727,6 +1712,7 @@
           ]
         },
         {
+          "id": 2,
           "cuil": "20294465996",
           "inte": 1,
           "apellido": "Flores",
@@ -1764,6 +1750,7 @@
       "secuencia": 2,
       "afiliados": [
         {
+          "id": 1,
           "cuil": "23279737229",
           "inte": null,
           "apellido": "Torres",
@@ -1792,6 +1779,7 @@
           ]
         },
         {
+          "id": 2,
           "cuil": "20294465996",
           "inte": 1,
           "apellido": "Moreno",
@@ -1829,6 +1817,7 @@
       "secuencia": 1,
       "afiliados": [
         {
+          "id": 1,
           "cuil": "23279737229",
           "inte": null,
           "apellido": "Días",
@@ -1857,6 +1846,7 @@
           ]
         },
         {
+          "id": 2,
           "cuil": "20294465996",
           "inte": 1,
           "apellido": "Herrera",
@@ -1894,6 +1884,7 @@
       "secuencia": 4,
       "afiliados": [
         {
+          "id": 1,
           "cuil": "23279737229",
           "inte": null,
           "apellido": "Castro",
@@ -1922,6 +1913,7 @@
           ]
         },
         {
+          "id": 2,
           "cuil": "20294465996",
           "inte": 1,
           "apellido": "Ruiz",
@@ -1959,6 +1951,7 @@
       "secuencia": 5,
       "afiliados": [
         {
+          "id": 1,
           "cuil": "23279737229",
           "inte": null,
           "apellido": "López",
@@ -1987,6 +1980,7 @@
           ]
         },
         {
+          "id": 2,
           "cuil": "20294465996",
           "inte": 1,
           "apellido": "Martínez",
@@ -2024,6 +2018,7 @@
       "secuencia": 6,
       "afiliados": [
         {
+          "id": 1,
           "cuil": "23279737229",
           "inte": null,
           "apellido": "Garcia",
@@ -2052,6 +2047,7 @@
           ]
         },
         {
+          "id": 2,
           "cuil": "20294465996",
           "inte": 1,
           "apellido": "Castro",
@@ -2089,6 +2085,7 @@
       "secuencia": 2,
       "afiliados": [
         {
+          "id": 1,
           "cuil": "23279737229",
           "inte": null,
           "apellido": "Vázquez",
@@ -2117,6 +2114,7 @@
           ]
         },
         {
+          "id": 2,
           "cuil": "20294465996",
           "inte": 1,
           "apellido": "Querubín",
@@ -2154,6 +2152,7 @@
       "secuencia": 1,
       "afiliados": [
         {
+          "id": 1,
           "cuil": "23279737229",
           "inte": null,
           "apellido": "Vázquez",
@@ -2182,6 +2181,7 @@
           ]
         },
         {
+          "id": 2,
           "cuil": "20294465996",
           "inte": 1,
           "apellido": "Querubín",
@@ -2219,6 +2219,7 @@
       "secuencia": null,
       "afiliados": [
         {
+          "id": 1,
           "cuil": "23279737229",
           "inte": null,
           "apellido": "Vázquez",
@@ -2247,6 +2248,7 @@
           ]
         },
         {
+          "id": 2,
           "cuil": "20294465996",
           "inte": 1,
           "apellido": "Querubín",
@@ -2284,6 +2286,7 @@
       "secuencia": null,
       "afiliados": [
         {
+          "id": 1,
           "cuil": "23279737229",
           "inte": null,
           "apellido": "Vázquez",
@@ -2312,6 +2315,7 @@
           ]
         },
         {
+          "id": 2,
           "cuil": "20294465996",
           "inte": 1,
           "apellido": "Querubín",
@@ -2343,8 +2347,10 @@
     },
     {
       "periodo": "2023-10-01T00:00:00.000Z",
+      "empresaId": "1",
       "afiliados": [
         {
+          "id": 1,
           "cuil": "23279737229",
           "inte": null,
           "apellido": "Vázquez",
@@ -2377,6 +2383,7 @@
           ]
         },
         {
+          "id": 2,
           "cuil": "20294465996",
           "inte": 1,
           "apellido": "Querubín",
@@ -2415,6 +2422,7 @@
       "periodo": "2025-04-01T00:00:00.000Z",
       "afiliados": [
         {
+          "id": 1,
           "cuil": "20949118682",
           "inte": 0,
           "apellido": "Salinas",
@@ -2436,6 +2444,7 @@
       "periodo": "2021-02-01T00:00:00.000Z",
       "afiliados": [
         {
+          "id": 1,
           "cuil": "20949118682",
           "inte": 0,
           "apellido": "Salinas",
@@ -2457,6 +2466,7 @@
       "periodo": "2023-10-01T00:00:00.000Z",
       "afiliados": [
         {
+          "id": 1,
           "cuil": "23279737229",
           "inte": null,
           "apellido": "Vázquez",
@@ -2471,6 +2481,7 @@
           "amtimaSocio": true
         },
         {
+          "id": 2,
           "cuil": "20294465996",
           "inte": 1,
           "apellido": "Querubín",
@@ -2492,6 +2503,7 @@
       "periodo": "2023-10-01T00:00:00.000Z",
       "afiliados": [
         {
+          "id": 1,
           "cuil": "23279737229",
           "inte": null,
           "apellido": "Vázquez",
@@ -2506,6 +2518,7 @@
           "amtimaSocio": true
         },
         {
+          "id": 2,
           "cuil": "20294465996",
           "inte": 1,
           "apellido": "Querubín",
@@ -2527,6 +2540,7 @@
       "periodo": "2023-10-01T00:00:00.000Z",
       "afiliados": [
         {
+          "id": 1,
           "cuil": "23279737229",
           "inte": null,
           "apellido": "Vázquez",
@@ -2541,6 +2555,7 @@
           "amtimaSocio": true
         },
         {
+          "id": 2,
           "cuil": "20294465996",
           "inte": 1,
           "apellido": "Querubín",
@@ -2609,6 +2624,58 @@
       ],
       "empresaId": "1",
       "id": 210
+    },
+    {
+      "periodo": null,
+      "afiliados": [
+        {
+          "cuil": 20949118682,
+          "inte": null,
+          "apellido": "Salinas",
+          "nombre": "Luis",
+          "fechaIngreso": "2024-02-15",
+          "empresaDomicilioId": 8,
+          "camara": "FAIM",
+          "categoria": "C",
+          "remunerativo": 1000,
+          "noRemunerativo": 2000,
+          "uomaSocio": true,
+          "amtimaSocio": true,
+          "id": 1
+        },
+        {
+          "cuil": 20949118782,
+          "inte": null,
+          "apellido": "Bueno",
+          "nombre": "Diego",
+          "fechaIngreso": "2024-03-15",
+          "empresaDomicilioId": 10,
+          "camara": "CAENA",
+          "categoria": "A",
+          "remunerativo": 3000,
+          "noRemunerativo": 6000,
+          "uomaSocio": false,
+          "amtimaSocio": false,
+          "id": 2
+        },
+        {
+          "cuil": 21345667876,
+          "inte": null,
+          "apellido": "Lopez",
+          "nombre": "Jose",
+          "fechaIngreso": "2024-04-18",
+          "empresaDomicilioId": 10,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 4000,
+          "noRemunerativo": 5000,
+          "uomaSocio": true,
+          "amtimaSocio": false,
+          "id": 3
+        }
+      ],
+      "empresaId": "1",
+      "id": 211
     }
   ],
   "afiliado": [
