@@ -36,7 +36,7 @@
   "/empresa/:empresaId/ddjj/:id": "/DDJJ/:id",
   "/empresa/:empresaId/ddjj/:id/presentar": "/DDJJ/:id",
   "/empresa/:empresaId/ddjj/periodo/:periodo/existe": "/DDJJ?empresaId=:empresaId&periodo=:periodo",
-
+  
   "/roles/:id/funcionalidad": "/rol/funcionalidad/getRel?rolId=:id",
   "/roles/:id": "/rol",
   "/roles": "/rol",

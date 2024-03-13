@@ -174,8 +174,8 @@ export const MisAltaDeclaracionesJuradas = ({
         categoria: !item.categoria ? null : item.categoria,
         remunerativo: !item.remunerativo ? null : item.remunerativo,
         noRemunerativo: !item.noRemunerativo ? null : item.noRemunerativo,
-        uomasocio: item.uomasocio,
-        antimasocio: item.antimasocio,
+        uomaSocio: item.uomasocio,
+        antimaSocio: item.antimasocio,
       })),
     };
 

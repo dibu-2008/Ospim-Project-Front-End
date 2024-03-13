@@ -147,7 +147,7 @@ export const GrillaMisDeclaracionesJuradas = ({
     }));
 
     setPeticion("PUT");
-    setRowsAltaDDJJ(ddjj.afiliados);
+    setRowsAltaDDJJ(updateRowsAltaDDJJ);
     setDDJJState(ddjj);
   };
 

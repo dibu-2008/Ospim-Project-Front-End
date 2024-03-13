@@ -58,13 +58,8 @@ function EditToolbar(props) {
         categoria: "",
         remunerativo: "",
         noRemunerativo: "",
-<<<<<<< HEAD
-        uomasocio: false,
-        antimasocio: false,
-=======
         uomaSocio: false,
         amtimaSocio: false,
->>>>>>> sigeco_front_diego
         isNew: true,
       },
       ...oldRows,
@@ -82,13 +77,8 @@ function EditToolbar(props) {
         categoria: "",
         remunerativo: "",
         noRemunerativo: "",
-<<<<<<< HEAD
-        uomasocio: false,
-        antimasocio: false,
-=======
         uomaSocio: false,
         amtimaSocio: false,
->>>>>>> sigeco_front_diego
         isNew: true,
       },
       ...oldRows,

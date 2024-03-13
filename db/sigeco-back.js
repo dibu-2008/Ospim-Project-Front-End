@@ -13,7 +13,7 @@ module.exports = (req, res, next) => {
       return "DDJJ-IMPRIMIR";
     }
 
-    if (req.method === "POST" && req.url.endsWith("/ddjj/validar")) {
+    if (req.method === "POST" && req.url.toLowerCase().endsWith("/ddjj/validar")) {
       return "DDJJ-VALIDAR-NIVEL2";
     }
 

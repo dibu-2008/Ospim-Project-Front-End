@@ -1299,28 +1299,18 @@
       "periodo": "2024-02-01",
       "empleados": [
         {
-          "cuil": "20949118682",
-          "inte": null,
-          "apellido": "Salinas",
-          "nombre": "Luis",
-          "fechaIngreso": "2001-01-01T00:00:00.000Z",
-          "empresaDomicilioId": 3,
-          "camara": "CAENA",
-          "categoria": "D",
-          "remunerativo": 545000.7,
-          "noRemunerativo": 25000,
+          "cuil": "20275889645",
+          "inte": 0,
+          "apellido": "Vasquez",
+          "nombre": "Clementino",
+          "fechaIngreso": "2015-01-01",
+          "empresaDomicilioId": 32,
+          "camara": "FAIM",
+          "categoria": "A",
+          "remunerativo": 135000.7,
+          "noRemunerativo": 15000,
           "uomaSocio": false,
-          "amtimaSocio": false,
-          "aportes": [
-            {
-              "codigo": "UOMACU",
-              "importe": 9725.75
-            },
-            {
-              "codigo": "ART46",
-              "importe": 2600.26
-            }
-          ]
+          "antimaSocio": false
         },
         {
           "cuil": "27418918786",
@@ -1331,20 +1321,10 @@
           "empresaDomicilioId": 32,
           "camara": "CAENA",
           "categoria": "D",
-          "remunerativo": 545000.7,
-          "noRemunerativo": 25000,
-          "uomaSocio": false,
-          "amtimaSocio": false,
-          "aportes": [
-            {
-              "codigo": "UOMACU",
-              "importe": 9725.75
-            },
-            {
-              "codigo": "ART46",
-              "importe": 2600.26
-            }
-          ]
+          "remunerativo": 645000.7,
+          "noRemunerativo": 65000,
+          "uomaSocio": true,
+          "antimaSocio": true
         }
       ],
       "id": 120
@@ -1362,27 +1342,7 @@
           "camara": "CAENA",
           "categoria": "D",
           "remunerativo": 545000.7,
-          "noRemunerativo": 25000,
-          "uomaSocio": true,
-          "amtimaSocio": true,
-          "aportes": [
-            {
-              "codigo": "UOMACS",
-              "importe": 1303.33
-            },
-            {
-              "codigo": "UOMAAS",
-              "importe": 2000.01
-            },
-            {
-              "codigo": "AMTIMACS",
-              "importe": 7500
-            },
-            {
-              "codigo": "ART46",
-              "importe": 2600.26
-            }
-          ]
+          "noRemunerativo": 25000
         },
         {
           "cuil": "20294465996",
@@ -1394,27 +1354,7 @@
           "camara": "CAENA",
           "categoria": "D",
           "remunerativo": 545000.7,
-          "noRemunerativo": 25000,
-          "uomaSocio": true,
-          "amtimaSocio": true,
-          "aportes": [
-            {
-              "codigo": "UOMACS",
-              "importe": 1303.33
-            },
-            {
-              "codigo": "UOMAAS",
-              "importe": 2000.01
-            },
-            {
-              "codigo": "AMTIMACS",
-              "importe": 7500
-            },
-            {
-              "codigo": "ART46",
-              "importe": 2600.26
-            }
-          ]
+          "noRemunerativo": 25000
         }
       ],
       "id": 121
@@ -2872,6 +2812,25 @@
       ],
       "empresaId": "1",
       "id": 221
+    },
+    {
+      "periodo": null,
+      "afiliados": [
+        {
+          "cuil": "20949118682",
+          "inte": null,
+          "apellido": "Salinas",
+          "nombre": "Luis",
+          "fechaIngreso": null,
+          "empresaDomicilioId": null,
+          "camara": null,
+          "categoria": null,
+          "remunerativo": null,
+          "noRemunerativo": null
+        }
+      ],
+      "empresaId": "1",
+      "id": 222
     }
   ],
   "afiliado": [
