@@ -169,7 +169,7 @@ export const MisAltaDeclaracionesJuradas = ({
       afiliados: rowsAltaDDJJ.map((item) => {
         const registro = {
           cuil: !item.cuil ? null : item.cuil,
-          inte: null,
+          inte: !item.inte ? null : item.inte,
           apellido: !item.apellido ? null : item.apellido,
           nombre: !item.nombre ? null : item.nombre,
           fechaIngreso: !item.fechaIngreso ? null : item.fechaIngreso,
@@ -180,8 +180,9 @@ export const MisAltaDeclaracionesJuradas = ({
           categoria: !item.categoria ? null : item.categoria,
           remunerativo: !item.remunerativo ? null : item.remunerativo,
           noRemunerativo: !item.noRemunerativo ? null : item.noRemunerativo,
-          uomaSocio: false,
-          amtimaSocio: false,
+          //uomaSocio: false,
+          uomaSocio: item.uomaSocio,
+          amtimaSocio: item.amtimaSocio,
         };
         if (item.id) registro.id = item.id;
         return registro;
