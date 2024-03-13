@@ -4,6 +4,7 @@ import { Visibility as VisibilityIcon, Print as PrintIcon, Edit as EditIcon } fr
 import { DataGrid } from '@mui/x-data-grid';
 import { useNavigate } from 'react-router-dom';  // Importa useNavigate
 import { getBoletasByEmpresa, downloadPdfBoleta } from './BoletasApi';
+import formatter from "@/common/formatter";
 import './Boletas.css';
 
 

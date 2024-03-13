@@ -48,7 +48,7 @@ const AppRouter = () => {
             <Route path="altausuariointerno" element={<AltaUsuarioInterno />} />
             <Route path="cuitsrestringidos" element={<CuitsRestringidos />} />
             <Route path="roles" element={<Roles />} />
-            <Route path="generarboletas" element={<GenerarBoletas />} />
+            <Route path="generarboletas/:id" element={<GenerarBoletas />} />
             <Route path="detalleboleta" element={<DetalleBoleta />} />
             <Route path="generarotrospagos" element={<GenerarOtrosPagos />} />
             <Route path="detalleotrospagos" errorElement={<DetalleOtrosPagos />}/>

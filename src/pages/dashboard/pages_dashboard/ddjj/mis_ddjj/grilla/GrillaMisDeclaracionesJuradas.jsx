@@ -21,6 +21,8 @@ import { PDFViewer, PDFDownloadLink } from "@react-pdf/renderer";
 import { MyDocument } from "./MiPdf";
 import Swal from "sweetalert2";
 import dayjs from "dayjs";
+import { useNavigate } from 'react-router-dom';  
+
 
 function misDDJJColumnaAporteGet(ddjjResponse) {
   //toma todas las ddjj de la consulta de "Mis DDJJ" y arma "vector de Columnas Aportes"
@@ -87,6 +89,17 @@ export const GrillaMisDeclaracionesJuradas = ({
 
   let colAportes = [];
 
+  const navigate = useNavigate();  
+
+  const handleGenerarBoletaClick = (id) => () => {
+    try{
+      navigate(`/dashboard/generarboletas/${id}`);
+    } catch (error) {
+      console.error(error)
+    }
+    
+  };
+
   useEffect(() => {
     const ObtenerMisDeclaracionesJuradas = async () => {
       let ddjjResponse = await axiosDDJJ.consultar(idEmpresa);
@@ -128,7 +141,7 @@ export const GrillaMisDeclaracionesJuradas = ({
     setTabState(0);
 
     const ddjj = await axiosDDJJ.getDDJJ(idEmpresa, id);
-
+    console.log(ddjj)
     const periodoResponse = ddjj.periodo;
     const fecha = new Date(periodoResponse);
     const mes = fecha.getMonth() + 1; // Sumar 1 porque los meses van de 0 a 11
@@ -342,6 +355,7 @@ export const GrillaMisDeclaracionesJuradas = ({
               marginLeft: "-40px",
             }}
             variant="contained"
+            onClick={handleGenerarBoletaClick(id)}
           >
             Generar Boleta
           </Button>,
