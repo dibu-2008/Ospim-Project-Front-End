@@ -117,6 +117,7 @@ export const DeclaracionesJuradas = () => {
           <CustomTabPanel value={tabState} index={0}>
             <MisAltaDeclaracionesJuradas
               DDJJState={DDJJState}
+              setDDJJState={setDDJJState}
               periodo={periodo}
               setPeriodo={setPeriodo}
               periodoIso={periodoIso}

@@ -27,6 +27,7 @@ import XLSX from "xlsx";
 
 export const MisAltaDeclaracionesJuradas = ({
   DDJJState,
+  setDDJJState,
   periodo,
   setPeriodo,
   periodoIso,
@@ -222,9 +223,9 @@ export const MisAltaDeclaracionesJuradas = ({
       }).then(async (result) => {
         if (result.isConfirmed) {
           console.log("Aceptar...");
+          let bOK = false;
           if (peticion === "PUT") {
-            await axiosDDJJ.actualizar(ID_EMPRESA, DDJJ);
-            alert("Declaracion jurada actualizada exitosamente");
+            bOK = await axiosDDJJ.actualizar(ID_EMPRESA, DDJJ);
             //setRowsAltaDDJJ([]);
           } else {
             await axiosDDJJ.crear(ID_EMPRESA, DDJJ);
@@ -247,7 +248,13 @@ export const MisAltaDeclaracionesJuradas = ({
         //setRowsAltaDDJJ([]);
         // peticion put con fetch
       } else {
-        await axiosDDJJ.crear(ID_EMPRESA, DDJJ);
+        const data = await axiosDDJJ.crear(ID_EMPRESA, DDJJ);
+        if (data) {
+          //actualizar estado
+          setDDJJState(data);
+          setRowsAltaDDJJ(data.);
+        }
+        //sacarlo luego de actualizar
         setRowsAltaDDJJ([]);
       }
     }
