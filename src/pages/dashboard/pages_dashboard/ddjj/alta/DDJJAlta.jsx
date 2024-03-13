@@ -252,7 +252,7 @@ export const MisAltaDeclaracionesJuradas = ({
         if (data) {
           //actualizar estado
           setDDJJState(data);
-          setRowsAltaDDJJ(data.);
+          //setRowsAltaDDJJ(data.);
         }
         //sacarlo luego de actualizar
         setRowsAltaDDJJ([]);
