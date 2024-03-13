@@ -2743,6 +2743,80 @@
       ],
       "empresaId": "1",
       "id": 212
+    },
+    {
+      "periodo": null,
+      "afiliados": [
+        {
+          "cuil": "20949118682",
+          "inte": null,
+          "apellido": "Salinas",
+          "nombre": "Luis",
+          "fechaIngreso": "2024-03-14T03:00:00.000Z",
+          "empresaDomicilioId": 8,
+          "camara": "FAIM",
+          "categoria": "D",
+          "remunerativo": "1",
+          "noRemunerativo": "1",
+          "uomaSocio": false,
+          "amtimaSocio": false,
+          "id": 1
+        }
+      ],
+      "empresaId": "1",
+      "id": 213
+    },
+    {
+      "periodo": null,
+      "afiliados": [
+        {
+          "cuil": 20949118682,
+          "inte": null,
+          "apellido": "Salinas",
+          "nombre": "Luis",
+          "fechaIngreso": "2024-02-15",
+          "empresaDomicilioId": 8,
+          "camara": "FAIM",
+          "categoria": "C",
+          "remunerativo": 1000,
+          "noRemunerativo": 2000,
+          "uomaSocio": true,
+          "amtimaSocio": true,
+          "id": 1
+        },
+        {
+          "cuil": 20949118782,
+          "inte": null,
+          "apellido": "Bueno",
+          "nombre": "Diego",
+          "fechaIngreso": "2024-03-15",
+          "empresaDomicilioId": 10,
+          "camara": "CAENA",
+          "categoria": "A",
+          "remunerativo": 3000,
+          "noRemunerativo": 6000,
+          "uomaSocio": false,
+          "amtimaSocio": false,
+          "id": 2
+        },
+        {
+          "cuil": 21345667876,
+          "inte": null,
+          "apellido": "Lopez",
+          "nombre": "Jose",
+          "fechaIngreso": "2024-04-18",
+          "empresaDomicilioId": 10,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 4000,
+          "noRemunerativo": 5000,
+          "uomaSocio": true,
+          "amtimaSocio": false,
+          "id": 3
+        }
+      ],
+      "empresaId": "1",
+      "id": 214
     }
   ],
   "afiliado": [

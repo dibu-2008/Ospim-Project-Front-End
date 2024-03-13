@@ -30,21 +30,21 @@ module.exports = (req, res, next) => {
         const jsonExitoso = [
           {
             cuil: "20949118682",
-            inter: 0,
+            inte: 0,
             apellido: "Salinas",
             nombre: "luis",
             cuilValido: true,
           },
           {
             cuil: "20949118782",
-            inter: null,
+            inte: null,
             apellido: null,
             nombre: null,
             cuilValido: true,
           },
           {
             cuil: "21345667876",
-            inter: null,
+            inte: null,
             apellido: null,
             nombre: null,
             cuilValido: true,
@@ -56,21 +56,21 @@ module.exports = (req, res, next) => {
         const jsonFallido = [
           {
             cuil: cuil1,
-            inter: 0,
+            inte: 0,
             apellido: "Salinas",
             nombre: "luis",
             cuilValido: true,
           },
           {
             cuil: cuil2,
-            inter: null,
+            inte: null,
             apellido: null,
             nombre: null,
             cuilValido: true,
           },
           {
             cuil: cuil3,
-            inter: null,
+            inte: null,
             apellido: null,
             nombre: null,
             cuilValido: false,
