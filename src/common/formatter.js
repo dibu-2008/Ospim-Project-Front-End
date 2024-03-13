@@ -21,14 +21,17 @@ const formatDate = (value) => {
   }
 };
 
-const formatPeriodo = (value) => {
+const formatPeriodo = (value, separador) => {
   try {
+    if (!separador) {
+      separador = "/";
+    }
     const date = new Date(value);
 
     const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
     const year = date.getUTCFullYear();
 
-    return `${month}/${year}`;
+    return `${month}${separador}${year}`;
   } catch (error) {
     return "";
   }

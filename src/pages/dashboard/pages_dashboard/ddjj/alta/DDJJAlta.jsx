@@ -19,6 +19,7 @@ import esLocale from "dayjs/locale/es";
 import "./DDJJAlta.css";
 import { GrillaPasoTres } from "./paso_tres/GrillaPasoTres";
 import { axiosDDJJ } from "./DDJJAltaApi";
+import formatter from "@/common/formatter";
 
 import localStorageService from "@/components/localStorage/localStorageService";
 import Swal from "sweetalert2";
@@ -26,6 +27,7 @@ import XLSX from "xlsx";
 
 export const MisAltaDeclaracionesJuradas = ({
   DDJJState,
+  setDDJJState,
   periodo,
   setPeriodo,
   periodoIso,
@@ -38,6 +40,8 @@ export const MisAltaDeclaracionesJuradas = ({
   peticion,
   idDDJJ,
 }) => {
+  console.log("rowsAltaDDJJ: ");
+  console.log(rowsAltaDDJJ);
   const [otroPeriodo, setOtroPeriodo] = useState(null);
   const [otroPeriodoIso, setOtroPeriodoIso] = useState(null);
   const [camaras, setCamaras] = useState([]);
@@ -162,22 +166,27 @@ export const MisAltaDeclaracionesJuradas = ({
     const DDJJ = {
       id: DDJJState.id,
       periodo: periodoIso,
-      afiliados: rowsAltaDDJJ.map((item) => ({
-        cuil: !item.cuil ? null : item.cuil,
-        inte: null,
-        apellido: !item.apellido ? null : item.apellido,
-        nombre: !item.nombre ? null : item.nombre,
-        fechaIngreso: !item.fechaIngreso ? null : item.fechaIngreso,
-        empresaDomicilioId: !item.empresaDomicilioId
-          ? null
-          : item.empresaDomicilioId,
-        camara: !item.camara ? null : item.camara,
-        categoria: !item.categoria ? null : item.categoria,
-        remunerativo: !item.remunerativo ? null : item.remunerativo,
-        noRemunerativo: !item.noRemunerativo ? null : item.noRemunerativo,
-        uomaSocio: item.uomasocio,
-        antimaSocio: item.antimasocio,
-      })),
+      afiliados: rowsAltaDDJJ.map((item) => {
+        const registro = {
+          cuil: !item.cuil ? null : item.cuil,
+          inte: !item.inte ? null : item.inte,
+          apellido: !item.apellido ? null : item.apellido,
+          nombre: !item.nombre ? null : item.nombre,
+          fechaIngreso: !item.fechaIngreso ? null : item.fechaIngreso,
+          empresaDomicilioId: !item.empresaDomicilioId
+            ? null
+            : item.empresaDomicilioId,
+          camara: !item.camara ? null : item.camara,
+          categoria: !item.categoria ? null : item.categoria,
+          remunerativo: !item.remunerativo ? null : item.remunerativo,
+          noRemunerativo: !item.noRemunerativo ? null : item.noRemunerativo,
+          //uomaSocio: false,
+          uomaSocio: item.uomaSocio,
+          amtimaSocio: item.amtimaSocio,
+        };
+        if (item.id) registro.id = item.id;
+        return registro;
+      }),
     };
 
     console.log("DECLARACION JURADA", DDJJ.id);
@@ -186,7 +195,7 @@ export const MisAltaDeclaracionesJuradas = ({
     setValidacionResponse(validacionResponse);
 
     // Validar si validacionResponse es igual a {errores: Array(6)}
-    if (validacionResponse.errores.length > 0) {
+    if (validacionResponse.errores && validacionResponse.errores.length > 0) {
       const mensajesUnicos = new Set();
 
       validacionResponse.errores.forEach((error) => {
@@ -213,9 +222,9 @@ export const MisAltaDeclaracionesJuradas = ({
       }).then(async (result) => {
         if (result.isConfirmed) {
           console.log("Aceptar...");
+          let bOK = false;
           if (peticion === "PUT") {
-            await axiosDDJJ.actualizar(ID_EMPRESA, DDJJ);
-            alert("Declaracion jurada actualizada exitosamente");
+            bOK = await axiosDDJJ.actualizar(ID_EMPRESA, DDJJ);
             //setRowsAltaDDJJ([]);
           } else {
             await axiosDDJJ.crear(ID_EMPRESA, DDJJ);
@@ -238,7 +247,13 @@ export const MisAltaDeclaracionesJuradas = ({
         //setRowsAltaDDJJ([]);
         // peticion put con fetch
       } else {
-        await axiosDDJJ.crear(ID_EMPRESA, DDJJ);
+        const data = await axiosDDJJ.crear(ID_EMPRESA, DDJJ);
+        if (data) {
+          //actualizar estado
+          setDDJJState(data);
+          //setRowsAltaDDJJ(data.);
+        }
+        //sacarlo luego de actualizar
         setRowsAltaDDJJ([]);
       }
     }
