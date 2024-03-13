@@ -180,7 +180,6 @@ export const MisAltaDeclaracionesJuradas = ({
           categoria: !item.categoria ? null : item.categoria,
           remunerativo: !item.remunerativo ? null : item.remunerativo,
           noRemunerativo: !item.noRemunerativo ? null : item.noRemunerativo,
-          //uomaSocio: false,
           uomaSocio: item.uomaSocio,
           amtimaSocio: item.amtimaSocio,
         };

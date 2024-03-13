@@ -110,16 +110,10 @@ export const Feriados = () => {
   useEffect(() => {
     const ObtenerFeriados = async () => {
       const response = await axiosFeriados.consultar();
-      response.map((item, index) => (item.numeroFila = index));
-      setRows(response.map((item) => ({ id: item.id, ...item })));
+      setRows(response);
     };
     ObtenerFeriados();
   }, []);
-
-  // imprimor rows en consola en función de useEffect
-  useEffect(() => {
-    console.log(rows);
-  }, [rows]);
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
