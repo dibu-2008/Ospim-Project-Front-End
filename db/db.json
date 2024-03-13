@@ -1295,6 +1295,7 @@
       "secuencia": 0,
       "afiliados": [
         {
+          "id": 1,
           "cuil": "20949118682",
           "inte": null,
           "apellido": "Salinas",

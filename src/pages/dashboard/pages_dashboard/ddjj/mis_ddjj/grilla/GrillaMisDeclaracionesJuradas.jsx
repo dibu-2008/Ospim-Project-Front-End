@@ -130,21 +130,20 @@ export const GrillaMisDeclaracionesJuradas = ({
 
     const ddjj = await axiosDDJJ.getDDJJ(idEmpresa, id);
     console.log("ddjj: ", ddjj);
-    const { periodo } = ddjj;
 
+    const { periodo } = ddjj;
     const mes = new Date(periodo).getMonth() + 1;
     const anio = new Date(periodo).getFullYear();
-
     setPeriodo(dayjs(`${anio}-${mes + 1}`));
 
     handleAcceptPeriodoDDJJ();
 
     const { afiliados } = ddjj;
 
-    const updateRowsAltaDDJJ = afiliados.map((item, index) => ({
-      id: index + 1,
-      ...item,
-    }));
+    //const updateRowsAltaDDJJ = afiliados.map((item, index) => ({
+    //  id: index + 1,
+    //  ...item,
+    //}));
 
     setPeticion("PUT");
     setRowsAltaDDJJ(ddjj.afiliados);

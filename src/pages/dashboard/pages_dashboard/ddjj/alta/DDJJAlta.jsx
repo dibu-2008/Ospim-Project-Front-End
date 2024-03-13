@@ -19,6 +19,7 @@ import esLocale from "dayjs/locale/es";
 import "./DDJJAlta.css";
 import { GrillaPasoTres } from "./paso_tres/GrillaPasoTres";
 import { axiosDDJJ } from "./DDJJAltaApi";
+import formatter from "@/common/formatter";
 
 import localStorageService from "@/components/localStorage/localStorageService";
 import Swal from "sweetalert2";
@@ -38,6 +39,8 @@ export const MisAltaDeclaracionesJuradas = ({
   peticion,
   idDDJJ,
 }) => {
+  console.log("rowsAltaDDJJ: ");
+  console.log(rowsAltaDDJJ);
   const [otroPeriodo, setOtroPeriodo] = useState(null);
   const [otroPeriodoIso, setOtroPeriodoIso] = useState(null);
   const [camaras, setCamaras] = useState([]);
@@ -163,24 +166,26 @@ export const MisAltaDeclaracionesJuradas = ({
     const DDJJ = {
       id: DDJJState.id,
       periodo: periodoIso,
-      afiliados: rowsAltaDDJJ.map((item) => ({
-        cuil: !item.cuil ? null : item.cuil,
-        inte: null,
-        apellido: !item.apellido ? null : item.apellido,
-        nombre: !item.nombre ? null : item.nombre,
-        fechaIngreso: !item.fechaIngreso ? null : item.fechaIngreso,
-        empresaDomicilioId: !item.empresaDomicilioId
-          ? null
-          : item.empresaDomicilioId,
-        camara: !item.camara ? null : item.camara,
-        categoria: !item.categoria ? null : item.categoria,
-        remunerativo: !item.remunerativo ? null : item.remunerativo,
-        noRemunerativo: !item.noRemunerativo ? null : item.noRemunerativo,
-        /* uomaSocio: item.aporteUomaCs && item.aporteUomaAs && item.aporteArt46 ? true : false,
-                amtimaSocio: item.aporteUomaCs && item.aporteUomaAs && item.aporteArt46 && item.aporteAmtimaCs ? true : false, */
-        uomaSocio: false,
-        amtimaSocio: false,
-      })),
+      afiliados: rowsAltaDDJJ.map((item) => {
+        const registro = {
+          cuil: !item.cuil ? null : item.cuil,
+          inte: null,
+          apellido: !item.apellido ? null : item.apellido,
+          nombre: !item.nombre ? null : item.nombre,
+          fechaIngreso: !item.fechaIngreso ? null : item.fechaIngreso,
+          empresaDomicilioId: !item.empresaDomicilioId
+            ? null
+            : item.empresaDomicilioId,
+          camara: !item.camara ? null : item.camara,
+          categoria: !item.categoria ? null : item.categoria,
+          remunerativo: !item.remunerativo ? null : item.remunerativo,
+          noRemunerativo: !item.noRemunerativo ? null : item.noRemunerativo,
+          uomaSocio: false,
+          amtimaSocio: false,
+        };
+        if (item.id) registro.id = item.id;
+        return registro;
+      }),
     };
 
     console.log("DECLARACION JURADA", DDJJ.id);
@@ -189,7 +194,7 @@ export const MisAltaDeclaracionesJuradas = ({
     setValidacionResponse(validacionResponse);
 
     // Validar si validacionResponse es igual a {errores: Array(6)}
-    if (validacionResponse.errores.length > 0) {
+    if (validacionResponse.errores && validacionResponse.errores.length > 0) {
       const mensajesUnicos = new Set();
 
       validacionResponse.errores.forEach((error) => {
