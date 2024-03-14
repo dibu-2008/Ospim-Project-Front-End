@@ -58,8 +58,8 @@ function EditToolbar(props) {
         categoria: "",
         remunerativo: "",
         noRemunerativo: "",
-        adheridoSindicato: false,
-        pagaMutual: false,
+        uomaSocio: false,
+        amtimaSocio: false,
         isNew: true,
       },
       ...oldRows,
@@ -77,8 +77,8 @@ function EditToolbar(props) {
         categoria: "",
         remunerativo: "",
         noRemunerativo: "",
-        adheridoSindicato: false,
-        pagaMutual: false,
+        uomaSocio: false,
+        amtimaSocio: false,
         isNew: true,
       },
       ...oldRows,
@@ -104,7 +104,6 @@ export const GrillaPasoTres = ({
   setRowsAltaDDJJ,
   rowsAltaDDJJAux,
   setRowsAltaDDJJAux,
-  token,
   camaras,
   categoriasFiltradas,
   setCategoriasFiltradas,
@@ -126,6 +125,7 @@ export const GrillaPasoTres = ({
 
   const ObtenerAfiliados = async (params, cuilElegido) => {
     const afiliados = await axiosDDJJ.getAfiliado(cuilElegido);
+    console.log(afiliados);
     //const afiliados = await obtenerAfiliados(token, cuilElegido);
     const afiliadoEncontrado = afiliados.find(
       (afiliado) => afiliado.cuil === cuilElegido
@@ -563,7 +563,7 @@ export const GrillaPasoTres = ({
       valueFormatter: (params) => formatter.currency.format(params.value || 0),
     },
     {
-      field: "uomasocio",
+      field: "uomaSocio",
       type: "singleSelect",
       //headerName: "Adherido a sindicato",
       renderHeader: () => (
@@ -586,7 +586,7 @@ export const GrillaPasoTres = ({
       ],
     },
     {
-      field: "antimasocio",
+      field: "amtimaSocio",
       type: "singleSelect",
       //headerName: "Paga mutual",
       renderHeader: () => (

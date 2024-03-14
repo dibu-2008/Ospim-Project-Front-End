@@ -19,11 +19,17 @@ import esLocale from "dayjs/locale/es";
 import "./DDJJAlta.css";
 import { GrillaPasoTres } from "./paso_tres/GrillaPasoTres";
 import { axiosDDJJ } from "./DDJJAltaApi";
+import formatter from "@/common/formatter";
+
+import localStorageService from "@/components/localStorage/localStorageService";
 import Swal from "sweetalert2";
 import XLSX from "xlsx";
 
 export const MisAltaDeclaracionesJuradas = ({
+  DDJJState,
+  setDDJJState,
   periodo,
+  setPeriodo,
   periodoIso,
   handleChangePeriodo,
   handleAcceptPeriodoDDJJ,
@@ -34,6 +40,8 @@ export const MisAltaDeclaracionesJuradas = ({
   peticion,
   idDDJJ,
 }) => {
+  console.log("rowsAltaDDJJ: ");
+  console.log(rowsAltaDDJJ);
   const [otroPeriodo, setOtroPeriodo] = useState(null);
   const [otroPeriodoIso, setOtroPeriodoIso] = useState(null);
   const [camaras, setCamaras] = useState([]);
@@ -45,21 +53,7 @@ export const MisAltaDeclaracionesJuradas = ({
   const [mostrarPeriodos, setMostrarPeriodos] = useState(false);
   const [validacionResponse, setValidacionResponse] = useState([]);
   const [afiliadoImportado, setAfiliadoImportado] = useState([]);
-  const TOKEN = JSON.parse(localStorage.getItem("stateLogin")).usuarioLogueado
-    .usuario.token;
-  const ID_EMPRESA = JSON.parse(localStorage.getItem("stateLogin"))
-    .usuarioLogueado.empresa.id;
-
-  useEffect(() => {
-    // imprimir en consola rowsAltaDDJJ
-    console.log(rowsAltaDDJJ);
-
-    // imprimir en consola la fecha del primero de diciembre del 2022 con el objeto dayjs
-    console.log(dayjs("2022-12-01").locale(esLocale).format("MMMM YYYY"));
-    console.log(dayjs("2024-02-15").locale(esLocale).format("MMMM YYYY"));
-    // formato dia mes año
-    console.log(dayjs("2024-02-15").locale(esLocale).format("DD MMMM YYYY"));
-  }, [rowsAltaDDJJ]);
+  const ID_EMPRESA = localStorageService.getEmpresaId();
 
   const handleChangeOtroPeriodo = (date) => setOtroPeriodo(date);
 
@@ -106,6 +100,7 @@ export const MisAltaDeclaracionesJuradas = ({
   }, []);
 
   const importarAfiliado = async () => {
+   
     const cuiles = afiliadoImportado.map((item) => item.cuil);
     const cuilesString = cuiles.map((item) => item.toString());
 
@@ -150,11 +145,12 @@ export const MisAltaDeclaracionesJuradas = ({
 
       setRowsAltaDDJJ(afiliadoImportado);
     }
+    setRowsAltaDDJJAux(afiliadoImportado);
   };
 
   const formatearFecha = (fecha) => {
-    const partes = fecha.split("/");
-    const anio = partes[2].length === 2 ? "20" + partes[2] : partes[2];
+    const partes = fecha?.split("/");
+    const anio = partes[2]?.length === 2 ? "20" + partes[2] : partes[2];
     const mes = partes[1].padStart(2, "0");
     const dia = partes[0];
     return `${anio}-${mes}-${dia}`;
@@ -193,8 +189,8 @@ export const MisAltaDeclaracionesJuradas = ({
             )?.id,
             remunerativo: item[7],
             noRemunerativo: item[8],
-            adheridoSindicato: item[9] === "Si",
-            pagaMutual: item[10] === "Si",
+            uomaSocio: item[9] === "Si",
+            amtimaSocio: item[10] === "Si",
           };
         });
 
@@ -211,38 +207,39 @@ export const MisAltaDeclaracionesJuradas = ({
   };
 
   const guardarDeclaracionJurada = async () => {
-    const altaDDJJFinal = {
+    const DDJJ = {
+      id: DDJJState.id,
       periodo: periodoIso,
-      afiliados: rowsAltaDDJJ.map((item) => ({
-        cuil: !item.cuil ? null : item.cuil,
-        inte: null,
-        apellido: !item.apellido ? null : item.apellido,
-        nombre: !item.nombre ? null : item.nombre,
-        fechaIngreso: !item.fechaIngreso ? null : item.fechaIngreso,
-        empresaDomicilioId: !item.empresaDomicilioId
-          ? null
-          : item.empresaDomicilioId,
-        camara: !item.camara ? null : item.camara,
-        categoria: !item.categoria ? null : item.categoria,
-        remunerativo: !item.remunerativo ? null : item.remunerativo,
-        noRemunerativo: !item.noRemunerativo ? null : item.noRemunerativo,
-        /* UOMASocio: item.aporteUomaCs && item.aporteUomaAs && item.aporteArt46 ? true : false,
-                ANTIMASocio: item.aporteUomaCs && item.aporteUomaAs && item.aporteArt46 && item.aporteAntimaCs ? true : false, */
-        UOMASocio: item.uomasocio,
-        ANTIMASocio: item.antimasocio,
-      })),
+      afiliados: rowsAltaDDJJ.map((item) => {
+        const registro = {
+          cuil: !item.cuil ? null : item.cuil,
+          inte: !item.inte ? null : item.inte,
+          apellido: !item.apellido ? null : item.apellido,
+          nombre: !item.nombre ? null : item.nombre,
+          fechaIngreso: !item.fechaIngreso ? null : item.fechaIngreso,
+          empresaDomicilioId: !item.empresaDomicilioId
+            ? null
+            : item.empresaDomicilioId,
+          camara: !item.camara ? null : item.camara,
+          categoria: !item.categoria ? null : item.categoria,
+          remunerativo: !item.remunerativo ? null : item.remunerativo,
+          noRemunerativo: !item.noRemunerativo ? null : item.noRemunerativo,
+          uomaSocio: item.uomaSocio,
+          amtimaSocio: item.amtimaSocio,
+        };
+        if (item.id) registro.id = item.id;
+        return registro;
+      }),
     };
-    console.log(rowsAltaDDJJ);
 
-    const erroresResponse = await axiosDDJJ.validar(ID_EMPRESA, altaDDJJFinal);
-    console.log(erroresResponse);
-    setValidacionResponse(erroresResponse);
+    const validacionResponse = await axiosDDJJ.validar(ID_EMPRESA, DDJJ);
+    console.log(validacionResponse);
+    setValidacionResponse(validacionResponse);
 
-    // Validar si validacionResponse es igual a {errores: Array(6)}
-    if (erroresResponse.errores) {
+    if (validacionResponse.errores && validacionResponse.errores.length > 0) {
       const mensajesUnicos = new Set();
 
-      erroresResponse.errores.forEach((error) => {
+      validacionResponse.errores.forEach((error) => {
         if (!mensajesUnicos.has(error.descripcion)) {
           mensajesUnicos.add(error.descripcion);
         }
@@ -256,9 +253,9 @@ export const MisAltaDeclaracionesJuradas = ({
 
       Swal.fire({
         icon: "error",
-        title: "Oops...",
+        title: "Valiacion de Declaracion Jurada",
         html: `${mensajesFormateados}<br>
-                      <label for="guardarErrores">¿Deseas guardar la declaración jurada con errores?</label>`,
+                      <label for="guardarErrores">¿Deseas guardar la declaración jurada y corregir mas tardes los errores?</label>`,
         showConfirmButton: true,
         confirmButtonText: "Aceptar",
         showCancelButton: true,
@@ -266,22 +263,40 @@ export const MisAltaDeclaracionesJuradas = ({
       }).then(async (result) => {
         if (result.isConfirmed) {
           console.log("Aceptar...");
-
-          /* if (peticion === "PUT") {
-
-                        await actualizarDeclaracionJurada(TOKEN, ID_EMPRESA, altaDDJJFinal, idDDJJ);
-
-                    } else {
-
-                        await crearAltaDeclaracionJurada(TOKEN, ID_EMPRESA, altaDDJJFinal);
-                    } */
+          let bOK = false;
+          if (peticion === "PUT") {
+            bOK = await axiosDDJJ.actualizar(ID_EMPRESA, DDJJ);
+            //setRowsAltaDDJJ([]);
+          } else {
+            await axiosDDJJ.crear(ID_EMPRESA, DDJJ);
+            alert("Declaracion jurada guardada exitosamente");
+            //setRowsAltaDDJJ([]);
+          }
         } else {
-          console.log("Cancelar...");
-
-          // limpiar la grilla
-          setRowsAltaDDJJ([]);
+          console.log("Cancelar...se queda a corregir datos");
+          // NO limpiar la grilla.
+          // El usuario decidio corregir los errores antes de GRABAR.
+          // pero no hay que PERDER los datos.-
         }
       });
+    } else {
+      console.log("no tiene errores...grabo directamente.");
+      if (peticion === "PUT") {
+        console.log("Dentro de PUT");
+        //await actualizarDeclaracionJurada(ID_EMPRESA, altaDDJJFinal, altaDDJJFinal.id);
+        await axiosDDJJ.actualizar(ID_EMPRESA, DDJJ);
+        //setRowsAltaDDJJ([]);
+        // peticion put con fetch
+      } else {
+        const data = await axiosDDJJ.crear(ID_EMPRESA, DDJJ);
+        if (data) {
+          //actualizar estado
+          setDDJJState(data);
+          //setRowsAltaDDJJ(data.);
+        }
+        //sacarlo luego de actualizar
+        setRowsAltaDDJJ([]);
+      }
     }
   };
 
@@ -423,7 +438,6 @@ export const MisAltaDeclaracionesJuradas = ({
           setRowsAltaDDJJ={setRowsAltaDDJJ}
           rowsAltaDDJJAux={rowsAltaDDJJAux}
           setRowsAltaDDJJAux={setRowsAltaDDJJAux}
-          token={TOKEN}
           camaras={camaras}
           categoriasFiltradas={categoriasFiltradas}
           setCategoriasFiltradas={setCategoriasFiltradas}
@@ -459,15 +473,3 @@ export const MisAltaDeclaracionesJuradas = ({
     </div>
   );
 };
-
-// Como debe de venir la respuesa de la API
-
-/* cuilesValidados = [
-    {
-     int nullo que no existe el afiliado
-    }
-]
- */
-
-// int si existe o no en la base de datos
-// validacion validar si el cuil es correcto

@@ -13,7 +13,7 @@ module.exports = (req, res, next) => {
       return "DDJJ-IMPRIMIR";
     }
 
-    if (req.method === "POST" && req.url.endsWith("/ddjj/validar")) {
+    if (req.method === "POST" && req.url.toLowerCase().endsWith("/ddjj/validar")) {
       return "DDJJ-VALIDAR-NIVEL2";
     }
 
@@ -30,21 +30,21 @@ module.exports = (req, res, next) => {
         const jsonExitoso = [
           {
             cuil: "20949118682",
-            inter: 0,
+            inte: 0,
             apellido: "Salinas",
             nombre: "luis",
             cuilValido: true,
           },
           {
             cuil: "20949118782",
-            inter: null,
+            inte: null,
             apellido: null,
             nombre: null,
             cuilValido: true,
           },
           {
             cuil: "21345667876",
-            inter: null,
+            inte: null,
             apellido: null,
             nombre: null,
             cuilValido: true,
@@ -56,21 +56,21 @@ module.exports = (req, res, next) => {
         const jsonFallido = [
           {
             cuil: cuil1,
-            inter: 0,
+            inte: 0,
             apellido: "Salinas",
             nombre: "luis",
             cuilValido: true,
           },
           {
             cuil: cuil2,
-            inter: null,
+            inte: null,
             apellido: null,
             nombre: null,
             cuilValido: true,
           },
           {
             cuil: cuil3,
-            inter: null,
+            inte: null,
             apellido: null,
             nombre: null,
             cuilValido: false,
@@ -79,6 +79,10 @@ module.exports = (req, res, next) => {
 
         res.json(jsonFallido);
       }
+    }
+
+    if (req.method === "GET" && req.url.startsWith("/feriados/duplicar/")) {
+      return "FERIADOS-DUPLICAR";
     }
 
     let regEx = /([DDJJConsulta]|[DDJJ])/i;
@@ -294,6 +298,11 @@ module.exports = (req, res, next) => {
     case "GUARDAR-BOLETAS":
       gurdarBoletas();
       break;
+    case "FERIADOS-DUPLICAR":
+      feriadosDuplicar();
+      break;  
+    case "OSPIM-CONTACTO":
+      getOspimContacto();
     case "----":
       // code block
       next();
@@ -363,6 +372,11 @@ module.exports = (req, res, next) => {
     const file = `${__dirname}/ddjj_2.pdf`;
     res.download(file); // Set disposition and send it.
   }
+
+  function feriadosDuplicar() {
+    res.status(200).jsonp(true);
+  }
+
 
   function AporteDetalleAlta() {
     let aporte = req.query.aporte;
@@ -639,8 +653,8 @@ module.exports = (req, res, next) => {
         // Return value for new_array
         element.aportes = DDJJSetParamsAporteV2(
           element.remunerativo,
-          element.UOMASocio,
-          element.ANTIMASocio
+          element.uomaSocio,
+          element.amtimaSocio
         );
 
         return element;
@@ -658,16 +672,16 @@ module.exports = (req, res, next) => {
     }
   }
 
-  function DDJJSetParamsAporteV2(remuneracion, bUOMASocio, bANTIMASocio) {
+  function DDJJSetParamsAporteV2(remuneracion, buomaSocio, bamtimaSocio) {
     let aportes = [];
     let imp = remuneracion * 0.02;
     let impArt46 = 2570 * 0.02;
     aportes[0] = { aporte: "ART46", importe: impArt46 };
-    if (bUOMASocio) {
+    if (buomaSocio) {
       aportes[1] = { aporte: "UOMACS", importe: imp };
       aportes[2] = { aporte: "UOMAAS", importe: imp };
-      if (bANTIMASocio) {
-        aportes[3] = { aporte: "ANTIMACS", importe: 7500 };
+      if (bamtimaSocio) {
+        aportes[3] = { aporte: "AMTIMACS", importe: 7500 };
       }
     }
     return aportes;
@@ -682,7 +696,7 @@ module.exports = (req, res, next) => {
       req.body.estado = "PE";
       req.body.secuencia = null;
       req.body.totalART46 = genRand(100000, 1000000, 2);
-      req.body.totalAntimaCS = genRand(100000, 1000000, 2);
+      req.body.totalAmtimaCS = genRand(100000, 1000000, 2);
       req.body.totalUomaCS = genRand(100000, 1000000, 2);
       req.body.totalUomaAS = genRand(100000, 1000000, 2);
       req.body.totalCuotaUsu = genRand(100000, 1000000, 2);

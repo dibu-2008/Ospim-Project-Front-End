@@ -70,6 +70,7 @@ function castearMisDDJJ(ddjjResponse) {
 }
 
 export const GrillaMisDeclaracionesJuradas = ({
+  setDDJJState,
   rows_mis_ddjj,
   setRowsMisDdjj,
   idEmpresa,
@@ -137,24 +138,24 @@ export const GrillaMisDeclaracionesJuradas = ({
     }
   };
 
-  const handleEditClick = (id) => async () => {
+  const handleEditClick = (id, row) => async () => {
     setTabState(0);
 
     const ddjj = await axiosDDJJ.getDDJJ(idEmpresa, id);
-    console.log(ddjj)
-    const periodoResponse = ddjj.periodo;
-    const fecha = new Date(periodoResponse);
-    const mes = fecha.getMonth() + 1; // Sumar 1 porque los meses van de 0 a 11
-    const anio = fecha.getFullYear();
+
+    const { periodo, afiliados } = ddjj;
+    const mes = new Date(periodo).getMonth() + 1;
+    const anio = new Date(periodo).getFullYear();
 
     setPeriodo(dayjs(`${anio}-${mes + 1}`));
 
     handleAcceptPeriodoDDJJ();
 
     setPeticion("PUT");
-    setIdDDJJ(id);
-    setRowsAltaDDJJ(ddjj.afiliados);
+    setRowsAltaDDJJ(afiliados);
+    setDDJJState(ddjj);
   };
+
 
   const handleSaveClick = (id) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
