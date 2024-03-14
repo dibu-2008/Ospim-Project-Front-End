@@ -89,7 +89,7 @@ module.exports = (req, res, next) => {
     if (
       req.method === "GET" &&
       regEx.test(req.url) &&
-      //req.url.startsWith("*/DDJJConsulta?") &&
+      !req.url.startsWith("/empresa/periodo/tiene-rectificativa") &&
       req.query.empresaId &&
       req.query.periodo
     ) {
@@ -180,7 +180,36 @@ module.exports = (req, res, next) => {
     ) {
       return "APORTE-DETALLE-ALTA";
     }
-    return "----";
+
+    if (req.method === "GET" && req.url.startsWith("/empresa/ddjj/boletas") )
+    {
+      return "BOLETA-DETALLE"
+    }
+    if (req.method === "POST" && req.url.startsWith("empresa/ddjj/boleta/calcular-interes") )
+    {
+      return "CALCULAR-INTERES"
+    } 
+    if (req.method === "POST" && req.url.startsWith("/empresa/ddjj/calcular-interes") )
+    {
+      return "CALCULAR-INTERESES"
+    } 
+    if (req.method === "GET" && req.url.startsWith("/empresa/ddjj/boleta/codigo"))
+    {
+      return "BOLETA-DDJJ-CODIGO"
+    }
+    if (req.method === "GET" && req.url.startsWith("/empresa/ddjj/boleta-pago/concepto/imprimir-detalle")){
+      return "DETALLE-BOLETA-IMPRIMIR"
+    }
+    if (req.method ==="GET" && req.url.startsWith("/empresa/ddjj/boleta-pago/concepto/imprimir-boleta")){
+      return "BOLETA-IMPRIMIR"
+    }
+    if (req.method === "GET" && req.url.startsWith("/empresa/periodo/tiene-rectificativa")){
+      return "TIENE-RECTIFICATIVA"
+    }
+    if (req.method === "POST" && req.url.startsWith("/empresa/ddjj/guardar-boletas")){
+      return "GUARDAR-BOLETAS"
+    }
+      return "----";
   }
 
   switch (getAPI(req, res)) {
@@ -245,9 +274,33 @@ module.exports = (req, res, next) => {
     case "DDJJ-VALIDAR-NIVEL2":
       ddjjValidarN2(req, res);
       break;
+    case "BOLETA-DETALLE":
+      getBoletaDetalle();
+      break;
+    case "CALCULAR-INTERES":
+      calcularInteres();
+      break;
+    case "CALCULAR-INTERESES":
+      calcularInteresBoletas();
+      break;
+    case "BOLETA-DDJJ-CODIGO":
+      getBoletaByDDJJIDandCodigo();
+      break;
+    case "DETALLE-BOLETA-IMPRIMIR":
+      getBoletaDetalleImpresa();
+      break;
+    case "BOLETA-IMPRIMIR":
+      getBoletaImpresa();
+      break;
+    case "TIENE-RECTIFICATIVA":
+      tieneRectificativa();
+      break;
+    case "GUARDAR-BOLETAS":
+      gurdarBoletas();
+      break;
     case "FERIADOS-DUPLICAR":
       feriadosDuplicar();
-      break;
+      break;  
     case "OSPIM-CONTACTO":
       getOspimContacto();
     case "----":
@@ -665,5 +718,96 @@ module.exports = (req, res, next) => {
     var rand = Math.random() * (max - min) + min;
     var power = Math.pow(10, decimalPlaces);
     return Math.floor(rand * power) / power;
+  }
+
+
+  function getBoletaDetalle(){
+    const declaracion_jurada_id       = req.query.ddjj_id
+    const boletasDetalle              = req.app.db.__wrapped__.boletas;
+    const tieneBoletasParaDeclaracion = boletasDetalle.declaracion_jurada_id == declaracion_jurada_id
+    const error404 = {descripcion: "No se encontraron boletas para la declaracion jurada"}
+    
+    tieneBoletasParaDeclaracion ? res.status(200).jsonp(boletasDetalle) : res.status(404).jsonp(error404)
+  }
+
+  function  calcula_diferencia_de_dias(dia_mayor, dia_menor) {
+    return (new Date(dia_mayor) - new Date(dia_menor)) / (1000 * 60 * 60 * 24);
+  } 
+
+  function gurdarBoletas(){
+    const numero_boleta = req.app.db.__wrapped__.boletas_guardadas.length
+    console.log(req.body)
+    req.body.forEach( (element, index) =>{
+      
+      element.numero_boleta = numero_boleta + index
+      req.app.db.__wrapped__.boletas_guardadas.push(element) ;
+      req.app.db.write();
+    })
+    res.status(201).send(null)
+  }
+
+  function calcularInteres(){
+    const { codigoBoleta } = req.query
+    const { intencion_de_pago } = req.body
+    const interes_diario = 0.01  
+    const boletaOrig = req.app.db.__wrapped__.boletas.detalle_boletas.find(boleta => boleta.codigo === codigoBoleta)
+    const boleta = JSON.parse(JSON.stringify(boletaOrig))
+    const diferencia_en_dias  = calcula_diferencia_de_dias(intencion_de_pago, boleta.vencimiento)
+    
+    if (diferencia_en_dias >= 0){
+      const monto_interes = boleta.total_acumulado * interes_diario *  diferencia_en_dias
+      boleta.total_final = boleta.total_acumulado + monto_interes
+      boleta.interes = parseFloat(monto_interes.toFixed(2))
+    }
+    
+    boleta.intencion_de_pago = intencion_de_pago
+    res.status(200).jsonp({...boleta}) 
+  }
+
+  function calcularInteresBoletas(){
+    //Calcula el interes de todas las boletas de una sola vez
+    const { intencion_de_pago } = req.body
+    const interes_diario = 0.01
+    const boletasOrig = req.app.db.__wrapped__.boletas
+    const boletas = JSON.parse(JSON.stringify(boletasOrig))
+  
+    const boletasActualizadas = boletas.detalle_boletas.map(boleta =>{
+      const diferencia_en_dias = calcula_diferencia_de_dias(intencion_de_pago, boleta.vencimiento)
+      if (diferencia_en_dias >= 0){
+        const monto_interes = boleta.total_acumulado * interes_diario *  diferencia_en_dias
+        boleta.total_final = boleta.total_acumulado + monto_interes
+        boleta.intencion_de_pago = intencion_de_pago
+        boleta.interes = parseFloat(monto_interes.toFixed(2))
+      }
+  
+      return {...boleta, intencion_de_pago}
+    })
+    res.status(200).jsonp(boletasActualizadas)
+  }
+
+  function getBoletaByDDJJIDandCodigo(){
+    const { ddjj_id, codigo } = req.query
+    const BOLETAS_BY_DDDJJ = req.app.db.__wrapped__.boletas_guardadas.find(boletasddjj => boletasddjj.declaracion_jurada_id == ddjj_id )
+    const BOLETA_BY_CODIGO = BOLETAS_BY_DDDJJ.detalle_boletas.find(boleta => boleta.codigo == codigo)
+    res.status(200).jsonp(BOLETA_BY_CODIGO)
+  }
+
+  function getBoletaDetalleImpresa(){
+    console.log("entre en impresion detalle de boleta")
+    const file = `${__dirname}/detalle_boleta.pdf`;
+    res.download(file); // Set disposition and send it.
+  }
+
+  function getBoletaImpresa(){
+    console.log("entre en impresion de boleta")
+    const file = `${__dirname}/boletas.pdf`;
+    res.download(file); // Set disposition and send it.
+  }
+
+  function tieneRectificativa(){
+    const {empresaId, periodo} = req.query
+    const rectificativa = empresaId == 1 && periodo == '2024-01'
+    
+    res.status(200).jsonp({rectificativa})
   }
 };

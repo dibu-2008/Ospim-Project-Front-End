@@ -44,6 +44,8 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
+import ReceiptIcon from '@mui/icons-material/Receipt';
+
 
 const drawerWidth = 270;
 
@@ -205,6 +207,10 @@ const DashboardPage = () => {
                   <NavLink to="./misdatos" className="icon-container">
                     <PersonIcon className="icon-link" />{" "}
                     {open && <span className="icon-link">Datos Empresa</span>}
+                  </NavLink>
+                  <NavLink to="./generarotrospagos" className="icon-container">
+                    <ReceiptIcon className="icon-link" />{" "}
+                    {open && <span className="icon-link">Boleta Blanca</span>}
                   </NavLink>
                   <NavLink to="./cuitsrestringidos" className="icon-container">
                     <NetworkLockedIcon className="icon-link" />{" "}
