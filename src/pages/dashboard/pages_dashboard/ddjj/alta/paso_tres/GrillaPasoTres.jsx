@@ -50,6 +50,7 @@ function EditToolbar(props) {
       {
         id,
         cuil: "",
+        inte: null,
         apellido: "",
         nombre: "",
         camara: "",
@@ -69,6 +70,7 @@ function EditToolbar(props) {
       {
         id,
         cuil: "",
+        inte: null,
         apellido: "",
         nombre: "",
         camara: "",
@@ -113,6 +115,7 @@ export const GrillaPasoTres = ({
   plantas,
   validacionResponse,
 }) => {
+  console.log("GrillaPasoTres - rowsAltaDDJJ: " + JSON.stringify(rowsAltaDDJJ));
   const [locale, setLocale] = useState("esES");
   const [rowModesModel, setRowModesModel] = useState({});
   const [selectedRowId, setSelectedRowId] = useState(null);
@@ -134,6 +137,24 @@ export const GrillaPasoTres = ({
     setAfiliado(afiliadoEncontrado);
     // TODO : Mirar el tema de la logica de busqueda por que tambien podria poder escribir sin buscar el cuil
     if (afiliadoEncontrado) {
+      console.log(
+        "ObtenerAfiliados -5-  params.row: " + JSON.stringify(params.row)
+      );
+
+      // Inte
+      params.api.setEditCellValue({
+        id: params.inte,
+        field: "inte",
+        value: afiliadoEncontrado.inte,
+      });
+      console.log(
+        "ObtenerAfiliados -6-  params.row: " + JSON.stringify(params.row)
+      );
+      params.row.inte = afiliadoEncontrado.inte;
+      console.log(
+        "ObtenerAfiliados -7-  params.row: " + JSON.stringify(params.row)
+      );
+
       // Apellido
       params.api.setEditCellValue({
         id: params.id,
@@ -216,6 +237,8 @@ export const GrillaPasoTres = ({
 
   const processRowUpdate = async (newRow) => {
     const updatedRow = { ...newRow, isNew: false };
+
+    console.log("processRowUpdate - newRow:" + JSON.stringify(newRow));
 
     setRowsAltaDDJJ(
       rowsAltaDDJJ.map((row) => (row.id === newRow.id ? updatedRow : row))
@@ -311,6 +334,10 @@ export const GrillaPasoTres = ({
           </div>
         );
       },
+    },
+    {
+      field: "inte",
+      type: "number",
     },
     {
       field: "apellido",
@@ -448,7 +475,8 @@ export const GrillaPasoTres = ({
       }),
       headerClassName: "header--cell",
       renderEditCell: (params) => {
-        console.log(rowsAltaDDJJ);
+        console.log("renderEditCell - params: ");
+        console.log(params);
 
         return (
           <Select
@@ -684,6 +712,7 @@ export const GrillaPasoTres = ({
           <DataGrid
             rows={rowsAltaDDJJ}
             columns={columns}
+            columnVisibilityModel={{ inte: false }}
             editMode="row"
             rowModesModel={rowModesModel}
             onRowModesModelChange={handleRowModesModelChange}

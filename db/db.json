@@ -1356,8 +1356,8 @@
           "nombre": "Luis",
           "fechaIngreso": "2024-02-15",
           "empresaDomicilioId": 8,
-          "camara": "FAIM",
-          "categoria": "C",
+          "camara": null,
+          "categoria": null,
           "remunerativo": 1000,
           "noRemunerativo": 2000,
           "uomaSocio": true,
@@ -1371,8 +1371,8 @@
           "nombre": "Diego",
           "fechaIngreso": "2024-03-15",
           "empresaDomicilioId": 10,
-          "camara": "CAENA",
-          "categoria": "A",
+          "camara": null,
+          "categoria": null,
           "remunerativo": 3000,
           "noRemunerativo": 6000,
           "uomaSocio": false,
@@ -1380,7 +1380,7 @@
           "id": 2
         },
         {
-          "cuil": 21345667876,
+          "cuil": 21345667676,
           "inte": null,
           "apellido": "Lopez",
           "nombre": "Jose",
@@ -1388,11 +1388,26 @@
           "empresaDomicilioId": 10,
           "camara": "CAENA",
           "categoria": "D",
-          "remunerativo": 4000,
-          "noRemunerativo": 5000,
+          "remunerativo": null,
+          "noRemunerativo": null,
           "uomaSocio": true,
           "amtimaSocio": false,
           "id": 3
+        },
+        {
+          "cuil": 93822767344,
+          "inte": null,
+          "apellido": "Stack",
+          "nombre": "Tony",
+          "fechaIngreso": "2024-05-19",
+          "empresaDomicilioId": 10,
+          "camara": "CAENA",
+          "categoria": "A",
+          "remunerativo": 6000,
+          "noRemunerativo": 5000,
+          "uomaSocio": false,
+          "amtimaSocio": false,
+          "id": 4
         }
       ],
       "id": 121
@@ -2817,48 +2832,105 @@
       ],
       "empresaId": "1",
       "id": 214
+    },
+    {
+      "periodo": "2024-02-01T00:00:00.000Z",
+      "afiliados": [
+        {
+          "cuil": "27367071112",
+          "inte": 0,
+          "apellido": "Nelo",
+          "nombre": "Rosario",
+          "fechaIngreso": "2001-01-01T00:00:00.000Z",
+          "empresaDomicilioId": 32,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 335000.7,
+          "noRemunerativo": 25000,
+          "uomaSocio": true,
+          "antimaSocio": true
+        },
+        {
+          "cuil": "27418918786",
+          "inte": 0,
+          "apellido": "Chapa",
+          "nombre": "Gladys",
+          "fechaIngreso": "2010-01-01T00:00:00.000Z",
+          "empresaDomicilioId": 32,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "uomaSocio": true,
+          "antimaSocio": true
+        }
+      ],
+      "empresaId": "1",
+      "id": 215
+    },
+    {
+      "periodo": null,
+      "afiliados": [
+        {
+          "cuil": "20949118682",
+          "inte": null,
+          "apellido": "Salinas",
+          "nombre": "Luis",
+          "fechaIngreso": "2024-03-15T03:00:00.000Z",
+          "empresaDomicilioId": 4,
+          "camara": "FAIM",
+          "categoria": "C",
+          "remunerativo": "1",
+          "noRemunerativo": "1",
+          "uomaSocio": true,
+          "amtimaSocio": true,
+          "id": 1
+        }
+      ],
+      "empresaId": "1",
+      "id": 216
     }
   ],
   "afiliado": [
     {
       "cuil": "23278871924",
-      "inter": 0,
+      "inte": 0,
       "apellido": "Morales",
       "nombre": "Alfio"
     },
     {
       "cuil": "20949118682",
-      "inter": 0,
+      "inte": 0,
       "apellido": "Salinas",
       "nombre": "Luis"
     },
     {
       "cuil": "27312728848",
-      "inter": 0,
+      "inte": 0,
       "apellido": "Castaneda",
       "nombre": "Manfredo"
     },
     {
       "cuil": "20289401173",
-      "inter": 0,
+      "inte": 0,
       "apellido": "Anaya",
       "nombre": "Reinardo"
     },
     {
       "cuil": "27112763592",
-      "inter": 0,
+      "inte": 0,
       "apellido": "Raya",
       "nombre": "Doria"
     },
     {
       "cuil": "23332969889",
-      "inter": 0,
+      "inte": 0,
       "apellido": "Tejada",
       "nombre": "Vanda"
     },
     {
       "cuil": "27446744955",
-      "inter": 0,
+      "inte": 0,
       "apellido": "Longoria",
       "nombre": "Albano"
     }
@@ -3037,6 +3109,384 @@
       "referencia": "R",
       "categoria": null,
       "antiguedad": null
+    }
+  ],
+  "boletas": {
+    "declaracion_jurada_id": 120,
+    "periodo": "01-2024",
+    "detalle_boletas": [
+      {
+        "codigo": "UOMACS",
+        "descripcion": "UOMA Cuota Social",
+        "vencimiento": "2024-02-21",
+        "periodo": "01-2024",
+        "total_acumulado": 13410,
+        "interes": 0,
+        "ajuste": 0,
+        "total_final": 13410,
+        "intencion_de_pago": "",
+        "afiliados": [
+          {
+            "cuil": "27367071112",
+            "apellido": "Nelo",
+            "nombre": "Rosario",
+            "remunerativo": 200000,
+            "capital": 8400
+          },
+          {
+            "cuil": "2731722324248",
+            "apellido": "Nelo",
+            "nombre": "Manfredo",
+            "remunerativo": 100000,
+            "capital": 7610
+          },
+          {
+            "cuil": "273712728848",
+            "apellido": "Nelo",
+            "nombre": "Sabario",
+            "remunerativo": 100000,
+            "capital": 5800
+          }
+        ]
+      },
+      {
+        "codigo": "ART46",
+        "descripcion": "Art. 46",
+        "vencimiento": "2024-02-21",
+        "periodo": "01-2024",
+        "total_acumulado": 1484,
+        "interes": 0,
+        "ajuste": 0,
+        "total_final": 1484,
+        "intencion_de_pago": "",
+        "afiliados": [
+          {
+            "cuil": "27367071112",
+            "apellido": "Nelo",
+            "nombre": "Rosario",
+            "remunerativo": 200000,
+            "capital": 520
+          },
+          {
+            "cuil": "2731722324248",
+            "apellido": "Nelo",
+            "nombre": "Manfredo",
+            "remunerativo": 100000,
+            "capital": 482
+          },
+          {
+            "cuil": "273712728848",
+            "apellido": "Nelo",
+            "nombre": "Sabario",
+            "remunerativo": 200000,
+            "capital": 482
+          }
+        ]
+      },
+      {
+        "codigo": "ANTIMACS",
+        "descripcion": "ANTIMA Cuota Social",
+        "vencimiento": "2024-02-21",
+        "periodo": "01-2024",
+        "total_acumulado": 7800,
+        "interes": 0,
+        "ajuste": 0,
+        "total_final": 7800,
+        "intencion_de_pago": "",
+        "afiliados": [
+          {
+            "cuil": "27367071112",
+            "apellido": "Nelo",
+            "nombre": "Rosario",
+            "remunerativo": 200000,
+            "capital": 7800
+          }
+        ]
+      }
+    ]
+  },
+  "boletas_guardadas": [
+    {
+      "codigo": "UOMACS",
+      "descripcion": "UOMA Cuota Social",
+      "vencimiento": "2024-02-21",
+      "periodo": "01-2024",
+      "total_acumulado": 13410,
+      "interes": 4157.1,
+      "ajuste": 0,
+      "total_final": 17567.1,
+      "intencion_de_pago": "2024-03-23",
+      "afiliados": [
+        {
+          "cuil": "27367071112",
+          "apellido": "Nelo",
+          "nombre": "Rosario",
+          "remunerativo": 200000,
+          "capital": 8400
+        },
+        {
+          "cuil": "2731722324248",
+          "apellido": "Nelo",
+          "nombre": "Manfredo",
+          "remunerativo": 100000,
+          "capital": 7610
+        },
+        {
+          "cuil": "273712728848",
+          "apellido": "Nelo",
+          "nombre": "Sabario",
+          "remunerativo": 100000,
+          "capital": 5800
+        }
+      ],
+      "declaracion_jurada_id": 5048119,
+      "numero_boleta": 0
+    },
+    {
+      "codigo": "ART46",
+      "descripcion": "Art. 46",
+      "vencimiento": "2024-02-21",
+      "periodo": "01-2024",
+      "total_acumulado": 1484,
+      "interes": 460.04,
+      "ajuste": 0,
+      "total_final": 1944.04,
+      "intencion_de_pago": "2024-03-23",
+      "afiliados": [
+        {
+          "cuil": "27367071112",
+          "apellido": "Nelo",
+          "nombre": "Rosario",
+          "remunerativo": 200000,
+          "capital": 520
+        },
+        {
+          "cuil": "2731722324248",
+          "apellido": "Nelo",
+          "nombre": "Manfredo",
+          "remunerativo": 100000,
+          "capital": 482
+        },
+        {
+          "cuil": "273712728848",
+          "apellido": "Nelo",
+          "nombre": "Sabario",
+          "remunerativo": 200000,
+          "capital": 482
+        }
+      ],
+      "declaracion_jurada_id": 5048119,
+      "numero_boleta": 1
+    },
+    {
+      "codigo": "ANTIMACS",
+      "descripcion": "ANTIMA Cuota Social",
+      "vencimiento": "2024-02-21",
+      "periodo": "01-2024",
+      "total_acumulado": 7800,
+      "interes": 2418,
+      "ajuste": 0,
+      "total_final": 10218,
+      "intencion_de_pago": "2024-03-23",
+      "afiliados": [
+        {
+          "cuil": "27367071112",
+          "apellido": "Nelo",
+          "nombre": "Rosario",
+          "remunerativo": 200000,
+          "capital": 7800
+        }
+      ],
+      "declaracion_jurada_id": 5048119,
+      "numero_boleta": 2
+    },
+    {
+      "codigo": "UOMACS",
+      "descripcion": "UOMA Cuota Social",
+      "vencimiento": "2024-02-21",
+      "periodo": "01-2024",
+      "total_acumulado": 13410,
+      "interes": 0,
+      "ajuste": 0,
+      "total_final": 13410,
+      "intencion_de_pago": "",
+      "afiliados": [
+        {
+          "cuil": "27367071112",
+          "apellido": "Nelo",
+          "nombre": "Rosario",
+          "remunerativo": 200000,
+          "capital": 8400
+        },
+        {
+          "cuil": "2731722324248",
+          "apellido": "Nelo",
+          "nombre": "Manfredo",
+          "remunerativo": 100000,
+          "capital": 7610
+        },
+        {
+          "cuil": "273712728848",
+          "apellido": "Nelo",
+          "nombre": "Sabario",
+          "remunerativo": 100000,
+          "capital": 5800
+        }
+      ],
+      "declaracion_jurada_id": 5048119,
+      "numero_boleta": 3
+    },
+    {
+      "codigo": "ART46",
+      "descripcion": "Art. 46",
+      "vencimiento": "2024-02-21",
+      "periodo": "01-2024",
+      "total_acumulado": 1484,
+      "interes": 0,
+      "ajuste": 0,
+      "total_final": 1484,
+      "intencion_de_pago": "",
+      "afiliados": [
+        {
+          "cuil": "27367071112",
+          "apellido": "Nelo",
+          "nombre": "Rosario",
+          "remunerativo": 200000,
+          "capital": 520
+        },
+        {
+          "cuil": "2731722324248",
+          "apellido": "Nelo",
+          "nombre": "Manfredo",
+          "remunerativo": 100000,
+          "capital": 482
+        },
+        {
+          "cuil": "273712728848",
+          "apellido": "Nelo",
+          "nombre": "Sabario",
+          "remunerativo": 200000,
+          "capital": 482
+        }
+      ],
+      "declaracion_jurada_id": 5048119,
+      "numero_boleta": 4
+    },
+    {
+      "codigo": "ANTIMACS",
+      "descripcion": "ANTIMA Cuota Social",
+      "vencimiento": "2024-02-21",
+      "periodo": "01-2024",
+      "total_acumulado": 7800,
+      "interes": 0,
+      "ajuste": 0,
+      "total_final": 7800,
+      "intencion_de_pago": "",
+      "afiliados": [
+        {
+          "cuil": "27367071112",
+          "apellido": "Nelo",
+          "nombre": "Rosario",
+          "remunerativo": 200000,
+          "capital": 7800
+        }
+      ],
+      "declaracion_jurada_id": 5048119,
+      "numero_boleta": 5
+    },
+    {
+      "codigo": "UOMACS",
+      "descripcion": "UOMA Cuota Social",
+      "vencimiento": "2024-02-21",
+      "periodo": "01-2024",
+      "total_acumulado": 13410,
+      "interes": 3218.4,
+      "ajuste": 0,
+      "total_final": 16628.4,
+      "intencion_de_pago": "2024-03-16",
+      "afiliados": [
+        {
+          "cuil": "27367071112",
+          "apellido": "Nelo",
+          "nombre": "Rosario",
+          "remunerativo": 200000,
+          "capital": 8400
+        },
+        {
+          "cuil": "2731722324248",
+          "apellido": "Nelo",
+          "nombre": "Manfredo",
+          "remunerativo": 100000,
+          "capital": 7610
+        },
+        {
+          "cuil": "273712728848",
+          "apellido": "Nelo",
+          "nombre": "Sabario",
+          "remunerativo": 100000,
+          "capital": 5800
+        }
+      ],
+      "declaracion_jurada_id": 5048119,
+      "numero_boleta": 6
+    },
+    {
+      "codigo": "ART46",
+      "descripcion": "Art. 46",
+      "vencimiento": "2024-02-21",
+      "periodo": "01-2024",
+      "total_acumulado": 1484,
+      "interes": 356.16,
+      "ajuste": 0,
+      "total_final": 1840.1599999999999,
+      "intencion_de_pago": "2024-03-16",
+      "afiliados": [
+        {
+          "cuil": "27367071112",
+          "apellido": "Nelo",
+          "nombre": "Rosario",
+          "remunerativo": 200000,
+          "capital": 520
+        },
+        {
+          "cuil": "2731722324248",
+          "apellido": "Nelo",
+          "nombre": "Manfredo",
+          "remunerativo": 100000,
+          "capital": 482
+        },
+        {
+          "cuil": "273712728848",
+          "apellido": "Nelo",
+          "nombre": "Sabario",
+          "remunerativo": 200000,
+          "capital": 482
+        }
+      ],
+      "declaracion_jurada_id": 5048119,
+      "numero_boleta": 7
+    },
+    {
+      "codigo": "ANTIMACS",
+      "descripcion": "ANTIMA Cuota Social",
+      "vencimiento": "2024-02-21",
+      "periodo": "01-2024",
+      "total_acumulado": 7800,
+      "interes": 1872,
+      "ajuste": 0,
+      "total_final": 9672,
+      "intencion_de_pago": "2024-03-16",
+      "afiliados": [
+        {
+          "cuil": "27367071112",
+          "apellido": "Nelo",
+          "nombre": "Rosario",
+          "remunerativo": 200000,
+          "capital": 7800
+        }
+      ],
+      "declaracion_jurada_id": 5048119,
+      "numero_boleta": 8
     }
   ]
 }

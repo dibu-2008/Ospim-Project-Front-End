@@ -178,6 +178,7 @@ export const MisAltaDeclaracionesJuradas = ({
           return {
             id: index + 1,
             cuil: item[0],
+            inte: null,
             apellido: item[1],
             nombre: item[2],
             camara: item[3],
