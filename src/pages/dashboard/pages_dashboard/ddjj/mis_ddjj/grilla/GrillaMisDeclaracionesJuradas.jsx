@@ -142,6 +142,9 @@ export const GrillaMisDeclaracionesJuradas = ({
     setTabState(0);
 
     const ddjj = await axiosDDJJ.getDDJJ(idEmpresa, id);
+    console.log("ddjj: ", ddjj);
+
+    // Aca tambien se deberia de hacer la peticion para obtener los inte por cada DNI
 
     const { periodo, afiliados } = ddjj;
     const mes = new Date(periodo).getMonth() + 1;
@@ -152,6 +155,9 @@ export const GrillaMisDeclaracionesJuradas = ({
     handleAcceptPeriodoDDJJ();
 
     setPeticion("PUT");
+    // Agregarle a afiliados la propiedad isNew con el valor de false
+    afiliados.forEach((afiliado) => afiliado.isNew = false);
+    
     setRowsAltaDDJJ(afiliados);
     setDDJJState(ddjj);
   };

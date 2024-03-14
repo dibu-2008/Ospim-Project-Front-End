@@ -2832,48 +2832,105 @@
       ],
       "empresaId": "1",
       "id": 214
+    },
+    {
+      "periodo": "2024-02-01T00:00:00.000Z",
+      "afiliados": [
+        {
+          "cuil": "27367071112",
+          "inte": 0,
+          "apellido": "Nelo",
+          "nombre": "Rosario",
+          "fechaIngreso": "2001-01-01T00:00:00.000Z",
+          "empresaDomicilioId": 32,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 335000.7,
+          "noRemunerativo": 25000,
+          "uomaSocio": true,
+          "antimaSocio": true
+        },
+        {
+          "cuil": "27418918786",
+          "inte": 0,
+          "apellido": "Chapa",
+          "nombre": "Gladys",
+          "fechaIngreso": "2010-01-01T00:00:00.000Z",
+          "empresaDomicilioId": 32,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "uomaSocio": true,
+          "antimaSocio": true
+        }
+      ],
+      "empresaId": "1",
+      "id": 215
+    },
+    {
+      "periodo": null,
+      "afiliados": [
+        {
+          "cuil": "20949118682",
+          "inte": null,
+          "apellido": "Salinas",
+          "nombre": "Luis",
+          "fechaIngreso": "2024-03-15T03:00:00.000Z",
+          "empresaDomicilioId": 4,
+          "camara": "FAIM",
+          "categoria": "C",
+          "remunerativo": "1",
+          "noRemunerativo": "1",
+          "uomaSocio": true,
+          "amtimaSocio": true,
+          "id": 1
+        }
+      ],
+      "empresaId": "1",
+      "id": 216
     }
   ],
   "afiliado": [
     {
       "cuil": "23278871924",
-      "inter": 0,
+      "inte": 0,
       "apellido": "Morales",
       "nombre": "Alfio"
     },
     {
       "cuil": "20949118682",
-      "inter": 0,
+      "inte": 0,
       "apellido": "Salinas",
       "nombre": "Luis"
     },
     {
       "cuil": "27312728848",
-      "inter": 0,
+      "inte": 0,
       "apellido": "Castaneda",
       "nombre": "Manfredo"
     },
     {
       "cuil": "20289401173",
-      "inter": 0,
+      "inte": 0,
       "apellido": "Anaya",
       "nombre": "Reinardo"
     },
     {
       "cuil": "27112763592",
-      "inter": 0,
+      "inte": 0,
       "apellido": "Raya",
       "nombre": "Doria"
     },
     {
       "cuil": "23332969889",
-      "inter": 0,
+      "inte": 0,
       "apellido": "Tejada",
       "nombre": "Vanda"
     },
     {
       "cuil": "27446744955",
-      "inter": 0,
+      "inte": 0,
       "apellido": "Longoria",
       "nombre": "Albano"
     }

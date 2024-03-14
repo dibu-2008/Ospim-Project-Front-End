@@ -116,6 +116,7 @@ export const GrillaPasoTres = ({
   const [locale, setLocale] = useState("esES");
   const [rowModesModel, setRowModesModel] = useState({});
   const [selectedRowId, setSelectedRowId] = useState(null);
+  const [inteDataBase, setInteDataBase] = useState(null);
 
   const theme = useTheme();
   const themeWithLocale = useMemo(
@@ -124,16 +125,22 @@ export const GrillaPasoTres = ({
   );
 
   const ObtenerAfiliados = async (params, cuilElegido) => {
+
     const afiliados = await axiosDDJJ.getAfiliado(cuilElegido);
-    console.log(afiliados);
-    //const afiliados = await obtenerAfiliados(token, cuilElegido);
+
     const afiliadoEncontrado = afiliados.find(
       (afiliado) => afiliado.cuil === cuilElegido
     );
 
-    setAfiliado(afiliadoEncontrado);
     // TODO : Mirar el tema de la logica de busqueda por que tambien podria poder escribir sin buscar el cuil
     if (afiliadoEncontrado) {
+
+      if (afiliadoEncontrado.inte !== null) {
+        setInteDataBase(afiliadoEncontrado.inte);
+      }
+
+      setAfiliado(afiliadoEncontrado);
+
       // Apellido
       params.api.setEditCellValue({
         id: params.id,
@@ -188,7 +195,6 @@ export const GrillaPasoTres = ({
   const handleEditClick = (id) => () => {
     console.log("handleEditClick - id: " + id);
     const editedRow = rowsAltaDDJJ.find((row) => row.id === id);
-    console.log("handleEditClick - editedRow: " + JSON.stringify(editedRow));
 
     filtroDeCategoria(editedRow.camara);
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
@@ -215,21 +221,40 @@ export const GrillaPasoTres = ({
   };
 
   const processRowUpdate = async (newRow) => {
-    const updatedRow = { ...newRow, isNew: false };
 
-    setRowsAltaDDJJ(
-      rowsAltaDDJJ.map((row) => (row.id === newRow.id ? updatedRow : row))
-    );
+    if (newRow.isNew) {
 
-    console.log("rowsAltaDDJJ: ", rowsAltaDDJJ);
+      const fila = { ...newRow, inte: inteDataBase };
+      console.log("Nueva Fila")
+      console.log(fila)
 
-    setRowsAltaDDJJAux(
-      rowsAltaDDJJAux.map((row) => (row.id === newRow.id ? updatedRow : row))
-    );
+      setRowsAltaDDJJ(
+        rowsAltaDDJJ.map((row) => (row.id === newRow.id ? fila : row))
+      );
 
-    console.log("rowsAltaDDJJAux: ", rowsAltaDDJJAux);
+      setRowsAltaDDJJAux(
+        rowsAltaDDJJAux.map((row) => (row.id === newRow.id ? fila : row))
+      );
 
-    return updatedRow;
+      return { ...newRow, isNew: false }
+
+    } else {
+
+      const fila = { ...newRow, inte: inteDataBase };
+      console.log("Fila a modificar")
+      console.log(fila)
+
+      setRowsAltaDDJJ(
+        rowsAltaDDJJ.map((row) => (row.id === newRow.id ? fila : row))
+      );
+
+      setRowsAltaDDJJAux(
+        rowsAltaDDJJAux.map((row) => (row.id === newRow.id ? fila : row))
+      );
+
+      return fila;
+    }
+
   };
 
   const handleRowModesModelChange = (newRowModesModel) => {
@@ -448,7 +473,6 @@ export const GrillaPasoTres = ({
       }),
       headerClassName: "header--cell",
       renderEditCell: (params) => {
-        console.log(rowsAltaDDJJ);
 
         return (
           <Select

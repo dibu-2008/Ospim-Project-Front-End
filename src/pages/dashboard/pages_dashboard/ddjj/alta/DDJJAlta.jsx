@@ -40,8 +40,7 @@ export const MisAltaDeclaracionesJuradas = ({
   peticion,
   idDDJJ,
 }) => {
-  console.log("rowsAltaDDJJ: ");
-  console.log(rowsAltaDDJJ);
+
   const [otroPeriodo, setOtroPeriodo] = useState(null);
   const [otroPeriodoIso, setOtroPeriodoIso] = useState(null);
   const [camaras, setCamaras] = useState([]);
@@ -93,7 +92,6 @@ export const MisAltaDeclaracionesJuradas = ({
   useEffect(() => {
     const ObtenerPlantaEmpresas = async () => {
       const data = await axiosDDJJ.getPlantas(ID_EMPRESA);
-      console.log(data);
       setPlantas(data.map((item) => ({ id: item, ...item })));
     };
     ObtenerPlantaEmpresas();
@@ -139,6 +137,9 @@ export const MisAltaDeclaracionesJuradas = ({
         showConfirmButton: false,
         timer: 1000,
       });
+
+      // Aca es donde debo de controlar el inte dependiendo si el cuil 
+      // Se encuentra dado de alta o no, antes de llenar la grilla.
 
       setRowsAltaDDJJ(afiliadoImportado);
     }
@@ -207,8 +208,8 @@ export const MisAltaDeclaracionesJuradas = ({
   };
 
   const guardarDeclaracionJurada = async () => {
+
     const DDJJ = {
-      id: DDJJState.id,
       periodo: periodoIso,
       afiliados: rowsAltaDDJJ.map((item) => {
         const registro = {
@@ -232,6 +233,11 @@ export const MisAltaDeclaracionesJuradas = ({
       }),
     };
 
+    if (DDJJState.id) {
+      DDJJ.id = DDJJState.id;
+    }
+
+    
     const validacionResponse = await axiosDDJJ.validar(ID_EMPRESA, DDJJ);
     console.log(validacionResponse);
     setValidacionResponse(validacionResponse);
@@ -289,6 +295,7 @@ export const MisAltaDeclaracionesJuradas = ({
         // peticion put con fetch
       } else {
         const data = await axiosDDJJ.crear(ID_EMPRESA, DDJJ);
+        console.log(data);
         if (data) {
           //actualizar estado
           setDDJJState(data);
