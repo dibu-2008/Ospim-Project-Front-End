@@ -50,7 +50,6 @@ function EditToolbar(props) {
       {
         id,
         cuil: "",
-        inte: null,
         apellido: "",
         nombre: "",
         camara: "",
@@ -70,7 +69,6 @@ function EditToolbar(props) {
       {
         id,
         cuil: "",
-        inte: null,
         apellido: "",
         nombre: "",
         camara: "",
@@ -115,10 +113,10 @@ export const GrillaPasoTres = ({
   plantas,
   validacionResponse,
 }) => {
-  console.log("GrillaPasoTres - rowsAltaDDJJ: " + JSON.stringify(rowsAltaDDJJ));
   const [locale, setLocale] = useState("esES");
   const [rowModesModel, setRowModesModel] = useState({});
   const [selectedRowId, setSelectedRowId] = useState(null);
+  const [inteDataBase, setInteDataBase] = useState(null);
 
   const theme = useTheme();
   const themeWithLocale = useMemo(
@@ -127,33 +125,21 @@ export const GrillaPasoTres = ({
   );
 
   const ObtenerAfiliados = async (params, cuilElegido) => {
+
     const afiliados = await axiosDDJJ.getAfiliado(cuilElegido);
-    console.log(afiliados);
-    //const afiliados = await obtenerAfiliados(token, cuilElegido);
+
     const afiliadoEncontrado = afiliados.find(
       (afiliado) => afiliado.cuil === cuilElegido
     );
 
-    setAfiliado(afiliadoEncontrado);
     // TODO : Mirar el tema de la logica de busqueda por que tambien podria poder escribir sin buscar el cuil
     if (afiliadoEncontrado) {
-      console.log(
-        "ObtenerAfiliados -5-  params.row: " + JSON.stringify(params.row)
-      );
 
-      // Inte
-      params.api.setEditCellValue({
-        id: params.inte,
-        field: "inte",
-        value: afiliadoEncontrado.inte,
-      });
-      console.log(
-        "ObtenerAfiliados -6-  params.row: " + JSON.stringify(params.row)
-      );
-      params.row.inte = afiliadoEncontrado.inte;
-      console.log(
-        "ObtenerAfiliados -7-  params.row: " + JSON.stringify(params.row)
-      );
+      if (afiliadoEncontrado.inte !== null) {
+        setInteDataBase(afiliadoEncontrado.inte);
+      }
+
+      setAfiliado(afiliadoEncontrado);
 
       // Apellido
       params.api.setEditCellValue({
@@ -209,7 +195,6 @@ export const GrillaPasoTres = ({
   const handleEditClick = (id) => () => {
     console.log("handleEditClick - id: " + id);
     const editedRow = rowsAltaDDJJ.find((row) => row.id === id);
-    console.log("handleEditClick - editedRow: " + JSON.stringify(editedRow));
 
     filtroDeCategoria(editedRow.camara);
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
@@ -236,23 +221,40 @@ export const GrillaPasoTres = ({
   };
 
   const processRowUpdate = async (newRow) => {
-    const updatedRow = { ...newRow, isNew: false };
 
-    console.log("processRowUpdate - newRow:" + JSON.stringify(newRow));
+    if (newRow.isNew) {
 
-    setRowsAltaDDJJ(
-      rowsAltaDDJJ.map((row) => (row.id === newRow.id ? updatedRow : row))
-    );
+      const fila = { ...newRow, inte: inteDataBase };
+      console.log("Nueva Fila")
+      console.log(fila)
 
-    console.log("rowsAltaDDJJ: ", rowsAltaDDJJ);
+      setRowsAltaDDJJ(
+        rowsAltaDDJJ.map((row) => (row.id === newRow.id ? fila : row))
+      );
 
-    setRowsAltaDDJJAux(
-      rowsAltaDDJJAux.map((row) => (row.id === newRow.id ? updatedRow : row))
-    );
+      setRowsAltaDDJJAux(
+        rowsAltaDDJJAux.map((row) => (row.id === newRow.id ? fila : row))
+      );
 
-    console.log("rowsAltaDDJJAux: ", rowsAltaDDJJAux);
+      return { ...newRow, isNew: false }
 
-    return updatedRow;
+    } else {
+
+      const fila = { ...newRow, inte: inteDataBase };
+      console.log("Fila a modificar")
+      console.log(fila)
+
+      setRowsAltaDDJJ(
+        rowsAltaDDJJ.map((row) => (row.id === newRow.id ? fila : row))
+      );
+
+      setRowsAltaDDJJAux(
+        rowsAltaDDJJAux.map((row) => (row.id === newRow.id ? fila : row))
+      );
+
+      return fila;
+    }
+
   };
 
   const handleRowModesModelChange = (newRowModesModel) => {
@@ -334,10 +336,6 @@ export const GrillaPasoTres = ({
           </div>
         );
       },
-    },
-    {
-      field: "inte",
-      type: "number",
     },
     {
       field: "apellido",
@@ -475,8 +473,6 @@ export const GrillaPasoTres = ({
       }),
       headerClassName: "header--cell",
       renderEditCell: (params) => {
-        console.log("renderEditCell - params: ");
-        console.log(params);
 
         return (
           <Select
@@ -712,7 +708,6 @@ export const GrillaPasoTres = ({
           <DataGrid
             rows={rowsAltaDDJJ}
             columns={columns}
-            columnVisibilityModel={{ inte: false }}
             editMode="row"
             rowModesModel={rowModesModel}
             onRowModesModelChange={handleRowModesModelChange}

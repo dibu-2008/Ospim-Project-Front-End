@@ -73,6 +73,7 @@ const crearNuevoRegistro = (props) => {
 };
 
 export const Feriados = () => {
+
   const [locale, setLocale] = useState("esES");
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
@@ -173,6 +174,7 @@ export const Feriados = () => {
     fecha.setUTCHours(0, 0, 0, 0);
     const fechaFormateada = fecha.toISOString();
 */
+
     if (newRow.isNew) {
       console.log("processRowUpdate - ALTA");
       try {
@@ -222,13 +224,21 @@ export const Feriados = () => {
   };
 
   const obSubmitAnio = async (e) => {
+    
     e.preventDefault();
     const anio = fecha.$y;
 
     const response = await axiosFeriados.duplicar(anio);
 
+    if (response) {
+      swal.showSuccess("Año duplicado correctamente");
+    }else {
+      swal.showError("Error al duplicar el año");  
+    }
+    
     handleClose();
-  };
+
+  }
 
   useEffect(() => {
     const paintCells = () => {
@@ -407,7 +417,9 @@ export const Feriados = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <form onSubmit={obSubmitAnio}>
+          <form
+            onSubmit={obSubmitAnio}
+          >
             <LocalizationProvider
               dateAdapter={AdapterDayjs}
               adapterLocale={"es"}
@@ -426,9 +438,8 @@ export const Feriados = () => {
             </LocalizationProvider>
             <Button
               variant="contained"
-              sx={{ marginTop: "10px" }}
-              type="submit"
-            >
+              sx={{ marginTop: '10px' }}
+              type="submit">
               Enviar
             </Button>
           </form>

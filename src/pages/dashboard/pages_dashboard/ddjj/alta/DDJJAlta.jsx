@@ -40,8 +40,7 @@ export const MisAltaDeclaracionesJuradas = ({
   peticion,
   idDDJJ,
 }) => {
-  console.log("rowsAltaDDJJ: ");
-  console.log(rowsAltaDDJJ);
+
   const [otroPeriodo, setOtroPeriodo] = useState(null);
   const [otroPeriodoIso, setOtroPeriodoIso] = useState(null);
   const [camaras, setCamaras] = useState([]);
@@ -93,13 +92,13 @@ export const MisAltaDeclaracionesJuradas = ({
   useEffect(() => {
     const ObtenerPlantaEmpresas = async () => {
       const data = await axiosDDJJ.getPlantas(ID_EMPRESA);
-      console.log(data);
       setPlantas(data.map((item) => ({ id: item, ...item })));
     };
     ObtenerPlantaEmpresas();
   }, []);
 
   const importarAfiliado = async () => {
+   
     const cuiles = afiliadoImportado.map((item) => item.cuil);
     const cuilesString = cuiles.map((item) => item.toString());
 
@@ -110,14 +109,11 @@ export const MisAltaDeclaracionesJuradas = ({
 
     // Si alguno de los cuiles el valor de cuilesValidados es igual a false
     if (cuilesResponse.some((item) => item.cuilValido === false)) {
-      // imprimir en consola el cuil que tiene el valor de cuilValido igual a false
+
       const cuilFallido = cuilesResponse.filter(
         (item) => item.cuilValido === false
       );
-      cuilFallido.forEach((item) => {
-        console.log(item.cuil);
-      });
-
+      
       const mensajesFormateados = cuilFallido
         .map((item, index) => {
           return `<p>${item.cuil}</p>`;
@@ -134,13 +130,16 @@ export const MisAltaDeclaracionesJuradas = ({
         cancelButtonText: "Cancelar",
       });
     } else {
-      // swall de 1 segundo success
+
       Swal.fire({
         icon: "success",
         title: "Importación exitosa",
         showConfirmButton: false,
         timer: 1000,
       });
+
+      // Aca es donde debo de controlar el inte dependiendo si el cuil 
+      // Se encuentra dado de alta o no, antes de llenar la grilla.
 
       setRowsAltaDDJJ(afiliadoImportado);
     }
@@ -170,33 +169,35 @@ export const MisAltaDeclaracionesJuradas = ({
         const sheet = workbook.Sheets[sheetName];
         const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
-        const arraySinEncabezado = rows.slice(1);
+        console.log("CSV IMPORTADO...")
+        console.log(rows)
 
-        console.log(arraySinEncabezado);
-
-        const arrayTransformado = arraySinEncabezado.map((item, index) => {
-          return {
-            id: index + 1,
-            cuil: item[0],
-            inte: null,
-            apellido: item[1],
-            nombre: item[2],
-            camara: item[3],
-            categoria: item[4],
-            fechaIngreso: formatearFecha(item[5]),
-            empresaDomicilioId: plantas.find(
-              (plantas) => plantas.planta === item[6]
-            )?.id,
-            remunerativo: item[7],
-            noRemunerativo: item[8],
-            uomaSocio: item[9] === "Si",
-            amtimaSocio: item[10] === "Si",
-          };
-        });
-
-        setAfiliadoImportado(arrayTransformado);
-        // setRowsAltaDDJJ(arrayTransformado);
-      };
+        if(rows[0].length === 11){
+          console.log("Columnas completas");
+          const arraySinEncabezado = rows.slice(1);
+          const arrayTransformado = arraySinEncabezado.map((item, index) => {
+            return {
+              id: index + 1,
+              cuil: item[0],
+              apellido: item[1],
+              nombre: item[2],
+              camara: item[3],
+              categoria: item[4],
+              fechaIngreso: formatearFecha(item[5]),
+              empresaDomicilioId: plantas.find(
+                (plantas) => plantas.planta === item[6]
+              )?.id,
+              remunerativo: item[7],
+              noRemunerativo: item[8],
+              uomaSocio: item[9] === "Si",
+              amtimaSocio: item[10] === "Si",
+            };
+          });
+          setAfiliadoImportado(arrayTransformado);
+        }else {
+          console.log("Columnas incompletas");
+        }
+      }
 
       reader.readAsArrayBuffer(file);
     }
@@ -207,8 +208,8 @@ export const MisAltaDeclaracionesJuradas = ({
   };
 
   const guardarDeclaracionJurada = async () => {
+
     const DDJJ = {
-      id: DDJJState.id,
       periodo: periodoIso,
       afiliados: rowsAltaDDJJ.map((item) => {
         const registro = {
@@ -232,11 +233,15 @@ export const MisAltaDeclaracionesJuradas = ({
       }),
     };
 
+    if (DDJJState.id) {
+      DDJJ.id = DDJJState.id;
+    }
+
+    
     const validacionResponse = await axiosDDJJ.validar(ID_EMPRESA, DDJJ);
     console.log(validacionResponse);
     setValidacionResponse(validacionResponse);
 
-    // Validar si validacionResponse es igual a {errores: Array(6)}
     if (validacionResponse.errores && validacionResponse.errores.length > 0) {
       const mensajesUnicos = new Set();
 
@@ -290,6 +295,7 @@ export const MisAltaDeclaracionesJuradas = ({
         // peticion put con fetch
       } else {
         const data = await axiosDDJJ.crear(ID_EMPRESA, DDJJ);
+        console.log(data);
         if (data) {
           //actualizar estado
           setDDJJState(data);

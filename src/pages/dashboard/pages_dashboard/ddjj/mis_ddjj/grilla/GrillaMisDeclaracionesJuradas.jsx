@@ -21,6 +21,8 @@ import { PDFViewer, PDFDownloadLink } from "@react-pdf/renderer";
 import { MyDocument } from "./MiPdf";
 import Swal from "sweetalert2";
 import dayjs from "dayjs";
+import { useNavigate } from 'react-router-dom';  
+
 
 function misDDJJColumnaAporteGet(ddjjResponse) {
   //toma todas las ddjj de la consulta de "Mis DDJJ" y arma "vector de Columnas Aportes"
@@ -88,6 +90,17 @@ export const GrillaMisDeclaracionesJuradas = ({
 
   let colAportes = [];
 
+  const navigate = useNavigate();  
+
+  const handleGenerarBoletaClick = (id) => () => {
+    try{
+      navigate(`/dashboard/generarboletas/${id}`);
+    } catch (error) {
+      console.error(error)
+    }
+    
+  };
+
   useEffect(() => {
     const ObtenerMisDeclaracionesJuradas = async () => {
       let ddjjResponse = await axiosDDJJ.consultar(idEmpresa);
@@ -131,17 +144,24 @@ export const GrillaMisDeclaracionesJuradas = ({
     const ddjj = await axiosDDJJ.getDDJJ(idEmpresa, id);
     console.log("ddjj: ", ddjj);
 
+    // Aca tambien se deberia de hacer la peticion para obtener los inte por cada DNI
+
     const { periodo, afiliados } = ddjj;
     const mes = new Date(periodo).getMonth() + 1;
     const anio = new Date(periodo).getFullYear();
+
     setPeriodo(dayjs(`${anio}-${mes + 1}`));
 
     handleAcceptPeriodoDDJJ();
 
     setPeticion("PUT");
+    // Agregarle a afiliados la propiedad isNew con el valor de false
+    afiliados.forEach((afiliado) => afiliado.isNew = false);
+    
     setRowsAltaDDJJ(afiliados);
     setDDJJState(ddjj);
   };
+
 
   const handleSaveClick = (id) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
@@ -342,6 +362,7 @@ export const GrillaMisDeclaracionesJuradas = ({
               marginLeft: "-40px",
             }}
             variant="contained"
+            onClick={handleGenerarBoletaClick(id)}
           >
             Generar Boleta
           </Button>,
