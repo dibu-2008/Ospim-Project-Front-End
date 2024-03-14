@@ -94,7 +94,10 @@ export const duplicarFeriados = async (anio) => {
 
   try {
     const response = await axiosCrud.consultar(URL);
-    return response || [];
+    if (response == true) {
+      swal.showSuccess(HTTP_MSG_MODI);
+      return true;
+    }
   } catch (error) {
     showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL_ENTITY} - status: ${error.status})`,

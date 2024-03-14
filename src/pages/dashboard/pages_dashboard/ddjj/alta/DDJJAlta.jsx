@@ -99,13 +99,57 @@ export const MisAltaDeclaracionesJuradas = ({
     ObtenerPlantaEmpresas();
   }, []);
 
-  const importarAfiliado = () => {
-    setRowsAltaDDJJ(afiliadoImportado);
+  const importarAfiliado = async () => {
+    const cuiles = afiliadoImportado.map((item) => item.cuil);
+    const cuilesString = cuiles.map((item) => item.toString());
+
+    const cuilesResponse = await axiosDDJJ.validarCuiles(
+      ID_EMPRESA,
+      cuilesString
+    );
+
+    // Si alguno de los cuiles el valor de cuilesValidados es igual a false
+    if (cuilesResponse.some((item) => item.cuilValido === false)) {
+      // imprimir en consola el cuil que tiene el valor de cuilValido igual a false
+      const cuilFallido = cuilesResponse.filter(
+        (item) => item.cuilValido === false
+      );
+      cuilFallido.forEach((item) => {
+        console.log(item.cuil);
+      });
+
+      const mensajesFormateados = cuilFallido
+        .map((item, index) => {
+          return `<p>${item.cuil}</p>`;
+        })
+        .join("");
+
+      Swal.fire({
+        icon: "error",
+        title: "Error de validacion",
+        html: `Cuiles con errores:<br>${mensajesFormateados}<br>`,
+        showConfirmButton: true,
+        confirmButtonText: "Aceptar",
+        showCancelButton: true,
+        cancelButtonText: "Cancelar",
+      });
+    } else {
+      // swall de 1 segundo success
+      Swal.fire({
+        icon: "success",
+        title: "Importación exitosa",
+        showConfirmButton: false,
+        timer: 1000,
+      });
+
+      setRowsAltaDDJJ(afiliadoImportado);
+    }
+    setRowsAltaDDJJAux(afiliadoImportado);
   };
 
   const formatearFecha = (fecha) => {
-    const partes = fecha.split("/");
-    const anio = partes[2].length === 2 ? "20" + partes[2] : partes[2];
+    const partes = fecha?.split("/");
+    const anio = partes[2]?.length === 2 ? "20" + partes[2] : partes[2];
     const mes = partes[1].padStart(2, "0");
     const dia = partes[0];
     return `${anio}-${mes}-${dia}`;
@@ -144,8 +188,6 @@ export const MisAltaDeclaracionesJuradas = ({
             )?.id,
             remunerativo: item[7],
             noRemunerativo: item[8],
-            adheridoSindicato: item[9] === "Si",
-            pagaMutual: item[10] === "Si",
             uomaSocio: item[9] === "Si",
             amtimaSocio: item[10] === "Si",
           };
@@ -181,7 +223,6 @@ export const MisAltaDeclaracionesJuradas = ({
           categoria: !item.categoria ? null : item.categoria,
           remunerativo: !item.remunerativo ? null : item.remunerativo,
           noRemunerativo: !item.noRemunerativo ? null : item.noRemunerativo,
-          //uomaSocio: false,
           uomaSocio: item.uomaSocio,
           amtimaSocio: item.amtimaSocio,
         };
@@ -190,9 +231,8 @@ export const MisAltaDeclaracionesJuradas = ({
       }),
     };
 
-    console.log("DECLARACION JURADA", DDJJ.id);
-
     const validacionResponse = await axiosDDJJ.validar(ID_EMPRESA, DDJJ);
+    console.log(validacionResponse);
     setValidacionResponse(validacionResponse);
 
     // Validar si validacionResponse es igual a {errores: Array(6)}

@@ -109,16 +109,10 @@ export const Feriados = () => {
   useEffect(() => {
     const ObtenerFeriados = async () => {
       const response = await axiosFeriados.consultar();
-      response.map((item, index) => (item.numeroFila = index));
-      setRows(response.map((item) => ({ id: item.id, ...item })));
+      setRows(response);
     };
     ObtenerFeriados();
   }, []);
-
-  // imprimor rows en consola en función de useEffect
-  useEffect(() => {
-    console.log(rows);
-  }, [rows]);
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -233,11 +227,7 @@ export const Feriados = () => {
 
     const response = await axiosFeriados.duplicar(anio);
 
-    console.log(response);
-
     handleClose();
-
-    swal.showSuccess("Año actualizado correctamente");
   };
 
   useEffect(() => {
@@ -396,6 +386,12 @@ export const Feriados = () => {
               "& .css-1iyq7zh-MuiDataGrid-columnHeaders": {
                 backgroundColor: "#1A76D2 !important",
               },
+
+              /* "& .MuiDataGrid-cell--editable": {
+                bgcolor: (theme) =>
+                  theme.palette.mode === "dark" ? "#1A76D2" : "rgba(26, 118, 210, 0.550)",
+                color: (theme) => (theme.palette.mode === "dark" ? "white" : "white"),
+              }, */
             }}
             paginationModel={paginationModel}
             onPaginationModelChange={setPaginationModel}

@@ -14,7 +14,7 @@ import { DesktopDatePicker } from "@mui/x-date-pickers";
 import { CSVLink, CSVDownload } from "react-csv";
 import localStorageService from "@/components/localStorage/localStorageService";
 export const MisDeclaracionesJuradas = ({
-  setDDJJState = { setDDJJState },
+  setDDJJState,
   rows_mis_ddjj,
   setRowsMisDdjj,
   setTabState,
