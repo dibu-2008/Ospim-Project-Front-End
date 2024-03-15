@@ -91,6 +91,7 @@ export const actualizarDeclaracionJurada = async (empresaId, registro) => {
     if (response == true) {
       swal.showSuccess(HTTP_MSG_MODI);
       return true;
+
     }
     throw response;
   } catch (error) {
@@ -127,6 +128,7 @@ export const validaCuil = async (empresaId, cuiles) => {
       return errores || [];
     }
   }
+
 };
 
 export const axiosDDJJ = {
@@ -157,7 +159,6 @@ export const axiosDDJJ = {
   validar: async function (empresaId, registro) {
     return validarAltaDeclaracionJurada(empresaId, registro);
   },
-
   validarCuiles: async function (empresaId, cuiles) {
     return validaCuil(empresaId, cuiles);
   },
