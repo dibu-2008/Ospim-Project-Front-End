@@ -55,6 +55,4 @@
   "/empresa/:empresaId/ddjj/:Id/boleta-pago/concepto/:concepto/imprimir-detalle":"/empresa/ddjj/boleta-pago/concepto/imprimir-detalle",
   "/empresa/:empresaId/ddjj/:Id/boleta-pago/concepto/:concepto/imprimir-boleta":"/empresa/ddjj/boleta-pago/concepto/imprimir-boleta",
   "/empresa/:empresaId/periodo/:periodo/tiene-rectificativa" :"/empresa/periodo/tiene-rectificativa?empresaId=:empresaId&periodo=:periodo"
-
-
 }
