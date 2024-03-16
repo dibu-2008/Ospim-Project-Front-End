@@ -52,6 +52,7 @@ export const MisAltaDeclaracionesJuradas = ({
   const [mostrarPeriodos, setMostrarPeriodos] = useState(false);
   const [validacionResponse, setValidacionResponse] = useState([]);
   const [afiliadoImportado, setAfiliadoImportado] = useState([]);
+  const [filasDoc, setFilasDoc] = useState([]);
   const ID_EMPRESA = localStorageService.getEmpresaId();
 
   const handleChangeOtroPeriodo = (date) => setOtroPeriodo(date);
@@ -98,7 +99,7 @@ export const MisAltaDeclaracionesJuradas = ({
   }, []);
 
   const importarAfiliado = async () => {
-   
+
     const cuiles = afiliadoImportado.map((item) => item.cuil);
     const cuilesString = cuiles.map((item) => item.toString());
 
@@ -132,17 +133,19 @@ export const MisAltaDeclaracionesJuradas = ({
       const cuilFallido = cuilesResponse.filter(
         (item) => item.cuilValido === false
       );
-      
-      const mensajesFormateados = cuilFallido
-        .map((item, index) => {
-          return `<p>${item.cuil}</p>`;
-        })
-        .join("");
+
+
+      const mensajesFormateados2 = filasDoc.map((item) => {
+        return `<p style="margin-top:20px;">
+        Linea ${item.indice}: cuil ${item.cuil} con formato inválido.</p>`;
+      }).join("");
+
+      console.log(mensajesFormateados2);
 
       Swal.fire({
         icon: "error",
         title: "Error de validacion",
-        html: `Cuiles con errores:<br>${mensajesFormateados}<br>`,
+        html: `Cuiles con errores:<br>${mensajesFormateados2}<br>`,
         showConfirmButton: true,
         confirmButtonText: "Aceptar",
         showCancelButton: true,
@@ -165,7 +168,7 @@ export const MisAltaDeclaracionesJuradas = ({
 
       setRowsAltaDDJJ(afiliadoImportadoConInte);
     }
-    setRowsAltaDDJJAux(afiliadoImportadoConInte); 
+    setRowsAltaDDJJAux(afiliadoImportadoConInte);
   };
 
   const formatearFecha = (fecha) => {
@@ -194,9 +197,31 @@ export const MisAltaDeclaracionesJuradas = ({
         console.log("CSV IMPORTADO...")
         console.log(rows)
 
-        if(rows[0].length === 11){
+        if (rows[0].length === 11) {
           console.log("Columnas completas");
           const arraySinEncabezado = rows.slice(1);
+
+          // recorrer el array rows armar de cada array un objeto con 
+          /*
+            {
+              indice: index + 1,
+              cuil: item[0],
+            }
+          */
+
+          rows.forEach((item, index) => {
+
+            const fila = {
+              indice: index + 1,
+              cuil: item[0]
+            }
+
+            setFilasDoc([...filasDoc, fila]);
+            
+          })
+
+
+
           const arrayTransformado = arraySinEncabezado.map((item, index) => {
             return {
               id: index + 1,
@@ -218,10 +243,10 @@ export const MisAltaDeclaracionesJuradas = ({
           });
 
           // Antes de llenar las grillas debo de validar los cuiles
-          
+
 
           setAfiliadoImportado(arrayTransformado);
-        }else {
+        } else {
           console.log("Columnas incompletas");
         }
       }
@@ -245,6 +270,7 @@ export const MisAltaDeclaracionesJuradas = ({
         console.log("DENTRO DE ROWS ALTA DDJJ");
         console.log(item)
         const registro = {
+          errores: item.errores,
           cuil: !item.cuil ? null : item.cuil,
           inte: item.inte,
           apellido: !item.apellido ? null : item.apellido,
@@ -273,10 +299,39 @@ export const MisAltaDeclaracionesJuradas = ({
 
     console.log("DDJJJJJJJJJJJJJJJJJJ FINALLLL")
     console.log(DDJJ)
-    
+
+    // Borrar la propiedad errores de cada afiliado
+    // por que no se envia al backend
+    DDJJ.afiliados.forEach((afiliado) => {
+      delete afiliado.errores;
+    });
+
     const validacionResponse = await axiosDDJJ.validar(ID_EMPRESA, DDJJ);
     console.log(validacionResponse);
-    setValidacionResponse(validacionResponse);
+
+    // array de cuiles del array validacionResponse.errores
+    const cuilesConErrores = validacionResponse.errores.map((error) => error.cuil);
+
+    // Agregar la propiedad errores="No"
+    DDJJ.afiliados.forEach((afiliado) => {
+      if (!cuilesConErrores.includes(afiliado.cuil)) {
+        afiliado.errores = "No";
+      }
+    });
+
+    // Buscar todos estos cuiles en el rowsAltaDDJJ, y marcarlos con errores="Si"
+    rowsAltaDDJJ.forEach((afiliado) => {
+      if (cuilesConErrores.includes(afiliado.cuil)) {
+        afiliado.errores = "Si";
+      } else {
+        afiliado.errores = "No";
+      }
+    });
+
+    // Borro la propiedad errores de ddjj
+    delete DDJJ.errores;
+
+    setValidacionResponse(validacionResponse); // Sirve para pintar en rojo los campos con errores
 
     if (validacionResponse.errores && validacionResponse.errores.length > 0) {
       const mensajesUnicos = new Set();
@@ -338,9 +393,9 @@ export const MisAltaDeclaracionesJuradas = ({
           //setRowsAltaDDJJ(data.);
         }
         //sacarlo luego de actualizar
-        setRowsAltaDDJJ([]);
+        //setRowsAltaDDJJ([]);
       }
-    } 
+    }
   };
 
   return (

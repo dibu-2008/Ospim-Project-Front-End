@@ -12,6 +12,7 @@ import CancelIcon from "@mui/icons-material/Close";
 import {
   GridRowModes,
   DataGrid,
+  GridToolbar,
   gridClasses,
   GridToolbarContainer,
   GridActionsCellItem,
@@ -134,6 +135,7 @@ const crearNuevoRegistro = (props) => {
 
   return (
     <GridToolbarContainer>
+      <GridToolbar showQuickFilter={props.showQuickFilter} />
       <Button color="primary" startIcon={<AddIcon />} onClick={altaHandleClick}>
         Nuevo Registro
       </Button>

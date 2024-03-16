@@ -96,7 +96,11 @@ function EditToolbar(props) {
       <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
         Nuevo Registro
       </Button>
-      <GridToolbar showQuickFilter={props.showQuickFilter} />
+      <GridToolbar 
+        showQuickFilter={props.showQuickFilter} 
+        // ocultar el filtro de columnas
+          
+      />
     </GridToolbarContainer>
   );
 }
@@ -119,8 +123,7 @@ export const GrillaPasoTres = ({
   const [rowModesModel, setRowModesModel] = useState({});
   const [selectedRowId, setSelectedRowId] = useState(null);
   const [inteDataBase, setInteDataBase] = useState(null);
-  const [quickFilterText, setQuickFilterText] = useState('');
-
+  const [columnVisibilityModel, setColumnVisibilityModel] = useState({ errores: false });
 
   const theme = useTheme();
   const themeWithLocale = useMemo(
@@ -146,8 +149,8 @@ export const GrillaPasoTres = ({
       button.item(2).innerText = "DENSIDAD";
       button.item(3).innerText = "EXPORTAR";
 
-      
-      
+
+
     };
 
     const timeoutId = setTimeout(() => {
@@ -299,7 +302,25 @@ export const GrillaPasoTres = ({
   };
 
   const filasConErrores = () => {
-    // Mostrar las filas con errores
+
+    // Selecciona el contenedor "afiliados"
+    const contenedorAfiliados = document.querySelector(".afiliados");
+
+    // Busca el contenedor "MuiDataGrid-main" dentro del contenedor "afiliados"
+    const contenedorMain = contenedorAfiliados.querySelector(".MuiDataGrid-main");
+
+    // Busca el contenedor "MuiDataGrid-virtualScroller" dentro del contenedor "MuiDataGrid-main"
+    const contenedorVirtualScroller = contenedorMain.querySelector(".MuiDataGrid-virtualScroller");
+
+    // Busca el contenedor "MuiDataGrid-virtualScrollerContent" dentro del contenedor "MuiDataGrid-virtualScroller"
+    const contenedorVirtualScrollerContent = contenedorVirtualScroller.querySelector(".MuiDataGrid-virtualScrollerContent");
+
+    // Busca todos los hijos del contenedor "MuiDataGrid-virtualScrollerRenderZone" dentro del contenedor "MuiDataGrid-virtualScrollerContent"
+    const hijosMuiDataGridVirtualScrollerRenderZone = contenedorVirtualScrollerContent.querySelector(".MuiDataGrid-virtualScrollerRenderZone").children;
+
+    console.log("Hijos de MuiDataGrid-virtualScrollerRenderZone:", hijosMuiDataGridVirtualScrollerRenderZone);
+
+    /* // Mostrar las filas con errores
     let errores = [];
     validacionResponse?.errores?.forEach((error) => {
       errores.push(error.cuil);
@@ -316,13 +337,13 @@ export const GrillaPasoTres = ({
     console.log("Filas con errores: ", filasConErrores);
 
     // Mostrar las filas con errores en la grilla
-    setRowsAltaDDJJ(filasConErrores);
+    setRowsAltaDDJJ(filasConErrores); */
   };
 
   const filasTodas = () => {
-    console.log("Filas todas: ", rowsAltaDDJJAux)
+    /* console.log("Filas todas: ", rowsAltaDDJJAux)
     // Mostrar todas las filas
-    setRowsAltaDDJJ(rowsAltaDDJJAux);
+    setRowsAltaDDJJ(rowsAltaDDJJAux); */
   };
 
   const columns = [
@@ -670,6 +691,11 @@ export const GrillaPasoTres = ({
         { value: false, label: "No" },
       ],
     },
+    { 
+      field: "errores", 
+      headerName: "Errores", 
+      flex: 1 
+    },
     {
       field: "actions",
       type: "actions",
@@ -720,23 +746,6 @@ export const GrillaPasoTres = ({
     },
   ];
 
-  const VISIBLE_FLIEDS = [
-    "cuil",
-    "apellido",
-    "nombre",
-    "camara",
-    "categoria",
-    "fechaIngreso",
-    "empresaDomicilioId",
-    "remunerativo",
-    "noRemunerativo",
-    "uomaSocio",
-    "amtimaSocio",
-    "actions",
-  ];
-
-
-
   return (
     <div>
       <Box
@@ -761,8 +770,10 @@ export const GrillaPasoTres = ({
       >
         <ThemeProvider theme={themeWithLocale}>
           <DataGrid
+            className="afiliados"
             rows={rowsAltaDDJJ}
             columns={columns}
+            columnVisibilityModel={{errores: false}}
             editMode="row"
             rowModesModel={rowModesModel}
             onRowModesModelChange={handleRowModesModelChange}
@@ -779,14 +790,11 @@ export const GrillaPasoTres = ({
                 rowsAltaDDJJAux,
                 setRowModesModel,
                 showQuickFilter: true,
+                // filtro de columnas
+                showColumnMenu: true,
                 themeWithLocale
               },
             }}
-            getRows={rows => rows.filter(row =>
-              Object.values(row).some(value =>
-                String(value).toLowerCase().includes(quickFilterText.toLowerCase())
-              )
-            )}
 
             sx={{
               "& .MuiDataGrid-virtualScroller::-webkit-scrollbar": {
@@ -836,7 +844,7 @@ export const GrillaPasoTres = ({
             marginTop: "20px",
           }}
         >
-          <a
+          {/* <a
             className="link_animado"
             variant="contained"
             style={{
@@ -855,7 +863,7 @@ export const GrillaPasoTres = ({
             onClick={filasTodas}
           >
             Todas las filas
-          </a>
+          </a> */}
         </div>
       </Box>
     </div>
