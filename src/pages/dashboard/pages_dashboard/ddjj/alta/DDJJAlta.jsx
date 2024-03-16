@@ -107,6 +107,25 @@ export const MisAltaDeclaracionesJuradas = ({
       cuilesString
     );
 
+    console.log("AFILIAFO IMPORTADO");
+    console.log(afiliadoImportado);
+    console.log("CUILES RESPONSE DDBB");
+    console.log(cuilesResponse);
+
+    const afiliadoImportadoConInte = afiliadoImportado.map((item) => {
+
+      const cuilResponse = cuilesResponse.find(
+        (cuil) => +(cuil.cuil) === item.cuil
+      );
+      if (cuilResponse) {
+        return { ...item, inte: cuilResponse.inte };
+      }
+      return item;
+    });
+
+    console.log("AFILIADO IMPORTADO FINAL CON INTE");
+    console.log(afiliadoImportadoConInte);
+
     // Si alguno de los cuiles el valor de cuilesValidados es igual a false
     if (cuilesResponse.some((item) => item.cuilValido === false)) {
 
@@ -129,6 +148,9 @@ export const MisAltaDeclaracionesJuradas = ({
         showCancelButton: true,
         cancelButtonText: "Cancelar",
       });
+
+      setRowsAltaDDJJ(afiliadoImportadoConInte);
+
     } else {
 
       Swal.fire({
@@ -141,9 +163,9 @@ export const MisAltaDeclaracionesJuradas = ({
       // Aca es donde debo de controlar el inte dependiendo si el cuil 
       // Se encuentra dado de alta o no, antes de llenar la grilla.
 
-      setRowsAltaDDJJ(afiliadoImportado);
+      setRowsAltaDDJJ(afiliadoImportadoConInte);
     }
-    setRowsAltaDDJJAux(afiliadoImportado);
+    setRowsAltaDDJJAux(afiliadoImportadoConInte); 
   };
 
   const formatearFecha = (fecha) => {
@@ -191,8 +213,13 @@ export const MisAltaDeclaracionesJuradas = ({
               noRemunerativo: item[8],
               uomaSocio: item[9] === "Si",
               amtimaSocio: item[10] === "Si",
+              esImportado: true,
             };
           });
+
+          // Antes de llenar las grillas debo de validar los cuiles
+          
+
           setAfiliadoImportado(arrayTransformado);
         }else {
           console.log("Columnas incompletas");
@@ -209,12 +236,17 @@ export const MisAltaDeclaracionesJuradas = ({
 
   const guardarDeclaracionJurada = async () => {
 
+    console.log("GUARDAR DECLARACION JURADA")
+    console.log(rowsAltaDDJJ)
+
     const DDJJ = {
       periodo: periodoIso,
       afiliados: rowsAltaDDJJ.map((item) => {
+        console.log("DENTRO DE ROWS ALTA DDJJ");
+        console.log(item)
         const registro = {
           cuil: !item.cuil ? null : item.cuil,
-          inte: !item.inte ? null : item.inte,
+          inte: item.inte,
           apellido: !item.apellido ? null : item.apellido,
           nombre: !item.nombre ? null : item.nombre,
           fechaIngreso: !item.fechaIngreso ? null : item.fechaIngreso,
@@ -228,6 +260,8 @@ export const MisAltaDeclaracionesJuradas = ({
           uomaSocio: item.uomaSocio,
           amtimaSocio: item.amtimaSocio,
         };
+        console.log("REGISTRO")
+        console.log(registro)
         if (item.id) registro.id = item.id;
         return registro;
       }),
@@ -237,6 +271,8 @@ export const MisAltaDeclaracionesJuradas = ({
       DDJJ.id = DDJJState.id;
     }
 
+    console.log("DDJJJJJJJJJJJJJJJJJJ FINALLLL")
+    console.log(DDJJ)
     
     const validacionResponse = await axiosDDJJ.validar(ID_EMPRESA, DDJJ);
     console.log(validacionResponse);
@@ -304,7 +340,7 @@ export const MisAltaDeclaracionesJuradas = ({
         //sacarlo luego de actualizar
         setRowsAltaDDJJ([]);
       }
-    }
+    } 
   };
 
   return (

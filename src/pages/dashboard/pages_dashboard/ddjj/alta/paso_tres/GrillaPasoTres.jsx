@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect, useRef } from "react";
 import {
   GridRowModes,
   DataGrid,
+  GridToolbar,
   GridToolbarContainer,
   GridActionsCellItem,
   GridRowEditStopReasons,
@@ -91,10 +92,11 @@ function EditToolbar(props) {
   };
 
   return (
-    <GridToolbarContainer>
+    <GridToolbarContainer theme={props.themeWithLocale}>
       <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
         Nuevo Registro
       </Button>
+      <GridToolbar showQuickFilter={props.showQuickFilter} />
     </GridToolbarContainer>
   );
 }
@@ -117,12 +119,43 @@ export const GrillaPasoTres = ({
   const [rowModesModel, setRowModesModel] = useState({});
   const [selectedRowId, setSelectedRowId] = useState(null);
   const [inteDataBase, setInteDataBase] = useState(null);
+  const [quickFilterText, setQuickFilterText] = useState('');
+
 
   const theme = useTheme();
   const themeWithLocale = useMemo(
     () => createTheme(theme, locales[locale]),
     [locale, theme]
   );
+
+  useEffect(() => {
+    const paintCells = () => {
+
+      // Traete este button del DOM
+      /* MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall css-1knaqv7-MuiButtonBase-root-MuiButton-root pero que tenga el contenido FILTERS */
+
+      const button = document.querySelectorAll(
+        ".css-1knaqv7-MuiButtonBase-root-MuiButton-root"
+      );
+
+      console.log("Boton: ", button.item(0).nodeType);
+      console.log("Boton: ", button.item(0).innerText);
+
+      button.item(0).innerText = "COLUMNAS";
+      button.item(1).innerText = "FILTROS";
+      button.item(2).innerText = "DENSIDAD";
+      button.item(3).innerText = "EXPORTAR";
+
+      
+      
+    };
+
+    const timeoutId = setTimeout(() => {
+      paintCells();
+    }, 1000);
+
+    return () => clearTimeout(timeoutId);
+  }, []);
 
   const ObtenerAfiliados = async (params, cuilElegido) => {
 
@@ -131,6 +164,10 @@ export const GrillaPasoTres = ({
     const afiliadoEncontrado = afiliados.find(
       (afiliado) => afiliado.cuil === cuilElegido
     );
+
+    if (afiliado) {
+      setAfiliado(afiliadoEncontrado);
+    }
 
     // TODO : Mirar el tema de la logica de busqueda por que tambien podria poder escribir sin buscar el cuil
     if (afiliadoEncontrado) {
@@ -283,6 +320,7 @@ export const GrillaPasoTres = ({
   };
 
   const filasTodas = () => {
+    console.log("Filas todas: ", rowsAltaDDJJAux)
     // Mostrar todas las filas
     setRowsAltaDDJJ(rowsAltaDDJJAux);
   };
@@ -682,6 +720,23 @@ export const GrillaPasoTres = ({
     },
   ];
 
+  const VISIBLE_FLIEDS = [
+    "cuil",
+    "apellido",
+    "nombre",
+    "camara",
+    "categoria",
+    "fechaIngreso",
+    "empresaDomicilioId",
+    "remunerativo",
+    "noRemunerativo",
+    "uomaSocio",
+    "amtimaSocio",
+    "actions",
+  ];
+
+
+
   return (
     <div>
       <Box
@@ -723,8 +778,16 @@ export const GrillaPasoTres = ({
                 setRowsAltaDDJJAux,
                 rowsAltaDDJJAux,
                 setRowModesModel,
+                showQuickFilter: true,
+                themeWithLocale
               },
             }}
+            getRows={rows => rows.filter(row =>
+              Object.values(row).some(value =>
+                String(value).toLowerCase().includes(quickFilterText.toLowerCase())
+              )
+            )}
+
             sx={{
               "& .MuiDataGrid-virtualScroller::-webkit-scrollbar": {
                 width: "8px",

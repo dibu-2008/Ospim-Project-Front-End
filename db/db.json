@@ -2834,35 +2834,22 @@
       "id": 214
     },
     {
-      "periodo": "2024-02-01T00:00:00.000Z",
+      "periodo": null,
       "afiliados": [
         {
-          "cuil": "27367071112",
-          "inte": 0,
-          "apellido": "Nelo",
-          "nombre": "Rosario",
-          "fechaIngreso": "2001-01-01T00:00:00.000Z",
-          "empresaDomicilioId": 32,
+          "cuil": "20949118123",
+          "inte": null,
+          "apellido": "Invernizzi",
+          "nombre": "Andy",
+          "fechaIngreso": "2024-03-14T03:00:00.000Z",
+          "empresaDomicilioId": 9,
           "camara": "CAENA",
           "categoria": "D",
-          "remunerativo": 335000.7,
-          "noRemunerativo": 25000,
-          "uomaSocio": true,
-          "antimaSocio": true
-        },
-        {
-          "cuil": "27418918786",
-          "inte": 0,
-          "apellido": "Chapa",
-          "nombre": "Gladys",
-          "fechaIngreso": "2010-01-01T00:00:00.000Z",
-          "empresaDomicilioId": 32,
-          "camara": "CAENA",
-          "categoria": "D",
-          "remunerativo": 545000.7,
-          "noRemunerativo": 25000,
-          "uomaSocio": true,
-          "antimaSocio": true
+          "remunerativo": "1",
+          "noRemunerativo": "1",
+          "uomaSocio": false,
+          "amtimaSocio": false,
+          "id": 1
         }
       ],
       "empresaId": "1",
@@ -2873,17 +2860,17 @@
       "afiliados": [
         {
           "cuil": "20949118682",
-          "inte": null,
+          "inte": 0,
           "apellido": "Salinas",
           "nombre": "Luis",
-          "fechaIngreso": "2024-03-15T03:00:00.000Z",
+          "fechaIngreso": "2024-02-29T03:00:00.000Z",
           "empresaDomicilioId": 4,
-          "camara": "FAIM",
-          "categoria": "C",
+          "camara": "CAENA",
+          "categoria": "D",
           "remunerativo": "1",
           "noRemunerativo": "1",
-          "uomaSocio": true,
-          "amtimaSocio": true,
+          "uomaSocio": false,
+          "amtimaSocio": false,
           "id": 1
         }
       ],
