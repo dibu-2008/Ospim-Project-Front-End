@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect, useRef } from "react";
 import {
   GridRowModes,
   DataGrid,
+  GridToolbar,
   GridToolbarContainer,
   GridActionsCellItem,
   GridRowEditStopReasons,
@@ -91,10 +92,15 @@ function EditToolbar(props) {
   };
 
   return (
-    <GridToolbarContainer>
+    <GridToolbarContainer theme={props.themeWithLocale}>
       <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
         Nuevo Registro
       </Button>
+      <GridToolbar 
+        showQuickFilter={props.showQuickFilter} 
+        // ocultar el filtro de columnas
+          
+      />
     </GridToolbarContainer>
   );
 }
@@ -117,12 +123,42 @@ export const GrillaPasoTres = ({
   const [rowModesModel, setRowModesModel] = useState({});
   const [selectedRowId, setSelectedRowId] = useState(null);
   const [inteDataBase, setInteDataBase] = useState(null);
+  const [columnVisibilityModel, setColumnVisibilityModel] = useState({ errores: false });
 
   const theme = useTheme();
   const themeWithLocale = useMemo(
     () => createTheme(theme, locales[locale]),
     [locale, theme]
   );
+
+  useEffect(() => {
+    const paintCells = () => {
+
+      // Traete este button del DOM
+      /* MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall css-1knaqv7-MuiButtonBase-root-MuiButton-root pero que tenga el contenido FILTERS */
+
+      const button = document.querySelectorAll(
+        ".css-1knaqv7-MuiButtonBase-root-MuiButton-root"
+      );
+
+      console.log("Boton: ", button.item(0).nodeType);
+      console.log("Boton: ", button.item(0).innerText);
+
+      button.item(0).innerText = "COLUMNAS";
+      button.item(1).innerText = "FILTROS";
+      button.item(2).innerText = "DENSIDAD";
+      button.item(3).innerText = "EXPORTAR";
+
+
+
+    };
+
+    const timeoutId = setTimeout(() => {
+      paintCells();
+    }, 1000);
+
+    return () => clearTimeout(timeoutId);
+  }, []);
 
   const ObtenerAfiliados = async (params, cuilElegido) => {
 
@@ -131,6 +167,10 @@ export const GrillaPasoTres = ({
     const afiliadoEncontrado = afiliados.find(
       (afiliado) => afiliado.cuil === cuilElegido
     );
+
+    if (afiliado) {
+      setAfiliado(afiliadoEncontrado);
+    }
 
     // TODO : Mirar el tema de la logica de busqueda por que tambien podria poder escribir sin buscar el cuil
     if (afiliadoEncontrado) {
@@ -262,7 +302,25 @@ export const GrillaPasoTres = ({
   };
 
   const filasConErrores = () => {
-    // Mostrar las filas con errores
+
+    // Selecciona el contenedor "afiliados"
+    const contenedorAfiliados = document.querySelector(".afiliados");
+
+    // Busca el contenedor "MuiDataGrid-main" dentro del contenedor "afiliados"
+    const contenedorMain = contenedorAfiliados.querySelector(".MuiDataGrid-main");
+
+    // Busca el contenedor "MuiDataGrid-virtualScroller" dentro del contenedor "MuiDataGrid-main"
+    const contenedorVirtualScroller = contenedorMain.querySelector(".MuiDataGrid-virtualScroller");
+
+    // Busca el contenedor "MuiDataGrid-virtualScrollerContent" dentro del contenedor "MuiDataGrid-virtualScroller"
+    const contenedorVirtualScrollerContent = contenedorVirtualScroller.querySelector(".MuiDataGrid-virtualScrollerContent");
+
+    // Busca todos los hijos del contenedor "MuiDataGrid-virtualScrollerRenderZone" dentro del contenedor "MuiDataGrid-virtualScrollerContent"
+    const hijosMuiDataGridVirtualScrollerRenderZone = contenedorVirtualScrollerContent.querySelector(".MuiDataGrid-virtualScrollerRenderZone").children;
+
+    console.log("Hijos de MuiDataGrid-virtualScrollerRenderZone:", hijosMuiDataGridVirtualScrollerRenderZone);
+
+    /* // Mostrar las filas con errores
     let errores = [];
     validacionResponse?.errores?.forEach((error) => {
       errores.push(error.cuil);
@@ -279,12 +337,13 @@ export const GrillaPasoTres = ({
     console.log("Filas con errores: ", filasConErrores);
 
     // Mostrar las filas con errores en la grilla
-    setRowsAltaDDJJ(filasConErrores);
+    setRowsAltaDDJJ(filasConErrores); */
   };
 
   const filasTodas = () => {
+    /* console.log("Filas todas: ", rowsAltaDDJJAux)
     // Mostrar todas las filas
-    setRowsAltaDDJJ(rowsAltaDDJJAux);
+    setRowsAltaDDJJ(rowsAltaDDJJAux); */
   };
 
   const columns = [
@@ -632,6 +691,11 @@ export const GrillaPasoTres = ({
         { value: false, label: "No" },
       ],
     },
+    { 
+      field: "errores", 
+      headerName: "Errores", 
+      flex: 1 
+    },
     {
       field: "actions",
       type: "actions",
@@ -706,8 +770,10 @@ export const GrillaPasoTres = ({
       >
         <ThemeProvider theme={themeWithLocale}>
           <DataGrid
+            className="afiliados"
             rows={rowsAltaDDJJ}
             columns={columns}
+            columnVisibilityModel={{errores: false}}
             editMode="row"
             rowModesModel={rowModesModel}
             onRowModesModelChange={handleRowModesModelChange}
@@ -723,8 +789,13 @@ export const GrillaPasoTres = ({
                 setRowsAltaDDJJAux,
                 rowsAltaDDJJAux,
                 setRowModesModel,
+                showQuickFilter: true,
+                // filtro de columnas
+                showColumnMenu: true,
+                themeWithLocale
               },
             }}
+
             sx={{
               "& .MuiDataGrid-virtualScroller::-webkit-scrollbar": {
                 width: "8px",
@@ -773,7 +844,7 @@ export const GrillaPasoTres = ({
             marginTop: "20px",
           }}
         >
-          <a
+          {/* <a
             className="link_animado"
             variant="contained"
             style={{
@@ -792,7 +863,7 @@ export const GrillaPasoTres = ({
             onClick={filasTodas}
           >
             Todas las filas
-          </a>
+          </a> */}
         </div>
       </Box>
     </div>

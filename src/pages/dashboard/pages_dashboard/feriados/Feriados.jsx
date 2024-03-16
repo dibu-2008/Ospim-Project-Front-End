@@ -1,6 +1,6 @@
 import * as locales from "@mui/material/locale";
 import { useState, useEffect, useMemo, useRef } from "react";
-import { Box, Button, TextField } from "@mui/material";
+import { Box, Button, TextField, alpha, styled } from "@mui/material";
 
 import { Add, Edit, DeleteOutlined, Save, Close } from "@mui/icons-material";
 import AddIcon from "@mui/icons-material/Add";
@@ -12,6 +12,8 @@ import CancelIcon from "@mui/icons-material/Close";
 import {
   GridRowModes,
   DataGrid,
+  GridToolbar,
+  gridClasses,
   GridToolbarContainer,
   GridActionsCellItem,
   GridRowEditStopReasons,
@@ -46,6 +48,74 @@ const style = {
   p: 4,
 };
 
+const ODD_OPACITY = 0.2;
+
+const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
+  [`& .${gridClasses.row}.even`]: {
+    backgroundColor: theme.palette.grey[200],
+    '&:hover, &.Mui-hovered': {
+      backgroundColor: alpha(theme.palette.primary.main, ODD_OPACITY),
+      '@media (hover: none)': {
+        backgroundColor: 'transparent',
+      },
+    },
+    '&.Mui-selected': {
+      backgroundColor: alpha(
+        theme.palette.primary.main,
+        ODD_OPACITY + theme.palette.action.selectedOpacity,
+      ),
+      '&:hover, &.Mui-hovered': {
+        backgroundColor: alpha(
+          theme.palette.primary.main,
+          ODD_OPACITY +
+            theme.palette.action.selectedOpacity +
+            theme.palette.action.hoverOpacity,
+        ),
+        // Reset on touch devices, it doesn't add specificity
+        '@media (hover: none)': {
+          backgroundColor: alpha(
+            theme.palette.primary.main,
+            ODD_OPACITY + theme.palette.action.selectedOpacity,
+          ),
+        },
+      },
+    },
+  },
+
+  // quiero que odd tenga un hover verde
+  [`& .${gridClasses.row}.odd`]: {
+    backgroundColor: "#fff",
+    '&:hover, &.Mui-hovered': {
+      backgroundColor: alpha(theme.palette.primary.main, ODD_OPACITY),
+      '@media (hover: none)': {
+        backgroundColor: 'transparent',
+      },
+    },
+    '&.Mui-selected': {
+      backgroundColor: alpha(
+        theme.palette.primary.main,
+        ODD_OPACITY + theme.palette.action.selectedOpacity,
+      ),
+      '&:hover, &.Mui-hovered': {
+        backgroundColor: alpha(
+          theme.palette.primary.main,
+          ODD_OPACITY +
+            theme.palette.action.selectedOpacity +
+            theme.palette.action.hoverOpacity,
+        ),
+        // Reset on touch devices, it doesn't add specificity
+        '@media (hover: none)': {
+          backgroundColor: alpha(
+            theme.palette.primary.main,
+            ODD_OPACITY + theme.palette.action.selectedOpacity,
+          ),
+        },
+      },
+    },
+  },
+
+}));
+
 // Traerme las etiquetas del dom que tengas la clase .MuiDataGrid-cell--editable
 const crearNuevoRegistro = (props) => {
   const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
@@ -65,6 +135,7 @@ const crearNuevoRegistro = (props) => {
 
   return (
     <GridToolbarContainer>
+      <GridToolbar showQuickFilter={props.showQuickFilter} />
       <Button color="primary" startIcon={<AddIcon />} onClick={altaHandleClick}>
         Nuevo Registro
       </Button>
@@ -82,7 +153,7 @@ export const Feriados = () => {
     page: 0,
   });
 
-  const gridRef = useRef(null);
+  //const gridRef = useRef(null);
 
   // State del modal *************************************************
   const [open, setOpen] = useState(false);
@@ -110,7 +181,7 @@ export const Feriados = () => {
   useEffect(() => {
     const ObtenerFeriados = async () => {
       const response = await axiosFeriados.consultar();
-      setRows(response);
+      setRows(response.map((row, index) => ({ ...row, internalId: index + 1 })));
     };
     ObtenerFeriados();
   }, []);
@@ -224,7 +295,7 @@ export const Feriados = () => {
   };
 
   const obSubmitAnio = async (e) => {
-    
+
     e.preventDefault();
     const anio = fecha.$y;
 
@@ -232,45 +303,40 @@ export const Feriados = () => {
 
     if (response) {
       swal.showSuccess("Año duplicado correctamente");
-    }else {
-      swal.showError("Error al duplicar el año");  
+    } else {
+      swal.showError("Error al duplicar el año");
     }
-    
+
     handleClose();
 
   }
 
-  useEffect(() => {
+  /* useEffect(() => {
     const paintCells = () => {
       const feriadosContainer = document.querySelector(".feriados_container");
+
+      // Traeme todo lo que tengan el atributo data-id
       const cellEditable = feriadosContainer.querySelectorAll(
-        ".MuiDataGrid-cell--editable"
+        "[data-id]"
       );
-      cellEditable.forEach((cell) => {
-        cell.style.backgroundColor = "rgba(26, 118, 210, 0.550)";
-        cell.style.color = "white";
-      });
 
-      const dias = [];
+      console.log("PRIMERA CARGA ...............")
+      console.log("cellEditable", cellEditable.length);
 
-      cellEditable.forEach((cell) => {
-        const dia = cell.nextElementSibling;
-        dias.push(dia);
-      });
+      cellEditable.forEach((cell, index) => {
 
-      dias.forEach((dia) => {
-        dia.style.backgroundColor = "rgba(26, 118, 210, 0.550)";
-        dia.style.color = "white";
+        if (index % 2 === 0) {
+          cell.style.backgroundColor = "#CCCCCC";
+        }
       });
     };
 
-    // Esperar un poco antes de pintar las celdas
     const timeoutId = setTimeout(() => {
       paintCells();
     }, 1000);
 
     return () => clearTimeout(timeoutId);
-  }, []);
+  }, []); */
 
   const columnas = [
     {
@@ -297,12 +363,6 @@ export const Feriados = () => {
       headerClassName: "header--cell",
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
-        /* const isEvenRow = numeroFila % 2 !== 0;
-        console.log("row", id) */
-
-        // buscar el id en rows y obtener el numeroFila que siga esta logica numeroFila % 2 !== 0;
-        const isEvenRow =
-          rows.find((row) => row.id === id).numeroFila % 2 !== 0;
 
         if (isInEditMode) {
           return [
@@ -364,16 +424,14 @@ export const Feriados = () => {
         }}
       >
         <ThemeProvider theme={themeWithLocale}>
-          <DataGrid
-            ref={gridRef}
-            onRender={() => {
-              if (gridRef.current) {
-                paintCells();
-              }
-            }}
+          <StripedDataGrid
             rows={rows}
             columns={columnas}
-            isCellEditable={(params) => params.row.numeroFila % 2 != 0}
+            getRowId={(row) => row.internalId}
+            getRowClassName={(params) =>
+             
+              params.row.internalId % 2 === 0 ? 'even' : 'odd'
+            }
             editMode="row"
             rowModesModel={rowModesModel}
             onRowModesModelChange={handleRowModesModelChange}
@@ -385,24 +443,7 @@ export const Feriados = () => {
             slotProps={{
               toolbar: { setRows, rows, setRowModesModel, volverPrimerPagina },
             }}
-            sx={{
-              "& .MuiDataGrid-virtualScroller::-webkit-scrollbar": {
-                width: "8px",
-                visibility: "visible",
-              },
-              "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb": {
-                backgroundColor: "#ccc",
-              },
-              "& .css-1iyq7zh-MuiDataGrid-columnHeaders": {
-                backgroundColor: "#1A76D2 !important",
-              },
 
-              /* "& .MuiDataGrid-cell--editable": {
-                bgcolor: (theme) =>
-                  theme.palette.mode === "dark" ? "#1A76D2" : "rgba(26, 118, 210, 0.550)",
-                color: (theme) => (theme.palette.mode === "dark" ? "white" : "white"),
-              }, */
-            }}
             paginationModel={paginationModel}
             onPaginationModelChange={setPaginationModel}
             pageSizeOptions={[10, 15, 25]}
@@ -454,3 +495,4 @@ de que las celdas se pinten después de que el componente se monte
 y el DOM esté completamente cargado, también use el evento onRender 
 proporcionado por DataGrid para asegurarme de que las celdas se 
 vuelvan a pintar cada vez que se renderiza el componente. */
+
