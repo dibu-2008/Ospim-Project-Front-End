@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Typography, TextField, Button, MenuItem, FormControl, InputLabel, Select, Box, Grid } from '@mui/material';
-import { generarBoletaSinDDJJ, axiosOtrosPagos } from './OtrosPagosApi';
+import { downloadPdfDetalle, axiosOtrosPagos } from './OtrosPagosApi';
 
 import "./OtrosPagos.css"
 
@@ -38,10 +38,12 @@ export const GenerarOtrosPagos = () => {
             importe
             
         }
-        generarBoletaSinDDJJ(ID_EMPRESA, body)
-        
+        //generarBoletaSinDDJJ(ID_EMPRESA, body)
+        downloadPdfDetalle()
         console.log();
     };
+
+    
 
     return (
         <Box p={3} className="otros_pagos_container">
@@ -146,7 +148,7 @@ export const GenerarOtrosPagos = () => {
                         <Button 
                         variant="contained" 
                         disabled={ !periodo || !intencionDePago || !entidad || !razonPago || !importe } 
-                        onClick={handleImprimir}>Imprimir</Button>
+                        onClick={downloadPdfDetalle}>Imprimir</Button>
                     </Box>
                 </Grid>
             </Grid>

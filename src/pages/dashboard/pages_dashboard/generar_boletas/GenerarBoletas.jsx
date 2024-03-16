@@ -5,26 +5,29 @@ import "./GenerarBoletas.css";
 import formatter from "@/common/formatter";
 import { useParams } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';  
+//import { Boletas } from '../boletas/Boletas';
 
 export const GenerarBoletas = () => {
     const { id } = useParams();
 
     const DDJJ_ID = id
-    console.log(DDJJ_ID)
     const ID_EMPRESA = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.empresa.id;
 
     const [ boletas, setBoletas ] = useState({});
     const [ showDetail, setShowDetail ] = useState(false);
     const [ afiliados, setAfiliados ] = useState([]);
     const [ primeraSeleccion, setPrimeraSeleccion ] = useState(true)
+    const [ primeraSeleccionFDP, setPrimeraSeleccionFDP ] = useState(true)
     const [ habilitaBoton, sethabilitaBoton ] = useState(true)
+    const [ selectedFDP, setSelectedFDP ] = useState({})
     const navigate = useNavigate();  
 
     useEffect(() => {
         const fetchData = async () => {
           try {
             const data = await axiosGenerarBoletas.getBoletasByDDJJid(ID_EMPRESA,DDJJ_ID);
-            setBoletas(data)
+            setDefaultFDP(data)
+            //setBoletas(data)
             setAfiliados(ordenarAfiliadosBoletas(data));
           } catch (error) {
             console.error('Error al obtener las boletas:', error);
@@ -35,6 +38,12 @@ export const GenerarBoletas = () => {
         fetchData();
       }, []);
     
+    const setDefaultFDP = (data) => {
+        data.detalle_boletas.forEach(element => element.forma_de_pago = "Ventanilla")
+        setBoletas(data)
+
+    }
+
     const ordenarAfiliadosBoletas = (boletas) =>{
         const afiliados = {};
         boletas.detalle_boletas.forEach(boleta => {
@@ -56,26 +65,48 @@ export const GenerarBoletas = () => {
         const afiliadosArray = Object.values(afiliados);
         return afiliadosArray
     } 
-
+    
     const setInteresInDetalleBoleta = (boletaIndex, response) => {
         const newDetalleBoletas = [...boletas.detalle_boletas];
+        const fdp  = newDetalleBoletas[boletaIndex].forma_de_pago
         newDetalleBoletas[boletaIndex] = response.data;
+        newDetalleBoletas[boletaIndex].forma_de_pago = fdp
         setBoletas({ ...boletas, detalle_boletas: newDetalleBoletas });
-        console.log(boletas)
     }
     
     const setIntencionDePago = async  (codigo, fecha) => {
         if (primeraSeleccion) {
             setPrimeraSeleccion(false);
-            const response = await axiosGenerarBoletas.calcularInteresBoletas(123,DDJJ_ID, fecha)
-
-            setBoletas(prevBoletas => ({...prevBoletas, detalle_boletas:response.data}))
-            sethabilitaBoton(false)
+            const response = await axiosGenerarBoletas.calcularInteresBoletas(123, DDJJ_ID, fecha)
+            const updatedDetalleBoletas = response.data.map((boleta) => {
+                const prevBoleta = boletas.detalle_boletas.find((prevBoleta) => prevBoleta.codigo === boleta.codigo);
+                return { ...boleta, forma_de_pago: prevBoleta ? prevBoleta.forma_de_pago : 'Ventanilla' };
+            });
+            setBoletas((prevBoletas) => ({ ...prevBoletas, detalle_boletas: updatedDetalleBoletas }));
+            sethabilitaBoton(false);
         } else {
             const boletaIndex = boletas.detalle_boletas.findIndex(element => element.codigo === codigo);
-            const response = await axiosGenerarBoletas.calcularInteresBoleta(123, DDJJ_ID, codigo, fecha)
-            setInteresInDetalleBoleta(boletaIndex, response)
-            sethabilitaBoton(false)
+            const response = await axiosGenerarBoletas.calcularInteresBoleta(123, DDJJ_ID, codigo, fecha);
+            setInteresInDetalleBoleta(boletaIndex, response);
+            sethabilitaBoton(false);
+        }
+    };
+
+   const setFormaDePagoInBoleta = (boletaIndex, forma_de_pago) => {
+        const newDetalleBoletas = [...boletas.detalle_boletas];
+        newDetalleBoletas[boletaIndex] = { ...newDetalleBoletas[boletaIndex], forma_de_pago };
+        setBoletas({ ...boletas, detalle_boletas: newDetalleBoletas });
+    }
+
+    const setFormaDePago = (codigo, value) => {
+        if (primeraSeleccionFDP){
+            setSelectedFDP(prevState => ({ ...prevState, [codigo]:value}))
+            const newDetalleBoletas = boletas.detalle_boletas.map(boleta => ({ ...boleta, forma_de_pago: value }));
+            setBoletas({ ...boletas, detalle_boletas: newDetalleBoletas });
+            setPrimeraSeleccionFDP(false)
+        } else {
+            const boletaIndex = boletas.detalle_boletas.findIndex(element => element.codigo === codigo)
+            setFormaDePagoInBoleta(boletaIndex, value)
         }
     }
 
@@ -120,8 +151,8 @@ export const GenerarBoletas = () => {
                         <TableRow>
                             <TableCell>Forma de Pago</TableCell>
                             {boletas.detalle_boletas && boletas.detalle_boletas.map((boleta) => (
-                                <TableCell key={boleta.codigo}>
-                                    <Select defaultValue="Ventanilla">
+                                <TableCell key={boleta.codigo} >
+                                    <Select value={boleta.forma_de_pago || ''} onChange={event=> setFormaDePago(boleta.codigo, event.target.value)}>
                                         <MenuItem value="Ventanilla">Ventanilla</MenuItem>
                                         <MenuItem value="Red Link">Red Link</MenuItem>
                                         <MenuItem value="PagoMisCuentas">PagoMisCuentas</MenuItem>

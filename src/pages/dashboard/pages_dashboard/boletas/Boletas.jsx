@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { TextField, Button, IconButton, Box } from '@mui/material';
 import { Visibility as VisibilityIcon, Print as PrintIcon, Edit as EditIcon } from '@mui/icons-material';
 import { DataGrid } from '@mui/x-data-grid';
-import { useNavigate } from 'react-router-dom';  // Importa useNavigate
+import { useNavigate } from 'react-router-dom';  
 import { getBoletasByEmpresa, downloadPdfBoleta } from './BoletasApi';
 import formatter from "@/common/formatter";
 import './Boletas.css';
@@ -98,12 +98,12 @@ export const Boletas = () => {
         <DataGrid
           rows={boletasVisibles}
           columns={[
-            { field: 'periodo', headerName: 'Periodo', flex: 1 },
+            { field: 'periodo', headerName: 'Periodo', flex: 1, valueFormatter: (params) => params.value.replace('-','/') },
             { field: 'tipo_declaracion', headerName: 'Tipo Declaración Jurada', flex: 1 },
             { field: 'numero_boleta', headerName: 'Número de Boleta', flex: 1 },
             { field: 'descripcion', headerName: 'Concepto', flex: 1 },
-            { field: 'total_acumulado', headerName: 'Importe Boleta', flex: 1 },
-            { field: 'intencion_de_pago', headerName: 'Fecha de Pago', flex: 1 },
+            { field: 'total_acumulado', headerName: 'Importe Boleta', flex: 1, valueFormatter: (params) => formatter.currency.format(params.value) },
+            { field: 'intencion_de_pago', headerName: 'Fecha de Pago', flex: 1, valueFormatter: (params) =>  formatter.date(params.value)},
             { field: 'bep', headerName: 'BEP', flex: 1 },
             {
               field: 'acciones',

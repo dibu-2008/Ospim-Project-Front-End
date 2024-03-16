@@ -296,7 +296,7 @@ module.exports = (req, res, next) => {
       tieneRectificativa();
       break;
     case "GUARDAR-BOLETAS":
-      gurdarBoletas();
+      guardarBoletas();
       break;
     case "FERIADOS-DUPLICAR":
       feriadosDuplicar();
@@ -734,7 +734,7 @@ module.exports = (req, res, next) => {
     return (new Date(dia_mayor) - new Date(dia_menor)) / (1000 * 60 * 60 * 24);
   } 
 
-  function gurdarBoletas(){
+  function guardarBoletas(){
     const numero_boleta = req.app.db.__wrapped__.boletas_guardadas.length
     console.log(req.body)
     req.body.forEach( (element, index) =>{
