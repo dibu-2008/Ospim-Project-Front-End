@@ -21,8 +21,7 @@ import { PDFViewer, PDFDownloadLink } from "@react-pdf/renderer";
 import { MyDocument } from "./MiPdf";
 import Swal from "sweetalert2";
 import dayjs from "dayjs";
-import { useNavigate } from 'react-router-dom';  
-
+import { useNavigate } from "react-router-dom";
 
 function misDDJJColumnaAporteGet(ddjjResponse) {
   //toma todas las ddjj de la consulta de "Mis DDJJ" y arma "vector de Columnas Aportes"
@@ -71,11 +70,12 @@ function castearMisDDJJ(ddjjResponse) {
 
 export const GrillaMisDeclaracionesJuradas = ({
   setDDJJState,
+  setPeriodo,
   rows_mis_ddjj,
   setRowsMisDdjj,
   idEmpresa,
   setTabState,
-  /* setPeriodo,
+  /* 
   handleAcceptPeriodoDDJJ, */
   rowsAltaDDJJ,
   setRowsAltaDDJJ,
@@ -90,15 +90,14 @@ export const GrillaMisDeclaracionesJuradas = ({
 
   let colAportes = [];
 
-  const navigate = useNavigate();  
+  const navigate = useNavigate();
 
   const handleGenerarBoletaClick = (id) => () => {
-    try{
+    try {
       navigate(`/dashboard/generarboletas/${id}`);
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-    
   };
 
   useEffect(() => {
@@ -139,29 +138,23 @@ export const GrillaMisDeclaracionesJuradas = ({
   };
 
   const handleEditClick = (id, row) => async () => {
-    setTabState(0);
-
     const ddjj = await axiosDDJJ.getDDJJ(idEmpresa, id);
     console.log("ddjj: ", ddjj);
 
-    // Aca tambien se deberia de hacer la peticion para obtener los inte por cada DNI
-
     const { periodo, afiliados } = ddjj;
-    const mes = new Date(periodo).getMonth() + 1;
-    const anio = new Date(periodo).getFullYear();
-
-    //setPeriodo(dayjs(`${anio}-${mes + 1}`));
-
-    //handleAcceptPeriodoDDJJ();
 
     setPeticion("PUT");
     // Agregarle a afiliados la propiedad isNew con el valor de false
-    afiliados.forEach((afiliado) => afiliado.isNew = false);
-    
+    afiliados.forEach((afiliado) => (afiliado.isNew = false));
+
     setRowsAltaDDJJ(afiliados);
     setDDJJState(ddjj);
-  };
 
+    console.log("GrillaMisDeclaracionesJuradas.handleEditClick() - periodo: ");
+    console.log(periodo);
+    setPeriodo(periodo);
+    setTabState(0);
+  };
 
   const handleSaveClick = (id) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });

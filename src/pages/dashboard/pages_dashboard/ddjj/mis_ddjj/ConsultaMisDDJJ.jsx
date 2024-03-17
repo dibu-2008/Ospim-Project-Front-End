@@ -15,10 +15,11 @@ import { CSVLink, CSVDownload } from "react-csv";
 import localStorageService from "@/components/localStorage/localStorageService";
 export const MisDeclaracionesJuradas = ({
   setDDJJState,
+  setPeriodo,
   rows_mis_ddjj,
   setRowsMisDdjj,
   setTabState,
-  /* setPeriodo,
+  /* 
   handleAcceptPeriodoDDJJ, */
   rowsAltaDDJJ,
   setRowsAltaDDJJ,
@@ -152,11 +153,12 @@ export const MisDeclaracionesJuradas = ({
       <Stack direction="row" justifyContent="center" alignItems="center">
         <GrillaMisDeclaracionesJuradas
           setDDJJState={setDDJJState}
+          setPeriodo={setPeriodo}
           rows_mis_ddjj={rows_mis_ddjj}
           setRowsMisDdjj={setRowsMisDdjj}
           idEmpresa={ID_EMPRESA}
           setTabState={setTabState}
-          /* setPeriodo={setPeriodo}
+          /* 
           handleAcceptPeriodoDDJJ={handleAcceptPeriodoDDJJ} */
           rowsAltaDDJJ={rowsAltaDDJJ}
           setRowsAltaDDJJ={setRowsAltaDDJJ}

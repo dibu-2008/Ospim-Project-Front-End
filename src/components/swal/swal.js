@@ -25,9 +25,30 @@ const showSwalError = (descripcion) => {
   }
 };
 
+const showSwalErrorBusiness = (descripcion) => {
+  try {
+    console.log("showSwalError - descripcion:" + descripcion);
+    Swal.fire({
+      icon: "error",
+      title: "Error de Validación",
+      text: descripcion,
+      showConfirmButton: true,
+      confirmButtonText: "Aceptar",
+      //timer: 3000,
+    });
+  } catch (error) {
+    console.log("showSwalError-ERROR:");
+    console.log(error);
+  }
+};
+
 const swal = {
   showError: async function (descripcion) {
     return showSwalError(descripcion);
+  },
+
+  showErrorBusiness: async function (descripcion) {
+    return showSwalErrorBusiness(descripcion);
   },
 
   showSuccess: async function (descripcion) {
