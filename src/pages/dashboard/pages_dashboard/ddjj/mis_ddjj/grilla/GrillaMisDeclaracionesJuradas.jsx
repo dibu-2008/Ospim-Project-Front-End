@@ -75,8 +75,8 @@ export const GrillaMisDeclaracionesJuradas = ({
   setRowsMisDdjj,
   idEmpresa,
   setTabState,
-  setPeriodo,
-  handleAcceptPeriodoDDJJ,
+  /* setPeriodo,
+  handleAcceptPeriodoDDJJ, */
   rowsAltaDDJJ,
   setRowsAltaDDJJ,
   setPeticion,
@@ -150,9 +150,9 @@ export const GrillaMisDeclaracionesJuradas = ({
     const mes = new Date(periodo).getMonth() + 1;
     const anio = new Date(periodo).getFullYear();
 
-    setPeriodo(dayjs(`${anio}-${mes + 1}`));
+    //setPeriodo(dayjs(`${anio}-${mes + 1}`));
 
-    handleAcceptPeriodoDDJJ();
+    //handleAcceptPeriodoDDJJ();
 
     setPeticion("PUT");
     // Agregarle a afiliados la propiedad isNew con el valor de false

@@ -24,15 +24,16 @@ import formatter from "@/common/formatter";
 import localStorageService from "@/components/localStorage/localStorageService";
 import Swal from "sweetalert2";
 import XLSX from "xlsx";
+import { TextFields } from "@mui/icons-material";
 
 export const MisAltaDeclaracionesJuradas = ({
   DDJJState,
   setDDJJState,
-  periodo,
+  /* periodo,
   setPeriodo,
   periodoIso,
   handleChangePeriodo,
-  handleAcceptPeriodoDDJJ,
+  handleAcceptPeriodoDDJJ, */
   rowsAltaDDJJ,
   setRowsAltaDDJJ,
   rowsAltaDDJJAux,
@@ -41,6 +42,7 @@ export const MisAltaDeclaracionesJuradas = ({
   idDDJJ,
 }) => {
 
+  const [periodo, setPeriodo] = useState(null);
   const [otroPeriodo, setOtroPeriodo] = useState(null);
   const [otroPeriodoIso, setOtroPeriodoIso] = useState(null);
   const [camaras, setCamaras] = useState([]);
@@ -53,11 +55,14 @@ export const MisAltaDeclaracionesJuradas = ({
   const [validacionResponse, setValidacionResponse] = useState([]);
   const [afiliadoImportado, setAfiliadoImportado] = useState([]);
   const [filasDoc, setFilasDoc] = useState([]);
+  const [ocultarGrillaPaso3, setOcultarGrillaPaso3] = useState(false);
   const ID_EMPRESA = localStorageService.getEmpresaId();
+
+  const handleChangePeriodo = (date) => setPeriodo(date);
 
   const handleChangeOtroPeriodo = (date) => setOtroPeriodo(date);
 
-  const handleAcceptOtroPeriodo = () => {
+  /* const handleAcceptOtroPeriodo = () => {
     if (otroPeriodo && otroPeriodo.$d) {
       const { $d: fecha } = otroPeriodo;
       const fechaFormateada = new Date(fecha);
@@ -69,7 +74,7 @@ export const MisAltaDeclaracionesJuradas = ({
       const fechaISO = fechaFormateada.toISOString(); // 2026-02-01T00:00:00.000Z
       setOtroPeriodoIso(fechaISO);
     }
-  };
+  }; */
 
   useEffect(() => {
     const ObtenerCamaras = async () => {
@@ -130,9 +135,9 @@ export const MisAltaDeclaracionesJuradas = ({
     // Si alguno de los cuiles el valor de cuilesValidados es igual a false
     if (cuilesResponse.some((item) => item.cuilValido === false)) {
 
-      const cuilFallido = cuilesResponse.filter(
-        (item) => item.cuilValido === false
-      );
+      /*  const cuilFallido = cuilesResponse.filter(
+         (item) => item.cuilValido === false
+       ); */
 
 
       const mensajesFormateados2 = filasDoc.map((item) => {
@@ -169,6 +174,7 @@ export const MisAltaDeclaracionesJuradas = ({
       setRowsAltaDDJJ(afiliadoImportadoConInte);
     }
     setRowsAltaDDJJAux(afiliadoImportadoConInte);
+    setOcultarGrillaPaso3(true);
   };
 
   const formatearFecha = (fecha) => {
@@ -201,14 +207,6 @@ export const MisAltaDeclaracionesJuradas = ({
           console.log("Columnas completas");
           const arraySinEncabezado = rows.slice(1);
 
-          // recorrer el array rows armar de cada array un objeto con 
-          /*
-            {
-              indice: index + 1,
-              cuil: item[0],
-            }
-          */
-
           rows.forEach((item, index) => {
 
             const fila = {
@@ -217,10 +215,8 @@ export const MisAltaDeclaracionesJuradas = ({
             }
 
             setFilasDoc([...filasDoc, fila]);
-            
+
           })
-
-
 
           const arrayTransformado = arraySinEncabezado.map((item, index) => {
             return {
@@ -265,7 +261,7 @@ export const MisAltaDeclaracionesJuradas = ({
     console.log(rowsAltaDDJJ)
 
     const DDJJ = {
-      periodo: periodoIso,
+      periodo: periodo,
       afiliados: rowsAltaDDJJ.map((item) => {
         console.log("DENTRO DE ROWS ALTA DDJJ");
         console.log(item)
@@ -412,7 +408,7 @@ export const MisAltaDeclaracionesJuradas = ({
             }
           >
             <DemoContainer components={["DatePicker"]}>
-              <DesktopDatePicker
+              {/* <DesktopDatePicker
                 label={"Periodo"}
                 views={["month", "year"]}
                 closeOnSelect={false}
@@ -420,6 +416,13 @@ export const MisAltaDeclaracionesJuradas = ({
                 value={periodo}
                 slotProps={{ actionBar: { actions: ["cancel", "accept"] } }}
                 onAccept={handleAcceptPeriodoDDJJ}
+              /> */}
+              <DatePicker
+                label={"Periodo"}
+                views={["month", "year"]}
+                closeOnSelect={true}
+                onChange={handleChangePeriodo}
+                value={periodo}
               />
             </DemoContainer>
           </LocalizationProvider>
@@ -488,7 +491,7 @@ export const MisAltaDeclaracionesJuradas = ({
                         .localeText
                     }
                   >
-                    <DesktopDatePicker
+                    {/* <DesktopDatePicker
                       label={"Otro Periodo"}
                       views={["month", "year"]}
                       closeOnSelect={false}
@@ -498,6 +501,13 @@ export const MisAltaDeclaracionesJuradas = ({
                         actionBar: { actions: ["cancel", "accept"] },
                       }}
                       onAccept={handleAcceptOtroPeriodo}
+                    /> */}
+                    <DatePicker
+                      label={"Periodo"}
+                      views={["month", "year"]}
+                      closeOnSelect={true}
+                      onChange={handleChangePeriodo}
+                      value={otroPeriodo}
                     />
                   </LocalizationProvider>
                 </Stack>
@@ -523,51 +533,58 @@ export const MisAltaDeclaracionesJuradas = ({
               padding: "6px 23px",
               marginLeft: "468px",
             }}
+            onClick={() => setOcultarGrillaPaso3(!ocultarGrillaPaso3)}
           >
             Seleccionar
           </Button>
         </div>
       </div>
 
-      <div className="formulario_container">
-        <h5 className="paso">Paso 3 - Completar el formulario</h5>
-        <GrillaPasoTres
-          rowsAltaDDJJ={rowsAltaDDJJ}
-          setRowsAltaDDJJ={setRowsAltaDDJJ}
-          rowsAltaDDJJAux={rowsAltaDDJJAux}
-          setRowsAltaDDJJAux={setRowsAltaDDJJAux}
-          camaras={camaras}
-          categoriasFiltradas={categoriasFiltradas}
-          setCategoriasFiltradas={setCategoriasFiltradas}
-          afiliado={afiliado}
-          setAfiliado={setAfiliado}
-          todasLasCategorias={todasLasCategorias}
-          plantas={plantas}
-          validacionResponse={validacionResponse}
-        />
-        <div
-          className="botones_container"
-          style={{
-            display: "flex",
-            justifyContent: "flex-end",
-            marginTop: "20px",
-          }}
-        >
-          <Button
-            variant="contained" // Si quito esto se ve mejor ?????
-            sx={{ padding: "6px 52px", marginLeft: "10px" }}
-            onClick={guardarDeclaracionJurada}
-          >
-            Guardar
-          </Button>
-          <Button
-            variant="contained"
-            sx={{ padding: "6px 52px", marginLeft: "10px" }}
-          >
-            Presentar
-          </Button>
-        </div>
-      </div>
+      {
+        ocultarGrillaPaso3 && (
+          <div className="formulario_container">
+            <h5 className="paso">Paso 3 - Completar el formulario</h5>
+
+            <GrillaPasoTres
+              rowsAltaDDJJ={rowsAltaDDJJ}
+              setRowsAltaDDJJ={setRowsAltaDDJJ}
+              rowsAltaDDJJAux={rowsAltaDDJJAux}
+              setRowsAltaDDJJAux={setRowsAltaDDJJAux}
+              camaras={camaras}
+              categoriasFiltradas={categoriasFiltradas}
+              setCategoriasFiltradas={setCategoriasFiltradas}
+              afiliado={afiliado}
+              setAfiliado={setAfiliado}
+              todasLasCategorias={todasLasCategorias}
+              plantas={plantas}
+              validacionResponse={validacionResponse}
+            />
+
+            <div
+              className="botones_container"
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                marginTop: "20px",
+              }}
+            >
+              <Button
+                variant="contained" // Si quito esto se ve mejor ?????
+                sx={{ padding: "6px 52px", marginLeft: "10px" }}
+                onClick={guardarDeclaracionJurada}
+              >
+                Guardar
+              </Button>
+              <Button
+                variant="contained"
+                sx={{ padding: "6px 52px", marginLeft: "10px" }}
+              >
+                Presentar
+              </Button>
+            </div>
+          </div>
+        )
+      }
     </div>
   );
 };

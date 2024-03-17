@@ -83,10 +83,11 @@ export const presentarDeclaracionJurada = async (empresaId, ddjjId) => {
   const URL = `/empresa/${empresaId}/ddjj/${ddjjId}/presentar`;
   try {
     const response = await oAxios.patch(URL);
-    if (response.status === 200) {
+    if (response.status === 200 || response.status === 204) {
       swal.showSuccess(HTTP_MSG_MODI);
       return true;
     }
+    throw response;
   } catch (error) {
     showErrorBackEnd(HTTP_MSG_MODI_ERROR, error);
     return [];
