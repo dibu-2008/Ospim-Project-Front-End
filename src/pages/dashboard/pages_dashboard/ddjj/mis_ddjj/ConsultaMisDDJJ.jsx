@@ -18,8 +18,8 @@ export const MisDeclaracionesJuradas = ({
   rows_mis_ddjj,
   setRowsMisDdjj,
   setTabState,
-  setPeriodo,
-  handleAcceptPeriodoDDJJ,
+  /* setPeriodo,
+  handleAcceptPeriodoDDJJ, */
   rowsAltaDDJJ,
   setRowsAltaDDJJ,
   setPeticion,
@@ -156,8 +156,8 @@ export const MisDeclaracionesJuradas = ({
           setRowsMisDdjj={setRowsMisDdjj}
           idEmpresa={ID_EMPRESA}
           setTabState={setTabState}
-          setPeriodo={setPeriodo}
-          handleAcceptPeriodoDDJJ={handleAcceptPeriodoDDJJ}
+          /* setPeriodo={setPeriodo}
+          handleAcceptPeriodoDDJJ={handleAcceptPeriodoDDJJ} */
           rowsAltaDDJJ={rowsAltaDDJJ}
           setRowsAltaDDJJ={setRowsAltaDDJJ}
           setPeticion={setPeticion}
