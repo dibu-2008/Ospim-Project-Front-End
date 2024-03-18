@@ -81,7 +81,7 @@ export const Feriados = () => {
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
   const [paginationModel, setPaginationModel] = useState({
-    pageSize: 10,
+    pageSize: 50,
     page: 0,
   });
 
@@ -374,7 +374,7 @@ export const Feriados = () => {
             }}
             paginationModel={paginationModel}
             onPaginationModelChange={setPaginationModel}
-            pageSizeOptions={[10, 15, 25]}
+            pageSizeOptions={[50, 75, 100]}
           />
         </ThemeProvider>
       </Box>
