@@ -53,7 +53,8 @@ const ordernarBoletas = (boletas) => {
     const newArray = boletas.detalle_boletas.map(detalle => ({
         ...detalle,
         declaracion_jurada_id: boletas.declaracion_jurada_id,
-        periodo: boletas.periodo
+        periodo: boletas.periodo,
+        tipo_ddjj: boletas.tipo_ddjj
     }));
     return newArray;
 }
@@ -64,7 +65,7 @@ export const generarBoletasPost = async (empresa_id, ddjj_id,boletas)=>{
         const arr_boletas = ordernarBoletas(boletas)
         
         const response = await axiosCrud.crear(URL, arr_boletas)
-        
+        //console.log(arr_boletas)
         if (response) {
             window.location.href = "/dashboard/boletas";
         } else {

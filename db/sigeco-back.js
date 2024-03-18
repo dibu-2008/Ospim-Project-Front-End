@@ -206,10 +206,20 @@ module.exports = (req, res, next) => {
     if (req.method === "GET" && req.url.startsWith("/empresa/periodo/tiene-rectificativa")){
       return "TIENE-RECTIFICATIVA"
     }
+    if (req.method === "GET" && req.url.startsWith("/empresa/generar-sin-ddjj")){
+      return "GENERAR-SIN-DDJJ"
+    }
     if (req.method === "POST" && req.url.startsWith("/empresa/ddjj/guardar-boletas")){
       return "GUARDAR-BOLETAS"
     }
-      return "----";
+    if (req.method === "GET" && req.url.startsWith("/empresa/numero-boleta")){
+      return "GET-BOLETA-BY-ID"
+    }
+    if (req.method === "POST" && req.url.startsWith("/empresa/numero_boleta/modificar")){
+      console.log("entramos")
+      return "MODIFICAR-BOLETA-BY-ID"
+    }
+    return "----";
   }
 
   switch (getAPI(req, res)) {
@@ -298,9 +308,18 @@ module.exports = (req, res, next) => {
     case "GUARDAR-BOLETAS":
       guardarBoletas();
       break;
+    case "GENERAR-SIN-DDJJ":
+      getBoletaSinDDJJ();
+      break;
     case "FERIADOS-DUPLICAR":
       feriadosDuplicar();
       break;  
+    case "GET-BOLETA-BY-ID":
+      getBoletaById();
+      break;
+    case "MODIFICAR-BOLETA-BY-ID":
+      modificarBoletaById();
+      break;
     case "OSPIM-CONTACTO":
       getOspimContacto();
     case "----":
@@ -793,15 +812,13 @@ module.exports = (req, res, next) => {
   }
 
   function getBoletaDetalleImpresa(){
-    console.log("entre en impresion detalle de boleta")
     const file = `${__dirname}/detalle_boleta.pdf`;
-    res.download(file); // Set disposition and send it.
+    res.download(file); 
   }
 
   function getBoletaImpresa(){
-    console.log("entre en impresion de boleta")
     const file = `${__dirname}/boletas.pdf`;
-    res.download(file); // Set disposition and send it.
+    res.download(file); 
   }
 
   function tieneRectificativa(){
@@ -809,5 +826,29 @@ module.exports = (req, res, next) => {
     const rectificativa = empresaId == 1 && periodo == '2024-01'
     
     res.status(200).jsonp({rectificativa})
+  }
+  
+  function getBoletaSinDDJJ(){
+    const file = `${__dirname}/boleta_blanca.pdf`;
+    res.download(file); // Set disposition and send it.
+  }
+
+  function getBoletaById(){
+    const { numeroBoleta } = req.query
+    const boleta = req.app.db.__wrapped__.boletas_guardadas.find(boleta => boleta.numero_boleta == numeroBoleta )  
+    res.status(200).jsonp(boleta)
+  }
+  
+  function  modificarBoletaById(){
+    const { numeroBoleta } = req.query
+    const index = req.app.db.__wrapped__.boletas_guardadas.findIndex(element => element.numero_boleta == numeroBoleta) ;
+    req.app.db.__wrapped__.boletas_guardadas.forEach(element => console.log(element.numero_boleta))
+    try {
+      req.app.db.__wrapped__.boletas_guardadas[index] = req.body
+      req.app.db.write()  
+      res.status(200).send(null)
+    } catch (error) {
+      res.status(404)
+    }
   }
 };

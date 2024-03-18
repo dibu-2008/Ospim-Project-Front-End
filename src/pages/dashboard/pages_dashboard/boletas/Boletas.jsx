@@ -18,7 +18,7 @@ export const Boletas = () => {
 
 
   useEffect(() => {
-    console.log()
+    
     const fetchData = async () => {
       try {
         const response = await getBoletasByEmpresa(ID_EMPRESA);
@@ -27,6 +27,7 @@ export const Boletas = () => {
         //setBoletasVisibles(response.data.flatMap((boleta) => boleta.detalle_boletas.map((boletaDetalle, index) => ({ ...boletaDetalle, id: `${boleta.id}-${index}` }))));
         setBoletasVisibles(response.data.flatMap((boleta) => ({ ...boleta, id: `${boleta.numero_boleta}` })));
         //setBoletasVisibles(response.data)
+        console.log(boletas)
       } catch (error) {
         console.error('Error al obtener las boletas:', error);
       }
@@ -36,14 +37,13 @@ export const Boletas = () => {
   }, []);
 
   const handleViewClick = (boletaDetalle) => {
-    
-    localStorage.setItem("boletaDetalle" , JSON.stringify(boletaDetalle))
-    navigate('/dashboard/detalleboleta' );  
+    console.log(boletaDetalle.numero_boleta)
+    //localStorage.setItem("boletaDetalle" , JSON.stringify(boletaDetalle))
+    navigate(`/dashboard/detalleboleta/${boletaDetalle.numero_boleta}` );  
   };
 
   const handleSearch = () => {
     const filteredBoletas = boletas.filter((boleta) => {
-      //const fecha = boleta.detalle_boletas[0].periodo;
       const fecha = boleta.periodo;
       const [mes, anio] = fecha.split('-');
       const timestamp = new Date(`${anio}-${mes}-01`);
@@ -98,13 +98,15 @@ export const Boletas = () => {
         <DataGrid
           rows={boletasVisibles}
           columns={[
-            { field: 'periodo', headerName: 'Periodo', flex: 1, valueFormatter: (params) => params.value.replace('-','/') },
-            { field: 'tipo_declaracion', headerName: 'Tipo Declaración Jurada', flex: 1 },
-            { field: 'numero_boleta', headerName: 'Número de Boleta', flex: 1 },
+            { field: 'periodo', headerName: 'Periodo', flex: 0.8, valueFormatter: (params) => params.value?params.value.replace('-','/'):'' },
+            { field: 'tipo_ddjj', headerName: 'Tipo DDJJ', flex: 1 },
+            { field: 'numero_boleta', headerName: 'Número', flex: 0.8 },
             { field: 'descripcion', headerName: 'Concepto', flex: 1 },
-            { field: 'total_acumulado', headerName: 'Importe Boleta', flex: 1, valueFormatter: (params) => formatter.currency.format(params.value) },
-            { field: 'intencion_de_pago', headerName: 'Fecha de Pago', flex: 1, valueFormatter: (params) =>  formatter.date(params.value)},
-            { field: 'bep', headerName: 'BEP', flex: 1 },
+            { field: 'total_acumulado', headerName: 'Importe Boleta', flex: 1, valueFormatter: (params) => params.value?formatter.currency.format(params.value):'' },
+            { field: 'importe_recibido', headerName: 'Importe Recibido', flex: 1, valueFormatter: (params) => params.value?formatter.currency.format(params.value):''},
+            { field: 'fecha_de_pago', headerName: 'Fecha de Pago', flex: 1, valueFormatter: (params) => params.value?formatter.date(params.value):''},
+            { field: 'intencion_de_pago', headerName: 'Intencion de Pago', flex: 1, valueFormatter: (params) =>  params.value?formatter.date(params.value):''},
+            { field: 'forma_de_pago', headerName: 'Metodo de Pago', flex: 0.8 },
             {
               field: 'acciones',
               headerName: 'Acciones',
@@ -117,7 +119,7 @@ export const Boletas = () => {
                   <IconButton size='small' onClick={downloadPdfBoleta}>
                     <PrintIcon />
                   </IconButton>
-                  <IconButton size='small'>
+                  <IconButton size='small' onClick={()=> handleViewClick(params.row) } disabled = {!!params.row.fecha_de_pago}>
                     <EditIcon />
                   </IconButton>
                 </>

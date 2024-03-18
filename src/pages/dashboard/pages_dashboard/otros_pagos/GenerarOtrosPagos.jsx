@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Typography, TextField, Button, MenuItem, FormControl, InputLabel, Select, Box, Grid } from '@mui/material';
-import { downloadPdfDetalle, axiosOtrosPagos } from './OtrosPagosApi';
-
+import { downloadPdfBoletaBlanca, axiosOtrosPagos } from './OtrosPagosApi';
+import formatter from "@/common/formatter";
 import "./OtrosPagos.css"
 
 
@@ -9,41 +9,24 @@ export const GenerarOtrosPagos = () => {
     
     const [intencionDePago, setIntencionDePago] = useState('');
     const [entidad, setEntidad] = useState('');
-    const [razonPago, setRazonPago] = useState('');
     const [nroActa, setNroActa] = useState('');
     const [importe, setImporte] = useState('');
-    const [conceptoUOMA, setConceptoUOMA] = useState('');
-    const [periodo, setPeriodo] = useState('')
-    const [rectificativa, setRectificativa] = useState(false)
-    const [cuota, setCuota] = useState('')
-
+    const [periodo, setPeriodo] = useState('');
+    
     const ID_EMPRESA = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.empresa.id;
-    
 
-    
-    const handleChangePeriodo = async (fecha) => {
-        setPeriodo(fecha)
-        const isRectificativa = await axiosOtrosPagos.tieneRectificativa(ID_EMPRESA, fecha)
-        setRectificativa(isRectificativa.rectificativa)
-    }
 
     const handleImprimir = () => {
-
         const body = {
-            conceptoUOMA,
-            intencionDePago,
             entidad,
-            razonPago,
+            periodo,
             nroActa,
-            importe
-            
+            importe,
+            razon_de_pago: 'Nro Acta: ' + nroActa 
         }
-        //generarBoletaSinDDJJ(ID_EMPRESA, body)
-        downloadPdfDetalle()
-        console.log();
+        downloadPdfBoletaBlanca(ID_EMPRESA)
+        console.log(body);
     };
-
-    
 
     return (
         <Box p={3} className="otros_pagos_container">
@@ -55,7 +38,7 @@ export const GenerarOtrosPagos = () => {
                         type="month"
                         fullWidth
                         value={periodo}
-                        onChange={(e) => handleChangePeriodo(e.target.value)}
+                        onChange={(e) => setPeriodo(e.target.value)}
                         InputLabelProps={{
                             shrink: true,
                         }}
@@ -63,7 +46,7 @@ export const GenerarOtrosPagos = () => {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <TextField
-                        label="Fecha de Pago"
+                        label="Fecha intension de Pago"
                         type="date"
                         fullWidth
                         value={intencionDePago}
@@ -87,53 +70,14 @@ export const GenerarOtrosPagos = () => {
                     </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <FormControl fullWidth>
-                        <InputLabel>Razón de Pago</InputLabel>
-                        <Select
-                            value={razonPago}
-                            onChange={(e) => setRazonPago(e.target.value)}
-                        >
-                            <MenuItem value="Acta">Acta</MenuItem>
-                            {rectificativa && <MenuItem value="Rectificativa">Rectificativa</MenuItem>}
-                            <MenuItem value="Acuerdo de Pago">Acuerdo de Pago</MenuItem>
-                        </Select>
-                    </FormControl>
+                    <TextField
+                        label="Nro Acta"
+                        fullWidth
+                        type='number'
+                        value={nroActa}
+                        onChange={(e) => setNroActa(e.target.value)}
+                    />
                 </Grid>
-                {entidad === "UOMA" && (
-                    <Grid item xs={12} sm={6}>
-                        <FormControl fullWidth>
-                            <InputLabel>Tipo de Pago UOMA</InputLabel>
-                            <Select
-                                value={conceptoUOMA}
-                                onChange={(e) => setConceptoUOMA(e.target.value)}
-                            >
-                                <MenuItem value="Cuota Social">Cuota Social</MenuItem>
-                                <MenuItem value="Solidario">Solidario</MenuItem>
-                                <MenuItem value="Usufructo">Usufructo</MenuItem>
-                                <MenuItem value="Art.46">Art.46</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                )}
-                {razonPago !== "Rectificativa" &&
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            label="Nro Acta"
-                            fullWidth
-                            value={nroActa}
-                            onChange={(e) => setNroActa(e.target.value)}
-                        />
-                    </Grid>}
-                    {razonPago !== "Acuerdo de Pago" &&
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            label="Cuota"
-                            fullWidth
-                            value={cuota}
-                            onChange={(e) => setCuota(e.target.value)}
-                        />
-                    </Grid>}
-
                 <Grid item xs={12}>
                     <TextField
                         label="Importe"
@@ -147,8 +91,8 @@ export const GenerarOtrosPagos = () => {
                     <Box display="flex" justifyContent="flex-end">
                         <Button 
                         variant="contained" 
-                        disabled={ !periodo || !intencionDePago || !entidad || !razonPago || !importe } 
-                        onClick={downloadPdfDetalle}>Imprimir</Button>
+                        disabled={ !periodo || !intencionDePago || !entidad || !importe } 
+                        onClick={handleImprimir}>Imprimir</Button>
                     </Box>
                 </Grid>
             </Grid>

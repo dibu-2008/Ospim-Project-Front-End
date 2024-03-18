@@ -19,7 +19,7 @@ export const GenerarBoletas = () => {
     const [ primeraSeleccion, setPrimeraSeleccion ] = useState(true)
     const [ primeraSeleccionFDP, setPrimeraSeleccionFDP ] = useState(true)
     const [ habilitaBoton, sethabilitaBoton ] = useState(true)
-    const [ selectedFDP, setSelectedFDP ] = useState({})
+    const [ selectedFDP, setSelectedFDP ] = useState({}) // esto tengo que revisar si sigue siendo necesario
     const navigate = useNavigate();  
 
     useEffect(() => {
@@ -27,8 +27,11 @@ export const GenerarBoletas = () => {
           try {
             const data = await axiosGenerarBoletas.getBoletasByDDJJid(ID_EMPRESA,DDJJ_ID);
             setDefaultFDP(data)
-            //setBoletas(data)
+            
             setAfiliados(ordenarAfiliadosBoletas(data));
+            setPrimeraSeleccion(true)
+            setPrimeraSeleccionFDP(true)
+            sethabilitaBoton(true)
           } catch (error) {
             console.error('Error al obtener las boletas:', error);
             navigate(`/dashboard/ddjj`);
@@ -39,9 +42,8 @@ export const GenerarBoletas = () => {
       }, []);
     
     const setDefaultFDP = (data) => {
-        data.detalle_boletas.forEach(element => element.forma_de_pago = "Ventanilla")
+        data.detalle_boletas.forEach(element => element.forma_de_pago = "Ventanilla" )
         setBoletas(data)
-
     }
 
     const ordenarAfiliadosBoletas = (boletas) =>{
@@ -73,6 +75,13 @@ export const GenerarBoletas = () => {
         newDetalleBoletas[boletaIndex].forma_de_pago = fdp
         setBoletas({ ...boletas, detalle_boletas: newDetalleBoletas });
     }
+
+    const checkFields = () => {        
+        boletas.detalle_boletas.forEach(boleta =>{
+            if (boleta.intencion_de_pago === '') return true    
+        })
+        return false
+    }
     
     const setIntencionDePago = async  (codigo, fecha) => {
         if (primeraSeleccion) {
@@ -83,7 +92,7 @@ export const GenerarBoletas = () => {
                 return { ...boleta, forma_de_pago: prevBoleta ? prevBoleta.forma_de_pago : 'Ventanilla' };
             });
             setBoletas((prevBoletas) => ({ ...prevBoletas, detalle_boletas: updatedDetalleBoletas }));
-            sethabilitaBoton(false);
+            sethabilitaBoton(checkFields());
         } else {
             const boletaIndex = boletas.detalle_boletas.findIndex(element => element.codigo === codigo);
             const response = await axiosGenerarBoletas.calcularInteresBoleta(123, DDJJ_ID, codigo, fecha);
@@ -100,7 +109,7 @@ export const GenerarBoletas = () => {
 
     const setFormaDePago = (codigo, value) => {
         if (primeraSeleccionFDP){
-            setSelectedFDP(prevState => ({ ...prevState, [codigo]:value}))
+            //setSelectedFDP(prevState => ({ ...prevState, [codigo]:value}))
             const newDetalleBoletas = boletas.detalle_boletas.map(boleta => ({ ...boleta, forma_de_pago: value }));
             setBoletas({ ...boletas, detalle_boletas: newDetalleBoletas });
             setPrimeraSeleccionFDP(false)

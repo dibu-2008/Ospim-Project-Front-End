@@ -54,7 +54,9 @@
   "/empresa/:empresaId/boletas":"/boletas_guardadas",
   "/empresa/:empresaId/ddjj/:Id/boleta-pago/concepto/:concepto/imprimir-detalle":"/empresa/ddjj/boleta-pago/concepto/imprimir-detalle",
   "/empresa/:empresaId/ddjj/:Id/boleta-pago/concepto/:concepto/imprimir-boleta":"/empresa/ddjj/boleta-pago/concepto/imprimir-boleta",
-  "/empresa/:empresaId/periodo/:periodo/tiene-rectificativa" :"/empresa/periodo/tiene-rectificativa?empresaId=:empresaId&periodo=:periodo"
-
+  "/empresa/:empresaId/generar-sin-ddjj":"/empresa/generar-sin-ddjj",
+  "/empresa/:empresaId/periodo/:periodo/tiene-rectificativa" :"/empresa/periodo/tiene-rectificativa?empresaId=:empresaId&periodo=:periodo",
+  "/empresa/:empresaId/numero-boleta/:numeroBoleta" : "/empresa/numero-boleta/?numeroBoleta=:numeroBoleta",
+  "/empresa/:empresaId/numero-boleta/:numeroBoleta/modificar" : "/empresa/numero_boleta/modificar/?numeroBoleta=:numeroBoleta"
 
 }
