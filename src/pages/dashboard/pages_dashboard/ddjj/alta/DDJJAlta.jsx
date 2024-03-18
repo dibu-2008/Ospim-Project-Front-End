@@ -57,7 +57,11 @@ export const MisAltaDeclaracionesJuradas = ({
   const [ocultarGrillaPaso3, setOcultarGrillaPaso3] = useState(false);
   const ID_EMPRESA = localStorageService.getEmpresaId();
 
-  const handleChangePeriodo = (date) => setPeriodo(date);
+  const handleChangePeriodo = (date) => {
+    setPeriodo(date)
+    console.log("SSSSSSSSSSSSSSSSS")
+    console.log(periodo)
+  };
 
   const handleChangeOtroPeriodo = (date) => setOtroPeriodo(date);
 
@@ -236,6 +240,16 @@ export const MisAltaDeclaracionesJuradas = ({
   const guardarDeclaracionJurada = async () => {
     console.log("GUARDAR DECLARACION JURADA");
     console.log(rowsAltaDDJJ);
+    console.log(periodo)
+    console.log(DDJJState);
+    // si periodo la DDJJState tiene id modifico a periodo
+    if(DDJJState && DDJJState.id){
+      console.log("Tiene id la ddjj")
+      setPeriodo(DDJJState.periodo)
+      console.log(periodo)
+    }
+
+    console.log(periodo);
 
     let DDJJ = {
       periodo: periodo,
@@ -257,8 +271,8 @@ export const MisAltaDeclaracionesJuradas = ({
           categoria: !item.categoria ? null : item.categoria,
           remunerativo: !item.remunerativo ? null : item.remunerativo,
           noRemunerativo: !item.noRemunerativo ? null : item.noRemunerativo,
-          uomaSocio: item.uomaSocio,
-          amtimaSocio: item.amtimaSocio,
+          uomaSocio: !item.uomaSocio ? null : item.uomaSocio,
+          amtimaSocio: !item.amtimaSocio ? null : item.amtimaSocio,
         };
 
         console.log("REGISTRO NEW");
@@ -277,11 +291,9 @@ export const MisAltaDeclaracionesJuradas = ({
 
     // Borrar la propiedad errores de cada afiliado
     // por que no se envia al backend
-    /*
-    let aux = DDJJ.afiliados.map((reg) => {
-      delete reg.errores;
-      return reg;
-    });*/
+    DDJJ.afiliados.forEach((afiliado) => {
+      delete afiliado.errores;
+    });
 
     console.log("borro afiliado.errores - DDJJ:");
     console.log(DDJJ);
@@ -319,7 +331,9 @@ export const MisAltaDeclaracionesJuradas = ({
     });
 
     // Borro la propiedad errores de ddjj
-    delete DDJJ.errores;
+    DDJJ.afiliados.forEach((afiliado) => {
+      delete afiliado.errores;
+    });
 
     setValidacionResponse(validacionResponse); // Sirve para pintar en rojo los campos con errores
 
@@ -351,6 +365,11 @@ export const MisAltaDeclaracionesJuradas = ({
         if (result.isConfirmed) {
           console.log("Aceptar...");
           let bOK = false;
+
+          DDJJ.afiliados.forEach((afiliado) => {
+            delete afiliado.errores;
+          });      
+          
           if (peticion === "PUT") {
             bOK = await axiosDDJJ.actualizar(ID_EMPRESA, DDJJ);
           } else {
@@ -365,13 +384,20 @@ export const MisAltaDeclaracionesJuradas = ({
       });
     } else {
       console.log("no tiene errores...grabo directamente.");
+
+      DDJJ.afiliados.forEach((afiliado) => {
+        delete afiliado.errores;
+      });
+
       if (peticion === "PUT") {
         console.log("Dentro de PUT");
+    
         //await actualizarDeclaracionJurada(ID_EMPRESA, altaDDJJFinal, altaDDJJFinal.id);
         await axiosDDJJ.actualizar(ID_EMPRESA, DDJJ);
         //setRowsAltaDDJJ([]);
         // peticion put con fetch
       } else {
+    
         const data = await axiosDDJJ.crear(ID_EMPRESA, DDJJ);
         console.log(data);
         if (data) {
@@ -414,7 +440,7 @@ export const MisAltaDeclaracionesJuradas = ({
             }
           >
             <DemoContainer components={["DatePicker"]}>
-              <DatePicker
+              <DesktopDatePicker
                 label={"Periodo"}
                 views={["month", "year"]}
                 closeOnSelect={true}

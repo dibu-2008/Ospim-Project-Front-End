@@ -68,10 +68,6 @@ export const DeclaracionesJuradas = () => {
     setTabState(newValue);
   };
 
-  const handleChangePeriodo = (date) => {
-    setPeriodo(date);
-  };
-
   /* const handleAcceptPeriodoDDJJ = () => {
     if (periodo && periodo.$d) {
       const { $d: fecha } = periodo;

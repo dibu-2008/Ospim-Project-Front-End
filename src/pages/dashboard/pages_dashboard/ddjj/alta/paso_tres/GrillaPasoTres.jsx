@@ -59,8 +59,8 @@ function EditToolbar(props) {
         categoria: "",
         remunerativo: "",
         noRemunerativo: "",
-        uomaSocio: false,
-        amtimaSocio: false,
+        uomaSocio: "",
+        amtimaSocio: "",
         isNew: true,
       },
       ...oldRows,
@@ -578,6 +578,9 @@ export const GrillaPasoTres = ({
       align: "center",
       headerClassName: "header--cell",
       valueFormatter: (params) => {
+
+        if(!params.value) return "";
+
         const date = new Date(params.value);
         const day = date.getUTCDate().toString().padStart(2, "0");
         const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
@@ -609,7 +612,10 @@ export const GrillaPasoTres = ({
       headerAlign: "center",
       align: "center",
       headerClassName: "header--cell",
-      valueFormatter: (params) => formatter.currency.format(params.value || 0),
+      valueFormatter: (params) => {
+        if(params.value === "") return "";
+        return formatter.currency.format(params.value || 0)
+      },
     },
     {
       field: "noRemunerativo",
@@ -628,7 +634,10 @@ export const GrillaPasoTres = ({
       headerAlign: "center",
       align: "center",
       headerClassName: "header--cell",
-      valueFormatter: (params) => formatter.currency.format(params.value || 0),
+      valueFormatter: (params) => {
+        if(params.value === "") return "";  
+        return formatter.currency.format(params.value || 0)
+      },
     },
     {
       field: "uomaSocio",

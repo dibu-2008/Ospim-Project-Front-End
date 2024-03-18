@@ -23,6 +23,7 @@ import Swal from "sweetalert2";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 
+
 function misDDJJColumnaAporteGet(ddjjResponse) {
   //toma todas las ddjj de la consulta de "Mis DDJJ" y arma "vector de Columnas Aportes"
   //Ejemplo: ['UOMACU', 'ART46', 'UOMASC']
@@ -143,6 +144,14 @@ export const GrillaMisDeclaracionesJuradas = ({
 
     const { periodo, afiliados } = ddjj;
 
+    const fecha = formatter.periodo(periodo);
+
+    const [mes, anio] = fecha.split("/");
+    const fechaNueva = new Date(anio, mes);
+    const year = fechaNueva.getFullYear();
+    const month = fechaNueva.getMonth() + 1;
+    const day = fechaNueva.getDate();
+
     // Agregarle a afiliados la propiedad isNew con el valor de false
     afiliados.forEach((afiliado) => (afiliado.isNew = false));
 
@@ -151,10 +160,10 @@ export const GrillaMisDeclaracionesJuradas = ({
 
     //Actualizo estados de solapa DDJJ y cambio de Tab
     setPeticion("PUT");
-    setPeriodo(periodo);
+    setPeriodo(dayjs(`${year}-${month - 1}-${day}`));
     setRowsAltaDDJJ(afiliados);
     setDDJJState(ddjj);
-    setTabState(0);
+    setTabState(0); 
   };
 
   const handleSaveClick = (id) => () => {
