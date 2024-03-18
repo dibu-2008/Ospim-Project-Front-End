@@ -52,7 +52,6 @@ export const MisDeclaracionesJuradas = ({
   const buscarDeclaracionesJuradas = async () => {
     try {
       const ddjjResponse = await axiosDDJJ.consultar(ID_EMPRESA);
-
       if (desde && desde.$d && hasta && hasta.$d) {
         const { $d: $desde } = desde;
         const { $d: $hasta } = hasta;
@@ -74,6 +73,8 @@ export const MisDeclaracionesJuradas = ({
           );
         });
         setRowsMisDdjj(declaracionesFiltradas);
+      } else {
+        setRowsMisDdjj(ddjjResponse);
       }
     } catch (error) {
       console.error("Error al buscar declaraciones juradas:", error);

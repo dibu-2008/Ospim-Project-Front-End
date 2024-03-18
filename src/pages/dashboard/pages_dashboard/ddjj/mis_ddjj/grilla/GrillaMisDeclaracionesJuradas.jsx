@@ -143,16 +143,17 @@ export const GrillaMisDeclaracionesJuradas = ({
 
     const { periodo, afiliados } = ddjj;
 
-    setPeticion("PUT");
     // Agregarle a afiliados la propiedad isNew con el valor de false
     afiliados.forEach((afiliado) => (afiliado.isNew = false));
 
-    setRowsAltaDDJJ(afiliados);
-    setDDJJState(ddjj);
-
     console.log("GrillaMisDeclaracionesJuradas.handleEditClick() - periodo: ");
     console.log(periodo);
+
+    //Actualizo estados de solapa DDJJ y cambio de Tab
+    setPeticion("PUT");
     setPeriodo(periodo);
+    setRowsAltaDDJJ(afiliados);
+    setDDJJState(ddjj);
     setTabState(0);
   };
 

@@ -257,7 +257,7 @@ export const MisAltaDeclaracionesJuradas = ({
         console.log("DENTRO DE ROWS ALTA DDJJ.c.c.");
         console.log(item);
 
-        const registro = {
+        const registroNew = {
           errores: item.errores,
           cuil: !item.cuil ? null : item.cuil,
           inte: item.inte,
@@ -275,10 +275,10 @@ export const MisAltaDeclaracionesJuradas = ({
           amtimaSocio: item.amtimaSocio,
         };
 
-        console.log("REGISTRO");
-        console.log(registro);
-        if (item.id) registro.id = item.id;
-        return registro;
+        console.log("REGISTRO NEW");
+        console.log(registroNew);
+        if (item.id) registroNew.id = item.id;
+        return registroNew;
       }),
     };
 
@@ -392,6 +392,10 @@ export const MisAltaDeclaracionesJuradas = ({
     }
   };
 
+  const presentarDeclaracionJurada = async () => {};
+
+  console.log("DDJJAlta - rowsAltaDDJJ: ");
+  console.log(rowsAltaDDJJ);
   return (
     <div className="mis_alta_declaraciones_juradas_container">
       <div className="periodo_container">
@@ -538,7 +542,7 @@ export const MisAltaDeclaracionesJuradas = ({
         </div>
       </div>
 
-      {ocultarGrillaPaso3 && (
+      {(ocultarGrillaPaso3 || (rowsAltaDDJJ && rowsAltaDDJJ.length > 0)) && (
         <div className="formulario_container">
           <h5 className="paso">Paso 3 - Completar el formulario</h5>
 
@@ -572,9 +576,11 @@ export const MisAltaDeclaracionesJuradas = ({
             >
               Guardar
             </Button>
+
             <Button
               variant="contained"
               sx={{ padding: "6px 52px", marginLeft: "10px" }}
+              onClick={presentarDeclaracionJurada}
             >
               Presentar
             </Button>
