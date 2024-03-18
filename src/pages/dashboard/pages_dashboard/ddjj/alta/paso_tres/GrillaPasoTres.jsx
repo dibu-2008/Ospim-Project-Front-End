@@ -257,9 +257,13 @@ export const GrillaPasoTres = ({
 
   const processRowUpdate = async (newRow) => {
     if (newRow.isNew) {
-      const fila = { ...newRow, inte: inteDataBase };
+      const fila = { ...newRow, inte: inteDataBase, errores: false };
       console.log("Nueva Fila");
       console.log(fila);
+      console.log("Nueva Fila - newRow: ");
+      console.log(newRow);
+      console.log("Nueva Fila - rowsAltaDDJJ: ");
+      console.log(rowsAltaDDJJ);
 
       setRowsAltaDDJJ(
         rowsAltaDDJJ.map((row) => (row.id === newRow.id ? fila : row))
@@ -269,7 +273,7 @@ export const GrillaPasoTres = ({
         rowsAltaDDJJAux.map((row) => (row.id === newRow.id ? fila : row))
       );
 
-      return { ...newRow, isNew: false };
+      return { ...fila, isNew: false };
     } else {
       const fila = { ...newRow, inte: inteDataBase };
       console.log("Fila a modificar");

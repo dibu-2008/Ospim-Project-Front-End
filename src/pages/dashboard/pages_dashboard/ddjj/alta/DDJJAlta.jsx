@@ -301,6 +301,7 @@ export const MisAltaDeclaracionesJuradas = ({
     console.log(DDJJ);
 
     const validacionResponse = await axiosDDJJ.validar(ID_EMPRESA, DDJJ);
+    console.log("validacionResponse: ");
     console.log(validacionResponse);
 
     // array de cuiles del array validacionResponse.errores
@@ -308,11 +309,17 @@ export const MisAltaDeclaracionesJuradas = ({
     if (validacionResponse.errores) {
       cuilesConErrores = validacionResponse.errores.map((error) => error.cuil);
     }
+    console.log("cuilesConErrores: ");
+    console.log(cuilesConErrores);
 
     // Agregar la propiedad errores="No"
     DDJJ.afiliados.forEach((afiliado) => {
-      if (!cuilesConErrores.includes(afiliado.cuil)) {
-        afiliado.errores = false;
+      console.log("afiliado.cuil: ");
+      console.log(afiliado.cuil);
+      afiliado.errores = false;
+      if (cuilesConErrores.includes(afiliado.cuil)) {
+        console.log("afiliado.errores:false");
+        afiliado.errores = true;
       }
     });
 
@@ -396,6 +403,17 @@ export const MisAltaDeclaracionesJuradas = ({
 
   console.log("DDJJAlta - rowsAltaDDJJ: ");
   console.log(rowsAltaDDJJ);
+  console.log("DDJJAlta - DDJJState: ");
+  console.log(DDJJState);
+  let formNro = "Formulario: Original";
+  if (DDJJState && DDJJState.secuencia) {
+    if (DDJJState.secuencia == 0) {
+      formNro = "Formulario: Original";
+    } else {
+      formNro = "Formulario: Rectif. " + DDJJState.secuencia;
+    }
+  }
+
   return (
     <div className="mis_alta_declaraciones_juradas_container">
       <div className="periodo_container">
@@ -428,6 +446,7 @@ export const MisAltaDeclaracionesJuradas = ({
               />
             </DemoContainer>
           </LocalizationProvider>
+          {formNro}
         </Stack>
       </div>
 
