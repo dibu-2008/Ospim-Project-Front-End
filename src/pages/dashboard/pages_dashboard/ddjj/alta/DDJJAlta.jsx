@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Stack } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -60,20 +60,6 @@ export const MisAltaDeclaracionesJuradas = ({
   const handleChangePeriodo = (date) => setPeriodo(date);
 
   const handleChangeOtroPeriodo = (date) => setOtroPeriodo(date);
-
-  /* const handleAcceptOtroPeriodo = () => {
-    if (otroPeriodo && otroPeriodo.$d) {
-      const { $d: fecha } = otroPeriodo;
-      const fechaFormateada = new Date(fecha);
-      fechaFormateada.setDate(1); // Establecer el día del mes a 1
-
-      // Ajustar la zona horaria a UTC
-      fechaFormateada.setUTCHours(0, 0, 0, 0);
-
-      const fechaISO = fechaFormateada.toISOString(); // 2026-02-01T00:00:00.000Z
-      setOtroPeriodoIso(fechaISO);
-    }
-  }; */
 
   useEffect(() => {
     const ObtenerCamaras = async () => {
@@ -399,7 +385,7 @@ export const MisAltaDeclaracionesJuradas = ({
     }
   };
 
-  const presentarDeclaracionJurada = async () => {};
+  const presentarDeclaracionJurada = async () => { };
 
   console.log("DDJJAlta - rowsAltaDDJJ: ");
   console.log(rowsAltaDDJJ);
@@ -419,7 +405,7 @@ export const MisAltaDeclaracionesJuradas = ({
       <div className="periodo_container">
         <h5 className="paso">Paso 1 - Indique período a presentar</h5>
         <Stack spacing={4} direction="row" alignItems="center">
-          <h5 className="title_periodo">Período</h5>
+          <Typography variant="h6" className="title_periodo">Período</Typography>
           <LocalizationProvider
             dateAdapter={AdapterDayjs}
             adapterLocale={"es"}
@@ -428,25 +414,18 @@ export const MisAltaDeclaracionesJuradas = ({
             }
           >
             <DemoContainer components={["DatePicker"]}>
-              {/* <DesktopDatePicker
-                label={"Periodo"}
-                views={["month", "year"]}
-                closeOnSelect={false}
-                onChange={handleChangePeriodo}
-                value={periodo}
-                slotProps={{ actionBar: { actions: ["cancel", "accept"] } }}
-                onAccept={handleAcceptPeriodoDDJJ}
-              /> */}
               <DatePicker
                 label={"Periodo"}
                 views={["month", "year"]}
                 closeOnSelect={true}
                 onChange={handleChangePeriodo}
-                value={dayjs(periodo)}
+                value={periodo} // dayJs(periodo) fallaba
               />
             </DemoContainer>
           </LocalizationProvider>
-          {formNro}
+          <Typography variant="h6">
+            {formNro}
+          </Typography>
         </Stack>
       </div>
 
@@ -512,24 +491,13 @@ export const MisAltaDeclaracionesJuradas = ({
                         .localeText
                     }
                   >
-                    {/* <DesktopDatePicker
-                      label={"Otro Periodo"}
-                      views={["month", "year"]}
-                      closeOnSelect={false}
-                      onChange={handleChangeOtroPeriodo}
-                      value={otroPeriodo}
-                      slotProps={{
-                        actionBar: { actions: ["cancel", "accept"] },
-                      }}
-                      onAccept={handleAcceptOtroPeriodo}
-                    /> */}
-                    <DatePicker
+                    {/* <DatePicker
                       label={"Periodo"}
                       views={["month", "year"]}
                       closeOnSelect={true}
-                      onChange={handleChangePeriodo}
+                      onChange={handleChangeOtroPeriodo}
                       value={otroPeriodo}
-                    />
+                    /> */}
                   </LocalizationProvider>
                 </Stack>
               )}
