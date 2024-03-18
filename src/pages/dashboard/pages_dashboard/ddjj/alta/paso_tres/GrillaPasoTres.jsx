@@ -660,7 +660,7 @@ export const GrillaPasoTres = ({
       valueOptions: [
         { value: true, label: "Si" },
         { value: false, label: "No" },
-      ],
+      ],   
     },
     {
       field: "amtimaSocio",
@@ -683,7 +683,7 @@ export const GrillaPasoTres = ({
       valueOptions: [
         { value: true, label: "Si" },
         { value: false, label: "No" },
-      ],
+      ]
     },
     {
       field: "errores",
