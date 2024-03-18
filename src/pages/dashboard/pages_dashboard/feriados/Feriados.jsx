@@ -35,6 +35,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers";
 import formatter from "@/common/formatter";
 import swal from "@/components/swal/swal";
+import StripedDataGrid from "@/common/dataGridStyle";
 
 const style = {
   position: "absolute",
@@ -48,87 +49,19 @@ const style = {
   p: 4,
 };
 
-const ODD_OPACITY = 0.2;
-
-const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
-  [`& .${gridClasses.row}.even`]: {
-    backgroundColor: theme.palette.grey[200],
-    '&:hover, &.Mui-hovered': {
-      backgroundColor: alpha(theme.palette.primary.main, ODD_OPACITY),
-      '@media (hover: none)': {
-        backgroundColor: 'transparent',
-      },
-    },
-    '&.Mui-selected': {
-      backgroundColor: alpha(
-        theme.palette.primary.main,
-        ODD_OPACITY + theme.palette.action.selectedOpacity,
-      ),
-      '&:hover, &.Mui-hovered': {
-        backgroundColor: alpha(
-          theme.palette.primary.main,
-          ODD_OPACITY +
-            theme.palette.action.selectedOpacity +
-            theme.palette.action.hoverOpacity,
-        ),
-        // Reset on touch devices, it doesn't add specificity
-        '@media (hover: none)': {
-          backgroundColor: alpha(
-            theme.palette.primary.main,
-            ODD_OPACITY + theme.palette.action.selectedOpacity,
-          ),
-        },
-      },
-    },
-  },
-
-  // quiero que odd tenga un hover verde
-  [`& .${gridClasses.row}.odd`]: {
-    backgroundColor: "#fff",
-    '&:hover, &.Mui-hovered': {
-      backgroundColor: alpha(theme.palette.primary.main, ODD_OPACITY),
-      '@media (hover: none)': {
-        backgroundColor: 'transparent',
-      },
-    },
-    '&.Mui-selected': {
-      backgroundColor: alpha(
-        theme.palette.primary.main,
-        ODD_OPACITY + theme.palette.action.selectedOpacity,
-      ),
-      '&:hover, &.Mui-hovered': {
-        backgroundColor: alpha(
-          theme.palette.primary.main,
-          ODD_OPACITY +
-            theme.palette.action.selectedOpacity +
-            theme.palette.action.hoverOpacity,
-        ),
-        // Reset on touch devices, it doesn't add specificity
-        '@media (hover: none)': {
-          backgroundColor: alpha(
-            theme.palette.primary.main,
-            ODD_OPACITY + theme.palette.action.selectedOpacity,
-          ),
-        },
-      },
-    },
-  },
-
-}));
-
 // Traerme las etiquetas del dom que tengas la clase .MuiDataGrid-cell--editable
 const crearNuevoRegistro = (props) => {
   const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
 
   const altaHandleClick = () => {
-    const maxId = rows ? Math.max(...rows.map((row) => row.id), 0) : 1;
+    const maxId = rows ? Math.max(...rows.map((row) => row.internalId), 0) : 1;
     const newId = maxId + 1;
-    const id = newId;
+    const internalId = newId;
     volverPrimerPagina();
 
-    setRows((oldRows) => [{ id, fecha: "", isNew: true }, ...oldRows]);
+    setRows((oldRows) => [{ internalId, fecha: "", isNew: true }, ...oldRows]);
     setRowModesModel((oldModel) => ({
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
+      [internalId]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
       ...oldModel,
     }));
   };
@@ -144,7 +77,6 @@ const crearNuevoRegistro = (props) => {
 };
 
 export const Feriados = () => {
-
   const [locale, setLocale] = useState("esES");
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
@@ -178,11 +110,12 @@ export const Feriados = () => {
     [locale, theme]
   );
 
+  const ObtenerFeriados = async () => {
+    const response = await axiosFeriados.consultar();
+    setRows(response.map((row, index) => ({ ...row, internalId: index + 1 })));
+  };
+
   useEffect(() => {
-    const ObtenerFeriados = async () => {
-      const response = await axiosFeriados.consultar();
-      setRows(response.map((row, index) => ({ ...row, internalId: index + 1 })));
-    };
     ObtenerFeriados();
   }, []);
 
@@ -192,15 +125,22 @@ export const Feriados = () => {
     }
   };
 
-  const handleEditClick = (id) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+  const handleEditClick = (row) => () => {
+    setRowModesModel({
+      ...rowModesModel,
+      [row.internalId]: { mode: GridRowModes.Edit },
+    });
   };
 
-  const handleSaveClick = (id) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+  const handleSaveClick = (row) => () => {
+    setRowModesModel({
+      ...rowModesModel,
+      [row.internalId]: { mode: GridRowModes.View },
+    });
   };
 
-  const handleDeleteClick = (id) => async () => {
+  const handleDeleteClick = (row) => async () => {
+    console.log(row);
     const showSwalConfirm = async () => {
       try {
         Swal.fire({
@@ -213,7 +153,7 @@ export const Feriados = () => {
           confirmButtonText: "Si, bórralo!",
         }).then(async (result) => {
           if (result.isConfirmed) {
-            const bBajaOk = await axiosFeriados.eliminar(id);
+            const bBajaOk = await axiosFeriados.eliminar(row.id);
             if (bBajaOk) setRows(rows.filter((row) => row.id !== id));
           }
         });
@@ -225,15 +165,15 @@ export const Feriados = () => {
     showSwalConfirm();
   };
 
-  const handleCancelClick = (id) => () => {
+  const handleCancelClick = (row) => () => {
     setRowModesModel({
       ...rowModesModel,
-      [id]: { mode: GridRowModes.View, ignoreModifications: true },
+      [row.internalId]: { mode: GridRowModes.View, ignoreModifications: true },
     });
 
-    const editedRow = rows.find((row) => row.id === id);
+    const editedRow = rows.find((reg) => reg.id === row.id);
     if (editedRow.isNew) {
-      setRows(rows.filter((row) => row.id !== id));
+      setRows(rows.filter((reg) => reg.id !== row.id));
     }
   };
 
@@ -249,11 +189,13 @@ export const Feriados = () => {
     if (newRow.isNew) {
       console.log("processRowUpdate - ALTA");
       try {
-        delete newRow.id;
+        const internalId = newRow.internalId;
+        delete newRow.internalId;
         delete newRow.isNew;
         const data = await axiosFeriados.crear(newRow);
         if (data && data.id) {
           newRow.id = data.id;
+          newRow.internalId = internalId;
           newRow.isNew = false;
           bOk = true;
           const newRows = rows.map((row) => (row.isNew ? newRow : row));
@@ -269,10 +211,13 @@ export const Feriados = () => {
     } else {
       console.log("3 - processRowUpdate - MODI ");
       try {
+        const internalId = newRow.internalId;
+        delete newRow.internalId;
         delete newRow.isNew;
         bOk = await axiosFeriados.actualizar(newRow);
         console.log("4 - processRowUpdate - MODI - bOk: " + bOk);
         newRow.isNew = false;
+        newRow.internalId = internalId;
         if (bOk) {
           setRows(rows.map((row) => (row.id === newRow.id ? newRow : row)));
         }
@@ -295,48 +240,20 @@ export const Feriados = () => {
   };
 
   const obSubmitAnio = async (e) => {
-
     e.preventDefault();
     const anio = fecha.$y;
-
+    console.log("anio: " + anio);
     const response = await axiosFeriados.duplicar(anio);
 
     if (response) {
       swal.showSuccess("Año duplicado correctamente");
+      ObtenerFeriados();
     } else {
       swal.showError("Error al duplicar el año");
     }
 
     handleClose();
-
-  }
-
-  /* useEffect(() => {
-    const paintCells = () => {
-      const feriadosContainer = document.querySelector(".feriados_container");
-
-      // Traeme todo lo que tengan el atributo data-id
-      const cellEditable = feriadosContainer.querySelectorAll(
-        "[data-id]"
-      );
-
-      console.log("PRIMERA CARGA ...............")
-      console.log("cellEditable", cellEditable.length);
-
-      cellEditable.forEach((cell, index) => {
-
-        if (index % 2 === 0) {
-          cell.style.backgroundColor = "#CCCCCC";
-        }
-      });
-    };
-
-    const timeoutId = setTimeout(() => {
-      paintCells();
-    }, 1000);
-
-    return () => clearTimeout(timeoutId);
-  }, []); */
+  };
 
   const columnas = [
     {
@@ -361,8 +278,9 @@ export const Feriados = () => {
       headerAlign: "center",
       align: "center",
       headerClassName: "header--cell",
-      getActions: ({ id }) => {
-        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+      getActions: ({ row }) => {
+        const isInEditMode =
+          rowModesModel[row.internalId]?.mode === GridRowModes.Edit;
 
         if (isInEditMode) {
           return [
@@ -370,13 +288,13 @@ export const Feriados = () => {
               icon={<SaveIcon />}
               label="Guardar"
               sx={{ color: "primary.main" }}
-              onClick={handleSaveClick(id)}
+              onClick={handleSaveClick(row)}
             />,
             <GridActionsCellItem
               icon={<CancelIcon />}
               label="Cancelar"
               className="textPrimary"
-              onClick={handleCancelClick(id)}
+              onClick={handleCancelClick(row)}
               color="inherit"
             />,
           ];
@@ -387,14 +305,14 @@ export const Feriados = () => {
             icon={<EditIcon />}
             label="Editar"
             className="textPrimary"
-            onClick={handleEditClick(id)}
+            onClick={handleEditClick(row)}
             color="inherit"
           />,
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Eliminar"
             className="textPrimary"
-            onClick={handleDeleteClick(id)}
+            onClick={handleDeleteClick(row)}
             color="inherit"
           />,
         ];
@@ -429,8 +347,7 @@ export const Feriados = () => {
             columns={columnas}
             getRowId={(row) => row.internalId}
             getRowClassName={(params) =>
-             
-              params.row.internalId % 2 === 0 ? 'even' : 'odd'
+              params.row.internalId % 2 === 0 ? "even" : "odd"
             }
             editMode="row"
             rowModesModel={rowModesModel}
@@ -443,7 +360,6 @@ export const Feriados = () => {
             slotProps={{
               toolbar: { setRows, rows, setRowModesModel, volverPrimerPagina },
             }}
-
             paginationModel={paginationModel}
             onPaginationModelChange={setPaginationModel}
             pageSizeOptions={[10, 15, 25]}
@@ -458,9 +374,7 @@ export const Feriados = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <form
-            onSubmit={obSubmitAnio}
-          >
+          <form onSubmit={obSubmitAnio}>
             <LocalizationProvider
               dateAdapter={AdapterDayjs}
               adapterLocale={"es"}
@@ -479,8 +393,9 @@ export const Feriados = () => {
             </LocalizationProvider>
             <Button
               variant="contained"
-              sx={{ marginTop: '10px' }}
-              type="submit">
+              sx={{ marginTop: "10px" }}
+              type="submit"
+            >
               Enviar
             </Button>
           </form>
@@ -495,4 +410,3 @@ de que las celdas se pinten después de que el componente se monte
 y el DOM esté completamente cargado, también use el evento onRender 
 proporcionado por DataGrid para asegurarme de que las celdas se 
 vuelvan a pintar cada vez que se renderiza el componente. */
-

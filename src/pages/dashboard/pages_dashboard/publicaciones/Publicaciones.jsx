@@ -17,6 +17,7 @@ import * as locales from "@mui/material/locale";
 import Swal from "sweetalert2";
 import "./Publicaciones.css";
 import { ThreeCircles } from "react-loader-spinner";
+import StripedDataGrid from "@/common/dataGridStyle";
 
 export const Publicaciones = () => {
   const [locale, setLocale] = useState("esES");
@@ -39,8 +40,10 @@ export const Publicaciones = () => {
   //Consulta rows de la Grilla
   useEffect(() => {
     const obtenerPublicaciones = async () => {
-      const publicaciones = await axiosPublicaciones.consultar();
-      setRows(publicaciones.map((item, index) => ({ ...item, id: item.id })));
+      const response = await axiosPublicaciones.consultar();
+      setRows(
+        response.map((row, index) => ({ ...row, internalId: index + 1 }))
+      );
     };
 
     obtenerPublicaciones();
@@ -342,10 +345,14 @@ export const Publicaciones = () => {
         )}
         {showDataGrid && (
           <ThemeProvider theme={themeWithLocale}>
-            <DataGrid
+            <StripedDataGrid
               rows={rows}
               columns={columns}
               editMode="row"
+              getRowId={(row) => row.internalId}
+              getRowClassName={(params) =>
+                params.row.internalId % 2 === 0 ? "even" : "odd"
+              }
               rowModesModel={rowModesModel}
               onRowModesModelChange={handleRowModesModelChange}
               onRowEditStop={handleRowEditStop}
