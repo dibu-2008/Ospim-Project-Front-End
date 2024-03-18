@@ -62,15 +62,21 @@ export const Publicaciones = () => {
     }
   };
 
-  const handleEditClick = (id) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+  const handleEditClick = (row) => () => {
+    setRowModesModel({
+      ...rowModesModel,
+      [row.internalId]: { mode: GridRowModes.Edit },
+    });
   };
 
-  const handleSaveClick = (id) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+  const handleSaveClick = (row) => () => {
+    setRowModesModel({
+      ...rowModesModel,
+      [row.internalId]: { mode: GridRowModes.View },
+    });
   };
 
-  const handleDeleteClick = (id) => async () => {
+  const handleDeleteClick = (row) => async () => {
     const showSwalConfirm = async () => {
       try {
         Swal.fire({
@@ -83,8 +89,8 @@ export const Publicaciones = () => {
           confirmButtonText: "Si, bórralo!",
         }).then(async (result) => {
           if (result.isConfirmed) {
-            const bBajaOk = await axiosPublicaciones.eliminar(id);
-            if (bBajaOk) setRows(rows.filter((row) => row.id !== id));
+            const bBajaOk = await axiosPublicaciones.eliminar(row.id);
+            if (bBajaOk) setRows(rows.filter((reg) => reg.id !== row.id));
           }
         });
       } catch (error) {
@@ -94,15 +100,15 @@ export const Publicaciones = () => {
     showSwalConfirm();
   };
 
-  const handleCancelClick = (id) => () => {
+  const handleCancelClick = (row) => () => {
     setRowModesModel({
       ...rowModesModel,
-      [id]: { mode: GridRowModes.View, ignoreModifications: true },
+      [row.internalId]: { mode: GridRowModes.View, ignoreModifications: true },
     });
 
-    const editedRow = rows.find((row) => row.id === id);
+    const editedRow = rows.find((reg) => reg.id === row.id);
     if (editedRow.isNew) {
-      setRows(rows.filter((row) => row.id !== id));
+      setRows(rows.filter((reg) => reg.id !== row.id));
     }
   };
 
@@ -127,12 +133,15 @@ export const Publicaciones = () => {
     if (newRow.isNew) {
       console.log("processRowUpdate - ALTA");
       try {
+        const internalId = newRow.internalId;
         delete newRow.id;
+        delete newRow.internalId;
         delete newRow.isNew;
         const data = await axiosPublicaciones.crear(newRow);
         if (data && data.id) {
           newRow.id = data.id;
           newRow.isNew = false;
+          newRow.internalId = internalId;
           bOk = true;
           const newRows = rows.map((row) => (row.isNew ? newRow : row));
           setRows(newRows);
@@ -145,9 +154,12 @@ export const Publicaciones = () => {
     } else {
       console.log("processRowUpdate - MODI");
       try {
+        const internalId = newRow.internalId;
+        delete newRow.internalId;
         delete newRow.isNew;
         bOk = await axiosPublicaciones.actualizar(newRow);
         newRow.isNew = false;
+        newRow.internalId = internalId;
         if (bOk) {
           setRows(rows.map((row) => (row.id === newRow.id ? newRow : row)));
         }
@@ -248,8 +260,8 @@ export const Publicaciones = () => {
       align: "center",
       headerClassName: "header--cell header--cell--left",
       getActions: ({ row }) => {
-        const id = row.id;
-        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+        const isInEditMode =
+          rowModesModel[row.internalId]?.mode === GridRowModes.Edit;
 
         if (isInEditMode) {
           return [
@@ -259,13 +271,13 @@ export const Publicaciones = () => {
               sx={{
                 color: "primary.main",
               }}
-              onClick={handleSaveClick(id)}
+              onClick={handleSaveClick(row)}
             />,
             <GridActionsCellItem
               icon={<CancelIcon />}
               label="Cancel"
               className="textPrimary"
-              onClick={handleCancelClick(id)}
+              onClick={handleCancelClick(row)}
               color="inherit"
             />,
           ];
@@ -276,13 +288,13 @@ export const Publicaciones = () => {
             icon={<EditIcon />}
             label="Edit"
             className="textPrimary"
-            onClick={handleEditClick(id)}
+            onClick={handleEditClick(row)}
             color="inherit"
           />,
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Delete"
-            onClick={handleDeleteClick(id)}
+            onClick={handleDeleteClick(row)}
             color="inherit"
           />,
         ];
