@@ -2782,6 +2782,28 @@
       ],
       "empresaId": "1",
       "id": 214
+    },
+    {
+      "periodo": "2017-05-19T03:00:00.000Z",
+      "afiliados": [
+        {
+          "cuil": "20949118682",
+          "inte": 0,
+          "apellido": "Salinas",
+          "nombre": "Luis",
+          "fechaIngreso": "2024-03-21T03:00:00.000Z",
+          "empresaDomicilioId": 9,
+          "camara": "FAIM",
+          "categoria": "D",
+          "remunerativo": "1",
+          "noRemunerativo": "1",
+          "uomaSocio": true,
+          "amtimaSocio": true,
+          "id": 1
+        }
+      ],
+      "empresaId": "1",
+      "id": 215
     }
   ],
   "afiliado": [

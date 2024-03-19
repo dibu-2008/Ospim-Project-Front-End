@@ -198,6 +198,10 @@ const DashboardPage = () => {
                     <DateRangeIcon className="icon-link" />{" "}
                     {open && <span className="icon-link">Feriados</span>}
                   </NavLink>)}
+                  <NavLink to="./ddjjconsultaempleado" className="icon-container">
+                    <LibraryBooksIcon className="icon-link" />{" "}
+                    {open && <span className="icon-link">DDJJ Consulta</span>}
+                  </NavLink>
                   {rolUsuario === "EMPLEADOR" && (
                   <NavLink to="./ddjj" className="icon-container">
                     <LibraryBooksIcon className="icon-link" />{" "}
@@ -208,15 +212,18 @@ const DashboardPage = () => {
                     <StyleIcon className="icon-link" />{" "}
                     {open && <span className="icon-link">Boletas</span>}
                   </NavLink>)}
-                  {rolUsuario === "EMPLEADOR" && (<NavLink to="./pagos" className="icon-container">
+                  {rolUsuario === "EMPLEADOR" && (
+                  <NavLink to="./pagos" className="icon-container">
                     <AccountBalanceWalletIcon className="icon-link" />{" "}
                     {open && <span className="icon-link">Pagos</span>}
                   </NavLink>)}
-                  {rolUsuario === "EMPLEADOR" && (<NavLink to="./misdatos" className="icon-container">
+                  {rolUsuario === "EMPLEADOR" && (
+                  <NavLink to="./misdatos" className="icon-container">
                     <PersonIcon className="icon-link" />{" "}
                     {open && <span className="icon-link">Datos Empresa</span>}
                   </NavLink>)}
-                  {rolUsuario === "EMPLEADOR" && (<NavLink to="./generarotrospagos" className="icon-container">
+                  {rolUsuario === "EMPLEADOR" && (
+                  <NavLink to="./generarotrospagos" className="icon-container">
                     <ReceiptIcon className="icon-link" />{" "}
                     {open && <span className="icon-link">Boleta Blanca</span>}
                   </NavLink>)}
