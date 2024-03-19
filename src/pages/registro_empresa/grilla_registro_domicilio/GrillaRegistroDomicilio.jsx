@@ -128,7 +128,7 @@ export const GrillaRegistroDomilicio = ({ rows, setRows }) => {
 
   const handleSaveClick = (id) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-    showSwallAgregarDomicilio();
+    //showSwallAgregarDomicilio();
   };
 
   const handleDeleteClick = (id) => () => {

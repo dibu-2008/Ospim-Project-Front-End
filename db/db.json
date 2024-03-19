@@ -110,6 +110,83 @@
         }
       ],
       "id": 1
+    },
+    {
+      "razonSocial": "Luis Salinas",
+      "cuit": "20949118682",
+      "clave": "123",
+      "email": "luig@gmail.com",
+      "telefono": "1234567845",
+      "telefono_prefijo": "011",
+      "whatsapp": "4345345435345",
+      "whatsapp_prefijo": "12",
+      "ramoId": 4,
+      "telefonosAlternativos": [
+        {
+          "prefijo": "011",
+          "nro": "423423423423"
+        },
+        {
+          "prefijo": "12",
+          "nro": "3213213223123"
+        }
+      ],
+      "domicilios": [
+        {
+          "tipo": "FISCAL",
+          "provinciaId": 10,
+          "localidadId": 1893,
+          "calle": "ancon",
+          "piso": "1",
+          "depto": "1",
+          "oficina": "1",
+          "cp": "1223",
+          "planta": "Planta 1"
+        }
+      ],
+      "id": 2
+    },
+    {
+      "razonSocial": "dsfsdfds",
+      "cuit": "2234234324",
+      "clave": "123",
+      "email": "luis@luis1.com",
+      "telefono": "01530990849",
+      "telefono_prefijo": "8",
+      "whatsapp": "22342132132313",
+      "whatsapp_prefijo": "23",
+      "ramoId": 5,
+      "telefonosAlternativos": [
+        {
+          "prefijo": "11",
+          "nro": "123123213213213"
+        },
+        {
+          "prefijo": "34",
+          "nro": "1231231232132132"
+        }
+      ],
+      "[object Object]": [
+        {
+          "email": "luis@luis2.com"
+        },
+        {
+          "email": "ospim2@gmail.com"
+        }
+      ],
+      "domicilios": [
+        {
+          "tipo": "",
+          "provinciaId": "",
+          "localidadId": "",
+          "calle": "",
+          "piso": "",
+          "oficina": "",
+          "cp": "",
+          "planta": ""
+        }
+      ],
+      "id": 3
     }
   ],
   "rol": [
@@ -2782,6 +2859,28 @@
       ],
       "empresaId": "1",
       "id": 214
+    },
+    {
+      "periodo": "2017-05-19T03:00:00.000Z",
+      "afiliados": [
+        {
+          "cuil": "20949118682",
+          "inte": 0,
+          "apellido": "Salinas",
+          "nombre": "Luis",
+          "fechaIngreso": "2024-03-21T03:00:00.000Z",
+          "empresaDomicilioId": 9,
+          "camara": "FAIM",
+          "categoria": "D",
+          "remunerativo": "1",
+          "noRemunerativo": "1",
+          "uomaSocio": true,
+          "amtimaSocio": true,
+          "id": 1
+        }
+      ],
+      "empresaId": "1",
+      "id": 215
     }
   ],
   "afiliado": [
