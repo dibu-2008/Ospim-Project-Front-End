@@ -17,7 +17,7 @@ import * as locales from "@mui/material/locale";
 import Swal from "sweetalert2";
 import "./Publicaciones.css";
 import { ThreeCircles } from "react-loader-spinner";
-import StripedDataGrid from "@/common/dataGridStyle";
+import { StripedDataGrid, dataGridStyle } from "@/common/dataGridStyle";
 
 export const Publicaciones = () => {
   const [locale, setLocale] = useState("esES");
@@ -371,6 +371,7 @@ export const Publicaciones = () => {
               processRowUpdate={(updatedRow, originalRow) =>
                 processRowUpdate(updatedRow, originalRow)
               }
+              localeText={dataGridStyle.toolbarText}
               slots={{
                 toolbar: EditarNuevaFila,
               }}

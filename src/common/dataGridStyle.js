@@ -3,7 +3,7 @@ import { DataGrid, gridClasses } from "@mui/x-data-grid";
 
 const ODD_OPACITY = 0.2;
 
-const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
+export const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
   [`& .${gridClasses.row}.even`]: {
     backgroundColor: theme.palette.grey[200],
     "&:hover, &.Mui-hovered": {
@@ -67,5 +67,18 @@ const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
     },
   },
 }));
+
+//textos en castellano del Toolbar
+const toolbarText = {
+  toolbarColumns: "Columnas",
+  toolbarFilters: "Filtros",
+  toolbarDensity: "Estilo",
+  toolbarExport: "Exportar",
+};
+
+export const dataGridStyle = {
+  toolbarText: toolbarText,
+  ODD_OPACITY: ODD_OPACITY,
+};
 
 export default StripedDataGrid;
