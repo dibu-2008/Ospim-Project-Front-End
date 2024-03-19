@@ -4,6 +4,7 @@ import { Visibility as VisibilityIcon, Print as PrintIcon, Edit as EditIcon } fr
 import { DataGrid } from '@mui/x-data-grid';
 import { useNavigate } from 'react-router-dom';  
 import { getBoletasByEmpresa, downloadPdfBoleta } from './BoletasApi';
+import { CSVLink, CSVDownload } from "react-csv";
 import formatter from "@/common/formatter";
 import './Boletas.css';
 
@@ -15,7 +16,7 @@ export const Boletas = () => {
   const [boletas, setBoletas] = useState([]);
   const [boletasVisibles, setBoletasVisibles] = useState([]);
   const navigate = useNavigate();  
-
+  
 
   useEffect(() => {
     
@@ -53,10 +54,6 @@ export const Boletas = () => {
     setBoletasVisibles(filteredBoletas.flatMap((boleta) => ({ ...boleta, id: `${boleta.numero_boleta}` })));
   };
 
-  const handleExport = () => {
-    // TODO implementar logica para exportar
-    console.log('Exportar datos');
-  };
 
   return (
     <div className='boletas_container'>
@@ -85,7 +82,6 @@ export const Boletas = () => {
         </div>
         <div>
           <Button variant="contained" onClick={handleSearch}>Buscar</Button>
-          <Button variant="contained" onClick={handleExport}>Exportar</Button>
         </div>
       </div>
       <Box style={{ height: 400, width: '100%' }} 
@@ -102,7 +98,7 @@ export const Boletas = () => {
             { field: 'tipo_ddjj', headerName: 'Tipo DDJJ', flex: 1 },
             { field: 'numero_boleta', headerName: 'Número', flex: 0.8 },
             { field: 'descripcion', headerName: 'Concepto', flex: 1 },
-            { field: 'total_acumulado', headerName: 'Importe Boleta', flex: 1, valueFormatter: (params) => params.value?formatter.currency.format(params.value):'' },
+            { field: 'total_final', headerName: 'Importe Boleta', flex: 1, valueFormatter: (params) => params.value?formatter.currency.format(params.value):'' },
             { field: 'importe_recibido', headerName: 'Importe Recibido', flex: 1, valueFormatter: (params) => params.value?formatter.currency.format(params.value):''},
             { field: 'fecha_de_pago', headerName: 'Fecha de Pago', flex: 1, valueFormatter: (params) => params.value?formatter.date(params.value):''},
             { field: 'intencion_de_pago', headerName: 'Intencion de Pago', flex: 1, valueFormatter: (params) =>  params.value?formatter.date(params.value):''},
