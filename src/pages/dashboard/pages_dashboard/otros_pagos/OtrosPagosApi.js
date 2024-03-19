@@ -67,6 +67,31 @@ export const downloadPdfBoleta = async () => {
   }
 }
 
+
+export const downloadPdfBoletaBlanca = async (empresa_id) => {  
+  const URL = `${BACKEND_URL}/empresa/${empresa_id}/generar-sin-ddjj`
+  try{
+    const response = axiosCrud.consultar(URL)
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'boleta.pdf');
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    if (response) {
+      window.location.href = "/dashboard/boletas";
+    } else {
+        console.error("Error al generar boletas");
+    }
+  }
+  catch (error){
+    const HTTP_MSG = HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`
+    showErrorBackEnd(HTTP_MSG,error);
+  }
+}
+
 export const axiosOtrosPagos = {
     generarBoletaSinDDJJ,
     tieneRectificativa,

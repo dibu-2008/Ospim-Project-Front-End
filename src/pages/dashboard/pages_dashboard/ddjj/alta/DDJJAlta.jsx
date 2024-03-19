@@ -535,6 +535,7 @@ export const MisAltaDeclaracionesJuradas = ({
               marginLeft: "114px",
               padding: "6px 45px",
             }}
+            onClick={() => setOcultarGrillaPaso3(!ocultarGrillaPaso3)}
           >
             Buscar
           </Button>

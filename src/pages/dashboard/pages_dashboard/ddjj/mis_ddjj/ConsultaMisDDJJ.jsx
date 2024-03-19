@@ -142,10 +142,12 @@ export const MisDeclaracionesJuradas = ({
           <Button onClick={buscarDeclaracionesJuradas} variant="contained">
             Buscar
           </Button>
-          <Button variant="contained" onClick={exportarDeclaracionesJuradas}>
-            Exportar
-          </Button>
-          <CSVLink data={data}>Exportar CSV</CSVLink>
+
+          <CSVLink data={data}>
+            <Button variant="contained" onClick={exportarDeclaracionesJuradas}>
+              Exportar CSV
+            </Button>
+          </CSVLink>
           {/* <CSVLink data={csvData} filename={"misddjj.csv"}>Download me</CSVLink>; */}
 
           {/* <CSVDownload data={rows_mis_ddjj} target="_blank" />; */}

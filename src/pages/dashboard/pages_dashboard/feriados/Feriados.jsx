@@ -1,6 +1,6 @@
 import * as locales from "@mui/material/locale";
 import { useState, useEffect, useMemo, useRef } from "react";
-import { Box, Button, TextField, alpha, styled } from "@mui/material";
+import { Box, Button, IconButton, TextField, Tooltip, alpha, styled } from "@mui/material";
 
 import { Add, Edit, DeleteOutlined, Save, Close } from "@mui/icons-material";
 import AddIcon from "@mui/icons-material/Add";
@@ -42,7 +42,7 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: 500,
   bgcolor: "background.paper",
   border: "2px solid #1A76D2",
   boxShadow: 24,
@@ -81,7 +81,7 @@ export const Feriados = () => {
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
   const [paginationModel, setPaginationModel] = useState({
-    pageSize: 10,
+    pageSize: 50,
     page: 0,
   });
 
@@ -322,12 +322,24 @@ export const Feriados = () => {
 
   return (
     <div className="feriados_container">
-      <h1>
+      <h1 style={{
+        display: "flex",
+        alignItems: "center",
+      }}>
         Administración de feriados
-        <DateRangeIcon
-          sx={{ marginLeft: "10px", fontSize: "2rem", cursor: "pointer" }}
-          onClick={handleOpen}
-        />
+        <Tooltip 
+          title="Pasar feriados años siguiente" 
+          sx={{ marginLeft: "10px" , cursor: "pointer" }}>
+          <IconButton>
+            <DateRangeIcon
+              sx={{
+                fontSize: "2.5rem",
+                color: "#1A76D2",
+              }}
+              onClick={handleOpen}
+            />
+          </IconButton>
+        </Tooltip>
       </h1>
       <Box
         sx={{
@@ -362,7 +374,7 @@ export const Feriados = () => {
             }}
             paginationModel={paginationModel}
             onPaginationModelChange={setPaginationModel}
-            pageSizeOptions={[10, 15, 25]}
+            pageSizeOptions={[50, 75, 100]}
           />
         </ThemeProvider>
       </Box>
@@ -375,6 +387,19 @@ export const Feriados = () => {
       >
         <Box sx={style}>
           <form onSubmit={obSubmitAnio}>
+            <Typography 
+              variant="h4" 
+              component="h2" 
+              sx={{ 
+                textAlign: "center",
+                backgroundColor: alpha(theme.palette.primary.main, 0.1),
+                borderRadius: "5px",
+                width: "400px",
+                marginBottom: "20px",
+                color: theme.palette.primary.main,
+              }}>
+              Duplicar feriados
+            </Typography>
             <LocalizationProvider
               dateAdapter={AdapterDayjs}
               adapterLocale={"es"}
@@ -393,7 +418,7 @@ export const Feriados = () => {
             </LocalizationProvider>
             <Button
               variant="contained"
-              sx={{ marginTop: "10px" }}
+              sx={{ marginTop: "20px" }}
               type="submit"
             >
               Enviar
@@ -405,8 +430,4 @@ export const Feriados = () => {
   );
 };
 
-/* he usado setTimeout dentro del efecto de React para asegurarme 
-de que las celdas se pinten después de que el componente se monte 
-y el DOM esté completamente cargado, también use el evento onRender 
-proporcionado por DataGrid para asegurarme de que las celdas se 
-vuelvan a pintar cada vez que se renderiza el componente. */
+
