@@ -44,9 +44,8 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
-import ReceiptIcon from '@mui/icons-material/Receipt';
+import ReceiptIcon from "@mui/icons-material/Receipt";
 import localStorageService from "@/components/localStorage/localStorageService";
-
 
 const drawerWidth = 270;
 
@@ -120,8 +119,8 @@ const Drawer = styled(MuiDrawer, {
 const DashboardPage = () => {
   const navigate = useNavigate();
   const [value, setValue] = useState(0);
-  const rolUsuario = localStorageService.getRol();
-  console.log("ROL USUARIO: ", rolUsuario); // IMPRIME EMPLEADOR
+  const isRolEmpleador = localStorageService.isRolEmpleador();
+  console.log("ROL USUARIO Empleador??: ", isRolEmpleador); // IMPRIME EMPLEADOR
 
   const onLogout = () => {
     navigate("/login", { replace: true });
@@ -187,62 +186,79 @@ const DashboardPage = () => {
                     <HomeIcon className="icon-link" />{" "}
                     {open && <span className="icon-link">Inicio</span>}
                   </NavLink>
-                  {rolUsuario === "EMPLEADO" && (
+                  {!isRolEmpleador && (
                     <NavLink to="./publicaciones" className="icon-container">
                       <PreviewIcon className="icon-link" />{" "}
                       {open && <span className="icon-link">Publicaciones</span>}
                     </NavLink>
                   )}
-                  {rolUsuario === "EMPLEADO" && (
-                  <NavLink to="./feriados" className="icon-container">
-                    <DateRangeIcon className="icon-link" />{" "}
-                    {open && <span className="icon-link">Feriados</span>}
-                  </NavLink>)}
-                  <NavLink to="./ddjjconsultaempleado" className="icon-container">
-                    <LibraryBooksIcon className="icon-link" />{" "}
-                    {open && <span className="icon-link">DDJJ Consulta</span>}
-                  </NavLink>
-                  {rolUsuario === "EMPLEADOR" && (
-                  <NavLink to="./ddjj" className="icon-container">
-                    <LibraryBooksIcon className="icon-link" />{" "}
-                    {open && <span className="icon-link">DDJJ</span>}
-                  </NavLink>)}
-                  {rolUsuario === "EMPLEADOR" && (
-                  <NavLink to="./boletas" className="icon-container">
-                    <StyleIcon className="icon-link" />{" "}
-                    {open && <span className="icon-link">Boletas</span>}
-                  </NavLink>)}
-                  {rolUsuario === "EMPLEADOR" && (
-                  <NavLink to="./pagos" className="icon-container">
-                    <AccountBalanceWalletIcon className="icon-link" />{" "}
-                    {open && <span className="icon-link">Pagos</span>}
-                  </NavLink>)}
-                  {rolUsuario === "EMPLEADOR" && (
-                  <NavLink to="./misdatos" className="icon-container">
-                    <PersonIcon className="icon-link" />{" "}
-                    {open && <span className="icon-link">Datos Empresa</span>}
-                  </NavLink>)}
-                  {rolUsuario === "EMPLEADOR" && (
-                  <NavLink to="./generarotrospagos" className="icon-container">
-                    <ReceiptIcon className="icon-link" />{" "}
-                    {open && <span className="icon-link">Boleta Blanca</span>}
-                  </NavLink>)}
-                  {rolUsuario === "EMPLEADO" && (
-                  <NavLink to="./cuitsrestringidos" className="icon-container">
-                    <NetworkLockedIcon className="icon-link" />{" "}
-                    {open && (
-                      <span className="icon-link">Cuits Restringidos</span>
-                    )}
-                  </NavLink>)}
-                  {rolUsuario === "EMPLEADO" && (
-                  <NavLink to="./roles" className="icon-container">
-                    <CoPresentIcon className="icon-link" />{" "}
-                    {open && <span className="icon-link">Roles</span>}
-                  </NavLink>)}
-                  {rolUsuario === "EMPLEADO" && (<NavLink to="./altausuariointerno" className="icon-container">
-                    <PersonAddIcon className="icon-link" />{" "}
-                    {open && <span className="icon-link">Usuario Interno</span>}
-                  </NavLink>)}
+                  {!isRolEmpleador && (
+                    <NavLink to="./feriados" className="icon-container">
+                      <DateRangeIcon className="icon-link" />{" "}
+                      {open && <span className="icon-link">Feriados</span>}
+                    </NavLink>
+                  )}
+                  {isRolEmpleador && (
+                    <NavLink to="./ddjj" className="icon-container">
+                      <LibraryBooksIcon className="icon-link" />{" "}
+                      {open && <span className="icon-link">DDJJ</span>}
+                    </NavLink>
+                  )}
+                  {isRolEmpleador && (
+                    <NavLink to="./boletas" className="icon-container">
+                      <StyleIcon className="icon-link" />{" "}
+                      {open && <span className="icon-link">Boletas</span>}
+                    </NavLink>
+                  )}
+                  {isRolEmpleador && (
+                    <NavLink to="./pagos" className="icon-container">
+                      <AccountBalanceWalletIcon className="icon-link" />{" "}
+                      {open && <span className="icon-link">Pagos</span>}
+                    </NavLink>
+                  )}
+                  {isRolEmpleador && (
+                    <NavLink to="./misdatos" className="icon-container">
+                      <PersonIcon className="icon-link" />{" "}
+                      {open && <span className="icon-link">Datos Empresa</span>}
+                    </NavLink>
+                  )}
+                  {isRolEmpleador && (
+                    <NavLink
+                      to="./generarotrospagos"
+                      className="icon-container"
+                    >
+                      <ReceiptIcon className="icon-link" />{" "}
+                      {open && <span className="icon-link">Boleta Blanca</span>}
+                    </NavLink>
+                  )}
+                  {!isRolEmpleador && (
+                    <NavLink
+                      to="./cuitsrestringidos"
+                      className="icon-container"
+                    >
+                      <NetworkLockedIcon className="icon-link" />{" "}
+                      {open && (
+                        <span className="icon-link">Cuits Restringidos</span>
+                      )}
+                    </NavLink>
+                  )}
+                  {!isRolEmpleador && (
+                    <NavLink to="./roles" className="icon-container">
+                      <CoPresentIcon className="icon-link" />{" "}
+                      {open && <span className="icon-link">Roles</span>}
+                    </NavLink>
+                  )}
+                  {!isRolEmpleador && (
+                    <NavLink
+                      to="./altausuariointerno"
+                      className="icon-container"
+                    >
+                      <PersonAddIcon className="icon-link" />{" "}
+                      {open && (
+                        <span className="icon-link">Usuario Interno</span>
+                      )}
+                    </NavLink>
+                  )}
                 </ListItemIcon>
               </ListItemButton>
             </ListItem>
