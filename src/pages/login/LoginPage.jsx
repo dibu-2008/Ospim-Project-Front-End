@@ -87,10 +87,13 @@ export const LoginPage = () => {
     }
 
     const loginDto = await logon(user, passwordLoginInternalUser);
+    console.log("ESTOY EN LA LINEA 90 RESPUESTA DE LOGINDTO");
+    console.log(loginDto); // AQUI ES DONDE SE OBTIENE EL TOKEN Y EL TOKEN DE REFRESCO
 
     if (loginDto && loginDto.token) {
       console.log("EXISTE loginDto.token");
       const usuarioConDFA = await usuarioLogueadoHabilitadoDFA(loginDto.token);
+      console.log("usuarioConDFA: ", usuarioConDFA); // TRUE O FALSE
       let bUsuarioConDFA = false;
       if (usuarioConDFA && usuarioConDFA.valor) {
         bUsuarioConDFA = true;
@@ -98,8 +101,8 @@ export const LoginPage = () => {
       console.log(bUsuarioConDFA);
       if (bUsuarioConDFA) {
         console.log("usuarioHabilitadoDFA: TRUE !!!");
-        setShowInternalUserForm(false);
-        setShowVerificationForm(true);
+        setShowInternalUserForm(false); // Esconde el form de usuario y clave
+        setShowVerificationForm(true); // Muestra el form de DFA
       } else {
         console.log("usuarioHabilitadoDFA: FALSE !!!");
         setToken(loginDto.token);
@@ -122,7 +125,7 @@ export const LoginPage = () => {
       console.log(loginDto);
       console.log("onLoginInternalUser - INIT-loginDto:NO EXISTE");
     }
-    OnResetFormLoginInternalUser();
+    OnResetFormLoginInternalUser(); 
   };
 
   //Eventos para Form DFA  (Token)
@@ -135,6 +138,7 @@ export const LoginPage = () => {
     e.preventDefault();
 
     const logonDfa = await logonDFA(token, verificationCode);
+    console.log("ESTOY EN LA LINEA 141 RESPUESTA DE logonDfa");
 
     if (logonDfa) {
       showSwalSuccess(VITE_WELCOME_PORTAL);
@@ -175,7 +179,7 @@ export const LoginPage = () => {
       const timer = setTimeout(() => {
         setShowInputComponent(true);
         setShowLoading(false);
-      }, 2000);
+      }, 1000);
       return () => clearTimeout(timer);
     }
   }, [showVerificationForm]); // useEffect se ejecutará cuando showVerificationForm cambie
@@ -204,23 +208,6 @@ export const LoginPage = () => {
                   </Stack>
                 )}
               </div>
-              {/* <div className="input-group">
-                <TextField
-                  type="password"
-                  name="passwordLoginInternalUser"
-                  id="passwordLoginInternalUser"
-                  value={passwordLoginInternalUser}
-                  onChange={onInputChangePassword}
-                  autoComplete="off"
-                  label="Contraseña"
-                  className="input_data"
-                />
-                {showAlertPassword && (
-                  <Stack sx={{ width: "100%" }} spacing={2}>
-                    <Alert severity="error">Campo requerido</Alert>
-                  </Stack>
-                )}
-              </div> */}
               <div className="input-group">
                 <FormControl variant="outlined">
                   <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
@@ -274,7 +261,7 @@ export const LoginPage = () => {
       {showVerificationForm && (
         <div className="wrapper">
           <div className="contenedor_form_code">
-            <h1>Ingrese Token de validaci&oacute;n</h1>
+            <h1>Ingrese Token de validación</h1>
 
             <form onSubmit={onVerificationCodeSubmit}>
               <div className="input_group_code">
