@@ -198,10 +198,15 @@ const DashboardPage = () => {
                       {open && <span className="icon-link">Feriados</span>}
                     </NavLink>
                   )}
-                  <NavLink to="./ddjjconsultaempleado" className="icon-container">
+                  {!isRolEmpleador && (
+                    <NavLink
+                      to="./ddjjconsultaempleado"
+                      className="icon-container"
+                    >
                       <DateRangeIcon className="icon-link" />{" "}
                       {open && <span className="icon-link">DDJJ consulta</span>}
-                  </NavLink>
+                    </NavLink>
+                  )}
                   {isRolEmpleador && (
                     <NavLink to="./ddjj" className="icon-container">
                       <LibraryBooksIcon className="icon-link" />{" "}
