@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Stack } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -24,15 +24,17 @@ import formatter from "@/common/formatter";
 import localStorageService from "@/components/localStorage/localStorageService";
 import Swal from "sweetalert2";
 import XLSX from "xlsx";
+import { TextFields } from "@mui/icons-material";
 
 export const MisAltaDeclaracionesJuradas = ({
   DDJJState,
   setDDJJState,
   periodo,
   setPeriodo,
+  /* 
   periodoIso,
   handleChangePeriodo,
-  handleAcceptPeriodoDDJJ,
+  handleAcceptPeriodoDDJJ, */
   rowsAltaDDJJ,
   setRowsAltaDDJJ,
   rowsAltaDDJJAux,
@@ -40,8 +42,6 @@ export const MisAltaDeclaracionesJuradas = ({
   peticion,
   idDDJJ,
 }) => {
-  console.log("rowsAltaDDJJ: ");
-  console.log(rowsAltaDDJJ);
   const [otroPeriodo, setOtroPeriodo] = useState(null);
   const [otroPeriodoIso, setOtroPeriodoIso] = useState(null);
   const [camaras, setCamaras] = useState([]);
@@ -53,23 +53,17 @@ export const MisAltaDeclaracionesJuradas = ({
   const [mostrarPeriodos, setMostrarPeriodos] = useState(false);
   const [validacionResponse, setValidacionResponse] = useState([]);
   const [afiliadoImportado, setAfiliadoImportado] = useState([]);
+  const [filasDoc, setFilasDoc] = useState([]);
+  const [ocultarGrillaPaso3, setOcultarGrillaPaso3] = useState(false);
   const ID_EMPRESA = localStorageService.getEmpresaId();
 
-  const handleChangeOtroPeriodo = (date) => setOtroPeriodo(date);
-
-  const handleAcceptOtroPeriodo = () => {
-    if (otroPeriodo && otroPeriodo.$d) {
-      const { $d: fecha } = otroPeriodo;
-      const fechaFormateada = new Date(fecha);
-      fechaFormateada.setDate(1); // Establecer el día del mes a 1
-
-      // Ajustar la zona horaria a UTC
-      fechaFormateada.setUTCHours(0, 0, 0, 0);
-
-      const fechaISO = fechaFormateada.toISOString(); // 2026-02-01T00:00:00.000Z
-      setOtroPeriodoIso(fechaISO);
-    }
+  const handleChangePeriodo = (date) => {
+    setPeriodo(date)
+    console.log("SSSSSSSSSSSSSSSSS")
+    console.log(periodo)
   };
+
+  const handleChangeOtroPeriodo = (date) => setOtroPeriodo(date);
 
   useEffect(() => {
     const ObtenerCamaras = async () => {
@@ -93,14 +87,12 @@ export const MisAltaDeclaracionesJuradas = ({
   useEffect(() => {
     const ObtenerPlantaEmpresas = async () => {
       const data = await axiosDDJJ.getPlantas(ID_EMPRESA);
-      console.log(data);
       setPlantas(data.map((item) => ({ id: item, ...item })));
     };
     ObtenerPlantaEmpresas();
   }, []);
 
   const importarAfiliado = async () => {
-   
     const cuiles = afiliadoImportado.map((item) => item.cuil);
     const cuilesString = cuiles.map((item) => item.toString());
 
@@ -109,33 +101,51 @@ export const MisAltaDeclaracionesJuradas = ({
       cuilesString
     );
 
+    console.log("AFILIAFO IMPORTADO");
+    console.log(afiliadoImportado);
+    console.log("CUILES RESPONSE DDBB");
+    console.log(cuilesResponse);
+
+    const afiliadoImportadoConInte = afiliadoImportado.map((item) => {
+      const cuilResponse = cuilesResponse.find(
+        (cuil) => +cuil.cuil === item.cuil
+      );
+      if (cuilResponse) {
+        return { ...item, inte: cuilResponse.inte };
+      }
+      return item;
+    });
+
+    console.log("AFILIADO IMPORTADO FINAL CON INTE");
+    console.log(afiliadoImportadoConInte);
+
     // Si alguno de los cuiles el valor de cuilesValidados es igual a false
     if (cuilesResponse.some((item) => item.cuilValido === false)) {
-      // imprimir en consola el cuil que tiene el valor de cuilValido igual a false
-      const cuilFallido = cuilesResponse.filter(
-        (item) => item.cuilValido === false
-      );
-      cuilFallido.forEach((item) => {
-        console.log(item.cuil);
-      });
+      /*  const cuilFallido = cuilesResponse.filter(
+         (item) => item.cuilValido === false
+       ); */
 
-      const mensajesFormateados = cuilFallido
-        .map((item, index) => {
-          return `<p>${item.cuil}</p>`;
+      const mensajesFormateados2 = filasDoc
+        .map((item) => {
+          return `<p style="margin-top:20px;">
+        Linea ${item.indice}: cuil ${item.cuil} con formato inválido.</p>`;
         })
         .join("");
+
+      console.log(mensajesFormateados2);
 
       Swal.fire({
         icon: "error",
         title: "Error de validacion",
-        html: `Cuiles con errores:<br>${mensajesFormateados}<br>`,
+        html: `Cuiles con errores:<br>${mensajesFormateados2}<br>`,
         showConfirmButton: true,
         confirmButtonText: "Aceptar",
         showCancelButton: true,
         cancelButtonText: "Cancelar",
       });
+
+      setRowsAltaDDJJ(afiliadoImportadoConInte);
     } else {
-      // swall de 1 segundo success
       Swal.fire({
         icon: "success",
         title: "Importación exitosa",
@@ -143,9 +153,13 @@ export const MisAltaDeclaracionesJuradas = ({
         timer: 1000,
       });
 
-      setRowsAltaDDJJ(afiliadoImportado);
+      // Aca es donde debo de controlar el inte dependiendo si el cuil
+      // Se encuentra dado de alta o no, antes de llenar la grilla.
+
+      setRowsAltaDDJJ(afiliadoImportadoConInte);
     }
-    setRowsAltaDDJJAux(afiliadoImportado);
+    setRowsAltaDDJJAux(afiliadoImportadoConInte);
+    setOcultarGrillaPaso3(true);
   };
 
   const formatearFecha = (fecha) => {
@@ -171,31 +185,48 @@ export const MisAltaDeclaracionesJuradas = ({
         const sheet = workbook.Sheets[sheetName];
         const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
-        const arraySinEncabezado = rows.slice(1);
+        console.log("CSV IMPORTADO...");
+        console.log(rows);
 
-        console.log(arraySinEncabezado);
+        if (rows[0].length === 11) {
+          console.log("Columnas completas");
+          const arraySinEncabezado = rows.slice(1);
 
-        const arrayTransformado = arraySinEncabezado.map((item, index) => {
-          return {
-            id: index + 1,
-            cuil: item[0],
-            apellido: item[1],
-            nombre: item[2],
-            camara: item[3],
-            categoria: item[4],
-            fechaIngreso: formatearFecha(item[5]),
-            empresaDomicilioId: plantas.find(
-              (plantas) => plantas.planta === item[6]
-            )?.id,
-            remunerativo: item[7],
-            noRemunerativo: item[8],
-            uomaSocio: item[9] === "Si",
-            amtimaSocio: item[10] === "Si",
-          };
-        });
+          rows.forEach((item, index) => {
+            const fila = {
+              indice: index + 1,
+              cuil: item[0],
+            };
 
-        setAfiliadoImportado(arrayTransformado);
-        // setRowsAltaDDJJ(arrayTransformado);
+            setFilasDoc([...filasDoc, fila]);
+          });
+
+          const arrayTransformado = arraySinEncabezado.map((item, index) => {
+            return {
+              id: index + 1,
+              cuil: item[0],
+              apellido: item[1],
+              nombre: item[2],
+              camara: item[3],
+              categoria: item[4],
+              fechaIngreso: formatearFecha(item[5]),
+              empresaDomicilioId: plantas.find(
+                (plantas) => plantas.planta === item[6]
+              )?.id,
+              remunerativo: item[7],
+              noRemunerativo: item[8],
+              uomaSocio: item[9] === "Si",
+              amtimaSocio: item[10] === "Si",
+              esImportado: true,
+            };
+          });
+
+          // Antes de llenar las grillas debo de validar los cuiles
+
+          setAfiliadoImportado(arrayTransformado);
+        } else {
+          console.log("Columnas incompletas");
+        }
       };
 
       reader.readAsArrayBuffer(file);
@@ -207,13 +238,29 @@ export const MisAltaDeclaracionesJuradas = ({
   };
 
   const guardarDeclaracionJurada = async () => {
-    const DDJJ = {
-      id: DDJJState.id,
-      periodo: periodoIso,
+    console.log("GUARDAR DECLARACION JURADA");
+    console.log(rowsAltaDDJJ);
+    console.log(periodo)
+    console.log(DDJJState);
+    // si periodo la DDJJState tiene id modifico a periodo
+    if(DDJJState && DDJJState.id){
+      console.log("Tiene id la ddjj")
+      setPeriodo(DDJJState.periodo)
+      console.log(periodo)
+    }
+
+    console.log(periodo);
+
+    let DDJJ = {
+      periodo: periodo,
       afiliados: rowsAltaDDJJ.map((item) => {
-        const registro = {
+        console.log("DENTRO DE ROWS ALTA DDJJ.c.c.");
+        console.log(item);
+
+        const registroNew = {
+          errores: item.errores,
           cuil: !item.cuil ? null : item.cuil,
-          inte: !item.inte ? null : item.inte,
+          inte: item.inte,
           apellido: !item.apellido ? null : item.apellido,
           nombre: !item.nombre ? null : item.nombre,
           fechaIngreso: !item.fechaIngreso ? null : item.fechaIngreso,
@@ -224,17 +271,71 @@ export const MisAltaDeclaracionesJuradas = ({
           categoria: !item.categoria ? null : item.categoria,
           remunerativo: !item.remunerativo ? null : item.remunerativo,
           noRemunerativo: !item.noRemunerativo ? null : item.noRemunerativo,
-          uomaSocio: item.uomaSocio,
-          amtimaSocio: item.amtimaSocio,
+          uomaSocio: !item.uomaSocio ? null : item.uomaSocio,
+          amtimaSocio: !item.amtimaSocio ? null : item.amtimaSocio,
         };
-        if (item.id) registro.id = item.id;
-        return registro;
+
+        console.log("REGISTRO NEW");
+        console.log(registroNew);
+        if (item.id) registroNew.id = item.id;
+        return registroNew;
       }),
     };
 
+    if (DDJJState.id) {
+      DDJJ.id = DDJJState.id;
+    }
+
+    console.log("DDJJJJJJJJJJJJJJJJJJ FINALLLL");
+    console.log(DDJJ);
+
+    // Borrar la propiedad errores de cada afiliado
+    // por que no se envia al backend
+    DDJJ.afiliados.forEach((afiliado) => {
+      delete afiliado.errores;
+    });
+
+    console.log("borro afiliado.errores - DDJJ:");
+    console.log(DDJJ);
+
     const validacionResponse = await axiosDDJJ.validar(ID_EMPRESA, DDJJ);
+    console.log("validacionResponse: ");
     console.log(validacionResponse);
-    setValidacionResponse(validacionResponse);
+
+    // array de cuiles del array validacionResponse.errores
+    let cuilesConErrores = [];
+    if (validacionResponse.errores) {
+      cuilesConErrores = validacionResponse.errores.map((error) => error.cuil);
+    }
+    console.log("cuilesConErrores: ");
+    console.log(cuilesConErrores);
+
+    // Agregar la propiedad errores="No"
+    DDJJ.afiliados.forEach((afiliado) => {
+      console.log("afiliado.cuil: ");
+      console.log(afiliado.cuil);
+      afiliado.errores = false;
+      if (cuilesConErrores.includes(afiliado.cuil)) {
+        console.log("afiliado.errores:false");
+        afiliado.errores = true;
+      }
+    });
+
+    // Buscar todos estos cuiles en el rowsAltaDDJJ, y marcarlos con errores="Si"
+    rowsAltaDDJJ.forEach((afiliado) => {
+      if (cuilesConErrores.includes(afiliado.cuil)) {
+        afiliado.errores = true;
+      } else {
+        afiliado.errores = false;
+      }
+    });
+
+    // Borro la propiedad errores de ddjj
+    DDJJ.afiliados.forEach((afiliado) => {
+      delete afiliado.errores;
+    });
+
+    setValidacionResponse(validacionResponse); // Sirve para pintar en rojo los campos con errores
 
     if (validacionResponse.errores && validacionResponse.errores.length > 0) {
       const mensajesUnicos = new Set();
@@ -264,13 +365,15 @@ export const MisAltaDeclaracionesJuradas = ({
         if (result.isConfirmed) {
           console.log("Aceptar...");
           let bOK = false;
+
+          DDJJ.afiliados.forEach((afiliado) => {
+            delete afiliado.errores;
+          });      
+          
           if (peticion === "PUT") {
             bOK = await axiosDDJJ.actualizar(ID_EMPRESA, DDJJ);
-            //setRowsAltaDDJJ([]);
           } else {
             await axiosDDJJ.crear(ID_EMPRESA, DDJJ);
-            alert("Declaracion jurada guardada exitosamente");
-            //setRowsAltaDDJJ([]);
           }
         } else {
           console.log("Cancelar...se queda a corregir datos");
@@ -281,31 +384,54 @@ export const MisAltaDeclaracionesJuradas = ({
       });
     } else {
       console.log("no tiene errores...grabo directamente.");
+
+      DDJJ.afiliados.forEach((afiliado) => {
+        delete afiliado.errores;
+      });
+
       if (peticion === "PUT") {
         console.log("Dentro de PUT");
+    
         //await actualizarDeclaracionJurada(ID_EMPRESA, altaDDJJFinal, altaDDJJFinal.id);
         await axiosDDJJ.actualizar(ID_EMPRESA, DDJJ);
         //setRowsAltaDDJJ([]);
         // peticion put con fetch
       } else {
+    
         const data = await axiosDDJJ.crear(ID_EMPRESA, DDJJ);
+        console.log(data);
         if (data) {
           //actualizar estado
           setDDJJState(data);
           //setRowsAltaDDJJ(data.);
         }
         //sacarlo luego de actualizar
-        setRowsAltaDDJJ([]);
+        //setRowsAltaDDJJ([]);
       }
     }
   };
+
+  const presentarDeclaracionJurada = async () => { };
+
+  console.log("DDJJAlta - rowsAltaDDJJ: ");
+  console.log(rowsAltaDDJJ);
+  console.log("DDJJAlta - DDJJState: ");
+  console.log(DDJJState);
+  let formNro = "Formulario: Original";
+  if (DDJJState && DDJJState.secuencia) {
+    if (DDJJState.secuencia == 0) {
+      formNro = "Formulario: Original";
+    } else {
+      formNro = "Formulario: Rectif. " + DDJJState.secuencia;
+    }
+  }
 
   return (
     <div className="mis_alta_declaraciones_juradas_container">
       <div className="periodo_container">
         <h5 className="paso">Paso 1 - Indique período a presentar</h5>
         <Stack spacing={4} direction="row" alignItems="center">
-          <h5 className="title_periodo">Período</h5>
+          <Typography variant="h6" className="title_periodo">Período</Typography>
           <LocalizationProvider
             dateAdapter={AdapterDayjs}
             adapterLocale={"es"}
@@ -317,14 +443,15 @@ export const MisAltaDeclaracionesJuradas = ({
               <DesktopDatePicker
                 label={"Periodo"}
                 views={["month", "year"]}
-                closeOnSelect={false}
+                closeOnSelect={true}
                 onChange={handleChangePeriodo}
-                value={periodo}
-                slotProps={{ actionBar: { actions: ["cancel", "accept"] } }}
-                onAccept={handleAcceptPeriodoDDJJ}
+                value={periodo} // dayJs(periodo) fallaba
               />
             </DemoContainer>
           </LocalizationProvider>
+          <Typography variant="h6">
+            {formNro}
+          </Typography>
         </Stack>
       </div>
 
@@ -390,17 +517,13 @@ export const MisAltaDeclaracionesJuradas = ({
                         .localeText
                     }
                   >
-                    <DesktopDatePicker
-                      label={"Otro Periodo"}
+                    {/* <DatePicker
+                      label={"Periodo"}
                       views={["month", "year"]}
-                      closeOnSelect={false}
+                      closeOnSelect={true}
                       onChange={handleChangeOtroPeriodo}
                       value={otroPeriodo}
-                      slotProps={{
-                        actionBar: { actions: ["cancel", "accept"] },
-                      }}
-                      onAccept={handleAcceptOtroPeriodo}
-                    />
+                    /> */}
                   </LocalizationProvider>
                 </Stack>
               )}
@@ -412,6 +535,7 @@ export const MisAltaDeclaracionesJuradas = ({
               marginLeft: "114px",
               padding: "6px 45px",
             }}
+            onClick={() => setOcultarGrillaPaso3(!ocultarGrillaPaso3)}
           >
             Buscar
           </Button>
@@ -425,51 +549,58 @@ export const MisAltaDeclaracionesJuradas = ({
               padding: "6px 23px",
               marginLeft: "468px",
             }}
+            onClick={() => setOcultarGrillaPaso3(!ocultarGrillaPaso3)}
           >
             Seleccionar
           </Button>
         </div>
       </div>
 
-      <div className="formulario_container">
-        <h5 className="paso">Paso 3 - Completar el formulario</h5>
-        <GrillaPasoTres
-          rowsAltaDDJJ={rowsAltaDDJJ}
-          setRowsAltaDDJJ={setRowsAltaDDJJ}
-          rowsAltaDDJJAux={rowsAltaDDJJAux}
-          setRowsAltaDDJJAux={setRowsAltaDDJJAux}
-          camaras={camaras}
-          categoriasFiltradas={categoriasFiltradas}
-          setCategoriasFiltradas={setCategoriasFiltradas}
-          afiliado={afiliado}
-          setAfiliado={setAfiliado}
-          todasLasCategorias={todasLasCategorias}
-          plantas={plantas}
-          validacionResponse={validacionResponse}
-        />
-        <div
-          className="botones_container"
-          style={{
-            display: "flex",
-            justifyContent: "flex-end",
-            marginTop: "20px",
-          }}
-        >
-          <Button
-            variant="contained" // Si quito esto se ve mejor ?????
-            sx={{ padding: "6px 52px", marginLeft: "10px" }}
-            onClick={guardarDeclaracionJurada}
+      {(ocultarGrillaPaso3 || (rowsAltaDDJJ && rowsAltaDDJJ.length > 0)) && (
+        <div className="formulario_container">
+          <h5 className="paso">Paso 3 - Completar el formulario</h5>
+
+          <GrillaPasoTres
+            rowsAltaDDJJ={rowsAltaDDJJ}
+            setRowsAltaDDJJ={setRowsAltaDDJJ}
+            rowsAltaDDJJAux={rowsAltaDDJJAux}
+            setRowsAltaDDJJAux={setRowsAltaDDJJAux}
+            camaras={camaras}
+            categoriasFiltradas={categoriasFiltradas}
+            setCategoriasFiltradas={setCategoriasFiltradas}
+            afiliado={afiliado}
+            setAfiliado={setAfiliado}
+            todasLasCategorias={todasLasCategorias}
+            plantas={plantas}
+            validacionResponse={validacionResponse}
+          />
+
+          <div
+            className="botones_container"
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              marginTop: "20px",
+            }}
           >
-            Guardar
-          </Button>
-          <Button
-            variant="contained"
-            sx={{ padding: "6px 52px", marginLeft: "10px" }}
-          >
-            Presentar
-          </Button>
+            <Button
+              variant="contained" // Si quito esto se ve mejor ?????
+              sx={{ padding: "6px 52px", marginLeft: "10px" }}
+              onClick={guardarDeclaracionJurada}
+            >
+              Guardar
+            </Button>
+
+            <Button
+              variant="contained"
+              sx={{ padding: "6px 52px", marginLeft: "10px" }}
+              onClick={presentarDeclaracionJurada}
+            >
+              Presentar
+            </Button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

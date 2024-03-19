@@ -15,11 +15,12 @@ import { CSVLink, CSVDownload } from "react-csv";
 import localStorageService from "@/components/localStorage/localStorageService";
 export const MisDeclaracionesJuradas = ({
   setDDJJState,
+  setPeriodo,
   rows_mis_ddjj,
   setRowsMisDdjj,
   setTabState,
-  setPeriodo,
-  handleAcceptPeriodoDDJJ,
+  /* 
+  handleAcceptPeriodoDDJJ, */
   rowsAltaDDJJ,
   setRowsAltaDDJJ,
   setPeticion,
@@ -51,7 +52,6 @@ export const MisDeclaracionesJuradas = ({
   const buscarDeclaracionesJuradas = async () => {
     try {
       const ddjjResponse = await axiosDDJJ.consultar(ID_EMPRESA);
-
       if (desde && desde.$d && hasta && hasta.$d) {
         const { $d: $desde } = desde;
         const { $d: $hasta } = hasta;
@@ -73,6 +73,8 @@ export const MisDeclaracionesJuradas = ({
           );
         });
         setRowsMisDdjj(declaracionesFiltradas);
+      } else {
+        setRowsMisDdjj(ddjjResponse);
       }
     } catch (error) {
       console.error("Error al buscar declaraciones juradas:", error);
@@ -140,10 +142,12 @@ export const MisDeclaracionesJuradas = ({
           <Button onClick={buscarDeclaracionesJuradas} variant="contained">
             Buscar
           </Button>
-          <Button variant="contained" onClick={exportarDeclaracionesJuradas}>
-            Exportar
-          </Button>
-          <CSVLink data={data}>Exportar CSV</CSVLink>
+
+          <CSVLink data={data}>
+            <Button variant="contained" onClick={exportarDeclaracionesJuradas}>
+              Exportar CSV
+            </Button>
+          </CSVLink>
           {/* <CSVLink data={csvData} filename={"misddjj.csv"}>Download me</CSVLink>; */}
 
           {/* <CSVDownload data={rows_mis_ddjj} target="_blank" />; */}
@@ -152,12 +156,13 @@ export const MisDeclaracionesJuradas = ({
       <Stack direction="row" justifyContent="center" alignItems="center">
         <GrillaMisDeclaracionesJuradas
           setDDJJState={setDDJJState}
+          setPeriodo={setPeriodo}
           rows_mis_ddjj={rows_mis_ddjj}
           setRowsMisDdjj={setRowsMisDdjj}
           idEmpresa={ID_EMPRESA}
           setTabState={setTabState}
-          setPeriodo={setPeriodo}
-          handleAcceptPeriodoDDJJ={handleAcceptPeriodoDDJJ}
+          /* 
+          handleAcceptPeriodoDDJJ={handleAcceptPeriodoDDJJ} */
           rowsAltaDDJJ={rowsAltaDDJJ}
           setRowsAltaDDJJ={setRowsAltaDDJJ}
           setPeticion={setPeticion}

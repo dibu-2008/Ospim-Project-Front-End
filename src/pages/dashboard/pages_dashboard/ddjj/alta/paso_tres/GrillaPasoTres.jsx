@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect, useRef } from "react";
 import {
   GridRowModes,
   DataGrid,
+  GridToolbar,
   GridToolbarContainer,
   GridActionsCellItem,
   GridRowEditStopReasons,
@@ -58,8 +59,8 @@ function EditToolbar(props) {
         categoria: "",
         remunerativo: "",
         noRemunerativo: "",
-        uomaSocio: false,
-        amtimaSocio: false,
+        uomaSocio: "",
+        amtimaSocio: "",
         isNew: true,
       },
       ...oldRows,
@@ -91,10 +92,14 @@ function EditToolbar(props) {
   };
 
   return (
-    <GridToolbarContainer>
+    <GridToolbarContainer theme={props.themeWithLocale}>
       <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
         Nuevo Registro
       </Button>
+      <GridToolbar
+        showQuickFilter={props.showQuickFilter}
+        // ocultar el filtro de columnas
+      />
     </GridToolbarContainer>
   );
 }
@@ -116,6 +121,10 @@ export const GrillaPasoTres = ({
   const [locale, setLocale] = useState("esES");
   const [rowModesModel, setRowModesModel] = useState({});
   const [selectedRowId, setSelectedRowId] = useState(null);
+  const [inteDataBase, setInteDataBase] = useState(null);
+  const [columnVisibilityModel, setColumnVisibilityModel] = useState({
+    errores: false,
+  });
 
   const theme = useTheme();
   const themeWithLocale = useMemo(
@@ -123,17 +132,50 @@ export const GrillaPasoTres = ({
     [locale, theme]
   );
 
+  useEffect(() => {
+    const paintCells = () => {
+      // Traete este button del DOM
+      /* MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall css-1knaqv7-MuiButtonBase-root-MuiButton-root pero que tenga el contenido FILTERS */
+
+      const button = document.querySelectorAll(
+        ".css-1knaqv7-MuiButtonBase-root-MuiButton-root"
+      );
+
+      console.log("Boton: ", button.item(0).nodeType);
+      console.log("Boton: ", button.item(0).innerText);
+
+      button.item(0).innerText = "COLUMNAS";
+      button.item(1).innerText = "FILTROS";
+      button.item(2).innerText = "DENSIDAD";
+      button.item(3).innerText = "EXPORTAR";
+    };
+
+    const timeoutId = setTimeout(() => {
+      paintCells();
+    }, 1000);
+
+    return () => clearTimeout(timeoutId);
+  }, []);
+
   const ObtenerAfiliados = async (params, cuilElegido) => {
     const afiliados = await axiosDDJJ.getAfiliado(cuilElegido);
-    console.log(afiliados);
-    //const afiliados = await obtenerAfiliados(token, cuilElegido);
+
     const afiliadoEncontrado = afiliados.find(
       (afiliado) => afiliado.cuil === cuilElegido
     );
 
-    setAfiliado(afiliadoEncontrado);
+    if (afiliado) {
+      setAfiliado(afiliadoEncontrado);
+    }
+
     // TODO : Mirar el tema de la logica de busqueda por que tambien podria poder escribir sin buscar el cuil
     if (afiliadoEncontrado) {
+      if (afiliadoEncontrado.inte !== null) {
+        setInteDataBase(afiliadoEncontrado.inte);
+      }
+
+      setAfiliado(afiliadoEncontrado);
+
       // Apellido
       params.api.setEditCellValue({
         id: params.id,
@@ -188,7 +230,6 @@ export const GrillaPasoTres = ({
   const handleEditClick = (id) => () => {
     console.log("handleEditClick - id: " + id);
     const editedRow = rowsAltaDDJJ.find((row) => row.id === id);
-    console.log("handleEditClick - editedRow: " + JSON.stringify(editedRow));
 
     filtroDeCategoria(editedRow.camara);
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
@@ -215,21 +256,39 @@ export const GrillaPasoTres = ({
   };
 
   const processRowUpdate = async (newRow) => {
-    const updatedRow = { ...newRow, isNew: false };
+    if (newRow.isNew) {
+      const fila = { ...newRow, inte: inteDataBase, errores: false };
+      console.log("Nueva Fila");
+      console.log(fila);
+      console.log("Nueva Fila - newRow: ");
+      console.log(newRow);
+      console.log("Nueva Fila - rowsAltaDDJJ: ");
+      console.log(rowsAltaDDJJ);
 
-    setRowsAltaDDJJ(
-      rowsAltaDDJJ.map((row) => (row.id === newRow.id ? updatedRow : row))
-    );
+      setRowsAltaDDJJ(
+        rowsAltaDDJJ.map((row) => (row.id === newRow.id ? fila : row))
+      );
 
-    console.log("rowsAltaDDJJ: ", rowsAltaDDJJ);
+      setRowsAltaDDJJAux(
+        rowsAltaDDJJAux.map((row) => (row.id === newRow.id ? fila : row))
+      );
 
-    setRowsAltaDDJJAux(
-      rowsAltaDDJJAux.map((row) => (row.id === newRow.id ? updatedRow : row))
-    );
+      return { ...fila, isNew: false };
+    } else {
+      const fila = { ...newRow, inte: inteDataBase };
+      console.log("Fila a modificar");
+      console.log(fila);
 
-    console.log("rowsAltaDDJJAux: ", rowsAltaDDJJAux);
+      setRowsAltaDDJJ(
+        rowsAltaDDJJ.map((row) => (row.id === newRow.id ? fila : row))
+      );
 
-    return updatedRow;
+      setRowsAltaDDJJAux(
+        rowsAltaDDJJAux.map((row) => (row.id === newRow.id ? fila : row))
+      );
+
+      return fila;
+    }
   };
 
   const handleRowModesModelChange = (newRowModesModel) => {
@@ -237,29 +296,40 @@ export const GrillaPasoTres = ({
   };
 
   const filasConErrores = () => {
-    // Mostrar las filas con errores
-    let errores = [];
-    validacionResponse?.errores?.forEach((error) => {
-      errores.push(error.cuil);
-    });
+    // Selecciona el contenedor "afiliados"
+    const contenedorAfiliados = document.querySelector(".afiliados");
 
-    // Filtrar las filas con errores, consultando el cuil mediante el array de errores, usando includes para comparar
-    let filasConErrores = [];
-    rowsAltaDDJJ.forEach((row) => {
-      if (errores.includes(row.cuil)) {
-        filasConErrores.push(row);
-      }
-    });
+    // Busca el contenedor "MuiDataGrid-main" dentro del contenedor "afiliados"
+    const contenedorMain =
+      contenedorAfiliados.querySelector(".MuiDataGrid-main");
 
-    console.log("Filas con errores: ", filasConErrores);
+    // Busca el contenedor "MuiDataGrid-virtualScroller" dentro del contenedor "MuiDataGrid-main"
+    const contenedorVirtualScroller = contenedorMain.querySelector(
+      ".MuiDataGrid-virtualScroller"
+    );
 
-    // Mostrar las filas con errores en la grilla
-    setRowsAltaDDJJ(filasConErrores);
+    // Busca el contenedor "MuiDataGrid-virtualScrollerContent" dentro del contenedor "MuiDataGrid-virtualScroller"
+    const contenedorVirtualScrollerContent =
+      contenedorVirtualScroller.querySelector(
+        ".MuiDataGrid-virtualScrollerContent"
+      );
+
+    // Busca todos los hijos del contenedor "MuiDataGrid-virtualScrollerRenderZone" dentro del contenedor "MuiDataGrid-virtualScrollerContent"
+    const hijosMuiDataGridVirtualScrollerRenderZone =
+      contenedorVirtualScrollerContent.querySelector(
+        ".MuiDataGrid-virtualScrollerRenderZone"
+      ).children;
+
+    console.log(
+      "Hijos de MuiDataGrid-virtualScrollerRenderZone:",
+      hijosMuiDataGridVirtualScrollerRenderZone
+    );
   };
 
   const filasTodas = () => {
+    /* console.log("Filas todas: ", rowsAltaDDJJAux)
     // Mostrar todas las filas
-    setRowsAltaDDJJ(rowsAltaDDJJAux);
+    setRowsAltaDDJJ(rowsAltaDDJJAux); */
   };
 
   const columns = [
@@ -448,8 +518,6 @@ export const GrillaPasoTres = ({
       }),
       headerClassName: "header--cell",
       renderEditCell: (params) => {
-        console.log(rowsAltaDDJJ);
-
         return (
           <Select
             fullWidth
@@ -510,6 +578,9 @@ export const GrillaPasoTres = ({
       align: "center",
       headerClassName: "header--cell",
       valueFormatter: (params) => {
+
+        if(!params.value) return "";
+
         const date = new Date(params.value);
         const day = date.getUTCDate().toString().padStart(2, "0");
         const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
@@ -541,7 +612,10 @@ export const GrillaPasoTres = ({
       headerAlign: "center",
       align: "center",
       headerClassName: "header--cell",
-      valueFormatter: (params) => formatter.currency.format(params.value || 0),
+      valueFormatter: (params) => {
+        if(params.value === "") return "";
+        return formatter.currency.format(params.value || 0)
+      },
     },
     {
       field: "noRemunerativo",
@@ -560,7 +634,10 @@ export const GrillaPasoTres = ({
       headerAlign: "center",
       align: "center",
       headerClassName: "header--cell",
-      valueFormatter: (params) => formatter.currency.format(params.value || 0),
+      valueFormatter: (params) => {
+        if(params.value === "") return "";  
+        return formatter.currency.format(params.value || 0)
+      },
     },
     {
       field: "uomaSocio",
@@ -583,7 +660,7 @@ export const GrillaPasoTres = ({
       valueOptions: [
         { value: true, label: "Si" },
         { value: false, label: "No" },
-      ],
+      ],   
     },
     {
       field: "amtimaSocio",
@@ -606,7 +683,13 @@ export const GrillaPasoTres = ({
       valueOptions: [
         { value: true, label: "Si" },
         { value: false, label: "No" },
-      ],
+      ]
+    },
+    {
+      field: "errores",
+      headerName: "Errores",
+      flex: 1,
+      type: "boolean",
     },
     {
       field: "actions",
@@ -682,8 +765,10 @@ export const GrillaPasoTres = ({
       >
         <ThemeProvider theme={themeWithLocale}>
           <DataGrid
+            className="afiliados"
             rows={rowsAltaDDJJ}
             columns={columns}
+            columnVisibilityModel={{ errores: false }}
             editMode="row"
             rowModesModel={rowModesModel}
             onRowModesModelChange={handleRowModesModelChange}
@@ -699,6 +784,10 @@ export const GrillaPasoTres = ({
                 setRowsAltaDDJJAux,
                 rowsAltaDDJJAux,
                 setRowModesModel,
+                showQuickFilter: true,
+                // filtro de columnas
+                showColumnMenu: true,
+                themeWithLocale,
               },
             }}
             sx={{
@@ -749,7 +838,7 @@ export const GrillaPasoTres = ({
             marginTop: "20px",
           }}
         >
-          <a
+          {/* <a
             className="link_animado"
             variant="contained"
             style={{
@@ -768,7 +857,7 @@ export const GrillaPasoTres = ({
             onClick={filasTodas}
           >
             Todas las filas
-          </a>
+          </a> */}
         </div>
       </Box>
     </div>

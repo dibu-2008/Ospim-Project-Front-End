@@ -46,11 +46,12 @@ function a11yProps(index) {
 
 export const DeclaracionesJuradas = () => {
   const [DDJJState, setDDJJState] = useState({});
+  const [periodo, setPeriodo] = useState(null);
   const [rowsAltaDDJJ, setRowsAltaDDJJ] = useState([]);
   const [rowsAltaDDJJAux, setRowsAltaDDJJAux] = useState([]);
   const [rows_mis_ddjj, setRowsMisDdjj] = useState([]);
-  const [periodo, setPeriodo] = useState(null);
-  const [periodoIso, setPeriodoIso] = useState(null);
+  /*
+  const [periodoIso, setPeriodoIso] = useState(null); */
   const [locale, setLocale] = useState("esES");
   const [tabState, setTabState] = useState(0);
   const [peticion, setPeticion] = useState("");
@@ -67,11 +68,7 @@ export const DeclaracionesJuradas = () => {
     setTabState(newValue);
   };
 
-  const handleChangePeriodo = (date) => {
-    setPeriodo(date);
-  };
-
-  const handleAcceptPeriodoDDJJ = () => {
+  /* const handleAcceptPeriodoDDJJ = () => {
     if (periodo && periodo.$d) {
       const { $d: fecha } = periodo;
       const fechaFormateada = new Date(fecha);
@@ -83,11 +80,11 @@ export const DeclaracionesJuradas = () => {
       const fechaISO = fechaFormateada.toISOString(); // 2026-02-01T00:00:00.000Z
       setPeriodoIso(fechaISO);
     }
-  };
+  }; */
 
-  useEffect(() => {
+  /* useEffect(() => {
     handleAcceptPeriodoDDJJ();
-  }, [periodo]);
+  }, [periodo]); */
 
   return (
     <div className="declaraciones_juradas_container">
@@ -120,10 +117,10 @@ export const DeclaracionesJuradas = () => {
               DDJJState={DDJJState}
               setDDJJState={setDDJJState}
               periodo={periodo}
-              setPeriodo={setPeriodo}
-              periodoIso={periodoIso}
+              setPeriodo={setPeriodo} /*  */
+              /* periodoIso={periodoIso}
               handleChangePeriodo={handleChangePeriodo}
-              handleAcceptPeriodoDDJJ={handleAcceptPeriodoDDJJ}
+              handleAcceptPeriodoDDJJ={handleAcceptPeriodoDDJJ} */
               rowsAltaDDJJ={rowsAltaDDJJ}
               setRowsAltaDDJJ={setRowsAltaDDJJ}
               rowsAltaDDJJAux={rowsAltaDDJJAux}
@@ -135,11 +132,12 @@ export const DeclaracionesJuradas = () => {
           <CustomTabPanel value={tabState} index={1}>
             <MisDeclaracionesJuradas
               setDDJJState={setDDJJState}
+              setPeriodo={setPeriodo}
               rows_mis_ddjj={rows_mis_ddjj}
               setRowsMisDdjj={setRowsMisDdjj}
               setTabState={setTabState}
-              setPeriodo={setPeriodo}
-              handleAcceptPeriodoDDJJ={handleAcceptPeriodoDDJJ}
+              /* 
+              handleAcceptPeriodoDDJJ={handleAcceptPeriodoDDJJ} */
               rowsAltaDDJJ={rowsAltaDDJJ}
               setRowsAltaDDJJ={setRowsAltaDDJJ}
               setPeticion={setPeticion}
