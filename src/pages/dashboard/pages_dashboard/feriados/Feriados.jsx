@@ -339,15 +339,13 @@ export const Feriados = () => {
         Administración de feriados
         <Tooltip
           title="Pasar feriados años siguiente"
-          sx={{ marginLeft: "10px", cursor: "pointer" }}
-        >
-          <IconButton>
+          sx={{ marginLeft: "10px", cursor: "pointer" }}>
+          <IconButton onClick={handleOpen}>
             <DateRangeIcon
               sx={{
                 fontSize: "2.5rem",
                 color: "#1A76D2",
               }}
-              onClick={handleOpen}
             />
           </IconButton>
         </Tooltip>
@@ -429,13 +427,26 @@ export const Feriados = () => {
                 />
               </DemoContainer>
             </LocalizationProvider>
-            <Button
-              variant="contained"
-              sx={{ marginTop: "20px" }}
-              type="submit"
+            <Box 
+              display="flex" 
+              justifyContent="space-between"
+              sx= {{ width: "76%" }}
             >
-              Enviar
-            </Button>
+              <Button
+                variant="contained"
+                sx={{ marginTop: "20px" }}
+                type="submit"
+              >
+                Enviar
+              </Button>
+              <Button
+                variant="contained"
+                sx={{ marginTop: "20px" }}
+                onClick={handleClose}
+              >
+                Cancelar
+              </Button>
+            </Box>
           </form>
         </Box>
       </Modal>

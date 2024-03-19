@@ -495,35 +495,6 @@
       "apellido": "Salinas",
       "email": "luis@gmail.com",
       "id": 8
-    },
-    {
-      "descripcion": "usuario12",
-      "clave": "Prueba123",
-      "rolId": 1,
-      "nombre": "Nombre12",
-      "apellido": "Apellido12 PRUEBA",
-      "email": "usuario12@gmail.com",
-      "id": 9,
-      "habilitado": true
-    },
-    {
-      "descripcion": "luis33",
-      "clave": "123",
-      "rolId": 7,
-      "nombre": "Luis",
-      "apellido": "Salinas",
-      "email": "luis@gmail.com",
-      "id": 10,
-      "habilitado": true
-    },
-    {
-      "descripcion": "",
-      "clave": "",
-      "rolId": "",
-      "nombre": "Juan",
-      "apellido": "Pepenilla",
-      "email": "",
-      "id": 11
     }
   ],
   "publicaciones": [
