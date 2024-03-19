@@ -43,6 +43,11 @@ export const getRol = () => {
   return {};
 };
 
+export const isRolEmpleador = () => {
+  let ROL = getRol();
+  if (ROL == "EMPLEADOR") return true;
+  return false;
+};
 
 const localStorageService = {
   getToken: function () {
@@ -53,6 +58,9 @@ const localStorageService = {
   },
   getRol: function () {
     return getRol();
+  },
+  isRolEmpleador: function () {
+    return isRolEmpleador();
   },
 };
 
