@@ -1,6 +1,14 @@
 import * as locales from "@mui/material/locale";
 import { useState, useEffect, useMemo, useRef } from "react";
-import { Box, Button, IconButton, TextField, Tooltip, alpha, styled } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  TextField,
+  Tooltip,
+  alpha,
+  styled,
+} from "@mui/material";
 
 import { Add, Edit, DeleteOutlined, Save, Close } from "@mui/icons-material";
 import AddIcon from "@mui/icons-material/Add";
@@ -35,7 +43,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers";
 import formatter from "@/common/formatter";
 import swal from "@/components/swal/swal";
-import StripedDataGrid from "@/common/dataGridStyle";
+import { StripedDataGrid, dataGridStyle } from "@/common/dataGridStyle";
 
 const style = {
   position: "absolute",
@@ -322,10 +330,12 @@ export const Feriados = () => {
 
   return (
     <div className="feriados_container">
-      <h1 style={{
-        display: "flex",
-        alignItems: "center",
-      }}>
+      <h1
+        style={{
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
         Administración de feriados
         <Tooltip
           title="Pasar feriados años siguiente"
@@ -367,6 +377,7 @@ export const Feriados = () => {
             processRowUpdate={(updatedRow, originalRow) =>
               processRowUpdate(updatedRow, originalRow)
             }
+            localeText={dataGridStyle.toolbarText}
             slots={{ toolbar: crearNuevoRegistro }}
             slotProps={{
               toolbar: { setRows, rows, setRowModesModel, volverPrimerPagina },
@@ -396,7 +407,8 @@ export const Feriados = () => {
                 width: "400px",
                 marginBottom: "20px",
                 color: theme.palette.primary.main,
-              }}>
+              }}
+            >
               Duplicar feriados
             </Typography>
             <LocalizationProvider
@@ -441,5 +453,3 @@ export const Feriados = () => {
     </div>
   );
 };
-
-
