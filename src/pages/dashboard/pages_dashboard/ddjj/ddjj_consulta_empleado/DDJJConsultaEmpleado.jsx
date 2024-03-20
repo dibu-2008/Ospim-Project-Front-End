@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import localStorageService from "@/components/localStorage/localStorageService";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -6,17 +6,21 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { esES } from "@mui/x-date-pickers/locales";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import { CSVLink, CSVDownload } from "react-csv";
-import { Stack } from "@mui/material";
+import { Stack, TextField } from "@mui/material";
 import Button from "@mui/material/Button";
 import { GrillaDDJJConsultaEmpleado } from "./grilla/GrillaDDJJConsultaEmpleado";
 import { useNavigate } from "react-router-dom";
 import { axiosDDJJ } from "../mis_ddjj/grilla/GrillaMisDeclaracionesJuradasApi";
 import { Box } from "@mui/system";
 import LocalPrintshopIcon from "@mui/icons-material/LocalPrintshop";
-import { DataGrid, GridActionsCellItem, GridRowModes } from "@mui/x-data-grid";
+import AddIcon from "@mui/icons-material/Add";
+import { DataGrid, GridActionsCellItem, GridRowModes, GridToolbarContainer, GridToolbar } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import formatter from "@/common/formatter";
+import { StripedDataGrid, dataGridStyle } from "@/common/dataGridStyle";
+import * as locales from "@mui/material/locale";
+import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 
 function misDDJJColumnaAporteGet(ddjjResponse) {
   //toma todas las ddjj de la consulta de "Mis DDJJ" y arma "vector de Columnas Aportes"
@@ -65,10 +69,11 @@ function castearMisDDJJ(ddjjResponse) {
 
 export const DDJJConsultaEmpleado = () => {
 
+  const [locale, setLocale] = useState("esES");
   const [rowsMisDDJJ, setRowsMisDDJJ] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
   const [paginationModel, setPaginationModel] = useState({
-    pageSize: 10,
+    pageSize: 50,
     page: 0,
   });
   const [desde, setDesde] = useState(null);
@@ -82,6 +87,12 @@ export const DDJJConsultaEmpleado = () => {
     ["George Abuladze", 33, "politician"],
     ["Nick Tsereteli", 19, "public worker"],
   ]);
+  const [cuil, setCuil] = useState("");
+  const theme = useTheme();
+  const themeWithLocale = useMemo(
+    () => createTheme(theme, locales[locale]),
+    [locale, theme]
+  );
 
   const idEmpresa = localStorageService.getEmpresaId();
 
@@ -90,13 +101,20 @@ export const DDJJConsultaEmpleado = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const findElement = document.querySelector(".MuiFormLabel-root.MuiInputLabel-root.MuiInputLabel-formControl.MuiInputLabel-animated.MuiInputLabel-sizeMedium.MuiInputLabel-standard.MuiFormLabel-colorPrimary.MuiInputLabel-root.MuiInputLabel-formControl.MuiInputLabel-animated.MuiInputLabel-sizeMedium.MuiInputLabel-standard.css-t8oiee-MuiFormLabel-root-MuiInputLabel-root");
+    if (findElement) {
+      findElement.innerHTML = "Buscar Columna";
+    }
+  }, []);
+
+  useEffect(() => {
     const ObtenerMisDeclaracionesJuradas = async () => {
       let ddjjResponse = await axiosDDJJ.consultar(idEmpresa);
 
       //Agrego las columnas deTotales de Aportes
       ddjjResponse = await castearMisDDJJ(ddjjResponse);
 
-      setRowsMisDDJJ(ddjjResponse.map((item) => ({ id: item.id, ...item })));
+      setRowsMisDDJJ(ddjjResponse.map((item) => ({ internalId: item.id, ...item })));
     };
 
     ObtenerMisDeclaracionesJuradas();
@@ -105,8 +123,6 @@ export const DDJJConsultaEmpleado = () => {
   const declaracionJuradasImpresion = async (idDDJJ) => {
     await axiosDDJJ.imprimir(idEmpresa, idDDJJ);
   };
-
-
 
   const handleSubmit = (e) => {
     setData([...data, [fullName, age, occupation]]);
@@ -119,6 +135,21 @@ export const DDJJConsultaEmpleado = () => {
   const handleChangeDesde = (date) => setDesde(date);
 
   const handleChangeHasta = (date) => setHasta(date);
+
+  const handleChangeCuil = (e) => setCuil(e.target.value);
+
+  const handleDDJJPorCuil = async () => {
+
+    console.log("CUIL", cuil)
+    console.log("Aca va la peticion al back")
+  };
+
+  const volverPrimerPagina = () => {
+    setPaginationModel((prevPaginationModel) => ({
+      ...prevPaginationModel,
+      page: 0,
+    }));
+  };
 
   const buscarDeclaracionesJuradas = async () => {
     try {
@@ -256,7 +287,9 @@ export const DDJJConsultaEmpleado = () => {
 
   return (
     <div className="declaraciones_juradas_container">
-      <h1>Consulta de Declaraciones Juradas</h1>
+      <h1 style={{
+        marginBottom: "50px",
+      }}>Consulta de Declaraciones Juradas</h1>
       <div className="mis_declaraciones_juradas_container">
         <Stack
           spacing={4}
@@ -275,10 +308,8 @@ export const DDJJConsultaEmpleado = () => {
               <DesktopDatePicker
                 label={"Periodo desde"}
                 views={["month", "year"]}
-                closeOnSelect={false}
                 onChange={handleChangeDesde}
                 value={desde}
-                slotProps={{ actionBar: { actions: ["cancel", "accept"] } }}
               />
             </DemoContainer>
           </LocalizationProvider>
@@ -293,10 +324,8 @@ export const DDJJConsultaEmpleado = () => {
               <DesktopDatePicker
                 label={"Periodo hasta"}
                 views={["month", "year"]}
-                closeOnSelect={false}
                 onChange={handleChangeHasta}
                 value={hasta}
-                slotProps={{ actionBar: { actions: ["cancel", "accept"] } }}
               />
             </DemoContainer>
           </LocalizationProvider>
@@ -309,15 +338,43 @@ export const DDJJConsultaEmpleado = () => {
           alignItems="center"
         >
           <Button onClick={buscarDeclaracionesJuradas} variant="contained">
-            Buscar
+            Buscar DDJJ
           </Button>
 
           <CSVLink data={data}>
             <Button variant="contained" onClick={exportarDeclaracionesJuradas}>
-              Exportar CSV
+              Exportar a CSV
             </Button>
           </CSVLink>
         </Stack>
+      </div>
+      <div
+        style={{
+          width: "75.4%",
+          margin: "0 auto 50px auto",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <TextField
+          id="outlined-basic"
+          label="Cuil"
+          variant="outlined"
+          sx={{
+            width: "230.2px",
+          }}
+          value={cuil}
+          onChange={handleChangeCuil}
+        />
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleDDJJPorCuil}
+          style={{ marginLeft: "10px" }}
+        >
+          Filtrar por Cuil
+        </Button>
       </div>
       <Stack
         direction="row"
@@ -327,7 +384,7 @@ export const DDJJConsultaEmpleado = () => {
           sx={{
             margin: "0 auto",
             height: "600px",
-            width: "90%",
+            width: "100%",
             "& .actions": {
               color: "text.secondary",
             },
@@ -336,25 +393,24 @@ export const DDJJConsultaEmpleado = () => {
             },
           }}
         >
-          <DataGrid
-            rows={rowsMisDDJJ}
-            columns={columns}
-            editMode="row"
-            rowModesModel={rowModesModel}
-            onRowModesModelChange={handleRowModesModelChange}
-            sx={{
-              "& .MuiDataGrid-virtualScroller::-webkit-scrollbar": {
-                width: "8px",
-                visibility: "visible",
-              },
-              "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb": {
-                backgroundColor: "#ccc",
-              },
-            }}
-            paginationModel={paginationModel}
-            onPaginationModelChange={setPaginationModel}
-            pageSizeOptions={[10, 15, 25]}
-          />
+          <ThemeProvider theme={themeWithLocale}>
+            <StripedDataGrid
+              rows={rowsMisDDJJ}
+              columns={columns}
+              getRowId={(row) => row.internalId}
+              getRowClassName={(params) =>
+                params.row.internalId % 2 === 0 ? "even" : "odd"
+              }
+              editMode="row"
+              rowModesModel={rowModesModel}
+              onRowModesModelChange={handleRowModesModelChange}
+              localeText={dataGridStyle.toolbarText}
+              slots={{ toolbar: GridToolbar }}
+              paginationModel={paginationModel}
+              onPaginationModelChange={setPaginationModel}
+              pageSizeOptions={[50, 75, 100]}
+            />
+          </ThemeProvider>
         </Box>
       </Stack>
     </div>

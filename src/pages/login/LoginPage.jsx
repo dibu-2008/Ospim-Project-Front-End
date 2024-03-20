@@ -141,7 +141,7 @@ export const LoginPage = () => {
     console.log("ESTOY EN LA LINEA 141 RESPUESTA DE logonDfa");
 
     if (logonDfa) {
-      showSwalSuccess(VITE_WELCOME_PORTAL);
+      //showSwalSuccess(VITE_WELCOME_PORTAL);
 
       const { token, refreshToken } = logonDfa;
 
