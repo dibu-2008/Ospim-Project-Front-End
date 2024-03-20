@@ -96,16 +96,21 @@ export const DDJJConsultaEmpleado = () => {
 
   const idEmpresa = localStorageService.getEmpresaId();
 
+  // axiosDDJJ.consultar()
+  // rowsMisDDJJ por rowsDDJJ
+  // Cuit empresa agregar
+  // Razon Social agregar
+  // Cuil empleado
+  // DDJJEMPLEADOOSPIM
+  // Agregar CUIT y RAZONSOCIAL
+  // Si filtre por CUIT
+  // Si el CUIT esta lleno no muestro CUIT y razon social
+  // Si el CUI es nulo muestro CUIT y razon social como columnas
+
+
   let colAportes = [];
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const findElement = document.querySelector(".MuiFormLabel-root.MuiInputLabel-root.MuiInputLabel-formControl.MuiInputLabel-animated.MuiInputLabel-sizeMedium.MuiInputLabel-standard.MuiFormLabel-colorPrimary.MuiInputLabel-root.MuiInputLabel-formControl.MuiInputLabel-animated.MuiInputLabel-sizeMedium.MuiInputLabel-standard.css-t8oiee-MuiFormLabel-root-MuiInputLabel-root");
-    if (findElement) {
-      findElement.innerHTML = "Buscar Columna";
-    }
-  }, []);
 
   useEffect(() => {
     const ObtenerMisDeclaracionesJuradas = async () => {
@@ -329,6 +334,18 @@ export const DDJJConsultaEmpleado = () => {
               />
             </DemoContainer>
           </LocalizationProvider>
+          <LocalizationProvider>
+            <TextField
+              id="outlined-basic"
+              label="Cuit"
+              variant="outlined"
+              sx={{
+                width: "230.2px",
+              }}
+              value={cuil}
+              onChange={handleChangeCuil}
+            />
+          </LocalizationProvider>
         </Stack>
 
         <Stack
@@ -338,14 +355,14 @@ export const DDJJConsultaEmpleado = () => {
           alignItems="center"
         >
           <Button onClick={buscarDeclaracionesJuradas} variant="contained">
-            Buscar DDJJ
+            Consultar
           </Button>
 
-          <CSVLink data={data}>
+          {/* <CSVLink data={data}>
             <Button variant="contained" onClick={exportarDeclaracionesJuradas}>
               Exportar a CSV
             </Button>
-          </CSVLink>
+          </CSVLink> */}
         </Stack>
       </div>
       <div
@@ -357,9 +374,9 @@ export const DDJJConsultaEmpleado = () => {
           alignItems: "center",
         }}
       >
-        <TextField
+        {/* <TextField
           id="outlined-basic"
-          label="Cuil"
+          label="Cuit"
           variant="outlined"
           sx={{
             width: "230.2px",
@@ -373,8 +390,8 @@ export const DDJJConsultaEmpleado = () => {
           onClick={handleDDJJPorCuil}
           style={{ marginLeft: "10px" }}
         >
-          Filtrar por Cuil
-        </Button>
+          Filtrar por Cuit
+        </Button> */}
       </div>
       <Stack
         direction="row"

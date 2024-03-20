@@ -74,6 +74,13 @@ const toolbarText = {
   toolbarFilters: "Filtros",
   toolbarDensity: "Estilo",
   toolbarExport: "Exportar",
+  columnMenuUnsort: "Desordenar",
+  columnMenuSortAsc: "Ordenar Ascendente",
+  columnMenuSortDesc: "Ordenar Descendente",
+  columnMenuFilter: "Filtrar",
+  columnMenuHideColumn: "Ocultar Columna",
+  columnMenuShowColumns: "Mostrar columnas",
+  
 };
 
 export const dataGridStyle = {
