@@ -13,9 +13,18 @@ import { showSwalSuccess } from "./LoginShowAlert.js";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
 import "./LoginPage.css";
-import { Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
+import {
+  Button,
+  FormControl,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  TextField,
+} from "@mui/material";
 import { ThreeCircles } from "react-loader-spinner";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import localStorageService from "@/components/localStorage/localStorageService.js";
 
 const VITE_WELCOME_PORTAL = import.meta.env.VITE_WELCOME_PORTAL;
 
@@ -92,6 +101,7 @@ export const LoginPage = () => {
 
     if (loginDto && loginDto.token) {
       console.log("EXISTE loginDto.token");
+      setToken(loginDto.token);
       const usuarioConDFA = await usuarioLogueadoHabilitadoDFA(loginDto.token);
       console.log("usuarioConDFA: ", usuarioConDFA); // TRUE O FALSE
       let bUsuarioConDFA = false;
@@ -125,7 +135,7 @@ export const LoginPage = () => {
       console.log(loginDto);
       console.log("onLoginInternalUser - INIT-loginDto:NO EXISTE");
     }
-    OnResetFormLoginInternalUser(); 
+    OnResetFormLoginInternalUser();
   };
 
   //Eventos para Form DFA  (Token)
@@ -210,9 +220,11 @@ export const LoginPage = () => {
               </div>
               <div className="input-group">
                 <FormControl variant="outlined">
-                  <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+                  <InputLabel htmlFor="outlined-adornment-password">
+                    Password
+                  </InputLabel>
                   <OutlinedInput
-                    type={showPassword ? 'text' : 'password'}
+                    type={showPassword ? "text" : "password"}
                     name="passwordLoginInternalUser"
                     id="passwordLoginInternalUser"
                     value={passwordLoginInternalUser}
@@ -252,7 +264,9 @@ export const LoginPage = () => {
               </Button>
               <div className="container_btn_pass_firts">
                 <a className="link_animado">Recupero de Contraseña</a>
-                <a className="link_animado" onClick={redirectToRegister}>Ingreso por primera vez</a>
+                <a className="link_animado" onClick={redirectToRegister}>
+                  Ingreso por primera vez
+                </a>
               </div>
             </form>
           </div>
