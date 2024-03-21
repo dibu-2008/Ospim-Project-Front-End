@@ -21,6 +21,7 @@ import formatter from "@/common/formatter";
 import { StripedDataGrid, dataGridStyle } from "@/common/dataGridStyle";
 import * as locales from "@mui/material/locale";
 import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
+import { axiosDDJJEmpleado } from "./DDJJConsultaEmpleadoApi";
 
 function misDDJJColumnaAporteGet(ddjjResponse) {
   //toma todas las ddjj de la consulta de "Mis DDJJ" y arma "vector de Columnas Aportes"
@@ -67,26 +68,19 @@ function castearMisDDJJ(ddjjResponse) {
   return ddjjResponse;
 }
 
+const paginacion = {
+  pageSize: 50,
+  page: 0,
+}
+
 export const DDJJConsultaEmpleado = () => {
 
   const [locale, setLocale] = useState("esES");
-  const [rowsMisDDJJ, setRowsMisDDJJ] = useState([]);
+  const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
-  const [paginationModel, setPaginationModel] = useState({
-    pageSize: 50,
-    page: 0,
-  });
+  const [paginationModel, setPaginationModel] = useState(paginacion);
   const [desde, setDesde] = useState(null);
   const [hasta, setHasta] = useState(null);
-  const [fullName, setFullName] = useState("");
-  const [age, setAge] = useState(0);
-  const [occupation, setOccupation] = useState("");
-  const [data, setData] = useState([
-    ["Full Name", "Age", "Occupation"],
-    ["Irakli Tchigladze", 32, "writer"],
-    ["George Abuladze", 33, "politician"],
-    ["Nick Tsereteli", 19, "public worker"],
-  ]);
   const [cuil, setCuil] = useState("");
   const theme = useTheme();
   const themeWithLocale = useMemo(
@@ -94,15 +88,13 @@ export const DDJJConsultaEmpleado = () => {
     [locale, theme]
   );
 
-  const idEmpresa = localStorageService.getEmpresaId();
-
   // axiosDDJJ.consultar()
-  // rowsMisDDJJ por rowsDDJJ
-  // Cuit empresa agregar
-  // Razon Social agregar
+  // rows por rowsDDJJ
+  // Cuit empresa agregar LISTO
+  // Razon Social agregar LISTO
   // Cuil empleado
   // DDJJEMPLEADOOSPIM
-  // Agregar CUIT y RAZONSOCIAL
+  // Agregar CUIT y RAZONSOCIAL LISTO
   // Si filtre por CUIT
   // Si el CUIT esta lleno no muestro CUIT y razon social
   // Si el CUI es nulo muestro CUIT y razon social como columnas
@@ -110,32 +102,19 @@ export const DDJJConsultaEmpleado = () => {
 
   let colAportes = [];
 
-  const navigate = useNavigate();
-
   useEffect(() => {
     const ObtenerMisDeclaracionesJuradas = async () => {
-      let ddjjResponse = await axiosDDJJ.consultar(idEmpresa);
+      let ddjjResponse = await axiosDDJJEmpleado.consultar();
+      console.log(ddjjResponse)
 
       //Agrego las columnas deTotales de Aportes
       ddjjResponse = await castearMisDDJJ(ddjjResponse);
 
-      setRowsMisDDJJ(ddjjResponse.map((item) => ({ internalId: item.id, ...item })));
+      setRows(ddjjResponse.map((item) => ({ internalId: item.id, ...item })));
     };
 
     ObtenerMisDeclaracionesJuradas();
   }, []);
-
-  const declaracionJuradasImpresion = async (idDDJJ) => {
-    await axiosDDJJ.imprimir(idEmpresa, idDDJJ);
-  };
-
-  const handleSubmit = (e) => {
-    setData([...data, [fullName, age, occupation]]);
-    setFullName("");
-    setAge(0);
-    setOccupation("");
-  };
-  const ID_EMPRESA = localStorageService.getEmpresaId();
 
   const handleChangeDesde = (date) => setDesde(date);
 
@@ -143,54 +122,24 @@ export const DDJJConsultaEmpleado = () => {
 
   const handleChangeCuil = (e) => setCuil(e.target.value);
 
-  const handleDDJJPorCuil = async () => {
-
-    console.log("CUIL", cuil)
-    console.log("Aca va la peticion al back")
-  };
-
-  const volverPrimerPagina = () => {
-    setPaginationModel((prevPaginationModel) => ({
-      ...prevPaginationModel,
-      page: 0,
-    }));
-  };
-
   const buscarDeclaracionesJuradas = async () => {
-    try {
-      const ddjjResponse = await axiosDDJJ.consultar(ID_EMPRESA);
-      if (desde && desde.$d && hasta && hasta.$d) {
-        const { $d: $desde } = desde;
-        const { $d: $hasta } = hasta;
 
-        const fechaDesde = new Date($desde);
-        fechaDesde.setDate(1); // Seteamos el día del mes a 1
-        fechaDesde.setUTCHours(0, 0, 0, 0); // Ajustamos la zona horaria a UTC
-        const fechaIsoDesde = fechaDesde.toISOString(); // Convertimos la fecha a ISO
+    if(desde !== null || hasta !== null) {
+      const ddjjResponse = await axiosDDJJEmpleado.consultarPorRango(desde, hasta);
 
-        const fechaHasta = new Date($hasta);
-        fechaHasta.setDate(1); // Seteamos el día del mes a 1
-        fechaHasta.setUTCHours(0, 0, 0, 0); // Ajustamos la zona horaria a UTC
-        const fechaIsoHasta = fechaHasta.toISOString(); // Convertimos la fecha a ISO
-
-        const declaracionesFiltradas = ddjjResponse.filter((ddjj) => {
-          const fecha = new Date(ddjj.periodo);
-          return (
-            fecha >= new Date(fechaIsoDesde) && fecha <= new Date(fechaIsoHasta)
-          );
-        });
-        setRowsMisDDJJ(declaracionesFiltradas);
-      } else {
-        setRowsMisDDJJ(ddjjResponse);
+      if(ddjjResponse && ddjjResponse.data){
+        setRows(ddjjResponse.data.map((item) => ({ internalId: item.id, ...item })));
       }
-    } catch (error) {
-      console.error("Error al buscar declaraciones juradas:", error);
     }
-  };
 
-  const exportarDeclaracionesJuradas = () => {
-    console.log("Exportar declaraciones juradas");
-    //console.log(rows_mis_ddjj);
+    if(cuil !== "") {
+      const ddjjResponse = await axiosDDJJEmpleado.consultarPorCuit(cuil);
+
+      if(ddjjResponse && ddjjResponse.data){
+        setRows(ddjjResponse.data.map((item) => ({ internalId: item.id, ...item })));
+      }
+    }
+    
   };
 
   //1ro seteo columans fijas
@@ -199,7 +148,7 @@ export const DDJJConsultaEmpleado = () => {
       field: "periodo",
       headerName: "Periodo",
       flex: 1.5,
-      editable: true,
+      editable: false,
       type: "date",
       headerAlign: "center",
       align: "center",
@@ -209,10 +158,28 @@ export const DDJJConsultaEmpleado = () => {
       },
     },
     {
+      field: "cuit",
+      headerName: "Cuit",
+      flex: 1.5,
+      editable: false,
+      headerAlign: "center",
+      align: "center",
+      headerClassName: "header--cell",
+    },
+    {
+      field: "razonSocial",
+      headerName: "Razon Social",
+      flex: 2,
+      editable: false,
+      headerAlign: "center",
+      align: "center",
+      headerClassName: "header--cell",
+    },
+    {
       field: "secuencia",
       headerName: "Numero",
       flex: 1,
-      editable: true,
+      editable: false,
       headerAlign: "center",
       align: "center",
       headerClassName: "header--cell",
@@ -229,14 +196,14 @@ export const DDJJConsultaEmpleado = () => {
     },
   ];
 
-  colAportes = misDDJJColumnaAporteGet(rowsMisDDJJ);
+  colAportes = misDDJJColumnaAporteGet(rows);
 
   colAportes.forEach((elem) => {
     columns.push({
       field: "total" + elem,
       headerName: "Total " + elem,
       flex: 1,
-      editable: true,
+      editable: false,
       headerAlign: "center",
       align: "center",
       headerClassName: "header--cell",
@@ -247,7 +214,7 @@ export const DDJJConsultaEmpleado = () => {
   columns.push({
     field: "actions",
     headerName: "Acciones",
-    flex: 2,
+    flex: 1,
     type: "actions",
     headerAlign: "center",
     align: "center",
@@ -263,13 +230,11 @@ export const DDJJConsultaEmpleado = () => {
             sx={{
               color: "primary.main",
             }}
-          // onClick={handleSaveClick(id)}
           />,
           <GridActionsCellItem
             icon={<CancelIcon />}
             label="Cancel"
             className="textPrimary"
-            // onClick={handleCancelClick(id)}
             color="inherit"
           />,
         ];
@@ -295,7 +260,11 @@ export const DDJJConsultaEmpleado = () => {
       <h1 style={{
         marginBottom: "50px",
       }}>Consulta de Declaraciones Juradas</h1>
-      <div className="mis_declaraciones_juradas_container">
+      <div className="mis_declaraciones_juradas_container"
+        style={{
+          marginBottom: "50px",
+        }}
+      >
         <Stack
           spacing={4}
           direction="row"
@@ -334,18 +303,22 @@ export const DDJJConsultaEmpleado = () => {
               />
             </DemoContainer>
           </LocalizationProvider>
-          <LocalizationProvider>
+          <div style={{
+            height: "100px",
+            width: "250px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: "8px",
+          }}>
             <TextField
               id="outlined-basic"
               label="Cuit"
               variant="outlined"
-              sx={{
-                width: "230.2px",
-              }}
               value={cuil}
               onChange={handleChangeCuil}
             />
-          </LocalizationProvider>
+          </div>
         </Stack>
 
         <Stack
@@ -357,41 +330,7 @@ export const DDJJConsultaEmpleado = () => {
           <Button onClick={buscarDeclaracionesJuradas} variant="contained">
             Consultar
           </Button>
-
-          {/* <CSVLink data={data}>
-            <Button variant="contained" onClick={exportarDeclaracionesJuradas}>
-              Exportar a CSV
-            </Button>
-          </CSVLink> */}
         </Stack>
-      </div>
-      <div
-        style={{
-          width: "75.4%",
-          margin: "0 auto 50px auto",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        {/* <TextField
-          id="outlined-basic"
-          label="Cuit"
-          variant="outlined"
-          sx={{
-            width: "230.2px",
-          }}
-          value={cuil}
-          onChange={handleChangeCuil}
-        />
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleDDJJPorCuil}
-          style={{ marginLeft: "10px" }}
-        >
-          Filtrar por Cuit
-        </Button> */}
       </div>
       <Stack
         direction="row"
@@ -412,7 +351,7 @@ export const DDJJConsultaEmpleado = () => {
         >
           <ThemeProvider theme={themeWithLocale}>
             <StripedDataGrid
-              rows={rowsMisDDJJ}
+              rows={rows}
               columns={columns}
               getRowId={(row) => row.internalId}
               getRowClassName={(params) =>

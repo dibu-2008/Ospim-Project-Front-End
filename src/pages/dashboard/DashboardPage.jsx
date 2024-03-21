@@ -198,18 +198,16 @@ const DashboardPage = () => {
                       {open && <span className="icon-link">Feriados</span>}
                     </NavLink>
                   )}
-<<<<<<< HEAD
-                  {!isRolEmpleador && (<NavLink to="./ddjjconsultaempleado" className="icon-container">
-                  <LibraryBooksIcon className="icon-link" />{" "}
-                      {open && <span className="icon-link">DDJJ consulta</span>}
-                  </NavLink>)}
-=======
-
->>>>>>> sigeco_front_diego
                   {isRolEmpleador && (
                     <NavLink to="./ddjj" className="icon-container">
                       <LibraryBooksIcon className="icon-link" />{" "}
                       {open && <span className="icon-link">DDJJ</span>}
+                    </NavLink>
+                  )}
+                  {!isRolEmpleador && (
+                    <NavLink to="./ddjjconsultaempleado" className="icon-container">
+                      <LibraryBooksIcon className="icon-link" />{" "}
+                      {open && <span className="icon-link">DDJJ Consulta</span>}
                     </NavLink>
                   )}
                   {isRolEmpleador && (

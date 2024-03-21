@@ -1501,6 +1501,166 @@
       ]
     }
   ],
+  "ddjjConsulta": [
+    {
+      "id": 120,
+      "cuit": "20233725006",
+      "razonSocial":"Empresa Nro 1",
+      "estado": "PR",
+      "empresaId": 1,
+      "periodo": "2023-01-01T00:00:00.000Z",
+      "secuencia": 0,
+      "aportes": [
+        {
+          "codigo": "UOMACU",
+          "importe": 9725.75
+        },
+        {
+          "codigo": "ART46",
+          "importe": 5200.52
+        },
+        {
+          "codigo": "UOMACU",
+          "importe": 9725.75
+        }
+      ]
+    },
+    {
+      "id": 121,
+      "cuit": "20233725007",
+      "razonSocial":"Empresa Nro 2",
+      "estado": "PE",
+      "empresaId": 1,
+      "periodo": "2023-02-01T00:00:00.000Z",
+      "secuencia": 1,
+      "aportes": [
+        {
+          "codigo": "UOMACS",
+          "importe": 299.99
+        },
+        {
+          "codigo": "AMTIMACS",
+          "importe": 15000
+        },
+        {
+          "codigo": "ART46",
+          "importe": 5200.52
+        },
+        {
+          "codigo": "UOMAAS",
+          "importe": 4000.02
+        }
+      ]
+    },
+    {
+      "id": 122,
+      "cuit": "20233725007",
+      "razonSocial":"Empresa Nro 3",
+      "estado": "PE",
+      "empresaId": 1,
+      "periodo": "2023-02-01T00:00:00.000Z",
+      "secuencia": 1,
+      "aportes": [
+        {
+          "codigo": "UOMACU",
+          "importe": 10725.75
+        },
+        {
+          "codigo": "UOMACS",
+          "importe": 130800.25
+        },
+        {
+          "codigo": "ART46",
+          "importe": 7200.52
+        },
+        {
+          "codigo": "UOMACU",
+          "importe": 5725.75
+        }
+      ]
+    },
+    {
+      "id": 123,
+      "cuit": "20233725008",
+      "razonSocial":"Empresa Nro 1",
+      "estado": "PR",
+      "empresaId": 2,
+      "periodo": "2023-01-01T00:00:00.000Z",
+      "secuencia": 0,
+      "aportes": [
+        {
+          "codigo": "UOMACU",
+          "importe": 12350.75
+        },
+        {
+          "codigo": "UOMACS",
+          "importe": 145850.25
+        },
+        {
+          "codigo": "ART46",
+          "importe": 9250.6
+        },
+        {
+          "codigo": "UOMACU",
+          "importe": 8975.75
+        }
+      ]
+    },
+    {
+      "id": 124,
+      "cuit": "20233725009",
+      "razonSocial":"Empresa Nro 2",
+      "estado": "PR",
+      "empresaId": 2,
+      "periodo": "2023-02-01T00:00:00.000Z",
+      "secuencia": 1,
+      "aportes": [
+        {
+          "codigo": "UOMACU",
+          "importe": 13500.5
+        },
+        {
+          "codigo": "UOMACS",
+          "importe": 150000
+        },
+        {
+          "codigo": "ART46",
+          "importe": 9500.75
+        },
+        {
+          "codigo": "UOMACU",
+          "importe": 9100.25
+        }
+      ]
+    },
+    {
+      "id": 125,
+      "cuit": "20233725010",
+      "razonSocial":"Empresa Nro 3",
+      "estado": "PR",
+      "empresaId": 2,
+      "periodo": "2023-02-01T00:00:00.000Z",
+      "secuencia": 2,
+      "aportes": [
+        {
+          "codigo": "UOMACU",
+          "importe": 14000
+        },
+        {
+          "codigo": "UOMACS",
+          "importe": 155000.5
+        },
+        {
+          "codigo": "ART46",
+          "importe": 9750.25
+        },
+        {
+          "codigo": "UOMACU",
+          "importe": 9200.75
+        }
+      ]
+    }
+  ],
   "DDJJ": [
     {
       "//": "DDJJ ********************************************************************************** 01",
