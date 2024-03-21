@@ -58,9 +58,9 @@ export const MisAltaDeclaracionesJuradas = ({
   const ID_EMPRESA = localStorageService.getEmpresaId();
 
   const handleChangePeriodo = (date) => {
-    setPeriodo(date)
-    console.log("SSSSSSSSSSSSSSSSS")
-    console.log(periodo)
+    setPeriodo(date);
+    console.log("SSSSSSSSSSSSSSSSS");
+    console.log(periodo);
   };
 
   const handleChangeOtroPeriodo = (date) => setOtroPeriodo(date);
@@ -240,13 +240,13 @@ export const MisAltaDeclaracionesJuradas = ({
   const guardarDeclaracionJurada = async () => {
     console.log("GUARDAR DECLARACION JURADA");
     console.log(rowsAltaDDJJ);
-    console.log(periodo)
+    console.log(periodo);
     console.log(DDJJState);
     // si periodo la DDJJState tiene id modifico a periodo
-    if(DDJJState && DDJJState.id){
-      console.log("Tiene id la ddjj")
-      setPeriodo(DDJJState.periodo)
-      console.log(periodo)
+    if (DDJJState && DDJJState.id) {
+      console.log("Tiene id la ddjj");
+      setPeriodo(DDJJState.periodo);
+      console.log(periodo);
     }
 
     console.log(periodo);
@@ -271,8 +271,8 @@ export const MisAltaDeclaracionesJuradas = ({
           categoria: !item.categoria ? null : item.categoria,
           remunerativo: !item.remunerativo ? null : item.remunerativo,
           noRemunerativo: !item.noRemunerativo ? null : item.noRemunerativo,
-          uomaSocio: !item.uomaSocio ? null : item.uomaSocio,
-          amtimaSocio: !item.amtimaSocio ? null : item.amtimaSocio,
+          uomaSocio: item.uomaSocio,
+          amtimaSocio: item.amtimaSocio,
         };
 
         console.log("REGISTRO NEW");
@@ -368,8 +368,8 @@ export const MisAltaDeclaracionesJuradas = ({
 
           DDJJ.afiliados.forEach((afiliado) => {
             delete afiliado.errores;
-          });      
-          
+          });
+
           if (peticion === "PUT") {
             bOK = await axiosDDJJ.actualizar(ID_EMPRESA, DDJJ);
           } else {
@@ -391,13 +391,12 @@ export const MisAltaDeclaracionesJuradas = ({
 
       if (peticion === "PUT") {
         console.log("Dentro de PUT");
-    
+
         //await actualizarDeclaracionJurada(ID_EMPRESA, altaDDJJFinal, altaDDJJFinal.id);
         await axiosDDJJ.actualizar(ID_EMPRESA, DDJJ);
         //setRowsAltaDDJJ([]);
         // peticion put con fetch
       } else {
-    
         const data = await axiosDDJJ.crear(ID_EMPRESA, DDJJ);
         console.log(data);
         if (data) {
@@ -411,7 +410,7 @@ export const MisAltaDeclaracionesJuradas = ({
     }
   };
 
-  const presentarDeclaracionJurada = async () => { };
+  const presentarDeclaracionJurada = async () => {};
 
   console.log("DDJJAlta - rowsAltaDDJJ: ");
   console.log(rowsAltaDDJJ);
@@ -431,7 +430,9 @@ export const MisAltaDeclaracionesJuradas = ({
       <div className="periodo_container">
         <h5 className="paso">Paso 1 - Indique período a presentar</h5>
         <Stack spacing={4} direction="row" alignItems="center">
-          <Typography variant="h6" className="title_periodo">Período</Typography>
+          <Typography variant="h6" className="title_periodo">
+            Período
+          </Typography>
           <LocalizationProvider
             dateAdapter={AdapterDayjs}
             adapterLocale={"es"}
@@ -449,9 +450,7 @@ export const MisAltaDeclaracionesJuradas = ({
               />
             </DemoContainer>
           </LocalizationProvider>
-          <Typography variant="h6">
-            {formNro}
-          </Typography>
+          <Typography variant="h6">{formNro}</Typography>
         </Stack>
       </div>
 
