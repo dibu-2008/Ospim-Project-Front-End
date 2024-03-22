@@ -75,30 +75,19 @@ const paginacion = {
 
 export const DDJJConsultaEmpleado = () => {
 
-  const [locale, setLocale] = useState("esES");
-  const [rows, setRows] = useState([]);
-  const [rowModesModel, setRowModesModel] = useState({});
+  const [showCuitRazonSocial, setShowCuitRazonSocial] = useState(true);
   const [paginationModel, setPaginationModel] = useState(paginacion);
+  const [rowModesModel, setRowModesModel] = useState({});
+  const [locale, setLocale] = useState("esES");
   const [desde, setDesde] = useState(null);
   const [hasta, setHasta] = useState(null);
-  const [cuil, setCuil] = useState("");
+  const [cuit, setCuit] = useState("");
+  const [rows, setRows] = useState([]);
   const theme = useTheme();
   const themeWithLocale = useMemo(
     () => createTheme(theme, locales[locale]),
     [locale, theme]
   );
-
-  // axiosDDJJ.consultar()
-  // rows por rowsDDJJ
-  // Cuit empresa agregar LISTO
-  // Razon Social agregar LISTO
-  // Cuil empleado
-  // DDJJEMPLEADOOSPIM
-  // Agregar CUIT y RAZONSOCIAL LISTO
-  // Si filtre por CUIT
-  // Si el CUIT esta lleno no muestro CUIT y razon social
-  // Si el CUI es nulo muestro CUIT y razon social como columnas
-
 
   let colAportes = [];
 
@@ -120,30 +109,35 @@ export const DDJJConsultaEmpleado = () => {
 
   const handleChangeHasta = (date) => setHasta(date);
 
-  const handleChangeCuil = (e) => setCuil(e.target.value);
+  const handleChangeCuil = (e) => setCuit(e.target.value);
 
   const buscarDeclaracionesJuradas = async () => {
 
-    if(desde !== null || hasta !== null) {
+    if(desde !== null && hasta !== null && cuit === "") {
+      // Si el CUI es nulo muestro CUIT y razon social como columnas
+      
       const ddjjResponse = await axiosDDJJEmpleado.consultarPorRango(desde, hasta);
-
+      
       if(ddjjResponse && ddjjResponse.data){
         setRows(ddjjResponse.data.map((item) => ({ internalId: item.id, ...item })));
+        setShowCuitRazonSocial(true);
       }
     }
 
-    if(cuil !== "") {
-      const ddjjResponse = await axiosDDJJEmpleado.consultarPorCuit(cuil);
-
+    if(cuit !== "" && desde === null && hasta === null) {
+      // Si el CUIT esta lleno no muestro CUIT y razon social
+      
+      const ddjjResponse = await axiosDDJJEmpleado.consultarPorCuit(cuit);
+      
       if(ddjjResponse && ddjjResponse.data){
         setRows(ddjjResponse.data.map((item) => ({ internalId: item.id, ...item })));
+        setShowCuitRazonSocial(false);
       }
     }
     
   };
 
-  //1ro seteo columans fijas
-  let columns = [
+  const columns = [
     {
       field: "periodo",
       headerName: "Periodo",
@@ -156,25 +150,34 @@ export const DDJJConsultaEmpleado = () => {
       valueFormatter: (params) => {
         return formatter.periodo(params.value);
       },
-    },
-    {
-      field: "cuit",
-      headerName: "Cuit",
-      flex: 1.5,
-      editable: false,
-      headerAlign: "center",
-      align: "center",
-      headerClassName: "header--cell",
-    },
-    {
-      field: "razonSocial",
-      headerName: "Razon Social",
-      flex: 2,
-      editable: false,
-      headerAlign: "center",
-      align: "center",
-      headerClassName: "header--cell",
-    },
+    }
+  ];
+
+  if (showCuitRazonSocial) {
+
+    columns.push(
+      {
+        field: "cuit",
+        headerName: "Cuit",
+        flex: 1.5,
+        editable: false,
+        headerAlign: "center",
+        align: "center",
+        headerClassName: "header--cell",
+      },
+      {
+        field: "razonSocial",
+        headerName: "Razon Social",
+        flex: 2,
+        editable: false,
+        headerAlign: "center",
+        align: "center",
+        headerClassName: "header--cell",
+      }
+    );
+  }
+
+  columns.push(
     {
       field: "secuencia",
       headerName: "Numero",
@@ -193,8 +196,8 @@ export const DDJJConsultaEmpleado = () => {
           return "Rectif. " + params.value;
         }
       },
-    },
-  ];
+    }
+  );
 
   colAportes = misDDJJColumnaAporteGet(rows);
 
@@ -315,7 +318,7 @@ export const DDJJConsultaEmpleado = () => {
               id="outlined-basic"
               label="Cuit"
               variant="outlined"
-              value={cuil}
+              value={cuit}
               onChange={handleChangeCuil}
             />
           </div>
