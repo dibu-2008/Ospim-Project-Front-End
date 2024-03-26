@@ -339,7 +339,8 @@ export const Feriados = () => {
         Administración de feriados
         <Tooltip
           title="Pasar feriados años siguiente"
-          sx={{ marginLeft: "10px", cursor: "pointer" }}>
+          sx={{ marginLeft: "10px", cursor: "pointer" }}
+        >
           <IconButton onClick={handleOpen}>
             <DateRangeIcon
               sx={{
@@ -427,10 +428,10 @@ export const Feriados = () => {
                 />
               </DemoContainer>
             </LocalizationProvider>
-            <Box 
-              display="flex" 
+            <Box
+              display="flex"
               justifyContent="space-between"
-              sx= {{ width: "76%" }}
+              sx={{ width: "76%" }}
             >
               <Button
                 variant="contained"
