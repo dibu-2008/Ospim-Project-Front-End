@@ -200,6 +200,7 @@ export const Feriados = () => {
         const internalId = newRow.internalId;
         delete newRow.internalId;
         delete newRow.isNew;
+        console.log(newRow);
         const data = await axiosFeriados.crear(newRow);
         if (data && data.id) {
           newRow.id = data.id;

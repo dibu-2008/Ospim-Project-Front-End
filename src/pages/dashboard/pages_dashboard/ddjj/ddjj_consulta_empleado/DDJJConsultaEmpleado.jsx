@@ -113,10 +113,14 @@ export const DDJJConsultaEmpleado = () => {
 
   const buscarDeclaracionesJuradas = async () => {
 
+    // Busqueda por rango de periodo
     if(desde !== null && hasta !== null && cuit === "") {
-      // Si el CUI es nulo muestro CUIT y razon social como columnas
+
+      const desdeFor = formatter.date(desde.$d);
+      const hastaFor = formatter.date(hasta.$d);
       
-      const ddjjResponse = await axiosDDJJEmpleado.consultarPorRango(desde, hasta);
+      const ddjjResponse = await axiosDDJJEmpleado
+        .consultarPorRango(desdeFor, hastaFor);
       
       if(ddjjResponse && ddjjResponse.data){
         setRows(ddjjResponse.data.map((item) => ({ internalId: item.id, ...item })));
@@ -124,14 +128,29 @@ export const DDJJConsultaEmpleado = () => {
       }
     }
 
+    // Busqueda por cuit
     if(cuit !== "" && desde === null && hasta === null) {
-      // Si el CUIT esta lleno no muestro CUIT y razon social
       
       const ddjjResponse = await axiosDDJJEmpleado.consultarPorCuit(cuit);
       
+      if(ddjjResponse && ddjjResponse.length > 0){
+        console.log("Essssss")
+        setRows(ddjjResponse.map((item) => ({ internalId: item.id, ...item })));
+        setShowCuitRazonSocial(false);
+      }
+    }
+
+    // Busqueda por rango de periodo y cuit
+    if(desde !== null && hasta !== null && cuit !== "") {
+
+      const desdeFor = formatter.date(desde.$d);
+      const hastaFor = formatter.date(hasta.$d);
+      
+      const ddjjResponse = await axiosDDJJEmpleado
+        .consultarPorRangoCuit(desdeFor, hastaFor, cuit);
+      
       if(ddjjResponse && ddjjResponse.data){
         setRows(ddjjResponse.data.map((item) => ({ internalId: item.id, ...item })));
-        setShowCuitRazonSocial(false);
       }
     }
     

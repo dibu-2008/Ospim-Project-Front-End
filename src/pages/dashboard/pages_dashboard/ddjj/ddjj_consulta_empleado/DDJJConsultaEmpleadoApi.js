@@ -32,9 +32,12 @@ export const obtenerDDJJ = async () => {
     }
 };
 
-export const obtenerDDJJPorRango = async (fechaDesde, fechaHasta) => {
+export const obtenerPorRango = async (desde, hasta) => {
 
-    const URL = `/ddjjConsulta/${fechaDesde}/${fechaHasta}`;
+    const queryStringDesde = `?desde=${encodeURIComponent(desde)}`;
+    const queryStringHasta = `&hasta=${encodeURIComponent(hasta)}`;
+
+    const URL = `/ddjjConsulta${queryStringDesde}${queryStringHasta}`;
     try {
         const data = await axiosCrud.consultar(URL);
         return data || [];
@@ -55,7 +58,9 @@ export const obtenerDDJJPorRango = async (fechaDesde, fechaHasta) => {
 }
 
 export const obtenerPorCuit = async (cuit) => {
-    const URL = `/ddjjConsulta/${cuit}`;
+
+    const URL = `/ddjjConsulta?cuit=${cuit}`;
+
     try {
         const data = await axiosCrud.consultar(URL);
         return data || [];
@@ -75,14 +80,43 @@ export const obtenerPorCuit = async (cuit) => {
     }
 }
 
+export const obtenerPorRangoCuit = async (desde, hasta, cuit) => {
+    
+    const queryStringDesde = `?desde=${encodeURIComponent(desde)}`;
+    const queryStringHasta = `&hasta=${encodeURIComponent(hasta)}`;
+    
+    const URL = `/ddjjConsulta${queryStringDesde}${queryStringHasta}&cuit=${cuit}`;
+    
+    try {
+        const data = await axiosCrud.consultar(URL);
+        return data || [];
+    } catch (error) {
+        console.log(
+            "obtenerPorRangoCuit() - catch-error - URL: " +
+            URL +
+            " - status: " +
+            error.status
+        );
+
+        showErrorBackEnd(
+            HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
+            error
+        );
+        return [];
+    }
+}
+
 export const axiosDDJJEmpleado = {
     consultar: async function () {
         return obtenerDDJJ();
     },
-    consultarPorRango: async function (fechaDesde, fechaHasta) {
-        return obtenerDDJJPorRango(fechaDesde, fechaHasta);
+    consultarPorRango: async function (desde, hasta) {
+        return obtenerPorRango(desde, hasta);
     },
     consultarPorCuit: async function (cuit) {
         return obtenerPorCuit(cuit);
+    },
+    consultarPorRangoCuit: async function (desde, hasta, cuit) {
+        return obtenerPorRangoCuit(desde, hasta, cuit);
     }
 };

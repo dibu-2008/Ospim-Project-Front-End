@@ -503,6 +503,18 @@
     {
       "fecha": "2024-02-24T00:00:00.000Z",
       "id": 64
+    },
+    {
+      "fecha": "2024-03-21T03:00:00.000Z",
+      "id": 65
+    },
+    {
+      "fecha": "2024-03-29T03:00:00.000Z",
+      "id": 66
+    },
+    {
+      "fecha": "2024-03-22T03:00:00.000Z",
+      "id": 67
     }
   ],
   "usuario-interno": [
@@ -1505,7 +1517,7 @@
     {
       "id": 120,
       "cuit": "20233725006",
-      "razonSocial":"Empresa Nro 1",
+      "razonSocial": "Empresa Nro 1",
       "estado": "PR",
       "empresaId": 1,
       "periodo": "2023-01-01T00:00:00.000Z",
@@ -1528,7 +1540,7 @@
     {
       "id": 121,
       "cuit": "20233725007",
-      "razonSocial":"Empresa Nro 2",
+      "razonSocial": "Empresa Nro 2",
       "estado": "PE",
       "empresaId": 1,
       "periodo": "2023-02-01T00:00:00.000Z",
@@ -1555,7 +1567,7 @@
     {
       "id": 122,
       "cuit": "20233725007",
-      "razonSocial":"Empresa Nro 3",
+      "razonSocial": "Empresa Nro 3",
       "estado": "PE",
       "empresaId": 1,
       "periodo": "2023-02-01T00:00:00.000Z",
@@ -1582,7 +1594,7 @@
     {
       "id": 123,
       "cuit": "20233725008",
-      "razonSocial":"Empresa Nro 1",
+      "razonSocial": "Empresa Nro 1",
       "estado": "PR",
       "empresaId": 2,
       "periodo": "2023-01-01T00:00:00.000Z",
@@ -1609,7 +1621,7 @@
     {
       "id": 124,
       "cuit": "20233725009",
-      "razonSocial":"Empresa Nro 2",
+      "razonSocial": "Empresa Nro 2",
       "estado": "PR",
       "empresaId": 2,
       "periodo": "2023-02-01T00:00:00.000Z",
@@ -1636,7 +1648,7 @@
     {
       "id": 125,
       "cuit": "20233725010",
-      "razonSocial":"Empresa Nro 3",
+      "razonSocial": "Empresa Nro 3",
       "estado": "PR",
       "empresaId": 2,
       "periodo": "2023-02-01T00:00:00.000Z",
