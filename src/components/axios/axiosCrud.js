@@ -58,11 +58,13 @@ export const axiosCrear = async (UrlApi, oEntidad) => {
 };
 
 export const axiosActualizar = async (UrlApi, oEntidad) => {
-  const URL = `${UrlApi}/${oEntidad.id}`;
+  const pkId = oEntidad.id;
+  const URL = `${UrlApi}/${pkId}`;
 
   try {
     delete oEntidad.id;
     const response = await oAxios.put(URL, oEntidad);
+    oEntidad.id = pkId;
     if (response.status !== 204 && response.status !== 200) {
       //JsonServer devuelve 200
       console.log(
