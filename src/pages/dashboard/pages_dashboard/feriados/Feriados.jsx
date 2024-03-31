@@ -62,14 +62,13 @@ const crearNuevoRegistro = (props) => {
   const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
 
   const altaHandleClick = () => {
-    const maxId = rows ? Math.max(...rows.map((row) => row.internalId), 0) : 1;
-    const newId = maxId + 1;
-    const internalId = newId;
+    const newReg = { fecha: "" };
+
     volverPrimerPagina();
 
-    setRows((oldRows) => [{ internalId, fecha: "", isNew: true }, ...oldRows]);
+    setRows((oldRows) => [newReg, ...oldRows]);
     setRowModesModel((oldModel) => ({
-      [internalId]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
+      [0]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
       ...oldModel,
     }));
   };
@@ -120,7 +119,7 @@ export const Feriados = () => {
 
   const ObtenerFeriados = async () => {
     const response = await axiosFeriados.consultar();
-    setRows(response.map((row, index) => ({ ...row, internalId: index + 1 })));
+    setRows(response);
   };
 
   useEffect(() => {
@@ -134,16 +133,18 @@ export const Feriados = () => {
   };
 
   const handleEditClick = (row) => () => {
+    console.log("handleEditClick - row:");
+    console.log(row);
     setRowModesModel({
       ...rowModesModel,
-      [row.internalId]: { mode: GridRowModes.Edit },
+      [rows.indexOf(row)]: { mode: GridRowModes.Edit },
     });
   };
 
   const handleSaveClick = (row) => () => {
     setRowModesModel({
       ...rowModesModel,
-      [row.internalId]: { mode: GridRowModes.View },
+      [rows.indexOf(row)]: { mode: GridRowModes.View },
     });
   };
 
@@ -161,7 +162,7 @@ export const Feriados = () => {
         }).then(async (result) => {
           if (result.isConfirmed) {
             const bBajaOk = await axiosFeriados.eliminar(row.id);
-            if (bBajaOk) setRows(rows.filter((row) => row.id !== id));
+            if (bBajaOk) setRows(rows.filter((rowAux) => rowAux.id !== row.id));
           }
         });
       } catch (error) {
@@ -175,7 +176,10 @@ export const Feriados = () => {
   const handleCancelClick = (row) => () => {
     setRowModesModel({
       ...rowModesModel,
-      [row.internalId]: { mode: GridRowModes.View, ignoreModifications: true },
+      [rows.indexOf(row)]: {
+        mode: GridRowModes.View,
+        ignoreModifications: true,
+      },
     });
 
     const editedRow = rows.find((reg) => reg.id === row.id);
@@ -187,26 +191,14 @@ export const Feriados = () => {
   const processRowUpdate = async (newRow, oldRow) => {
     console.log("processRowUpdate - INIT");
     let bOk = false;
-    /*
-    const fecha = new Date(newRow.fecha);
-    fecha.setUTCHours(0, 0, 0, 0);
-    const fechaFormateada = fecha.toISOString();
-*/
 
-    if (newRow.isNew) {
-      console.log("processRowUpdate - ALTA");
+    if (!newRow.id) {
       try {
-        const internalId = newRow.internalId;
-        delete newRow.internalId;
-        delete newRow.isNew;
-        console.log(newRow);
         const data = await axiosFeriados.crear(newRow);
         if (data && data.id) {
           newRow.id = data.id;
-          newRow.internalId = internalId;
-          newRow.isNew = false;
           bOk = true;
-          const newRows = rows.map((row) => (row.isNew ? newRow : row));
+          const newRows = rows.map((row) => (!row.id ? newRow : row));
           setRows(newRows);
         } else {
           console.log("alta sin ID generado");
@@ -217,17 +209,13 @@ export const Feriados = () => {
         );
       }
     } else {
-      console.log("3 - processRowUpdate - MODI ");
       try {
-        const internalId = newRow.internalId;
-        delete newRow.internalId;
-        delete newRow.isNew;
         bOk = await axiosFeriados.actualizar(newRow);
-        console.log("4 - processRowUpdate - MODI - bOk: " + bOk);
-        newRow.isNew = false;
-        newRow.internalId = internalId;
         if (bOk) {
-          setRows(rows.map((row) => (row.id === newRow.id ? newRow : row)));
+          const rowsNew = rows.map((row) =>
+            row.id === newRow.id ? newRow : row
+          );
+          setRows(rowsNew);
         }
       } catch (error) {
         console.log(
@@ -288,7 +276,7 @@ export const Feriados = () => {
       headerClassName: "header--cell",
       getActions: ({ row }) => {
         const isInEditMode =
-          rowModesModel[row.internalId]?.mode === GridRowModes.Edit;
+          rowModesModel[rows.indexOf(row)]?.mode === GridRowModes.Edit;
 
         if (isInEditMode) {
           return [
@@ -339,7 +327,8 @@ export const Feriados = () => {
         Administración de feriados
         <Tooltip
           title="Pasar feriados años siguiente"
-          sx={{ marginLeft: "10px", cursor: "pointer" }}>
+          sx={{ marginLeft: "10px", cursor: "pointer" }}
+        >
           <IconButton onClick={handleOpen}>
             <DateRangeIcon
               sx={{
@@ -366,9 +355,9 @@ export const Feriados = () => {
           <StripedDataGrid
             rows={rows}
             columns={columnas}
-            getRowId={(row) => row.internalId}
+            getRowId={(row) => rows.indexOf(row)}
             getRowClassName={(params) =>
-              params.row.internalId % 2 === 0 ? "even" : "odd"
+              rows.indexOf(params.row) % 2 === 0 ? "even" : "odd"
             }
             editMode="row"
             rowModesModel={rowModesModel}
@@ -427,10 +416,10 @@ export const Feriados = () => {
                 />
               </DemoContainer>
             </LocalizationProvider>
-            <Box 
-              display="flex" 
+            <Box
+              display="flex"
               justifyContent="space-between"
-              sx= {{ width: "76%" }}
+              sx={{ width: "76%" }}
             >
               <Button
                 variant="contained"
