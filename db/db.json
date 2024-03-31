@@ -241,7 +241,7 @@
   ],
   "feriados": [
     {
-      "fecha": "2023-03-29T03:00:00.000Z",
+      "fecha": "2023-03-27T03:00:00.000Z",
       "id": 1
     },
     {
@@ -589,9 +589,9 @@
   "publicaciones": [
     {
       "titulo": "Publicacion 05",
-      "cuerpo": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ex dolore consequatur ipsam deserunt adipisci recusandae nulla aliquid vero! Eveniet dolores excepturi repellat architecto laborum necessitatibus reiciendis, ad obcaecati. Asperiores, quam.",
+      "cuerpo": "xx",
       "vigenciaDesde": "2024-02-07T00:00:00.000Z",
-      "vigenciaHasta": "2025-02-07T00:00:00.000Z",
+      "vigenciaHasta": "2025-02-09T00:00:00.000Z",
       "id": 18
     },
     {
@@ -3101,9 +3101,9 @@
   ],
   "cuit-restringido": [
     {
-      "id": 3,
       "cuit": "40518267004",
-      "observacion": "xx"
+      "observacion": "xxxxxx",
+      "id": 3
     },
     {
       "id": 4,

@@ -148,7 +148,6 @@ export const Feriados = () => {
   };
 
   const handleDeleteClick = (row) => async () => {
-    console.log(row);
     const showSwalConfirm = async () => {
       try {
         Swal.fire({

@@ -19,19 +19,18 @@ import "./Publicaciones.css";
 import { ThreeCircles } from "react-loader-spinner";
 import { StripedDataGrid, dataGridStyle } from "@/common/dataGridStyle";
 
+const paginacion = {
+  pageSize: 50,
+  page: 0,
+}
+
 export const Publicaciones = () => {
   const [locale, setLocale] = useState("esES");
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
   const [showDataGrid, setShowDataGrid] = useState(false);
-  const [showLoading, setShowLoading] = useState(true);
-  const [paginationModel, setPaginationModel] = useState({
-    pageSize: 10,
-    page: 0,
-  });
-
+  const [paginationModel, setPaginationModel] = useState(paginacion);
   const theme = useTheme();
-
   const themeWithLocale = useMemo(
     () => createTheme(theme, locales[locale]),
     [locale, theme]
@@ -187,7 +186,7 @@ export const Publicaciones = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowDataGrid(true);
-    }, 2000);
+    }, 500);
 
     return () => clearTimeout(timer);
   });
@@ -397,7 +396,7 @@ export const Publicaciones = () => {
               }}
               paginationModel={paginationModel}
               onPaginationModelChange={setPaginationModel}
-              pageSizeOptions={[10, 15, 25]}
+              pageSizeOptions={[50, 75, 100]}
             />
           </ThemeProvider>
         )}
