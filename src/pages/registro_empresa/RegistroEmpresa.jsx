@@ -36,7 +36,7 @@ export const RegistroEmpresa = () => {
     console.log(ramos);
   }, []);
 
-  
+
 
   const {
     cuit,
@@ -219,6 +219,15 @@ export const RegistroEmpresa = () => {
               autoComplete="off"
               label="CUIT"
             />
+            <span
+              style={{
+                position: "absolute",
+                marginTop: "18px",
+                marginLeft: "515px",
+                fontSize: "20px",
+                color: "rgb(255, 0, 0)"
+              }}
+            >*</span>
           </div>
           <div className="input-group">
             <TextField
@@ -229,6 +238,15 @@ export const RegistroEmpresa = () => {
               autoComplete="off"
               label="Razón Social"
             />
+            <span
+              style={{
+                position: "absolute",
+                marginTop: "18px",
+                marginLeft: "515px",
+                fontSize: "20px",
+                color: "rgb(255, 0, 0)"
+              }}
+            >*</span>
           </div>
           <div className="input-group">
             <TextField
@@ -242,7 +260,16 @@ export const RegistroEmpresa = () => {
               }}
               label="E-mail principal N° 1"
             />
-          </div> 
+            <span
+              style={{
+                position: "absolute",
+                marginTop: "18px",
+                marginLeft: "515px",
+                fontSize: "20px",
+                color: "rgb(255, 0, 0)"
+              }}
+            >*</span>
+          </div>
           <div
             style={{
               position: "relative",
@@ -299,7 +326,7 @@ export const RegistroEmpresa = () => {
                 }}
               />
             </div>
-          ))} 
+          ))}
           <div className="input-group">
             <InputComponent
               type="password"
@@ -310,6 +337,15 @@ export const RegistroEmpresa = () => {
               variant="filled"
               label="Contraseña"
             />
+            <span
+              style={{
+                position: "absolute",
+                marginTop: "18px",
+                marginLeft: "515px",
+                fontSize: "20px",
+                color: "rgb(255, 0, 0)"
+              }}
+            >*</span>
           </div>
           <div className="input-group">
             <InputComponent
@@ -321,7 +357,16 @@ export const RegistroEmpresa = () => {
               variant="filled"
               label="Repetir Contraseña"
             />
-          </div> 
+            <span
+              style={{
+                position: "absolute",
+                marginTop: "18px",
+                marginLeft: "515px",
+                fontSize: "20px",
+                color: "rgb(255, 0, 0)"
+              }}
+            >*</span>
+          </div>
           <div className="input-group">
             <div
               style={{
@@ -344,6 +389,15 @@ export const RegistroEmpresa = () => {
                   label="Prefijo"
                 />
               </div>
+              <span
+              style={{
+                position: "absolute",
+                marginTop: "18px",
+                marginLeft: "515px",
+                fontSize: "20px",
+                color: "rgb(255, 0, 0)"
+              }}
+            >*</span>
               <div
                 style={{
                   width: "80%",
@@ -362,7 +416,7 @@ export const RegistroEmpresa = () => {
                 />
               </div>
             </div>
-          </div> 
+          </div>
           <div className="input-group">
             <div
               style={{
@@ -503,6 +557,15 @@ export const RegistroEmpresa = () => {
                   label="Prefijo"
                 />
               </div>
+              <span
+              style={{
+                position: "absolute",
+                marginTop: "18px",
+                marginLeft: "515px",
+                fontSize: "20px",
+                color: "rgb(255, 0, 0)"
+              }}
+            >*</span>
               <div
                 style={{
                   width: "80%",
@@ -549,6 +612,15 @@ export const RegistroEmpresa = () => {
                 </Select>
               </FormControl>
             </Box>
+            <span
+              style={{
+                position: "absolute",
+                marginTop: "18px",
+                marginLeft: "515px",
+                fontSize: "20px",
+                color: "rgb(255, 0, 0)"
+              }}
+            >*</span>
           </div>
 
           <div
