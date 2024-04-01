@@ -1,5 +1,4 @@
 import { useEffect, useState, useMemo } from "react";
-import localStorageService from "@/components/localStorage/localStorageService";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -8,22 +7,16 @@ import { DesktopDatePicker } from "@mui/x-date-pickers";
 import { CSVLink, CSVDownload } from "react-csv";
 import { Stack, TextField } from "@mui/material";
 import Button from "@mui/material/Button";
-import { GrillaDDJJConsultaEmpleado } from "./grilla/GrillaDDJJConsultaEmpleado";
-import { useNavigate } from "react-router-dom";
-import { axiosDDJJ } from "../mis_ddjj/grilla/GrillaMisDeclaracionesJuradasApi";
 import { Box } from "@mui/system";
 import LocalPrintshopIcon from "@mui/icons-material/LocalPrintshop";
-import AddIcon from "@mui/icons-material/Add";
 import { DataGrid, GridActionsCellItem, GridRowModes, GridToolbarContainer, GridToolbar } from "@mui/x-data-grid";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import formatter from "@/common/formatter";
 import { StripedDataGrid, dataGridStyle } from "@/common/dataGridStyle";
 import * as locales from "@mui/material/locale";
 import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 import { axiosDDJJEmpleado } from "./DDJJConsultaEmpleadoApi";
 
-function misDDJJColumnaAporteGet(ddjjResponse) {
+function DDJJColumnaAporteGet(ddjjResponse) {
   //toma todas las ddjj de la consulta de "Mis DDJJ" y arma "vector de Columnas Aportes"
   //Ejemplo: ['UOMACU', 'ART46', 'UOMASC']
   let vecAportes = ddjjResponse.map((item) => item.aportes).flat();
@@ -56,8 +49,8 @@ function ddjjTotalesAportes(ddjj, colAportes) {
   return vecAportesConTotales;
 }
 
-function castearMisDDJJ(ddjjResponse) {
-  let colAportes = misDDJJColumnaAporteGet(ddjjResponse);
+function castearDDJJ(ddjjResponse) {
+  let colAportes = DDJJColumnaAporteGet(ddjjResponse);
   ddjjResponse.forEach((dj) => {
     let colAportesConTotales = ddjjTotalesAportes(dj, colAportes);
 
@@ -92,18 +85,17 @@ export const DDJJConsultaEmpleado = () => {
   let colAportes = [];
 
   useEffect(() => {
-    const ObtenerMisDeclaracionesJuradas = async () => {
+    const ObtenerDDJJ = async () => {
       let ddjjResponse = await axiosDDJJEmpleado.consultar();
       console.log(ddjjResponse)
 
       //Agrego las columnas deTotales de Aportes
-      ddjjResponse = await castearMisDDJJ(ddjjResponse);
+      ddjjResponse = await castearDDJJ(ddjjResponse);
 
-      // setRows(ddjjResponse.map((item) => ({ internalId: item.id, ...item })));
       setRows(ddjjResponse);
     };
 
-    ObtenerMisDeclaracionesJuradas();
+    ObtenerDDJJ();
   }, []);
 
   const handleChangeDesde = (date) => setDesde(date);
@@ -112,7 +104,7 @@ export const DDJJConsultaEmpleado = () => {
 
   const handleChangeCuil = (e) => setCuit(e.target.value);
 
-  const buscarDeclaracionesJuradas = async () => {
+  const buscarDDJJ = async () => {
 
     // Busqueda por rango de periodo
     if (desde !== null && hasta !== null && cuit === "") {
@@ -134,9 +126,6 @@ export const DDJJConsultaEmpleado = () => {
 
       const ddjjResponse = await axiosDDJJEmpleado
         .consultarFiltrado(null, null, cuit)
-
-        console.log("sfgsdfdsfdsfdsfdsfdsf");
-        console.log(ddjjResponse);
 
       if (ddjjResponse.length > 0) {
         setRows(ddjjResponse);
@@ -221,7 +210,7 @@ export const DDJJConsultaEmpleado = () => {
     }
   );
 
-  colAportes = misDDJJColumnaAporteGet(rows);
+  colAportes = DDJJColumnaAporteGet(rows);
 
   colAportes.forEach((elem) => {
     columns.push({
@@ -353,7 +342,7 @@ export const DDJJConsultaEmpleado = () => {
           justifyContent="center"
           alignItems="center"
         >
-          <Button onClick={buscarDeclaracionesJuradas} variant="contained">
+          <Button onClick={buscarDDJJ} variant="contained">
             Consultar
           </Button>
         </Stack>
