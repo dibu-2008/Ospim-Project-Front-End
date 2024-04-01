@@ -44,7 +44,7 @@ export const consultaDDJJfiltrada = async (desde, hasta, cuit) => {
         queryStringHasta = `&hasta=${encodeURIComponent(hasta)}`;
     }
     
-    const URL = `/ddjjConsulta?cuit=${cuit}${queryStringDesde}${queryStringHasta}`;
+    const URL = `/ddjj/totales?cuit=${cuit}${queryStringDesde}${queryStringHasta}`;
 
     try {
         const data = await axiosCrud.consultar(URL);
