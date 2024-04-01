@@ -24,17 +24,17 @@ function EditToolbar(props) {
   const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
 
   const altaHandleClick = () => {
-    const maxId = rows ? Math.max(...rows.map((row) => row.internalId), 0) : 1;
+    /* const maxId = rows ? Math.max(...rows.map((row) => row.internalId), 0) : 1;
     const newId = maxId + 1;
-    const internalId = newId;
+    const internalId = newId; */
+
+    const newReg = { cuit: "", observacion: "" }
+
     volverPrimerPagina();
 
-    setRows((oldRows) => [
-      { internalId, cuit: "", observacion: "", isNew: true },
-      ...oldRows,
-    ]);
+    setRows((oldRows) => [newReg,...oldRows]);
     setRowModesModel((oldModel) => ({
-      [internalId]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
+      [0]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
       ...oldModel,
     }));
   };
@@ -48,14 +48,17 @@ function EditToolbar(props) {
   );
 }
 
+const paginacion = {
+  pageSize: 50,
+  page: 0,
+}
+
 export const CuitsRestringidos = () => {
+
+  const [paginationModel, setPaginationModel] = useState(paginacion);
+  const [rowModesModel, setRowModesModel] = useState({});
   const [locale, setLocale] = useState("esES");
   const [rows, setRows] = useState([]);
-  const [rowModesModel, setRowModesModel] = useState({});
-  const [paginationModel, setPaginationModel] = useState({
-    pageSize: 10,
-    page: 0,
-  });
 
   const volverPrimerPagina = () => {
     setPaginationModel((prevPaginationModel) => ({
@@ -75,7 +78,8 @@ export const CuitsRestringidos = () => {
     const ObtenerCuitsRestringidos = async () => {
       const response = await axiosCuitsRestringidos.consultar();
       // setRows(response.map((item, index) => ({ internalId: index + 1, ...item })));
-      setRows(response.map((item) => ({ internalId: item.id, ...item })));
+      //setRows(response.map((item) => ({ internalId: item.id, ...item })));
+      setRows(response);
     };
     ObtenerCuitsRestringidos();
   }, []);
@@ -89,13 +93,13 @@ export const CuitsRestringidos = () => {
   const handleEditClick = (row) => () => {
     setRowModesModel({ 
       ...rowModesModel, 
-      [row.internalId]: { mode: GridRowModes.Edit } });
+      [rows.indexOf(row)]: { mode: GridRowModes.Edit } });
   };
 
   const handleSaveClick = (row) => () => {
     setRowModesModel({ 
       ...rowModesModel, 
-      [row.internalId]: { mode: GridRowModes.View } });
+      [rows.indexOf(row)]: { mode: GridRowModes.View } });
   };
 
   const handleDeleteClick = (row) => async () => {
@@ -126,35 +130,38 @@ export const CuitsRestringidos = () => {
   const handleCancelClick = (row) => () => {
     setRowModesModel({
       ...rowModesModel,
-      [row.internalId]: { mode: GridRowModes.View, ignoreModifications: true },
+      [rows.indexOf(row)]: { 
+        mode: GridRowModes.View, 
+        ignoreModifications: true 
+      },
     });
 
-    const editedRow = rows.find((row) => row.id === id);
+    const editedRow = rows.find((reg) => reg.id === row.id);
     if (editedRow.isNew) {
-      setRows(rows.filter((row) => row.id !== id));
+      setRows(rows.filter((reg) => reg.id !== row.id));
     }
   };
 
   const processRowUpdate = async (newRow, oldRow) => {
     let bOk = false;
     console.log("1 - processRowUpdate - newRow: " + JSON.stringify(newRow));
-    if (newRow.isNew) {
+    if (!newRow.id) {
       console.log("2 - processRowUpdate - ALTA ");
       try {
-        const internalId = newRow.internalId;
+        /* const internalId = newRow.internalId;
         delete newRow.internalId;
-        delete newRow.isNew;
+        delete newRow.isNew; */
         const data = await axiosCuitsRestringidos.crear(newRow);
         console.log("data: " + JSON.stringify(data));
         if (data && data.id) {
           newRow.id = data.id;
-          newRow.internalId = internalId;
-          newRow.isNew = false;
+          /* newRow.internalId = internalId;
+          newRow.isNew = false; */
           bOk = true;
 
           console.log("ALTA - rows: ");
           console.log(rows);
-          const newRows = rows.map((row) => (row.isNew ? newRow : row));
+          const newRows = rows.map((row) => (!row.id ? newRow : row));
           console.log(newRows);
           setRows(newRows);
         } else {
@@ -168,15 +175,18 @@ export const CuitsRestringidos = () => {
     } else {
       console.log("3 - processRowUpdate - MODI ");
       try {
-        const internalId = newRow.internalId;
+        /* const internalId = newRow.internalId;
         delete newRow.internalId;
-        delete newRow.isNew;
+        delete newRow.isNew; */
         bOk = await axiosCuitsRestringidos.actualizar(newRow);
         console.log("4 - processRowUpdate - MODI - bOk: " + bOk);
-        newRow.isNew = false;
-        newRow.internalId = internalId;
+        /* newRow.isNew = false;
+        newRow.internalId = internalId; */
         if (bOk) {
-          setRows(rows.map((row) => (row.id === newRow.id ? newRow : row)));
+          const rowsNew = rows.map((row) =>
+            row.id === newRow.id ? newRow : row
+          );
+          setRows(rowsNew);
         }
       } catch (error) {
         console.log(
@@ -227,7 +237,7 @@ export const CuitsRestringidos = () => {
       flex: 1,
       getActions: ({ row }) => {
         const isInEditMode = 
-          rowModesModel[row.internalId]?.mode === GridRowModes.Edit;
+          rowModesModel[rows.indexOf(row)]?.mode === GridRowModes.Edit;
 
         if (isInEditMode) {
           return [
@@ -281,9 +291,9 @@ export const CuitsRestringidos = () => {
           <StripedDataGrid
             rows={rows}
             columns={columns}
-            getRowId={(row) => row.internalId}
+            getRowId={(row) => rows.indexOf(row)}
             getRowClassName={(params) =>
-              params.row.internalId % 2 === 0 ? "even" : "odd"
+              rows.indexOf(params.row) % 2 === 0 ? "even" : "odd"
             }
             editMode="row"
             rowModesModel={rowModesModel}
@@ -313,7 +323,7 @@ export const CuitsRestringidos = () => {
             }}
             paginationModel={paginationModel}
             onPaginationModelChange={setPaginationModel}
-            pageSizeOptions={[10, 15, 25]}
+            pageSizeOptions={[50, 75, 100]}
           />
         </ThemeProvider>
       </Box>
