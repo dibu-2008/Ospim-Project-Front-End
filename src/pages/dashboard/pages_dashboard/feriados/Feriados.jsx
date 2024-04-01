@@ -263,7 +263,7 @@ export const Feriados = () => {
       headerClassName: "header--cell",
       valueFormatter: ({ value }) => {
         return formatter.date(value);
-      },
+      }
     },
     {
       field: "actions",
