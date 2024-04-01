@@ -32,61 +32,20 @@ export const obtenerDDJJ = async () => {
     }
 };
 
-export const obtenerPorRango = async (desde, hasta) => {
-
-    const queryStringDesde = `?desde=${encodeURIComponent(desde)}`;
-    const queryStringHasta = `&hasta=${encodeURIComponent(hasta)}`;
-
-    const URL = `/ddjjConsulta${queryStringDesde}${queryStringHasta}`;
-    try {
-        const data = await axiosCrud.consultar(URL);
-        return data || [];
-    } catch (error) {
-        console.log(
-            "obtenerDDJJPorRange() - catch-error - URL: " +
-            URL +
-            " - status: " +
-            error.status
-        );
-
-        showErrorBackEnd(
-            HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
-            error
-        );
-        return [];
+export const consultaDDJJfiltrada = async (desde, hasta, cuit) => {
+    
+    let queryStringDesde = "";
+    let queryStringHasta = "";
+    
+    if (desde !== null) {
+        queryStringDesde = `&desde=${encodeURIComponent(desde)}`;
     }
-}
-
-export const obtenerPorCuit = async (cuit) => {
-
-    const URL = `/ddjjConsulta?cuit=${cuit}`;
-
-    try {
-        const data = await axiosCrud.consultar(URL);
-        return data || [];
-    } catch (error) {
-        console.log(
-            "obtenerPorCuit() - catch-error - URL: " +
-            URL +
-            " - status: " +
-            error.status
-        );
-
-        showErrorBackEnd(
-            HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
-            error
-        );
-        return [];
+    if (hasta !== null) {
+        queryStringHasta = `&hasta=${encodeURIComponent(hasta)}`;
     }
-}
+    
+    const URL = `/ddjjConsulta?cuit=${cuit}${queryStringDesde}${queryStringHasta}`;
 
-export const obtenerPorRangoCuit = async (desde, hasta, cuit) => {
-    
-    const queryStringDesde = `?desde=${encodeURIComponent(desde)}`;
-    const queryStringHasta = `&hasta=${encodeURIComponent(hasta)}`;
-    
-    const URL = `/ddjjConsulta${queryStringDesde}${queryStringHasta}&cuit=${cuit}`;
-    
     try {
         const data = await axiosCrud.consultar(URL);
         return data || [];
@@ -106,17 +65,12 @@ export const obtenerPorRangoCuit = async (desde, hasta, cuit) => {
     }
 }
 
+
 export const axiosDDJJEmpleado = {
     consultar: async function () {
         return obtenerDDJJ();
     },
-    consultarPorRango: async function (desde, hasta) {
-        return obtenerPorRango(desde, hasta);
+    consultarFiltrado: async function (desde, hasta, cuit) {
+        return consultaDDJJfiltrada(desde, hasta, cuit);
     },
-    consultarPorCuit: async function (cuit) {
-        return obtenerPorCuit(cuit);
-    },
-    consultarPorRangoCuit: async function (desde, hasta, cuit) {
-        return obtenerPorRangoCuit(desde, hasta, cuit);
-    }
 };

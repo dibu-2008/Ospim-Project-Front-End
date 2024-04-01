@@ -99,7 +99,8 @@ export const DDJJConsultaEmpleado = () => {
       //Agrego las columnas deTotales de Aportes
       ddjjResponse = await castearMisDDJJ(ddjjResponse);
 
-      setRows(ddjjResponse.map((item) => ({ internalId: item.id, ...item })));
+      // setRows(ddjjResponse.map((item) => ({ internalId: item.id, ...item })));
+      setRows(ddjjResponse);
     };
 
     ObtenerMisDeclaracionesJuradas();
@@ -114,46 +115,48 @@ export const DDJJConsultaEmpleado = () => {
   const buscarDeclaracionesJuradas = async () => {
 
     // Busqueda por rango de periodo
-    if(desde !== null && hasta !== null && cuit === "") {
+    if (desde !== null && hasta !== null && cuit === "") {
 
       const desdeFor = formatter.date(desde.$d);
       const hastaFor = formatter.date(hasta.$d);
-      
+
       const ddjjResponse = await axiosDDJJEmpleado
-        .consultarPorRango(desdeFor, hastaFor);
-      
-      if(ddjjResponse && ddjjResponse.data){
-        setRows(ddjjResponse.data.map((item) => ({ internalId: item.id, ...item })));
+        .consultarFiltrado(desdeFor, hastaFor, null);
+
+      if (ddjjResponse.length > 0) {
+        setRows(ddjjResponse);
         setShowCuitRazonSocial(true);
       }
     }
 
     // Busqueda por cuit
-    if(cuit !== "" && desde === null && hasta === null) {
-      
-      const ddjjResponse = await axiosDDJJEmpleado.consultarPorCuit(cuit);
-      
-      if(ddjjResponse && ddjjResponse.length > 0){
-        console.log("Essssss")
-        setRows(ddjjResponse.map((item) => ({ internalId: item.id, ...item })));
+    if (cuit !== "" && desde === null && hasta === null) {
+
+      const ddjjResponse = await axiosDDJJEmpleado
+        .consultarFiltrado(null, null, cuit)
+
+        console.log("sfgsdfdsfdsfdsfdsfdsf");
+        console.log(ddjjResponse);
+
+      if (ddjjResponse.length > 0) {
+        setRows(ddjjResponse);
         setShowCuitRazonSocial(false);
       }
     }
 
     // Busqueda por rango de periodo y cuit
-    if(desde !== null && hasta !== null && cuit !== "") {
+    if (desde !== null && hasta !== null && cuit !== "") {
 
       const desdeFor = formatter.date(desde.$d);
       const hastaFor = formatter.date(hasta.$d);
-      
+
       const ddjjResponse = await axiosDDJJEmpleado
-        .consultarPorRangoCuit(desdeFor, hastaFor, cuit);
-      
-      if(ddjjResponse && ddjjResponse.data){
-        setRows(ddjjResponse.data.map((item) => ({ internalId: item.id, ...item })));
+        .consultarFiltrado(desdeFor, hastaFor, cuit);
+
+      if (ddjjResponse.length > 0) {
+        setRows(ddjjResponse);
       }
     }
-    
   };
 
   const columns = [
@@ -241,8 +244,9 @@ export const DDJJConsultaEmpleado = () => {
     headerAlign: "center",
     align: "center",
     headerClassName: "header--cell",
-    getActions: ({ id, row }) => {
-      const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+    getActions: ({ row }) => {
+      const isInEditMode =
+        rowModesModel[rows.indexOf(row)]?.mode === GridRowModes.Edit;
 
       if (isInEditMode) {
         return [
@@ -267,7 +271,7 @@ export const DDJJConsultaEmpleado = () => {
           icon={<LocalPrintshopIcon />}
           label="Print"
           color="inherit"
-          onClick={() => declaracionJuradasImpresion(id)}
+          onClick={() => declaracionJuradasImpresion(row.id)}
         />,
       ]
     },
@@ -375,9 +379,9 @@ export const DDJJConsultaEmpleado = () => {
             <StripedDataGrid
               rows={rows}
               columns={columns}
-              getRowId={(row) => row.internalId}
+              getRowId={(row) => rows.indexOf(row)}
               getRowClassName={(params) =>
-                params.row.internalId % 2 === 0 ? "even" : "odd"
+                rows.indexOf(params.row) % 2 === 0 ? "even" : "odd"
               }
               editMode="row"
               rowModesModel={rowModesModel}
