@@ -19,6 +19,7 @@ import { Roles } from "@/pages/dashboard/pages_dashboard/roles/Roles";
 import { GenerarBoletas } from "@/pages/dashboard/pages_dashboard/generar_boletas/GenerarBoletas";
 import { GenerarOtrosPagos } from "@/pages/dashboard/pages_dashboard/otros_pagos/GenerarOtrosPagos";
 import { DetalleOtrosPagos } from "@/pages/dashboard/pages_dashboard/otros_pagos/DetalleOtrosPagos";
+import { Ajustes } from "@/pages/dashboard/pages_dashboard/ajustes/Ajustes"
 
 const PagosPage = () => <div>Contenido de la página de pagos</div>;
 
@@ -51,7 +52,8 @@ const AppRouter = () => {
             <Route path="generarboletas/:id" element={<GenerarBoletas />} />
             <Route path="detalleboleta/:numero_boleta" element={<DetalleBoleta />} />
             <Route path="generarotrospagos" element={<GenerarOtrosPagos />} />
-            <Route path="detalleotrospagos" errorElement={<DetalleOtrosPagos />}/>
+            <Route path="detalleotrospagos" element={<DetalleOtrosPagos />}/>
+            <Route path="ajustes" element={<Ajustes />}/>
           </Route>
           <Route path="registercompany" element={<RegistroEmpresa />} />
           <Route index element={<Navigate to="/login" />} />

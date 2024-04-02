@@ -188,11 +188,11 @@ module.exports = (req, res, next) => {
     if (req.method === "POST" && req.url.startsWith("empresa/ddjj/boleta/calcular-interes") )
     {
       return "CALCULAR-INTERES"
-    } 
+    }
     if (req.method === "POST" && req.url.startsWith("/empresa/ddjj/calcular-interes") )
     {
       return "CALCULAR-INTERESES"
-    } 
+    }
     if (req.method === "GET" && req.url.startsWith("/empresa/ddjj/boleta/codigo"))
     {
       return "BOLETA-DDJJ-CODIGO"
@@ -206,7 +206,7 @@ module.exports = (req, res, next) => {
     if (req.method === "GET" && req.url.startsWith("/empresa/periodo/tiene-rectificativa")){
       return "TIENE-RECTIFICATIVA"
     }
-    if (req.method === "GET" && req.url.startsWith("/empresa/generar-sin-ddjj")){
+    if (req.method === "POST" && req.url.startsWith("/empresa/otras_boletas")){//REVISAR ESTA PARTE
       return "GENERAR-SIN-DDJJ"
     }
     if (req.method === "POST" && req.url.startsWith("/empresa/ddjj/guardar-boletas")){
@@ -216,9 +216,17 @@ module.exports = (req, res, next) => {
       return "GET-BOLETA-BY-ID"
     }
     if (req.method === "POST" && req.url.startsWith("/empresa/numero_boleta/modificar")){
-      console.log("entramos")
       return "MODIFICAR-BOLETA-BY-ID"
     }
+    if (req.method === "PUT" && req.url.startsWith("/sigeco/ajustes")){
+      return "UPDATE-AJUSTE"
+    }
+    console.log('ESTO ES EL URL QUE ESTA COMPARANDO: ' + req.url)
+    if (req.method === "GET" && req.url.startsWith("/empresa/1/boleta/")){
+      console.log("Si entre")
+      return "GET-BOLETA-SIN-DDJJ"
+    }
+
     return "----";
   }
 
@@ -309,16 +317,22 @@ module.exports = (req, res, next) => {
       guardarBoletas();
       break;
     case "GENERAR-SIN-DDJJ":
-      getBoletaSinDDJJ();
+      generarBoletaSinDDJJ();
       break;
     case "FERIADOS-DUPLICAR":
       feriadosDuplicar();
-      break;  
+      break;
     case "GET-BOLETA-BY-ID":
       getBoletaById();
       break;
     case "MODIFICAR-BOLETA-BY-ID":
       modificarBoletaById();
+      break;
+    case "GET-BOLETA-SIN-DDJJ":
+      getBoletaSinDDJJ();
+      break;
+    case "UPDATE-AJUSTE":
+      updateAjuste();
       break;
     case "OSPIM-CONTACTO":
       getOspimContacto();
@@ -745,21 +759,20 @@ module.exports = (req, res, next) => {
     const boletasDetalle              = req.app.db.__wrapped__.boletas;
     const tieneBoletasParaDeclaracion = boletasDetalle.declaracion_jurada_id == declaracion_jurada_id
     const error404 = {descripcion: "No se encontraron boletas para la declaracion jurada"}
-    
+
     tieneBoletasParaDeclaracion ? res.status(200).jsonp(boletasDetalle) : res.status(404).jsonp(error404)
   }
 
   function  calcula_diferencia_de_dias(dia_mayor, dia_menor) {
     return (new Date(dia_mayor) - new Date(dia_menor)) / (1000 * 60 * 60 * 24);
-  } 
+  }
 
   function guardarBoletas(){
     const numero_boleta = req.app.db.__wrapped__.boletas_guardadas.length
     console.log(req.body)
     req.body.forEach( (element, index) =>{
-      
       element.numero_boleta = numero_boleta + index
-      req.app.db.__wrapped__.boletas_guardadas.push(element) ;
+      req.app.db.__wrapped__.boletas_guardadas.con_ddjj.push(element) ;
       req.app.db.write();
     })
     res.status(201).send(null)
@@ -768,19 +781,19 @@ module.exports = (req, res, next) => {
   function calcularInteres(){
     const { codigoBoleta } = req.query
     const { intencion_de_pago } = req.body
-    const interes_diario = 0.01  
+    const interes_diario = 0.01
     const boletaOrig = req.app.db.__wrapped__.boletas.detalle_boletas.find(boleta => boleta.codigo === codigoBoleta)
     const boleta = JSON.parse(JSON.stringify(boletaOrig))
     const diferencia_en_dias  = calcula_diferencia_de_dias(intencion_de_pago, boleta.vencimiento)
-    
+
     if (diferencia_en_dias >= 0){
       const monto_interes = boleta.total_acumulado * interes_diario *  diferencia_en_dias
       boleta.total_final = boleta.total_acumulado + monto_interes
       boleta.interes = parseFloat(monto_interes.toFixed(2))
     }
-    
+
     boleta.intencion_de_pago = intencion_de_pago
-    res.status(200).jsonp({...boleta}) 
+    res.status(200).jsonp({...boleta})
   }
 
   function calcularInteresBoletas(){
@@ -789,7 +802,7 @@ module.exports = (req, res, next) => {
     const interes_diario = 0.01
     const boletasOrig = req.app.db.__wrapped__.boletas
     const boletas = JSON.parse(JSON.stringify(boletasOrig))
-  
+
     const boletasActualizadas = boletas.detalle_boletas.map(boleta =>{
       const diferencia_en_dias = calcula_diferencia_de_dias(intencion_de_pago, boleta.vencimiento)
       if (diferencia_en_dias >= 0){
@@ -798,7 +811,7 @@ module.exports = (req, res, next) => {
         boleta.intencion_de_pago = intencion_de_pago
         boleta.interes = parseFloat(monto_interes.toFixed(2))
       }
-  
+
       return {...boleta, intencion_de_pago}
     })
     res.status(200).jsonp(boletasActualizadas)
@@ -806,49 +819,67 @@ module.exports = (req, res, next) => {
 
   function getBoletaByDDJJIDandCodigo(){
     const { ddjj_id, codigo } = req.query
-    const BOLETAS_BY_DDDJJ = req.app.db.__wrapped__.boletas_guardadas.find(boletasddjj => boletasddjj.declaracion_jurada_id == ddjj_id )
+    const BOLETAS_BY_DDDJJ = req.app.db.__wrapped__.boletas_guardadas.con_ddjj.find(boletasddjj => boletasddjj.declaracion_jurada_id == ddjj_id )
     const BOLETA_BY_CODIGO = BOLETAS_BY_DDDJJ.detalle_boletas.find(boleta => boleta.codigo == codigo)
     res.status(200).jsonp(BOLETA_BY_CODIGO)
   }
 
   function getBoletaDetalleImpresa(){
     const file = `${__dirname}/detalle_boleta.pdf`;
-    res.download(file); 
+    res.download(file);
   }
 
   function getBoletaImpresa(){
     const file = `${__dirname}/boletas.pdf`;
-    res.download(file); 
+    res.download(file);
   }
 
   function tieneRectificativa(){
     const {empresaId, periodo} = req.query
     const rectificativa = empresaId == 1 && periodo == '2024-01'
-    
     res.status(200).jsonp({rectificativa})
   }
-  
+
+  function generarBoletaSinDDJJ(){
+    const file = `${__dirname}/boleta_blanca.pdf`;
+    const nueva_boleta = req.body
+    const id = req.app.db.__wrapped__.boletas_guardadas.sin_ddjj.length + 1
+    req.app.db.__wrapped__.boletas_guardadas.sin_ddjj.push({...nueva_boleta, id})
+    req.app.db.write()
+    res.download(file);
+  }
+
   function getBoletaSinDDJJ(){
     const file = `${__dirname}/boleta_blanca.pdf`;
-    res.download(file); // Set disposition and send it.
+    res.download(file);
   }
 
   function getBoletaById(){
     const { numeroBoleta } = req.query
-    const boleta = req.app.db.__wrapped__.boletas_guardadas.find(boleta => boleta.numero_boleta == numeroBoleta )  
+    const boleta = req.app.db.__wrapped__.boletas_guardadas.con_ddjj.find(boleta => boleta.numero_boleta == numeroBoleta )
     res.status(200).jsonp(boleta)
   }
-  
+
   function  modificarBoletaById(){
     const { numeroBoleta } = req.query
-    const index = req.app.db.__wrapped__.boletas_guardadas.findIndex(element => element.numero_boleta == numeroBoleta) ;
-    req.app.db.__wrapped__.boletas_guardadas.forEach(element => console.log(element.numero_boleta))
+    const index = req.app.db.__wrapped__.boletas_guardadas.con_ddjj.findIndex(element => element.numero_boleta == numeroBoleta) ;
+    req.app.db.__wrapped__.boletas_guardadas.con_ddjj.forEach(element => console.log(element.numero_boleta))
     try {
-      req.app.db.__wrapped__.boletas_guardadas[index] = req.body
-      req.app.db.write()  
+      req.app.db.__wrapped__.boletas_guardadas.con_ddjj[index] = req.body
+      req.app.db.write()
       res.status(200).send(null)
     } catch (error) {
       res.status(404)
     }
+  }
+
+  function updateAjuste(){
+    const {id} = req.query
+    console.log('id pedido ' + id)
+    const index = req.app.db.__wrapped__.ajustes.findIndex(element => element.id == id) ;
+    console.log('index del elemento ' + index)
+    req.app.db.__wrapped__.ajustes[index]= req.body;
+    req.app.db.write()
+    res.status(201).send(null)
   }
 };

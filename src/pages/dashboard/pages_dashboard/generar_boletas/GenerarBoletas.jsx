@@ -4,7 +4,7 @@ import { axiosGenerarBoletas } from './GenerarBoletasApi';
 import "./GenerarBoletas.css";
 import formatter from "@/common/formatter";
 import { useParams } from "react-router-dom";
-import { useNavigate } from 'react-router-dom';  
+import { useNavigate } from 'react-router-dom';
 //import { Boletas } from '../boletas/Boletas';
 
 export const GenerarBoletas = () => {
@@ -19,15 +19,14 @@ export const GenerarBoletas = () => {
     const [ primeraSeleccion, setPrimeraSeleccion ] = useState(true)
     const [ primeraSeleccionFDP, setPrimeraSeleccionFDP ] = useState(true)
     const [ habilitaBoton, sethabilitaBoton ] = useState(true)
-    const [ selectedFDP, setSelectedFDP ] = useState({}) // esto tengo que revisar si sigue siendo necesario
-    const navigate = useNavigate();  
+    //const [ selectedFDP, setSelectedFDP ] = useState({}) // esto tengo que revisar si sigue siendo necesario
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {
           try {
             const data = await axiosGenerarBoletas.getBoletasByDDJJid(ID_EMPRESA,DDJJ_ID);
             setDefaultFDP(data)
-            
             setAfiliados(ordenarAfiliadosBoletas(data));
             setPrimeraSeleccion(true)
             setPrimeraSeleccionFDP(true)
@@ -37,10 +36,9 @@ export const GenerarBoletas = () => {
             navigate(`/dashboard/ddjj`);
           }
         };
-    
         fetchData();
       }, []);
-    
+
     const setDefaultFDP = (data) => {
         data.detalle_boletas.forEach(element => element.forma_de_pago = "Ventanilla" )
         setBoletas(data)
@@ -66,8 +64,8 @@ export const GenerarBoletas = () => {
         });
         const afiliadosArray = Object.values(afiliados);
         return afiliadosArray
-    } 
-    
+    }
+
     const setInteresInDetalleBoleta = (boletaIndex, response) => {
         const newDetalleBoletas = [...boletas.detalle_boletas];
         const fdp  = newDetalleBoletas[boletaIndex].forma_de_pago
@@ -76,13 +74,13 @@ export const GenerarBoletas = () => {
         setBoletas({ ...boletas, detalle_boletas: newDetalleBoletas });
     }
 
-    const checkFields = () => {        
+    const checkFields = () => {
         boletas.detalle_boletas.forEach(boleta =>{
-            if (boleta.intencion_de_pago === '') return true    
+            if (boleta.intencion_de_pago === '') return true
         })
         return false
     }
-    
+
     const setIntencionDePago = async  (codigo, fecha) => {
         if (primeraSeleccion) {
             setPrimeraSeleccion(false);
@@ -122,9 +120,9 @@ export const GenerarBoletas = () => {
     const toggleDetail = () => setShowDetail(!showDetail);
 
     const generarBoletas = async () => await axiosGenerarBoletas.generarBoletasPost(ID_EMPRESA, DDJJ_ID, boletas)
-    
+
     const hoy =new Date().toISOString().split('T')[0]
-    
+
     return (
         <div className='generador_boletas_container'>
             <h1>Boleta de Pago</h1>
@@ -150,7 +148,7 @@ export const GenerarBoletas = () => {
                             <TableCell>Intención de Pago</TableCell>
                             {boletas.detalle_boletas && boletas.detalle_boletas.map((boleta) => (
                                 <TableCell key={boleta.codigo}>
-                                    <TextField type="date" 
+                                    <TextField type="date"
                                     inputProps={{min:hoy}}
                                     value={boleta.intencion_de_pago}
                                     onChange={event => setIntencionDePago(boleta.codigo, event.target.value)}/>
@@ -189,7 +187,6 @@ export const GenerarBoletas = () => {
                             {boletas.detalle_boletas && boletas.detalle_boletas.map((boleta) => (
                                 <TableCell className='cwbcb' key={boleta.codigo}>{boleta.descripcion}</TableCell>
                             ))}
-                            
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -245,5 +242,4 @@ export const GenerarBoletas = () => {
             </Box>
         </div>
     );
-    
 };

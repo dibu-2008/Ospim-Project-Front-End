@@ -57,6 +57,9 @@
   "/empresa/:empresaId/generar-sin-ddjj":"/empresa/generar-sin-ddjj",
   "/empresa/:empresaId/periodo/:periodo/tiene-rectificativa" :"/empresa/periodo/tiene-rectificativa?empresaId=:empresaId&periodo=:periodo",
   "/empresa/:empresaId/numero-boleta/:numeroBoleta" : "/empresa/numero-boleta/?numeroBoleta=:numeroBoleta",
-  "/empresa/:empresaId/numero-boleta/:numeroBoleta/modificar" : "/empresa/numero_boleta/modificar/?numeroBoleta=:numeroBoleta"
-
+  "/empresa/:empresaId/numero-boleta/:numeroBoleta/modificar" : "/empresa/numero_boleta/modificar/?numeroBoleta=:numeroBoleta",
+  "/empresa/:empresaId/generar-boleta-sin-ddjj": "/empresa/otras_boletas",
+  "/sigeco/intereses": "/intereses",
+  "/sigeco/ajustes" : "/ajustes",
+  "/sigeco/ajustes/:id":"/sigeco/ajustes/?id=:id"
 }

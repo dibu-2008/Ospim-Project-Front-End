@@ -210,7 +210,7 @@ const DashboardPage = () => {
                   </NavLink>
                   <NavLink to="./generarotrospagos" className="icon-container">
                     <ReceiptIcon className="icon-link" />{" "}
-                    {open && <span className="icon-link">Boleta Blanca</span>}
+                    {open && <span className="icon-link">Pago de Actas</span>}
                   </NavLink>
                   <NavLink to="./cuitsrestringidos" className="icon-container">
                     <NetworkLockedIcon className="icon-link" />{" "}

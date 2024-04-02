@@ -1,30 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { Typography, TextField, Button, MenuItem, FormControl, InputLabel, Select, Box, Grid } from '@mui/material';
-import { downloadPdfBoletaBlanca, axiosOtrosPagos } from './OtrosPagosApi';
-import formatter from "@/common/formatter";
+import {  generarBoletaSinDDJJ } from './OtrosPagosApi';
 import "./OtrosPagos.css"
 
 
 export const GenerarOtrosPagos = () => {
-    
+
     const [intencionDePago, setIntencionDePago] = useState('');
     const [entidad, setEntidad] = useState('');
     const [nroActa, setNroActa] = useState('');
     const [importe, setImporte] = useState('');
-    const [periodo, setPeriodo] = useState('');
-    
-    const ID_EMPRESA = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.empresa.id;
 
+    const ID_EMPRESA = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.empresa.id;
+    const hoy =new Date().toISOString().split('T')[0]
 
     const handleImprimir = () => {
         const body = {
             entidad,
-            periodo,
             nroActa,
             importe,
-            razon_de_pago: 'Nro Acta: ' + nroActa 
+            intencionDePago,
+            razon_de_pago: 'Nro Acta: ' + nroActa
         }
-        downloadPdfBoletaBlanca(ID_EMPRESA)
+
+        generarBoletaSinDDJJ(ID_EMPRESA, body)
         console.log(body);
     };
 
@@ -34,22 +33,11 @@ export const GenerarOtrosPagos = () => {
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
                     <TextField
-                        label="Periodo"
-                        type="month"
-                        fullWidth
-                        value={periodo}
-                        onChange={(e) => setPeriodo(e.target.value)}
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <TextField
                         label="Fecha intension de Pago"
                         type="date"
                         fullWidth
                         value={intencionDePago}
+                        inputProps={{min:hoy}}
                         onChange={(e) => setIntencionDePago(e.target.value)}
                         InputLabelProps={{
                             shrink: true,
@@ -89,9 +77,9 @@ export const GenerarOtrosPagos = () => {
                 </Grid>
                 <Grid item xs={12}>
                     <Box display="flex" justifyContent="flex-end">
-                        <Button 
-                        variant="contained" 
-                        disabled={ !periodo || !intencionDePago || !entidad || !importe } 
+                        <Button
+                        variant="contained"
+                        disabled={!intencionDePago || !entidad || !importe || !nroActa  }
                         onClick={handleImprimir}>Imprimir</Button>
                     </Box>
                 </Grid>

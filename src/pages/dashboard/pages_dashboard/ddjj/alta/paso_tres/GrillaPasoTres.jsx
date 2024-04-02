@@ -587,6 +587,7 @@ export const GrillaPasoTres = ({
         const year = date.getUTCFullYear();
 
         //return `${day}-${month}-${year}`;
+        console.log(params.value.split('T')[0])
         return formatter.date(params.value);
       },
     },

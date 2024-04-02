@@ -76,12 +76,12 @@ export const DetalleBoleta = () => {
   const handleSetMetodoPago = async (value) =>{
     setMetodoPago(value)
     const nuevaBoleta = JSON.parse(JSON.stringify(boletaDetalle))
-    nuevaBoleta.forma_de_pago = value 
+    nuevaBoleta.forma_de_pago = value
     setBoletaDetalle(nuevaBoleta)
   }
 
   const handleGuardar = () => {
-    guardarBoleta()  
+    guardarBoleta()
     setModoEdicion(!modoEdicion)
   }
 
@@ -99,7 +99,7 @@ export const DetalleBoleta = () => {
         <Button onClick={downloadPdfDetalle}>
           Descargar Detalle
         </Button>
-        <Button onClick={downloadPdfBoleta}>
+        <Button onClick={() => downloadPdfBoleta(ID_EMPRESA, boletaDetalle.declaracion_jurada_id, boletaDetalle.codigo)}>
           Descargar Boleta
         </Button>
         {(isEditable && !modoEdicion) && <Button variant="contained" onClick={()=> setModoEdicion(!modoEdicion)} color="primary" >
