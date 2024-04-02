@@ -23,7 +23,6 @@ import Swal from "sweetalert2";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 
-
 function misDDJJColumnaAporteGet(ddjjResponse) {
   //toma todas las ddjj de la consulta de "Mis DDJJ" y arma "vector de Columnas Aportes"
   //Ejemplo: ['UOMACU', 'ART46', 'UOMASC']
@@ -117,17 +116,17 @@ export const GrillaMisDeclaracionesJuradas = ({
   const PresentarDeclaracionesJuradas = async (id) => {
     const updatedRow = { ...rows_mis_ddjj.find((row) => row.id === id) };
 
-    updatedRow.estado = "PR";
-
     const estado = {
       estado: updatedRow.estado,
     };
 
     const bRta = await axiosDDJJ.presentar(idEmpresa, id);
-    if (bRta)
+    if (bRta) {
       setRowsMisDdjj(
         rows_mis_ddjj.map((row) => (row.id === id ? updatedRow : row))
       );
+      updatedRow.estado = "PR";
+    }
 
     return updatedRow;
   };
@@ -163,7 +162,7 @@ export const GrillaMisDeclaracionesJuradas = ({
     setPeriodo(dayjs(`${year}-${month - 1}-${day}`));
     setRowsAltaDDJJ(afiliados);
     setDDJJState(ddjj);
-    setTabState(0); 
+    setTabState(0);
   };
 
   const handleSaveClick = (id) => () => {

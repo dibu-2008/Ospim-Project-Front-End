@@ -30,6 +30,7 @@ import {
 } from "@mui/material";
 import { axiosDDJJ } from "../DDJJAltaApi";
 import "./GrillaPasoTres.css";
+import { dataGridStyle } from "@/common/dataGridStyle";
 
 function EditToolbar(props) {
   const {
@@ -59,8 +60,8 @@ function EditToolbar(props) {
         categoria: "",
         remunerativo: "",
         noRemunerativo: "",
-        uomaSocio: "",
-        amtimaSocio: "",
+        uomaSocio: false,
+        amtimaSocio: false,
         isNew: true,
       },
       ...oldRows,
@@ -131,31 +132,6 @@ export const GrillaPasoTres = ({
     () => createTheme(theme, locales[locale]),
     [locale, theme]
   );
-
-  useEffect(() => {
-    const paintCells = () => {
-      // Traete este button del DOM
-      /* MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall css-1knaqv7-MuiButtonBase-root-MuiButton-root pero que tenga el contenido FILTERS */
-
-      const button = document.querySelectorAll(
-        ".css-1knaqv7-MuiButtonBase-root-MuiButton-root"
-      );
-
-      console.log("Boton: ", button.item(0).nodeType);
-      console.log("Boton: ", button.item(0).innerText);
-
-      button.item(0).innerText = "COLUMNAS";
-      button.item(1).innerText = "FILTROS";
-      button.item(2).innerText = "DENSIDAD";
-      button.item(3).innerText = "EXPORTAR";
-    };
-
-    const timeoutId = setTimeout(() => {
-      paintCells();
-    }, 1000);
-
-    return () => clearTimeout(timeoutId);
-  }, []);
 
   const ObtenerAfiliados = async (params, cuilElegido) => {
     const afiliados = await axiosDDJJ.getAfiliado(cuilElegido);
@@ -578,8 +554,7 @@ export const GrillaPasoTres = ({
       align: "center",
       headerClassName: "header--cell",
       valueFormatter: (params) => {
-
-        if(!params.value) return "";
+        if (!params.value) return "";
 
         const date = new Date(params.value);
         const day = date.getUTCDate().toString().padStart(2, "0");
@@ -614,8 +589,8 @@ export const GrillaPasoTres = ({
       align: "center",
       headerClassName: "header--cell",
       valueFormatter: (params) => {
-        if(params.value === "") return "";
-        return formatter.currency.format(params.value || 0)
+        if (params.value === "") return "";
+        return formatter.currency.format(params.value || 0);
       },
     },
     {
@@ -636,8 +611,8 @@ export const GrillaPasoTres = ({
       align: "center",
       headerClassName: "header--cell",
       valueFormatter: (params) => {
-        if(params.value === "") return "";  
-        return formatter.currency.format(params.value || 0)
+        if (params.value === "") return "";
+        return formatter.currency.format(params.value || 0);
       },
     },
     {
@@ -661,7 +636,7 @@ export const GrillaPasoTres = ({
       valueOptions: [
         { value: true, label: "Si" },
         { value: false, label: "No" },
-      ],   
+      ],
     },
     {
       field: "amtimaSocio",
@@ -684,7 +659,7 @@ export const GrillaPasoTres = ({
       valueOptions: [
         { value: true, label: "Si" },
         { value: false, label: "No" },
-      ]
+      ],
     },
     {
       field: "errores",
@@ -775,6 +750,7 @@ export const GrillaPasoTres = ({
             onRowModesModelChange={handleRowModesModelChange}
             onRowEditStop={handleRowEditStop}
             processRowUpdate={processRowUpdate}
+            localeText={dataGridStyle.toolbarText}
             slots={{
               toolbar: EditToolbar,
             }}

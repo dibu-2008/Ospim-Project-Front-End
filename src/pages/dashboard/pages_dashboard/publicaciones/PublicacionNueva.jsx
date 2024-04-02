@@ -1,4 +1,8 @@
-import { GridRowModes, GridToolbarContainer } from "@mui/x-data-grid";
+import {
+  GridRowModes,
+  GridToolbarContainer,
+  GridToolbar,
+} from "@mui/x-data-grid";
 
 import AddIcon from "@mui/icons-material/Add";
 import Button from "@mui/material/Button";
@@ -32,6 +36,7 @@ export const EditarNuevaFila = (props) => {
 
   return (
     <GridToolbarContainer>
+      <GridToolbar showQuickFilter={props.showQuickFilter} />
       <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
         Nuevo Registro
       </Button>

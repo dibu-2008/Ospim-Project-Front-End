@@ -90,7 +90,7 @@ export const RegistroEmpresa = () => {
       phoneAlternativos.length > 0 &&
       (prefijo_second || phone_second)
     ) {
-      usuarioEmpresa[telefonosAlternativos] = [
+      usuarioEmpresa["telefonosAlternativos"] = [
         {
           prefijo: prefijo_second,
           nro: phone_second,
@@ -108,7 +108,7 @@ export const RegistroEmpresa = () => {
         phoneAlternativos.length > 0 &&
         (prefijo_second || phone_second)
       )
-        usuarioEmpresa[telefonosAlternativos] = [
+        usuarioEmpresa["telefonosAlternativos"] = [
           {
             prefijo: prefijo_second,
             nro: phone_second,

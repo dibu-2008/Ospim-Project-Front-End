@@ -14,10 +14,11 @@ import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 import * as locales from "@mui/material/locale";
+import formatter from "@/common/formatter";
 import Swal from "sweetalert2";
 import "./Publicaciones.css";
 import { ThreeCircles } from "react-loader-spinner";
-import StripedDataGrid from "@/common/dataGridStyle";
+import { StripedDataGrid, dataGridStyle } from "@/common/dataGridStyle";
 
 export const Publicaciones = () => {
   const [locale, setLocale] = useState("esES");
@@ -115,6 +116,7 @@ export const Publicaciones = () => {
   const processRowUpdate = async (newRow, oldRow) => {
     let bOk = false;
 
+    /*
     let fechaDesdeOri = null;
     let fechaHastaOri = null;
     if (newRow.vigenciaDesde) {
@@ -129,7 +131,7 @@ export const Publicaciones = () => {
       const fechaHastaFormateada = fechaHastaOri.toISOString();
       newRow.vigenciaHasta = fechaHastaFormateada;
     }
-
+    */
     if (newRow.isNew) {
       console.log("processRowUpdate - ALTA");
       try {
@@ -170,8 +172,8 @@ export const Publicaciones = () => {
       }
     }
 
-    if (fechaDesdeOri) newRow.vigenciaDesde = fechaDesdeOri;
-    if (fechaHastaOri) newRow.vigenciaHasta = fechaHastaOri;
+    //if (fechaDesdeOri) newRow.vigenciaDesde = fechaDesdeOri;
+    //if (fechaHastaOri) newRow.vigenciaHasta = fechaHastaOri;
 
     if (bOk) {
       return newRow;
@@ -229,7 +231,8 @@ export const Publicaciones = () => {
         const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
         const year = date.getUTCFullYear();
 
-        return `${day}-${month}-${year}`;
+        //return `${day}-${month}-${year}`;
+        return formatter.date(params.value);
       },
     },
     {
@@ -247,8 +250,8 @@ export const Publicaciones = () => {
         const day = date.getUTCDate().toString().padStart(2, "0");
         const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
         const year = date.getUTCFullYear();
-
-        return `${day}-${month}-${year}`;
+        //return `${day}-${month}-${year}`;
+        return formatter.date(params.value);
       },
     },
     {
@@ -371,6 +374,7 @@ export const Publicaciones = () => {
               processRowUpdate={(updatedRow, originalRow) =>
                 processRowUpdate(updatedRow, originalRow)
               }
+              localeText={dataGridStyle.toolbarText}
               slots={{
                 toolbar: EditarNuevaFila,
               }}

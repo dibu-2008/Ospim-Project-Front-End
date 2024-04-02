@@ -28,12 +28,39 @@ export const getEmpresaId = () => {
   }
 };
 
+export const getRol = () => {
+  let auxStateLogin = localStorage.getItem("stateLogin");
+  let ROL = null;
+
+  if (auxStateLogin != null) {
+    auxStateLogin = JSON.parse(localStorage.getItem("stateLogin"));
+    if (auxStateLogin.hasOwnProperty("usuarioLogueado")) {
+      ROL = auxStateLogin.usuarioLogueado.usuario.rol[0].descripcion;
+      return ROL;
+    }
+  }
+
+  return {};
+};
+
+export const isRolEmpleador = () => {
+  let ROL = getRol();
+  if (ROL == "EMPLEADOR") return true;
+  return false;
+};
+
 const localStorageService = {
   getToken: function () {
     return getToken();
   },
   getEmpresaId: function () {
     return getEmpresaId();
+  },
+  getRol: function () {
+    return getRol();
+  },
+  isRolEmpleador: function () {
+    return isRolEmpleador();
   },
 };
 

@@ -90,7 +90,6 @@ export const presentarDeclaracionJurada = async (empresaId, ddjjId) => {
     throw response;
   } catch (error) {
     showErrorBackEnd(HTTP_MSG_MODI_ERROR, error);
-    return [];
   }
   return false;
 };

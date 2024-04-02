@@ -44,8 +44,8 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
-import ReceiptIcon from '@mui/icons-material/Receipt';
-
+import ReceiptIcon from "@mui/icons-material/Receipt";
+import localStorageService from "@/components/localStorage/localStorageService";
 
 const drawerWidth = 270;
 
@@ -119,6 +119,8 @@ const Drawer = styled(MuiDrawer, {
 const DashboardPage = () => {
   const navigate = useNavigate();
   const [value, setValue] = useState(0);
+  const isRolEmpleador = localStorageService.isRolEmpleador();
+  console.log("ROL USUARIO Empleador??: ", isRolEmpleador); // IMPRIME EMPLEADOR
 
   const onLogout = () => {
     navigate("/login", { replace: true });
@@ -184,48 +186,68 @@ const DashboardPage = () => {
                     <HomeIcon className="icon-link" />{" "}
                     {open && <span className="icon-link">Inicio</span>}
                   </NavLink>
+                  {!isRolEmpleador && (                  
                   <NavLink to="./publicaciones" className="icon-container">
                     <PreviewIcon className="icon-link" />{" "}
                     {open && <span className="icon-link">Publicaciones</span>}
                   </NavLink>
+                   )}
+                   {!isRolEmpleador && (
                   <NavLink to="./feriados" className="icon-container">
                     <DateRangeIcon className="icon-link" />{" "}
                     {open && <span className="icon-link">Feriados</span>}
                   </NavLink>
+                   )}
+                  {isRolEmpleador && (
                   <NavLink to="./ddjj" className="icon-container">
                     <LibraryBooksIcon className="icon-link" />{" "}
                     {open && <span className="icon-link">DDJJ</span>}
                   </NavLink>
+                   )}
+                   {isRolEmpleador && (
                   <NavLink to="./boletas" className="icon-container">
                     <StyleIcon className="icon-link" />{" "}
                     {open && <span className="icon-link">Boletas</span>}
                   </NavLink>
+                   )}
+                  {isRolEmpleador && (
                   <NavLink to="./pagos" className="icon-container">
                     <AccountBalanceWalletIcon className="icon-link" />{" "}
                     {open && <span className="icon-link">Pagos</span>}
                   </NavLink>
+                  )}
+                  {isRolEmpleador && (
                   <NavLink to="./misdatos" className="icon-container">
                     <PersonIcon className="icon-link" />{" "}
                     {open && <span className="icon-link">Datos Empresa</span>}
                   </NavLink>
+                  )}
+                  {isRolEmpleador && (
                   <NavLink to="./generarotrospagos" className="icon-container">
                     <ReceiptIcon className="icon-link" />{" "}
-                    {open && <span className="icon-link">Pago de Actas</span>}
+                    {open && <span className="icon-link">Boleta Blanca</span>}
                   </NavLink>
+                  )}
+                  {!isRolEmpleador && (
                   <NavLink to="./cuitsrestringidos" className="icon-container">
                     <NetworkLockedIcon className="icon-link" />{" "}
                     {open && (
                       <span className="icon-link">Cuits Restringidos</span>
                     )}
                   </NavLink>
+                  )}
+                  {isRolEmpleador && (
                   <NavLink to="./roles" className="icon-container">
                     <CoPresentIcon className="icon-link" />{" "}
                     {open && <span className="icon-link">Roles</span>}
                   </NavLink>
+                  )}
+                  {isRolEmpleador && (
                   <NavLink to="./altausuariointerno" className="icon-container">
                     <PersonAddIcon className="icon-link" />{" "}
                     {open && <span className="icon-link">Usuario Interno</span>}
                   </NavLink>
+                  )}
                 </ListItemIcon>
               </ListItemButton>
             </ListItem>

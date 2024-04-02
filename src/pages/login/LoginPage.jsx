@@ -13,9 +13,18 @@ import { showSwalSuccess } from "./LoginShowAlert.js";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
 import "./LoginPage.css";
-import { Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
+import {
+  Button,
+  FormControl,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  TextField,
+} from "@mui/material";
 import { ThreeCircles } from "react-loader-spinner";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import localStorageService from "@/components/localStorage/localStorageService.js";
 
 const VITE_WELCOME_PORTAL = import.meta.env.VITE_WELCOME_PORTAL;
 
@@ -87,10 +96,14 @@ export const LoginPage = () => {
     }
 
     const loginDto = await logon(user, passwordLoginInternalUser);
+    console.log("ESTOY EN LA LINEA 90 RESPUESTA DE LOGINDTO");
+    console.log(loginDto); // AQUI ES DONDE SE OBTIENE EL TOKEN Y EL TOKEN DE REFRESCO
 
     if (loginDto && loginDto.token) {
       console.log("EXISTE loginDto.token");
+      setToken(loginDto.token);
       const usuarioConDFA = await usuarioLogueadoHabilitadoDFA(loginDto.token);
+      console.log("usuarioConDFA: ", usuarioConDFA); // TRUE O FALSE
       let bUsuarioConDFA = false;
       if (usuarioConDFA && usuarioConDFA.valor) {
         bUsuarioConDFA = true;
@@ -98,8 +111,8 @@ export const LoginPage = () => {
       console.log(bUsuarioConDFA);
       if (bUsuarioConDFA) {
         console.log("usuarioHabilitadoDFA: TRUE !!!");
-        setShowInternalUserForm(false);
-        setShowVerificationForm(true);
+        setShowInternalUserForm(false); // Esconde el form de usuario y clave
+        setShowVerificationForm(true); // Muestra el form de DFA
       } else {
         console.log("usuarioHabilitadoDFA: FALSE !!!");
         setToken(loginDto.token);
@@ -135,6 +148,7 @@ export const LoginPage = () => {
     e.preventDefault();
 
     const logonDfa = await logonDFA(token, verificationCode);
+    console.log("ESTOY EN LA LINEA 141 RESPUESTA DE logonDfa");
 
     if (logonDfa) {
       showSwalSuccess(VITE_WELCOME_PORTAL);
@@ -175,7 +189,7 @@ export const LoginPage = () => {
       const timer = setTimeout(() => {
         setShowInputComponent(true);
         setShowLoading(false);
-      }, 2000);
+      }, 1000);
       return () => clearTimeout(timer);
     }
   }, [showVerificationForm]); // useEffect se ejecutará cuando showVerificationForm cambie
@@ -204,28 +218,13 @@ export const LoginPage = () => {
                   </Stack>
                 )}
               </div>
-              {/* <div className="input-group">
-                <TextField
-                  type="password"
-                  name="passwordLoginInternalUser"
-                  id="passwordLoginInternalUser"
-                  value={passwordLoginInternalUser}
-                  onChange={onInputChangePassword}
-                  autoComplete="off"
-                  label="Contraseña"
-                  className="input_data"
-                />
-                {showAlertPassword && (
-                  <Stack sx={{ width: "100%" }} spacing={2}>
-                    <Alert severity="error">Campo requerido</Alert>
-                  </Stack>
-                )}
-              </div> */}
               <div className="input-group">
                 <FormControl variant="outlined">
-                  <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+                  <InputLabel htmlFor="outlined-adornment-password">
+                    Password
+                  </InputLabel>
                   <OutlinedInput
-                    type={showPassword ? 'text' : 'password'}
+                    type={showPassword ? "text" : "password"}
                     name="passwordLoginInternalUser"
                     id="passwordLoginInternalUser"
                     value={passwordLoginInternalUser}
@@ -265,7 +264,9 @@ export const LoginPage = () => {
               </Button>
               <div className="container_btn_pass_firts">
                 <a className="link_animado">Recupero de Contraseña</a>
-                <a className="link_animado" onClick={redirectToRegister}>Ingreso por primera vez</a>
+                <a className="link_animado" onClick={redirectToRegister}>
+                  Ingreso por primera vez
+                </a>
               </div>
             </form>
           </div>
@@ -274,7 +275,7 @@ export const LoginPage = () => {
       {showVerificationForm && (
         <div className="wrapper">
           <div className="contenedor_form_code">
-            <h1>Ingrese Token de validaci&oacute;n</h1>
+            <h1>Ingrese Token de validación</h1>
 
             <form onSubmit={onVerificationCodeSubmit}>
               <div className="input_group_code">
