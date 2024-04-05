@@ -453,51 +453,51 @@
       "id": 52
     },
     {
-      "fecha": "2024-02-07T00:00:00.000Z",
+      "fecha": "2024-02-07T03:00:00.000Z",
       "id": 53
     },
     {
-      "fecha": "2024-02-07T00:00:00.000Z",
+      "fecha": "2024-02-07T03:00:00.000Z",
       "id": 54
     },
     {
-      "fecha": "2024-02-24T00:00:00.000Z",
+      "fecha": "2024-02-24T03:00:00.000Z",
       "id": 55
     },
     {
-      "fecha": "2023-12-05T00:00:00.000Z",
+      "fecha": "2023-12-05T03:00:00.000Z",
       "id": 56
     },
     {
-      "fecha": "2024-02-21T00:00:00.000Z",
+      "fecha": "2024-02-21T03:00:00.000Z",
       "id": 57
     },
     {
-      "fecha": "2024-01-01T00:00:00.000Z",
+      "fecha": "2024-01-01T03:00:00.000Z",
       "id": 58
     },
     {
-      "fecha": "2024-02-21T00:00:00.000Z",
+      "fecha": "2024-02-21T03:00:00.000Z",
       "id": 59
     },
     {
-      "fecha": "2024-01-01T00:00:00.000Z",
+      "fecha": "2024-01-01T03:00:00.000Z",
       "id": 60
     },
     {
-      "fecha": "2024-02-07T00:00:00.000Z",
+      "fecha": "2024-02-07T03:00:00.000Z",
       "id": 61
     },
     {
-      "fecha": "2024-02-07T00:00:00.000Z",
+      "fecha": "2024-02-07T03:00:00.000Z",
       "id": 62
     },
     {
-      "fecha": "2024-02-07T00:00:00.000Z",
+      "fecha": "2024-02-07T03:00:00.000Z",
       "id": 63
     },
     {
-      "fecha": "2024-02-24T00:00:00.000Z",
+      "fecha": "2024-02-24T03:00:00.000Z",
       "id": 64
     },
     {
@@ -586,50 +586,50 @@
     {
       "titulo": "Publicacion 05",
       "cuerpo": "xx",
-      "vigenciaDesde": "2024-02-07T00:00:00.000Z",
-      "vigenciaHasta": "2025-02-09T00:00:00.000Z",
+      "vigenciaDesde": "2024-02-07T03:00:00.000Z",
+      "vigenciaHasta": "2025-02-09T03:00:00.000Z",
       "id": 18
     },
     {
       "titulo": "Publicacion 07",
       "cuerpo": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto amet consequuntur eos. Blanditiis veniam ad reprehenderit distinctio ab, aliquam maxime, labore id error. Sequi provident expedita adipisci odio laudantium alias!",
-      "vigenciaDesde": "2024-02-07T00:00:00.000Z",
-      "vigenciaHasta": "2025-02-07T00:00:00.000Z",
+      "vigenciaDesde": "2024-02-07T03:00:00.000Z",
+      "vigenciaHasta": "2025-02-07T03:00:00.000Z",
       "id": 20
     },
     {
       "titulo": "Titulo Pabada 1",
       "cuerpo": "Cuerpo Pabada 1",
-      "vigenciaDesde": "2023-12-05",
-      "vigenciaHasta": "2023-12-30",
+      "vigenciaDesde": "2023-12-05T03:00:00.000Z",
+      "vigenciaHasta": "2023-12-30T03:00:00.000Z",
       "id": 28
     },
     {
       "titulo": "publi",
       "cuerpo": "xdfsdfds",
-      "vigenciaDesde": "2024-02-22T00:00:00.000Z",
-      "vigenciaHasta": "2024-02-24T00:00:00.000Z",
+      "vigenciaDesde": "2024-02-22T03:00:00.000Z",
+      "vigenciaHasta": "2024-02-24T03:00:00.000Z",
       "id": 30
     },
     {
       "titulo": "Titulo Pabada 1",
       "cuerpo": "Cuerpo Pabada 1",
-      "vigenciaDesde": "2023-12-05",
-      "vigenciaHasta": "2023-12-30",
+      "vigenciaDesde": "2023-12-05T03:00:00.000Z",
+      "vigenciaHasta": "2023-12-30T03:00:00.000Z",
       "id": 31
     },
     {
       "titulo": "sdfsdfd",
       "cuerpo": "sdfsdf",
-      "vigenciaDesde": "2024-02-21T00:00:00.000Z",
-      "vigenciaHasta": "2024-02-21T00:00:00.000Z",
+      "vigenciaDesde": "2024-02-21T03:00:00.000Z",
+      "vigenciaHasta": "2024-02-21T03:00:00.000Z",
       "id": 32
     },
     {
       "titulo": "titulo II",
       "cuerpo": "Cuerpo de titulo II",
-      "vigenciaDesde": "2024-01-01T00:00:00.000Z",
-      "vigenciaHasta": "2025-02-14T00:00:00.000Z",
+      "vigenciaDesde": "2024-01-01T03:00:00.000Z",
+      "vigenciaHasta": "2025-02-14T03:00:00.000Z",
       "id": 33
     }
   ],
@@ -1024,7 +1024,7 @@
       "nombre": "20233725006",
       "rol": [
         {
-          "descripcion": "EMPLEADO"
+          "descripcion": "EMPLEADOR"
         }
       ]
     },
@@ -1091,7 +1091,7 @@
       "id": 120,
       "estado": "PR",
       "empresaId": 1,
-      "periodo": "2023-11-01T00:00:00.000Z",
+      "periodo": "2023-11-01T03:00:00.000Z",
       "secuencia": 0,
       "aportes": [
         {
@@ -1112,7 +1112,7 @@
       "id": 121,
       "estado": "PE",
       "empresaId": 1,
-      "periodo": "2023-11-01T00:00:00.000Z",
+      "periodo": "2023-11-01T03:00:00.000Z",
       "secuencia": 1,
       "aportes": [
         {
@@ -1137,7 +1137,7 @@
       "id": 122,
       "estado": "PE",
       "empresaId": 1,
-      "periodo": "2023-12-01T00:00:00.000Z",
+      "periodo": "2023-12-01T03:00:00.000Z",
       "secuencia": 1,
       "aportes": [
         {
@@ -1162,7 +1162,7 @@
       "id": 123,
       "estado": "PR",
       "empresaId": 1,
-      "periodo": "2023-09-01T00:00:00.000Z",
+      "periodo": "2023-09-01T03:00:00.000Z",
       "secuencia": 0,
       "aportes": [
         {
@@ -1187,7 +1187,7 @@
       "id": 124,
       "estado": "PR",
       "empresaId": 1,
-      "periodo": "2023-10-01T00:00:00.000Z",
+      "periodo": "2023-10-01T03:00:00.000Z",
       "secuencia": 1,
       "aportes": [
         {
@@ -1212,7 +1212,7 @@
       "id": 125,
       "estado": "PR",
       "empresaId": 1,
-      "periodo": "2023-11-01T00:00:00.000Z",
+      "periodo": "2023-11-01T03:00:00.000Z",
       "secuencia": 2,
       "aportes": [
         {
@@ -1237,7 +1237,7 @@
       "id": 126,
       "estado": "PR",
       "empresaId": 1,
-      "periodo": "2023-12-01T00:00:00.000Z",
+      "periodo": "2023-12-01T03:00:00.000Z",
       "secuencia": 3,
       "aportes": [
         {
@@ -1262,7 +1262,7 @@
       "id": 127,
       "estado": "PR",
       "empresaId": 2,
-      "periodo": "2023-09-01T00:00:00.000Z",
+      "periodo": "2023-09-01T03:00:00.000Z",
       "secuencia": 2,
       "aportes": [
         {
@@ -1287,7 +1287,7 @@
       "id": 128,
       "estado": "PR",
       "empresaId": 2,
-      "periodo": "2023-10-01T00:00:00.000Z",
+      "periodo": "2023-10-01T03:00:00.000Z",
       "secuencia": 2,
       "aportes": [
         {
@@ -1312,7 +1312,7 @@
       "id": 129,
       "estado": "PR",
       "empresaId": 1,
-      "periodo": "2024-01-01T00:00:00.000Z",
+      "periodo": "2024-01-01T03:00:00.000Z",
       "secuencia": 4,
       "aportes": [
         {
@@ -1337,7 +1337,7 @@
       "id": 130,
       "estado": "PR",
       "empresaId": 1,
-      "periodo": "2024-02-01T00:00:00.000Z",
+      "periodo": "2024-02-01T03:00:00.000Z",
       "secuencia": 5,
       "aportes": [
         {
@@ -1362,7 +1362,7 @@
       "id": 131,
       "estado": "PR",
       "empresaId": 1,
-      "periodo": "2024-03-01T00:00:00.000Z",
+      "periodo": "2024-03-01T03:00:00.000Z",
       "secuencia": 6,
       "aportes": [
         {
@@ -1387,7 +1387,7 @@
       "id": 200,
       "estado": "PR",
       "empresaId": 1,
-      "periodo": "2024-04-01T00:00:00.000Z",
+      "periodo": "2024-04-01T03:00:00.000Z",
       "secuencia": 7,
       "aportes": [
         {
@@ -1412,7 +1412,7 @@
       "id": 201,
       "estado": "PR",
       "empresaId": 1,
-      "periodo": "2024-05-01T00:00:00.000Z",
+      "periodo": "2024-05-01T03:00:00.000Z",
       "secuencia": 8,
       "aportes": [
         {
@@ -1437,7 +1437,7 @@
       "id": 202,
       "estado": "PR",
       "empresaId": 1,
-      "periodo": "2024-06-01T00:00:00.000Z",
+      "periodo": "2024-06-01T03:00:00.000Z",
       "secuencia": 9,
       "aportes": [
         {
@@ -1462,7 +1462,7 @@
       "id": 203,
       "estado": "PR",
       "empresaId": 1,
-      "periodo": "2024-07-01T00:00:00.000Z",
+      "periodo": "2024-07-01T03:00:00.000Z",
       "secuencia": 10,
       "aportes": [
         {
@@ -1484,7 +1484,7 @@
       ]
     },
     {
-      "periodo": "2023-10-01T00:00:00.000Z",
+      "periodo": "2023-10-01T03:00:00.000Z",
       "id": 204,
       "estado": "PE",
       "empresaId": 2,
@@ -1516,7 +1516,7 @@
       "razonSocial": "Empresa Nro 1",
       "estado": "PR",
       "empresaId": 1,
-      "periodo": "2023-01-01T00:00:00.000Z",
+      "periodo": "2023-01-01T03:00:00.000Z",
       "secuencia": 0,
       "aportes": [
         {
@@ -1539,7 +1539,7 @@
       "razonSocial": "Empresa Nro 2",
       "estado": "PE",
       "empresaId": 1,
-      "periodo": "2023-02-01T00:00:00.000Z",
+      "periodo": "2023-02-01T03:00:00.000Z",
       "secuencia": 1,
       "aportes": [
         {
@@ -1566,7 +1566,7 @@
       "razonSocial": "Empresa Nro 3",
       "estado": "PE",
       "empresaId": 1,
-      "periodo": "2023-02-01T00:00:00.000Z",
+      "periodo": "2023-02-01T03:00:00.000Z",
       "secuencia": 1,
       "aportes": [
         {
@@ -1593,7 +1593,7 @@
       "razonSocial": "Empresa Nro 1",
       "estado": "PR",
       "empresaId": 2,
-      "periodo": "2023-01-01T00:00:00.000Z",
+      "periodo": "2023-01-01T03:00:00.000Z",
       "secuencia": 0,
       "aportes": [
         {
@@ -1620,7 +1620,7 @@
       "razonSocial": "Empresa Nro 2",
       "estado": "PR",
       "empresaId": 2,
-      "periodo": "2023-02-01T00:00:00.000Z",
+      "periodo": "2023-02-01T03:00:00.000Z",
       "secuencia": 1,
       "aportes": [
         {
@@ -1647,7 +1647,7 @@
       "razonSocial": "Empresa Nro 3",
       "estado": "PR",
       "empresaId": 2,
-      "periodo": "2023-02-01T00:00:00.000Z",
+      "periodo": "2023-02-01T03:00:00.000Z",
       "secuencia": 2,
       "aportes": [
         {
@@ -1675,7 +1675,7 @@
       "id": 120,
       "estado": "PR",
       "empresaId": 1,
-      "periodo": "2023-11-01T00:00:00.000Z",
+      "periodo": "2023-11-01T03:00:00.000Z",
       "secuencia": 0,
       "afiliados": [
         {
@@ -1684,7 +1684,7 @@
           "inte": null,
           "apellido": "Salinas",
           "nombre": "Luis",
-          "fechaIngreso": "2001-01-01T00:00:00.000Z",
+          "fechaIngreso": "2001-01-01T03:00:00.000Z",
           "empresaDomicilioId": 3,
           "camara": "CAENA",
           "categoria": "D",
@@ -1709,7 +1709,7 @@
           "inte": 1,
           "apellido": "Carlos",
           "nombre": "Sanchez",
-          "fechaIngreso": "2010-01-01T00:00:00.000Z",
+          "fechaIngreso": "2010-01-01T03:00:00.000Z",
           "empresaDomicilioId": 3,
           "camara": "CAENA",
           "categoria": "D",
@@ -1731,14 +1731,33 @@
       ]
     },
     {
-      "periodo": "2023-10-01T03:00:00.000Z",
+      "id": 121,
+      "estado": "PE",
+      "empresaId": 1,
+      "periodo": "2023-11-01T03:00:00.000Z",
+      "secuencia": 1,
       "afiliados": [
+        {
+          "cuil": "20949118682",
+          "inte": 0,
+          "apellido": "Salinas",
+          "nombre": "Luis",
+          "fechaIngreso": "2024-04-10T03:00:00.000Z",
+          "empresaDomicilioId": 4,
+          "camara": "FAIM",
+          "categoria": "C",
+          "remunerativo": "1",
+          "noRemunerativo": "1",
+          "uomaSocio": false,
+          "amtimaSocio": false,
+          "id": 5
+        },
         {
           "cuil": 20949118682,
           "inte": null,
           "apellido": "Salinas",
           "nombre": "Luis",
-          "fechaIngreso": "2024-02-15",
+          "fechaIngreso": "2024-02-15T03:00:00.000Z",
           "empresaDomicilioId": 8,
           "camara": "CAENA",
           "categoria": "C",
@@ -1753,7 +1772,7 @@
           "inte": null,
           "apellido": "Bueno",
           "nombre": "Diego",
-          "fechaIngreso": "2024-03-15",
+          "fechaIngreso": "2024-03-15T03:00:00.000Z",
           "empresaDomicilioId": 10,
           "camara": "CAENA",
           "categoria": "A",
@@ -1768,7 +1787,7 @@
           "inte": null,
           "apellido": "Lopez",
           "nombre": "Jose",
-          "fechaIngreso": "2024-04-18",
+          "fechaIngreso": "2024-04-18T03:00:00.000Z",
           "empresaDomicilioId": 10,
           "camara": "CAENA",
           "categoria": "D",
@@ -1783,7 +1802,7 @@
           "inte": null,
           "apellido": "Stack",
           "nombre": "Tony",
-          "fechaIngreso": "2024-05-19",
+          "fechaIngreso": "2024-05-19T03:00:00.000Z",
           "empresaDomicilioId": 10,
           "camara": "CAENA",
           "categoria": "A",
@@ -1793,15 +1812,14 @@
           "amtimaSocio": null,
           "id": 4
         }
-      ],
-      "id": 121
+      ]
     },
     {
       "//": "DDJJ ********************************************************************************** 03",
       "id": 122,
       "estado": "PE",
       "empresaId": 1,
-      "periodo": "2023-09-01T00:00:00.000Z",
+      "periodo": "2023-12-01T03:00:00.000Z",
       "secuencia": 0,
       "afiliados": [
         {
@@ -1810,7 +1828,7 @@
           "inte": null,
           "apellido": "Martínez",
           "nombre": "Ana",
-          "fechaIngreso": "2001-01-01T00:00:00.000Z",
+          "fechaIngreso": "2001-01-01T03:00:00.000Z",
           "empresaDomicilioId": 3,
           "camara": "CAENA",
           "categoria": "D",
@@ -1843,7 +1861,7 @@
           "inte": 1,
           "apellido": "López",
           "nombre": "Laura",
-          "fechaIngreso": "2010-01-01T00:00:00.000Z",
+          "fechaIngreso": "2010-01-01T03:00:00.000Z",
           "empresaDomicilioId": 3,
           "camara": "CAENA",
           "categoria": "D",
@@ -1877,7 +1895,7 @@
       "id": 123,
       "estado": "PR",
       "empresaId": 1,
-      "periodo": "2023-09-01T00:00:00.000Z",
+      "periodo": "2023-09-01T03:00:00.000Z",
       "secuencia": 1,
       "afiliados": [
         {
@@ -1886,7 +1904,7 @@
           "inte": null,
           "apellido": "García",
           "nombre": "David",
-          "fechaIngreso": "2001-01-01T00:00:00.000Z",
+          "fechaIngreso": "2001-01-01T03:00:00.000Z",
           "empresaDomicilioId": 3,
           "camara": "CAENA",
           "categoria": "D",
@@ -1915,7 +1933,7 @@
           "inte": 1,
           "apellido": "Fernández",
           "nombre": "",
-          "fechaIngreso": "2010-01-01T00:00:00.000Z",
+          "fechaIngreso": "2010-01-01T03:00:00.000Z",
           "empresaDomicilioId": 3,
           "camara": "CAENA",
           "categoria": "D",
@@ -1944,7 +1962,7 @@
       "id": 124,
       "estado": "PR",
       "empresaId": 1,
-      "periodo": "2023-10-01T00:00:00.000Z",
+      "periodo": "2023-10-01T03:00:00.000Z",
       "secuencia": 1,
       "afiliados": [
         {
@@ -1953,7 +1971,7 @@
           "inte": null,
           "apellido": "García",
           "nombre": "David",
-          "fechaIngreso": "2001-01-01T00:00:00.000Z",
+          "fechaIngreso": "2001-01-01T03:00:00.000Z",
           "empresaDomicilioId": 3,
           "camara": "CAENA",
           "categoria": "D",
@@ -1982,7 +2000,7 @@
           "inte": 1,
           "apellido": "Fernández",
           "nombre": "Sofia",
-          "fechaIngreso": "2010-01-01T00:00:00.000Z",
+          "fechaIngreso": "2010-01-01T03:00:00.000Z",
           "empresaDomicilioId": 3,
           "camara": "CAENA",
           "categoria": "D",
@@ -2011,7 +2029,7 @@
       "id": 125,
       "estado": "PR",
       "empresaId": 1,
-      "periodo": "2023-11-01T00:00:00.000Z",
+      "periodo": "2023-11-01T03:00:00.000Z",
       "secuencia": 2,
       "afiliados": [
         {
@@ -2020,7 +2038,7 @@
           "inte": null,
           "apellido": "Ruiz",
           "nombre": "Alberto",
-          "fechaIngreso": "2001-01-01T00:00:00.000Z",
+          "fechaIngreso": "2001-01-01T03:00:00.000Z",
           "empresaDomicilioId": 3,
           "camara": "CAENA",
           "categoria": "D",
@@ -2049,7 +2067,7 @@
           "inte": 1,
           "apellido": "Romero",
           "nombre": "Sergio",
-          "fechaIngreso": "2010-01-01T00:00:00.000Z",
+          "fechaIngreso": "2010-01-01T03:00:00.000Z",
           "empresaDomicilioId": 3,
           "camara": "CAENA",
           "categoria": "D",
@@ -2078,7 +2096,7 @@
       "id": 126,
       "estado": "PR",
       "empresaId": 1,
-      "periodo": "2023-12-01T00:00:00.000Z",
+      "periodo": "2023-12-01T03:00:00.000Z",
       "secuencia": 3,
       "afiliados": [
         {
@@ -2087,7 +2105,7 @@
           "inte": null,
           "apellido": "Garcia",
           "nombre": "Juan",
-          "fechaIngreso": "2001-01-01T00:00:00.000Z",
+          "fechaIngreso": "2001-01-01T03:00:00.000Z",
           "empresaDomicilioId": 3,
           "camara": "CAENA",
           "categoria": "D",
@@ -2116,7 +2134,7 @@
           "inte": 1,
           "apellido": "Flores",
           "nombre": "Pablo",
-          "fechaIngreso": "2010-01-01T00:00:00.000Z",
+          "fechaIngreso": "2010-01-01T03:00:00.000Z",
           "empresaDomicilioId": 3,
           "camara": "CAENA",
           "categoria": "D",
@@ -2145,7 +2163,7 @@
       "id": 127,
       "estado": "PR",
       "empresaId": 2,
-      "periodo": "2023-09-01T00:00:00.000Z",
+      "periodo": "2023-09-01T03:00:00.000Z",
       "secuencia": 2,
       "afiliados": [
         {
@@ -2154,7 +2172,7 @@
           "inte": null,
           "apellido": "Torres",
           "nombre": "Isabel",
-          "fechaIngreso": "2001-01-01T00:00:00.000Z",
+          "fechaIngreso": "2001-01-01T03:00:00.000Z",
           "empresaDomicilioId": 3,
           "camara": "CAENA",
           "categoria": "D",
@@ -2183,7 +2201,7 @@
           "inte": 1,
           "apellido": "Moreno",
           "nombre": "Manuel",
-          "fechaIngreso": "2010-01-01T00:00:00.000Z",
+          "fechaIngreso": "2010-01-01T03:00:00.000Z",
           "empresaDomicilioId": 3,
           "camara": "CAENA",
           "categoria": "D",
@@ -2212,7 +2230,7 @@
       "id": 128,
       "estado": "PR",
       "empresaId": 2,
-      "periodo": "2023-10-01T00:00:00.000Z",
+      "periodo": "2023-10-01T03:00:00.000Z",
       "secuencia": 1,
       "afiliados": [
         {
@@ -2221,7 +2239,7 @@
           "inte": null,
           "apellido": "Días",
           "nombre": "Lucia",
-          "fechaIngreso": "2001-01-01T00:00:00.000Z",
+          "fechaIngreso": "2001-01-01T03:00:00.000Z",
           "empresaDomicilioId": 3,
           "camara": "CAENA",
           "categoria": "D",
@@ -2250,7 +2268,7 @@
           "inte": 1,
           "apellido": "Herrera",
           "nombre": "Diego",
-          "fechaIngreso": "2010-01-01T00:00:00.000Z",
+          "fechaIngreso": "2010-01-01T03:00:00.000Z",
           "empresaDomicilioId": 3,
           "camara": "CAENA",
           "categoria": "D",
@@ -2279,7 +2297,7 @@
       "id": 129,
       "estado": "PR",
       "empresa Id": 1,
-      "periodo": "2024-01-01T00:00:00.000Z",
+      "periodo": "2024-01-01T03:00:00.000Z",
       "secuencia": 4,
       "afiliados": [
         {
@@ -2288,7 +2306,7 @@
           "inte": null,
           "apellido": "Castro",
           "nombre": "Marta",
-          "fechaIngreso": "2001-01-01T00:00:00.000Z",
+          "fechaIngreso": "2001-01-01T03:00:00.000Z",
           "empresaDomicilioId": 3,
           "camara": "CAENA",
           "categoria": "D",
@@ -2317,7 +2335,7 @@
           "inte": 1,
           "apellido": "Ruiz",
           "nombre": "Elena",
-          "fechaIngreso": "2010-01-01T00:00:00.000Z",
+          "fechaIngreso": "2010-01-01T03:00:00.000Z",
           "empresaDomicilioId": 3,
           "camara": "CAENA",
           "categoria": "D",
@@ -2346,7 +2364,7 @@
       "id": 130,
       "estado": "PR",
       "empresaId": 1,
-      "periodo": "2024-02-01T00:00:00.000Z",
+      "periodo": "2024-02-01T03:00:00.000Z",
       "secuencia": 5,
       "afiliados": [
         {
@@ -2355,7 +2373,7 @@
           "inte": null,
           "apellido": "López",
           "nombre": "Carla",
-          "fechaIngreso": "2001-01-01T00:00:00.000Z",
+          "fechaIngreso": "2001-01-01T03:00:00.000Z",
           "empresaDomicilioId": 3,
           "camara": "CAENA",
           "categoria": "D",
@@ -2384,7 +2402,7 @@
           "inte": 1,
           "apellido": "Martínez",
           "nombre": "Andrés",
-          "fechaIngreso": "2010-01-01T00:00:00.000Z",
+          "fechaIngreso": "2010-01-01T03:00:00.000Z",
           "empresaDomicilioId": 3,
           "camara": "CAENA",
           "categoria": "D",
@@ -2413,7 +2431,7 @@
       "id": 131,
       "estado": "PR",
       "empresaId": 1,
-      "periodo": "2024-03-01T00:00:00.000Z",
+      "periodo": "2024-03-01T03:00:00.000Z",
       "secuencia": 6,
       "afiliados": [
         {
@@ -2422,7 +2440,7 @@
           "inte": null,
           "apellido": "Garcia",
           "nombre": "valeria",
-          "fechaIngreso": "2001-01-01T00:00:00.000Z",
+          "fechaIngreso": "2001-01-01T03:00:00.000Z",
           "empresaDomicilioId": 3,
           "camara": "CAENA",
           "categoria": "D",
@@ -2451,7 +2469,7 @@
           "inte": 1,
           "apellido": "Castro",
           "nombre": "Hugo",
-          "fechaIngreso": "2010-01-01T00:00:00.000Z",
+          "fechaIngreso": "2010-01-01T03:00:00.000Z",
           "empresaDomicilioId": 3,
           "camara": "CAENA",
           "categoria": "D",
@@ -2480,7 +2498,7 @@
       "id": 200,
       "estado": "PR",
       "empresaId": 2,
-      "periodo": "2023-09-01T00:00:00.000Z",
+      "periodo": "2023-09-01T03:00:00.000Z",
       "secuencia": 2,
       "afiliados": [
         {
@@ -2489,7 +2507,7 @@
           "inte": null,
           "apellido": "Vázquez",
           "nombre": "Lot",
-          "fechaIngreso": "2001-01-01T00:00:00.000Z",
+          "fechaIngreso": "2001-01-01T03:00:00.000Z",
           "empresaDomicilioId": 3,
           "camara": "CAENA",
           "categoria": "D",
@@ -2518,7 +2536,7 @@
           "inte": 1,
           "apellido": "Querubín",
           "nombre": "Tapia",
-          "fechaIngreso": "2010-01-01T00:00:00.000Z",
+          "fechaIngreso": "2010-01-01T03:00:00.000Z",
           "empresaDomicilioId": 3,
           "camara": "CAENA",
           "categoria": "D",
@@ -2547,7 +2565,7 @@
       "id": 201,
       "estado": "PR",
       "empresaId": 2,
-      "periodo": "2023-09-01T00:00:00.000Z",
+      "periodo": "2023-09-01T03:00:00.000Z",
       "secuencia": 1,
       "afiliados": [
         {
@@ -2556,7 +2574,7 @@
           "inte": null,
           "apellido": "Vázquez",
           "nombre": "Lot",
-          "fechaIngreso": "2001-01-01T00:00:00.000Z",
+          "fechaIngreso": "2001-01-01T03:00:00.000Z",
           "empresaDomicilioId": 3,
           "camara": "CAENA",
           "categoria": "D",
@@ -2585,7 +2603,7 @@
           "inte": 1,
           "apellido": "Querubín",
           "nombre": "Tapia",
-          "fechaIngreso": "2010-01-01T00:00:00.000Z",
+          "fechaIngreso": "2010-01-01T03:00:00.000Z",
           "empresaDomicilioId": 3,
           "camara": "CAENA",
           "categoria": "D",
@@ -2612,7 +2630,7 @@
     },
     {
       "id": 202,
-      "periodo": "2023-10-01T00:00:00.000Z",
+      "periodo": "2023-10-01T03:00:00.000Z",
       "empresaId": "1",
       "estado": "PE",
       "secuencia": null,
@@ -2623,7 +2641,7 @@
           "inte": null,
           "apellido": "Vázquez",
           "nombre": "Lot",
-          "fechaIngreso": "2001-01-01T00:00:00.000Z",
+          "fechaIngreso": "2001-01-01T03:00:00.000Z",
           "empresaDomicilioId": 3,
           "camara": "CAENA",
           "categoria": "D",
@@ -2652,7 +2670,7 @@
           "inte": 1,
           "apellido": "Querubín",
           "nombre": "Tapia",
-          "fechaIngreso": "2010-01-01T00:00:00.000Z",
+          "fechaIngreso": "2010-01-01T03:00:00.000Z",
           "empresaDomicilioId": 3,
           "camara": "CAENA",
           "categoria": "D",
@@ -2679,7 +2697,7 @@
     },
     {
       "id": 203,
-      "periodo": "2023-10-01T00:00:00.000Z",
+      "periodo": "2023-10-01T03:00:00.000Z",
       "empresaId": "1",
       "estado": "PE",
       "secuencia": null,
@@ -2690,7 +2708,7 @@
           "inte": null,
           "apellido": "Vázquez",
           "nombre": "Lot",
-          "fechaIngreso": "2001-01-01T00:00:00.000Z",
+          "fechaIngreso": "2001-01-01T03:00:00.000Z",
           "empresaDomicilioId": 3,
           "camara": "CAENA",
           "categoria": "D",
@@ -2719,7 +2737,7 @@
           "inte": 1,
           "apellido": "Querubín",
           "nombre": "Tapia",
-          "fechaIngreso": "2010-01-01T00:00:00.000Z",
+          "fechaIngreso": "2010-01-01T03:00:00.000Z",
           "empresaDomicilioId": 3,
           "camara": "CAENA",
           "categoria": "D",
@@ -3049,6 +3067,138 @@
       ],
       "empresaId": "1",
       "id": 215
+    },
+    {
+      "periodo": "2024-04-02T03:00:00.000Z",
+      "afiliados": [
+        {
+          "cuil": "20949118682",
+          "inte": 0,
+          "apellido": "Salinas",
+          "nombre": "Luis",
+          "fechaIngreso": "2024-04-03T03:00:00.000Z",
+          "empresaDomicilioId": 10,
+          "camara": "CAENA",
+          "categoria": "C",
+          "remunerativo": "1",
+          "noRemunerativo": "1",
+          "uomaSocio": false,
+          "amtimaSocio": false,
+          "id": 1
+        }
+      ],
+      "empresaId": "1",
+      "id": 216
+    },
+    {
+      "periodo": "2024-05-04T03:00:00.000Z",
+      "afiliados": [
+        {
+          "cuil": "20949118682",
+          "inte": 0,
+          "apellido": "Salinas",
+          "nombre": "Luis",
+          "fechaIngreso": "2024-04-18T03:00:00.000Z",
+          "empresaDomicilioId": 9,
+          "camara": "CAENA",
+          "categoria": "C",
+          "remunerativo": "1",
+          "noRemunerativo": "1",
+          "uomaSocio": false,
+          "amtimaSocio": false,
+          "id": 1
+        }
+      ],
+      "empresaId": "1",
+      "id": 217
+    },
+    {
+      "periodo": "2024-05-04T03:00:00.000Z",
+      "afiliados": [
+        {
+          "cuil": "20949118682",
+          "inte": 0,
+          "apellido": "Salinas",
+          "nombre": "Luis",
+          "fechaIngreso": "2024-04-10T03:00:00.000Z",
+          "empresaDomicilioId": 10,
+          "camara": "CEPA",
+          "categoria": "D",
+          "remunerativo": "1",
+          "noRemunerativo": "1",
+          "uomaSocio": false,
+          "amtimaSocio": false,
+          "id": 1
+        }
+      ],
+      "empresaId": "1",
+      "id": 218
+    },
+    {
+      "periodo": "2017-05-04T03:00:00.000Z",
+      "afiliados": [
+        {
+          "cuil": "20949118682",
+          "inte": 0,
+          "apellido": "Salinas",
+          "nombre": "Luis",
+          "fechaIngreso": "2024-04-11T03:00:00.000Z",
+          "empresaDomicilioId": 10,
+          "camara": "CAENA",
+          "categoria": "C",
+          "remunerativo": "1",
+          "noRemunerativo": "1",
+          "uomaSocio": false,
+          "amtimaSocio": false,
+          "id": 1
+        }
+      ],
+      "empresaId": "1",
+      "id": 219
+    },
+    {
+      "periodo": null,
+      "afiliados": [
+        {
+          "cuil": "20949118682",
+          "inte": 0,
+          "apellido": "Salinas",
+          "nombre": "Luis",
+          "fechaIngreso": "2024-04-24T03:00:00.000Z",
+          "empresaDomicilioId": 4,
+          "camara": "FAIM",
+          "categoria": "D",
+          "remunerativo": "1",
+          "noRemunerativo": "1",
+          "uomaSocio": false,
+          "amtimaSocio": false,
+          "id": 1
+        }
+      ],
+      "empresaId": "1",
+      "id": 220
+    },
+    {
+      "periodo": "2033-05-04T03:00:00.000Z",
+      "afiliados": [
+        {
+          "cuil": "20949118682",
+          "inte": 0,
+          "apellido": "Salinas",
+          "nombre": "Luis",
+          "fechaIngreso": "2024-04-18T03:00:00.000Z",
+          "empresaDomicilioId": 5,
+          "camara": "CAENA",
+          "categoria": "C",
+          "remunerativo": "1",
+          "noRemunerativo": "1",
+          "uomaSocio": false,
+          "amtimaSocio": false,
+          "id": 1
+        }
+      ],
+      "empresaId": "1",
+      "id": 221
     }
   ],
   "afiliado": [
@@ -3237,7 +3387,7 @@
       "referencia": "R",
       "categoria": null,
       "antiguedad": null,
-      "vigenciaDesde": "1990-01-01T00:00.000Z",
+      "vigenciaDesde": "1990-01-01T03:00.000Z",
       "vigenciaHasta": null
     },
     {
