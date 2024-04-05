@@ -31,19 +31,13 @@ export const MisAltaDeclaracionesJuradas = ({
   setDDJJState,
   periodo,
   setPeriodo,
-  /* 
-  periodoIso,
-  handleChangePeriodo,
-  handleAcceptPeriodoDDJJ, */
   rowsAltaDDJJ,
   setRowsAltaDDJJ,
   rowsAltaDDJJAux,
   setRowsAltaDDJJAux,
   peticion,
-  idDDJJ,
 }) => {
-  const [otroPeriodo, setOtroPeriodo] = useState(null);
-  const [otroPeriodoIso, setOtroPeriodoIso] = useState(null);
+
   const [camaras, setCamaras] = useState([]);
   const [todasLasCategorias, setTodasLasCategorias] = useState([]);
   const [categoriasFiltradas, setCategoriasFiltradas] = useState([]);
@@ -55,20 +49,15 @@ export const MisAltaDeclaracionesJuradas = ({
   const [afiliadoImportado, setAfiliadoImportado] = useState([]);
   const [filasDoc, setFilasDoc] = useState([]);
   const [ocultarGrillaPaso3, setOcultarGrillaPaso3] = useState(false);
+  const [btnSubirHabilitado, setBtnSubirHabilitado] = useState(false);
+  const [ddjjCreada, setDDJJCreada] = useState({});
   const ID_EMPRESA = localStorageService.getEmpresaId();
 
-  const handleChangePeriodo = (date) => {
-    setPeriodo(date);
-    console.log("SSSSSSSSSSSSSSSSS");
-    console.log(periodo);
-  };
-
-  const handleChangeOtroPeriodo = (date) => setOtroPeriodo(date);
-
+  const handleChangePeriodo = (date) => setPeriodo(date);
+  
   useEffect(() => {
     const ObtenerCamaras = async () => {
       const data = await axiosDDJJ.getCamaras();
-      //const camarasResponse = await obtenerCamaras(TOKEN);
       setCamaras(data.map((item, index) => ({ id: index + 1, ...item })));
     };
     ObtenerCamaras();
@@ -93,6 +82,10 @@ export const MisAltaDeclaracionesJuradas = ({
   }, []);
 
   const importarAfiliado = async () => {
+
+    alert("Atenti")
+    console.log(DDJJState);
+
     const cuiles = afiliadoImportado.map((item) => item.cuil);
     const cuilesString = cuiles.map((item) => item.toString());
 
@@ -100,11 +93,6 @@ export const MisAltaDeclaracionesJuradas = ({
       ID_EMPRESA,
       cuilesString
     );
-
-    console.log("AFILIAFO IMPORTADO");
-    console.log(afiliadoImportado);
-    console.log("CUILES RESPONSE DDBB");
-    console.log(cuilesResponse);
 
     const afiliadoImportadoConInte = afiliadoImportado.map((item) => {
       const cuilResponse = cuilesResponse.find(
@@ -116,14 +104,8 @@ export const MisAltaDeclaracionesJuradas = ({
       return item;
     });
 
-    console.log("AFILIADO IMPORTADO FINAL CON INTE");
-    console.log(afiliadoImportadoConInte);
-
     // Si alguno de los cuiles el valor de cuilesValidados es igual a false
     if (cuilesResponse.some((item) => item.cuilValido === false)) {
-      /*  const cuilFallido = cuilesResponse.filter(
-         (item) => item.cuilValido === false
-       ); */
 
       const mensajesFormateados2 = filasDoc
         .map((item) => {
@@ -224,6 +206,11 @@ export const MisAltaDeclaracionesJuradas = ({
           // Antes de llenar las grillas debo de validar los cuiles
 
           setAfiliadoImportado(arrayTransformado);
+          setBtnSubirHabilitado(true);
+          console.log(DDJJState);
+          if(DDJJState.id){
+            confirm("Recorda que si subis un archivo, se perderan los datos de la ddjj actual")
+          }
         } else {
           console.log("Columnas incompletas");
         }
@@ -373,7 +360,9 @@ export const MisAltaDeclaracionesJuradas = ({
           if (peticion === "PUT") {
             bOK = await axiosDDJJ.actualizar(ID_EMPRESA, DDJJ);
           } else {
-            await axiosDDJJ.crear(ID_EMPRESA, DDJJ);
+            const data = await axiosDDJJ.crear(ID_EMPRESA, DDJJ);
+            setDDJJCreada(data);
+            console.log(data);
           }
         } else {
           console.log("Cancelar...se queda a corregir datos");
@@ -398,6 +387,7 @@ export const MisAltaDeclaracionesJuradas = ({
         // peticion put con fetch
       } else {
         const data = await axiosDDJJ.crear(ID_EMPRESA, DDJJ);
+        setDDJJCreada(data);
         console.log(data);
         if (data) {
           //actualizar estado
@@ -412,10 +402,6 @@ export const MisAltaDeclaracionesJuradas = ({
 
   const presentarDeclaracionJurada = async () => {};
 
-  console.log("DDJJAlta - rowsAltaDDJJ: ");
-  console.log(rowsAltaDDJJ);
-  console.log("DDJJAlta - DDJJState: ");
-  console.log(DDJJState);
   let formNro = "Formulario: Original";
   if (DDJJState && DDJJState.secuencia) {
     if (DDJJState.secuencia == 0) {
@@ -477,6 +463,7 @@ export const MisAltaDeclaracionesJuradas = ({
               padding: "6px 52px",
             }}
             onClick={importarAfiliado}
+            disabled={!btnSubirHabilitado}
           >
             Subir
           </Button>
@@ -516,13 +503,6 @@ export const MisAltaDeclaracionesJuradas = ({
                         .localeText
                     }
                   >
-                    {/* <DatePicker
-                      label={"Periodo"}
-                      views={["month", "year"]}
-                      closeOnSelect={true}
-                      onChange={handleChangeOtroPeriodo}
-                      value={otroPeriodo}
-                    /> */}
                   </LocalizationProvider>
                 </Stack>
               )}
@@ -583,20 +563,45 @@ export const MisAltaDeclaracionesJuradas = ({
             }}
           >
             <Button
-              variant="contained" // Si quito esto se ve mejor ?????
+              variant="contained"
               sx={{ padding: "6px 52px", marginLeft: "10px" }}
               onClick={guardarDeclaracionJurada}
             >
               Guardar
             </Button>
-
-            <Button
-              variant="contained"
-              sx={{ padding: "6px 52px", marginLeft: "10px" }}
-              onClick={presentarDeclaracionJurada}
-            >
-              Presentar
-            </Button>
+            {
+              DDJJState.estado === "PR" ? (
+                <Button
+                  variant="contained"
+                  sx={{ padding: "6px 52px", marginLeft: "10px" }}
+                  onClick={presentarDeclaracionJurada}
+                  disabled={true}
+                >
+                  Presentar
+                </Button>
+              ) : (
+                
+                  DDJJState.estado === "PE" ? (
+                    <Button
+                      variant="contained"
+                      sx={{ padding: "6px 52px", marginLeft: "10px" }}
+                      onClick={presentarDeclaracionJurada}
+                      disabled={false}
+                    >
+                      Presentar
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      sx={{ padding: "6px 52px", marginLeft: "10px" }}
+                      onClick={presentarDeclaracionJurada}
+                      disabled={ ddjjCreada.id ? false : true }
+                    >
+                      Presentar 
+                    </Button>
+                  )
+              )
+            }
           </div>
         </div>
       )}
