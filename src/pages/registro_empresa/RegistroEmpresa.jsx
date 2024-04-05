@@ -14,6 +14,7 @@ import FormControl from "@mui/material/FormControl";
 import AddIcon from "@mui/icons-material/Add";
 import "./RegistroEmpresa.css";
 import NavBar from "@/components/navbar/NavBar";
+import { showErrorBackEnd } from "@/components/axios/showErrorBackEnd";
 
 export const RegistroEmpresa = () => {
   const [additionalEmail, setAddionalEmail] = useState([]);
@@ -33,10 +34,7 @@ export const RegistroEmpresa = () => {
     };
 
     getRamos();
-    console.log(ramos);
   }, []);
-
-
 
   const {
     cuit,
@@ -72,6 +70,12 @@ export const RegistroEmpresa = () => {
 
   const OnSubmitRegisterCompany = async (e) => {
     e.preventDefault();
+
+    // Validar de que password y repeatPassword sean iguales
+    if (password !== repeatPassword) {
+      showErrorBackEnd("Las contraseñas no coinciden", {});
+      return;
+    }
 
     let usuarioEmpresa = {
       razonSocial: razonSocial,
@@ -160,7 +164,7 @@ export const RegistroEmpresa = () => {
       setAdditionalPhone([]);
       setRowsDomicilio([]);
       OnResetFormRegisterCompany();
-    }
+    } 
   };
 
   const OnChangeRamos = (e) => {
