@@ -511,8 +511,17 @@
     {
       "fecha": "2024-03-22T03:00:00.000Z",
       "id": 67
+    },
+    {
+      "fecha": "2024-04-05T03:00:00.000Z",
+      "id": 68
+    },
+    {
+      "fecha": "2024-04-06T03:00:00.000Z",
+      "id": 69
     }
   ],
+  "intereses": [],
   "usuario-interno": [
     {
       "descripcion": "admin",
@@ -1024,7 +1033,7 @@
       "nombre": "20233725006",
       "rol": [
         {
-          "descripcion": "EMPLEADOR"
+          "descripcion": "EMPLEADO"
         }
       ]
     },
