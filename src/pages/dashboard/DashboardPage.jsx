@@ -1,5 +1,6 @@
 import { useState } from "react";
 import logo from "../../assets/logo.svg";
+import afipIcon from "../../assets/afip.svg";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import HomeIcon from "@mui/icons-material/Home";
@@ -186,18 +187,18 @@ const DashboardPage = () => {
                     <HomeIcon className="icon-link" />{" "}
                     {open && <span className="icon-link">Inicio</span>}
                   </NavLink>
-                  {!isRolEmpleador && (                  
-                  <NavLink to="./publicaciones" className="icon-container">
-                    <PreviewIcon className="icon-link" />{" "}
-                    {open && <span className="icon-link">Publicaciones</span>}
-                  </NavLink>
-                   )}
-                   {!isRolEmpleador && (
-                  <NavLink to="./feriados" className="icon-container">
-                    <DateRangeIcon className="icon-link" />{" "}
-                    {open && <span className="icon-link">Feriados</span>}
-                  </NavLink>
-                   )}
+                  {!isRolEmpleador && (
+                    <NavLink to="./publicaciones" className="icon-container">
+                      <PreviewIcon className="icon-link" />{" "}
+                      {open && <span className="icon-link">Publicaciones</span>}
+                    </NavLink>
+                  )}
+                  {!isRolEmpleador && (
+                    <NavLink to="./feriados" className="icon-container">
+                      <DateRangeIcon className="icon-link" />{" "}
+                      {open && <span className="icon-link">Feriados</span>}
+                    </NavLink>
+                  )}
                   {isRolEmpleador && (
                   <NavLink to="./ddjj" className="icon-container">
                     <LibraryBooksIcon className="icon-link" />{" "}
@@ -210,11 +211,35 @@ const DashboardPage = () => {
                     {open && <span className="icon-link">Boletas</span>}
                   </NavLink>
                    )}
+                   {!isRolEmpleador && (
+                    <NavLink to="./ddjj" className="icon-container">
+                      <LibraryBooksIcon className="icon-link" />{" "}
+                      {open && <span className="icon-link">DDJJ</span>}
+                    </NavLink>
+                  )}
+                  {!isRolEmpleador && (
+                    <NavLink to="./ddjjconsultaempleado" className="icon-container">
+                      <LibraryBooksIcon className="icon-link" />{" "}
+                      {open && <span className="icon-link">DDJJ Consulta</span>}
+                    </NavLink>
+                  )}
+                  {isRolEmpleador && (
+                    <NavLink to="./pagos" className="icon-container">
+                      <AccountBalanceWalletIcon className="icon-link" />{" "}
+                      {open && <span className="icon-link">Pagos</span>}
+                    </NavLink>
+                  )}
                   {isRolEmpleador && (
                   <NavLink to="./pagos" className="icon-container">
                     <AccountBalanceWalletIcon className="icon-link" />{" "}
                     {open && <span className="icon-link">Pagos</span>}
                   </NavLink>
+                  )}
+                  {!isRolEmpleador && (
+                    <NavLink to="./ddjjconsultaempleado" className="icon-container">
+                      <LibraryBooksIcon className="icon-link" />{" "}
+                      {open && <span className="icon-link">DDJJ Consulta</span>}
+                    </NavLink>
                   )}
                   {isRolEmpleador && (
                   <NavLink to="./misdatos" className="icon-container">
@@ -243,10 +268,47 @@ const DashboardPage = () => {
                   </NavLink>
                   )}
                   {isRolEmpleador && (
-                  <NavLink to="./altausuariointerno" className="icon-container">
-                    <PersonAddIcon className="icon-link" />{" "}
-                    {open && <span className="icon-link">Usuario Interno</span>}
-                  </NavLink>
+                  <NavLink
+                  to="./altausuariointerno"
+                  className="icon-container"
+                >
+                  <PersonAddIcon className="icon-link" />{" "}
+                  {open && (
+                    <span className="icon-link">Usuario Interno</span>
+                  )}
+                </NavLink>
+                  )}
+                  {!isRolEmpleador && (
+                    <NavLink
+                      to="./interesesafip"
+                      className="icon-container"
+                    >
+                      <img 
+                        src={afipIcon} 
+                        alt="afip" 
+                        className="icon-link" 
+                        style={{width: 24, height: 24}}
+                      />{" "}
+                      {open && (
+                        <span className="icon-link">Intereses Afip</span>
+                      )}
+                    </NavLink>
+                  )}
+                  {!isRolEmpleador && (
+                    <NavLink
+                      to="./interesesafip"
+                      className="icon-container"
+                    >
+                      <img 
+                        src={afipIcon} 
+                        alt="afip" 
+                        className="icon-link" 
+                        style={{width: 24, height: 24}}
+                      />{" "}
+                      {open && (
+                        <span className="icon-link">Intereses Afip</span>
+                      )}
+                    </NavLink>
                   )}
                 </ListItemIcon>
               </ListItemButton>
