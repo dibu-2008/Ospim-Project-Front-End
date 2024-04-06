@@ -521,7 +521,14 @@
       "id": 69
     }
   ],
-  "intereses": [],
+  "intereses": [
+    {
+      "vigenciaDesde": "2024-04-04T03:00:00.000Z",
+      "vigenciaHasta": "2024-04-06T03:00:00.000Z",
+      "indice": 1,
+      "id": 1
+    }
+  ],
   "usuario-interno": [
     {
       "descripcion": "admin",
@@ -1033,7 +1040,7 @@
       "nombre": "20233725006",
       "rol": [
         {
-          "descripcion": "EMPLEADO"
+          "descripcion": "EMPLEADOR"
         }
       ]
     },
@@ -1680,15 +1687,24 @@
   ],
   "DDJJ": [
     {
-      "//": "DDJJ ********************************************************************************** 01",
-      "id": 120,
-      "estado": "PR",
-      "empresaId": 1,
       "periodo": "2023-11-01T03:00:00.000Z",
-      "secuencia": 0,
       "afiliados": [
         {
-          "id": 1,
+          "cuil": "123123213213",
+          "inte": null,
+          "apellido": "sdasd",
+          "nombre": "asdas",
+          "fechaIngreso": null,
+          "empresaDomicilioId": null,
+          "camara": "FAIM-XXXX",
+          "categoria": null,
+          "remunerativo": null,
+          "noRemunerativo": null,
+          "uomaSocio": false,
+          "amtimaSocio": false,
+          "id": 3
+        },
+        {
           "cuil": "20949118682",
           "inte": null,
           "apellido": "Salinas",
@@ -1701,19 +1717,9 @@
           "noRemunerativo": 25000,
           "uomaSocio": false,
           "amtimaSocio": false,
-          "aportes": [
-            {
-              "codigo": "UOMACU",
-              "importe": 9725.75
-            },
-            {
-              "codigo": "ART46",
-              "importe": 2600.26
-            }
-          ]
+          "id": 1
         },
         {
-          "id": 2,
           "cuil": "20294465996",
           "inte": 1,
           "apellido": "Carlos",
@@ -1726,29 +1732,17 @@
           "noRemunerativo": 25000,
           "uomaSocio": false,
           "amtimaSocio": false,
-          "aportes": [
-            {
-              "codigo": "UOMACU",
-              "importe": 9725.75
-            },
-            {
-              "codigo": "ART46",
-              "importe": 2600.26
-            }
-          ]
+          "id": 2
         }
-      ]
+      ],
+      "id": 120
     },
     {
-      "id": 121,
-      "estado": "PE",
-      "empresaId": 1,
       "periodo": "2023-11-01T03:00:00.000Z",
-      "secuencia": 1,
       "afiliados": [
         {
           "cuil": "20949118682",
-          "inte": 0,
+          "inte": null,
           "apellido": "Salinas",
           "nombre": "Luis",
           "fechaIngreso": "2024-04-10T03:00:00.000Z",
@@ -1821,7 +1815,8 @@
           "amtimaSocio": null,
           "id": 4
         }
-      ]
+      ],
+      "id": 121
     },
     {
       "//": "DDJJ ********************************************************************************** 03",

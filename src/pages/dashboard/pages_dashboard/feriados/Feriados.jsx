@@ -183,7 +183,7 @@ export const Feriados = () => {
     });
 
     const editedRow = rows.find((reg) => reg.id === row.id);
-    if (editedRow.isNew) {
+    if (!editedRow.id) {
       setRows(rows.filter((reg) => reg.id !== row.id));
     }
   };
