@@ -503,6 +503,14 @@
     {
       "fecha": "2024-02-24T00:00:00.000Z",
       "id": 64
+    },
+    {
+      "fecha": "2024-04-12T03:00:00.000Z",
+      "id": 65
+    },
+    {
+      "fecha": "2024-04-19T03:00:00.000Z",
+      "id": 66
     }
   ],
   "usuario-interno": [
@@ -3730,27 +3738,27 @@
     {
       "id": 1,
       "cuit": 12312312,
-      "periodo_original": "2024-02",
+      "periodo_original": "2024-04-01T03:00:00.000Z",
       "importe": 123123,
       "aporte": "ART.46",
-      "vigencia": "2024-02"
+      "vigencia": "2024-04-03T03:00:00.000Z"
     },
     {
       "id": 2,
       "cuit": 12312312,
-      "periodo_original": "2024-02",
+      "periodo_original": "2024-04-03T03:00:00.000Z",
       "importe": 123123,
       "aporte": "ART.46",
-      "vigencia": "2024-02",
-      "nro_boleta" : 2
+      "vigencia": "2024-04-03T03:00:00.000Z",
+      "nro_boleta": 2
     },
     {
       "id": 3,
       "cuit": 12312312,
-      "periodo_original": "2024-02",
+      "periodo_original": "2024-04-03T03:00:00.000Z",
       "importe": 123123,
       "aporte": "ART.46",
-      "vigencia": "2024-02"
+      "vigencia": "2024-04-03T03:00:00.000Z"
     }
   ]
 }

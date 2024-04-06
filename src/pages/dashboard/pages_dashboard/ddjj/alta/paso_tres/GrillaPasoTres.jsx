@@ -564,6 +564,7 @@ export const GrillaPasoTres = ({
         //return `${day}-${month}-${year}`;
         console.log(params.value.split('T')[0])
         return formatter.date(params.value);
+        //return params.value
       },
     },
     {
@@ -751,6 +752,7 @@ export const GrillaPasoTres = ({
             onRowEditStop={handleRowEditStop}
             processRowUpdate={processRowUpdate}
             localeText={dataGridStyle.toolbarText}
+            timezoneOffset={null}
             slots={{
               toolbar: EditToolbar,
             }}
