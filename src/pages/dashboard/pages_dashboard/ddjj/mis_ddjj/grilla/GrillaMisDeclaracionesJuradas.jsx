@@ -147,7 +147,6 @@ export const GrillaMisDeclaracionesJuradas = ({
     const fecha = formatter.periodo2(periodo);
     console.log("fecha: ", fecha);
 
-
     // Agregarle a afiliados la propiedad isNew con el valor de false
     afiliados.forEach((afiliado) => (afiliado.isNew = false));
 
@@ -253,7 +252,7 @@ export const GrillaMisDeclaracionesJuradas = ({
       valueGetter: (params) => {
         // Si secuencia es 0 es "Original" sino es "Rectificativa"+secuencia
         if (params.value === null) {
-          return "Original";
+          return "Pendiente";
         } else if (params.value === 0) {
           return "Original";
         } else {
@@ -338,7 +337,7 @@ export const GrillaMisDeclaracionesJuradas = ({
             label="Print"
             color="inherit"
             onClick={() => declaracionJuradasImpresion(id)}
-          />
+          />,
         ];
       } else {
         return [
@@ -364,7 +363,7 @@ export const GrillaMisDeclaracionesJuradas = ({
             label="Print"
             color="inherit"
             onClick={() => declaracionJuradasImpresion(id)}
-          />
+          />,
         ];
       }
     },
