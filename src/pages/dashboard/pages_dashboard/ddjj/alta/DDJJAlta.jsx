@@ -37,7 +37,6 @@ export const MisAltaDeclaracionesJuradas = ({
   setRowsAltaDDJJAux,
   peticion,
 }) => {
-
   const [camaras, setCamaras] = useState([]);
   const [todasLasCategorias, setTodasLasCategorias] = useState([]);
   const [categoriasFiltradas, setCategoriasFiltradas] = useState([]);
@@ -54,7 +53,7 @@ export const MisAltaDeclaracionesJuradas = ({
   const ID_EMPRESA = localStorageService.getEmpresaId();
 
   const handleChangePeriodo = (date) => setPeriodo(date);
-  
+
   useEffect(() => {
     const ObtenerCamaras = async () => {
       const data = await axiosDDJJ.getCamaras();
@@ -82,8 +81,7 @@ export const MisAltaDeclaracionesJuradas = ({
   }, []);
 
   const importarAfiliado = async () => {
-
-    alert("Atenti")
+    alert("Atenti");
     console.log(DDJJState);
 
     const cuiles = afiliadoImportado.map((item) => item.cuil);
@@ -106,7 +104,6 @@ export const MisAltaDeclaracionesJuradas = ({
 
     // Si alguno de los cuiles el valor de cuilesValidados es igual a false
     if (cuilesResponse.some((item) => item.cuilValido === false)) {
-
       const mensajesFormateados2 = filasDoc
         .map((item) => {
           return `<p style="margin-top:20px;">
@@ -208,8 +205,10 @@ export const MisAltaDeclaracionesJuradas = ({
           setAfiliadoImportado(arrayTransformado);
           setBtnSubirHabilitado(true);
           console.log(DDJJState);
-          if(DDJJState.id){
-            confirm("Recorda que si subis un archivo, se perderan los datos de la ddjj actual")
+          if (DDJJState.id) {
+            confirm(
+              "Recorda que si subis un archivo, se perderan los datos de la ddjj actual"
+            );
           }
         } else {
           console.log("Columnas incompletas");
@@ -402,12 +401,16 @@ export const MisAltaDeclaracionesJuradas = ({
 
   const presentarDeclaracionJurada = async () => {};
 
-  let formNro = "Formulario: Original";
+  let formNro = "Formulario: Pendiente";
   if (DDJJState && DDJJState.secuencia) {
-    if (DDJJState.secuencia == 0) {
-      formNro = "Formulario: Original";
-    } else {
-      formNro = "Formulario: Rectif. " + DDJJState.secuencia;
+    switch (DDJJState.secuencia) {
+      case 0:
+        formNro = "Formulario: Original";
+        console.log("Tengo un perro");
+        break;
+      default:
+        formNro = "Formulario: Rectif. " + DDJJState.secuencia;
+        break;
     }
   }
 
@@ -502,8 +505,7 @@ export const MisAltaDeclaracionesJuradas = ({
                       esES.components.MuiLocalizationProvider.defaultProps
                         .localeText
                     }
-                  >
-                  </LocalizationProvider>
+                  ></LocalizationProvider>
                 </Stack>
               )}
             </div>
@@ -569,39 +571,34 @@ export const MisAltaDeclaracionesJuradas = ({
             >
               Guardar
             </Button>
-            {
-              DDJJState.estado === "PR" ? (
-                <Button
-                  variant="contained"
-                  sx={{ padding: "6px 52px", marginLeft: "10px" }}
-                  onClick={presentarDeclaracionJurada}
-                  disabled={true}
-                >
-                  Presentar
-                </Button>
-              ) : (
-                
-                  DDJJState.estado === "PE" ? (
-                    <Button
-                      variant="contained"
-                      sx={{ padding: "6px 52px", marginLeft: "10px" }}
-                      onClick={presentarDeclaracionJurada}
-                      disabled={false}
-                    >
-                      Presentar
-                    </Button>
-                  ) : (
-                    <Button
-                      variant="contained"
-                      sx={{ padding: "6px 52px", marginLeft: "10px" }}
-                      onClick={presentarDeclaracionJurada}
-                      disabled={ ddjjCreada.id ? false : true }
-                    >
-                      Presentar 
-                    </Button>
-                  )
-              )
-            }
+            {DDJJState.estado === "PR" ? (
+              <Button
+                variant="contained"
+                sx={{ padding: "6px 52px", marginLeft: "10px" }}
+                onClick={presentarDeclaracionJurada}
+                disabled={true}
+              >
+                Presentar
+              </Button>
+            ) : DDJJState.estado === "PE" ? (
+              <Button
+                variant="contained"
+                sx={{ padding: "6px 52px", marginLeft: "10px" }}
+                onClick={presentarDeclaracionJurada}
+                disabled={false}
+              >
+                Presentar
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                sx={{ padding: "6px 52px", marginLeft: "10px" }}
+                onClick={presentarDeclaracionJurada}
+                disabled={ddjjCreada.id ? false : true}
+              >
+                Presentar
+              </Button>
+            )}
           </div>
         </div>
       )}
