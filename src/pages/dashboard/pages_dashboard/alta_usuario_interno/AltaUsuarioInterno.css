@@ -1,9 +1,9 @@
-.usuario_interno_container{
+.usuario_interno_container {
     margin: 50px auto;
     width: 90%;
 }
 
-.usuario_interno_container h1{
+.usuario_interno_container h1 {
     color: #1A76D2;
     margin-bottom: 65px;
     text-align: left !important;
@@ -15,4 +15,3 @@
     font-weight: bold;
     border: 1px solid #1A76D2;
 }
-

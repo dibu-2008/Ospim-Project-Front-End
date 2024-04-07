@@ -534,8 +534,8 @@
       "descripcion": "admin",
       "clave": "Prueba123",
       "rolId": 1,
-      "nombre": "PRUEBA 2",
-      "apellido": "true",
+      "nombre": "Jose",
+      "apellido": "Suarez",
       "email": "prueba@gmail.com",
       "id": 1,
       "habilitado": false
@@ -546,8 +546,8 @@
       "clave": "Prueba123",
       "rolId": 7,
       "habilitado": false,
-      "nombre": "PRUEBA 2",
-      "apellido": "true",
+      "nombre": "Francisco",
+      "apellido": "Moreno",
       "email": "prueba2@gmail.com"
     },
     {
@@ -555,8 +555,8 @@
       "descripcion": "usuauro4",
       "clave": "Prueba123",
       "rolId": 7,
-      "nombre": "PRUEBA 3",
-      "apellido": "true",
+      "nombre": "Carlos",
+      "apellido": "Fuente",
       "email": ""
     },
     {
@@ -564,8 +564,8 @@
       "descripcion": "cccc",
       "clave": "cccc",
       "rolId": 7,
-      "nombre": "nombre ",
-      "apellido": "ape",
+      "nombre": "Rocio",
+      "apellido": "Gomez",
       "email": "cccc@gmail.com",
       "habilitado": true
     },
@@ -574,16 +574,16 @@
       "descripcion": "ccccjjj",
       "clave": "cccc jjj",
       "rolId": 77,
-      "nombre": "nombre ",
-      "apellido": "ape",
+      "nombre": "Federico",
+      "apellido": "Castro",
       "email": "cccc@gmail.com"
     },
     {
       "descripcion": "usuario-2",
       "clave": "Prueba123",
       "rolId": 7,
-      "nombre": "Usuario-22 ",
-      "apellido": "-2",
+      "nombre": "Marcelo",
+      "apellido": "Perez",
       "email": "usuario-2@gmail.com",
       "id": 7,
       "habilitado": false
@@ -1040,7 +1040,7 @@
       "nombre": "20233725006",
       "rol": [
         {
-          "descripcion": "EMPLEADOR"
+          "descripcion": "EMPLEADO"
         }
       ]
     },
