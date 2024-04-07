@@ -3,7 +3,6 @@ import { axiosPublicaciones } from "./PublicacionesApi";
 import { EditarNuevaFila } from "./PublicacionNueva";
 import {
   GridRowModes,
-  DataGrid,
   GridActionsCellItem,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
