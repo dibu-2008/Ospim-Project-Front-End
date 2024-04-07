@@ -241,14 +241,6 @@
   ],
   "feriados": [
     {
-      "fecha": "2023-03-30T03:00:00.000Z",
-      "id": 2
-    },
-    {
-      "id": 3,
-      "fecha": "2023-09-15T03:00:00.000Z"
-    },
-    {
       "fecha": "2024-02-13T03:00:00.000Z",
       "id": 4
     },
@@ -519,6 +511,22 @@
     {
       "fecha": "2024-04-06T03:00:00.000Z",
       "id": 69
+    },
+    {
+      "fecha": "2024-04-06T03:00:00.000Z",
+      "id": 70
+    },
+    {
+      "fecha": "2024-04-06T03:00:00.000Z",
+      "id": 71
+    },
+    {
+      "fecha": "2024-04-06T03:00:00.000Z",
+      "id": 72
+    },
+    {
+      "fecha": "2024-04-06T03:00:00.000Z",
+      "id": 73
     }
   ],
   "intereses": [
@@ -532,13 +540,13 @@
   "usuario-interno": [
     {
       "descripcion": "admin",
-      "clave": "Prueba123",
+      "clave": "Prueba1234",
       "rolId": 1,
       "nombre": "Jose",
       "apellido": "Suarez",
       "email": "prueba@gmail.com",
-      "id": 1,
-      "habilitado": false
+      "habilitado": false,
+      "id": 1
     },
     {
       "id": 2,
@@ -602,8 +610,8 @@
     {
       "titulo": "Publicacion 05",
       "cuerpo": "xx",
-      "vigenciaDesde": "2024-02-07T03:00:00.000Z",
-      "vigenciaHasta": "2025-02-09T03:00:00.000Z",
+      "vigenciaDesde": "2024-02-13T03:00:00.000Z",
+      "vigenciaHasta": "2025-02-13T03:00:00.000Z",
       "id": 18
     },
     {
@@ -647,6 +655,13 @@
       "vigenciaDesde": "2024-01-01T03:00:00.000Z",
       "vigenciaHasta": "2025-02-14T03:00:00.000Z",
       "id": 33
+    },
+    {
+      "titulo": "asdasdasd",
+      "cuerpo": "asdasdsa",
+      "vigenciaDesde": "2024-04-12T03:00:00.000Z",
+      "vigenciaHasta": "2024-04-12T03:00:00.000Z",
+      "id": 34
     }
   ],
   "publicacionesVigentes": [
