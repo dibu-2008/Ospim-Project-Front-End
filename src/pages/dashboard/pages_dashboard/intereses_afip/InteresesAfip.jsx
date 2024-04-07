@@ -140,16 +140,11 @@ export const InteresesAfip = () => {
                 ignoreModifications: true,
             },
         });
-        setRows(rows.filter((reg) => reg.id !== row.id));
-
-        // El tema es que como no se guardo nada en rows, 
-        // entonces editedRow es undefined y no se puede hacer el filter
-        // o limpieza de la fila que se estaba editando
-        /* const editedRow = rows.find((reg) => reg.id === row.id);
-        console.log("editedRow.isNew: " + editedRow.isNew);
-        if (editedRow.isNew) {
+        
+        const editedRow = rows.find((reg) => reg.id === row.id);
+        if (!editedRow.id) {
             setRows(rows.filter((reg) => reg.id !== row.id));
-        } */
+        }
     };
 
     const processRowUpdate = async (newRow, oldRow) => {

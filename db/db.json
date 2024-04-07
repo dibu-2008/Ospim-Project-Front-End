@@ -521,14 +521,21 @@
       "id": 69
     }
   ],
-  "intereses": [],
+  "intereses": [
+    {
+      "vigenciaDesde": "2024-04-04T03:00:00.000Z",
+      "vigenciaHasta": "2024-04-06T03:00:00.000Z",
+      "indice": 1,
+      "id": 1
+    }
+  ],
   "usuario-interno": [
     {
       "descripcion": "admin",
       "clave": "Prueba123",
       "rolId": 1,
-      "nombre": "PRUEBA 2",
-      "apellido": "true",
+      "nombre": "Jose",
+      "apellido": "Suarez",
       "email": "prueba@gmail.com",
       "id": 1,
       "habilitado": false
@@ -539,8 +546,8 @@
       "clave": "Prueba123",
       "rolId": 7,
       "habilitado": false,
-      "nombre": "PRUEBA 2",
-      "apellido": "true",
+      "nombre": "Francisco",
+      "apellido": "Moreno",
       "email": "prueba2@gmail.com"
     },
     {
@@ -548,8 +555,8 @@
       "descripcion": "usuauro4",
       "clave": "Prueba123",
       "rolId": 7,
-      "nombre": "PRUEBA 3",
-      "apellido": "true",
+      "nombre": "Carlos",
+      "apellido": "Fuente",
       "email": ""
     },
     {
@@ -557,8 +564,8 @@
       "descripcion": "cccc",
       "clave": "cccc",
       "rolId": 7,
-      "nombre": "nombre ",
-      "apellido": "ape",
+      "nombre": "Rocio",
+      "apellido": "Gomez",
       "email": "cccc@gmail.com",
       "habilitado": true
     },
@@ -567,16 +574,16 @@
       "descripcion": "ccccjjj",
       "clave": "cccc jjj",
       "rolId": 77,
-      "nombre": "nombre ",
-      "apellido": "ape",
+      "nombre": "Federico",
+      "apellido": "Castro",
       "email": "cccc@gmail.com"
     },
     {
       "descripcion": "usuario-2",
       "clave": "Prueba123",
       "rolId": 7,
-      "nombre": "Usuario-22 ",
-      "apellido": "-2",
+      "nombre": "Marcelo",
+      "apellido": "Perez",
       "email": "usuario-2@gmail.com",
       "id": 7,
       "habilitado": false
@@ -1680,56 +1687,21 @@
   ],
   "DDJJ": [
     {
-      "//": "DDJJ ********************************************************************************** 01",
-      "id": 120,
-      "estado": "PR",
-      "empresaId": 1,
       "periodo": "2023-11-01T03:00:00.000Z",
-      "secuencia": 0,
       "afiliados": [
         {
-          "cuil": "2345234",
+          "cuil": "123123213213",
           "inte": null,
-          "apellido": "dghfdfgh",
-          "nombre": "gsdfgsd",
+          "apellido": "sdasd",
+          "nombre": "asdas",
           "fechaIngreso": null,
-          "empresaDomicilioId": 4,
-          "camara": "CAENA",
-          "categoria": "C",
-          "remunerativo": "4324",
-          "noRemunerativo": "234234",
-          "uomaSocio": null,
-          "amtimaSocio": null,
-          "id": 5
-        },
-        {
-          "cuil": "41234123",
-          "inte": null,
-          "apellido": "jfhgjfghj",
-          "nombre": "fadfasadf",
-          "fechaIngreso": null,
-          "empresaDomicilioId": 10,
-          "camara": "CAENA",
-          "categoria": "C",
-          "remunerativo": "132",
-          "noRemunerativo": "541",
-          "uomaSocio": true,
-          "amtimaSocio": null,
-          "id": 4
-        },
-        {
-          "cuil": "431243",
-          "inte": null,
-          "apellido": "fgadsdf",
-          "nombre": "afdsfa",
-          "fechaIngreso": null,
-          "empresaDomicilioId": 3,
-          "camara": "FAIM",
-          "categoria": "D",
-          "remunerativo": "4321",
-          "noRemunerativo": "4312",
-          "uomaSocio": null,
-          "amtimaSocio": true,
+          "empresaDomicilioId": null,
+          "camara": "FAIM-XXXX",
+          "categoria": null,
+          "remunerativo": null,
+          "noRemunerativo": null,
+          "uomaSocio": false,
+          "amtimaSocio": false,
           "id": 3
         },
         {
@@ -1743,8 +1715,8 @@
           "categoria": "D",
           "remunerativo": 545000.7,
           "noRemunerativo": 25000,
-          "uomaSocio": null,
-          "amtimaSocio": null,
+          "uomaSocio": false,
+          "amtimaSocio": false,
           "id": 1
         },
         {
@@ -1760,29 +1732,17 @@
           "noRemunerativo": 25000,
           "uomaSocio": false,
           "amtimaSocio": false,
-          "aportes": [
-            {
-              "codigo": "UOMACU",
-              "importe": 9725.75
-            },
-            {
-              "codigo": "ART46",
-              "importe": 2600.26
-            }
-          ]
+          "id": 2
         }
-      ]
+      ],
+      "id": 120
     },
     {
-      "id": 121,
-      "estado": "PE",
-      "empresaId": 1,
       "periodo": "2023-11-01T03:00:00.000Z",
-      "secuencia": 1,
       "afiliados": [
         {
           "cuil": "20949118682",
-          "inte": 0,
+          "inte": null,
           "apellido": "Salinas",
           "nombre": "Luis",
           "fechaIngreso": "2024-04-10T03:00:00.000Z",
@@ -1855,7 +1815,8 @@
           "amtimaSocio": null,
           "id": 4
         }
-      ]
+      ],
+      "id": 121
     },
     {
       "//": "DDJJ ********************************************************************************** 03",
