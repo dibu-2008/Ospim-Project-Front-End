@@ -11,26 +11,21 @@ export const EditarNuevaFila = (props) => {
   const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
 
   const handleClick = () => {
-    const maxId = rows ? Math.max(...rows.map((row) => row.internalId), 0) : 1;
-    const newId = maxId + 1;
-    const internalId = newId;
+
+    const newReg = {
+      titulo: "",
+      cuerpo: "",
+      vigenciaDesde: "",
+      vigenciaHasta: ""
+    }
 
     volverPrimerPagina();
+    
+    setRows((oldRows) => [newReg, ...oldRows]);
 
-    setRows((oldRows) => [
-      {
-        internalId,
-        titulo: "",
-        cuerpo: "",
-        vigenciaDesde: "",
-        vigenciaHasta: "",
-        isNew: true,
-      },
-      ...oldRows,
-    ]);
     setRowModesModel((oldModel) => ({
+      [0]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
       ...oldModel,
-      [internalId]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
     }));
   };
 

@@ -3,6 +3,7 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import {
   Box,
   Button,
+  Grid,
   IconButton,
   TextField,
   Tooltip,
@@ -44,6 +45,7 @@ import { DatePicker } from "@mui/x-date-pickers";
 import formatter from "@/common/formatter";
 import swal from "@/components/swal/swal";
 import { StripedDataGrid, dataGridStyle } from "@/common/dataGridStyle";
+import { ToastContainer } from "react-toastify";
 
 const style = {
   position: "absolute",
@@ -339,6 +341,7 @@ export const Feriados = () => {
           </IconButton>
         </Tooltip>
       </h1>
+      <ToastContainer style={{ marginRight: "6rem", marginTop: "3rem" }}/>
       <Box
         sx={{
           height: "600px",

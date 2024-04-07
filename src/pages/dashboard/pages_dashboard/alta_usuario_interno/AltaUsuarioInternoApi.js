@@ -55,7 +55,7 @@ export const actualizar = async (registro) => {
     }
     throw response;
   } catch (error) {
-    showErrorBackEnd(HTTP_MSG_MODI_ERROR, response);
+    showErrorBackEnd(HTTP_MSG_MODI_ERROR, error);
     return false;
   }
 };
