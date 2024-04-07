@@ -517,19 +517,7 @@ export const GrillaPasoTres = ({
       valueFormatter: ({ value }) => {
         if (!value) return "";
 
-<<<<<<< HEAD
-        const date = new Date(params.value);
-        const day = date.getUTCDate().toString().padStart(2, "0");
-        const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
-        const year = date.getUTCFullYear();
-
-        //return `${day}-${month}-${year}`;
-        console.log(params.value.split('T')[0])
-        return formatter.date(params.value);
-        //return params.value
-=======
         return formatter.date(value);
->>>>>>> sigeco_front_luis
       },
     }, 
     {

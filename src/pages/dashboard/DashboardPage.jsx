@@ -205,40 +205,22 @@ const DashboardPage = () => {
                     {open && <span className="icon-link">DDJJ</span>}
                   </NavLink>
                    )}
+                   {!isRolEmpleador && (
+                    <NavLink to="./ddjjconsultaempleado" className="icon-container">
+                      <LibraryBooksIcon className="icon-link" />{" "}
+                      {open && <span className="icon-link">DDJJ Consulta</span>}
+                    </NavLink>
+                  )}
                    {isRolEmpleador && (
                   <NavLink to="./boletas" className="icon-container">
                     <StyleIcon className="icon-link" />{" "}
                     {open && <span className="icon-link">Boletas</span>}
                   </NavLink>
                    )}
-                   {!isRolEmpleador && (
-                    <NavLink to="./ddjj" className="icon-container">
-                      <LibraryBooksIcon className="icon-link" />{" "}
-                      {open && <span className="icon-link">DDJJ</span>}
-                    </NavLink>
-                  )}
-                  {!isRolEmpleador && (
-                    <NavLink to="./ddjjconsultaempleado" className="icon-container">
-                      <LibraryBooksIcon className="icon-link" />{" "}
-                      {open && <span className="icon-link">DDJJ Consulta</span>}
-                    </NavLink>
-                  )}
                   {isRolEmpleador && (
                     <NavLink to="./pagos" className="icon-container">
                       <AccountBalanceWalletIcon className="icon-link" />{" "}
                       {open && <span className="icon-link">Pagos</span>}
-                    </NavLink>
-                  )}
-                  {isRolEmpleador && (
-                  <NavLink to="./pagos" className="icon-container">
-                    <AccountBalanceWalletIcon className="icon-link" />{" "}
-                    {open && <span className="icon-link">Pagos</span>}
-                  </NavLink>
-                  )}
-                  {!isRolEmpleador && (
-                    <NavLink to="./ddjjconsultaempleado" className="icon-container">
-                      <LibraryBooksIcon className="icon-link" />{" "}
-                      {open && <span className="icon-link">DDJJ Consulta</span>}
                     </NavLink>
                   )}
                   {isRolEmpleador && (
@@ -269,29 +251,14 @@ const DashboardPage = () => {
                   )}
                   {isRolEmpleador && (
                   <NavLink
-                  to="./altausuariointerno"
-                  className="icon-container"
-                >
+                    to="./altausuariointerno"
+                    className="icon-container"
+                   >
                   <PersonAddIcon className="icon-link" />{" "}
                   {open && (
                     <span className="icon-link">Usuario Interno</span>
                   )}
-                </NavLink>
-                  )}
-                  {!isRolEmpleador && (
-                    <NavLink
-                      to="./interesesafip"
-                      className="icon-container"
-                    >
-                      <img 
-                        src={afipIcon} 
-                        alt="afip" 
-                        className="icon-link" 
-                        style={{width: 24, height: 24}}
-                      />{" "}
-                      {open && (
-                        <span className="icon-link">Intereses Afip</span>
-                      )}
+
                     </NavLink>
                   )}
                   {!isRolEmpleador && (

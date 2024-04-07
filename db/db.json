@@ -1773,11 +1773,12 @@
         }
       ]
     },
-    {      "id": 121,
-    "estado": "PE",
-    "empresaId": 1,
-    "periodo": "2023-11-01T03:00:00.000Z",
-    "secuencia": 1,
+    {
+      "id": 121,
+      "estado": "PE",
+      "empresaId": 1,
+      "periodo": "2023-11-01T03:00:00.000Z",
+      "secuencia": 1,
       "afiliados": [
         {
           "cuil": "20949118682",
@@ -3466,12 +3467,12 @@
   "boletas": {
     "declaracion_jurada_id": 120,
     "tipo_ddjj": "Original",
-    "periodo": "01-2024",
+    "periodo": "2024-01-01T03:00:00.000Z",
     "detalle_boletas": [
       {
         "codigo": "UOMACS",
         "descripcion": "UOMA Cuota Social",
-        "vencimiento": "2024-02-21",
+        "vencimiento": "2024-02-21T03:00:00.000Z",
         "periodo": "01-2024",
         "total_acumulado": 21810,
         "interes": 0,
@@ -3505,7 +3506,7 @@
       {
         "codigo": "ART46",
         "descripcion": "Art. 46",
-        "vencimiento": "2024-02-21",
+        "vencimiento": "2024-02-21T03:00:00.000Z",
         "periodo": "01-2024",
         "total_acumulado": 1484,
         "interes": 0,
@@ -3539,7 +3540,7 @@
       {
         "codigo": "ANTIMACS",
         "descripcion": "ANTIMA Cuota Social",
-        "vencimiento": "2024-02-21",
+        "vencimiento": "2024-02-21T00:00:00.000Z",
         "periodo": "01-2024",
         "total_acumulado": 7800,
         "interes": 0,
@@ -4001,6 +4002,406 @@
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
         "numero_boleta": null
+      },
+      {
+        "codigo": "UOMACS",
+        "descripcion": "UOMA Cuota Social",
+        "vencimiento": "2024-02-21",
+        "periodo": "01-2024",
+        "total_acumulado": 21810,
+        "interes": 12867.9,
+        "ajuste": 0,
+        "total_final": 34677.9,
+        "intencion_de_pago": "2024-04-20",
+        "afiliados": [
+          {
+            "cuil": "27367071112",
+            "apellido": "Nelo",
+            "nombre": "Rosario",
+            "remunerativo": 200000,
+            "capital": 8400
+          },
+          {
+            "cuil": "2731722324248",
+            "apellido": "Nelo",
+            "nombre": "Manfredo",
+            "remunerativo": 100000,
+            "capital": 7610
+          },
+          {
+            "cuil": "273712728848",
+            "apellido": "Nelo",
+            "nombre": "Sabario",
+            "remunerativo": 100000,
+            "capital": 5800
+          }
+        ],
+        "forma_de_pago": "Red Link",
+        "declaracion_jurada_id": 120,
+        "tipo_ddjj": "Original",
+        "numero_boleta": null
+      },
+      {
+        "codigo": "ART46",
+        "descripcion": "Art. 46",
+        "vencimiento": "2024-02-21",
+        "periodo": "01-2024",
+        "total_acumulado": 1484,
+        "interes": 875.56,
+        "ajuste": 0,
+        "total_final": 2359.56,
+        "intencion_de_pago": "2024-04-20",
+        "afiliados": [
+          {
+            "cuil": "27367071112",
+            "apellido": "Nelo",
+            "nombre": "Rosario",
+            "remunerativo": 200000,
+            "capital": 520
+          },
+          {
+            "cuil": "2731722324248",
+            "apellido": "Nelo",
+            "nombre": "Manfredo",
+            "remunerativo": 100000,
+            "capital": 482
+          },
+          {
+            "cuil": "273712728848",
+            "apellido": "Nelo",
+            "nombre": "Sabario",
+            "remunerativo": 200000,
+            "capital": 482
+          }
+        ],
+        "forma_de_pago": "Red Link",
+        "declaracion_jurada_id": 120,
+        "tipo_ddjj": "Original",
+        "numero_boleta": null
+      },
+      {
+        "codigo": "ANTIMACS",
+        "descripcion": "ANTIMA Cuota Social",
+        "vencimiento": "2024-02-21",
+        "periodo": "01-2024",
+        "total_acumulado": 7800,
+        "interes": 4602,
+        "ajuste": 0,
+        "total_final": 12402,
+        "intencion_de_pago": "2024-04-20",
+        "afiliados": [
+          {
+            "cuil": "27367071112",
+            "apellido": "Nelo",
+            "nombre": "Rosario",
+            "remunerativo": 200000,
+            "capital": 7800
+          }
+        ],
+        "forma_de_pago": "Red Link",
+        "declaracion_jurada_id": 120,
+        "tipo_ddjj": "Original",
+        "numero_boleta": null
+      },
+      {
+        "codigo": "UOMACS",
+        "descripcion": "UOMA Cuota Social",
+        "vencimiento": "2024-02-21T03:00:00.000Z",
+        "periodo": "01-2024",
+        "total_acumulado": 21810,
+        "interes": 12622.54,
+        "ajuste": 0,
+        "total_final": 34432.5375,
+        "intencion_de_pago": "2024-04-19",
+        "afiliados": [
+          {
+            "cuil": "27367071112",
+            "apellido": "Nelo",
+            "nombre": "Rosario",
+            "remunerativo": 200000,
+            "capital": 8400
+          },
+          {
+            "cuil": "2731722324248",
+            "apellido": "Nelo",
+            "nombre": "Manfredo",
+            "remunerativo": 100000,
+            "capital": 7610
+          },
+          {
+            "cuil": "273712728848",
+            "apellido": "Nelo",
+            "nombre": "Sabario",
+            "remunerativo": 100000,
+            "capital": 5800
+          }
+        ],
+        "forma_de_pago": "Red Link",
+        "declaracion_jurada_id": 120,
+        "tipo_ddjj": "Original",
+        "numero_boleta": null
+      },
+      {
+        "codigo": "ART46",
+        "descripcion": "Art. 46",
+        "vencimiento": "2024-02-21T03:00:00.000Z",
+        "periodo": "01-2024",
+        "total_acumulado": 1484,
+        "interes": 858.87,
+        "ajuste": 0,
+        "total_final": 2342.865,
+        "intencion_de_pago": "2024-04-19",
+        "afiliados": [
+          {
+            "cuil": "27367071112",
+            "apellido": "Nelo",
+            "nombre": "Rosario",
+            "remunerativo": 200000,
+            "capital": 520
+          },
+          {
+            "cuil": "2731722324248",
+            "apellido": "Nelo",
+            "nombre": "Manfredo",
+            "remunerativo": 100000,
+            "capital": 482
+          },
+          {
+            "cuil": "273712728848",
+            "apellido": "Nelo",
+            "nombre": "Sabario",
+            "remunerativo": 200000,
+            "capital": 482
+          }
+        ],
+        "forma_de_pago": "Red Link",
+        "declaracion_jurada_id": 120,
+        "tipo_ddjj": "Original",
+        "numero_boleta": null
+      },
+      {
+        "codigo": "ANTIMACS",
+        "descripcion": "ANTIMA Cuota Social",
+        "vencimiento": "2024-02-21T03:00:00.000Z",
+        "periodo": "01-2024",
+        "total_acumulado": 7800,
+        "interes": 4514.25,
+        "ajuste": 0,
+        "total_final": 12314.25,
+        "intencion_de_pago": "2024-04-19",
+        "afiliados": [
+          {
+            "cuil": "27367071112",
+            "apellido": "Nelo",
+            "nombre": "Rosario",
+            "remunerativo": 200000,
+            "capital": 7800
+          }
+        ],
+        "forma_de_pago": "Red Link",
+        "declaracion_jurada_id": 120,
+        "tipo_ddjj": "Original",
+        "numero_boleta": null
+      },
+      {
+        "codigo": "UOMACS",
+        "descripcion": "UOMA Cuota Social",
+        "vencimiento": "2024-02-21T03:00:00.000Z",
+        "periodo": "01-2024",
+        "total_acumulado": 21810,
+        "interes": 11095.84,
+        "ajuste": 0,
+        "total_final": 32905.8375,
+        "intencion_de_pago": "2024-04-12",
+        "afiliados": [
+          {
+            "cuil": "27367071112",
+            "apellido": "Nelo",
+            "nombre": "Rosario",
+            "remunerativo": 200000,
+            "capital": 8400
+          },
+          {
+            "cuil": "2731722324248",
+            "apellido": "Nelo",
+            "nombre": "Manfredo",
+            "remunerativo": 100000,
+            "capital": 7610
+          },
+          {
+            "cuil": "273712728848",
+            "apellido": "Nelo",
+            "nombre": "Sabario",
+            "remunerativo": 100000,
+            "capital": 5800
+          }
+        ],
+        "forma_de_pago": "Red Link",
+        "declaracion_jurada_id": 120,
+        "tipo_ddjj": "Original",
+        "numero_boleta": null
+      },
+      {
+        "codigo": "ART46",
+        "descripcion": "Art. 46",
+        "vencimiento": "2024-02-21T03:00:00.000Z",
+        "periodo": "01-2024",
+        "total_acumulado": 1484,
+        "interes": 754.99,
+        "ajuste": 0,
+        "total_final": 2238.985,
+        "intencion_de_pago": "2024-04-12",
+        "afiliados": [
+          {
+            "cuil": "27367071112",
+            "apellido": "Nelo",
+            "nombre": "Rosario",
+            "remunerativo": 200000,
+            "capital": 520
+          },
+          {
+            "cuil": "2731722324248",
+            "apellido": "Nelo",
+            "nombre": "Manfredo",
+            "remunerativo": 100000,
+            "capital": 482
+          },
+          {
+            "cuil": "273712728848",
+            "apellido": "Nelo",
+            "nombre": "Sabario",
+            "remunerativo": 200000,
+            "capital": 482
+          }
+        ],
+        "forma_de_pago": "Red Link",
+        "declaracion_jurada_id": 120,
+        "tipo_ddjj": "Original",
+        "numero_boleta": null
+      },
+      {
+        "codigo": "ANTIMACS",
+        "descripcion": "ANTIMA Cuota Social",
+        "vencimiento": "2024-02-21T00:00:00.000Z",
+        "periodo": "01-2024",
+        "total_acumulado": 7800,
+        "interes": 3978,
+        "ajuste": 0,
+        "total_final": 11778,
+        "intencion_de_pago": "2024-04-12",
+        "afiliados": [
+          {
+            "cuil": "27367071112",
+            "apellido": "Nelo",
+            "nombre": "Rosario",
+            "remunerativo": 200000,
+            "capital": 7800
+          }
+        ],
+        "forma_de_pago": "Red Link",
+        "declaracion_jurada_id": 120,
+        "tipo_ddjj": "Original",
+        "numero_boleta": null
+      },
+      {
+        "codigo": "UOMACS",
+        "descripcion": "UOMA Cuota Social",
+        "vencimiento": "2024-02-21T03:00:00.000Z",
+        "periodo": "2024-01-01T03:00:00.000Z",
+        "total_acumulado": 21810,
+        "interes": 14367.34,
+        "ajuste": 0,
+        "total_final": 36177.3375,
+        "intencion_de_pago": "2024-04-27",
+        "afiliados": [
+          {
+            "cuil": "27367071112",
+            "apellido": "Nelo",
+            "nombre": "Rosario",
+            "remunerativo": 200000,
+            "capital": 8400
+          },
+          {
+            "cuil": "2731722324248",
+            "apellido": "Nelo",
+            "nombre": "Manfredo",
+            "remunerativo": 100000,
+            "capital": 7610
+          },
+          {
+            "cuil": "273712728848",
+            "apellido": "Nelo",
+            "nombre": "Sabario",
+            "remunerativo": 100000,
+            "capital": 5800
+          }
+        ],
+        "forma_de_pago": "Ventanilla",
+        "declaracion_jurada_id": 120,
+        "tipo_ddjj": "Original",
+        "numero_boleta": null
+      },
+      {
+        "codigo": "ART46",
+        "descripcion": "Art. 46",
+        "vencimiento": "2024-02-21T03:00:00.000Z",
+        "periodo": "2024-01-01T03:00:00.000Z",
+        "total_acumulado": 1484,
+        "interes": 977.59,
+        "ajuste": 0,
+        "total_final": 2461.585,
+        "intencion_de_pago": "2024-04-27",
+        "afiliados": [
+          {
+            "cuil": "27367071112",
+            "apellido": "Nelo",
+            "nombre": "Rosario",
+            "remunerativo": 200000,
+            "capital": 520
+          },
+          {
+            "cuil": "2731722324248",
+            "apellido": "Nelo",
+            "nombre": "Manfredo",
+            "remunerativo": 100000,
+            "capital": 482
+          },
+          {
+            "cuil": "273712728848",
+            "apellido": "Nelo",
+            "nombre": "Sabario",
+            "remunerativo": 200000,
+            "capital": 482
+          }
+        ],
+        "forma_de_pago": "Ventanilla",
+        "declaracion_jurada_id": 120,
+        "tipo_ddjj": "Original",
+        "numero_boleta": null
+      },
+      {
+        "codigo": "ANTIMACS",
+        "descripcion": "ANTIMA Cuota Social",
+        "vencimiento": "2024-02-21T00:00:00.000Z",
+        "periodo": "2024-01-01T03:00:00.000Z",
+        "total_acumulado": 7800,
+        "interes": 5148,
+        "ajuste": 0,
+        "total_final": 12948,
+        "intencion_de_pago": "2024-04-27",
+        "afiliados": [
+          {
+            "cuil": "27367071112",
+            "apellido": "Nelo",
+            "nombre": "Rosario",
+            "remunerativo": 200000,
+            "capital": 7800
+          }
+        ],
+        "forma_de_pago": "Ventanilla",
+        "declaracion_jurada_id": 120,
+        "tipo_ddjj": "Original",
+        "numero_boleta": null
       }
     ],
     "sin_ddjj": [
@@ -4049,7 +4450,6 @@
       }
     ]
   },
-  
   "ajustes": [
     {
       "id": 1,

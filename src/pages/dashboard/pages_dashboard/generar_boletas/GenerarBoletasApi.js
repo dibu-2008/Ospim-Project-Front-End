@@ -1,8 +1,6 @@
 import { axiosCrud } from '@/components/axios/axiosCrud';
 import oAxios from '@/components/axios/axiosInstace';
 import { showErrorBackEnd } from "@/components/axios/showErrorBackEnd";
-import { SignalWifiConnectedNoInternet4TwoTone } from '@mui/icons-material';
-import axios from 'axios'
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;

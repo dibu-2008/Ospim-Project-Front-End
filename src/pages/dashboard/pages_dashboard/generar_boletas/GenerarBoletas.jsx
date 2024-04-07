@@ -126,7 +126,10 @@ export const GenerarBoletas = () => {
     return (
         <div className='generador_boletas_container'>
             <h1>Boleta de Pago</h1>
-            <p>Periodo: { boletas && boletas.periodo  ? boletas.periodo.replace('-','/'): ''} </p>
+            <p>Periodo: { boletas && boletas.periodo  ? 
+            //boletas.periodo.replace('-','/'): 
+            formatter.periodo(boletas.periodo,'-'):
+            ''} </p>
             <TableContainer component={Paper}>
                 <Table>
                     <TableHead>
