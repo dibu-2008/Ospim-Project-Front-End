@@ -37,10 +37,36 @@ const formatPeriodo = (value, separador) => {
   }
 };
 
+const formatPeriodo2 = (value) => {
+  try {
+    const date = new Date(value);
+
+    const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
+    const year = date.getUTCFullYear();
+    const day = date.getUTCDate().toString().padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  } catch (error) {
+    return "";
+  }
+};
+
+const formatFechaGrilla = (value) => {
+  try {
+
+    return new Date(value).toISOString().split('T')[0];
+
+  }catch (error) {
+    return "";
+  }
+}
+
 const formatter = {
   currency: formatCurrency,
   date: formatDate,
   periodo: formatPeriodo,
+  periodo2: formatPeriodo2,
+  fechaGrilla: formatFechaGrilla
 };
 
 export default formatter;

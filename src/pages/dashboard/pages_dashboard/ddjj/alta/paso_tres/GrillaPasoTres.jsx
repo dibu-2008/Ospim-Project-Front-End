@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useRef } from "react";
 import {
   GridRowModes,
   DataGrid,
@@ -13,24 +13,21 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
-import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import SearchIcon from "@mui/icons-material/Search";
 import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 import * as locales from "@mui/material/locale";
 import formatter from "@/common/formatter";
 import {
-  Checkbox,
   Box,
   Button,
   TextField,
   Select,
   MenuItem,
-  appBarClasses,
 } from "@mui/material";
 import { axiosDDJJ } from "../DDJJAltaApi";
 import "./GrillaPasoTres.css";
 import { dataGridStyle } from "@/common/dataGridStyle";
+import dayjs from "dayjs";
 
 function EditToolbar(props) {
   const {
@@ -121,17 +118,15 @@ export const GrillaPasoTres = ({
 }) => {
   const [locale, setLocale] = useState("esES");
   const [rowModesModel, setRowModesModel] = useState({});
-  const [selectedRowId, setSelectedRowId] = useState(null);
   const [inteDataBase, setInteDataBase] = useState(null);
-  const [columnVisibilityModel, setColumnVisibilityModel] = useState({
-    errores: false,
-  });
 
   const theme = useTheme();
   const themeWithLocale = useMemo(
     () => createTheme(theme, locales[locale]),
     [locale, theme]
   );
+
+  const apiRef = useRef(null);
 
   const ObtenerAfiliados = async (params, cuilElegido) => {
     const afiliados = await axiosDDJJ.getAfiliado(cuilElegido);
@@ -198,8 +193,14 @@ export const GrillaPasoTres = ({
   };
 
   const handleRowEditStop = (params, event) => {
-    if (params.reason === GridRowEditStopReasons.rowFocusOut) {
-      event.defaultMuiPrevented = true;
+    if (
+      params.reason === GridRowEditStopReasons.rowFocusOut ||
+      params.reason === GridRowEditStopReasons.keyboard && event.key === 'Enter'
+    ) {
+      apiRef.current?.stopRowEditMode({
+        id: params.id,
+        ignoreModifications: false,
+      });
     }
   };
 
@@ -271,43 +272,6 @@ export const GrillaPasoTres = ({
     setRowModesModel(newRowModesModel);
   };
 
-  const filasConErrores = () => {
-    // Selecciona el contenedor "afiliados"
-    const contenedorAfiliados = document.querySelector(".afiliados");
-
-    // Busca el contenedor "MuiDataGrid-main" dentro del contenedor "afiliados"
-    const contenedorMain =
-      contenedorAfiliados.querySelector(".MuiDataGrid-main");
-
-    // Busca el contenedor "MuiDataGrid-virtualScroller" dentro del contenedor "MuiDataGrid-main"
-    const contenedorVirtualScroller = contenedorMain.querySelector(
-      ".MuiDataGrid-virtualScroller"
-    );
-
-    // Busca el contenedor "MuiDataGrid-virtualScrollerContent" dentro del contenedor "MuiDataGrid-virtualScroller"
-    const contenedorVirtualScrollerContent =
-      contenedorVirtualScroller.querySelector(
-        ".MuiDataGrid-virtualScrollerContent"
-      );
-
-    // Busca todos los hijos del contenedor "MuiDataGrid-virtualScrollerRenderZone" dentro del contenedor "MuiDataGrid-virtualScrollerContent"
-    const hijosMuiDataGridVirtualScrollerRenderZone =
-      contenedorVirtualScrollerContent.querySelector(
-        ".MuiDataGrid-virtualScrollerRenderZone"
-      ).children;
-
-    console.log(
-      "Hijos de MuiDataGrid-virtualScrollerRenderZone:",
-      hijosMuiDataGridVirtualScrollerRenderZone
-    );
-  };
-
-  const filasTodas = () => {
-    /* console.log("Filas todas: ", rowsAltaDDJJAux)
-    // Mostrar todas las filas
-    setRowsAltaDDJJ(rowsAltaDDJJAux); */
-  };
-
   const columns = [
     {
       field: "cuil",
@@ -332,9 +296,6 @@ export const GrillaPasoTres = ({
                   field: "cuil",
                   value: newValue,
                 });
-                // Darle background color verde cuando escriba el cuil
-                /* const textField = document.getElementById('cuil' + params.row.id);
-                                textField.style.backgroundColor = 'transparent'; */
               }}
               sx={{
                 "& .MuiOutlinedInput-root": {
@@ -424,7 +385,7 @@ export const GrillaPasoTres = ({
       field: "nombre",
       type: "string",
       headerName: "Nombre",
-      flex: 1.5,
+      flex: 1,
       editable: true,
       headerAlign: "center",
       align: "center",
@@ -548,23 +509,17 @@ export const GrillaPasoTres = ({
       field: "fechaIngreso",
       type: "date",
       headerName: "Ingreso",
-      flex: 1,
+      flex: 1.3,
       editable: true,
       headerAlign: "center",
       align: "center",
       headerClassName: "header--cell",
-      valueFormatter: (params) => {
-        if (!params.value) return "";
+      valueFormatter: ({ value }) => {
+        if (!value) return "";
 
-        const date = new Date(params.value);
-        const day = date.getUTCDate().toString().padStart(2, "0");
-        const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
-        const year = date.getUTCFullYear();
-
-        //return `${day}-${month}-${year}`;
-        return formatter.date(params.value);
+        return formatter.date(value);
       },
-    },
+    }, 
     {
       field: "empresaDomicilioId",
       type: "singleSelect",
@@ -740,6 +695,7 @@ export const GrillaPasoTres = ({
       >
         <ThemeProvider theme={themeWithLocale}>
           <DataGrid
+            apiRef={apiRef.current}
             className="afiliados"
             rows={rowsAltaDDJJ}
             columns={columns}
@@ -814,26 +770,6 @@ export const GrillaPasoTres = ({
             marginTop: "20px",
           }}
         >
-          {/* <a
-            className="link_animado"
-            variant="contained"
-            style={{
-              padding: "6px auto",
-              marginRight: "20px",
-              cursor: "pointer",
-            }}
-            onClick={filasConErrores}
-          >
-            Filas con errores
-          </a>
-          <a
-            className="link_animado"
-            variant="contained"
-            style={{ padding: "6px auto", cursor: "pointer" }}
-            onClick={filasTodas}
-          >
-            Todas las filas
-          </a> */}
         </div>
       </Box>
     </div>

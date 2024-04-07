@@ -14,6 +14,7 @@ import FormControl from "@mui/material/FormControl";
 import AddIcon from "@mui/icons-material/Add";
 import "./RegistroEmpresa.css";
 import NavBar from "@/components/navbar/NavBar";
+import { showErrorBackEnd } from "@/components/axios/showErrorBackEnd";
 
 export const RegistroEmpresa = () => {
   const [additionalEmail, setAddionalEmail] = useState([]);
@@ -33,10 +34,7 @@ export const RegistroEmpresa = () => {
     };
 
     getRamos();
-    console.log(ramos);
   }, []);
-
-  
 
   const {
     cuit,
@@ -72,6 +70,12 @@ export const RegistroEmpresa = () => {
 
   const OnSubmitRegisterCompany = async (e) => {
     e.preventDefault();
+
+    // Validar de que password y repeatPassword sean iguales
+    if (password !== repeatPassword) {
+      showErrorBackEnd("Las contraseñas no coinciden", {});
+      return;
+    }
 
     let usuarioEmpresa = {
       razonSocial: razonSocial,
@@ -160,7 +164,7 @@ export const RegistroEmpresa = () => {
       setAdditionalPhone([]);
       setRowsDomicilio([]);
       OnResetFormRegisterCompany();
-    }
+    } 
   };
 
   const OnChangeRamos = (e) => {
@@ -219,6 +223,15 @@ export const RegistroEmpresa = () => {
               autoComplete="off"
               label="CUIT"
             />
+            <span
+              style={{
+                position: "absolute",
+                marginTop: "18px",
+                marginLeft: "515px",
+                fontSize: "20px",
+                color: "rgb(255, 0, 0)"
+              }}
+            >*</span>
           </div>
           <div className="input-group">
             <TextField
@@ -229,6 +242,15 @@ export const RegistroEmpresa = () => {
               autoComplete="off"
               label="Razón Social"
             />
+            <span
+              style={{
+                position: "absolute",
+                marginTop: "18px",
+                marginLeft: "515px",
+                fontSize: "20px",
+                color: "rgb(255, 0, 0)"
+              }}
+            >*</span>
           </div>
           <div className="input-group">
             <TextField
@@ -242,7 +264,16 @@ export const RegistroEmpresa = () => {
               }}
               label="E-mail principal N° 1"
             />
-          </div> 
+            <span
+              style={{
+                position: "absolute",
+                marginTop: "18px",
+                marginLeft: "515px",
+                fontSize: "20px",
+                color: "rgb(255, 0, 0)"
+              }}
+            >*</span>
+          </div>
           <div
             style={{
               position: "relative",
@@ -299,7 +330,7 @@ export const RegistroEmpresa = () => {
                 }}
               />
             </div>
-          ))} 
+          ))}
           <div className="input-group">
             <InputComponent
               type="password"
@@ -310,6 +341,15 @@ export const RegistroEmpresa = () => {
               variant="filled"
               label="Contraseña"
             />
+            <span
+              style={{
+                position: "absolute",
+                marginTop: "18px",
+                marginLeft: "515px",
+                fontSize: "20px",
+                color: "rgb(255, 0, 0)"
+              }}
+            >*</span>
           </div>
           <div className="input-group">
             <InputComponent
@@ -321,7 +361,16 @@ export const RegistroEmpresa = () => {
               variant="filled"
               label="Repetir Contraseña"
             />
-          </div> 
+            <span
+              style={{
+                position: "absolute",
+                marginTop: "18px",
+                marginLeft: "515px",
+                fontSize: "20px",
+                color: "rgb(255, 0, 0)"
+              }}
+            >*</span>
+          </div>
           <div className="input-group">
             <div
               style={{
@@ -344,6 +393,15 @@ export const RegistroEmpresa = () => {
                   label="Prefijo"
                 />
               </div>
+              <span
+              style={{
+                position: "absolute",
+                marginTop: "18px",
+                marginLeft: "515px",
+                fontSize: "20px",
+                color: "rgb(255, 0, 0)"
+              }}
+            >*</span>
               <div
                 style={{
                   width: "80%",
@@ -362,7 +420,7 @@ export const RegistroEmpresa = () => {
                 />
               </div>
             </div>
-          </div> 
+          </div>
           <div className="input-group">
             <div
               style={{
@@ -503,6 +561,15 @@ export const RegistroEmpresa = () => {
                   label="Prefijo"
                 />
               </div>
+              <span
+              style={{
+                position: "absolute",
+                marginTop: "18px",
+                marginLeft: "515px",
+                fontSize: "20px",
+                color: "rgb(255, 0, 0)"
+              }}
+            >*</span>
               <div
                 style={{
                   width: "80%",
@@ -549,6 +616,15 @@ export const RegistroEmpresa = () => {
                 </Select>
               </FormControl>
             </Box>
+            <span
+              style={{
+                position: "absolute",
+                marginTop: "18px",
+                marginLeft: "515px",
+                fontSize: "20px",
+                color: "rgb(255, 0, 0)"
+              }}
+            >*</span>
           </div>
 
           <div

@@ -20,6 +20,7 @@ import { GenerarBoletas } from "@/pages/dashboard/pages_dashboard/generar_boleta
 import { GenerarOtrosPagos } from "@/pages/dashboard/pages_dashboard/otros_pagos/GenerarOtrosPagos";
 import { DetalleOtrosPagos } from "@/pages/dashboard/pages_dashboard/otros_pagos/DetalleOtrosPagos";
 import { DDJJConsultaEmpleado } from "@/pages/dashboard/pages_dashboard/ddjj/ddjj_consulta_empleado/DDJJConsultaEmpleado";
+import { InteresesAfip } from "@/pages/dashboard/pages_dashboard/intereses_afip/InteresesAfip";
 
 const PagosPage = () => <div>Contenido de la página de pagos</div>;
 
@@ -54,6 +55,7 @@ const AppRouter = () => {
             <Route path="detalleboleta/:numero_boleta" element={<DetalleBoleta />} />
             <Route path="generarotrospagos" element={<GenerarOtrosPagos />} />
             <Route path="detalleotrospagos" errorElement={<DetalleOtrosPagos />}/>
+            <Route path="interesesafip" element={<InteresesAfip />} />
           </Route>
           <Route path="registercompany" element={<RegistroEmpresa />} />
           <Route index element={<Navigate to="/login" />} />

@@ -17,23 +17,24 @@ import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import { axiosCuitsRestringidos } from "./CuitsRestringidosApi";
 import Swal from "sweetalert2";
+import { StripedDataGrid, dataGridStyle } from "@/common/dataGridStyle";
 import "./CuitsRestringidos.css";
 
 function EditToolbar(props) {
   const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
 
   const altaHandleClick = () => {
-    const maxId = rows ? Math.max(...rows.map((row) => row.id), 0) : 1;
+    /* const maxId = rows ? Math.max(...rows.map((row) => row.internalId), 0) : 1;
     const newId = maxId + 1;
-    const id = newId;
+    const internalId = newId; */
+
+    const newReg = { cuit: "", observacion: "" }
+
     volverPrimerPagina();
 
-    setRows((oldRows) => [
-      { id, cuit: "", observacion: "", isNew: true },
-      ...oldRows,
-    ]);
+    setRows((oldRows) => [newReg,...oldRows]);
     setRowModesModel((oldModel) => ({
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
+      [0]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
       ...oldModel,
     }));
   };
@@ -47,14 +48,17 @@ function EditToolbar(props) {
   );
 }
 
+const paginacion = {
+  pageSize: 50,
+  page: 0,
+}
+
 export const CuitsRestringidos = () => {
+
+  const [paginationModel, setPaginationModel] = useState(paginacion);
+  const [rowModesModel, setRowModesModel] = useState({});
   const [locale, setLocale] = useState("esES");
   const [rows, setRows] = useState([]);
-  const [rowModesModel, setRowModesModel] = useState({});
-  const [paginationModel, setPaginationModel] = useState({
-    pageSize: 10,
-    page: 0,
-  });
 
   const volverPrimerPagina = () => {
     setPaginationModel((prevPaginationModel) => ({
@@ -73,7 +77,9 @@ export const CuitsRestringidos = () => {
   useEffect(() => {
     const ObtenerCuitsRestringidos = async () => {
       const response = await axiosCuitsRestringidos.consultar();
-      setRows(response.map((item) => ({ id: item.id, ...item })));
+      // setRows(response.map((item, index) => ({ internalId: index + 1, ...item })));
+      //setRows(response.map((item) => ({ internalId: item.id, ...item })));
+      setRows(response);
     };
     ObtenerCuitsRestringidos();
   }, []);
@@ -84,15 +90,19 @@ export const CuitsRestringidos = () => {
     }
   };
 
-  const handleEditClick = (id) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+  const handleEditClick = (row) => () => {
+    setRowModesModel({ 
+      ...rowModesModel, 
+      [rows.indexOf(row)]: { mode: GridRowModes.Edit } });
   };
 
-  const handleSaveClick = (id) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+  const handleSaveClick = (row) => () => {
+    setRowModesModel({ 
+      ...rowModesModel, 
+      [rows.indexOf(row)]: { mode: GridRowModes.View } });
   };
 
-  const handleDeleteClick = (id) => async () => {
+  const handleDeleteClick = (row) => async () => {
     const showSwalConfirm = async () => {
       try {
         Swal.fire({
@@ -105,7 +115,7 @@ export const CuitsRestringidos = () => {
           confirmButtonText: "Si, bórralo!",
         }).then(async (result) => {
           if (result.isConfirmed) {
-            const bBajaOk = await axiosCuitsRestringidos.eliminar(id);
+            const bBajaOk = await axiosCuitsRestringidos.eliminar(row.id);
             if (bBajaOk) setRows(rows.filter((row) => row.id !== id));
           }
         });
@@ -117,36 +127,41 @@ export const CuitsRestringidos = () => {
     showSwalConfirm();
   };
 
-  const handleCancelClick = (id) => () => {
+  const handleCancelClick = (row) => () => {
     setRowModesModel({
       ...rowModesModel,
-      [id]: { mode: GridRowModes.View, ignoreModifications: true },
+      [rows.indexOf(row)]: { 
+        mode: GridRowModes.View, 
+        ignoreModifications: true 
+      },
     });
 
-    const editedRow = rows.find((row) => row.id === id);
+    const editedRow = rows.find((reg) => reg.id === row.id);
     if (editedRow.isNew) {
-      setRows(rows.filter((row) => row.id !== id));
+      setRows(rows.filter((reg) => reg.id !== row.id));
     }
   };
 
   const processRowUpdate = async (newRow, oldRow) => {
     let bOk = false;
     console.log("1 - processRowUpdate - newRow: " + JSON.stringify(newRow));
-    if (newRow.isNew) {
+    if (!newRow.id) {
       console.log("2 - processRowUpdate - ALTA ");
       try {
-        delete newRow.id;
-        delete newRow.isNew;
+        /* const internalId = newRow.internalId;
+        delete newRow.internalId;
+        delete newRow.isNew; */
         const data = await axiosCuitsRestringidos.crear(newRow);
         console.log("data: " + JSON.stringify(data));
         if (data && data.id) {
           newRow.id = data.id;
-          newRow.isNew = false;
+          /* newRow.internalId = internalId;
+          newRow.isNew = false; */
           bOk = true;
 
           console.log("ALTA - rows: ");
           console.log(rows);
-          const newRows = rows.map((row) => (row.isNew ? newRow : row));
+          const newRows = rows.map((row) => (!row.id ? newRow : row));
           console.log(newRows);
           setRows(newRows);
         } else {
@@ -160,12 +175,18 @@ export const CuitsRestringidos = () => {
     } else {
       console.log("3 - processRowUpdate - MODI ");
       try {
-        delete newRow.isNew;
+        /* const internalId = newRow.internalId;
+        delete newRow.internalId;
+        delete newRow.isNew; */
         bOk = await axiosCuitsRestringidos.actualizar(newRow);
         console.log("4 - processRowUpdate - MODI - bOk: " + bOk);
-        newRow.isNew = false;
+        /* newRow.isNew = false;
+        newRow.internalId = internalId; */
         if (bOk) {
-          setRows(rows.map((row) => (row.id === newRow.id ? newRow : row)));
+          const rowsNew = rows.map((row) =>
+            row.id === newRow.id ? newRow : row
+          );
+          setRows(rowsNew);
         }
       } catch (error) {
         console.log(
@@ -214,8 +235,9 @@ export const CuitsRestringidos = () => {
       align: "center",
       headerClassName: "header--cell",
       flex: 1,
-      getActions: ({ id }) => {
-        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+      getActions: ({ row }) => {
+        const isInEditMode = 
+          rowModesModel[rows.indexOf(row)]?.mode === GridRowModes.Edit;
 
         if (isInEditMode) {
           return [
@@ -225,13 +247,13 @@ export const CuitsRestringidos = () => {
               sx={{
                 color: "primary.main",
               }}
-              onClick={handleSaveClick(id)}
+              onClick={handleSaveClick(row)}
             />,
             <GridActionsCellItem
               icon={<CancelIcon />}
               label="Cancelar"
               className="textPrimary"
-              onClick={handleCancelClick(id)}
+              onClick={handleCancelClick(row)}
               color="inherit"
             />,
           ];
@@ -242,13 +264,13 @@ export const CuitsRestringidos = () => {
             icon={<EditIcon />}
             label="Edit"
             className="textPrimary"
-            onClick={handleEditClick(id)}
+            onClick={handleEditClick(row)}
             color="inherit"
           />,
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Delete"
-            onClick={handleDeleteClick(id)}
+            onClick={handleDeleteClick(row)}
             color="inherit"
           />,
         ];
@@ -266,9 +288,13 @@ export const CuitsRestringidos = () => {
         }}
       >
         <ThemeProvider theme={themeWithLocale}>
-          <DataGrid
+          <StripedDataGrid
             rows={rows}
             columns={columns}
+            getRowId={(row) => rows.indexOf(row)}
+            getRowClassName={(params) =>
+              rows.indexOf(params.row) % 2 === 0 ? "even" : "odd"
+            }
             editMode="row"
             rowModesModel={rowModesModel}
             onRowModesModelChange={handleRowModesModelChange}
@@ -276,6 +302,7 @@ export const CuitsRestringidos = () => {
             processRowUpdate={(updatedRow, originalRow) =>
               processRowUpdate(updatedRow, originalRow)
             }
+            localeText={dataGridStyle.toolbarText}
             slots={{
               toolbar: EditToolbar,
             }}
@@ -296,7 +323,7 @@ export const CuitsRestringidos = () => {
             }}
             paginationModel={paginationModel}
             onPaginationModelChange={setPaginationModel}
-            pageSizeOptions={[10, 15, 25]}
+            pageSizeOptions={[50, 75, 100]}
           />
         </ThemeProvider>
       </Box>

@@ -22,6 +22,7 @@ import { MyDocument } from "./MiPdf";
 import Swal from "sweetalert2";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
+import { StripedDataGrid, dataGridStyle } from "@/common/dataGridStyle";
 
 function misDDJJColumnaAporteGet(ddjjResponse) {
   //toma todas las ddjj de la consulta de "Mis DDJJ" y arma "vector de Columnas Aportes"
@@ -143,23 +144,16 @@ export const GrillaMisDeclaracionesJuradas = ({
 
     const { periodo, afiliados } = ddjj;
 
-    const fecha = formatter.periodo(periodo);
+    const fecha = formatter.periodo2(periodo);
+    console.log("fecha: ", fecha);
 
-    const [mes, anio] = fecha.split("/");
-    const fechaNueva = new Date(anio, mes);
-    const year = fechaNueva.getFullYear();
-    const month = fechaNueva.getMonth() + 1;
-    const day = fechaNueva.getDate();
 
     // Agregarle a afiliados la propiedad isNew con el valor de false
     afiliados.forEach((afiliado) => (afiliado.isNew = false));
 
-    console.log("GrillaMisDeclaracionesJuradas.handleEditClick() - periodo: ");
-    console.log(periodo);
-
     //Actualizo estados de solapa DDJJ y cambio de Tab
     setPeticion("PUT");
-    setPeriodo(dayjs(`${year}-${month - 1}-${day}`));
+    setPeriodo(dayjs(fecha));
     setRowsAltaDDJJ(afiliados);
     setDDJJState(ddjj);
     setTabState(0);
@@ -344,17 +338,7 @@ export const GrillaMisDeclaracionesJuradas = ({
             label="Print"
             color="inherit"
             onClick={() => declaracionJuradasImpresion(id)}
-          />,
-          /* <PDFDownloadLink
-            document={<MyDocument rows_mis_ddjj={rows_mis_ddjj} />}
-            fileName="ddjj.pdf"
-          >
-            <GridActionsCellItem
-              icon={<LocalPrintshopIcon />}
-              label="Print"
-              color="inherit"
-            />
-          </PDFDownloadLink>, */
+          />
         ];
       } else {
         return [
@@ -380,18 +364,7 @@ export const GrillaMisDeclaracionesJuradas = ({
             label="Print"
             color="inherit"
             onClick={() => declaracionJuradasImpresion(id)}
-          />,
-          /* <PDFDownloadLink
-            document={<MyDocument rows_mis_ddjj={rows_mis_ddjj} />}
-            fileName="ddjj.pdf"
-          >
-            <GridActionsCellItem
-              icon={<LocalPrintshopIcon />}
-              label="Print"
-              color="inherit"
-            />
-            ,
-          </PDFDownloadLink>, */
+          />
         ];
       }
     },
@@ -418,7 +391,7 @@ export const GrillaMisDeclaracionesJuradas = ({
           },
         }}
       >
-        <DataGrid
+        <StripedDataGrid
           rows={rows_mis_ddjj}
           columns={columns}
           editMode="row"
@@ -426,15 +399,11 @@ export const GrillaMisDeclaracionesJuradas = ({
           onRowModesModelChange={handleRowModesModelChange}
           onRowEditStop={handleRowEditStop}
           processRowUpdate={processRowUpdate}
-          /* slots={{
-                        toolbar: GridToolbar,
-                    }} */
-          /* 
-                    slotProps={{
-                        toolbar: { setRowsMisDdjj, rows_mis_ddjj, setRowModesModel },
-                    }} */
+          localeText={dataGridStyle.toolbarText}
+          slots={{
+            toolbar: GridToolbar,
+          }}
           sx={{
-            // ...
             "& .MuiDataGrid-virtualScroller::-webkit-scrollbar": {
               width: "8px",
               visibility: "visible",
@@ -448,9 +417,6 @@ export const GrillaMisDeclaracionesJuradas = ({
           pageSizeOptions={[10, 15, 25]}
         />
       </Box>
-      {/* <PDFViewer style={{ width: "100%", height: "500px" }}>
-        <MyDocument rows_mis_ddjj={rows_mis_ddjj} />
-      </PDFViewer> */}
     </div>
   );
 };

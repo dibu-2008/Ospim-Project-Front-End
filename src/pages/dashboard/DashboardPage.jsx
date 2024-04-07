@@ -1,5 +1,6 @@
 import { useState } from "react";
 import logo from "../../assets/logo.svg";
+import afipIcon from "../../assets/afip.svg";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import HomeIcon from "@mui/icons-material/Home";
@@ -198,11 +199,16 @@ const DashboardPage = () => {
                       {open && <span className="icon-link">Feriados</span>}
                     </NavLink>
                   )}
-
                   {isRolEmpleador && (
                     <NavLink to="./ddjj" className="icon-container">
                       <LibraryBooksIcon className="icon-link" />{" "}
                       {open && <span className="icon-link">DDJJ</span>}
+                    </NavLink>
+                  )}
+                  {!isRolEmpleador && (
+                    <NavLink to="./ddjjconsultaempleado" className="icon-container">
+                      <LibraryBooksIcon className="icon-link" />{" "}
+                      {open && <span className="icon-link">DDJJ Consulta</span>}
                     </NavLink>
                   )}
                   {isRolEmpleador && (
@@ -257,6 +263,22 @@ const DashboardPage = () => {
                       <PersonAddIcon className="icon-link" />{" "}
                       {open && (
                         <span className="icon-link">Usuario Interno</span>
+                      )}
+                    </NavLink>
+                  )}
+                  {!isRolEmpleador && (
+                    <NavLink
+                      to="./interesesafip"
+                      className="icon-container"
+                    >
+                      <img 
+                        src={afipIcon} 
+                        alt="afip" 
+                        className="icon-link" 
+                        style={{width: 24, height: 24}}
+                      />{" "}
+                      {open && (
+                        <span className="icon-link">Intereses Afip</span>
                       )}
                     </NavLink>
                   )}
