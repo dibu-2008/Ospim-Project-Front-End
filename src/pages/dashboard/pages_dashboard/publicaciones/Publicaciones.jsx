@@ -3,7 +3,6 @@ import { axiosPublicaciones } from "./PublicacionesApi";
 import { EditarNuevaFila } from "./PublicacionNueva";
 import {
   GridRowModes,
-  DataGrid,
   GridActionsCellItem,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
@@ -14,7 +13,6 @@ import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 import * as locales from "@mui/material/locale";
-import formatter from "@/common/formatter";
 import Swal from "sweetalert2";
 import "./Publicaciones.css";
 import { ThreeCircles } from "react-loader-spinner";
