@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from "react";
+import { useState, useMemo } from "react";
 import {
   GridRowModes,
   DataGrid,
@@ -6,6 +6,7 @@ import {
   GridToolbarContainer,
   GridActionsCellItem,
   GridRowEditStopReasons,
+  useGridApiRef,
 } from "@mui/x-data-grid";
 
 import AddIcon from "@mui/icons-material/Add";
@@ -17,13 +18,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 import * as locales from "@mui/material/locale";
 import formatter from "@/common/formatter";
-import {
-  Box,
-  Button,
-  TextField,
-  Select,
-  MenuItem,
-} from "@mui/material";
+import { Box, Button, TextField, Select, MenuItem } from "@mui/material";
 import { axiosDDJJ } from "../DDJJAltaApi";
 import "./GrillaPasoTres.css";
 import { dataGridStyle } from "@/common/dataGridStyle";
@@ -126,7 +121,7 @@ export const GrillaPasoTres = ({
     [locale, theme]
   );
 
-  const apiRef = useRef(null);
+  const gridApiRef = useGridApiRef();
 
   const ObtenerAfiliados = async (params, cuilElegido) => {
     const afiliados = await axiosDDJJ.getAfiliado(cuilElegido);
@@ -195,9 +190,10 @@ export const GrillaPasoTres = ({
   const handleRowEditStop = (params, event) => {
     if (
       params.reason === GridRowEditStopReasons.rowFocusOut ||
-      params.reason === GridRowEditStopReasons.keyboard && event.key === 'Enter'
+      (params.reason === GridRowEditStopReasons.keyboard &&
+        event.key === "Enter")
     ) {
-      apiRef.current?.stopRowEditMode({
+      gridApiRef.current?.stopRowEditMode({
         id: params.id,
         ignoreModifications: false,
       });
@@ -233,6 +229,7 @@ export const GrillaPasoTres = ({
   };
 
   const processRowUpdate = async (newRow) => {
+    console.log("processRowUpdate - INIT");
     if (newRow.isNew) {
       const fila = { ...newRow, inte: inteDataBase, errores: false };
       console.log("Nueva Fila");
@@ -519,7 +516,7 @@ export const GrillaPasoTres = ({
 
         return formatter.date(value);
       },
-    }, 
+    },
     {
       field: "empresaDomicilioId",
       type: "singleSelect",
@@ -695,7 +692,7 @@ export const GrillaPasoTres = ({
       >
         <ThemeProvider theme={themeWithLocale}>
           <DataGrid
-            apiRef={apiRef.current}
+            apiRef={gridApiRef}
             className="afiliados"
             rows={rowsAltaDDJJ}
             columns={columns}
@@ -769,8 +766,7 @@ export const GrillaPasoTres = ({
           style={{
             marginTop: "20px",
           }}
-        >
-        </div>
+        ></div>
       </Box>
     </div>
   );
