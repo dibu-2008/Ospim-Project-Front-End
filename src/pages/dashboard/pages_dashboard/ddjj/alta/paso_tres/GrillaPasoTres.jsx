@@ -19,13 +19,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 import * as locales from "@mui/material/locale";
 import formatter from "@/common/formatter";
-import {
-  Box,
-  Button,
-  TextField,
-  Select,
-  MenuItem,
-} from "@mui/material";
+import { Box, Button, TextField, Select, MenuItem } from "@mui/material";
 import { axiosDDJJ } from "../DDJJAltaApi";
 import "./GrillaPasoTres.css";
 import { dataGridStyle } from "@/common/dataGridStyle";
@@ -244,6 +238,7 @@ export const GrillaPasoTres = ({
   };
 
   const processRowUpdate = async (newRow) => {
+    console.log("processRowUpdate - INIT");
     if (newRow.isNew) {
       const fila = { ...newRow, inte: inteDataBase, errores: false };
       console.log("Nueva Fila");
@@ -553,7 +548,7 @@ export const GrillaPasoTres = ({
         if (!value) return "";
         return formatter.date(value);
       },
-    }, 
+    },
     {
       field: "empresaDomicilioId",
       type: "singleSelect",
@@ -827,8 +822,7 @@ export const GrillaPasoTres = ({
           style={{
             marginTop: "20px",
           }}
-        >
-        </div>
+        ></div>
       </Box>
     </div>
   );

@@ -50,8 +50,6 @@ export const DeclaracionesJuradas = () => {
   const [rowsAltaDDJJ, setRowsAltaDDJJ] = useState([]);
   const [rowsAltaDDJJAux, setRowsAltaDDJJAux] = useState([]);
   const [rows_mis_ddjj, setRowsMisDdjj] = useState([]);
-  /*
-  const [periodoIso, setPeriodoIso] = useState(null); */
   const [locale, setLocale] = useState("esES");
   const [tabState, setTabState] = useState(0);
   const [peticion, setPeticion] = useState("");
@@ -67,24 +65,6 @@ export const DeclaracionesJuradas = () => {
   const handleChangeTabState = (event, newValue) => {
     setTabState(newValue);
   };
-
-  /* const handleAcceptPeriodoDDJJ = () => {
-    if (periodo && periodo.$d) {
-      const { $d: fecha } = periodo;
-      const fechaFormateada = new Date(fecha);
-      fechaFormateada.setDate(1); // Establecer el día del mes a 1
-
-      // Ajustar la zona horaria a UTC
-      fechaFormateada.setUTCHours(0, 0, 0, 0);
-
-      const fechaISO = fechaFormateada.toISOString(); // 2026-02-01T00:00:00.000Z
-      setPeriodoIso(fechaISO);
-    }
-  }; */
-
-  /* useEffect(() => {
-    handleAcceptPeriodoDDJJ();
-  }, [periodo]); */
 
   return (
     <div className="declaraciones_juradas_container">
@@ -118,9 +98,6 @@ export const DeclaracionesJuradas = () => {
               setDDJJState={setDDJJState}
               periodo={periodo}
               setPeriodo={setPeriodo} /*  */
-              /* periodoIso={periodoIso}
-              handleChangePeriodo={handleChangePeriodo}
-              handleAcceptPeriodoDDJJ={handleAcceptPeriodoDDJJ} */
               rowsAltaDDJJ={rowsAltaDDJJ}
               setRowsAltaDDJJ={setRowsAltaDDJJ}
               rowsAltaDDJJAux={rowsAltaDDJJAux}
@@ -136,8 +113,6 @@ export const DeclaracionesJuradas = () => {
               rows_mis_ddjj={rows_mis_ddjj}
               setRowsMisDdjj={setRowsMisDdjj}
               setTabState={setTabState}
-              /* 
-              handleAcceptPeriodoDDJJ={handleAcceptPeriodoDDJJ} */
               rowsAltaDDJJ={rowsAltaDDJJ}
               setRowsAltaDDJJ={setRowsAltaDDJJ}
               setPeticion={setPeticion}
