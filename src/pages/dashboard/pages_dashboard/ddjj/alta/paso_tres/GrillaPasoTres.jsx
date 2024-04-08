@@ -517,6 +517,7 @@ export const GrillaPasoTres = ({
       valueOptions: categoriasFiltradas,
       valueFormatter: ({ value }) => value || "",
       renderEditCell: (params) => {
+        console.log(params)
         return (
           <Select
             fullWidth
@@ -649,6 +650,10 @@ export const GrillaPasoTres = ({
         { value: true, label: "Si" },
         { value: false, label: "No" },
       ],
+      valueFormatter: ({ value }) => {
+        if (value === "") return "";
+        return value ? "Si" : "No";
+      }
     },
     {
       field: "amtimaSocio",
@@ -672,6 +677,10 @@ export const GrillaPasoTres = ({
         { value: true, label: "Si" },
         { value: false, label: "No" },
       ],
+      valueFormatter: ({ value }) => {
+        if (value === "") return "";
+        return value ? "Si" : "No";
+      }
     },
     {
       field: "errores",
