@@ -1676,8 +1676,8 @@
           "categoria": "D",
           "remunerativo": 545000.7,
           "noRemunerativo": 25000,
-          "uomaSocio": false,
-          "amtimaSocio": false,
+          "uomaSocio": true,
+          "amtimaSocio": true,
           "id": 1
         },
         {

@@ -38,7 +38,6 @@ function EditToolbar(props) {
     setRowsAltaDDJJAux,
     rowsAltaDDJJAux,
     setRowModesModel,
-    setSomeRowInEditMode,
   } = props;
 
   const handleClick = () => {
@@ -829,14 +828,6 @@ export const GrillaPasoTres = ({
             marginTop: "20px",
           }}
         >
-          <Button 
-          variant="contained"
-          sx={{ padding: "6px 52px", marginLeft: "10px" }}
-          // deshabilitado hasta que todas las filas este guardadas
-          
-          >
-          Update a row
-        </Button>
         </div>
       </Box>
     </div>

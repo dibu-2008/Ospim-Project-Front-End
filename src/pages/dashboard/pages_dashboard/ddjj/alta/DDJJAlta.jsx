@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Stack, Typography } from "@mui/material";
+import { Stack, Tooltip, Typography } from "@mui/material";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -59,8 +59,9 @@ export const MisAltaDeclaracionesJuradas = ({
   const handleChangePeriodo = (date) => setPeriodo(date);
 
   useEffect(() => {
-    // Check if some row is in edit mode
+    // Comprueba si hay alguna fila en modo edición
     const isSomeRowInEditMode = Object.values(rowModesModel).some((row) => row.mode === GridRowModes.Edit);
+    // Actualiza el estado con el valor de booleano
     setSomeRowInEditMode(isSomeRowInEditMode);
   }, [rowModesModel]);
 
@@ -234,11 +235,7 @@ export const MisAltaDeclaracionesJuradas = ({
   };
 
   const guardarDeclaracionJurada = async () => {
-    console.log("GUARDAR DECLARACION JURADA");
-    console.log(rowsAltaDDJJ);
-    console.log(periodo);
-    console.log(DDJJState);
-    // si periodo la DDJJState tiene id modifico a periodo
+
     if (DDJJState && DDJJState.id) {
       console.log("Tiene id la ddjj");
       setPeriodo(DDJJState.periodo);
@@ -574,14 +571,22 @@ export const MisAltaDeclaracionesJuradas = ({
               marginTop: "20px",
             }}
           >
-            <Button
-              variant="contained"
-              sx={{ padding: "6px 52px", marginLeft: "10px" }}
-              onClick={guardarDeclaracionJurada}
-              disabled={someRowInEditMode || rowsAltaDDJJ.length === 0}
+            <Tooltip
+              title={someRowInEditMode ? "Hay filas en edición, por favor finalice la edición antes de guardar." : ""}
+              sx={{ marginLeft: "10px", cursor: "pointer" }}
             >
-              Guardar
-            </Button>
+              <span>
+                <Button
+                  variant="contained"
+                  sx={{ padding: "6px 52px", marginLeft: "10px" }}
+                  onClick={guardarDeclaracionJurada}
+                  disabled={someRowInEditMode || rowsAltaDDJJ.length === 0}
+                >
+                  Guardar
+                </Button>
+              </span>
+            </Tooltip>
+
 
             {
               DDJJState.estado === "PR" ? (
