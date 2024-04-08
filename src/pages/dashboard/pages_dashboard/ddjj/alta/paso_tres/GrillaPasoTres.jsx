@@ -52,9 +52,9 @@ function EditToolbar(props) {
         categoria: "",
         remunerativo: "",
         noRemunerativo: "",
-        uomaSocio: false,
-        amtimaSocio: false,
-        isNew: true,
+        uomaSocio: "",
+        amtimaSocio: "",
+        isNew: "",
       },
       ...oldRows,
     ]);
@@ -501,6 +501,30 @@ export const GrillaPasoTres = ({
       align: "center",
       headerClassName: "header--cell",
       valueOptions: categoriasFiltradas,
+      valueFormatter: ({ value }) => value || "",
+      renderEditCell: (params) => {
+        return (
+          <Select
+            fullWidth
+            value={params.value || ""}
+            onChange={(event) => {
+              params.api.setEditCellValue({
+                id: params.id,
+                field: "categoria",
+                value: event.target.value,
+              });
+            }}
+          >
+            {categoriasFiltradas.map((categoria) => {
+              return (
+                <MenuItem key={categoria} value={categoria}>
+                  {categoria}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        );
+      }
     },
     {
       field: "fechaIngreso",
@@ -513,7 +537,6 @@ export const GrillaPasoTres = ({
       headerClassName: "header--cell",
       valueFormatter: ({ value }) => {
         if (!value) return "";
-
         return formatter.date(value);
       },
     },
@@ -529,6 +552,30 @@ export const GrillaPasoTres = ({
       valueOptions: plantas.map((planta) => {
         return { value: planta.id, label: planta.planta }; // Agrega la propiedad 'key'
       }),
+      valueFormatter: ({ value }) => value || "",
+      renderEditCell: (params) => {
+        return (
+          <Select
+            fullWidth
+            value={params.value || ""}
+            onChange={(event) => {
+              params.api.setEditCellValue({
+                id: params.id,
+                field: "empresaDomicilioId",
+                value: event.target.value,
+              });
+            }}
+          >
+            {plantas.map((planta) => {
+              return (
+                <MenuItem key={planta.id} value={planta.id}>
+                  {planta.planta}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        );
+      }
     },
     {
       field: "remunerativo",
