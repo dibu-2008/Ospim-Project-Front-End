@@ -6,6 +6,7 @@ import {
   GridToolbarContainer,
   GridActionsCellItem,
   GridRowEditStopReasons,
+  useGridApiRef,
 } from "@mui/x-data-grid";
 
 import AddIcon from "@mui/icons-material/Add";
@@ -57,9 +58,9 @@ function EditToolbar(props) {
         categoria: "",
         remunerativo: "",
         noRemunerativo: "",
-        uomaSocio: false,
-        amtimaSocio: false,
-        isNew: true,
+        uomaSocio: "",
+        amtimaSocio: "",
+        isNew: "",
       },
       ...oldRows,
     ]);
@@ -126,7 +127,7 @@ export const GrillaPasoTres = ({
     [locale, theme]
   );
 
-  const apiRef = useRef(null);
+  const gridApiRef = useGridApiRef();
 
   const ObtenerAfiliados = async (params, cuilElegido) => {
     const afiliados = await axiosDDJJ.getAfiliado(cuilElegido);
@@ -197,7 +198,7 @@ export const GrillaPasoTres = ({
       params.reason === GridRowEditStopReasons.rowFocusOut ||
       params.reason === GridRowEditStopReasons.keyboard && event.key === 'Enter'
     ) {
-      apiRef.current?.stopRowEditMode({
+      gridApiRef.current?.stopRowEditMode({
         id: params.id,
         ignoreModifications: false,
       });
@@ -504,6 +505,30 @@ export const GrillaPasoTres = ({
       align: "center",
       headerClassName: "header--cell",
       valueOptions: categoriasFiltradas,
+      valueFormatter: ({ value }) => value || "",
+      renderEditCell: (params) => {
+        return (
+          <Select
+            fullWidth
+            value={params.value || ""}
+            onChange={(event) => {
+              params.api.setEditCellValue({
+                id: params.id,
+                field: "categoria",
+                value: event.target.value,
+              });
+            }}
+          >
+            {categoriasFiltradas.map((categoria) => {
+              return (
+                <MenuItem key={categoria} value={categoria}>
+                  {categoria}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        );
+      }
     },
     {
       field: "fechaIngreso",
@@ -516,7 +541,6 @@ export const GrillaPasoTres = ({
       headerClassName: "header--cell",
       valueFormatter: ({ value }) => {
         if (!value) return "";
-
         return formatter.date(value);
       },
     }, 
@@ -532,6 +556,30 @@ export const GrillaPasoTres = ({
       valueOptions: plantas.map((planta) => {
         return { value: planta.id, label: planta.planta }; // Agrega la propiedad 'key'
       }),
+      valueFormatter: ({ value }) => value || "",
+      renderEditCell: (params) => {
+        return (
+          <Select
+            fullWidth
+            value={params.value || ""}
+            onChange={(event) => {
+              params.api.setEditCellValue({
+                id: params.id,
+                field: "empresaDomicilioId",
+                value: event.target.value,
+              });
+            }}
+          >
+            {plantas.map((planta) => {
+              return (
+                <MenuItem key={planta.id} value={planta.id}>
+                  {planta.planta}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        );
+      }
     },
     {
       field: "remunerativo",
@@ -695,7 +743,7 @@ export const GrillaPasoTres = ({
       >
         <ThemeProvider theme={themeWithLocale}>
           <DataGrid
-            apiRef={apiRef.current}
+            apiRef={gridApiRef}
             className="afiliados"
             rows={rowsAltaDDJJ}
             columns={columns}
