@@ -25,6 +25,7 @@ import localStorageService from "@/components/localStorage/localStorageService";
 import Swal from "sweetalert2";
 import XLSX from "xlsx";
 import { TextFields } from "@mui/icons-material";
+import { GridRowModes } from "@mui/x-data-grid";
 
 export const MisAltaDeclaracionesJuradas = ({
   DDJJState,
@@ -52,9 +53,17 @@ export const MisAltaDeclaracionesJuradas = ({
   const [btnSubirHabilitado, setBtnSubirHabilitado] = useState(false);
   const [ddjjCreada, setDDJJCreada] = useState({});
   const ID_EMPRESA = localStorageService.getEmpresaId();
+  const [someRowInEditMode, setSomeRowInEditMode] = useState(false);
+  const [rowModesModel, setRowModesModel] = useState({});
 
   const handleChangePeriodo = (date) => setPeriodo(date);
-  
+
+  useEffect(() => {
+    // Check if some row is in edit mode
+    const isSomeRowInEditMode = Object.values(rowModesModel).some((row) => row.mode === GridRowModes.Edit);
+    setSomeRowInEditMode(isSomeRowInEditMode);
+  }, [rowModesModel]);
+
   useEffect(() => {
     const ObtenerCamaras = async () => {
       const data = await axiosDDJJ.getCamaras();
@@ -208,7 +217,7 @@ export const MisAltaDeclaracionesJuradas = ({
           setAfiliadoImportado(arrayTransformado);
           setBtnSubirHabilitado(true);
           console.log(DDJJState);
-          if(DDJJState.id){
+          if (DDJJState.id) {
             confirm("Recorda que si subis un archivo, se perderan los datos de la ddjj actual")
           }
         } else {
@@ -400,7 +409,7 @@ export const MisAltaDeclaracionesJuradas = ({
     }
   };
 
-  const presentarDeclaracionJurada = async () => {};
+  const presentarDeclaracionJurada = async () => { };
 
   let formNro = "Formulario: Original";
   if (DDJJState && DDJJState.secuencia) {
@@ -552,6 +561,9 @@ export const MisAltaDeclaracionesJuradas = ({
             todasLasCategorias={todasLasCategorias}
             plantas={plantas}
             validacionResponse={validacionResponse}
+            setSomeRowInEditMode={setSomeRowInEditMode}
+            rowModesModel={rowModesModel}
+            setRowModesModel={setRowModesModel}
           />
 
           <div
@@ -566,9 +578,11 @@ export const MisAltaDeclaracionesJuradas = ({
               variant="contained"
               sx={{ padding: "6px 52px", marginLeft: "10px" }}
               onClick={guardarDeclaracionJurada}
+              disabled={someRowInEditMode || rowsAltaDDJJ.length === 0}
             >
               Guardar
             </Button>
+
             {
               DDJJState.estado === "PR" ? (
                 <Button
@@ -580,26 +594,26 @@ export const MisAltaDeclaracionesJuradas = ({
                   Presentar
                 </Button>
               ) : (
-                
-                  DDJJState.estado === "PE" ? (
-                    <Button
-                      variant="contained"
-                      sx={{ padding: "6px 52px", marginLeft: "10px" }}
-                      onClick={presentarDeclaracionJurada}
-                      disabled={false}
-                    >
-                      Presentar
-                    </Button>
-                  ) : (
-                    <Button
-                      variant="contained"
-                      sx={{ padding: "6px 52px", marginLeft: "10px" }}
-                      onClick={presentarDeclaracionJurada}
-                      disabled={ ddjjCreada.id ? false : true }
-                    >
-                      Presentar 
-                    </Button>
-                  )
+
+                DDJJState.estado === "PE" ? (
+                  <Button
+                    variant="contained"
+                    sx={{ padding: "6px 52px", marginLeft: "10px" }}
+                    onClick={presentarDeclaracionJurada}
+                    disabled={false}
+                  >
+                    Presentar
+                  </Button>
+                ) : (
+                  <Button
+                    variant="contained"
+                    sx={{ padding: "6px 52px", marginLeft: "10px" }}
+                    onClick={presentarDeclaracionJurada}
+                    disabled={ddjjCreada.id ? false : true}
+                  >
+                    Presentar
+                  </Button>
+                )
               )
             }
           </div>

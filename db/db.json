@@ -2934,6 +2934,43 @@
       ],
       "empresaId": "1",
       "id": 216
+    },
+    {
+      "periodo": null,
+      "afiliados": [
+        {
+          "cuil": "312312321321",
+          "inte": 0,
+          "apellido": "dfdsfsdf",
+          "nombre": "sdfdsf",
+          "fechaIngreso": null,
+          "empresaDomicilioId": null,
+          "camara": "FAIM",
+          "categoria": "C",
+          "remunerativo": null,
+          "noRemunerativo": null,
+          "uomaSocio": "",
+          "amtimaSocio": "",
+          "id": 2
+        },
+        {
+          "cuil": "20949118682",
+          "inte": 0,
+          "apellido": "Salinas",
+          "nombre": "Luis",
+          "fechaIngreso": null,
+          "empresaDomicilioId": null,
+          "camara": "FAIM",
+          "categoria": "D",
+          "remunerativo": null,
+          "noRemunerativo": null,
+          "uomaSocio": "",
+          "amtimaSocio": "",
+          "id": 1
+        }
+      ],
+      "empresaId": "1",
+      "id": 217
     }
   ],
   "afiliado": [

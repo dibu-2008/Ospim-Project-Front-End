@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   GridRowModes,
   DataGrid,
@@ -7,6 +7,7 @@ import {
   GridActionsCellItem,
   GridRowEditStopReasons,
   useGridApiRef,
+  gridPaginatedVisibleSortedGridRowIdsSelector
 } from "@mui/x-data-grid";
 
 import AddIcon from "@mui/icons-material/Add";
@@ -37,6 +38,7 @@ function EditToolbar(props) {
     setRowsAltaDDJJAux,
     rowsAltaDDJJAux,
     setRowModesModel,
+    setSomeRowInEditMode,
   } = props;
 
   const handleClick = () => {
@@ -88,6 +90,7 @@ function EditToolbar(props) {
       ...oldModel,
       [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
     }));
+
   };
 
   return (
@@ -116,10 +119,14 @@ export const GrillaPasoTres = ({
   todasLasCategorias,
   plantas,
   validacionResponse,
+  setSomeRowInEditMode,
+  rowModesModel, 
+  setRowModesModel
 }) => {
   const [locale, setLocale] = useState("esES");
-  const [rowModesModel, setRowModesModel] = useState({});
+  // const [rowModesModel, setRowModesModel] = useState({});
   const [inteDataBase, setInteDataBase] = useState(null);
+  
 
   const theme = useTheme();
   const themeWithLocale = useMemo(
@@ -193,15 +200,19 @@ export const GrillaPasoTres = ({
     return soloCategorias;
   };
 
-  const handleRowEditStop = (params, event) => {
+  const handleRowEditStop = (params) => {
+
+    console.log(params)
+    
     if (
-      params.reason === GridRowEditStopReasons.rowFocusOut ||
-      params.reason === GridRowEditStopReasons.keyboard && event.key === 'Enter'
+      params.reason === GridRowEditStopReasons.rowFocusOut
     ) {
+
       gridApiRef.current?.stopRowEditMode({
         id: params.id,
         ignoreModifications: false,
-      });
+      }); 
+      
     }
   };
 
@@ -818,6 +829,14 @@ export const GrillaPasoTres = ({
             marginTop: "20px",
           }}
         >
+          <Button 
+          variant="contained"
+          sx={{ padding: "6px 52px", marginLeft: "10px" }}
+          // deshabilitado hasta que todas las filas este guardadas
+          
+          >
+          Update a row
+        </Button>
         </div>
       </Box>
     </div>
