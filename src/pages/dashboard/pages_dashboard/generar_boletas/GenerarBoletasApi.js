@@ -46,12 +46,18 @@ export const calcularInteresBoletas = async(empresa_id, ddjj_id, intencion_de_pa
 
 
 const ordernarBoletas = (boletas) => {
-    const newArray = boletas.detalle_boletas.map(detalle => ({
-        ...detalle,
-        declaracion_jurada_id: boletas.declaracion_jurada_id,
-        periodo: boletas.periodo,
-        tipo_ddjj: boletas.tipo_ddjj
-    }));
+  // const newArray = boletas.detalle_boletas.map(detalle => ({
+  //     ...detalle,
+  //     declaracion_jurada_id: boletas.declaracion_jurada_id,
+  //     periodo: boletas.periodo,
+  //     tipo_ddjj: boletas.tipo_ddjj
+  // }));
+    const newArray = boletas.detalle_boletas.map(detalle =>({
+        codigo: detalle.codigo,
+        intencion_de_pago: detalle.intencion_de_pago,
+        forma_de_pago: detalle.forma_de_pago
+    }))
+
     return newArray;
 }
 
@@ -59,12 +65,10 @@ export const generarBoletasPost = async (empresa_id, ddjj_id,boletas)=>{
     try{
         const URL =`${BACKEND_URL}/empresa/${ empresa_id }/ddjj/${ ddjj_id }/guardar-boletas`;
         const arr_boletas = ordernarBoletas(boletas)
-        console.log(URL)
-        console.log(arr_boletas)
 
         const response = await axiosCrud.crear(URL, arr_boletas)
         if (response) {
-            //window.location.href = "/dashboard/boletas";
+            return response
         } else {
             console.error("Error al generar boletas");
         }

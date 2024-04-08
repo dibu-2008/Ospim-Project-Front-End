@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Typography, TextField, Button, MenuItem, FormControl, InputLabel, Select, Box, Grid } from '@mui/material';
 import {  generarBoletaSinDDJJ } from './OtrosPagosApi';
 import "./OtrosPagos.css"
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 export const GenerarOtrosPagos = () => {
@@ -10,21 +12,37 @@ export const GenerarOtrosPagos = () => {
     const [entidad, setEntidad] = useState('');
     const [nroActa, setNroActa] = useState('');
     const [importe, setImporte] = useState('');
+    const [deshabilitar, setDeshabilitar] = useState(false);
 
     const ID_EMPRESA = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.empresa.id;
     const hoy =new Date().toISOString().split('T')[0]
 
-    const handleImprimir = () => {
+    const handleImprimir = async () => {
+        const redirect = () => window.location.href = "/dashboard/boletas";
         const body = {
             entidad,
             nroActa,
             importe,
-            intencionDePago,
+            intencionDePago : new Date(`${intencionDePago}`).toISOString(),
             razon_de_pago: 'Nro Acta: ' + nroActa
         }
-
-        generarBoletaSinDDJJ(ID_EMPRESA, body)
-        console.log(body);
+        try{
+            setDeshabilitar(true)
+            await generarBoletaSinDDJJ(ID_EMPRESA, body)
+            .then(()=>{
+                toast.success('Boleta generada con exito',{
+                    onClose: () =>{
+                        redirect()
+                    }
+                }
+                )
+            })
+        } catch (error) {
+            console.error(error)
+            toast.error("Ocurrio un problema al intentar generar la boleta")
+            redirect()
+        }
+        //console.log(body);
     };
 
     return (
@@ -79,11 +97,12 @@ export const GenerarOtrosPagos = () => {
                     <Box display="flex" justifyContent="flex-end">
                         <Button
                         variant="contained"
-                        disabled={!intencionDePago || !entidad || !importe || !nroActa  }
+                        disabled={!intencionDePago || !entidad || !importe || !nroActa  || deshabilitar }
                         onClick={handleImprimir}>Imprimir</Button>
                     </Box>
                 </Grid>
             </Grid>
+            <ToastContainer />
         </Box>
     );
 };

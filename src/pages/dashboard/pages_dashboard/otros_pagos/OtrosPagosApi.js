@@ -9,7 +9,6 @@ export const generarBoletaSinDDJJ = async (empresa_id, body) => {
   try{
     console.log(body)
     const URL = `${BACKEND_URL}/empresa/${empresa_id}/generar-boleta-sin-ddjj`
-    //return axios.post(URL, { ...body })
     const response = await axiosCrud.crear(URL, { ...body })
     if (response) {
       const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -19,7 +18,6 @@ export const generarBoletaSinDDJJ = async (empresa_id, body) => {
       document.body.appendChild(link);
       link.click();
       link.remove();
-      window.location.href = "/dashboard/boletas"
     } else {
       console.error("Error al generar boletas");
     }

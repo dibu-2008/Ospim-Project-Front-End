@@ -7,6 +7,9 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 //import { Boletas } from '../boletas/Boletas';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 export const GenerarBoletas = () => {
     const { id } = useParams();
 
@@ -82,9 +85,10 @@ export const GenerarBoletas = () => {
     }
 
     const setIntencionDePago = async  (codigo, fecha) => {
+        const fechaToISO =new Date(`${fecha}`).toISOString()
         if (primeraSeleccion) {
             setPrimeraSeleccion(false);
-            const response = await axiosGenerarBoletas.calcularInteresBoletas(123, DDJJ_ID, fecha)
+            const response = await axiosGenerarBoletas.calcularInteresBoletas(123, DDJJ_ID, fechaToISO)
             const updatedDetalleBoletas = response.data.map((boleta) => {
                 const prevBoleta = boletas.detalle_boletas.find((prevBoleta) => prevBoleta.codigo === boleta.codigo);
                 return { ...boleta, forma_de_pago: prevBoleta ? prevBoleta.forma_de_pago : 'Ventanilla' };
@@ -93,7 +97,7 @@ export const GenerarBoletas = () => {
             sethabilitaBoton(checkFields());
         } else {
             const boletaIndex = boletas.detalle_boletas.findIndex(element => element.codigo === codigo);
-            const response = await axiosGenerarBoletas.calcularInteresBoleta(123, DDJJ_ID, codigo, fecha);
+            const response = await axiosGenerarBoletas.calcularInteresBoleta(123, DDJJ_ID, codigo, fechaToISO);
             setInteresInDetalleBoleta(boletaIndex, response);
             sethabilitaBoton(false);
         }
@@ -107,7 +111,6 @@ export const GenerarBoletas = () => {
 
     const setFormaDePago = (codigo, value) => {
         if (primeraSeleccionFDP){
-            //setSelectedFDP(prevState => ({ ...prevState, [codigo]:value}))
             const newDetalleBoletas = boletas.detalle_boletas.map(boleta => ({ ...boleta, forma_de_pago: value }));
             setBoletas({ ...boletas, detalle_boletas: newDetalleBoletas });
             setPrimeraSeleccionFDP(false)
@@ -119,15 +122,29 @@ export const GenerarBoletas = () => {
 
     const toggleDetail = () => setShowDetail(!showDetail);
 
-    const generarBoletas = async () => await axiosGenerarBoletas.generarBoletasPost(ID_EMPRESA, DDJJ_ID, boletas)
+    const generarBoletas = async () => {
+        const redirect = () => window.location.href = "/dashboard/boletas";
+        try{
+            await axiosGenerarBoletas.generarBoletasPost(ID_EMPRESA, DDJJ_ID, boletas)
+            sethabilitaBoton(true)
+            toast.success('¡Toast de éxito!', {
+                onClose: () => {
+                    redirect()
+                }
+            });
+        } catch(error){
+            console.error(error)
+            toast.error("Ocurrio un problema")
+            redirect()
+        }
+        }
 
-    const hoy =new Date().toISOString().split('T')[0]
+    const hoy = new Date().toISOString().split('T')[0]
 
     return (
         <div className='generador_boletas_container'>
             <h1>Boleta de Pago</h1>
-            <p>Periodo: { boletas && boletas.periodo  ? 
-            //boletas.periodo.replace('-','/'): 
+            <p>Periodo: { boletas && boletas.periodo  ?
             formatter.periodo(boletas.periodo,'-'):
             ''} </p>
             <TableContainer component={Paper}>
@@ -153,7 +170,7 @@ export const GenerarBoletas = () => {
                                 <TableCell key={boleta.codigo}>
                                     <TextField type="date"
                                     inputProps={{min:hoy}}
-                                    value={boleta.intencion_de_pago}
+                                    value={boleta.intencion_de_pago.split("T")[0]}
                                     onChange={event => setIntencionDePago(boleta.codigo, event.target.value)}/>
                                 </TableCell>
                             ))}
@@ -226,7 +243,9 @@ export const GenerarBoletas = () => {
                         <TableRow>
                             <TableCell className='cwbcb' style={{width:'24.5em'}}>Ajustes</TableCell>
                             {boletas.detalle_boletas && boletas.detalle_boletas.map((boleta) => (
-                                <TableCell style={{width:'27.5em'}} key={boleta.codigo}>{formatter.currency.format(boleta.ajuste)}</TableCell>
+                                <TableCell style={{width:'27.5em'}} key={boleta.codigo}>
+                                    {formatter.currency.format(boleta.ajustes.reduce((acumulador, ajuste) => acumulador + ajuste.monto, 0))}
+                                </TableCell>
                             ))}
                         </TableRow>
                         <TableRow>
@@ -243,6 +262,22 @@ export const GenerarBoletas = () => {
                     Generar
                 </Button>
             </Box>
+            <ToastContainer />
+
+            {boletas.detalle_boletas && boletas.detalle_boletas
+                .filter((boleta) => boleta.ajustes.length > 0)
+                .map((boleta, index) => (
+                    <div key={index}>
+                    {index === 0 && <h3 style={{ color: '#1A76D2' }}>Ajustes aplicados</h3>}
+                    <p>{boleta.descripcion}</p>
+                    <ul>
+                        {boleta.ajustes.map((ajuste, index) => (
+                        <li key={index}>{ajuste.descripcion}: {formatter.currency.format(ajuste.monto)}</li>
+                        ))}
+                    </ul>
+                    </div>
+            ))}
+
         </div>
     );
 };

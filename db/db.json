@@ -3437,8 +3437,13 @@
         "periodo": "01-2024",
         "total_acumulado": 21810,
         "interes": 0,
-        "ajuste": 0,
-        "total_final": 21810,
+        "ajustes": [
+          {
+            "descripcion": "Por moras reiteradas",
+            "monto": 2333
+          }
+        ],
+        "total_final": 24143,
         "intencion_de_pago": "",
         "afiliados": [
           {
@@ -3471,8 +3476,17 @@
         "periodo": "01-2024",
         "total_acumulado": 1484,
         "interes": 0,
-        "ajuste": 0,
-        "total_final": 1484,
+        "ajustes": [
+          {
+            "descripcion": "Por moras reiteradas",
+            "monto": 2333
+          },
+          {
+            "descripcion": "Porque pintó",
+            "monto": 2344
+          }
+        ],
+        "total_final": 6161,
         "intencion_de_pago": "",
         "afiliados": [
           {
@@ -3505,7 +3519,7 @@
         "periodo": "01-2024",
         "total_acumulado": 7800,
         "interes": 0,
-        "ajuste": 0,
+        "ajustes": [],
         "total_final": 7800,
         "intencion_de_pago": "",
         "afiliados": [
@@ -4408,6 +4422,22 @@
         "importe": "1431234",
         "razon_de_pago": "Nro Acta: 123123",
         "id": 6
+      },
+      {
+        "entidad": "OSPIM",
+        "nroActa": "1111",
+        "importe": "1111",
+        "intencionDePago": "2024-04-10",
+        "razon_de_pago": "Nro Acta: 1111",
+        "id": 7
+      },
+      {
+        "entidad": "OSPIM",
+        "nroActa": "4444",
+        "importe": "44444",
+        "intencionDePago": "2024-04-19T00:00:00.000Z",
+        "razon_de_pago": "Nro Acta: 4444",
+        "id": 8
       }
     ]
   },
