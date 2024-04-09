@@ -3,26 +3,22 @@ import Box from "@mui/material/Box";
 import formatter from "@/common/formatter";
 import {
   GridRowModes,
-  DataGrid,
-  GridToolbarContainer,
   GridActionsCellItem,
   GridRowEditStopReasons,
   GridToolbar,
 } from "@mui/x-data-grid";
 import Button from "@mui/material/Button";
-import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import LocalPrintshopIcon from "@mui/icons-material/LocalPrintshop";
-import { axiosDDJJ } from "./GrillaMisDeclaracionesJuradasApi";
-import { PDFViewer, PDFDownloadLink } from "@react-pdf/renderer";
-import { MyDocument } from "./MiPdf";
+import { axiosDDJJ } from "./MisDDJJConsultaGrillaApi";
 import Swal from "sweetalert2";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 import { StripedDataGrid, dataGridStyle } from "@/common/dataGridStyle";
+import localStorageService from "@/components/localStorage/localStorageService";
 
 function misDDJJColumnaAporteGet(ddjjResponse) {
   //toma todas las ddjj de la consulta de "Mis DDJJ" y arma "vector de Columnas Aportes"
@@ -69,25 +65,22 @@ function castearMisDDJJ(ddjjResponse) {
   return ddjjResponse;
 }
 
-export const GrillaMisDeclaracionesJuradas = ({
+export const MisDDJJConsultaGrilla = ({
   setDDJJState,
   setPeriodo,
   rows_mis_ddjj: rowsMisDdjj,
   setRowsMisDdjj,
-  idEmpresa,
   setTabState,
-  /* 
-  handleAcceptPeriodoDDJJ, */
-  rowsAltaDDJJ,
   setRowsAltaDDJJ,
   setPeticion,
-  setIdDDJJ,
 }) => {
   const [rowModesModel, setRowModesModel] = useState({});
   const [paginationModel, setPaginationModel] = useState({
     pageSize: 10,
     page: 0,
   });
+
+  const ID_EMPRESA = localStorageService.getEmpresaId();
 
   let colAportes = [];
 
@@ -103,7 +96,7 @@ export const GrillaMisDeclaracionesJuradas = ({
 
   useEffect(() => {
     const ObtenerMisDeclaracionesJuradas = async () => {
-      let ddjjResponse = await axiosDDJJ.consultar(idEmpresa);
+      let ddjjResponse = await axiosDDJJ.consultar(ID_EMPRESA);
 
       //Agrego las columnas deTotales de Aportes
       ddjjResponse = await castearMisDDJJ(ddjjResponse);
@@ -116,7 +109,7 @@ export const GrillaMisDeclaracionesJuradas = ({
 
   const PresentarDeclaracionesJuradas = async (id) => {
     const updatedRow = { ...rowsMisDdjj.find((row) => row.id === id) };
-    const data = await axiosDDJJ.presentar(idEmpresa, id);
+    const data = await axiosDDJJ.presentar(ID_EMPRESA, id);
     if (data) {
       updatedRow.estado = data.estado || null;
       updatedRow.secuencia = data.secuencia || null;
@@ -136,7 +129,7 @@ export const GrillaMisDeclaracionesJuradas = ({
   };
 
   const handleEditClick = (id, row) => async () => {
-    const ddjj = await axiosDDJJ.getDDJJ(idEmpresa, id);
+    const ddjj = await axiosDDJJ.getDDJJ(ID_EMPRESA, id);
     console.log("ddjj: ", ddjj);
 
     const { periodo, afiliados } = ddjj;
@@ -160,7 +153,7 @@ export const GrillaMisDeclaracionesJuradas = ({
   };
 
   const declaracionJuradasImpresion = async (idDDJJ) => {
-    await axiosDDJJ.imprimir(idEmpresa, idDDJJ);
+    await axiosDDJJ.imprimir(ID_EMPRESA, idDDJJ);
   };
 
   const handleDeleteClick = (id) => async () => {
@@ -176,10 +169,10 @@ export const GrillaMisDeclaracionesJuradas = ({
           confirmButtonText: "Si, bórralo!",
         }).then(async (result) => {
           console.log(
-            "handleDeleteClick() - idEmpresa: " + idEmpresa + " id: " + id
+            "handleDeleteClick() - ID_EMPRESA: " + ID_EMPRESA + " id: " + id
           );
           if (result.isConfirmed) {
-            const bRta = await axiosDDJJ.eliminar(idEmpresa, id);
+            const bRta = await axiosDDJJ.eliminar(ID_EMPRESA, id);
             console.log("bRta: " + bRta);
             if (bRta)
               setRowsMisDdjj(rowsMisDdjj.filter((row) => row.id !== id));

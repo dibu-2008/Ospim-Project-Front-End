@@ -4,10 +4,10 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import "./DDJJ.css";
-import { MisDeclaracionesJuradas } from "./mis_ddjj/ConsultaMisDDJJ";
+import { ConsultaMisDDJJ } from "./mis_ddjj/MisDDJJConsulta";
 import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 import * as locales from "@mui/material/locale";
-import { MisAltaDeclaracionesJuradas } from "./alta/DDJJAlta";
+import { DDJJAlta } from "./alta/DDJJAlta";
 import dayjs from "dayjs";
 import { Boletas } from "../boletas/Boletas";
 
@@ -44,7 +44,7 @@ function a11yProps(index) {
   };
 }
 
-export const DeclaracionesJuradas = () => {
+export const DDJJ = () => {
   const [DDJJState, setDDJJState] = useState({});
   const [periodo, setPeriodo] = useState(null);
   const [rowsAltaDDJJ, setRowsAltaDDJJ] = useState([]);
@@ -93,7 +93,7 @@ export const DeclaracionesJuradas = () => {
             </Tabs>
           </Box>
           <CustomTabPanel value={tabState} index={0}>
-            <MisAltaDeclaracionesJuradas
+            <DDJJAlta
               DDJJState={DDJJState}
               setDDJJState={setDDJJState}
               periodo={periodo}
@@ -103,20 +103,17 @@ export const DeclaracionesJuradas = () => {
               rowsAltaDDJJAux={rowsAltaDDJJAux}
               setRowsAltaDDJJAux={setRowsAltaDDJJAux}
               peticion={peticion}
-              idDDJJ={idDDJJ}
             />
           </CustomTabPanel>
           <CustomTabPanel value={tabState} index={1}>
-            <MisDeclaracionesJuradas
+            <ConsultaMisDDJJ
               setDDJJState={setDDJJState}
               setPeriodo={setPeriodo}
               rows_mis_ddjj={rows_mis_ddjj}
               setRowsMisDdjj={setRowsMisDdjj}
               setTabState={setTabState}
-              rowsAltaDDJJ={rowsAltaDDJJ}
               setRowsAltaDDJJ={setRowsAltaDDJJ}
               setPeticion={setPeticion}
-              setIdDDJJ={setIdDDJJ}
             />
           </CustomTabPanel>
           <CustomTabPanel value={tabState} index={2}>

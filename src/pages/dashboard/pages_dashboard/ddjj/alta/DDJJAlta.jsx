@@ -3,30 +3,18 @@ import { Stack, Typography } from "@mui/material";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { esES } from "@mui/x-date-pickers/locales";
-import {
-  Box,
-  TextField,
-  Button,
-  Radio,
-  RadioGroup,
-  FormControlLabel,
-} from "@mui/material";
-import dayjs from "dayjs";
-import esLocale from "dayjs/locale/es";
+import { Button, Radio, RadioGroup, FormControlLabel } from "@mui/material";
 import "./DDJJAlta.css";
-import { GrillaPasoTres } from "./paso_tres/GrillaPasoTres";
+import { DDJJAltaEmpleadosGrilla } from "./empleadosGrilla/DDJJAltaEmpleadosGrilla";
 import { axiosDDJJ } from "./DDJJAltaApi";
-import formatter from "@/common/formatter";
 
 import localStorageService from "@/components/localStorage/localStorageService";
 import Swal from "sweetalert2";
 import XLSX from "xlsx";
-import { TextFields } from "@mui/icons-material";
 
-export const MisAltaDeclaracionesJuradas = ({
+export const DDJJAlta = ({
   DDJJState,
   setDDJJState,
   periodo,
@@ -403,19 +391,27 @@ export const MisAltaDeclaracionesJuradas = ({
   const presentarDeclaracionJurada = async () => {
     if (DDJJState.id) {
       const data = await axiosDDJJ.presentar(ID_EMPRESA, DDJJState.id);
+      console.log("data: ");
+      console.log(data);
       if (data) {
-        DDJJState = {
+        const newDDJJState = {
           ...DDJJState,
           estado: data.estado || null,
-          secuencia: data.secuencia || null,
+          secuencia: data.secuencia,
         };
-        setDDJJState(DDJJState);
+        console.log("newDDJJState - pre SET: ");
+        console.log(newDDJJState);
+        setDDJJState(newDDJJState);
       }
     }
   };
 
+  console.log("DDJJState: ");
+  console.log(DDJJState);
   let formNro = "Formulario: Pendiente";
   if (DDJJState && DDJJState.secuencia) {
+    console.log("DDJJState.secuencia: ");
+    console.log(DDJJState.secuencia);
     switch (DDJJState.secuencia) {
       case 0:
         formNro = "Formulario: Original";
@@ -554,7 +550,7 @@ export const MisAltaDeclaracionesJuradas = ({
         <div className="formulario_container">
           <h5 className="paso">Paso 3 - Completar el formulario</h5>
 
-          <GrillaPasoTres
+          <DDJJAltaEmpleadosGrilla
             rowsAltaDDJJ={rowsAltaDDJJ}
             setRowsAltaDDJJ={setRowsAltaDDJJ}
             rowsAltaDDJJAux={rowsAltaDDJJAux}
