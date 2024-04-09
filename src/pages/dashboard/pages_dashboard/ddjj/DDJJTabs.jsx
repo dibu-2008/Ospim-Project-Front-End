@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import "./DDJJ.css";
+import "./DDJJTabs.css";
 import { ConsultaMisDDJJ } from "./mis_ddjj/MisDDJJConsulta";
 import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 import * as locales from "@mui/material/locale";

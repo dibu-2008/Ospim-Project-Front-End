@@ -1,7 +1,7 @@
 import oAxios from "@components/axios/axiosInstace";
 import { axiosCrud } from "@components/axios/axiosCrud";
 import { showErrorBackEnd } from "@/components/axios/showErrorBackEnd";
-import { presentar } from "@/pages/dashboard/pages_dashboard/ddjj/DDJJApi";
+import { presentar } from "@/pages/dashboard/pages_dashboard/ddjj/DDJJCommonApi";
 import swal from "@/components/swal/swal";
 
 const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
