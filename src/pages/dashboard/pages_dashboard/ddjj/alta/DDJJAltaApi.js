@@ -91,7 +91,6 @@ export const actualizarDeclaracionJurada = async (empresaId, registro) => {
     if (response == true) {
       swal.showSuccess(HTTP_MSG_MODI);
       return true;
-
     }
     throw response;
   } catch (error) {
@@ -128,7 +127,21 @@ export const validaCuil = async (empresaId, cuiles) => {
       return errores || [];
     }
   }
+};
 
+export const presentarDeclaracionJurada = async (empresaId, ddjjId) => {
+  const URL = `/empresa/${empresaId}/ddjj/${ddjjId}/presentar`;
+  try {
+    const response = await oAxios.patch(URL);
+    if (response.status === 200 || response.status === 204) {
+      swal.showSuccess(HTTP_MSG_MODI);
+      return true;
+    }
+    throw response;
+  } catch (error) {
+    showErrorBackEnd(HTTP_MSG_MODI_ERROR, error);
+  }
+  return false;
 };
 
 export const axiosDDJJ = {
@@ -161,5 +174,9 @@ export const axiosDDJJ = {
   },
   validarCuiles: async function (empresaId, cuiles) {
     return validaCuil(empresaId, cuiles);
+  },
+
+  presentar: async function (empresaId, ddjjId) {
+    return presentarDeclaracionJurada(empresaId, ddjjId);
   },
 };

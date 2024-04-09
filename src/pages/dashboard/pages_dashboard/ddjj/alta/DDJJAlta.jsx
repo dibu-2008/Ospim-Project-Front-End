@@ -399,7 +399,16 @@ export const MisAltaDeclaracionesJuradas = ({
     }
   };
 
-  const presentarDeclaracionJurada = async () => {};
+  //const presentarDeclaracionJurada = async () => {};
+  const presentarDeclaracionJurada = async () => {
+    if (DDJJState.id) {
+      const bRta = await axiosDDJJ.presentar(ID_EMPRESA, DDJJState.id);
+      if (bRta) {
+        DDJJState.estado = "PR";
+        setDDJJState(DDJJState);
+      }
+    }
+  };
 
   let formNro = "Formulario: Pendiente";
   if (DDJJState && DDJJState.secuencia) {
@@ -571,34 +580,18 @@ export const MisAltaDeclaracionesJuradas = ({
             >
               Guardar
             </Button>
-            {DDJJState.estado === "PR" ? (
-              <Button
-                variant="contained"
-                sx={{ padding: "6px 52px", marginLeft: "10px" }}
-                onClick={presentarDeclaracionJurada}
-                disabled={true}
-              >
-                Presentar
-              </Button>
-            ) : DDJJState.estado === "PE" ? (
-              <Button
-                variant="contained"
-                sx={{ padding: "6px 52px", marginLeft: "10px" }}
-                onClick={presentarDeclaracionJurada}
-                disabled={false}
-              >
-                Presentar
-              </Button>
-            ) : (
-              <Button
-                variant="contained"
-                sx={{ padding: "6px 52px", marginLeft: "10px" }}
-                onClick={presentarDeclaracionJurada}
-                disabled={ddjjCreada.id ? false : true}
-              >
-                Presentar
-              </Button>
-            )}
+
+            <Button
+              variant="contained"
+              sx={{ padding: "6px 52px", marginLeft: "10px" }}
+              onClick={presentarDeclaracionJurada}
+              disabled={
+                (DDJJState && DDJJState.estado && DDJJState.estado !== "PE") ||
+                (ddjjCreada && ddjjCreada.id)
+              }
+            >
+              Presentar
+            </Button>
           </div>
         </div>
       )}

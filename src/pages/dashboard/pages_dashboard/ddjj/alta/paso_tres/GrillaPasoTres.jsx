@@ -524,7 +524,7 @@ export const GrillaPasoTres = ({
             })}
           </Select>
         );
-      }
+      },
     },
     {
       field: "fechaIngreso",
@@ -552,8 +552,16 @@ export const GrillaPasoTres = ({
       valueOptions: plantas.map((planta) => {
         return { value: planta.id, label: planta.planta }; // Agrega la propiedad 'key'
       }),
-      valueFormatter: ({ value }) => value || "",
+      valueFormatter: ({ value }) => {
+        if (value && plantas && plantas.length) {
+          return plantas.find((el) => el.id === value).planta;
+        } else {
+          return "";
+        }
+      },
       renderEditCell: (params) => {
+        if (params.value && plantas && plantas.length) {
+        }
         return (
           <Select
             fullWidth
@@ -575,7 +583,7 @@ export const GrillaPasoTres = ({
             })}
           </Select>
         );
-      }
+      },
     },
     {
       field: "remunerativo",
