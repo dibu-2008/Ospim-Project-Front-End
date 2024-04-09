@@ -17,12 +17,11 @@ import Swal from "sweetalert2";
 import "./Publicaciones.css";
 import { ThreeCircles } from "react-loader-spinner";
 import { StripedDataGrid, dataGridStyle } from "@/common/dataGridStyle";
-import formatter from "@/common/formatter";
 
 const paginacion = {
   pageSize: 50,
   page: 0,
-}
+};
 
 export const Publicaciones = () => {
   const [locale, setLocale] = useState("esES");
@@ -112,11 +111,9 @@ export const Publicaciones = () => {
   };
 
   const processRowUpdate = async (newRow, oldRow) => {
-
     let bOk = false;
 
-    if(!newRow.id) {
-
+    if (!newRow.id) {
       try {
         const data = await axiosPublicaciones.crear(newRow);
         if (data && data.id) {
@@ -130,7 +127,7 @@ export const Publicaciones = () => {
           "X - processRowUpdate - ALTA - ERROR: " + JSON.stringify(error)
         );
       }
-    }else {
+    } else {
       try {
         bOk = await axiosPublicaciones.actualizar(newRow);
         if (bOk) {
@@ -197,7 +194,7 @@ export const Publicaciones = () => {
       headerClassName: "header--cell header--cell--left",
       valueFormatter: ({ value }) => {
         return formatter.date(value);
-      }
+      },
     },
     {
       field: "vigenciaHasta",
@@ -210,7 +207,7 @@ export const Publicaciones = () => {
       headerClassName: "header--cell header--cell--left",
       valueFormatter: ({ value }) => {
         return formatter.date(value);
-      }
+      },
     },
     {
       field: "actions",
@@ -222,7 +219,7 @@ export const Publicaciones = () => {
       headerClassName: "header--cell header--cell--left",
       getActions: ({ row }) => {
         const isInEditMode =
-        rowModesModel[rows.indexOf(row)]?.mode === GridRowModes.Edit;
+          rowModesModel[rows.indexOf(row)]?.mode === GridRowModes.Edit;
 
         if (isInEditMode) {
           return [
@@ -323,9 +320,9 @@ export const Publicaciones = () => {
               columns={columns}
               editMode="row"
               getRowId={(row) => rows.indexOf(row)}
-            getRowClassName={(params) =>
-              rows.indexOf(params.row) % 2 === 0 ? "even" : "odd"
-            }
+              getRowClassName={(params) =>
+                rows.indexOf(params.row) % 2 === 0 ? "even" : "odd"
+              }
               rowModesModel={rowModesModel}
               onRowModesModelChange={handleRowModesModelChange}
               onRowEditStop={handleRowEditStop}

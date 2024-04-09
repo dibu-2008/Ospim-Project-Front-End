@@ -38,7 +38,6 @@ export const MisAltaDeclaracionesJuradas = ({
   setRowsAltaDDJJAux,
   peticion,
 }) => {
-
   const [camaras, setCamaras] = useState([]);
   const [todasLasCategorias, setTodasLasCategorias] = useState([]);
   const [categoriasFiltradas, setCategoriasFiltradas] = useState([]);
@@ -92,8 +91,7 @@ export const MisAltaDeclaracionesJuradas = ({
   }, []);
 
   const importarAfiliado = async () => {
-
-    alert("Atenti")
+    alert("Atenti");
     console.log(DDJJState);
 
     const cuiles = afiliadoImportado.map((item) => item.cuil);
@@ -116,7 +114,6 @@ export const MisAltaDeclaracionesJuradas = ({
 
     // Si alguno de los cuiles el valor de cuilesValidados es igual a false
     if (cuilesResponse.some((item) => item.cuilValido === false)) {
-
       const mensajesFormateados2 = filasDoc
         .map((item) => {
           return `<p style="margin-top:20px;">
@@ -408,12 +405,16 @@ export const MisAltaDeclaracionesJuradas = ({
 
   const presentarDeclaracionJurada = async () => { };
 
-  let formNro = "Formulario: Original";
+  let formNro = "Formulario: Pendiente";
   if (DDJJState && DDJJState.secuencia) {
-    if (DDJJState.secuencia == 0) {
-      formNro = "Formulario: Original";
-    } else {
-      formNro = "Formulario: Rectif. " + DDJJState.secuencia;
+    switch (DDJJState.secuencia) {
+      case 0:
+        formNro = "Formulario: Original";
+        console.log("Tengo un perro");
+        break;
+      default:
+        formNro = "Formulario: Rectif. " + DDJJState.secuencia;
+        break;
     }
   }
 
@@ -508,8 +509,7 @@ export const MisAltaDeclaracionesJuradas = ({
                       esES.components.MuiLocalizationProvider.defaultProps
                         .localeText
                     }
-                  >
-                  </LocalizationProvider>
+                  ></LocalizationProvider>
                 </Stack>
               )}
             </div>
