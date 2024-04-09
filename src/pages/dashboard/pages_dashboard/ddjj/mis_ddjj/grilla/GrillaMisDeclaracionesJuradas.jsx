@@ -72,7 +72,7 @@ function castearMisDDJJ(ddjjResponse) {
 export const GrillaMisDeclaracionesJuradas = ({
   setDDJJState,
   setPeriodo,
-  rows_mis_ddjj,
+  rows_mis_ddjj: rowsMisDdjj,
   setRowsMisDdjj,
   idEmpresa,
   setTabState,
@@ -115,18 +115,15 @@ export const GrillaMisDeclaracionesJuradas = ({
   }, []);
 
   const PresentarDeclaracionesJuradas = async (id) => {
-    const updatedRow = { ...rows_mis_ddjj.find((row) => row.id === id) };
+    const updatedRow = { ...rowsMisDdjj.find((row) => row.id === id) };
+    const data = await axiosDDJJ.presentar(idEmpresa, id);
+    if (data) {
+      updatedRow.estado = data.estado || null;
+      updatedRow.secuencia = data.secuencia || null;
 
-    const estado = {
-      estado: updatedRow.estado,
-    };
-
-    const bRta = await axiosDDJJ.presentar(idEmpresa, id);
-    if (bRta) {
       setRowsMisDdjj(
-        rows_mis_ddjj.map((row) => (row.id === id ? updatedRow : row))
+        rowsMisDdjj.map((row) => (row.id === id ? updatedRow : row))
       );
-      updatedRow.estado = "PR";
     }
 
     return updatedRow;
@@ -185,7 +182,7 @@ export const GrillaMisDeclaracionesJuradas = ({
             const bRta = await axiosDDJJ.eliminar(idEmpresa, id);
             console.log("bRta: " + bRta);
             if (bRta)
-              setRowsMisDdjj(rows_mis_ddjj.filter((row) => row.id !== id));
+              setRowsMisDdjj(rowsMisDdjj.filter((row) => row.id !== id));
           }
         });
       } catch (error) {
@@ -202,9 +199,9 @@ export const GrillaMisDeclaracionesJuradas = ({
       [id]: { mode: GridRowModes.View, ignoreModifications: true },
     });
 
-    const editedRow = rows_mis_ddjj.find((row) => row.id === id);
+    const editedRow = rowsMisDdjj.find((row) => row.id === id);
     if (editedRow.isNew) {
-      setRowsMisDdjj(rows_mis_ddjj.filter((row) => row.id !== id));
+      setRowsMisDdjj(rowsMisDdjj.filter((row) => row.id !== id));
     }
   };
 
@@ -216,7 +213,7 @@ export const GrillaMisDeclaracionesJuradas = ({
     }
 
     setRowsMisDdjj(
-      rows_mis_ddjj.map((row) => (row.id === newRow.id ? updatedRow : row))
+      rowsMisDdjj.map((row) => (row.id === newRow.id ? updatedRow : row))
     );
 
     return updatedRow;
@@ -262,7 +259,7 @@ export const GrillaMisDeclaracionesJuradas = ({
     },
   ];
 
-  colAportes = misDDJJColumnaAporteGet(rows_mis_ddjj);
+  colAportes = misDDJJColumnaAporteGet(rowsMisDdjj);
 
   colAportes.forEach((elem) => {
     columns.push({
@@ -391,7 +388,7 @@ export const GrillaMisDeclaracionesJuradas = ({
         }}
       >
         <StripedDataGrid
-          rows={rows_mis_ddjj}
+          rows={rowsMisDdjj}
           columns={columns}
           editMode="row"
           rowModesModel={rowModesModel}

@@ -402,10 +402,13 @@ export const MisAltaDeclaracionesJuradas = ({
   //const presentarDeclaracionJurada = async () => {};
   const presentarDeclaracionJurada = async () => {
     if (DDJJState.id) {
-      const bRta = await axiosDDJJ.presentar(ID_EMPRESA, DDJJState.id);
-      if (bRta) {
-        DDJJState = { ...DDJJState, estado: "PR" };
-        //DDJJState.estado = "PR";
+      const data = await axiosDDJJ.presentar(ID_EMPRESA, DDJJState.id);
+      if (data) {
+        DDJJState = {
+          ...DDJJState,
+          estado: data.estado || null,
+          secuencia: data.secuencia || null,
+        };
         setDDJJState(DDJJState);
       }
     }
