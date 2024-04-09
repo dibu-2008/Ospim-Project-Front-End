@@ -404,7 +404,8 @@ export const MisAltaDeclaracionesJuradas = ({
     if (DDJJState.id) {
       const bRta = await axiosDDJJ.presentar(ID_EMPRESA, DDJJState.id);
       if (bRta) {
-        DDJJState.estado = "PR";
+        DDJJState = { ...DDJJState, estado: "PR" };
+        //DDJJState.estado = "PR";
         setDDJJState(DDJJState);
       }
     }
