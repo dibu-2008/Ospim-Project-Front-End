@@ -392,6 +392,11 @@ export const MisDDJJConsultaGrilla = ({
           slots={{
             toolbar: GridToolbar,
           }}
+          slotProps={{
+            toolbar: {
+              showQuickFilter: true,
+            },
+          }}
           sx={{
             "& .MuiDataGrid-virtualScroller::-webkit-scrollbar": {
               width: "8px",
