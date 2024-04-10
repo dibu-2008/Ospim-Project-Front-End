@@ -15,6 +15,7 @@ import {
   GridToolbarContainer,
   GridActionsCellItem,
   GridRowEditStopReasons,
+  GridToolbar,
 } from "@mui/x-data-grid";
 
 import { axiosRoles } from "./RolesApi";
@@ -24,7 +25,14 @@ import Swal from "sweetalert2";
 import "./Roles.css";
 
 const crearNuevoRegistro = (props) => {
-  const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
+  const { 
+    setRows, 
+    rows, 
+    setRowModesModel, 
+    volverPrimerPagina,
+    showQuickFilter,
+    themeWithLocale
+  } = props;
 
   const altaHandleClick = () => {
     const maxId = rows ? Math.max(...rows.map((row) => row.id), 0) : 1;
@@ -41,10 +49,13 @@ const crearNuevoRegistro = (props) => {
   };
 
   return (
-    <GridToolbarContainer>
+    <GridToolbarContainer theme={themeWithLocale} style={{ display: 'flex', justifyContent: 'space-between' }}>
       <Button color="primary" startIcon={<AddIcon />} onClick={altaHandleClick}>
         Nuevo Registro
       </Button>
+      <GridToolbar
+        showQuickFilter={showQuickFilter}
+      />
     </GridToolbarContainer>
   );
 };
@@ -270,7 +281,14 @@ export const Roles = () => {
             }
             slots={{ toolbar: crearNuevoRegistro }}
             slotProps={{
-              toolbar: { setRows, rows, setRowModesModel, volverPrimerPagina },
+              toolbar: { 
+                setRows, 
+                rows, 
+                setRowModesModel, 
+                volverPrimerPagina,
+                showQuickFilter: true,
+                themeWithLocale
+              },
             }}
             sx={{
               "& .MuiDataGrid-virtualScroller::-webkit-scrollbar": {

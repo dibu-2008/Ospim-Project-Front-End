@@ -65,7 +65,7 @@ function castearMisDDJJ(ddjjResponse) {
   return ddjjResponse;
 }
 
-export const GrillaMisDeclaracionesJuradas = ({
+export const MisDDJJConsultaGrilla = ({
   setDDJJState,
   setPeriodo,
   rows_mis_ddjj: rowsMisDdjj,
@@ -109,9 +109,8 @@ export const GrillaMisDeclaracionesJuradas = ({
 
   const PresentarDeclaracionesJuradas = async (id) => {
     const updatedRow = { ...rowsMisDdjj.find((row) => row.id === id) };
-    const nuevoValor = { estado: "PR" };
-    const data = await axiosDDJJ.presentar(ID_EMPRESA, id, nuevoValor);
-    
+    const data = await axiosDDJJ.presentar(ID_EMPRESA, id);
+   
     console.log("data: ", data);
 
     if (data) {
@@ -227,7 +226,7 @@ export const GrillaMisDeclaracionesJuradas = ({
       field: "periodo",
       headerName: "Periodo",
       flex: 1,
-      editable: true,
+      editable: false,
       type: "date",
       headerAlign: "center",
       align: "center",
@@ -240,7 +239,7 @@ export const GrillaMisDeclaracionesJuradas = ({
       field: "secuencia",
       headerName: "Numero",
       flex: 1,
-      editable: true,
+      editable: false,
       headerAlign: "center",
       align: "center",
       headerClassName: "header--cell",
@@ -264,7 +263,7 @@ export const GrillaMisDeclaracionesJuradas = ({
       field: "total" + elem,
       headerName: "Total " + elem,
       flex: 1,
-      editable: true,
+      editable: false,
       headerAlign: "center",
       align: "center",
       headerClassName: "header--cell",

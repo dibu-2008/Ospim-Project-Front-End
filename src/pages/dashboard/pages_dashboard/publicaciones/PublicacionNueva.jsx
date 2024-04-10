@@ -8,7 +8,15 @@ import AddIcon from "@mui/icons-material/Add";
 import Button from "@mui/material/Button";
 
 export const EditarNuevaFila = (props) => {
-  const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
+  const { 
+    setRows, 
+    rows, 
+    setRowModesModel, 
+    volverPrimerPagina,
+    showQuickFilter,
+    showColumnMenu,
+    themeWithLocale
+  } = props;
 
   const handleClick = () => {
 
@@ -30,11 +38,13 @@ export const EditarNuevaFila = (props) => {
   };
 
   return (
-    <GridToolbarContainer>
-      <GridToolbar showQuickFilter={props.showQuickFilter} />
+    <GridToolbarContainer theme={themeWithLocale} style={{ display: 'flex', justifyContent: 'space-between' }}>
       <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
         Nuevo Registro
       </Button>
+      <GridToolbar
+        showQuickFilter={showQuickFilter}
+      />
     </GridToolbarContainer>
   );
 };

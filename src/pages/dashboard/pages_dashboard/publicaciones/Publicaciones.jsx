@@ -17,6 +17,7 @@ import Swal from "sweetalert2";
 import "./Publicaciones.css";
 import { ThreeCircles } from "react-loader-spinner";
 import { StripedDataGrid, dataGridStyle } from "@/common/dataGridStyle";
+import formatter from "@/common/formatter";
 
 const paginacion = {
   pageSize: 50,
@@ -339,6 +340,9 @@ export const Publicaciones = () => {
                   rows,
                   setRowModesModel,
                   volverPrimerPagina,
+                  showQuickFilter: true,
+                  showColumnMenu: true,
+                  themeWithLocale
                 },
               }}
               sx={{

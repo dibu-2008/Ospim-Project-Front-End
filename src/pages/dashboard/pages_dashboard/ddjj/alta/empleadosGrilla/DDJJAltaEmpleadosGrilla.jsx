@@ -31,6 +31,9 @@ function EditToolbar(props) {
     setRowsAltaDDJJAux,
     rowsAltaDDJJAux,
     setRowModesModel,
+    showQuickFilter,
+    showColumnMenu,
+    themeWithLocale,
   } = props;
 
   const handleClick = () => {
@@ -86,19 +89,18 @@ function EditToolbar(props) {
   };
 
   return (
-    <GridToolbarContainer theme={props.themeWithLocale}>
+    <GridToolbarContainer theme={themeWithLocale} style={{ display: 'flex', justifyContent: 'space-between' }}>
       <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
         Nuevo Registro
       </Button>
       <GridToolbar
-        showQuickFilter={props.showQuickFilter}
-        // ocultar el filtro de columnas
+        showQuickFilter={showQuickFilter}
       />
     </GridToolbarContainer>
   );
 }
 
-export const GrillaPasoTres = ({
+export const DDJJAltaEmpleadosGrilla = ({
   rowsAltaDDJJ,
   setRowsAltaDDJJ,
   rowsAltaDDJJAux,
@@ -112,13 +114,13 @@ export const GrillaPasoTres = ({
   plantas,
   validacionResponse,
   setSomeRowInEditMode,
-  rowModesModel, 
+  rowModesModel,
   setRowModesModel
 }) => {
   const [locale, setLocale] = useState("esES");
   // const [rowModesModel, setRowModesModel] = useState({});
   const [inteDataBase, setInteDataBase] = useState(null);
-  
+
 
   const theme = useTheme();
   const themeWithLocale = useMemo(
@@ -195,7 +197,7 @@ export const GrillaPasoTres = ({
   const handleRowEditStop = (params) => {
 
     console.log(params)
-    
+
     if (
       params.reason === GridRowEditStopReasons.rowFocusOut
     ) {
@@ -203,8 +205,8 @@ export const GrillaPasoTres = ({
       gridApiRef.current?.stopRowEditMode({
         id: params.id,
         ignoreModifications: false,
-      }); 
-      
+      });
+
     }
   };
 
@@ -595,9 +597,10 @@ export const GrillaPasoTres = ({
       headerAlign: "center",
       align: "center",
       headerClassName: "header--cell",
-      valueFormatter: (params) => {
-        if (params.value === "") return "";
-        return formatter.currency.format(params.value || 0);
+      valueFormatter: ({ value }) => {
+        if (value === "") return "";
+        if (value === null) return "";
+        return formatter.currency.format(value || 0);
       },
     },
     {
@@ -617,9 +620,10 @@ export const GrillaPasoTres = ({
       headerAlign: "center",
       align: "center",
       headerClassName: "header--cell",
-      valueFormatter: (params) => {
-        if (params.value === "") return "";
-        return formatter.currency.format(params.value || 0);
+      valueFormatter: ({ value }) => {
+        if (value === "") return "";
+        if (value === null) return "";
+        return formatter.currency.format(value || 0);
       },
     },
     {

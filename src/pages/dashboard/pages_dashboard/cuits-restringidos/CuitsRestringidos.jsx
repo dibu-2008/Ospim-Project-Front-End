@@ -2,10 +2,10 @@ import * as locales from "@mui/material/locale";
 import { useState, useEffect, useMemo } from "react";
 import {
   GridRowModes,
-  DataGrid,
   GridToolbarContainer,
   GridActionsCellItem,
   GridRowEditStopReasons,
+  GridToolbar,
 } from "@mui/x-data-grid";
 import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -21,7 +21,13 @@ import { StripedDataGrid, dataGridStyle } from "@/common/dataGridStyle";
 import "./CuitsRestringidos.css";
 
 function EditToolbar(props) {
-  const { setRows, setRowModesModel, volverPrimerPagina } = props;
+  const { 
+    setRows, 
+    setRowModesModel, 
+    volverPrimerPagina,
+    showQuickFilter,
+    themeWithLocale
+  } = props;
 
   const altaHandleClick = () => {
 
@@ -37,10 +43,13 @@ function EditToolbar(props) {
   };
 
   return (
-    <GridToolbarContainer>
+    <GridToolbarContainer theme={themeWithLocale} style={{ display: 'flex', justifyContent: 'space-between' }}>
       <Button color="primary" startIcon={<AddIcon />} onClick={altaHandleClick}>
         Nuevo Registro
       </Button>
+      <GridToolbar
+        showQuickFilter={showQuickFilter}
+      />
     </GridToolbarContainer>
   );
 }
@@ -294,7 +303,13 @@ export const CuitsRestringidos = () => {
               toolbar: EditToolbar,
             }}
             slotProps={{
-              toolbar: { setRows, setRowModesModel, volverPrimerPagina }
+              toolbar: { 
+                setRows, 
+                setRowModesModel, 
+                volverPrimerPagina,
+                showQuickFilter: true,
+                themeWithLocale
+              }
             }}
             sx={{
               "& .MuiDataGrid-virtualScroller::-webkit-scrollbar": {

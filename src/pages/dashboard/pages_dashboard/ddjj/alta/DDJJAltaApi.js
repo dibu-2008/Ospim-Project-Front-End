@@ -163,7 +163,7 @@ export const axiosDDJJ = {
   validarCuiles: async function (empresaId, cuiles) {
     return validaCuil(empresaId, cuiles);
   },
-  presentar: async function (empresaId, ddjjId, nuevoValor) {
-    return presentar(empresaId, ddjjId, nuevoValor);
+  presentar: async function (empresaId, ddjjId) {
+    return presentar(empresaId, ddjjId);
   },
 };

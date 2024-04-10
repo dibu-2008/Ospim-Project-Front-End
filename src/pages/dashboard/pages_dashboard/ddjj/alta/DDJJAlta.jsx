@@ -1,32 +1,31 @@
 import { useEffect, useState } from "react";
-import { Stack, Tooltip, Typography } from "@mui/material";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { esES } from "@mui/x-date-pickers/locales";
 import {
-  Box,
-  TextField,
   Button,
   Radio,
   RadioGroup,
   FormControlLabel,
+  Stack, 
+  Tooltip, 
+  Typography
 } from "@mui/material";
-import dayjs from "dayjs";
-import esLocale from "dayjs/locale/es";
+import 'dayjs/locale/es'; 
 import "./DDJJAlta.css";
-import { GrillaPasoTres } from "./empleadosGrilla/DDJJAltaEmpleadosGrilla";
+import { DDJJAltaEmpleadosGrilla } from "./empleadosGrilla/DDJJAltaEmpleadosGrilla";
 import { axiosDDJJ } from "./DDJJAltaApi";
-import formatter from "@/common/formatter";
-
 import localStorageService from "@/components/localStorage/localStorageService";
 import Swal from "sweetalert2";
 import XLSX from "xlsx";
-import { TextFields } from "@mui/icons-material";
 import { GridRowModes } from "@mui/x-data-grid";
-import axios from "axios";
+
+const textoIdioma = 
+  esES.components.MuiLocalizationProvider.defaultProps['localeText'];
+
+const adaptadorIdioma = "es";
 
 export const MisAltaDeclaracionesJuradas = ({
   DDJJState,
@@ -49,13 +48,13 @@ export const MisAltaDeclaracionesJuradas = ({
   const [validacionResponse, setValidacionResponse] = useState([]);
   const [afiliadoImportado, setAfiliadoImportado] = useState([]);
   const [filasDoc, setFilasDoc] = useState([]);
-  const [ocultarGrillaPaso3, setOcultarGrillaPaso3] = useState(false);
+  const [ocultarEmpleadosGrilla, setOcultarEmpleadosGrilla] = useState(false);
   const [btnSubirHabilitado, setBtnSubirHabilitado] = useState(false);
   const [ddjjCreada, setDDJJCreada] = useState({});
-  const ID_EMPRESA = localStorageService.getEmpresaId();
   const [someRowInEditMode, setSomeRowInEditMode] = useState(false);
   const [otroPeriodo, setOtroPeriodo] = useState(null);
   const [rowModesModel, setRowModesModel] = useState({});
+  const ID_EMPRESA = localStorageService.getEmpresaId();
 
   const handleChangePeriodo = (date) => setPeriodo(date);
 
@@ -95,8 +94,6 @@ export const MisAltaDeclaracionesJuradas = ({
   }, []);
 
   const importarAfiliado = async () => {
-    alert("Atenti");
-    console.log(DDJJState);
 
     const cuiles = afiliadoImportado.map((item) => item.cuil);
     const cuilesString = cuiles.map((item) => item.toString());
@@ -152,7 +149,7 @@ export const MisAltaDeclaracionesJuradas = ({
       setRowsAltaDDJJ(afiliadoImportadoConInte);
     }
     setRowsAltaDDJJAux(afiliadoImportadoConInte);
-    setOcultarGrillaPaso3(true);
+    setOcultarEmpleadosGrilla(true);
   };
 
   const formatearFecha = (fecha) => {
@@ -411,16 +408,11 @@ export const MisAltaDeclaracionesJuradas = ({
 
     if (DDJJState.id) {
 
-      const nuevoValor = { 
-        estado: "PR",
-        secuencia: 0
-      }
-
       // Esto deberia de ser un post para poder cambiar ambos datos 
   
-      const data = await axiosDDJJ.presentar(ID_EMPRESA, DDJJState.id, nuevoValor);
-      console.log("data: ");
-      console.log(data); 
+      const data = await axiosDDJJ.presentar(ID_EMPRESA, DDJJState.id);
+      DDJJState.estado = data.estado;
+      DDJJState.secuencia = data.secuencia;
       if (data) {
         
         const newDDJJState = {
@@ -435,24 +427,6 @@ export const MisAltaDeclaracionesJuradas = ({
     }
   };
 
-  /* if (DDJJState && DDJJState.secuencia) {
-
-    console.log("DDJJState.secuencia: ");
-    console.log(DDJJState.secuencia);
-
-    switch (DDJJState.secuencia) {
-      case 0:
-        setFormNro("Formulario: Original");
-        console.log("Tengo un perro");
-        break;
-      default:
-        setFormNro("Formulario: Rectif. " + DDJJState.secuencia);
-        break;
-    }
-  } */
-
-  // Hacer un console.log de DDJJState para ver si tiene el campo secuencia pero cuando haya cambios en rowModesModel
-
   return (
     <div className="mis_alta_declaraciones_juradas_container">
       <div className="periodo_container">
@@ -463,10 +437,8 @@ export const MisAltaDeclaracionesJuradas = ({
           </Typography>
           <LocalizationProvider
             dateAdapter={AdapterDayjs}
-            adapterLocale={"es"}
-            localeText={
-              esES.components.MuiLocalizationProvider.defaultProps.localeText
-            }
+            adapterLocale={adaptadorIdioma}
+            localeText={textoIdioma}
           >
             <DemoContainer components={["DatePicker"]}>
               <DesktopDatePicker
@@ -474,7 +446,7 @@ export const MisAltaDeclaracionesJuradas = ({
                 views={["month", "year"]}
                 closeOnSelect={true}
                 onChange={handleChangePeriodo}
-                value={periodo} // dayJs(periodo) fallaba
+                value={periodo} 
               />
             </DemoContainer>
           </LocalizationProvider>
@@ -559,11 +531,8 @@ export const MisAltaDeclaracionesJuradas = ({
                 >
                   <LocalizationProvider
                     dateAdapter={AdapterDayjs}
-                    adapterLocale={"es"}
-                    localeText={
-                      esES.components.MuiLocalizationProvider.defaultProps
-                        .localeText
-                    }
+                    adapterLocale={adaptadorIdioma}
+                    localeText={textoIdioma}
                   >
                     <DemoContainer components={["DatePicker"]}>
                       <DesktopDatePicker
@@ -585,7 +554,7 @@ export const MisAltaDeclaracionesJuradas = ({
               marginLeft: "114px",
               padding: "6px 45px",
             }}
-            onClick={() => setOcultarGrillaPaso3(!ocultarGrillaPaso3)}
+            onClick={() => setOcultarEmpleadosGrilla(!ocultarEmpleadosGrilla)}
           >
             Buscar
           </Button>
@@ -599,18 +568,18 @@ export const MisAltaDeclaracionesJuradas = ({
               padding: "6px 23px",
               marginLeft: "468px",
             }}
-            onClick={() => setOcultarGrillaPaso3(!ocultarGrillaPaso3)}
+            onClick={() => setOcultarEmpleadosGrilla(!ocultarEmpleadosGrilla)}
           >
             Seleccionar
           </Button>
         </div>
       </div>
 
-      {(ocultarGrillaPaso3 || (rowsAltaDDJJ && rowsAltaDDJJ.length > 0)) && (
+      {(ocultarEmpleadosGrilla || (rowsAltaDDJJ && rowsAltaDDJJ.length > 0)) && (
         <div className="formulario_container">
           <h5 className="paso">Paso 3 - Completar el formulario</h5>
 
-          <GrillaPasoTres
+          <DDJJAltaEmpleadosGrilla
             rowsAltaDDJJ={rowsAltaDDJJ}
             setRowsAltaDDJJ={setRowsAltaDDJJ}
             rowsAltaDDJJAux={rowsAltaDDJJAux}

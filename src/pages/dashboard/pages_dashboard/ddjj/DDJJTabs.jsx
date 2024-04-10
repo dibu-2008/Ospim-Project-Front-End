@@ -4,11 +4,10 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import "./DDJJTabs.css";
-import { MisDeclaracionesJuradas } from "./mis_ddjj/MisDDJJConsulta";
+import { MisDDJJConsulta } from "./mis_ddjj/MisDDJJConsulta";
 import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 import * as locales from "@mui/material/locale";
 import { MisAltaDeclaracionesJuradas } from "./alta/DDJJAlta";
-import dayjs from "dayjs";
 import { Boletas } from "../boletas/Boletas";
 
 function CustomTabPanel(props) {
@@ -107,7 +106,7 @@ export const DeclaracionesJuradas = () => {
             />
           </CustomTabPanel>
           <CustomTabPanel value={tabState} index={1}>
-            <MisDeclaracionesJuradas
+            <MisDDJJConsulta
               setDDJJState={setDDJJState}
               setPeriodo={setPeriodo}
               rows_mis_ddjj={rows_mis_ddjj}

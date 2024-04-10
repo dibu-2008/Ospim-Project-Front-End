@@ -79,14 +79,13 @@ export const imprimirDeclaracionJurada = async (empresaId, ddjjId) => {
   }
 };
 
-export const presentarDeclaracionJurada = async (empresaId, ddjjId, nuevoValor) => {
+export const presentarDeclaracionJurada = async (empresaId, ddjjId) => {
   const URL = `/empresa/${empresaId}/ddjj/${ddjjId}/presentar`;
   try {
-    const response = await oAxios.patch(URL, nuevoValor);
-    console.log('response', response);
+    const response = await oAxios.patch(URL);
     if (response.status === 200 || response.status === 204) {
       swal.showSuccess(HTTP_MSG_MODI);
-      return true;
+      return response.data || {};
     }
     throw response;
   } catch (error) {
@@ -127,8 +126,8 @@ export const axiosDDJJ = {
     return imprimirDeclaracionJurada(empresaId, ddjjId);
   },
 
-  presentar: async function (empresaId, ddjjId, nuevoValor) {
-    return presentarDeclaracionJurada(empresaId, ddjjId, nuevoValor);
+  presentar: async function (empresaId, ddjjId) {
+    return presentarDeclaracionJurada(empresaId, ddjjId);
   },
 
   eliminar: async function (empresaId, ddjjId) {
