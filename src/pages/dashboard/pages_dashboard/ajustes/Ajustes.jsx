@@ -4,7 +4,7 @@ import {
   Box,
   Button,
 } from "@mui/material";
-import {  TextField} from '@mui/material';
+
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
@@ -20,12 +20,8 @@ import { axiosAjustes } from "./AjustesApi";
 import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 import "./ajustes.css";
 import formatter from "@/common/formatter";
-import swal from "@/components/swal/swal";
 import { StripedDataGrid, dataGridStyle } from "@/common/dataGridStyle";
-import { DatePicker } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { esES } from '@mui/x-date-pickers/locales';
+import { InputPeriodo } from "@/components/InputPeriodo";
 
 
 
@@ -66,7 +62,33 @@ const crearNuevoRegistro = (props) => {
     </GridToolbarContainer>
   );
 };
+/*
+const InputPeriodo = (props) =>{
+  const { id, value, field, hasFocus } = props;
+  const apiRef = useGridApiContext();
+  const ref = useRef();
+  const handleValue = event  => {
+    const newValue = event.target.value;
+    apiRef.current.setEditCellValue({id, field, value: newValue})
+  }
 
+  useLayoutEffect(() => {
+    if (hasFocus) {
+      ref.current.focus();
+    }
+  }, [hasFocus]);
+
+  return (<input
+            ref={ref}
+            type="month"
+            className="MuiInputBase-input css-yz9k0d-MuiInputBase-input"
+            value={formatter.periodo(value).split('/')[1] + '-' + formatter.periodo(value).split('/')[0]}
+            defaultValue={formatter.periodo(value).split('/')[1] + '-' + formatter.periodo(value).split('/')[0]}
+            onChange={handleValue}
+          />)
+}
+
+*/
 export const Ajustes = () => {
   const [locale, setLocale] = useState("esES");
   const [rows, setRows] = useState([]);
@@ -142,6 +164,7 @@ export const Ajustes = () => {
 
     if (!newRow.id) {
       try {
+        console.log(newRow)
         const data = await axiosAjustes.crear(newRow);
         if (data && data.id) {
           newRow.id = data.id;
@@ -183,22 +206,7 @@ export const Ajustes = () => {
     setRowModesModel(newRowModesModel);
   };
 
-
-
   const columnas = [
-   //{
-   //  field: "fecha",
-   //  headerName: "Fecha",
-   //  flex: 1,
-   //  type: "date",
-   //  editable: true,
-   //  headerAlign: "center",
-   //  align: "center",
-   //  headerClassName: "header--cell",
-   //  valueFormatter: ({ value }) => {
-   //    return formatter.date(value);
-   //  },
-   //},
     { field: 'cuit',
         headerName: 'CUIT',
         flex: 1,
@@ -212,10 +220,13 @@ export const Ajustes = () => {
         field: 'periodo_original',
         headerName: 'PERIODO ORIGINAL',
         flex: 1,
-        type:'month',
         editable: true,
         headerAlign: "center",
         align:"center",
+        valueFormatter: (params) => {
+          return formatter.periodo(params.value);
+        },
+        renderEditCell: (params) => (<InputPeriodo {...params}/>),
         headerClassName: "header--cell"
       },
       {
@@ -232,8 +243,10 @@ export const Ajustes = () => {
         field: 'aporte',
         headerName: 'TIPO APORTE',
         type:'singleSelect',
+        editable:true,
         flex:1,
-        valueOptions: { 1: 'ART.46', 2: 'AMTIMA', 3: 'UOMA' },
+        defaultValue: 'UOMA',
+        valueOptions: [ 'ART.46', 'AMTIMA',  'UOMA' ],
         headerAlign: "center",
         align:"center",
         headerClassName: "header--cell"
@@ -246,21 +259,26 @@ export const Ajustes = () => {
         editable: true,
         headerAlign: 'center',
         align: 'center',
-        renderEditCell: (params) => (
-            <TextField
-              type="month"
-              autoFocus
-              value={formatter.periodo(params.value).split('/')[1] + '-' + formatter.periodo(params.value).split('/')[0]}
-              onBlur={params.stopEditing}
-            />
-        ),
-        renderCell: (params) => formatter.periodo(params.value),
+        type:'date',
+        valueFormatter: (params) => {
+          return formatter.periodo(params.value);
+        },
+        renderEditCell: (params) => (<InputPeriodo {...params}/>),
+        //renderEditCell: (params) => (
+        //  <input
+        //    type="month"
+        //    className="MuiInputBase-input css-yz9k0d-MuiInputBase-input"
+        //    defaultValue={formatter.periodo(params.value).split('/')[1] + '-' + formatter.periodo(params.value).split('/')[0]}
+        //  />
+        //),
+        //onchange: (e)=> console.log(e),
         headerClassName: 'header--cell',
       },
       { field: 'nro_boleta',
         headerName: 'NRO BOLETA',
         width: 150,
-        editable: false,
+        editable: true,
+        type:'number',
         headerAlign: "center",
         align:"center",
         headerClassName: "header--cell" },

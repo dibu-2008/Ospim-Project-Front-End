@@ -37,6 +37,8 @@ export const getAjustes = async () =>{
 }
 
 export const crearAjuste = async ( body ) => {
+
+    console.log(body)
     const URL = `${BACKEND_URL}/sigeco/ajustes`;
     try {
         const response = await axiosCrud.crear(URL, body)
