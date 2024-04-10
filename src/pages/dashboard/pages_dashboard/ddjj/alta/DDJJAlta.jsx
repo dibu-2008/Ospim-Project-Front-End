@@ -17,7 +17,7 @@ import {
 import dayjs from "dayjs";
 import esLocale from "dayjs/locale/es";
 import "./DDJJAlta.css";
-import { GrillaPasoTres } from "./paso_tres/GrillaPasoTres";
+import { GrillaPasoTres } from "./empleadosGrilla/DDJJAltaEmpleadosGrilla";
 import { axiosDDJJ } from "./DDJJAltaApi";
 import formatter from "@/common/formatter";
 
@@ -26,6 +26,7 @@ import Swal from "sweetalert2";
 import XLSX from "xlsx";
 import { TextFields } from "@mui/icons-material";
 import { GridRowModes } from "@mui/x-data-grid";
+import axios from "axios";
 
 export const MisAltaDeclaracionesJuradas = ({
   DDJJState,
@@ -53,9 +54,12 @@ export const MisAltaDeclaracionesJuradas = ({
   const [ddjjCreada, setDDJJCreada] = useState({});
   const ID_EMPRESA = localStorageService.getEmpresaId();
   const [someRowInEditMode, setSomeRowInEditMode] = useState(false);
+  const [otroPeriodo, setOtroPeriodo] = useState(null);
   const [rowModesModel, setRowModesModel] = useState({});
 
   const handleChangePeriodo = (date) => setPeriodo(date);
+
+  const handleChangeOtroPeriodo = (date) => setOtroPeriodo(date);
 
   useEffect(() => {
     // Comprueba si hay alguna fila en modo edición
@@ -403,20 +407,51 @@ export const MisAltaDeclaracionesJuradas = ({
     }
   };
 
-  const presentarDeclaracionJurada = async () => { };
+  const presentarDeclaracionJurada = async () => {
 
-  let formNro = "Formulario: Pendiente";
-  if (DDJJState && DDJJState.secuencia) {
+    if (DDJJState.id) {
+
+      const nuevoValor = { 
+        estado: "PR",
+        secuencia: 0
+      }
+
+      // Esto deberia de ser un post para poder cambiar ambos datos 
+  
+      const data = await axiosDDJJ.presentar(ID_EMPRESA, DDJJState.id, nuevoValor);
+      console.log("data: ");
+      console.log(data); 
+      if (data) {
+        
+        const newDDJJState = {
+          ...DDJJState,
+          estado: data.estado || null,
+          secuencia: data.secuencia,
+        };
+        console.log("newDDJJState - pre SET: ");
+        console.log(newDDJJState);
+        setDDJJState(newDDJJState);
+      }
+    }
+  };
+
+  /* if (DDJJState && DDJJState.secuencia) {
+
+    console.log("DDJJState.secuencia: ");
+    console.log(DDJJState.secuencia);
+
     switch (DDJJState.secuencia) {
       case 0:
-        formNro = "Formulario: Original";
+        setFormNro("Formulario: Original");
         console.log("Tengo un perro");
         break;
       default:
-        formNro = "Formulario: Rectif. " + DDJJState.secuencia;
+        setFormNro("Formulario: Rectif. " + DDJJState.secuencia);
         break;
     }
-  }
+  } */
+
+  // Hacer un console.log de DDJJState para ver si tiene el campo secuencia pero cuando haya cambios en rowModesModel
 
   return (
     <div className="mis_alta_declaraciones_juradas_container">
@@ -443,7 +478,26 @@ export const MisAltaDeclaracionesJuradas = ({
               />
             </DemoContainer>
           </LocalizationProvider>
-          <Typography variant="h6">{formNro}</Typography>
+            {
+              DDJJState.secuencia === 0 ? (
+                <Typography variant="h6">
+                  Formulario: Original
+                </Typography>
+              ) : (
+
+                DDJJState.secuencia ? (
+                  <Typography variant="h6">
+                    Formulario: Rectif. {DDJJState.secuencia}
+                  </Typography>
+
+
+                ) : (
+                  <Typography variant="h6">
+                    Formulario: Pendiente
+                  </Typography>
+                )
+              )
+            }
         </Stack>
       </div>
 
@@ -459,6 +513,7 @@ export const MisAltaDeclaracionesJuradas = ({
               aria-label="Archivo"
               onChange={handleFileChange}
               accept=".csv, .xlsx"
+              title=""
             />
             <div className="file-select-label" id="src-file1-label">
               {selectedFileName || "Nombre del archivo"}
@@ -509,7 +564,17 @@ export const MisAltaDeclaracionesJuradas = ({
                       esES.components.MuiLocalizationProvider.defaultProps
                         .localeText
                     }
-                  ></LocalizationProvider>
+                  >
+                    <DemoContainer components={["DatePicker"]}>
+                      <DesktopDatePicker
+                        label={"Otro período"}
+                        views={["month", "year"]}
+                        closeOnSelect={true}
+                        onChange={handleChangeOtroPeriodo}
+                        value={otroPeriodo}
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider>
                 </Stack>
               )}
             </div>

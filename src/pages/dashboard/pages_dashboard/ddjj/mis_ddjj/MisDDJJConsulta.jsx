@@ -4,12 +4,10 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
-import "./ConsultaMisDDJJ.css";
-import { GrillaMisDeclaracionesJuradas } from "./grilla/GrillaMisDeclaracionesJuradas";
-import { axiosDDJJ } from "./grilla/GrillaMisDeclaracionesJuradasApi";
+import "./MisDDJJConsulta.css";
+import { GrillaMisDeclaracionesJuradas } from "./grilla/MisDDJJConsultaGrilla";
+import { axiosDDJJ } from "./grilla/MisDDJJConsultaGrillaApi";
 import { esES } from "@mui/x-date-pickers/locales";
-import dayjs from "dayjs";
-import esLocale from "dayjs/locale/es";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import { CSVLink, CSVDownload } from "react-csv";
 import localStorageService from "@/components/localStorage/localStorageService";
@@ -19,8 +17,6 @@ export const MisDeclaracionesJuradas = ({
   rows_mis_ddjj,
   setRowsMisDdjj,
   setTabState,
-  /* 
-  handleAcceptPeriodoDDJJ, */
   rowsAltaDDJJ,
   setRowsAltaDDJJ,
   setPeticion,
@@ -37,12 +33,7 @@ export const MisDeclaracionesJuradas = ({
     ["George Abuladze", 33, "politician"],
     ["Nick Tsereteli", 19, "public worker"],
   ]);
-  const handleSubmit = (e) => {
-    setData([...data, [fullName, age, occupation]]);
-    setFullName("");
-    setAge(0);
-    setOccupation("");
-  };
+ 
   const ID_EMPRESA = localStorageService.getEmpresaId();
 
   const handleChangeDesde = (date) => setDesde(date);
@@ -159,14 +150,9 @@ export const MisDeclaracionesJuradas = ({
           setPeriodo={setPeriodo}
           rows_mis_ddjj={rows_mis_ddjj}
           setRowsMisDdjj={setRowsMisDdjj}
-          idEmpresa={ID_EMPRESA}
           setTabState={setTabState}
-          /* 
-          handleAcceptPeriodoDDJJ={handleAcceptPeriodoDDJJ} */
-          rowsAltaDDJJ={rowsAltaDDJJ}
           setRowsAltaDDJJ={setRowsAltaDDJJ}
           setPeticion={setPeticion}
-          setIdDDJJ={setIdDDJJ}
         />
       </Stack>
     </div>

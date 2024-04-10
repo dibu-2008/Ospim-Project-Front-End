@@ -21,9 +21,8 @@ import * as locales from "@mui/material/locale";
 import formatter from "@/common/formatter";
 import { Box, Button, TextField, Select, MenuItem } from "@mui/material";
 import { axiosDDJJ } from "../DDJJAltaApi";
-import "./GrillaPasoTres.css";
+import "./DDJJAltaEmpleadosGrilla.css";
 import { dataGridStyle } from "@/common/dataGridStyle";
-import dayjs from "dayjs";
 
 function EditToolbar(props) {
   const {
