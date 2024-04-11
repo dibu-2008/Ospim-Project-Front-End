@@ -42,10 +42,8 @@ const crearNuevoRegistro = (props) => {
   const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
 
   const altaHandleClick = () => {
-    const newReg = { fecha: "" };
-
+    const newReg = {};
     volverPrimerPagina();
-
     setRows((oldRows) => [newReg, ...oldRows]);
     setRowModesModel((oldModel) => ({
       [0]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
@@ -219,7 +217,6 @@ export const Ajustes = () => {
         type:'singleSelect',
         editable:true,
         flex:1,
-        defaultValue: 'UOMA',
         valueOptions: [ 'ART.46', 'AMTIMA',  'UOMA' ],
         headerAlign: "center",
         align:"center",
@@ -238,14 +235,6 @@ export const Ajustes = () => {
           return formatter.periodo(params.value);
         },
         renderEditCell: (params) => (<InputPeriodo {...params}/>),
-        //renderEditCell: (params) => (
-        //  <input
-        //    type="month"
-        //    className="MuiInputBase-input css-yz9k0d-MuiInputBase-input"
-        //    defaultValue={formatter.periodo(params.value).split('/')[1] + '-' + formatter.periodo(params.value).split('/')[0]}
-        //  />
-        //),
-        //onchange: (e)=> console.log(e),
         headerClassName: 'header--cell',
       },
       { field: 'nro_boleta',

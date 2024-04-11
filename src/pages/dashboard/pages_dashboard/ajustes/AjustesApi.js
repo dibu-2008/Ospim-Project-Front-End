@@ -1,6 +1,6 @@
 import { axiosCrud } from '@components/axios/axiosCrud'
 import { showErrorBackEnd } from "@/components/axios/showErrorBackEnd";
-
+import formatter from '@/common/formatter';
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
 const HTTP_MSG_MODI = import.meta.env.VITE_HTTP_MSG_MODI;
@@ -36,9 +36,20 @@ export const getAjustes = async () =>{
     }
 }
 
+const periodoToISOString = (value) => {
+    const periodo =  new Date(`${value}-01`)
+    periodo.setHours(periodo.getHours() + 3)
+    periodo.toISOString()
+    return periodo
+}
+
 export const crearAjuste = async ( body ) => {
 
-    console.log(body)
+    //const periodo_original =  new Date(`${body.periodo_original}-01`)
+    //periodo_original.setHours(periodo_original.getHours + 3)
+    body.periodo_original = formatter.periodoToISOString(body.periodo_original)
+    body.vigencia = formatter.periodoToISOString(body.vigencia)
+    //body.vigencia = new Date(`${body.vigencia}-01`).toISOString()
     const URL = `${BACKEND_URL}/sigeco/ajustes`;
     try {
         const response = await axiosCrud.crear(URL, body)

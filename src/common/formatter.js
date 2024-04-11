@@ -61,12 +61,20 @@ const formatFechaGrilla = (value) => {
   }
 }
 
+const periodoToISOString = (value) => {
+  const periodo =  new Date(`${value}-01`)
+  periodo.setHours(periodo.getHours() + 3)
+  periodo.toISOString()
+  return periodo
+}
+
 const formatter = {
   currency: formatCurrency,
   date: formatDate,
   periodo: formatPeriodo,
   periodo2: formatPeriodo2,
-  fechaGrilla: formatFechaGrilla
+  fechaGrilla: formatFechaGrilla,
+  periodoToISOString
 };
 
 export default formatter;
