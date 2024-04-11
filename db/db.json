@@ -4466,6 +4466,16 @@
       "importe": 123123,
       "aporte": "ART.46",
       "vigencia": "2024-04-03T03:00:00.000Z"
+    },
+    {
+      "fecha": "",
+      "cuit": "123",
+      "periodo_original": "2024-02",
+      "importe": 123,
+      "aporte": "ART.46",
+      "vigencia": "2024-06",
+      "nro_boleta": 123,
+      "id": 4
     }
   ]
 }
