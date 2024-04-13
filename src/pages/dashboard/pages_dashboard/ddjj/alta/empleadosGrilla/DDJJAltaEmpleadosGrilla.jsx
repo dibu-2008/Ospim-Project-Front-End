@@ -23,12 +23,13 @@ import { Box, Button, TextField, Select, MenuItem } from "@mui/material";
 import { axiosDDJJ } from "../DDJJAltaApi";
 import "./DDJJAltaEmpleadosGrilla.css";
 import { dataGridStyle } from "@/common/dataGridStyle";
+import dayjs from "dayjs";
 
 function EditToolbar(props) {
   const {
     setRowsAltaDDJJ,
     rowsAltaDDJJ,
-    setRowsAltaDDJJAux,
+    // setRowsAltaDDJJAux,
     rowsAltaDDJJAux,
     setRowModesModel,
     showQuickFilter,
@@ -62,7 +63,7 @@ function EditToolbar(props) {
       ...oldRows,
     ]);
 
-    setRowsAltaDDJJAux((oldRows) => [
+    /* setRowsAltaDDJJAux((oldRows) => [
       {
         id,
         cuil: "",
@@ -79,7 +80,7 @@ function EditToolbar(props) {
         isNew: true,
       },
       ...oldRows,
-    ]);
+    ]); */
 
     setRowModesModel((oldModel) => ({
       ...oldModel,
@@ -104,7 +105,7 @@ export const DDJJAltaEmpleadosGrilla = ({
   rowsAltaDDJJ,
   setRowsAltaDDJJ,
   rowsAltaDDJJAux,
-  setRowsAltaDDJJAux,
+  // setRowsAltaDDJJAux,
   camaras,
   categoriasFiltradas,
   setCategoriasFiltradas,
@@ -253,9 +254,9 @@ export const DDJJAltaEmpleadosGrilla = ({
         rowsAltaDDJJ.map((row) => (row.id === newRow.id ? fila : row))
       );
 
-      setRowsAltaDDJJAux(
+      /* setRowsAltaDDJJAux(
         rowsAltaDDJJAux.map((row) => (row.id === newRow.id ? fila : row))
-      );
+      ); */
 
       return { ...fila, isNew: false };
     } else {
@@ -267,9 +268,9 @@ export const DDJJAltaEmpleadosGrilla = ({
         rowsAltaDDJJ.map((row) => (row.id === newRow.id ? fila : row))
       );
 
-      setRowsAltaDDJJAux(
+      /* setRowsAltaDDJJAux(
         rowsAltaDDJJAux.map((row) => (row.id === newRow.id ? fila : row))
-      );
+      ); */
 
       return fila;
     }
@@ -548,7 +549,9 @@ export const DDJJAltaEmpleadosGrilla = ({
       headerClassName: "header--cell",
       valueFormatter: ({ value }) => {
         if (!value) return "";
-        return formatter.date(value);
+        //return formatter.date(value);
+        //return dayjs(value).format("MM/YYYY");
+        return dayjs(value).format("DD/MM/YYYY");
       },
     },
     {
@@ -561,7 +564,7 @@ export const DDJJAltaEmpleadosGrilla = ({
       align: "center",
       headerClassName: "header--cell",
       valueOptions: plantas.map((planta) => {
-        return { value: planta.id, label: planta.planta }; // Agrega la propiedad 'key'
+        return { value: planta.id, label: planta.planta };
       }),
       valueFormatter: ({ value }) => value || "",
       renderEditCell: (params) => {
@@ -778,7 +781,7 @@ export const DDJJAltaEmpleadosGrilla = ({
               toolbar: {
                 setRowsAltaDDJJ,
                 rowsAltaDDJJ,
-                setRowsAltaDDJJAux,
+                // setRowsAltaDDJJAux,
                 rowsAltaDDJJAux,
                 setRowModesModel,
                 showQuickFilter: true,

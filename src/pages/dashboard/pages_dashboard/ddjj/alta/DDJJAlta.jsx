@@ -9,11 +9,12 @@ import {
   Radio,
   RadioGroup,
   FormControlLabel,
-  Stack, 
-  Tooltip, 
-  Typography
+  Stack,
+  Tooltip,
+  Typography,
+  dialogClasses
 } from "@mui/material";
-import 'dayjs/locale/es'; 
+import 'dayjs/locale/es';
 import "./DDJJAlta.css";
 import { DDJJAltaEmpleadosGrilla } from "./empleadosGrilla/DDJJAltaEmpleadosGrilla";
 import { axiosDDJJ } from "./DDJJAltaApi";
@@ -21,8 +22,12 @@ import localStorageService from "@/components/localStorage/localStorageService";
 import Swal from "sweetalert2";
 import XLSX from "xlsx";
 import { GridRowModes } from "@mui/x-data-grid";
+import dayjs from "dayjs";
+import swal from "@/components/swal/swal";
 
-const textoIdioma = 
+const IMPORTACION_OK = import.meta.env.VITE_IMPORTACION_OK;
+
+const textoIdioma =
   esES.components.MuiLocalizationProvider.defaultProps['localeText'];
 
 const adaptadorIdioma = "es";
@@ -35,7 +40,7 @@ export const MisAltaDeclaracionesJuradas = ({
   rowsAltaDDJJ,
   setRowsAltaDDJJ,
   rowsAltaDDJJAux,
-  setRowsAltaDDJJAux,
+  // setRowsAltaDDJJAux,
   peticion,
 }) => {
   const [camaras, setCamaras] = useState([]);
@@ -136,28 +141,41 @@ export const MisAltaDeclaracionesJuradas = ({
 
       setRowsAltaDDJJ(afiliadoImportadoConInte);
     } else {
-      Swal.fire({
-        icon: "success",
-        title: "Importación exitosa",
-        showConfirmButton: false,
-        timer: 1000,
-      });
-
-      // Aca es donde debo de controlar el inte dependiendo si el cuil
-      // Se encuentra dado de alta o no, antes de llenar la grilla.
+      
+      swal.showSuccess(IMPORTACION_OK);
 
       setRowsAltaDDJJ(afiliadoImportadoConInte);
     }
-    setRowsAltaDDJJAux(afiliadoImportadoConInte);
+    // setRowsAltaDDJJAux(afiliadoImportadoConInte);
     setOcultarEmpleadosGrilla(true);
   };
 
-  const formatearFecha = (fecha) => {
-    const partes = fecha?.split("/");
-    const anio = partes[2]?.length === 2 ? "20" + partes[2] : partes[2];
-    const mes = partes[1].padStart(2, "0");
-    const dia = partes[0];
-    return `${anio}-${mes}-${dia}`;
+  const formatearFecha = (fechaExcel) => {
+
+    // xlsx
+    if (typeof fechaExcel === 'number') {
+      const horas = Math.floor((fechaExcel % 1) * 24);
+      const minutos = Math.floor((((fechaExcel % 1) * 24) - horas) * 60)
+      const fechaFinal = new Date(Date.UTC(0, 0, fechaExcel, horas - 17, minutos))
+
+      const fechaDaysJs =
+        dayjs(fechaFinal).set('hour', 3).set('minute', 0).set('second', 0).set('millisecond', 0).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+
+      return fechaDaysJs
+    }
+
+    // cvs
+    if (typeof fechaExcel === 'string') {
+      const partes = fechaExcel?.split("/");
+      const anio = partes[2]?.length === 2 ? "20" + partes[2] : partes[2];
+      const mes = partes[1].padStart(2, "0");
+      const dia = partes[0];
+
+      const fechaDaysJs =
+        dayjs(`${anio}-${mes}-${dia}`).set('hour', 3).set('minute', 0).set('second', 0).set('millisecond', 0).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+
+      return fechaDaysJs
+    }
   };
 
   const handleFileChange = (event) => {
@@ -175,11 +193,8 @@ export const MisAltaDeclaracionesJuradas = ({
         const sheet = workbook.Sheets[sheetName];
         const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
-        console.log("CSV IMPORTADO...");
-        console.log(rows);
-
         if (rows[0].length === 11) {
-          console.log("Columnas completas");
+
           const arraySinEncabezado = rows.slice(1);
 
           rows.forEach((item, index) => {
@@ -192,6 +207,7 @@ export const MisAltaDeclaracionesJuradas = ({
           });
 
           const arrayTransformado = arraySinEncabezado.map((item, index) => {
+
             return {
               id: index + 1,
               cuil: item[0],
@@ -220,7 +236,7 @@ export const MisAltaDeclaracionesJuradas = ({
             confirm("Recorda que si subis un archivo, se perderan los datos de la ddjj actual")
           }
         } else {
-          console.log("Columnas incompletas");
+          
         }
       };
 
@@ -409,12 +425,12 @@ export const MisAltaDeclaracionesJuradas = ({
     if (DDJJState.id) {
 
       // Esto deberia de ser un post para poder cambiar ambos datos 
-  
+
       const data = await axiosDDJJ.presentar(ID_EMPRESA, DDJJState.id);
       DDJJState.estado = data.estado;
       DDJJState.secuencia = data.secuencia;
       if (data) {
-        
+
         const newDDJJState = {
           ...DDJJState,
           estado: data.estado || null,
@@ -446,30 +462,30 @@ export const MisAltaDeclaracionesJuradas = ({
                 views={["month", "year"]}
                 closeOnSelect={true}
                 onChange={handleChangePeriodo}
-                value={periodo} 
+                value={periodo}
               />
             </DemoContainer>
           </LocalizationProvider>
-            {
-              DDJJState.secuencia === 0 ? (
+          {
+            DDJJState.secuencia === 0 ? (
+              <Typography variant="h6">
+                Formulario: Original
+              </Typography>
+            ) : (
+
+              DDJJState.secuencia ? (
                 <Typography variant="h6">
-                  Formulario: Original
+                  Formulario: Rectif. {DDJJState.secuencia}
                 </Typography>
+
+
               ) : (
-
-                DDJJState.secuencia ? (
-                  <Typography variant="h6">
-                    Formulario: Rectif. {DDJJState.secuencia}
-                  </Typography>
-
-
-                ) : (
-                  <Typography variant="h6">
-                    Formulario: Pendiente
-                  </Typography>
-                )
+                <Typography variant="h6">
+                  Formulario: Pendiente
+                </Typography>
               )
-            }
+            )
+          }
         </Stack>
       </div>
 
@@ -477,7 +493,7 @@ export const MisAltaDeclaracionesJuradas = ({
         <h5 className="paso">Paso 2 - Elija un modo de presentación</h5>
         <div className="subir_archivo_container">
           <span className="span">1</span>
-          <h5 className="title_subir_archivo">Subir un archivo CSV - XLSL</h5>
+          <h5 className="title_subir_archivo">Subir un archivo CSV - XLSX</h5>
           <div className="file-select" id="src-file1">
             <input
               type="file"
@@ -583,7 +599,7 @@ export const MisAltaDeclaracionesJuradas = ({
             rowsAltaDDJJ={rowsAltaDDJJ}
             setRowsAltaDDJJ={setRowsAltaDDJJ}
             rowsAltaDDJJAux={rowsAltaDDJJAux}
-            setRowsAltaDDJJAux={setRowsAltaDDJJAux}
+            // setRowsAltaDDJJAux={setRowsAltaDDJJAux}
             camaras={camaras}
             categoriasFiltradas={categoriasFiltradas}
             setCategoriasFiltradas={setCategoriasFiltradas}
