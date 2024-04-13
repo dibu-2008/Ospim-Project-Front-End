@@ -61,12 +61,25 @@ const formatFechaGrilla = (value) => {
   }
 }
 
-const periodoToISOString = (value) => {
-  const periodo =  new Date(`${value}-01`)
-  periodo.setHours(periodo.getHours() + 3)
-  periodo.toISOString()
-  return periodo
+const sumaTresHoras = (value) =>{
+  const fecha = value
+  const nuevaFecha = new Date(fecha.getTime() + (3 * 60 * 60 * 1000))
+  return nuevaFecha
 }
+
+const esFechaValida = (fechaString) => {
+  let fecha = new Date(fechaString);
+  return !isNaN(fecha.getTime()) && fechaString === fecha.toISOString();
+}
+
+const toFechaValida = (value) =>{
+    if (esFechaValida(value)){
+      return sumaTresHoras(new Date(value)).toISOString()
+    } else {
+      return sumaTresHoras(new Date(`${value}-01`)).toISOString()
+    }
+}
+
 
 const formatter = {
   currency: formatCurrency,
@@ -74,7 +87,7 @@ const formatter = {
   periodo: formatPeriodo,
   periodo2: formatPeriodo2,
   fechaGrilla: formatFechaGrilla,
-  periodoToISOString
+  toFechaValida
 };
 
 export default formatter;

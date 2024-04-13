@@ -1,3 +1,4 @@
+import formatter from '@/common/formatter';
 import { axiosCrud } from '@/components/axios/axiosCrud';
 import oAxios from '@/components/axios/axiosInstace';
 import { showErrorBackEnd } from "@/components/axios/showErrorBackEnd";
@@ -46,15 +47,9 @@ export const calcularInteresBoletas = async(empresa_id, ddjj_id, intencion_de_pa
 
 
 const ordernarBoletas = (boletas) => {
-  // const newArray = boletas.detalle_boletas.map(detalle => ({
-  //     ...detalle,
-  //     declaracion_jurada_id: boletas.declaracion_jurada_id,
-  //     periodo: boletas.periodo,
-  //     tipo_ddjj: boletas.tipo_ddjj
-  // }));
     const newArray = boletas.detalle_boletas.map(detalle =>({
         codigo: detalle.codigo,
-        intencion_de_pago: detalle.intencion_de_pago,
+        intencion_de_pago: formatter.toFechaValida(detalle.intencion_de_pago),
         forma_de_pago: detalle.forma_de_pago
     }))
 
@@ -76,6 +71,7 @@ export const generarBoletasPost = async (empresa_id, ddjj_id,boletas)=>{
         const HTTP_MSG = HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`
         showErrorBackEnd(HTTP_MSG,error);
     }
+
 }
 
 export const axiosGenerarBoletas = {

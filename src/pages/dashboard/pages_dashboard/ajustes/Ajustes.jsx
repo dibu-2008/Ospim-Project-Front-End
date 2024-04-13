@@ -218,6 +218,7 @@ export const Ajustes = () => {
         editable:true,
         flex:1,
         valueOptions: [ 'ART.46', 'AMTIMA',  'UOMA' ],
+        valueGetter: (params) => params.row.aporte || '',
         headerAlign: "center",
         align:"center",
         headerClassName: "header--cell"
@@ -240,7 +241,7 @@ export const Ajustes = () => {
       { field: 'nro_boleta',
         headerName: 'NRO BOLETA',
         width: 150,
-        editable: true,
+        editable: false,
         type:'number',
         headerAlign: "center",
         align:"center",

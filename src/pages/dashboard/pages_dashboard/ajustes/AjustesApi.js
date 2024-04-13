@@ -36,20 +36,11 @@ export const getAjustes = async () =>{
     }
 }
 
-const periodoToISOString = (value) => {
-    const periodo =  new Date(`${value}-01`)
-    periodo.setHours(periodo.getHours() + 3)
-    periodo.toISOString()
-    return periodo
-}
-
 export const crearAjuste = async ( body ) => {
 
-    //const periodo_original =  new Date(`${body.periodo_original}-01`)
-    //periodo_original.setHours(periodo_original.getHours + 3)
-    body.periodo_original = formatter.periodoToISOString(body.periodo_original)
-    body.vigencia = formatter.periodoToISOString(body.vigencia)
-    //body.vigencia = new Date(`${body.vigencia}-01`).toISOString()
+    body.periodo_original = formatter.toFechaValida(body.periodo_original)
+    body.vigencia = formatter.toFechaValida(body.vigencia)
+
     const URL = `${BACKEND_URL}/sigeco/ajustes`;
     try {
         const response = await axiosCrud.crear(URL, body)
