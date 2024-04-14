@@ -2,10 +2,10 @@ import * as locales from "@mui/material/locale";
 import { useState, useEffect, useMemo } from "react";
 import {
   GridRowModes,
-  DataGrid,
   GridToolbarContainer,
   GridActionsCellItem,
   GridRowEditStopReasons,
+  GridToolbar,
 } from "@mui/x-data-grid";
 import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -21,12 +21,15 @@ import { StripedDataGrid, dataGridStyle } from "@/common/dataGridStyle";
 import "./CuitsRestringidos.css";
 
 function EditToolbar(props) {
-  const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
+  const { 
+    setRows, 
+    setRowModesModel, 
+    volverPrimerPagina,
+    showQuickFilter,
+    themeWithLocale
+  } = props;
 
   const altaHandleClick = () => {
-    /* const maxId = rows ? Math.max(...rows.map((row) => row.internalId), 0) : 1;
-    const newId = maxId + 1;
-    const internalId = newId; */
 
     const newReg = { cuit: "", observacion: "" }
 
@@ -40,10 +43,13 @@ function EditToolbar(props) {
   };
 
   return (
-    <GridToolbarContainer>
+    <GridToolbarContainer theme={themeWithLocale} style={{ display: 'flex', justifyContent: 'space-between' }}>
       <Button color="primary" startIcon={<AddIcon />} onClick={altaHandleClick}>
         Nuevo Registro
       </Button>
+      <GridToolbar
+        showQuickFilter={showQuickFilter}
+      />
     </GridToolbarContainer>
   );
 }
@@ -77,8 +83,6 @@ export const CuitsRestringidos = () => {
   useEffect(() => {
     const ObtenerCuitsRestringidos = async () => {
       const response = await axiosCuitsRestringidos.consultar();
-      // setRows(response.map((item, index) => ({ internalId: index + 1, ...item })));
-      //setRows(response.map((item) => ({ internalId: item.id, ...item })));
       setRows(response);
     };
     ObtenerCuitsRestringidos();
@@ -137,7 +141,7 @@ export const CuitsRestringidos = () => {
     });
 
     const editedRow = rows.find((reg) => reg.id === row.id);
-    if (editedRow.isNew) {
+    if (!editedRow.id) {
       setRows(rows.filter((reg) => reg.id !== row.id));
     }
   };
@@ -148,15 +152,10 @@ export const CuitsRestringidos = () => {
     if (!newRow.id) {
       console.log("2 - processRowUpdate - ALTA ");
       try {
-        /* const internalId = newRow.internalId;
-        delete newRow.internalId;
-        delete newRow.isNew; */
         const data = await axiosCuitsRestringidos.crear(newRow);
         console.log("data: " + JSON.stringify(data));
         if (data && data.id) {
           newRow.id = data.id;
-          /* newRow.internalId = internalId;
-          newRow.isNew = false; */
           bOk = true;
 
           console.log("ALTA - rows: ");
@@ -175,13 +174,10 @@ export const CuitsRestringidos = () => {
     } else {
       console.log("3 - processRowUpdate - MODI ");
       try {
-        /* const internalId = newRow.internalId;
-        delete newRow.internalId;
-        delete newRow.isNew; */
+
         bOk = await axiosCuitsRestringidos.actualizar(newRow);
         console.log("4 - processRowUpdate - MODI - bOk: " + bOk);
-        /* newRow.isNew = false;
-        newRow.internalId = internalId; */
+     
         if (bOk) {
           const rowsNew = rows.map((row) =>
             row.id === newRow.id ? newRow : row
@@ -307,7 +303,13 @@ export const CuitsRestringidos = () => {
               toolbar: EditToolbar,
             }}
             slotProps={{
-              toolbar: { setRows, rows, setRowModesModel, volverPrimerPagina },
+              toolbar: { 
+                setRows, 
+                setRowModesModel, 
+                volverPrimerPagina,
+                showQuickFilter: true,
+                themeWithLocale
+              }
             }}
             sx={{
               "& .MuiDataGrid-virtualScroller::-webkit-scrollbar": {

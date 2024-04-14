@@ -9,7 +9,13 @@ import { Stack, TextField } from "@mui/material";
 import Button from "@mui/material/Button";
 import { Box } from "@mui/system";
 import LocalPrintshopIcon from "@mui/icons-material/LocalPrintshop";
-import { DataGrid, GridActionsCellItem, GridRowModes, GridToolbarContainer, GridToolbar } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridActionsCellItem,
+  GridRowModes,
+  GridToolbarContainer,
+  GridToolbar,
+} from "@mui/x-data-grid";
 import formatter from "@/common/formatter";
 import { StripedDataGrid, dataGridStyle } from "@/common/dataGridStyle";
 import * as locales from "@mui/material/locale";
@@ -64,10 +70,24 @@ function castearDDJJ(ddjjResponse) {
 const paginacion = {
   pageSize: 50,
   page: 0,
-}
+};
+
+const CustomToolbar = (props) => {
+  const {
+    showQuickFilter,
+    themeWithLocale
+  } = props;
+  return (
+    <GridToolbarContainer theme={themeWithLocale} style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <Button color="primary">
+        
+      </Button>
+      <GridToolbar showQuickFilter={showQuickFilter} />
+    </GridToolbarContainer>
+  );
+};
 
 export const DDJJConsultaEmpleado = () => {
-
   const [showCuitRazonSocial, setShowCuitRazonSocial] = useState(true);
   const [paginationModel, setPaginationModel] = useState(paginacion);
   const [rowModesModel, setRowModesModel] = useState({});
@@ -87,7 +107,7 @@ export const DDJJConsultaEmpleado = () => {
   useEffect(() => {
     const ObtenerDDJJ = async () => {
       let ddjjResponse = await axiosDDJJEmpleado.consultar();
-      console.log(ddjjResponse)
+      console.log(ddjjResponse);
 
       //Agrego las columnas deTotales de Aportes
       ddjjResponse = await castearDDJJ(ddjjResponse);
@@ -105,15 +125,16 @@ export const DDJJConsultaEmpleado = () => {
   const handleChangeCuil = (e) => setCuit(e.target.value);
 
   const buscarDDJJ = async () => {
-
     // Busqueda por rango de periodo
     if (desde !== null && hasta !== null && cuit === "") {
-
       const desdeFor = formatter.date(desde.$d);
       const hastaFor = formatter.date(hasta.$d);
 
-      const ddjjResponse = await axiosDDJJEmpleado
-        .consultarFiltrado(desdeFor, hastaFor, null);
+      const ddjjResponse = await axiosDDJJEmpleado.consultarFiltrado(
+        desdeFor,
+        hastaFor,
+        null
+      );
 
       if (ddjjResponse.length > 0) {
         setRows(ddjjResponse);
@@ -123,9 +144,11 @@ export const DDJJConsultaEmpleado = () => {
 
     // Busqueda por cuit
     if (cuit !== "" && desde === null && hasta === null) {
-
-      const ddjjResponse = await axiosDDJJEmpleado
-        .consultarFiltrado(null, null, cuit)
+      const ddjjResponse = await axiosDDJJEmpleado.consultarFiltrado(
+        null,
+        null,
+        cuit
+      );
 
       if (ddjjResponse.length > 0) {
         setRows(ddjjResponse);
@@ -135,12 +158,14 @@ export const DDJJConsultaEmpleado = () => {
 
     // Busqueda por rango de periodo y cuit
     if (desde !== null && hasta !== null && cuit !== "") {
-
       const desdeFor = formatter.date(desde.$d);
       const hastaFor = formatter.date(hasta.$d);
 
-      const ddjjResponse = await axiosDDJJEmpleado
-        .consultarFiltrado(desdeFor, hastaFor, cuit);
+      const ddjjResponse = await axiosDDJJEmpleado.consultarFiltrado(
+        desdeFor,
+        hastaFor,
+        cuit
+      );
 
       if (ddjjResponse.length > 0) {
         setRows(ddjjResponse);
@@ -161,11 +186,10 @@ export const DDJJConsultaEmpleado = () => {
       valueFormatter: (params) => {
         return formatter.periodo(params.value);
       },
-    }
+    },
   ];
 
   if (showCuitRazonSocial) {
-
     columns.push(
       {
         field: "cuit",
@@ -188,27 +212,25 @@ export const DDJJConsultaEmpleado = () => {
     );
   }
 
-  columns.push(
-    {
-      field: "secuencia",
-      headerName: "Numero",
-      flex: 1,
-      editable: false,
-      headerAlign: "center",
-      align: "center",
-      headerClassName: "header--cell",
-      valueGetter: (params) => {
-        // Si secuencia es 0 es "Original" sino es "Rectificativa"+secuencia
-        if (params.value === null) {
-          return "Original";
-        } else if (params.value === 0) {
-          return "Original";
-        } else {
-          return "Rectif. " + params.value;
-        }
-      },
-    }
-  );
+  columns.push({
+    field: "secuencia",
+    headerName: "Numero",
+    flex: 1,
+    editable: false,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header--cell",
+    valueGetter: (params) => {
+      // Si secuencia es 0 es "Original" sino es "Rectificativa"+secuencia
+      if (params.value === null) {
+        return "Pendiente";
+      } else if (params.value === 0) {
+        return "Original";
+      } else {
+        return "Rectif. " + params.value;
+      }
+    },
+  });
 
   colAportes = DDJJColumnaAporteGet(rows);
 
@@ -262,7 +284,7 @@ export const DDJJConsultaEmpleado = () => {
           color="inherit"
           onClick={() => declaracionJuradasImpresion(row.id)}
         />,
-      ]
+      ];
     },
   });
 
@@ -272,10 +294,15 @@ export const DDJJConsultaEmpleado = () => {
 
   return (
     <div className="declaraciones_juradas_container">
-      <h1 style={{
-        marginBottom: "50px",
-      }}>Consulta de Declaraciones Juradas</h1>
-      <div className="mis_declaraciones_juradas_container"
+      <h1
+        style={{
+          marginBottom: "50px",
+        }}
+      >
+        Consulta de Declaraciones Juradas
+      </h1>
+      <div
+        className="mis_declaraciones_juradas_container"
         style={{
           marginBottom: "50px",
         }}
@@ -318,14 +345,16 @@ export const DDJJConsultaEmpleado = () => {
               />
             </DemoContainer>
           </LocalizationProvider>
-          <div style={{
-            height: "100px",
-            width: "250px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            marginTop: "8px",
-          }}>
+          <div
+            style={{
+              height: "100px",
+              width: "250px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: "8px",
+            }}
+          >
             <TextField
               id="outlined-basic"
               label="Cuit"
@@ -347,10 +376,7 @@ export const DDJJConsultaEmpleado = () => {
           </Button>
         </Stack>
       </div>
-      <Stack
-        direction="row"
-        justifyContent="center"
-        alignItems="center">
+      <Stack direction="row" justifyContent="center" alignItems="center">
         <Box
           sx={{
             margin: "0 auto",
@@ -376,7 +402,14 @@ export const DDJJConsultaEmpleado = () => {
               rowModesModel={rowModesModel}
               onRowModesModelChange={handleRowModesModelChange}
               localeText={dataGridStyle.toolbarText}
-              slots={{ toolbar: GridToolbar }}
+              slots={{ toolbar: CustomToolbar }}
+              slotProps={{
+                toolbar: {
+                  showQuickFilter: true,
+                  showColumnMenu: true,
+                  themeWithLocale
+                },
+              }}
               paginationModel={paginationModel}
               onPaginationModelChange={setPaginationModel}
               pageSizeOptions={[50, 75, 100]}
@@ -385,5 +418,5 @@ export const DDJJConsultaEmpleado = () => {
         </Box>
       </Stack>
     </div>
-  )
-}
+  );
+};

@@ -4,27 +4,21 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
-import "./ConsultaMisDDJJ.css";
-import { GrillaMisDeclaracionesJuradas } from "./grilla/GrillaMisDeclaracionesJuradas";
-import { axiosDDJJ } from "./grilla/GrillaMisDeclaracionesJuradasApi";
+import "./MisDDJJConsulta.css";
+import { MisDDJJConsultaGrilla } from "./grilla/MisDDJJConsultaGrilla";
+import { axiosDDJJ } from "./grilla/MisDDJJConsultaGrillaApi";
 import { esES } from "@mui/x-date-pickers/locales";
-import dayjs from "dayjs";
-import esLocale from "dayjs/locale/es";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import { CSVLink, CSVDownload } from "react-csv";
 import localStorageService from "@/components/localStorage/localStorageService";
-export const MisDeclaracionesJuradas = ({
+export const MisDDJJConsulta = ({
   setDDJJState,
   setPeriodo,
   rows_mis_ddjj,
   setRowsMisDdjj,
   setTabState,
-  /* 
-  handleAcceptPeriodoDDJJ, */
-  rowsAltaDDJJ,
   setRowsAltaDDJJ,
   setPeticion,
-  setIdDDJJ,
 }) => {
   const [desde, setDesde] = useState(null);
   const [hasta, setHasta] = useState(null);
@@ -37,12 +31,7 @@ export const MisDeclaracionesJuradas = ({
     ["George Abuladze", 33, "politician"],
     ["Nick Tsereteli", 19, "public worker"],
   ]);
-  const handleSubmit = (e) => {
-    setData([...data, [fullName, age, occupation]]);
-    setFullName("");
-    setAge(0);
-    setOccupation("");
-  };
+
   const ID_EMPRESA = localStorageService.getEmpresaId();
 
   const handleChangeDesde = (date) => setDesde(date);
@@ -57,14 +46,14 @@ export const MisDeclaracionesJuradas = ({
         const { $d: $hasta } = hasta;
 
         const fechaDesde = new Date($desde);
-        fechaDesde.setDate(1); // Seteamos el día del mes a 1
-        fechaDesde.setUTCHours(0, 0, 0, 0); // Ajustamos la zona horaria a UTC
-        const fechaIsoDesde = fechaDesde.toISOString(); // Convertimos la fecha a ISO
+        fechaDesde.setDate(1); 
+        fechaDesde.setUTCHours(0, 0, 0, 0); 
+        const fechaIsoDesde = fechaDesde.toISOString(); 
 
         const fechaHasta = new Date($hasta);
-        fechaHasta.setDate(1); // Seteamos el día del mes a 1
-        fechaHasta.setUTCHours(0, 0, 0, 0); // Ajustamos la zona horaria a UTC
-        const fechaIsoHasta = fechaHasta.toISOString(); // Convertimos la fecha a ISO
+        fechaHasta.setDate(1); 
+        fechaHasta.setUTCHours(0, 0, 0, 0); 
+        const fechaIsoHasta = fechaHasta.toISOString(); 
 
         const declaracionesFiltradas = ddjjResponse.filter((ddjj) => {
           const fecha = new Date(ddjj.periodo);
@@ -83,7 +72,6 @@ export const MisDeclaracionesJuradas = ({
 
   const exportarDeclaracionesJuradas = () => {
     console.log("Exportar declaraciones juradas");
-    //console.log(rows_mis_ddjj);
   };
 
   return (
@@ -106,10 +94,9 @@ export const MisDeclaracionesJuradas = ({
               <DesktopDatePicker
                 label={"Periodo desde"}
                 views={["month", "year"]}
-                closeOnSelect={false}
+                closeOnSelect={true}
                 onChange={handleChangeDesde}
                 value={desde}
-                slotProps={{ actionBar: { actions: ["cancel", "accept"] } }}
               />
             </DemoContainer>
           </LocalizationProvider>
@@ -124,10 +111,9 @@ export const MisDeclaracionesJuradas = ({
               <DesktopDatePicker
                 label={"Periodo hasta"}
                 views={["month", "year"]}
-                closeOnSelect={false}
+                closeOnSelect={true}
                 onChange={handleChangeHasta}
                 value={hasta}
-                slotProps={{ actionBar: { actions: ["cancel", "accept"] } }}
               />
             </DemoContainer>
           </LocalizationProvider>
@@ -148,25 +134,17 @@ export const MisDeclaracionesJuradas = ({
               Exportar CSV
             </Button>
           </CSVLink>
-          {/* <CSVLink data={csvData} filename={"misddjj.csv"}>Download me</CSVLink>; */}
-
-          {/* <CSVDownload data={rows_mis_ddjj} target="_blank" />; */}
         </Stack>
       </div>
       <Stack direction="row" justifyContent="center" alignItems="center">
-        <GrillaMisDeclaracionesJuradas
+        <MisDDJJConsultaGrilla
           setDDJJState={setDDJJState}
           setPeriodo={setPeriodo}
           rows_mis_ddjj={rows_mis_ddjj}
           setRowsMisDdjj={setRowsMisDdjj}
-          idEmpresa={ID_EMPRESA}
           setTabState={setTabState}
-          /* 
-          handleAcceptPeriodoDDJJ={handleAcceptPeriodoDDJJ} */
-          rowsAltaDDJJ={rowsAltaDDJJ}
           setRowsAltaDDJJ={setRowsAltaDDJJ}
           setPeticion={setPeticion}
-          setIdDDJJ={setIdDDJJ}
         />
       </Stack>
     </div>

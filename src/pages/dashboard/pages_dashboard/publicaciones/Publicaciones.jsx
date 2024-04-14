@@ -3,7 +3,6 @@ import { axiosPublicaciones } from "./PublicacionesApi";
 import { EditarNuevaFila } from "./PublicacionNueva";
 import {
   GridRowModes,
-  DataGrid,
   GridActionsCellItem,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
@@ -14,16 +13,16 @@ import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 import * as locales from "@mui/material/locale";
-import formatter from "@/common/formatter";
 import Swal from "sweetalert2";
 import "./Publicaciones.css";
 import { ThreeCircles } from "react-loader-spinner";
 import { StripedDataGrid, dataGridStyle } from "@/common/dataGridStyle";
+import formatter from "@/common/formatter";
 
 const paginacion = {
   pageSize: 50,
   page: 0,
-}
+};
 
 export const Publicaciones = () => {
   const [locale, setLocale] = useState("esES");
@@ -37,13 +36,10 @@ export const Publicaciones = () => {
     [locale, theme]
   );
 
-  //Consulta rows de la Grilla
   useEffect(() => {
     const obtenerPublicaciones = async () => {
       const response = await axiosPublicaciones.consultar();
-      setRows(
-        response.map((row, index) => ({ ...row, internalId: index + 1 }))
-      );
+      setRows(response);
     };
 
     obtenerPublicaciones();
@@ -65,14 +61,14 @@ export const Publicaciones = () => {
   const handleEditClick = (row) => () => {
     setRowModesModel({
       ...rowModesModel,
-      [row.internalId]: { mode: GridRowModes.Edit },
+      [rows.indexOf(row)]: { mode: GridRowModes.Edit },
     });
   };
 
   const handleSaveClick = (row) => () => {
     setRowModesModel({
       ...rowModesModel,
-      [row.internalId]: { mode: GridRowModes.View },
+      [rows.indexOf(row)]: { mode: GridRowModes.View },
     });
   };
 
@@ -103,11 +99,14 @@ export const Publicaciones = () => {
   const handleCancelClick = (row) => () => {
     setRowModesModel({
       ...rowModesModel,
-      [row.internalId]: { mode: GridRowModes.View, ignoreModifications: true },
+      [rows.indexOf(row)]: {
+        mode: GridRowModes.View,
+        ignoreModifications: true,
+      },
     });
 
     const editedRow = rows.find((reg) => reg.id === row.id);
-    if (editedRow.isNew) {
+    if (!editedRow.id) {
       setRows(rows.filter((reg) => reg.id !== row.id));
     }
   };
@@ -115,36 +114,13 @@ export const Publicaciones = () => {
   const processRowUpdate = async (newRow, oldRow) => {
     let bOk = false;
 
-    /*
-    let fechaDesdeOri = null;
-    let fechaHastaOri = null;
-    if (newRow.vigenciaDesde) {
-      fechaDesdeOri = new Date(newRow.vigenciaDesde);
-      fechaDesdeOri.setUTCHours(0, 0, 0, 0);
-      const fechaDesdeFormateada = fechaDesdeOri.toISOString();
-      newRow.vigenciaDesde = fechaDesdeFormateada;
-    }
-    if (newRow.vigenciaHasta) {
-      fechaHastaOri = new Date(newRow.vigenciaHasta);
-      fechaHastaOri.setUTCHours(0, 0, 0, 0);
-      const fechaHastaFormateada = fechaHastaOri.toISOString();
-      newRow.vigenciaHasta = fechaHastaFormateada;
-    }
-    */
-    if (newRow.isNew) {
-      console.log("processRowUpdate - ALTA");
+    if (!newRow.id) {
       try {
-        const internalId = newRow.internalId;
-        delete newRow.id;
-        delete newRow.internalId;
-        delete newRow.isNew;
         const data = await axiosPublicaciones.crear(newRow);
         if (data && data.id) {
           newRow.id = data.id;
-          newRow.isNew = false;
-          newRow.internalId = internalId;
           bOk = true;
-          const newRows = rows.map((row) => (row.isNew ? newRow : row));
+          const newRows = rows.map((row) => (!row.id ? newRow : row));
           setRows(newRows);
         }
       } catch (error) {
@@ -153,16 +129,13 @@ export const Publicaciones = () => {
         );
       }
     } else {
-      console.log("processRowUpdate - MODI");
       try {
-        const internalId = newRow.internalId;
-        delete newRow.internalId;
-        delete newRow.isNew;
         bOk = await axiosPublicaciones.actualizar(newRow);
-        newRow.isNew = false;
-        newRow.internalId = internalId;
         if (bOk) {
-          setRows(rows.map((row) => (row.id === newRow.id ? newRow : row)));
+          const rowsNew = rows.map((row) =>
+            row.id === newRow.id ? newRow : row
+          );
+          setRows(rowsNew);
         }
       } catch (error) {
         console.log(
@@ -170,9 +143,6 @@ export const Publicaciones = () => {
         );
       }
     }
-
-    //if (fechaDesdeOri) newRow.vigenciaDesde = fechaDesdeOri;
-    //if (fechaHastaOri) newRow.vigenciaHasta = fechaHastaOri;
 
     if (bOk) {
       return newRow;
@@ -223,15 +193,8 @@ export const Publicaciones = () => {
       headerAlign: "center",
       align: "center",
       headerClassName: "header--cell header--cell--left",
-      valueFormatter: (params) => {
-        const date = new Date(params.value);
-
-        const day = date.getUTCDate().toString().padStart(2, "0");
-        const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
-        const year = date.getUTCFullYear();
-
-        //return `${day}-${month}-${year}`;
-        return formatter.date(params.value);
+      valueFormatter: ({ value }) => {
+        return formatter.date(value);
       },
     },
     {
@@ -243,14 +206,8 @@ export const Publicaciones = () => {
       headerAlign: "center",
       align: "center",
       headerClassName: "header--cell header--cell--left",
-      valueFormatter: (params) => {
-        const date = new Date(params.value);
-
-        const day = date.getUTCDate().toString().padStart(2, "0");
-        const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
-        const year = date.getUTCFullYear();
-        //return `${day}-${month}-${year}`;
-        return formatter.date(params.value);
+      valueFormatter: ({ value }) => {
+        return formatter.date(value);
       },
     },
     {
@@ -263,7 +220,7 @@ export const Publicaciones = () => {
       headerClassName: "header--cell header--cell--left",
       getActions: ({ row }) => {
         const isInEditMode =
-          rowModesModel[row.internalId]?.mode === GridRowModes.Edit;
+          rowModesModel[rows.indexOf(row)]?.mode === GridRowModes.Edit;
 
         if (isInEditMode) {
           return [
@@ -363,9 +320,9 @@ export const Publicaciones = () => {
               rows={rows}
               columns={columns}
               editMode="row"
-              getRowId={(row) => row.internalId}
+              getRowId={(row) => rows.indexOf(row)}
               getRowClassName={(params) =>
-                params.row.internalId % 2 === 0 ? "even" : "odd"
+                rows.indexOf(params.row) % 2 === 0 ? "even" : "odd"
               }
               rowModesModel={rowModesModel}
               onRowModesModelChange={handleRowModesModelChange}
@@ -383,6 +340,9 @@ export const Publicaciones = () => {
                   rows,
                   setRowModesModel,
                   volverPrimerPagina,
+                  showQuickFilter: true,
+                  showColumnMenu: true,
+                  themeWithLocale
                 },
               }}
               sx={{

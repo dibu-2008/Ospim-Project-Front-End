@@ -21,6 +21,7 @@ import {
   GridToolbarContainer,
   GridActionsCellItem,
   GridRowEditStopReasons,
+  GridToolbar,
 } from "@mui/x-data-grid";
 
 import { axiosUsuariosInternos } from "./AltaUsuarioInternoApi";
@@ -32,7 +33,8 @@ import Swal from "sweetalert2";
 import "./AltaUsuarioInterno.css";
 
 import { ToastContainer, toast } from 'react-toastify';
-  import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css';
+import { dataGridStyle } from "@/common/dataGridStyle";
 
 const style = {
   position: "absolute",
@@ -47,7 +49,14 @@ const style = {
 };
 
 const crearNuevoRegistro = (props) => {
-  const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
+  const {
+    setRows,
+    rows,
+    setRowModesModel,
+    volverPrimerPagina,
+    showQuickFilter,
+    themeWithLocale
+  } = props;
 
   const altaHandleClick = () => {
     const maxId = rows ? Math.max(...rows.map((row) => row.id), 0) : 1;
@@ -55,7 +64,6 @@ const crearNuevoRegistro = (props) => {
     const id = newId;
     volverPrimerPagina();
 
-    //saque campo:         password2: "",
     setRows((oldRows) => [
       {
         id,
@@ -77,10 +85,13 @@ const crearNuevoRegistro = (props) => {
   };
 
   return (
-    <GridToolbarContainer>
+    <GridToolbarContainer theme={themeWithLocale} style={{ display: 'flex', justifyContent: 'space-between' }}>
       <Button color="primary" startIcon={<AddIcon />} onClick={altaHandleClick}>
         Nuevo Registro
       </Button>
+      <GridToolbar
+        showQuickFilter={showQuickFilter}
+      />
     </GridToolbarContainer>
   );
 };
@@ -115,6 +126,7 @@ export const AltaUsuarioInterno = () => {
   useEffect(() => {
     const ObtenerUsuariosInternos = async () => {
       const response = await axiosUsuariosInternos.consultar();
+      console.log("response: ", response)
       setRows(response.map((item) => ({ id: item.id, ...item })));
     };
     ObtenerUsuariosInternos();
@@ -185,6 +197,7 @@ export const AltaUsuarioInterno = () => {
     setEmail(row.email);
     setClave(row.clave);
     setRepetirClave(row.clave);
+    setIdUsuario(id);
     handleOpen();
   };
 
@@ -257,6 +270,7 @@ export const AltaUsuarioInterno = () => {
   const [clave, setClave] = useState("");
   const [repetirClave, setRepetirClave] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [idUsuario, setIdUsuario] = useState(0);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -289,6 +303,9 @@ export const AltaUsuarioInterno = () => {
   };
 
   const handleFormSubmit = async (e) => {
+
+    console.log(rows);
+
     e.preventDefault();
     if (clave !== repetirClave) {
       toast.error("Las claves no coinciden !", {
@@ -300,16 +317,28 @@ export const AltaUsuarioInterno = () => {
       });
       return; // Para salir de la función sin continuar
     }
-    const data = {
-      nombre,
-      apellido,
-      usuario,
-      email,
-      clave,
-    };
-    console.log(data);
+
+    // Buscar el usuario en el array de usuarios
+    const usuario = rows.find((usuario) => usuario.id === idUsuario);
+    console.log(usuario)
+
+    usuario.nombre = nombre;
+    usuario.apellido = apellido;
+    usuario.clave = clave;
+
+    const resp = await axiosUsuariosInternos.actualizar(usuario);
+    if (resp) {
+      toast.success("Clave actualizada correctamente !", {
+        position: "top-right",
+        autoClose: 2000,
+        style: {
+          fontSize: "1rem",
+        },
+      });
+      handleClose();
+    }
   }
-  
+
 
   const columns = [
     {
@@ -453,7 +482,14 @@ export const AltaUsuarioInterno = () => {
 
   return (
     <div className="usuario_interno_container">
-      <h1>Alta Usuario Interno</h1>
+      <Grid container spacing={2}>
+        <Grid item xs={6}>
+          <h1>Alta Usuario Interno</h1>
+        </Grid>
+        <Grid item xs={6}>
+          <ToastContainer />
+        </Grid>
+      </Grid>
       <Box
         sx={{
           height: "600px",
@@ -478,9 +514,17 @@ export const AltaUsuarioInterno = () => {
             processRowUpdate={(updatedRow, originalRow) =>
               processRowUpdate(updatedRow, originalRow)
             }
+            localeText={dataGridStyle.toolbarText}
             slots={{ toolbar: crearNuevoRegistro }}
             slotProps={{
-              toolbar: { setRows, rows, setRowModesModel, volverPrimerPagina },
+              toolbar: {
+                setRows,
+                rows,
+                setRowModesModel,
+                volverPrimerPagina,
+                showQuickFilter: true,
+                themeWithLocale
+              },
             }}
             sx={{
               "& .MuiDataGrid-virtualScroller::-webkit-scrollbar": {
@@ -508,8 +552,8 @@ export const AltaUsuarioInterno = () => {
           onClose={handleClose}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
-        > 
-        
+        >
+
           <Box sx={style}>
             <form onSubmit={handleFormSubmit}>
               <Typography
@@ -525,7 +569,6 @@ export const AltaUsuarioInterno = () => {
                 }}
               >
                 Gestion de Clave
-              <ToastContainer />
               </Typography>
               <Grid container spacing={2}>
                 <Grid item xs={6}>
@@ -558,7 +601,8 @@ export const AltaUsuarioInterno = () => {
                     variant="outlined"
                     fullWidth
                     margin="normal"
-                    onChange={handleUsuario}
+                    //onChange={handleUsuario}
+                    sx={{ backgroundColor: "#f5f5f5" }}
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -568,7 +612,8 @@ export const AltaUsuarioInterno = () => {
                     variant="outlined"
                     fullWidth
                     margin="normal"
-                    onChange={handleEmail}
+                    //onChange={handleEmail}
+                    sx={{ backgroundColor: "#f5f5f5" }}
                   />
                 </Grid>
               </Grid>
@@ -631,7 +676,7 @@ export const AltaUsuarioInterno = () => {
                   sx={{ marginTop: "20px" }}
                   type="submit"
                 >
-                  Cambiar Clave
+                  Actualizar
                 </Button>
                 <Button
                   variant="contained"

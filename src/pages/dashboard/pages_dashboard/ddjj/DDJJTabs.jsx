@@ -3,12 +3,12 @@ import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import "./DDJJ.css";
-import { MisDeclaracionesJuradas } from "./mis_ddjj/ConsultaMisDDJJ";
+import "./DDJJTabs.css";
+
+import { MisDDJJConsulta } from "./mis_ddjj/MisDDJJConsulta";
 import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 import * as locales from "@mui/material/locale";
-import { MisAltaDeclaracionesJuradas } from "./alta/DDJJAlta";
-import dayjs from "dayjs";
+import { DDJJAlta } from "./alta/DDJJAlta";
 import { Boletas } from "../boletas/Boletas";
 
 function CustomTabPanel(props) {
@@ -44,14 +44,12 @@ function a11yProps(index) {
   };
 }
 
-export const DeclaracionesJuradas = () => {
+export const DDJJTabs = () => {
   const [DDJJState, setDDJJState] = useState({});
   const [periodo, setPeriodo] = useState(null);
   const [rowsAltaDDJJ, setRowsAltaDDJJ] = useState([]);
   const [rowsAltaDDJJAux, setRowsAltaDDJJAux] = useState([]);
   const [rows_mis_ddjj, setRowsMisDdjj] = useState([]);
-  /*
-  const [periodoIso, setPeriodoIso] = useState(null); */
   const [locale, setLocale] = useState("esES");
   const [tabState, setTabState] = useState(0);
   const [peticion, setPeticion] = useState("");
@@ -64,27 +62,7 @@ export const DeclaracionesJuradas = () => {
     [locale, theme]
   );
 
-  const handleChangeTabState = (event, newValue) => {
-    setTabState(newValue);
-  };
-
-  /* const handleAcceptPeriodoDDJJ = () => {
-    if (periodo && periodo.$d) {
-      const { $d: fecha } = periodo;
-      const fechaFormateada = new Date(fecha);
-      fechaFormateada.setDate(1); // Establecer el día del mes a 1
-
-      // Ajustar la zona horaria a UTC
-      fechaFormateada.setUTCHours(0, 0, 0, 0);
-
-      const fechaISO = fechaFormateada.toISOString(); // 2026-02-01T00:00:00.000Z
-      setPeriodoIso(fechaISO);
-    }
-  }; */
-
-  /* useEffect(() => {
-    handleAcceptPeriodoDDJJ();
-  }, [periodo]); */
+  const handleChangeTabState = (event, value) => setTabState(value);
 
   return (
     <div className="declaraciones_juradas_container">
@@ -113,14 +91,11 @@ export const DeclaracionesJuradas = () => {
             </Tabs>
           </Box>
           <CustomTabPanel value={tabState} index={0}>
-            <MisAltaDeclaracionesJuradas
+            <DDJJAlta
               DDJJState={DDJJState}
               setDDJJState={setDDJJState}
               periodo={periodo}
               setPeriodo={setPeriodo} /*  */
-              /* periodoIso={periodoIso}
-              handleChangePeriodo={handleChangePeriodo}
-              handleAcceptPeriodoDDJJ={handleAcceptPeriodoDDJJ} */
               rowsAltaDDJJ={rowsAltaDDJJ}
               setRowsAltaDDJJ={setRowsAltaDDJJ}
               rowsAltaDDJJAux={rowsAltaDDJJAux}
@@ -130,14 +105,12 @@ export const DeclaracionesJuradas = () => {
             />
           </CustomTabPanel>
           <CustomTabPanel value={tabState} index={1}>
-            <MisDeclaracionesJuradas
+            <MisDDJJConsulta
               setDDJJState={setDDJJState}
               setPeriodo={setPeriodo}
               rows_mis_ddjj={rows_mis_ddjj}
               setRowsMisDdjj={setRowsMisDdjj}
               setTabState={setTabState}
-              /* 
-              handleAcceptPeriodoDDJJ={handleAcceptPeriodoDDJJ} */
               rowsAltaDDJJ={rowsAltaDDJJ}
               setRowsAltaDDJJ={setRowsAltaDDJJ}
               setPeticion={setPeticion}

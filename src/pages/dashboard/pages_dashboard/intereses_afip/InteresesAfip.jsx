@@ -25,7 +25,14 @@ import { axiosIntereses } from './InteresesAfipApi';
 import formatter from '@/common/formatter';
 
 const crearNuevoRegistro = (props) => {
-    const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
+    const {
+        setRows,
+        rows,
+        setRowModesModel,
+        volverPrimerPagina,
+        showQuickFilter,
+        themeWithLocale
+    } = props;
 
     const altaHandleClick = () => {
         const newReg = { vigenciaDesde: "", vigenciaHasta: "", indice: "" };
@@ -41,11 +48,13 @@ const crearNuevoRegistro = (props) => {
 
 
     return (
-        <GridToolbarContainer>
-            <GridToolbar showQuickFilter={props.showQuickFilter} />
+        <GridToolbarContainer theme={themeWithLocale} style={{ display: 'flex', justifyContent: 'space-between' }}>
             <Button color="primary" startIcon={<AddIcon />} onClick={altaHandleClick}>
                 Nuevo Registro
             </Button>
+            <GridToolbar
+                showQuickFilter={showQuickFilter}
+            />
         </GridToolbarContainer>
     );
 };
@@ -140,7 +149,7 @@ export const InteresesAfip = () => {
                 ignoreModifications: true,
             },
         });
-        
+
         const editedRow = rows.find((reg) => reg.id === row.id);
         if (!editedRow.id) {
             setRows(rows.filter((reg) => reg.id !== row.id));
@@ -305,7 +314,14 @@ export const InteresesAfip = () => {
                     localeText={dataGridStyle.toolbarText}
                     slots={{ toolbar: crearNuevoRegistro }}
                     slotProps={{
-                        toolbar: { setRows, rows, setRowModesModel, volverPrimerPagina },
+                        toolbar: {
+                            setRows,
+                            rows,
+                            setRowModesModel,
+                            volverPrimerPagina,
+                            showQuickFilter: true,
+                            themeWithLocale,
+                        },
                     }}
                     paginationModel={paginationModel}
                     onPaginationModelChange={setPaginationModel}

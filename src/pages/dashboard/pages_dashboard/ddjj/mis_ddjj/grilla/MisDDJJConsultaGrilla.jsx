@@ -3,26 +3,22 @@ import Box from "@mui/material/Box";
 import formatter from "@/common/formatter";
 import {
   GridRowModes,
-  DataGrid,
-  GridToolbarContainer,
   GridActionsCellItem,
   GridRowEditStopReasons,
   GridToolbar,
 } from "@mui/x-data-grid";
 import Button from "@mui/material/Button";
-import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import LocalPrintshopIcon from "@mui/icons-material/LocalPrintshop";
-import { axiosDDJJ } from "./GrillaMisDeclaracionesJuradasApi";
-import { PDFViewer, PDFDownloadLink } from "@react-pdf/renderer";
-import { MyDocument } from "./MiPdf";
+import { axiosDDJJ } from "./MisDDJJConsultaGrillaApi";
 import Swal from "sweetalert2";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 import { StripedDataGrid, dataGridStyle } from "@/common/dataGridStyle";
+import localStorageService from "@/components/localStorage/localStorageService";
 
 function misDDJJColumnaAporteGet(ddjjResponse) {
   //toma todas las ddjj de la consulta de "Mis DDJJ" y arma "vector de Columnas Aportes"
@@ -69,25 +65,22 @@ function castearMisDDJJ(ddjjResponse) {
   return ddjjResponse;
 }
 
-export const GrillaMisDeclaracionesJuradas = ({
+export const MisDDJJConsultaGrilla = ({
   setDDJJState,
   setPeriodo,
-  rows_mis_ddjj,
+  rows_mis_ddjj: rowsMisDdjj,
   setRowsMisDdjj,
-  idEmpresa,
   setTabState,
-  /* 
-  handleAcceptPeriodoDDJJ, */
-  rowsAltaDDJJ,
   setRowsAltaDDJJ,
   setPeticion,
-  setIdDDJJ,
 }) => {
   const [rowModesModel, setRowModesModel] = useState({});
   const [paginationModel, setPaginationModel] = useState({
     pageSize: 10,
     page: 0,
   });
+
+  const ID_EMPRESA = localStorageService.getEmpresaId();
 
   let colAportes = [];
 
@@ -103,7 +96,7 @@ export const GrillaMisDeclaracionesJuradas = ({
 
   useEffect(() => {
     const ObtenerMisDeclaracionesJuradas = async () => {
-      let ddjjResponse = await axiosDDJJ.consultar(idEmpresa);
+      let ddjjResponse = await axiosDDJJ.consultar(ID_EMPRESA);
 
       //Agrego las columnas deTotales de Aportes
       ddjjResponse = await castearMisDDJJ(ddjjResponse);
@@ -115,22 +108,23 @@ export const GrillaMisDeclaracionesJuradas = ({
   }, []);
 
   const PresentarDeclaracionesJuradas = async (id) => {
-    const updatedRow = { ...rows_mis_ddjj.find((row) => row.id === id) };
+    const updatedRow = { ...rowsMisDdjj.find((row) => row.id === id) };
+    const data = await axiosDDJJ.presentar(ID_EMPRESA, id);
+   
+    console.log("data: ", data);
 
-    const estado = {
-      estado: updatedRow.estado,
-    };
+    if (data) {
+      updatedRow.estado = data.estado || null;
+      updatedRow.secuencia = data.secuencia || null;
 
-    const bRta = await axiosDDJJ.presentar(idEmpresa, id);
-    if (bRta) {
       setRowsMisDdjj(
-        rows_mis_ddjj.map((row) => (row.id === id ? updatedRow : row))
+        rowsMisDdjj.map((row) => (row.id === id ? updatedRow : row))
       );
-      updatedRow.estado = "PR";
     }
 
     return updatedRow;
   };
+
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -138,24 +132,8 @@ export const GrillaMisDeclaracionesJuradas = ({
     }
   };
 
-  const handleEditClick = (id, row) => async () => {
-    const ddjj = await axiosDDJJ.getDDJJ(idEmpresa, id);
-    console.log("ddjj: ", ddjj);
-
-    const { periodo, afiliados } = ddjj;
-
-    const fecha = formatter.periodo2(periodo);
-    console.log("fecha: ", fecha);
-
-
-    // Agregarle a afiliados la propiedad isNew con el valor de false
-    afiliados.forEach((afiliado) => (afiliado.isNew = false));
-
-    //Actualizo estados de solapa DDJJ y cambio de Tab
-    setPeticion("PUT");
-    setPeriodo(dayjs(fecha));
-    setRowsAltaDDJJ(afiliados);
-    setDDJJState(ddjj);
+  const handleEditClick = (id) => async () => {
+    setDDJJState({ id: id });
     setTabState(0);
   };
 
@@ -164,7 +142,7 @@ export const GrillaMisDeclaracionesJuradas = ({
   };
 
   const declaracionJuradasImpresion = async (idDDJJ) => {
-    await axiosDDJJ.imprimir(idEmpresa, idDDJJ);
+    await axiosDDJJ.imprimir(ID_EMPRESA, idDDJJ);
   };
 
   const handleDeleteClick = (id) => async () => {
@@ -180,13 +158,13 @@ export const GrillaMisDeclaracionesJuradas = ({
           confirmButtonText: "Si, bórralo!",
         }).then(async (result) => {
           console.log(
-            "handleDeleteClick() - idEmpresa: " + idEmpresa + " id: " + id
+            "handleDeleteClick() - ID_EMPRESA: " + ID_EMPRESA + " id: " + id
           );
           if (result.isConfirmed) {
-            const bRta = await axiosDDJJ.eliminar(idEmpresa, id);
+            const bRta = await axiosDDJJ.eliminar(ID_EMPRESA, id);
             console.log("bRta: " + bRta);
             if (bRta)
-              setRowsMisDdjj(rows_mis_ddjj.filter((row) => row.id !== id));
+              setRowsMisDdjj(rowsMisDdjj.filter((row) => row.id !== id));
           }
         });
       } catch (error) {
@@ -203,9 +181,9 @@ export const GrillaMisDeclaracionesJuradas = ({
       [id]: { mode: GridRowModes.View, ignoreModifications: true },
     });
 
-    const editedRow = rows_mis_ddjj.find((row) => row.id === id);
+    const editedRow = rowsMisDdjj.find((row) => row.id === id);
     if (editedRow.isNew) {
-      setRowsMisDdjj(rows_mis_ddjj.filter((row) => row.id !== id));
+      setRowsMisDdjj(rowsMisDdjj.filter((row) => row.id !== id));
     }
   };
 
@@ -217,7 +195,7 @@ export const GrillaMisDeclaracionesJuradas = ({
     }
 
     setRowsMisDdjj(
-      rows_mis_ddjj.map((row) => (row.id === newRow.id ? updatedRow : row))
+      rowsMisDdjj.map((row) => (row.id === newRow.id ? updatedRow : row))
     );
 
     return updatedRow;
@@ -233,7 +211,7 @@ export const GrillaMisDeclaracionesJuradas = ({
       field: "periodo",
       headerName: "Periodo",
       flex: 1,
-      editable: true,
+      editable: false,
       type: "date",
       headerAlign: "center",
       align: "center",
@@ -246,14 +224,14 @@ export const GrillaMisDeclaracionesJuradas = ({
       field: "secuencia",
       headerName: "Numero",
       flex: 1,
-      editable: true,
+      editable: false,
       headerAlign: "center",
       align: "center",
       headerClassName: "header--cell",
       valueGetter: (params) => {
         // Si secuencia es 0 es "Original" sino es "Rectificativa"+secuencia
         if (params.value === null) {
-          return "Original";
+          return "Pendiente";
         } else if (params.value === 0) {
           return "Original";
         } else {
@@ -263,14 +241,14 @@ export const GrillaMisDeclaracionesJuradas = ({
     },
   ];
 
-  colAportes = misDDJJColumnaAporteGet(rows_mis_ddjj);
+  colAportes = misDDJJColumnaAporteGet(rowsMisDdjj);
 
   colAportes.forEach((elem) => {
     columns.push({
       field: "total" + elem,
       headerName: "Total " + elem,
       flex: 1,
-      editable: true,
+      editable: false,
       headerAlign: "center",
       align: "center",
       headerClassName: "header--cell",
@@ -338,7 +316,7 @@ export const GrillaMisDeclaracionesJuradas = ({
             label="Print"
             color="inherit"
             onClick={() => declaracionJuradasImpresion(id)}
-          />
+          />,
         ];
       } else {
         return [
@@ -356,7 +334,7 @@ export const GrillaMisDeclaracionesJuradas = ({
             icon={<EditIcon />}
             label="Edit"
             className="textPrimary"
-            onClick={handleEditClick(id, row)}
+            onClick={handleEditClick(id)}
             color="inherit"
           />,
           <GridActionsCellItem
@@ -364,7 +342,7 @@ export const GrillaMisDeclaracionesJuradas = ({
             label="Print"
             color="inherit"
             onClick={() => declaracionJuradasImpresion(id)}
-          />
+          />,
         ];
       }
     },
@@ -392,7 +370,7 @@ export const GrillaMisDeclaracionesJuradas = ({
         }}
       >
         <StripedDataGrid
-          rows={rows_mis_ddjj}
+          rows={rowsMisDdjj}
           columns={columns}
           editMode="row"
           rowModesModel={rowModesModel}

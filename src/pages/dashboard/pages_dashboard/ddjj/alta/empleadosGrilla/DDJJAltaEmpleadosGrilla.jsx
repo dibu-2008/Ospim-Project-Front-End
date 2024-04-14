@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from "react";
+import { useState, useMemo } from "react";
 import {
   GridRowModes,
   DataGrid,
@@ -6,6 +6,7 @@ import {
   GridToolbarContainer,
   GridActionsCellItem,
   GridRowEditStopReasons,
+  useGridApiRef,
 } from "@mui/x-data-grid";
 
 import AddIcon from "@mui/icons-material/Add";
@@ -17,25 +18,20 @@ import SearchIcon from "@mui/icons-material/Search";
 import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 import * as locales from "@mui/material/locale";
 import formatter from "@/common/formatter";
-import {
-  Box,
-  Button,
-  TextField,
-  Select,
-  MenuItem,
-} from "@mui/material";
+import { Box, Button, TextField, Select, MenuItem } from "@mui/material";
 import { axiosDDJJ } from "../DDJJAltaApi";
-import "./GrillaPasoTres.css";
+import "./DDJJAltaEmpleadosGrilla.css";
 import { dataGridStyle } from "@/common/dataGridStyle";
 import dayjs from "dayjs";
+import swal from "@/components/swal/swal";
 
 function EditToolbar(props) {
   const {
     setRowsAltaDDJJ,
     rowsAltaDDJJ,
-    setRowsAltaDDJJAux,
-    rowsAltaDDJJAux,
     setRowModesModel,
+    showQuickFilter,
+    themeWithLocale,
   } = props;
 
   const handleClick = () => {
@@ -57,28 +53,9 @@ function EditToolbar(props) {
         categoria: "",
         remunerativo: "",
         noRemunerativo: "",
-        uomaSocio: false,
-        amtimaSocio: false,
-        isNew: true,
-      },
-      ...oldRows,
-    ]);
-
-    setRowsAltaDDJJAux((oldRows) => [
-      {
-        id,
-        cuil: "",
-        apellido: "",
-        nombre: "",
-        camara: "",
-        fechaIngreso: "",
-        empresaDomicilioId: "",
-        categoria: "",
-        remunerativo: "",
-        noRemunerativo: "",
-        uomaSocio: false,
-        amtimaSocio: false,
-        isNew: true,
+        uomaSocio: "",
+        amtimaSocio: "",
+        isNew: "",
       },
       ...oldRows,
     ]);
@@ -87,26 +64,24 @@ function EditToolbar(props) {
       ...oldModel,
       [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
     }));
+
   };
 
   return (
-    <GridToolbarContainer theme={props.themeWithLocale}>
+    <GridToolbarContainer theme={themeWithLocale} style={{ display: 'flex', justifyContent: 'space-between' }}>
       <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
         Nuevo Registro
       </Button>
       <GridToolbar
-        showQuickFilter={props.showQuickFilter}
-        // ocultar el filtro de columnas
+        showQuickFilter={showQuickFilter}
       />
     </GridToolbarContainer>
   );
 }
 
-export const GrillaPasoTres = ({
+export const DDJJAltaEmpleadosGrilla = ({
   rowsAltaDDJJ,
   setRowsAltaDDJJ,
-  rowsAltaDDJJAux,
-  setRowsAltaDDJJAux,
   camaras,
   categoriasFiltradas,
   setCategoriasFiltradas,
@@ -115,9 +90,11 @@ export const GrillaPasoTres = ({
   todasLasCategorias,
   plantas,
   validacionResponse,
+  rowModesModel,
+  setRowModesModel
 }) => {
+
   const [locale, setLocale] = useState("esES");
-  const [rowModesModel, setRowModesModel] = useState({});
   const [inteDataBase, setInteDataBase] = useState(null);
 
   const theme = useTheme();
@@ -126,60 +103,72 @@ export const GrillaPasoTres = ({
     [locale, theme]
   );
 
-  const apiRef = useRef(null);
+  const gridApiRef = useGridApiRef();
 
-  const ObtenerAfiliados = async (params, cuilElegido) => {
-    const afiliados = await axiosDDJJ.getAfiliado(cuilElegido);
+  const obtenerAfiliados = async (params, cuilElegido) => {
 
-    const afiliadoEncontrado = afiliados.find(
-      (afiliado) => afiliado.cuil === cuilElegido
-    );
-
-    if (afiliado) {
-      setAfiliado(afiliadoEncontrado);
+    if (cuilElegido === "") {
+      swal.showError("Debe ingresar un CUIL y presionar la lupa");
     }
 
-    // TODO : Mirar el tema de la logica de busqueda por que tambien podria poder escribir sin buscar el cuil
-    if (afiliadoEncontrado) {
-      if (afiliadoEncontrado.inte !== null) {
-        setInteDataBase(afiliadoEncontrado.inte);
+    if (cuilElegido.length < 11) {
+      swal.showError("El CUIL ingresado es incorrecto, debe tener 11 dígitos.");
+    } else {
+      const afiliados = await axiosDDJJ.getAfiliado(cuilElegido);
+
+      const afiliadoEncontrado = afiliados.find(
+        (afiliado) => afiliado.cuil === cuilElegido
+      );
+
+      if (afiliado) {
+        setAfiliado(afiliadoEncontrado);
       }
 
-      setAfiliado(afiliadoEncontrado);
+      // TODO : Mirar el tema de la logica de busqueda por que tambien podria poder escribir sin buscar el cuil
+      if (afiliadoEncontrado) {
+        if (afiliadoEncontrado.inte !== null) {
+          setInteDataBase(afiliadoEncontrado.inte);
+        }
 
-      // Apellido
-      params.api.setEditCellValue({
-        id: params.id,
-        field: "apellido",
-        value: afiliadoEncontrado.apellido,
-      });
+        setAfiliado(afiliadoEncontrado);
 
-      const textFieldApellido = document.getElementById(
-        "apellido" + params.row.id
-      );
-      const abueloApellido = textFieldApellido.parentNode.parentNode;
-      abueloApellido.style.display = "block";
+        // Apellido
+        params.api.setEditCellValue({
+          id: params.id,
+          field: "apellido",
+          value: afiliadoEncontrado.apellido,
+        });
 
-      // Nombre
-      params.api.setEditCellValue({
-        id: params.id,
-        field: "nombre",
-        value: afiliadoEncontrado.nombre,
-      });
+        const textFieldApellido = document.getElementById(
+          "apellido" + params.row.id
+        );
+        const abueloApellido = textFieldApellido.parentNode.parentNode;
+        abueloApellido.style.display = "block";
 
-      const textFieldNombre = document.getElementById("nombre" + params.row.id);
-      const abueloNombre = textFieldNombre.parentNode.parentNode;
-      abueloNombre.style.display = "block";
-    } else {
-      const textFieldApellido = document.getElementById(
-        "apellido" + params.row.id
-      );
-      const abueloApellido = textFieldApellido.parentNode.parentNode;
-      abueloApellido.style.display = "block";
+        // Nombre
+        params.api.setEditCellValue({
+          id: params.id,
+          field: "nombre",
+          value: afiliadoEncontrado.nombre,
+        });
 
-      const textFieldNombre = document.getElementById("nombre" + params.row.id);
-      const abueloNombre = textFieldNombre.parentNode.parentNode;
-      abueloNombre.style.display = "block";
+        const textFieldNombre = document.getElementById("nombre" + params.row.id);
+        const abueloNombre = textFieldNombre.parentNode.parentNode;
+        abueloNombre.style.display = "block";
+      } else {
+
+        swal.showError("No se encontraron afiliados con el CUIL ingresado, ingreselos manualmente.");
+
+        const textFieldApellido = document.getElementById(
+          "apellido" + params.row.id
+        );
+        const abueloApellido = textFieldApellido.parentNode.parentNode;
+        abueloApellido.style.display = "block";
+
+        const textFieldNombre = document.getElementById("nombre" + params.row.id);
+        const abueloNombre = textFieldNombre.parentNode.parentNode;
+        abueloNombre.style.display = "block";
+      }
     }
   };
 
@@ -192,15 +181,17 @@ export const GrillaPasoTres = ({
     return soloCategorias;
   };
 
-  const handleRowEditStop = (params, event) => {
+  const handleRowEditStop = (params) => {
+
     if (
-      params.reason === GridRowEditStopReasons.rowFocusOut ||
-      params.reason === GridRowEditStopReasons.keyboard && event.key === 'Enter'
+      params.reason === GridRowEditStopReasons.rowFocusOut
     ) {
-      apiRef.current?.stopRowEditMode({
+
+      gridApiRef.current?.stopRowEditMode({
         id: params.id,
         ignoreModifications: false,
       });
+
     }
   };
 
@@ -233,6 +224,7 @@ export const GrillaPasoTres = ({
   };
 
   const processRowUpdate = async (newRow) => {
+    console.log("processRowUpdate - INIT");
     if (newRow.isNew) {
       const fila = { ...newRow, inte: inteDataBase, errores: false };
       console.log("Nueva Fila");
@@ -246,10 +238,6 @@ export const GrillaPasoTres = ({
         rowsAltaDDJJ.map((row) => (row.id === newRow.id ? fila : row))
       );
 
-      setRowsAltaDDJJAux(
-        rowsAltaDDJJAux.map((row) => (row.id === newRow.id ? fila : row))
-      );
-
       return { ...fila, isNew: false };
     } else {
       const fila = { ...newRow, inte: inteDataBase };
@@ -260,16 +248,33 @@ export const GrillaPasoTres = ({
         rowsAltaDDJJ.map((row) => (row.id === newRow.id ? fila : row))
       );
 
-      setRowsAltaDDJJAux(
-        rowsAltaDDJJAux.map((row) => (row.id === newRow.id ? fila : row))
-      );
-
       return fila;
     }
   };
 
   const handleRowModesModelChange = (newRowModesModel) => {
     setRowModesModel(newRowModesModel);
+  };
+
+  const colorErrores = (params) => {
+
+    let cellClassName = "";
+
+    validacionResponse?.errores?.forEach((error) => {
+      if (
+        params.row.cuil === error.cuil &&
+        params.field === error.codigo
+      ) {
+        cellClassName = "hot";
+      }
+    });
+
+    // Action no implementar estilos hot o cold
+    if (params.field === "actions") {
+      cellClassName = "";
+    }
+
+    return cellClassName;
   };
 
   const columns = [
@@ -313,7 +318,7 @@ export const GrillaPasoTres = ({
             />
             <SearchIcon
               style={{ marginLeft: 8, cursor: "pointer" }}
-              onClick={() => ObtenerAfiliados(params, params.value)}
+              onClick={() => obtenerAfiliados(params, params.value)}
             />
           </div>
         );
@@ -450,15 +455,19 @@ export const GrillaPasoTres = ({
       headerAlign: "center",
       align: "center",
       type: "singleSelect",
-      valueOptions: camaras.map((camara) => {
-        return { value: camara.codigo, label: camara.descripcion }; // Agrega la propiedad 'key'
+      valueFormatter: ({ value }) => value || "",
+      valueOptions: camaras.map(({ codigo, descripcion }) => {
+        return { value: codigo, label: descripcion };
       }),
       headerClassName: "header--cell",
       renderEditCell: (params) => {
+
+        // validar 
+
         return (
           <Select
             fullWidth
-            value={params.value || ""}
+            value={params.value !== null ? params.value : ""}
             onChange={(event) => {
               params.api.setEditCellValue({
                 id: params.id,
@@ -504,6 +513,31 @@ export const GrillaPasoTres = ({
       align: "center",
       headerClassName: "header--cell",
       valueOptions: categoriasFiltradas,
+      valueFormatter: ({ value }) => value || "",
+      renderEditCell: (params) => {
+        console.log(params)
+        return (
+          <Select
+            fullWidth
+            value={params.value !== null ? params.value : ""}
+            onChange={(event) => {
+              params.api.setEditCellValue({
+                id: params.id,
+                field: "categoria",
+                value: event.target.value,
+              });
+            }}
+          >
+            {categoriasFiltradas.map((categoria) => {
+              return (
+                <MenuItem key={categoria} value={categoria}>
+                  {categoria}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        );
+      }
     },
     {
       field: "fechaIngreso",
@@ -516,10 +550,11 @@ export const GrillaPasoTres = ({
       headerClassName: "header--cell",
       valueFormatter: ({ value }) => {
         if (!value) return "";
-
-        return formatter.date(value);
+        //return formatter.date(value);
+        //return dayjs(value).format("MM/YYYY");
+        return dayjs(value).format("DD/MM/YYYY");
       },
-    }, 
+    },
     {
       field: "empresaDomicilioId",
       type: "singleSelect",
@@ -530,8 +565,32 @@ export const GrillaPasoTres = ({
       align: "center",
       headerClassName: "header--cell",
       valueOptions: plantas.map((planta) => {
-        return { value: planta.id, label: planta.planta }; // Agrega la propiedad 'key'
+        return { value: planta.id, label: planta.planta };
       }),
+      valueFormatter: ({ value }) => value || "",
+      renderEditCell: (params) => {
+        return (
+          <Select
+            fullWidth
+            value={params.value || ""}
+            onChange={(event) => {
+              params.api.setEditCellValue({
+                id: params.id,
+                field: "empresaDomicilioId",
+                value: event.target.value,
+              });
+            }}
+          >
+            {plantas.map((planta) => {
+              return (
+                <MenuItem key={planta.id} value={planta.id}>
+                  {planta.planta}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        );
+      }
     },
     {
       field: "remunerativo",
@@ -542,9 +601,10 @@ export const GrillaPasoTres = ({
       headerAlign: "center",
       align: "center",
       headerClassName: "header--cell",
-      valueFormatter: (params) => {
-        if (params.value === "") return "";
-        return formatter.currency.format(params.value || 0);
+      valueFormatter: ({ value }) => {
+        if (value === "") return "";
+        if (value === null) return "";
+        return formatter.currency.format(value || 0);
       },
     },
     {
@@ -564,15 +624,15 @@ export const GrillaPasoTres = ({
       headerAlign: "center",
       align: "center",
       headerClassName: "header--cell",
-      valueFormatter: (params) => {
-        if (params.value === "") return "";
-        return formatter.currency.format(params.value || 0);
+      valueFormatter: ({ value }) => {
+        if (value === "") return "";
+        if (value === null) return "";
+        return formatter.currency.format(value || 0);
       },
     },
     {
       field: "uomaSocio",
       type: "singleSelect",
-      //headerName: "Adherido a sindicato",
       renderHeader: () => (
         <div style={{ textAlign: "center", color: "#fff", fontSize: "0.8rem" }}>
           <span role="img" aria-label="enjoy">
@@ -591,11 +651,35 @@ export const GrillaPasoTres = ({
         { value: true, label: "Si" },
         { value: false, label: "No" },
       ],
+      valueFormatter: ({ value }) => {
+        console.log("Estoy de adherido al sindicato")
+        console.log(value)
+        if (value === "") return "";
+        if (value === null) return "";
+        return value ? "Si" : "No";
+      },
+      renderEditCell: (params) => {
+        return (
+          <Select
+            fullWidth
+            value={params.value !== null ? params.value : ""}
+            onChange={(event) => {
+              params.api.setEditCellValue({
+                id: params.id,
+                field: "uomaSocio",
+                value: event.target.value,
+              });
+            }}
+          >
+            <MenuItem value={true}>Si</MenuItem>
+            <MenuItem value={false}>No</MenuItem>
+          </Select>
+        );
+      }
     },
     {
       field: "amtimaSocio",
       type: "singleSelect",
-      //headerName: "Paga mutual",
       renderHeader: () => (
         <div style={{ textAlign: "center", color: "#fff", fontSize: "0.8rem" }}>
           <span role="img" aria-label="enjoy">
@@ -614,6 +698,30 @@ export const GrillaPasoTres = ({
         { value: true, label: "Si" },
         { value: false, label: "No" },
       ],
+      valueFormatter: ({ value }) => {
+        console.log(value)
+        if (value === "") return "";
+        if (value === null) return "";
+        return value ? "Si" : "No";
+      },
+      renderEditCell: (params) => {
+        return (
+          <Select
+            fullWidth
+            value={params.value !== null ? params.value : ""}
+            onChange={(event) => {
+              params.api.setEditCellValue({
+                id: params.id,
+                field: "amtimaSocio",
+                value: event.target.value,
+              });
+            }}
+          >
+            <MenuItem value={true}>Si</MenuItem>
+            <MenuItem value={false}>No</MenuItem>
+          </Select>
+        );
+      }
     },
     {
       field: "errores",
@@ -695,7 +803,7 @@ export const GrillaPasoTres = ({
       >
         <ThemeProvider theme={themeWithLocale}>
           <DataGrid
-            apiRef={apiRef.current}
+            apiRef={gridApiRef}
             className="afiliados"
             rows={rowsAltaDDJJ}
             columns={columns}
@@ -714,12 +822,8 @@ export const GrillaPasoTres = ({
               toolbar: {
                 setRowsAltaDDJJ,
                 rowsAltaDDJJ,
-                setRowsAltaDDJJAux,
-                rowsAltaDDJJAux,
                 setRowModesModel,
                 showQuickFilter: true,
-                // filtro de columnas
-                showColumnMenu: true,
                 themeWithLocale,
               },
             }}
@@ -745,33 +849,14 @@ export const GrillaPasoTres = ({
               },
             }}
             pageSizeOptions={[5, 10, 25]}
-            getCellClassName={(params) => {
-              let cellClassName = "";
-
-              validacionResponse?.errores?.forEach((error) => {
-                if (
-                  params.row.cuil === error.cuil &&
-                  params.field === error.codigo
-                ) {
-                  cellClassName = "hot";
-                }
-              });
-
-              // Action no implementar estilos hot o cold
-              if (params.field === "actions") {
-                cellClassName = "";
-              }
-
-              return cellClassName;
-            }}
+            getCellClassName={colorErrores}
           />
         </ThemeProvider>
         <div
           style={{
             marginTop: "20px",
           }}
-        >
-        </div>
+        ></div>
       </Box>
     </div>
   );

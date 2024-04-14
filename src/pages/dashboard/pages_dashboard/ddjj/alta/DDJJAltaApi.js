@@ -1,6 +1,7 @@
 import oAxios from "@components/axios/axiosInstace";
 import { axiosCrud } from "@components/axios/axiosCrud";
 import { showErrorBackEnd } from "@/components/axios/showErrorBackEnd";
+import { presentar } from "@/pages/dashboard/pages_dashboard/ddjj/DDJJCommonApi";
 import swal from "@/components/swal/swal";
 
 const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
@@ -58,6 +59,20 @@ export const obtenerPlantaEmpresas = async (empresaId) => {
   try {
     const data = await axiosCrud.consultar(URL);
     return data || [];
+  } catch (error) {
+    showErrorBackEnd(
+      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
+      error
+    );
+    return [];
+  }
+};
+
+export const obtenerMiDeclaracionJurada = async (empresaId, ddjjId) => {
+  const URL = `/empresa/${empresaId}/ddjj/${ddjjId}`;
+  try {
+    const data = await axiosCrud.consultar(URL);
+    return data || {};
   } catch (error) {
     showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
@@ -148,6 +163,10 @@ export const axiosDDJJ = {
     return obtenerPlantaEmpresas(empresaId);
   },
 
+  getDDJJ: async function (empresaId, ddjjId) {
+    return obtenerMiDeclaracionJurada(empresaId, ddjjId);
+  },
+
   crear: async function (empresaId, registro) {
     return crearAltaDeclaracionJurada(empresaId, registro);
   },
@@ -161,5 +180,8 @@ export const axiosDDJJ = {
   },
   validarCuiles: async function (empresaId, cuiles) {
     return validaCuil(empresaId, cuiles);
+  },
+  presentar: async function (empresaId, ddjjId) {
+    return presentar(empresaId, ddjjId);
   },
 };

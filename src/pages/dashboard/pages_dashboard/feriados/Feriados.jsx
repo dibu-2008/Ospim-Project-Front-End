@@ -3,6 +3,7 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import {
   Box,
   Button,
+  Grid,
   IconButton,
   TextField,
   Tooltip,
@@ -19,9 +20,7 @@ import CancelIcon from "@mui/icons-material/Close";
 
 import {
   GridRowModes,
-  DataGrid,
   GridToolbar,
-  gridClasses,
   GridToolbarContainer,
   GridActionsCellItem,
   GridRowEditStopReasons,
@@ -36,7 +35,6 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { esES } from "@mui/x-date-pickers/locales";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -44,6 +42,7 @@ import { DatePicker } from "@mui/x-date-pickers";
 import formatter from "@/common/formatter";
 import swal from "@/components/swal/swal";
 import { StripedDataGrid, dataGridStyle } from "@/common/dataGridStyle";
+import { ToastContainer } from "react-toastify";
 
 const style = {
   position: "absolute",
@@ -59,7 +58,13 @@ const style = {
 
 // Traerme las etiquetas del dom que tengas la clase .MuiDataGrid-cell--editable
 const crearNuevoRegistro = (props) => {
-  const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
+  const {
+    setRows,
+    setRowModesModel,
+    volverPrimerPagina,
+    showQuickFilter,
+    themeWithLocale
+  } = props;
 
   const altaHandleClick = () => {
     const newReg = { fecha: "" };
@@ -74,11 +79,13 @@ const crearNuevoRegistro = (props) => {
   };
 
   return (
-    <GridToolbarContainer>
-      <GridToolbar showQuickFilter={props.showQuickFilter} />
+    <GridToolbarContainer theme={themeWithLocale} style={{ display: 'flex', justifyContent: 'space-between' }}>
       <Button color="primary" startIcon={<AddIcon />} onClick={altaHandleClick}>
         Nuevo Registro
       </Button>
+      <GridToolbar
+        showQuickFilter={showQuickFilter}
+      />
     </GridToolbarContainer>
   );
 };
@@ -339,6 +346,7 @@ export const Feriados = () => {
           </IconButton>
         </Tooltip>
       </h1>
+      <ToastContainer style={{ marginRight: "6rem", marginTop: "3rem" }} />
       <Box
         sx={{
           height: "600px",
@@ -369,7 +377,14 @@ export const Feriados = () => {
             localeText={dataGridStyle.toolbarText}
             slots={{ toolbar: crearNuevoRegistro }}
             slotProps={{
-              toolbar: { setRows, rows, setRowModesModel, volverPrimerPagina },
+              toolbar: {
+                setRows,
+                setRowModesModel,
+                volverPrimerPagina,
+                showQuickFilter: true,
+                showColumnMenu: true,
+                themeWithLocale
+              },
             }}
             paginationModel={paginationModel}
             onPaginationModelChange={setPaginationModel}
