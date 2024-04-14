@@ -44,8 +44,7 @@ function a11yProps(index) {
   };
 }
 
-
-export const DeclaracionesJuradas = () => {
+export const DDJJTabs = () => {
   const [DDJJState, setDDJJState] = useState({});
   const [periodo, setPeriodo] = useState(null);
   const [rowsAltaDDJJ, setRowsAltaDDJJ] = useState([]);

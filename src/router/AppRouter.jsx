@@ -1,11 +1,11 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Navigate } from "react-router";
 import PrivateRoute from "./PrivateRoute";
-import { DeclaracionesJuradas } from "../pages/dashboard/pages_dashboard/ddjj/DDJJTabs";
 import { Inicio } from "../pages/dashboard/pages_dashboard/inicio/Inicio";
 import NavBar from "../components/navbar/NavBar";
 import { DatosEmpresa } from "../pages/dashboard/pages_dashboard/datos_empresa/DatosEmpresa";
 import { Publicaciones } from "../pages/dashboard/pages_dashboard/publicaciones/Publicaciones";
+import { DDJJTabs } from "@/pages/dashboard/pages_dashboard/ddjj/DDJJTabs";
 import { RegisterPage } from "../pages/RegisterPage";
 import DashboardPage from "../pages/dashboard/DashboardPage";
 import { LoginPage } from "../pages/login/LoginPage";
@@ -42,7 +42,7 @@ const AppRouter = () => {
           <Route path="inicio" index element={<Inicio />} />
           <Route path="publicaciones" element={<Publicaciones />} />
           <Route path="feriados" element={<Feriados />} />
-          <Route path="ddjj" element={<DDJJ />} />
+          <Route path="ddjj" element={<DDJJTabs />} />
           <Route
             path="ddjjconsultaempleado"
             element={<DDJJConsultaEmpleado />}
