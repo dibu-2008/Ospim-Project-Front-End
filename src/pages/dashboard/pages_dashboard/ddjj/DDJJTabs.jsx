@@ -4,8 +4,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import "./DDJJTabs.css";
-
-import { MisDDJJConsulta } from "./mis_ddjj/MisDDJJConsulta";
+import { MisDDJJConsultaFlt } from "./mis_ddjj/MisDDJJConsultaFlt";
 import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 import * as locales from "@mui/material/locale";
 import { DDJJAlta } from "./alta/DDJJAlta";
@@ -45,15 +44,9 @@ function a11yProps(index) {
 }
 
 export const DDJJTabs = () => {
-  const [DDJJState, setDDJJState] = useState({});
-  const [periodo, setPeriodo] = useState(null);
-  const [rowsAltaDDJJ, setRowsAltaDDJJ] = useState([]);
-  const [rowsAltaDDJJAux, setRowsAltaDDJJAux] = useState([]);
-  const [rows_mis_ddjj, setRowsMisDdjj] = useState([]);
+  const [idDDJJ, setIdDDJJ] = useState(null);
   const [locale, setLocale] = useState("esES");
   const [tabState, setTabState] = useState(0);
-  const [peticion, setPeticion] = useState("");
-  const [idDDJJ, setIdDDJJ] = useState(null);
 
   const theme = useTheme();
 
@@ -91,30 +84,12 @@ export const DDJJTabs = () => {
             </Tabs>
           </Box>
           <CustomTabPanel value={tabState} index={0}>
-            <DDJJAlta
-              DDJJState={DDJJState}
-              setDDJJState={setDDJJState}
-              periodo={periodo}
-              setPeriodo={setPeriodo} /*  */
-              rowsAltaDDJJ={rowsAltaDDJJ}
-              setRowsAltaDDJJ={setRowsAltaDDJJ}
-              rowsAltaDDJJAux={rowsAltaDDJJAux}
-              setRowsAltaDDJJAux={setRowsAltaDDJJAux}
-              peticion={peticion}
-              idDDJJ={idDDJJ}
-            />
+            <DDJJAlta idDDJJ={idDDJJ} setIdDDJJ={setIdDDJJ} />
           </CustomTabPanel>
           <CustomTabPanel value={tabState} index={1}>
-            <MisDDJJConsulta
-              setDDJJState={setDDJJState}
-              setPeriodo={setPeriodo}
-              rows_mis_ddjj={rows_mis_ddjj}
-              setRowsMisDdjj={setRowsMisDdjj}
-              setTabState={setTabState}
-              rowsAltaDDJJ={rowsAltaDDJJ}
-              setRowsAltaDDJJ={setRowsAltaDDJJ}
-              setPeticion={setPeticion}
+            <MisDDJJConsultaFlt
               setIdDDJJ={setIdDDJJ}
+              setTabState={setTabState}
             />
           </CustomTabPanel>
           <CustomTabPanel value={tabState} index={2}>

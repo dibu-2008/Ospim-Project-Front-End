@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   GridRowModes,
   DataGrid,
@@ -64,36 +64,31 @@ function EditToolbar(props) {
       ...oldModel,
       [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
     }));
-
   };
 
   return (
-    <GridToolbarContainer theme={themeWithLocale} style={{ display: 'flex', justifyContent: 'space-between' }}>
+    <GridToolbarContainer
+      theme={themeWithLocale}
+      style={{ display: "flex", justifyContent: "space-between" }}
+    >
       <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
         Nuevo Registro
       </Button>
-      <GridToolbar
-        showQuickFilter={showQuickFilter}
-      />
+      <GridToolbar showQuickFilter={showQuickFilter} />
     </GridToolbarContainer>
   );
 }
 
 export const DDJJAltaEmpleadosGrilla = ({
-  rowsAltaDDJJ,
-  setRowsAltaDDJJ,
-  rowsAltaDDJJAux,
-  camaras,
-  categoriasFiltradas,
-  setCategoriasFiltradas,
-  afiliado,
-  setAfiliado,
-  todasLasCategorias,
-  plantas,
-  validacionResponse,
+  ddjj,
+  setDdjj,
   rowModesModel,
-  setRowModesModel
+  setRowModesModel,
 }) => {
+  const [camaras, setCamaras] = useState([]);
+  const [plantas, setPlantas] = useState([]);
+  const [todasLasCategorias, setTodasLasCategorias] = useState([]);
+  const [categoriasFiltradas, setCategoriasFiltradas] = useState([]);
 
   const [locale, setLocale] = useState("esES");
   const [inteDataBase, setInteDataBase] = useState(null);
@@ -104,10 +99,38 @@ export const DDJJAltaEmpleadosGrilla = ({
     [locale, theme]
   );
 
+  //Consulta Camaras
+  useEffect(() => {
+    const ObtenerCamaras = async () => {
+      const data = await axiosDDJJ.getCamaras();
+      setCamaras(data.map((item, index) => ({ id: index + 1, ...item })));
+    };
+    ObtenerCamaras();
+  }, []);
+
+  //Consulta Categorias
+  useEffect(() => {
+    const ObtenerCategorias = async () => {
+      const data = await axiosDDJJ.getCategorias();
+      setTodasLasCategorias(
+        data.map((item, index) => ({ id: index + 1, ...item }))
+      );
+    };
+    ObtenerCategorias();
+  }, []);
+
+  //Consulta Planta de Empresas
+  useEffect(() => {
+    const ObtenerPlantaEmpresas = async () => {
+      const data = await axiosDDJJ.getPlantas(ID_EMPRESA);
+      setPlantas(data.map((item) => ({ id: item, ...item })));
+    };
+    ObtenerPlantaEmpresas();
+  }, []);
+
   const gridApiRef = useGridApiRef();
 
   const obtenerAfiliados = async (params, cuilElegido) => {
-
     if (cuilElegido === "") {
       swal.showError("Debe ingresar un CUIL y presionar la lupa");
     }
@@ -153,12 +176,15 @@ export const DDJJAltaEmpleadosGrilla = ({
           value: afiliadoEncontrado.nombre,
         });
 
-        const textFieldNombre = document.getElementById("nombre" + params.row.id);
+        const textFieldNombre = document.getElementById(
+          "nombre" + params.row.id
+        );
         const abueloNombre = textFieldNombre.parentNode.parentNode;
         abueloNombre.style.display = "block";
       } else {
-
-        swal.showError("No se encontraron afiliados con el CUIL ingresado, ingreselos manualmente.");
+        swal.showError(
+          "No se encontraron afiliados con el CUIL ingresado, ingreselos manualmente."
+        );
 
         const textFieldApellido = document.getElementById(
           "apellido" + params.row.id
@@ -166,7 +192,9 @@ export const DDJJAltaEmpleadosGrilla = ({
         const abueloApellido = textFieldApellido.parentNode.parentNode;
         abueloApellido.style.display = "block";
 
-        const textFieldNombre = document.getElementById("nombre" + params.row.id);
+        const textFieldNombre = document.getElementById(
+          "nombre" + params.row.id
+        );
         const abueloNombre = textFieldNombre.parentNode.parentNode;
         abueloNombre.style.display = "block";
       }
@@ -183,16 +211,11 @@ export const DDJJAltaEmpleadosGrilla = ({
   };
 
   const handleRowEditStop = (params) => {
-
-    if (
-      params.reason === GridRowEditStopReasons.rowFocusOut
-    ) {
-
+    if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       gridApiRef.current?.stopRowEditMode({
         id: params.id,
         ignoreModifications: false,
       });
-
     }
   };
 
@@ -258,14 +281,10 @@ export const DDJJAltaEmpleadosGrilla = ({
   };
 
   const colorErrores = (params) => {
-
     let cellClassName = "";
 
     validacionResponse?.errores?.forEach((error) => {
-      if (
-        params.row.cuil === error.cuil &&
-        params.field === error.codigo
-      ) {
+      if (params.row.cuil === error.cuil && params.field === error.codigo) {
         cellClassName = "hot";
       }
     });
@@ -462,8 +481,7 @@ export const DDJJAltaEmpleadosGrilla = ({
       }),
       headerClassName: "header--cell",
       renderEditCell: (params) => {
-
-        // validar 
+        // validar
 
         return (
           <Select
@@ -516,7 +534,7 @@ export const DDJJAltaEmpleadosGrilla = ({
       valueOptions: categoriasFiltradas,
       valueFormatter: ({ value }) => value || "",
       renderEditCell: (params) => {
-        console.log(params)
+        console.log(params);
         return (
           <Select
             fullWidth
@@ -538,7 +556,7 @@ export const DDJJAltaEmpleadosGrilla = ({
             })}
           </Select>
         );
-      }
+      },
     },
     {
       field: "fechaIngreso",
@@ -551,8 +569,6 @@ export const DDJJAltaEmpleadosGrilla = ({
       headerClassName: "header--cell",
       valueFormatter: ({ value }) => {
         if (!value) return "";
-        //return formatter.date(value);
-        //return dayjs(value).format("MM/YYYY");
         return dayjs(value).format("DD/MM/YYYY");
       },
     },
@@ -591,7 +607,7 @@ export const DDJJAltaEmpleadosGrilla = ({
             })}
           </Select>
         );
-      }
+      },
     },
     {
       field: "remunerativo",
@@ -653,8 +669,8 @@ export const DDJJAltaEmpleadosGrilla = ({
         { value: false, label: "No" },
       ],
       valueFormatter: ({ value }) => {
-        console.log("Estoy de adherido al sindicato")
-        console.log(value)
+        console.log("Estoy de adherido al sindicato");
+        console.log(value);
         if (value === "") return "";
         if (value === null) return "";
         return value ? "Si" : "No";
@@ -676,7 +692,7 @@ export const DDJJAltaEmpleadosGrilla = ({
             <MenuItem value={false}>No</MenuItem>
           </Select>
         );
-      }
+      },
     },
     {
       field: "amtimaSocio",
@@ -700,7 +716,7 @@ export const DDJJAltaEmpleadosGrilla = ({
         { value: false, label: "No" },
       ],
       valueFormatter: ({ value }) => {
-        console.log(value)
+        console.log(value);
         if (value === "") return "";
         if (value === null) return "";
         return value ? "Si" : "No";
@@ -722,7 +738,7 @@ export const DDJJAltaEmpleadosGrilla = ({
             <MenuItem value={false}>No</MenuItem>
           </Select>
         );
-      }
+      },
     },
     {
       field: "errores",
@@ -806,7 +822,7 @@ export const DDJJAltaEmpleadosGrilla = ({
           <DataGrid
             apiRef={gridApiRef}
             className="afiliados"
-            rows={rowsAltaDDJJ}
+            rows={ddjj.afiliados}
             columns={columns}
             columnVisibilityModel={{ errores: false }}
             editMode="row"

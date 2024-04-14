@@ -1,80 +1,23 @@
 import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import formatter from "@/common/formatter";
-import {
-  GridRowModes,
-  GridActionsCellItem,
-  GridRowEditStopReasons,
-  GridToolbar,
-} from "@mui/x-data-grid";
+import { GridActionsCellItem, GridToolbar } from "@mui/x-data-grid";
 import Button from "@mui/material/Button";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
-import SaveIcon from "@mui/icons-material/Save";
-import CancelIcon from "@mui/icons-material/Close";
 import LocalPrintshopIcon from "@mui/icons-material/LocalPrintshop";
 import { axiosDDJJ } from "./MisDDJJConsultaGrillaApi";
 import Swal from "sweetalert2";
-import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 import { StripedDataGrid, dataGridStyle } from "@/common/dataGridStyle";
 import localStorageService from "@/components/localStorage/localStorageService";
 
-function misDDJJColumnaAporteGet(ddjjResponse) {
-  //toma todas las ddjj de la consulta de "Mis DDJJ" y arma "vector de Columnas Aportes"
-  //Ejemplo: ['UOMACU', 'ART46', 'UOMASC']
-  let vecAportes = ddjjResponse.map((item) => item.aportes).flat();
-  let colAportes = vecAportes.reduce((acc, item) => {
-    if (!acc.includes(item.codigo)) {
-      acc.push(item.codigo);
-    }
-    return acc;
-  }, []);
-  return colAportes;
-}
-
-function ddjjTotalesAportes(ddjj, colAportes) {
-  //toma una ddjj de la consulta de "Mis DDJJ" y arma "vector de Columnas Totales por Aportes"
-
-  let vecAportes = ddjj.aportes;
-
-  let vecAportesConTotales = [];
-  colAportes.forEach((element) => {
-    vecAportesConTotales.push({ codigo: element, importe: 0 });
-  });
-
-  vecAportes.forEach((aporte) => {
-    vecAportesConTotales.forEach((total) => {
-      if (total.codigo == aporte.codigo) {
-        total.importe = total.importe + aporte.importe;
-      }
-    });
-  });
-  return vecAportesConTotales;
-}
-
-function castearMisDDJJ(ddjjResponse) {
-  let colAportes = misDDJJColumnaAporteGet(ddjjResponse);
-  ddjjResponse.forEach((dj) => {
-    let colAportesConTotales = ddjjTotalesAportes(dj, colAportes);
-
-    colAportesConTotales.forEach((regTot) => {
-      dj["total" + regTot.codigo] = regTot.importe;
-    });
-  });
-  return ddjjResponse;
-}
-
 export const MisDDJJConsultaGrilla = ({
-  setDDJJState,
-  setPeriodo,
-  rows_mis_ddjj: rowsMisDdjj,
-  setRowsMisDdjj,
+  rows,
+  setRows,
   setTabState,
-  setRowsAltaDDJJ,
-  setPeticion,
+  setIdDDJJ,
 }) => {
-  const [rowModesModel, setRowModesModel] = useState({});
   const [paginationModel, setPaginationModel] = useState({
     pageSize: 10,
     page: 0,
@@ -94,51 +37,24 @@ export const MisDDJJConsultaGrilla = ({
     }
   };
 
-  useEffect(() => {
-    const ObtenerMisDeclaracionesJuradas = async () => {
-      let ddjjResponse = await axiosDDJJ.consultar(ID_EMPRESA);
-
-      //Agrego las columnas deTotales de Aportes
-      ddjjResponse = await castearMisDDJJ(ddjjResponse);
-
-      setRowsMisDdjj(ddjjResponse.map((item) => ({ id: item.id, ...item })));
-    };
-
-    ObtenerMisDeclaracionesJuradas();
-  }, []);
-
   const PresentarDeclaracionesJuradas = async (id) => {
-    const updatedRow = { ...rowsMisDdjj.find((row) => row.id === id) };
+    const updatedRow = { ...rows.find((row) => row.id === id) };
     const data = await axiosDDJJ.presentar(ID_EMPRESA, id);
-   
+
     console.log("data: ", data);
 
     if (data) {
       updatedRow.estado = data.estado || null;
       updatedRow.secuencia = data.secuencia || null;
-
-      setRowsMisDdjj(
-        rowsMisDdjj.map((row) => (row.id === id ? updatedRow : row))
-      );
+      setRows(rows.map((row) => (row.id === id ? updatedRow : row)));
     }
 
     return updatedRow;
   };
 
-
-  const handleRowEditStop = (params, event) => {
-    if (params.reason === GridRowEditStopReasons.rowFocusOut) {
-      event.defaultMuiPrevented = true;
-    }
-  };
-
   const handleEditClick = (id) => async () => {
-    setDDJJState({ id: id });
+    setIdDDJJ(id);
     setTabState(0);
-  };
-
-  const handleSaveClick = (id) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
   const declaracionJuradasImpresion = async (idDDJJ) => {
@@ -163,46 +79,14 @@ export const MisDDJJConsultaGrilla = ({
           if (result.isConfirmed) {
             const bRta = await axiosDDJJ.eliminar(ID_EMPRESA, id);
             console.log("bRta: " + bRta);
-            if (bRta)
-              setRowsMisDdjj(rowsMisDdjj.filter((row) => row.id !== id));
+            if (bRta) setRows(rows.filter((row) => row.id !== id));
           }
         });
       } catch (error) {
         console.error("Error al ejecutar eliminarFeriado:", error);
       }
     };
-
     showSwalConfirm();
-  };
-
-  const handleCancelClick = (id) => () => {
-    setRowModesModel({
-      ...rowModesModel,
-      [id]: { mode: GridRowModes.View, ignoreModifications: true },
-    });
-
-    const editedRow = rowsMisDdjj.find((row) => row.id === id);
-    if (editedRow.isNew) {
-      setRowsMisDdjj(rowsMisDdjj.filter((row) => row.id !== id));
-    }
-  };
-
-  const processRowUpdate = async (newRow) => {
-    const updatedRow = { ...newRow, isNew: false };
-
-    if (newRow.isNew) {
-    } else {
-    }
-
-    setRowsMisDdjj(
-      rowsMisDdjj.map((row) => (row.id === newRow.id ? updatedRow : row))
-    );
-
-    return updatedRow;
-  };
-
-  const handleRowModesModelChange = (newRowModesModel) => {
-    setRowModesModel(newRowModesModel);
   };
 
   //1ro seteo columans fijas
@@ -241,20 +125,26 @@ export const MisDDJJConsultaGrilla = ({
     },
   ];
 
-  colAportes = misDDJJColumnaAporteGet(rowsMisDdjj);
-
-  colAportes.forEach((elem) => {
-    columns.push({
-      field: "total" + elem,
-      headerName: "Total " + elem,
-      flex: 1,
-      editable: false,
-      headerAlign: "center",
-      align: "center",
-      headerClassName: "header--cell",
-      valueFormatter: (params) => formatter.currency.format(params.value || 0),
-    });
-  });
+  //Agrego Columnas de Total Concepto.-
+  if (rows && rows.length > 0) {
+    const reg = rows[0];
+    for (let x in reg) {
+      const txt = "x: " + x + " - reg[x]:  " + reg[x] + "  --  ";
+      if (x.startsWith("total")) {
+        columns.push({
+          field: "total" + x.replace("total", ""),
+          headerName: "Total " + x.replace("total", ""),
+          flex: 1,
+          editable: false,
+          headerAlign: "center",
+          align: "center",
+          headerClassName: "header--cell",
+          valueFormatter: (params) =>
+            formatter.currency.format(params.value || 0),
+        });
+      }
+    }
+  }
 
   columns.push({
     field: "actions",
@@ -265,28 +155,6 @@ export const MisDDJJConsultaGrilla = ({
     align: "center",
     headerClassName: "header--cell",
     getActions: ({ id, row }) => {
-      const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
-
-      if (isInEditMode) {
-        return [
-          <GridActionsCellItem
-            icon={<SaveIcon />}
-            label="Save"
-            sx={{
-              color: "primary.main",
-            }}
-            onClick={handleSaveClick(id)}
-          />,
-          <GridActionsCellItem
-            icon={<CancelIcon />}
-            label="Cancel"
-            className="textPrimary"
-            onClick={handleCancelClick(id)}
-            color="inherit"
-          />,
-        ];
-      }
-
       if (row.estado === "PE") {
         return [
           <Button
@@ -298,6 +166,7 @@ export const MisDDJJConsultaGrilla = ({
           >
             Presentar
           </Button>,
+
           <GridActionsCellItem
             icon={<EditIcon />}
             label="Edit"
@@ -305,6 +174,7 @@ export const MisDDJJConsultaGrilla = ({
             onClick={handleEditClick(id)}
             color="inherit"
           />,
+
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Delete"
@@ -370,13 +240,8 @@ export const MisDDJJConsultaGrilla = ({
         }}
       >
         <StripedDataGrid
-          rows={rowsMisDdjj}
+          rows={rows}
           columns={columns}
-          editMode="row"
-          rowModesModel={rowModesModel}
-          onRowModesModelChange={handleRowModesModelChange}
-          onRowEditStop={handleRowEditStop}
-          processRowUpdate={processRowUpdate}
           localeText={dataGridStyle.toolbarText}
           slots={{
             toolbar: GridToolbar,
