@@ -4,6 +4,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import "./DDJJTabs.css";
+
 import { MisDDJJConsulta } from "./mis_ddjj/MisDDJJConsulta";
 import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 import * as locales from "@mui/material/locale";
@@ -43,6 +44,7 @@ function a11yProps(index) {
   };
 }
 
+
 export const DeclaracionesJuradas = () => {
   const [DDJJState, setDDJJState] = useState({});
   const [periodo, setPeriodo] = useState(null);
@@ -62,7 +64,6 @@ export const DeclaracionesJuradas = () => {
   );
 
   const handleChangeTabState = (event, value) => setTabState(value);
-
 
   return (
     <div className="declaraciones_juradas_container">

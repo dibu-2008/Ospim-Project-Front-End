@@ -31,7 +31,7 @@ export const MisDDJJConsulta = ({
     ["George Abuladze", 33, "politician"],
     ["Nick Tsereteli", 19, "public worker"],
   ]);
- 
+
   const ID_EMPRESA = localStorageService.getEmpresaId();
 
   const handleChangeDesde = (date) => setDesde(date);
