@@ -359,7 +359,7 @@ module.exports = (req, res, next) => {
       presentarDDJJ(req, res);
       break;
     case "----":
-      // code block
+            // code block
       next();
       break;
     default:
@@ -918,4 +918,7 @@ module.exports = (req, res, next) => {
     req.app.db.write()
     res.status(204).send(null)
   }
-};
+  function presentarDDJJ(req, res) {
+    // quiero que esta funcion me reporte { estado = "PR", secuencia = 1 }
+    res.status(200).jsonp({ estado: "PR", secuencia: 1 })
+  }
