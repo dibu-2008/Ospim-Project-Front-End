@@ -218,8 +218,15 @@ module.exports = (req, res, next) => {
     if (req.method === "POST" && req.url.startsWith("/empresa/numero_boleta/modificar")){
       return "MODIFICAR-BOLETA-BY-ID"
     }
-    if (req.method === "PUT" && req.url.startsWith("/sigeco/ajustes")){
-      return "UPDATE-AJUSTE"
+    if (req.url.startsWith("/sigeco/ajustes")){
+      if(req.method ==="PUT"){
+
+        return "UPDATE-AJUSTE"
+      } else{
+        console.log('entre')
+        return "DELETE-AJUSTE"
+      }
+
     }
     console.log('ESTO ES EL URL QUE ESTA COMPARANDO: ' + req.url)
     if (req.method === "GET" && req.url.startsWith("/empresa/1/boleta/")){
@@ -333,6 +340,9 @@ module.exports = (req, res, next) => {
       break;
     case "UPDATE-AJUSTE":
       updateAjuste();
+      break;
+    case "DELETE-AJUSTE":
+      deleteAjuste();
       break;
     case "OSPIM-CONTACTO":
       getOspimContacto();
@@ -881,5 +891,15 @@ module.exports = (req, res, next) => {
     req.app.db.__wrapped__.ajustes[index]= req.body;
     req.app.db.write()
     res.status(201).send(null)
+  }
+
+  function deleteAjuste(){
+    const {id} = req.query
+    console.log(id)
+    const ajustesActualizados = req.app.db.__wrapped__.ajustes.filter(item => item.id != id);
+    console.log(ajustesActualizados)
+    req.app.db.__wrapped__.ajustes = ajustesActualizados
+    req.app.db.write()
+    res.status(204).send(null)
   }
 };

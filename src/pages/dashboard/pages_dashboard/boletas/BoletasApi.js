@@ -69,8 +69,9 @@ export const downloadPdfBoleta = async (empresa_id, ddjj_id, concepto) => {
 export const modificarBoletaById = async (empresa_id,numero_boleta,body) => {
   const URL = `${BACKEND_URL}/empresa/${empresa_id}/numero-boleta/${numero_boleta}/modificar`;
   try {
-    const reponse = await axiosCrud.crear(URL,body)
-    return reponse
+    console.log(body)
+   // const reponse = await axiosCrud.crear(URL,body)
+   // return reponse
   } catch (error) {
     const HTTP_MSG = HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`
     showErrorBackEnd(HTTP_MSG,error);

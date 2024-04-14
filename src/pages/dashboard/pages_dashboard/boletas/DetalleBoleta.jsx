@@ -23,6 +23,7 @@ export const DetalleBoleta = () => {
   const [ codigo, setCodigo ] = useState('')
   const [ modoEdicion, setModoEdicion] = useState(false)
   const [ respaldoBoleta, setRespaldoBoleta] = useState([])
+  const [ajustes, setAjustes] = useState([])
 
   const ID_EMPRESA = JSON.parse(localStorage.getItem('stateLogin')).usuarioLogueado.empresa.id;
   const { numero_boleta } = useParams()
@@ -45,7 +46,9 @@ export const DetalleBoleta = () => {
         setDDDJJ_id(response.data.declaracion_jurada_id)
         setCodigo(response.data.codigo)
         setIsEditable(!response.data.fecha_de_pago)
+        setAjustes(response.data.ajustes)
         setRespaldoBoleta(JSON.parse(JSON.stringify(response.data)))
+
       } catch (error) {
         console.error('Error al obtener los datos de la boleta:', error);
       }
@@ -139,12 +142,12 @@ export const DetalleBoleta = () => {
                 <TableCell>{existeDato(formatter.currency.format(boletaDetalle.total_acumulado + boletaDetalle.interes))}</TableCell>
                 {boletaDetalle.importe_recibido && <TableCell>{existeDato(formatter.currency.format(boletaDetalle.importe_recibido))}</TableCell>}
                 {boletaDetalle.fecha_de_pago && <TableCell>{existeDato(formatter.date(boletaDetalle.fecha_de_pago))}</TableCell>}
-                <TableCell>{isEditable && modoEdicion? 
-                  (<TextField type="date" 
+                <TableCell>{isEditable && modoEdicion?
+                  (<TextField type="date"
                   inputProps={{min:hoy}}
                   value={intencionDePago}
-                  onChange={event => handlesSetIntencionDePago(event.target.value)}/>):                                          
-                existeDato(formatter.date(boletaDetalle.intencion_de_pago))}
+                  onChange={event => handlesSetIntencionDePago(event.target.value)}/>)
+                  :existeDato(formatter.date(boletaDetalle.intencion_de_pago))}
                 </TableCell>
                 <TableCell>
                   {isEditable && modoEdicion ? (
@@ -186,7 +189,9 @@ export const DetalleBoleta = () => {
             />
           </div>
         </Box>
-        <TableContainer>
+        <div className='space-between'>
+
+        <TableContainer className='w30'>
           <Table  sx={{ maxWidth: 200 }}>
             <TableBody>
               <TableRow>
@@ -210,7 +215,9 @@ export const DetalleBoleta = () => {
                   Ajustes
                 </TableCell>
                 <TableCell>
-                  {boletaDetalle.ajuste? formatter.currency.format(boletaDetalle.ajuste) : formatter.currency.format(0)}
+                {formatter.currency.format( (boletaDetalle.ajustes) ?boletaDetalle.ajustes.reduce((acumulador, ajuste) => acumulador + ajuste.monto, 0):0)}
+                  {//boletaDetalle.ajuste? formatter.currency.format(boletaDetalle.ajuste) : formatter.currency.format(0)
+                  }
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -224,7 +231,18 @@ export const DetalleBoleta = () => {
             </TableBody>
           </Table>
         </TableContainer>
-
+        {
+        (ajustes && ajustes.length>0) && ajustes
+                .map((ajuste, index) => (
+                    <div key={index} className='w30'>
+                    {index === 0 && <h3 style={{ color: '#1A76D2' }}>Ajustes aplicados</h3>}
+                    <p>{ajuste.descripcion}</p>
+                    <ul>
+                        <li key={index}>{ajuste.descripcion}: {formatter.currency.format(ajuste.monto)}</li>
+                    </ul>
+                    </div>
+            ))}
+        </div>
       </div>
   );
 };

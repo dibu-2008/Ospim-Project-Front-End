@@ -27,6 +27,7 @@ export const Boletas = () => {
         setBoletas(response.data["con_ddjj"]);
         setBoletasVisibles(response.data["con_ddjj"].flatMap((boleta) => ({ ...boleta, id: `${boleta.numero_boleta}` })));
         setBoletasSinDDJJ(response.data["sin_ddjj"])
+        console.log(response)
         setBoletasSinAfiliados(response.data["con_ddjj"].flatMap(boleta=>{
           const { afiliados, ...rest } = boleta;
           return { ...rest }
@@ -95,7 +96,7 @@ export const Boletas = () => {
         <DataGrid
           rows={boletasVisibles}
           columns={[
-            { field: 'periodo', headerName: 'Periodo', flex: 0.8, valueFormatter: (params) => params.value?params.value.replace('-','/'):'' },
+            { field: 'periodo', headerName: 'Periodo', flex: 0.8, valueFormatter: (params) => params.value? formatter.periodo(params.value, '-') :'' },
             { field: 'tipo_ddjj', headerName: 'Tipo DDJJ', flex: 1 },
             { field: 'numero_boleta', headerName: 'Número', flex: 0.8 },
             { field: 'descripcion', headerName: 'Concepto', flex: 1 },

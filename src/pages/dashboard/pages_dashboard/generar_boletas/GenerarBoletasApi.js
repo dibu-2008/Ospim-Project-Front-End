@@ -25,6 +25,7 @@ export const getBoletasByDDJJid = async (empresa_id, ddjj_id ) => {
 
 export const calcularInteresBoleta = async(empresa_id, ddjj_id, boleta_codigo, intencion_de_pago) => {
     const URL = `${BACKEND_URL}/empresa/${ empresa_id }/ddjj/${ ddjj_id }/boleta/${boleta_codigo}/calcular-interes`;
+    console.log(URL)
     try{
         const response = await calcularInteres(URL, intencion_de_pago)
         return response

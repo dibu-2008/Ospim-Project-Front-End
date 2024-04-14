@@ -9,6 +9,7 @@ import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import {
   GridRowModes,
   GridToolbar,
@@ -22,7 +23,8 @@ import "./ajustes.css";
 import formatter from "@/common/formatter";
 import { StripedDataGrid, dataGridStyle } from "@/common/dataGridStyle";
 import { InputPeriodo } from "@/components/InputPeriodo";
-
+import swal from "@/components/swal/swal";
+import Swal from "sweetalert2";
 
 
 const style = {
@@ -99,6 +101,31 @@ export const Ajustes = () => {
     }
   };
 
+  const handleDeleteClick = (row) => async () => {
+    const showSwalConfirm = async () => {
+      try {
+        Swal.fire({
+          title: "¿Estás seguro?",
+          text: "¡No podrás revertir esto!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#1A76D2",
+          cancelButtonColor: "#6c757d",
+          confirmButtonText: "Si, bórralo!",
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            const bBajaOk = await axiosAjustes.eliminar(row.id);
+            if (bBajaOk) setRows(rows.filter((rowAux) => rowAux.id !== row.id));
+          }
+        });
+      } catch (error) {
+        console.error("Error al ejecutar eliminarFeriado:", error);
+      }
+    };
+
+    showSwalConfirm();
+  };
+
   const handleEditClick = (row) => () => {
     console.log("handleEditClick - row:");
     console.log(row);
@@ -153,7 +180,8 @@ export const Ajustes = () => {
       }
     } else {
       try {
-        bOk = await axiosAjustes.actualizar(newRow);
+        console.log(newRow)
+        bOk = await axiosAjustes.actualizar(newRow.id, newRow);
         if (bOk) {
           const rowsNew = rows.map((row) =>
             row.id === newRow.id ? newRow : row
@@ -284,7 +312,14 @@ export const Ajustes = () => {
             className="textPrimary"
             onClick={handleEditClick(row)}
             color="inherit"
-          />
+          />,
+          <GridActionsCellItem
+          icon={<DeleteIcon />}
+          label="Eliminar"
+          className="textPrimary"
+          onClick={handleDeleteClick(row)}
+          color="inherit"
+        />
         ];
       },
     },

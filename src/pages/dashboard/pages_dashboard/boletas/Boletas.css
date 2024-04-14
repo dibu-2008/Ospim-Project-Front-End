@@ -35,5 +35,11 @@
 }
 
 .w30{
-width: 30%;
+width: 30%!important;
+}
+
+.space-between{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
 }
