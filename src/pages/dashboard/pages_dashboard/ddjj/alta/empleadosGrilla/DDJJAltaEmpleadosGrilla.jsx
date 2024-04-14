@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import {
   GridRowModes,
   DataGrid,
@@ -7,7 +7,6 @@ import {
   GridActionsCellItem,
   GridRowEditStopReasons,
   useGridApiRef,
-  gridPaginatedVisibleSortedGridRowIdsSelector
 } from "@mui/x-data-grid";
 
 import AddIcon from "@mui/icons-material/Add";
@@ -24,16 +23,14 @@ import { axiosDDJJ } from "../DDJJAltaApi";
 import "./DDJJAltaEmpleadosGrilla.css";
 import { dataGridStyle } from "@/common/dataGridStyle";
 import dayjs from "dayjs";
+import swal from "@/components/swal/swal";
 
 function EditToolbar(props) {
   const {
     setRowsAltaDDJJ,
     rowsAltaDDJJ,
-    // setRowsAltaDDJJAux,
-    rowsAltaDDJJAux,
     setRowModesModel,
     showQuickFilter,
-    showColumnMenu,
     themeWithLocale,
   } = props;
 
@@ -63,25 +60,6 @@ function EditToolbar(props) {
       ...oldRows,
     ]);
 
-    /* setRowsAltaDDJJAux((oldRows) => [
-      {
-        id,
-        cuil: "",
-        apellido: "",
-        nombre: "",
-        camara: "",
-        fechaIngreso: "",
-        empresaDomicilioId: "",
-        categoria: "",
-        remunerativo: "",
-        noRemunerativo: "",
-        uomaSocio: false,
-        amtimaSocio: false,
-        isNew: true,
-      },
-      ...oldRows,
-    ]); */
-
     setRowModesModel((oldModel) => ({
       ...oldModel,
       [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
@@ -105,7 +83,6 @@ export const DDJJAltaEmpleadosGrilla = ({
   rowsAltaDDJJ,
   setRowsAltaDDJJ,
   rowsAltaDDJJAux,
-  // setRowsAltaDDJJAux,
   camaras,
   categoriasFiltradas,
   setCategoriasFiltradas,
@@ -114,14 +91,12 @@ export const DDJJAltaEmpleadosGrilla = ({
   todasLasCategorias,
   plantas,
   validacionResponse,
-  setSomeRowInEditMode,
   rowModesModel,
   setRowModesModel
 }) => {
-  const [locale, setLocale] = useState("esES");
-  // const [rowModesModel, setRowModesModel] = useState({});
-  const [inteDataBase, setInteDataBase] = useState(null);
 
+  const [locale, setLocale] = useState("esES");
+  const [inteDataBase, setInteDataBase] = useState(null);
 
   const theme = useTheme();
   const themeWithLocale = useMemo(
@@ -131,58 +106,70 @@ export const DDJJAltaEmpleadosGrilla = ({
 
   const gridApiRef = useGridApiRef();
 
-  const ObtenerAfiliados = async (params, cuilElegido) => {
-    const afiliados = await axiosDDJJ.getAfiliado(cuilElegido);
+  const obtenerAfiliados = async (params, cuilElegido) => {
 
-    const afiliadoEncontrado = afiliados.find(
-      (afiliado) => afiliado.cuil === cuilElegido
-    );
-
-    if (afiliado) {
-      setAfiliado(afiliadoEncontrado);
+    if (cuilElegido === "") {
+      swal.showError("Debe ingresar un CUIL y presionar la lupa");
     }
 
-    // TODO : Mirar el tema de la logica de busqueda por que tambien podria poder escribir sin buscar el cuil
-    if (afiliadoEncontrado) {
-      if (afiliadoEncontrado.inte !== null) {
-        setInteDataBase(afiliadoEncontrado.inte);
+    if (cuilElegido.length < 11) {
+      swal.showError("El CUIL ingresado es incorrecto, debe tener 11 dígitos.");
+    } else {
+      const afiliados = await axiosDDJJ.getAfiliado(cuilElegido);
+
+      const afiliadoEncontrado = afiliados.find(
+        (afiliado) => afiliado.cuil === cuilElegido
+      );
+
+      if (afiliado) {
+        setAfiliado(afiliadoEncontrado);
       }
 
-      setAfiliado(afiliadoEncontrado);
+      // TODO : Mirar el tema de la logica de busqueda por que tambien podria poder escribir sin buscar el cuil
+      if (afiliadoEncontrado) {
+        if (afiliadoEncontrado.inte !== null) {
+          setInteDataBase(afiliadoEncontrado.inte);
+        }
 
-      // Apellido
-      params.api.setEditCellValue({
-        id: params.id,
-        field: "apellido",
-        value: afiliadoEncontrado.apellido,
-      });
+        setAfiliado(afiliadoEncontrado);
 
-      const textFieldApellido = document.getElementById(
-        "apellido" + params.row.id
-      );
-      const abueloApellido = textFieldApellido.parentNode.parentNode;
-      abueloApellido.style.display = "block";
+        // Apellido
+        params.api.setEditCellValue({
+          id: params.id,
+          field: "apellido",
+          value: afiliadoEncontrado.apellido,
+        });
 
-      // Nombre
-      params.api.setEditCellValue({
-        id: params.id,
-        field: "nombre",
-        value: afiliadoEncontrado.nombre,
-      });
+        const textFieldApellido = document.getElementById(
+          "apellido" + params.row.id
+        );
+        const abueloApellido = textFieldApellido.parentNode.parentNode;
+        abueloApellido.style.display = "block";
 
-      const textFieldNombre = document.getElementById("nombre" + params.row.id);
-      const abueloNombre = textFieldNombre.parentNode.parentNode;
-      abueloNombre.style.display = "block";
-    } else {
-      const textFieldApellido = document.getElementById(
-        "apellido" + params.row.id
-      );
-      const abueloApellido = textFieldApellido.parentNode.parentNode;
-      abueloApellido.style.display = "block";
+        // Nombre
+        params.api.setEditCellValue({
+          id: params.id,
+          field: "nombre",
+          value: afiliadoEncontrado.nombre,
+        });
 
-      const textFieldNombre = document.getElementById("nombre" + params.row.id);
-      const abueloNombre = textFieldNombre.parentNode.parentNode;
-      abueloNombre.style.display = "block";
+        const textFieldNombre = document.getElementById("nombre" + params.row.id);
+        const abueloNombre = textFieldNombre.parentNode.parentNode;
+        abueloNombre.style.display = "block";
+      } else {
+
+        swal.showError("No se encontraron afiliados con el CUIL ingresado, ingreselos manualmente.");
+
+        const textFieldApellido = document.getElementById(
+          "apellido" + params.row.id
+        );
+        const abueloApellido = textFieldApellido.parentNode.parentNode;
+        abueloApellido.style.display = "block";
+
+        const textFieldNombre = document.getElementById("nombre" + params.row.id);
+        const abueloNombre = textFieldNombre.parentNode.parentNode;
+        abueloNombre.style.display = "block";
+      }
     }
   };
 
@@ -196,8 +183,6 @@ export const DDJJAltaEmpleadosGrilla = ({
   };
 
   const handleRowEditStop = (params) => {
-
-    console.log(params)
 
     if (
       params.reason === GridRowEditStopReasons.rowFocusOut
@@ -254,10 +239,6 @@ export const DDJJAltaEmpleadosGrilla = ({
         rowsAltaDDJJ.map((row) => (row.id === newRow.id ? fila : row))
       );
 
-      /* setRowsAltaDDJJAux(
-        rowsAltaDDJJAux.map((row) => (row.id === newRow.id ? fila : row))
-      ); */
-
       return { ...fila, isNew: false };
     } else {
       const fila = { ...newRow, inte: inteDataBase };
@@ -268,16 +249,33 @@ export const DDJJAltaEmpleadosGrilla = ({
         rowsAltaDDJJ.map((row) => (row.id === newRow.id ? fila : row))
       );
 
-      /* setRowsAltaDDJJAux(
-        rowsAltaDDJJAux.map((row) => (row.id === newRow.id ? fila : row))
-      ); */
-
       return fila;
     }
   };
 
   const handleRowModesModelChange = (newRowModesModel) => {
     setRowModesModel(newRowModesModel);
+  };
+
+  const colorErrores = (params) => {
+
+    let cellClassName = "";
+
+    validacionResponse?.errores?.forEach((error) => {
+      if (
+        params.row.cuil === error.cuil &&
+        params.field === error.codigo
+      ) {
+        cellClassName = "hot";
+      }
+    });
+
+    // Action no implementar estilos hot o cold
+    if (params.field === "actions") {
+      cellClassName = "";
+    }
+
+    return cellClassName;
   };
 
   const columns = [
@@ -321,7 +319,7 @@ export const DDJJAltaEmpleadosGrilla = ({
             />
             <SearchIcon
               style={{ marginLeft: 8, cursor: "pointer" }}
-              onClick={() => ObtenerAfiliados(params, params.value)}
+              onClick={() => obtenerAfiliados(params, params.value)}
             />
           </div>
         );
@@ -458,15 +456,19 @@ export const DDJJAltaEmpleadosGrilla = ({
       headerAlign: "center",
       align: "center",
       type: "singleSelect",
-      valueOptions: camaras.map((camara) => {
-        return { value: camara.codigo, label: camara.descripcion }; // Agrega la propiedad 'key'
+      valueFormatter: ({ value }) => value || "",
+      valueOptions: camaras.map(({ codigo, descripcion }) => {
+        return { value: codigo, label: descripcion };
       }),
       headerClassName: "header--cell",
       renderEditCell: (params) => {
+
+        // validar 
+
         return (
           <Select
             fullWidth
-            value={params.value || ""}
+            value={params.value !== null ? params.value : ""}
             onChange={(event) => {
               params.api.setEditCellValue({
                 id: params.id,
@@ -518,7 +520,7 @@ export const DDJJAltaEmpleadosGrilla = ({
         return (
           <Select
             fullWidth
-            value={params.value || ""}
+            value={params.value !== null ? params.value : ""}
             onChange={(event) => {
               params.api.setEditCellValue({
                 id: params.id,
@@ -632,7 +634,6 @@ export const DDJJAltaEmpleadosGrilla = ({
     {
       field: "uomaSocio",
       type: "singleSelect",
-      //headerName: "Adherido a sindicato",
       renderHeader: () => (
         <div style={{ textAlign: "center", color: "#fff", fontSize: "0.8rem" }}>
           <span role="img" aria-label="enjoy">
@@ -652,14 +653,34 @@ export const DDJJAltaEmpleadosGrilla = ({
         { value: false, label: "No" },
       ],
       valueFormatter: ({ value }) => {
+        console.log("Estoy de adherido al sindicato")
+        console.log(value)
         if (value === "") return "";
+        if (value === null) return "";
         return value ? "Si" : "No";
+      },
+      renderEditCell: (params) => {
+        return (
+          <Select
+            fullWidth
+            value={params.value !== null ? params.value : ""}
+            onChange={(event) => {
+              params.api.setEditCellValue({
+                id: params.id,
+                field: "uomaSocio",
+                value: event.target.value,
+              });
+            }}
+          >
+            <MenuItem value={true}>Si</MenuItem>
+            <MenuItem value={false}>No</MenuItem>
+          </Select>
+        );
       }
     },
     {
       field: "amtimaSocio",
       type: "singleSelect",
-      //headerName: "Paga mutual",
       renderHeader: () => (
         <div style={{ textAlign: "center", color: "#fff", fontSize: "0.8rem" }}>
           <span role="img" aria-label="enjoy">
@@ -679,8 +700,28 @@ export const DDJJAltaEmpleadosGrilla = ({
         { value: false, label: "No" },
       ],
       valueFormatter: ({ value }) => {
+        console.log(value)
         if (value === "") return "";
+        if (value === null) return "";
         return value ? "Si" : "No";
+      },
+      renderEditCell: (params) => {
+        return (
+          <Select
+            fullWidth
+            value={params.value !== null ? params.value : ""}
+            onChange={(event) => {
+              params.api.setEditCellValue({
+                id: params.id,
+                field: "amtimaSocio",
+                value: event.target.value,
+              });
+            }}
+          >
+            <MenuItem value={true}>Si</MenuItem>
+            <MenuItem value={false}>No</MenuItem>
+          </Select>
+        );
       }
     },
     {
@@ -781,12 +822,8 @@ export const DDJJAltaEmpleadosGrilla = ({
               toolbar: {
                 setRowsAltaDDJJ,
                 rowsAltaDDJJ,
-                // setRowsAltaDDJJAux,
-                rowsAltaDDJJAux,
                 setRowModesModel,
                 showQuickFilter: true,
-                // filtro de columnas
-                showColumnMenu: true,
                 themeWithLocale,
               },
             }}
@@ -812,25 +849,7 @@ export const DDJJAltaEmpleadosGrilla = ({
               },
             }}
             pageSizeOptions={[5, 10, 25]}
-            getCellClassName={(params) => {
-              let cellClassName = "";
-
-              validacionResponse?.errores?.forEach((error) => {
-                if (
-                  params.row.cuil === error.cuil &&
-                  params.field === error.codigo
-                ) {
-                  cellClassName = "hot";
-                }
-              });
-
-              // Action no implementar estilos hot o cold
-              if (params.field === "actions") {
-                cellClassName = "";
-              }
-
-              return cellClassName;
-            }}
+            getCellClassName={colorErrores}
           />
         </ThemeProvider>
         <div

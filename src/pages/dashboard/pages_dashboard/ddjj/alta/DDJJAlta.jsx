@@ -32,7 +32,7 @@ const textoIdioma =
 
 const adaptadorIdioma = "es";
 
-export const MisAltaDeclaracionesJuradas = ({
+export const DDJJAlta = ({
   DDJJState,
   setDDJJState,
   periodo,
@@ -43,6 +43,7 @@ export const MisAltaDeclaracionesJuradas = ({
   // setRowsAltaDDJJAux,
   peticion,
 }) => {
+  
   const [camaras, setCamaras] = useState([]);
   const [todasLasCategorias, setTodasLasCategorias] = useState([]);
   const [categoriasFiltradas, setCategoriasFiltradas] = useState([]);
@@ -55,7 +56,7 @@ export const MisAltaDeclaracionesJuradas = ({
   const [filasDoc, setFilasDoc] = useState([]);
   const [ocultarEmpleadosGrilla, setOcultarEmpleadosGrilla] = useState(false);
   const [btnSubirHabilitado, setBtnSubirHabilitado] = useState(false);
-  const [ddjjCreada, setDDJJCreada] = useState({});
+  //const [ddjjCreada, setDDJJCreada] = useState({});
   const [someRowInEditMode, setSomeRowInEditMode] = useState(false);
   const [otroPeriodo, setOtroPeriodo] = useState(null);
   const [rowModesModel, setRowModesModel] = useState({});
@@ -97,6 +98,26 @@ export const MisAltaDeclaracionesJuradas = ({
     };
     ObtenerPlantaEmpresas();
   }, []);
+
+  // useEffect(() para llenar las grillas 
+  useEffect(() => {
+    
+    const obtenerDDJJ = async (ddjj, idDDJJ, idEmpresa) => {
+      if (ddjj && idDDJJ) {
+        try {
+          
+          const ddjj = await axiosDDJJ.getDDJJ(idEmpresa, idDDJJ);
+          console.log(ddjj.periodo);
+          setPeriodo(dayjs(ddjj.periodo));
+          setRowsAltaDDJJ(ddjj.afiliados);
+        } catch (error) {
+          console.error("Error al obtener la DDJJ:", error);
+        }
+      }
+    }
+  
+    obtenerDDJJ(DDJJState, DDJJState.id, ID_EMPRESA);
+  }, [DDJJState]);
 
   const importarAfiliado = async () => {
 
@@ -247,23 +268,13 @@ export const MisAltaDeclaracionesJuradas = ({
   const handleElegirOtroChange = (event) => {
     setMostrarPeriodos(event.target.value === "elegirOtro");
   };
-
+  
   const guardarDeclaracionJurada = async () => {
-
-    if (DDJJState && DDJJState.id) {
-      console.log("Tiene id la ddjj");
-      setPeriodo(DDJJState.periodo);
-      console.log(periodo);
-    }
-
-    console.log(periodo);
 
     let DDJJ = {
       periodo: periodo,
       afiliados: rowsAltaDDJJ.map((item) => {
-        console.log("DENTRO DE ROWS ALTA DDJJ.c.c.");
-        console.log(item);
-
+       
         const registroNew = {
           errores: item.errores,
           cuil: !item.cuil ? null : item.cuil,
@@ -278,8 +289,8 @@ export const MisAltaDeclaracionesJuradas = ({
           categoria: !item.categoria ? null : item.categoria,
           remunerativo: !item.remunerativo ? null : item.remunerativo,
           noRemunerativo: !item.noRemunerativo ? null : item.noRemunerativo,
-          uomaSocio: item.uomaSocio,
-          amtimaSocio: item.amtimaSocio,
+          uomaSocio: item.uomaSocio === "" ? null : item.uomaSocio,
+          amtimaSocio: item.amtimaSocio === "" ? null : item.amtimaSocio,
         };
 
         console.log("REGISTRO NEW");
@@ -377,12 +388,16 @@ export const MisAltaDeclaracionesJuradas = ({
             delete afiliado.errores;
           });
 
-          if (peticion === "PUT") {
+          console.log("Estoy dentro de los errores")
+
+          if(DDJJState.id){
             bOK = await axiosDDJJ.actualizar(ID_EMPRESA, DDJJ);
-          } else {
+          }else{
             const data = await axiosDDJJ.crear(ID_EMPRESA, DDJJ);
-            setDDJJCreada(data);
-            console.log(data);
+            if(data){
+              //setDDJJCreada(data);
+              setDDJJState(data);
+            }
           }
         } else {
           console.log("Cancelar...se queda a corregir datos");
@@ -393,32 +408,28 @@ export const MisAltaDeclaracionesJuradas = ({
       });
     } else {
       console.log("no tiene errores...grabo directamente.");
+      let bOK = false;
 
       DDJJ.afiliados.forEach((afiliado) => {
         delete afiliado.errores;
       });
 
-      if (peticion === "PUT") {
-        console.log("Dentro de PUT");
+      console.log("Estoy fuera de los errores")
 
-        //await actualizarDeclaracionJurada(ID_EMPRESA, altaDDJJFinal, altaDDJJFinal.id);
-        await axiosDDJJ.actualizar(ID_EMPRESA, DDJJ);
-        //setRowsAltaDDJJ([]);
-        // peticion put con fetch
-      } else {
+      if(DDJJState.id){
+        console.log("Dentro de ACTUALIZAR");
+        bOK = await axiosDDJJ.actualizar(ID_EMPRESA, DDJJ);
+      }else{
+        console.log("Dentro de CREAR");
         const data = await axiosDDJJ.crear(ID_EMPRESA, DDJJ);
-        setDDJJCreada(data);
-        console.log(data);
-        if (data) {
-          //actualizar estado
+        if(data){
+          //setDDJJCreada(data);
           setDDJJState(data);
-          //setRowsAltaDDJJ(data.);
         }
-        //sacarlo luego de actualizar
-        //setRowsAltaDDJJ([]);
       }
-    }
+    } 
   };
+  
 
   const presentarDeclaracionJurada = async () => {
 
@@ -493,7 +504,7 @@ export const MisAltaDeclaracionesJuradas = ({
         <h5 className="paso">Paso 2 - Elija un modo de presentación</h5>
         <div className="subir_archivo_container">
           <span className="span">1</span>
-          <h5 className="title_subir_archivo">Subir un archivo CSV - XLSX</h5>
+          <h5 className="title_subir_archivo">Importar archivo CSV - XLSX</h5>
           <div className="file-select" id="src-file1">
             <input
               type="file"
@@ -511,11 +522,12 @@ export const MisAltaDeclaracionesJuradas = ({
             variant="contained"
             sx={{
               padding: "6px 52px",
+              width: "150px",
             }}
             onClick={importarAfiliado}
             disabled={!btnSubirHabilitado}
           >
-            Subir
+            Importar
           </Button>
         </div>
         <div className="copiar_periodo_container">
@@ -582,11 +594,12 @@ export const MisAltaDeclaracionesJuradas = ({
             variant="contained"
             sx={{
               padding: "6px 23px",
-              marginLeft: "468px",
+              width: "150px",
+              marginLeft: "467px",
             }}
             onClick={() => setOcultarEmpleadosGrilla(!ocultarEmpleadosGrilla)}
           >
-            Seleccionar
+            Carga
           </Button>
         </div>
       </div>
@@ -599,7 +612,6 @@ export const MisAltaDeclaracionesJuradas = ({
             rowsAltaDDJJ={rowsAltaDDJJ}
             setRowsAltaDDJJ={setRowsAltaDDJJ}
             rowsAltaDDJJAux={rowsAltaDDJJAux}
-            // setRowsAltaDDJJAux={setRowsAltaDDJJAux}
             camaras={camaras}
             categoriasFiltradas={categoriasFiltradas}
             setCategoriasFiltradas={setCategoriasFiltradas}
@@ -664,7 +676,7 @@ export const MisAltaDeclaracionesJuradas = ({
                     variant="contained"
                     sx={{ padding: "6px 52px", marginLeft: "10px" }}
                     onClick={presentarDeclaracionJurada}
-                    disabled={ddjjCreada.id ? false : true}
+                    disabled={DDJJState.id ? false : true}
                   >
                     Presentar
                   </Button>

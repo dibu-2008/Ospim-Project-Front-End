@@ -132,23 +132,8 @@ export const MisDDJJConsultaGrilla = ({
     }
   };
 
-  const handleEditClick = (id, row) => async () => {
-    const ddjj = await axiosDDJJ.getDDJJ(ID_EMPRESA, id);
-    console.log("ddjj: ", ddjj);
-
-    const { periodo, afiliados } = ddjj;
-
-    const fecha = formatter.periodo2(periodo);
-    console.log("fecha: ", fecha);
-
-    // Agregarle a afiliados la propiedad isNew con el valor de false
-    afiliados.forEach((afiliado) => (afiliado.isNew = false));
-
-    //Actualizo estados de solapa DDJJ y cambio de Tab
-    setPeticion("PUT");
-    setPeriodo(dayjs(fecha));
-    setRowsAltaDDJJ(afiliados);
-    setDDJJState(ddjj);
+  const handleEditClick = (id) => async () => {
+    setDDJJState({ id: id });
     setTabState(0);
   };
 
@@ -349,7 +334,7 @@ export const MisDDJJConsultaGrilla = ({
             icon={<EditIcon />}
             label="Edit"
             className="textPrimary"
-            onClick={handleEditClick(id, row)}
+            onClick={handleEditClick(id)}
             color="inherit"
           />,
           <GridActionsCellItem

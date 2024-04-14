@@ -7,7 +7,7 @@ import "./DDJJTabs.css";
 import { MisDDJJConsulta } from "./mis_ddjj/MisDDJJConsulta";
 import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 import * as locales from "@mui/material/locale";
-import { MisAltaDeclaracionesJuradas } from "./alta/DDJJAlta";
+import { DDJJAlta } from "./alta/DDJJAlta";
 import { Boletas } from "../boletas/Boletas";
 
 function CustomTabPanel(props) {
@@ -61,9 +61,8 @@ export const DeclaracionesJuradas = () => {
     [locale, theme]
   );
 
-  const handleChangeTabState = (event, newValue) => {
-    setTabState(newValue);
-  };
+  const handleChangeTabState = (event, value) => setTabState(value);
+
 
   return (
     <div className="declaraciones_juradas_container">
@@ -92,7 +91,7 @@ export const DeclaracionesJuradas = () => {
             </Tabs>
           </Box>
           <CustomTabPanel value={tabState} index={0}>
-            <MisAltaDeclaracionesJuradas
+            <DDJJAlta
               DDJJState={DDJJState}
               setDDJJState={setDDJJState}
               periodo={periodo}
