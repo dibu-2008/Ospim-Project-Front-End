@@ -68,6 +68,20 @@ export const obtenerPlantaEmpresas = async (empresaId) => {
   }
 };
 
+export const obtenerMiDeclaracionJurada = async (empresaId, ddjjId) => {
+  const URL = `/empresa/${empresaId}/ddjj/${ddjjId}`;
+  try {
+    const data = await axiosCrud.consultar(URL);
+    return data || {};
+  } catch (error) {
+    showErrorBackEnd(
+      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
+      error
+    );
+    return [];
+  }
+};
+
 export const crearAltaDeclaracionJurada = async (empresaId, registro) => {
   const URL = `/empresa/${empresaId}/ddjj`;
   try {
@@ -92,6 +106,7 @@ export const actualizarDeclaracionJurada = async (empresaId, registro) => {
     if (response == true) {
       swal.showSuccess(HTTP_MSG_MODI);
       return true;
+
     }
     throw response;
   } catch (error) {
@@ -128,6 +143,7 @@ export const validaCuil = async (empresaId, cuiles) => {
       return errores || [];
     }
   }
+
 };
 
 export const axiosDDJJ = {
@@ -147,6 +163,10 @@ export const axiosDDJJ = {
     return obtenerPlantaEmpresas(empresaId);
   },
 
+  getDDJJ: async function (empresaId, ddjjId) {
+    return obtenerMiDeclaracionJurada(empresaId, ddjjId);
+  },
+
   crear: async function (empresaId, registro) {
     return crearAltaDeclaracionJurada(empresaId, registro);
   },
@@ -161,7 +181,6 @@ export const axiosDDJJ = {
   validarCuiles: async function (empresaId, cuiles) {
     return validaCuil(empresaId, cuiles);
   },
-
   presentar: async function (empresaId, ddjjId) {
     return presentar(empresaId, ddjjId);
   },

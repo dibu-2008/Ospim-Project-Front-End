@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Navigate } from "react-router";
 import PrivateRoute from "./PrivateRoute";
-import { DDJJ } from "../pages/dashboard/pages_dashboard/ddjj/DDJJTabs";
+import { DeclaracionesJuradas } from "../pages/dashboard/pages_dashboard/ddjj/DDJJTabs";
 import { Inicio } from "../pages/dashboard/pages_dashboard/inicio/Inicio";
 import NavBar from "../components/navbar/NavBar";
 import { DatosEmpresa } from "../pages/dashboard/pages_dashboard/datos_empresa/DatosEmpresa";

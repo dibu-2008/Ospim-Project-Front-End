@@ -4,11 +4,11 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import "./DDJJTabs.css";
-import { ConsultaMisDDJJ } from "./mis_ddjj/MisDDJJConsulta";
+
+import { MisDDJJConsulta } from "./mis_ddjj/MisDDJJConsulta";
 import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 import * as locales from "@mui/material/locale";
 import { DDJJAlta } from "./alta/DDJJAlta";
-import dayjs from "dayjs";
 import { Boletas } from "../boletas/Boletas";
 
 function CustomTabPanel(props) {
@@ -44,7 +44,8 @@ function a11yProps(index) {
   };
 }
 
-export const DDJJ = () => {
+
+export const DeclaracionesJuradas = () => {
   const [DDJJState, setDDJJState] = useState({});
   const [periodo, setPeriodo] = useState(null);
   const [rowsAltaDDJJ, setRowsAltaDDJJ] = useState([]);
@@ -62,9 +63,7 @@ export const DDJJ = () => {
     [locale, theme]
   );
 
-  const handleChangeTabState = (event, newValue) => {
-    setTabState(newValue);
-  };
+  const handleChangeTabState = (event, value) => setTabState(value);
 
   return (
     <div className="declaraciones_juradas_container">
@@ -103,17 +102,20 @@ export const DDJJ = () => {
               rowsAltaDDJJAux={rowsAltaDDJJAux}
               setRowsAltaDDJJAux={setRowsAltaDDJJAux}
               peticion={peticion}
+              idDDJJ={idDDJJ}
             />
           </CustomTabPanel>
           <CustomTabPanel value={tabState} index={1}>
-            <ConsultaMisDDJJ
+            <MisDDJJConsulta
               setDDJJState={setDDJJState}
               setPeriodo={setPeriodo}
               rows_mis_ddjj={rows_mis_ddjj}
               setRowsMisDdjj={setRowsMisDdjj}
               setTabState={setTabState}
+              rowsAltaDDJJ={rowsAltaDDJJ}
               setRowsAltaDDJJ={setRowsAltaDDJJ}
               setPeticion={setPeticion}
+              setIdDDJJ={setIdDDJJ}
             />
           </CustomTabPanel>
           <CustomTabPanel value={tabState} index={2}>

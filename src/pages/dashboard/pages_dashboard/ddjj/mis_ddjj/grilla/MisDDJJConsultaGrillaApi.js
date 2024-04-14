@@ -1,7 +1,6 @@
 import oAxios from "@components/axios/axiosInstace";
 import { axiosCrud } from "@components/axios/axiosCrud";
 import { showErrorBackEnd } from "@/components/axios/showErrorBackEnd";
-import { presentar } from "@/pages/dashboard/pages_dashboard/ddjj/DDJJCommonApi";
 import swal from "@/components/swal/swal";
 
 const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
@@ -80,6 +79,21 @@ export const imprimirDeclaracionJurada = async (empresaId, ddjjId) => {
   }
 };
 
+export const presentarDeclaracionJurada = async (empresaId, ddjjId) => {
+  const URL = `/empresa/${empresaId}/ddjj/${ddjjId}/presentar`;
+  try {
+    const response = await oAxios.patch(URL);
+    if (response.status === 200 || response.status === 204) {
+      swal.showSuccess(HTTP_MSG_MODI);
+      return response.data || {};
+    }
+    throw response;
+  } catch (error) {
+    showErrorBackEnd(HTTP_MSG_MODI_ERROR, error);
+  }
+  return false;
+};
+
 export const eliminarDeclaracionJurada = async (empresaId, ddjjId) => {
   const URL = `/empresa/${empresaId}/ddjj`;
   try {
@@ -113,7 +127,7 @@ export const axiosDDJJ = {
   },
 
   presentar: async function (empresaId, ddjjId) {
-    return presentar(empresaId, ddjjId);
+    return presentarDeclaracionJurada(empresaId, ddjjId);
   },
 
   eliminar: async function (empresaId, ddjjId) {

@@ -1,18 +1,36 @@
 import { useEffect, useState } from "react";
-import { Stack, Typography } from "@mui/material";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { esES } from "@mui/x-date-pickers/locales";
-import { Button, Radio, RadioGroup, FormControlLabel } from "@mui/material";
+import {
+  Button,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  Stack,
+  Tooltip,
+  Typography,
+  dialogClasses
+} from "@mui/material";
+import 'dayjs/locale/es';
 import "./DDJJAlta.css";
 import { DDJJAltaEmpleadosGrilla } from "./empleadosGrilla/DDJJAltaEmpleadosGrilla";
 import { axiosDDJJ } from "./DDJJAltaApi";
-
 import localStorageService from "@/components/localStorage/localStorageService";
 import Swal from "sweetalert2";
 import XLSX from "xlsx";
+import { GridRowModes } from "@mui/x-data-grid";
+import dayjs from "dayjs";
+import swal from "@/components/swal/swal";
+
+const IMPORTACION_OK = import.meta.env.VITE_IMPORTACION_OK;
+
+const textoIdioma =
+  esES.components.MuiLocalizationProvider.defaultProps['localeText'];
+
+const adaptadorIdioma = "es";
 
 export const DDJJAlta = ({
   DDJJState,
@@ -22,9 +40,10 @@ export const DDJJAlta = ({
   rowsAltaDDJJ,
   setRowsAltaDDJJ,
   rowsAltaDDJJAux,
-  setRowsAltaDDJJAux,
+  // setRowsAltaDDJJAux,
   peticion,
 }) => {
+  
   const [camaras, setCamaras] = useState([]);
   const [todasLasCategorias, setTodasLasCategorias] = useState([]);
   const [categoriasFiltradas, setCategoriasFiltradas] = useState([]);
@@ -35,12 +54,24 @@ export const DDJJAlta = ({
   const [validacionResponse, setValidacionResponse] = useState([]);
   const [afiliadoImportado, setAfiliadoImportado] = useState([]);
   const [filasDoc, setFilasDoc] = useState([]);
-  const [ocultarGrillaPaso3, setOcultarGrillaPaso3] = useState(false);
+  const [ocultarEmpleadosGrilla, setOcultarEmpleadosGrilla] = useState(false);
   const [btnSubirHabilitado, setBtnSubirHabilitado] = useState(false);
-  const [ddjjCreada, setDDJJCreada] = useState({});
+  //const [ddjjCreada, setDDJJCreada] = useState({});
+  const [someRowInEditMode, setSomeRowInEditMode] = useState(false);
+  const [otroPeriodo, setOtroPeriodo] = useState(null);
+  const [rowModesModel, setRowModesModel] = useState({});
   const ID_EMPRESA = localStorageService.getEmpresaId();
 
   const handleChangePeriodo = (date) => setPeriodo(date);
+
+  const handleChangeOtroPeriodo = (date) => setOtroPeriodo(date);
+
+  useEffect(() => {
+    // Comprueba si hay alguna fila en modo edición
+    const isSomeRowInEditMode = Object.values(rowModesModel).some((row) => row.mode === GridRowModes.Edit);
+    // Actualiza el estado con el valor de booleano
+    setSomeRowInEditMode(isSomeRowInEditMode);
+  }, [rowModesModel]);
 
   useEffect(() => {
     const ObtenerCamaras = async () => {
@@ -68,9 +99,27 @@ export const DDJJAlta = ({
     ObtenerPlantaEmpresas();
   }, []);
 
+  // useEffect(() para llenar las grillas 
+  useEffect(() => {
+    
+    const obtenerDDJJ = async (ddjj, idDDJJ, idEmpresa) => {
+      if (ddjj && idDDJJ) {
+        try {
+          
+          const ddjj = await axiosDDJJ.getDDJJ(idEmpresa, idDDJJ);
+          console.log(ddjj.periodo);
+          setPeriodo(dayjs(ddjj.periodo));
+          setRowsAltaDDJJ(ddjj.afiliados);
+        } catch (error) {
+          console.error("Error al obtener la DDJJ:", error);
+        }
+      }
+    }
+  
+    obtenerDDJJ(DDJJState, DDJJState.id, ID_EMPRESA);
+  }, [DDJJState]);
+
   const importarAfiliado = async () => {
-    alert("Atenti");
-    console.log(DDJJState);
 
     const cuiles = afiliadoImportado.map((item) => item.cuil);
     const cuilesString = cuiles.map((item) => item.toString());
@@ -113,28 +162,41 @@ export const DDJJAlta = ({
 
       setRowsAltaDDJJ(afiliadoImportadoConInte);
     } else {
-      Swal.fire({
-        icon: "success",
-        title: "Importación exitosa",
-        showConfirmButton: false,
-        timer: 1000,
-      });
-
-      // Aca es donde debo de controlar el inte dependiendo si el cuil
-      // Se encuentra dado de alta o no, antes de llenar la grilla.
+      
+      swal.showSuccess(IMPORTACION_OK);
 
       setRowsAltaDDJJ(afiliadoImportadoConInte);
     }
-    setRowsAltaDDJJAux(afiliadoImportadoConInte);
-    setOcultarGrillaPaso3(true);
+    // setRowsAltaDDJJAux(afiliadoImportadoConInte);
+    setOcultarEmpleadosGrilla(true);
   };
 
-  const formatearFecha = (fecha) => {
-    const partes = fecha?.split("/");
-    const anio = partes[2]?.length === 2 ? "20" + partes[2] : partes[2];
-    const mes = partes[1].padStart(2, "0");
-    const dia = partes[0];
-    return `${anio}-${mes}-${dia}`;
+  const formatearFecha = (fechaExcel) => {
+
+    // xlsx
+    if (typeof fechaExcel === 'number') {
+      const horas = Math.floor((fechaExcel % 1) * 24);
+      const minutos = Math.floor((((fechaExcel % 1) * 24) - horas) * 60)
+      const fechaFinal = new Date(Date.UTC(0, 0, fechaExcel, horas - 17, minutos))
+
+      const fechaDaysJs =
+        dayjs(fechaFinal).set('hour', 3).set('minute', 0).set('second', 0).set('millisecond', 0).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+
+      return fechaDaysJs
+    }
+
+    // cvs
+    if (typeof fechaExcel === 'string') {
+      const partes = fechaExcel?.split("/");
+      const anio = partes[2]?.length === 2 ? "20" + partes[2] : partes[2];
+      const mes = partes[1].padStart(2, "0");
+      const dia = partes[0];
+
+      const fechaDaysJs =
+        dayjs(`${anio}-${mes}-${dia}`).set('hour', 3).set('minute', 0).set('second', 0).set('millisecond', 0).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+
+      return fechaDaysJs
+    }
   };
 
   const handleFileChange = (event) => {
@@ -152,11 +214,8 @@ export const DDJJAlta = ({
         const sheet = workbook.Sheets[sheetName];
         const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
-        console.log("CSV IMPORTADO...");
-        console.log(rows);
-
         if (rows[0].length === 11) {
-          console.log("Columnas completas");
+
           const arraySinEncabezado = rows.slice(1);
 
           rows.forEach((item, index) => {
@@ -169,6 +228,7 @@ export const DDJJAlta = ({
           });
 
           const arrayTransformado = arraySinEncabezado.map((item, index) => {
+
             return {
               id: index + 1,
               cuil: item[0],
@@ -194,12 +254,10 @@ export const DDJJAlta = ({
           setBtnSubirHabilitado(true);
           console.log(DDJJState);
           if (DDJJState.id) {
-            confirm(
-              "Recorda que si subis un archivo, se perderan los datos de la ddjj actual"
-            );
+            confirm("Recorda que si subis un archivo, se perderan los datos de la ddjj actual")
           }
         } else {
-          console.log("Columnas incompletas");
+          
         }
       };
 
@@ -210,27 +268,13 @@ export const DDJJAlta = ({
   const handleElegirOtroChange = (event) => {
     setMostrarPeriodos(event.target.value === "elegirOtro");
   };
-
+  
   const guardarDeclaracionJurada = async () => {
-    console.log("GUARDAR DECLARACION JURADA");
-    console.log(rowsAltaDDJJ);
-    console.log(periodo);
-    console.log(DDJJState);
-    // si periodo la DDJJState tiene id modifico a periodo
-    if (DDJJState && DDJJState.id) {
-      console.log("Tiene id la ddjj");
-      setPeriodo(DDJJState.periodo);
-      console.log(periodo);
-    }
-
-    console.log(periodo);
 
     let DDJJ = {
       periodo: periodo,
       afiliados: rowsAltaDDJJ.map((item) => {
-        console.log("DENTRO DE ROWS ALTA DDJJ.c.c.");
-        console.log(item);
-
+       
         const registroNew = {
           errores: item.errores,
           cuil: !item.cuil ? null : item.cuil,
@@ -245,8 +289,8 @@ export const DDJJAlta = ({
           categoria: !item.categoria ? null : item.categoria,
           remunerativo: !item.remunerativo ? null : item.remunerativo,
           noRemunerativo: !item.noRemunerativo ? null : item.noRemunerativo,
-          uomaSocio: item.uomaSocio,
-          amtimaSocio: item.amtimaSocio,
+          uomaSocio: item.uomaSocio === "" ? null : item.uomaSocio,
+          amtimaSocio: item.amtimaSocio === "" ? null : item.amtimaSocio,
         };
 
         console.log("REGISTRO NEW");
@@ -344,12 +388,16 @@ export const DDJJAlta = ({
             delete afiliado.errores;
           });
 
-          if (peticion === "PUT") {
+          console.log("Estoy dentro de los errores")
+
+          if(DDJJState.id){
             bOK = await axiosDDJJ.actualizar(ID_EMPRESA, DDJJ);
-          } else {
+          }else{
             const data = await axiosDDJJ.crear(ID_EMPRESA, DDJJ);
-            setDDJJCreada(data);
-            console.log(data);
+            if(data){
+              //setDDJJCreada(data);
+              setDDJJState(data);
+            }
           }
         } else {
           console.log("Cancelar...se queda a corregir datos");
@@ -360,40 +408,40 @@ export const DDJJAlta = ({
       });
     } else {
       console.log("no tiene errores...grabo directamente.");
+      let bOK = false;
 
       DDJJ.afiliados.forEach((afiliado) => {
         delete afiliado.errores;
       });
 
-      if (peticion === "PUT") {
-        console.log("Dentro de PUT");
+      console.log("Estoy fuera de los errores")
 
-        //await actualizarDeclaracionJurada(ID_EMPRESA, altaDDJJFinal, altaDDJJFinal.id);
-        await axiosDDJJ.actualizar(ID_EMPRESA, DDJJ);
-        //setRowsAltaDDJJ([]);
-        // peticion put con fetch
-      } else {
+      if(DDJJState.id){
+        console.log("Dentro de ACTUALIZAR");
+        bOK = await axiosDDJJ.actualizar(ID_EMPRESA, DDJJ);
+      }else{
+        console.log("Dentro de CREAR");
         const data = await axiosDDJJ.crear(ID_EMPRESA, DDJJ);
-        setDDJJCreada(data);
-        console.log(data);
-        if (data) {
-          //actualizar estado
+        if(data){
+          //setDDJJCreada(data);
           setDDJJState(data);
-          //setRowsAltaDDJJ(data.);
         }
-        //sacarlo luego de actualizar
-        //setRowsAltaDDJJ([]);
       }
-    }
+    } 
   };
+  
 
-  //const presentarDeclaracionJurada = async () => {};
   const presentarDeclaracionJurada = async () => {
+
     if (DDJJState.id) {
+
+      // Esto deberia de ser un post para poder cambiar ambos datos 
+
       const data = await axiosDDJJ.presentar(ID_EMPRESA, DDJJState.id);
-      console.log("data: ");
-      console.log(data);
+      DDJJState.estado = data.estado;
+      DDJJState.secuencia = data.secuencia;
       if (data) {
+
         const newDDJJState = {
           ...DDJJState,
           estado: data.estado || null,
@@ -406,23 +454,6 @@ export const DDJJAlta = ({
     }
   };
 
-  console.log("DDJJState: ");
-  console.log(DDJJState);
-  let formNro = "Formulario: Pendiente";
-  if (DDJJState && DDJJState.secuencia) {
-    console.log("DDJJState.secuencia: ");
-    console.log(DDJJState.secuencia);
-    switch (DDJJState.secuencia) {
-      case 0:
-        formNro = "Formulario: Original";
-        console.log("Tengo un perro");
-        break;
-      default:
-        formNro = "Formulario: Rectif. " + DDJJState.secuencia;
-        break;
-    }
-  }
-
   return (
     <div className="mis_alta_declaraciones_juradas_container">
       <div className="periodo_container">
@@ -433,10 +464,8 @@ export const DDJJAlta = ({
           </Typography>
           <LocalizationProvider
             dateAdapter={AdapterDayjs}
-            adapterLocale={"es"}
-            localeText={
-              esES.components.MuiLocalizationProvider.defaultProps.localeText
-            }
+            adapterLocale={adaptadorIdioma}
+            localeText={textoIdioma}
           >
             <DemoContainer components={["DatePicker"]}>
               <DesktopDatePicker
@@ -444,11 +473,30 @@ export const DDJJAlta = ({
                 views={["month", "year"]}
                 closeOnSelect={true}
                 onChange={handleChangePeriodo}
-                value={periodo} // dayJs(periodo) fallaba
+                value={periodo}
               />
             </DemoContainer>
           </LocalizationProvider>
-          <Typography variant="h6">{formNro}</Typography>
+          {
+            DDJJState.secuencia === 0 ? (
+              <Typography variant="h6">
+                Formulario: Original
+              </Typography>
+            ) : (
+
+              DDJJState.secuencia ? (
+                <Typography variant="h6">
+                  Formulario: Rectif. {DDJJState.secuencia}
+                </Typography>
+
+
+              ) : (
+                <Typography variant="h6">
+                  Formulario: Pendiente
+                </Typography>
+              )
+            )
+          }
         </Stack>
       </div>
 
@@ -456,7 +504,7 @@ export const DDJJAlta = ({
         <h5 className="paso">Paso 2 - Elija un modo de presentación</h5>
         <div className="subir_archivo_container">
           <span className="span">1</span>
-          <h5 className="title_subir_archivo">Subir un archivo CSV - XLSL</h5>
+          <h5 className="title_subir_archivo">Importar archivo CSV - XLSX</h5>
           <div className="file-select" id="src-file1">
             <input
               type="file"
@@ -464,6 +512,7 @@ export const DDJJAlta = ({
               aria-label="Archivo"
               onChange={handleFileChange}
               accept=".csv, .xlsx"
+              title=""
             />
             <div className="file-select-label" id="src-file1-label">
               {selectedFileName || "Nombre del archivo"}
@@ -473,11 +522,12 @@ export const DDJJAlta = ({
             variant="contained"
             sx={{
               padding: "6px 52px",
+              width: "150px",
             }}
             onClick={importarAfiliado}
             disabled={!btnSubirHabilitado}
           >
-            Subir
+            Importar
           </Button>
         </div>
         <div className="copiar_periodo_container">
@@ -509,12 +559,19 @@ export const DDJJAlta = ({
                 >
                   <LocalizationProvider
                     dateAdapter={AdapterDayjs}
-                    adapterLocale={"es"}
-                    localeText={
-                      esES.components.MuiLocalizationProvider.defaultProps
-                        .localeText
-                    }
-                  ></LocalizationProvider>
+                    adapterLocale={adaptadorIdioma}
+                    localeText={textoIdioma}
+                  >
+                    <DemoContainer components={["DatePicker"]}>
+                      <DesktopDatePicker
+                        label={"Otro período"}
+                        views={["month", "year"]}
+                        closeOnSelect={true}
+                        onChange={handleChangeOtroPeriodo}
+                        value={otroPeriodo}
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider>
                 </Stack>
               )}
             </div>
@@ -525,7 +582,7 @@ export const DDJJAlta = ({
               marginLeft: "114px",
               padding: "6px 45px",
             }}
-            onClick={() => setOcultarGrillaPaso3(!ocultarGrillaPaso3)}
+            onClick={() => setOcultarEmpleadosGrilla(!ocultarEmpleadosGrilla)}
           >
             Buscar
           </Button>
@@ -537,16 +594,17 @@ export const DDJJAlta = ({
             variant="contained"
             sx={{
               padding: "6px 23px",
-              marginLeft: "468px",
+              width: "150px",
+              marginLeft: "467px",
             }}
-            onClick={() => setOcultarGrillaPaso3(!ocultarGrillaPaso3)}
+            onClick={() => setOcultarEmpleadosGrilla(!ocultarEmpleadosGrilla)}
           >
-            Seleccionar
+            Carga
           </Button>
         </div>
       </div>
 
-      {(ocultarGrillaPaso3 || (rowsAltaDDJJ && rowsAltaDDJJ.length > 0)) && (
+      {(ocultarEmpleadosGrilla || (rowsAltaDDJJ && rowsAltaDDJJ.length > 0)) && (
         <div className="formulario_container">
           <h5 className="paso">Paso 3 - Completar el formulario</h5>
 
@@ -554,7 +612,6 @@ export const DDJJAlta = ({
             rowsAltaDDJJ={rowsAltaDDJJ}
             setRowsAltaDDJJ={setRowsAltaDDJJ}
             rowsAltaDDJJAux={rowsAltaDDJJAux}
-            setRowsAltaDDJJAux={setRowsAltaDDJJAux}
             camaras={camaras}
             categoriasFiltradas={categoriasFiltradas}
             setCategoriasFiltradas={setCategoriasFiltradas}
@@ -563,6 +620,9 @@ export const DDJJAlta = ({
             todasLasCategorias={todasLasCategorias}
             plantas={plantas}
             validacionResponse={validacionResponse}
+            setSomeRowInEditMode={setSomeRowInEditMode}
+            rowModesModel={rowModesModel}
+            setRowModesModel={setRowModesModel}
           />
 
           <div
@@ -573,25 +633,56 @@ export const DDJJAlta = ({
               marginTop: "20px",
             }}
           >
-            <Button
-              variant="contained"
-              sx={{ padding: "6px 52px", marginLeft: "10px" }}
-              onClick={guardarDeclaracionJurada}
+            <Tooltip
+              title={someRowInEditMode ? "Hay filas en edición, por favor finalice la edición antes de guardar." : ""}
+              sx={{ marginLeft: "10px", cursor: "pointer" }}
             >
-              Guardar
-            </Button>
+              <span>
+                <Button
+                  variant="contained"
+                  sx={{ padding: "6px 52px", marginLeft: "10px" }}
+                  onClick={guardarDeclaracionJurada}
+                  disabled={someRowInEditMode || rowsAltaDDJJ.length === 0}
+                >
+                  Guardar
+                </Button>
+              </span>
+            </Tooltip>
 
-            <Button
-              variant="contained"
-              sx={{ padding: "6px 52px", marginLeft: "10px" }}
-              onClick={presentarDeclaracionJurada}
-              disabled={
-                (DDJJState && DDJJState.estado && DDJJState.estado !== "PE") ||
-                (ddjjCreada && ddjjCreada.id)
-              }
-            >
-              Presentar
-            </Button>
+
+            {
+              DDJJState.estado === "PR" ? (
+                <Button
+                  variant="contained"
+                  sx={{ padding: "6px 52px", marginLeft: "10px" }}
+                  onClick={presentarDeclaracionJurada}
+                  disabled={true}
+                >
+                  Presentar
+                </Button>
+              ) : (
+
+                DDJJState.estado === "PE" ? (
+                  <Button
+                    variant="contained"
+                    sx={{ padding: "6px 52px", marginLeft: "10px" }}
+                    onClick={presentarDeclaracionJurada}
+                    disabled={false}
+                  >
+                    Presentar
+                  </Button>
+                ) : (
+                  <Button
+                    variant="contained"
+                    sx={{ padding: "6px 52px", marginLeft: "10px" }}
+                    onClick={presentarDeclaracionJurada}
+                    disabled={DDJJState.id ? false : true}
+                  >
+                    Presentar
+                  </Button>
+                )
+              )
+            }
           </div>
         </div>
       )}

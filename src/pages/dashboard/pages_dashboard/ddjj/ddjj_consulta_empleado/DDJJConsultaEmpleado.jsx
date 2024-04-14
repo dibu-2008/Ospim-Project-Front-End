@@ -72,6 +72,21 @@ const paginacion = {
   page: 0,
 };
 
+const CustomToolbar = (props) => {
+  const {
+    showQuickFilter,
+    themeWithLocale
+  } = props;
+  return (
+    <GridToolbarContainer theme={themeWithLocale} style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <Button color="primary">
+        
+      </Button>
+      <GridToolbar showQuickFilter={showQuickFilter} />
+    </GridToolbarContainer>
+  );
+};
+
 export const DDJJConsultaEmpleado = () => {
   const [showCuitRazonSocial, setShowCuitRazonSocial] = useState(true);
   const [paginationModel, setPaginationModel] = useState(paginacion);
@@ -387,7 +402,14 @@ export const DDJJConsultaEmpleado = () => {
               rowModesModel={rowModesModel}
               onRowModesModelChange={handleRowModesModelChange}
               localeText={dataGridStyle.toolbarText}
-              slots={{ toolbar: GridToolbar }}
+              slots={{ toolbar: CustomToolbar }}
+              slotProps={{
+                toolbar: {
+                  showQuickFilter: true,
+                  showColumnMenu: true,
+                  themeWithLocale
+                },
+              }}
               paginationModel={paginationModel}
               onPaginationModelChange={setPaginationModel}
               pageSizeOptions={[50, 75, 100]}

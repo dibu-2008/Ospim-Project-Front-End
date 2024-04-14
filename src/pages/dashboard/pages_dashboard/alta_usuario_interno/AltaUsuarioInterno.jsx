@@ -21,6 +21,7 @@ import {
   GridToolbarContainer,
   GridActionsCellItem,
   GridRowEditStopReasons,
+  GridToolbar,
 } from "@mui/x-data-grid";
 
 import { axiosUsuariosInternos } from "./AltaUsuarioInternoApi";
@@ -33,6 +34,7 @@ import "./AltaUsuarioInterno.css";
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { dataGridStyle } from "@/common/dataGridStyle";
 
 const style = {
   position: "absolute",
@@ -47,7 +49,14 @@ const style = {
 };
 
 const crearNuevoRegistro = (props) => {
-  const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
+  const {
+    setRows,
+    rows,
+    setRowModesModel,
+    volverPrimerPagina,
+    showQuickFilter,
+    themeWithLocale
+  } = props;
 
   const altaHandleClick = () => {
     const maxId = rows ? Math.max(...rows.map((row) => row.id), 0) : 1;
@@ -55,7 +64,6 @@ const crearNuevoRegistro = (props) => {
     const id = newId;
     volverPrimerPagina();
 
-    //saque campo:         password2: "",
     setRows((oldRows) => [
       {
         id,
@@ -77,10 +85,13 @@ const crearNuevoRegistro = (props) => {
   };
 
   return (
-    <GridToolbarContainer>
+    <GridToolbarContainer theme={themeWithLocale} style={{ display: 'flex', justifyContent: 'space-between' }}>
       <Button color="primary" startIcon={<AddIcon />} onClick={altaHandleClick}>
         Nuevo Registro
       </Button>
+      <GridToolbar
+        showQuickFilter={showQuickFilter}
+      />
     </GridToolbarContainer>
   );
 };
@@ -503,9 +514,17 @@ export const AltaUsuarioInterno = () => {
             processRowUpdate={(updatedRow, originalRow) =>
               processRowUpdate(updatedRow, originalRow)
             }
+            localeText={dataGridStyle.toolbarText}
             slots={{ toolbar: crearNuevoRegistro }}
             slotProps={{
-              toolbar: { setRows, rows, setRowModesModel, volverPrimerPagina },
+              toolbar: {
+                setRows,
+                rows,
+                setRowModesModel,
+                volverPrimerPagina,
+                showQuickFilter: true,
+                themeWithLocale
+              },
             }}
             sx={{
               "& .MuiDataGrid-virtualScroller::-webkit-scrollbar": {

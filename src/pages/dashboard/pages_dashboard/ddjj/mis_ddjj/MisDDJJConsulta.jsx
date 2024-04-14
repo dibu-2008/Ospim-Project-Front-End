@@ -9,9 +9,9 @@ import { MisDDJJConsultaGrilla } from "./grilla/MisDDJJConsultaGrilla";
 import { axiosDDJJ } from "./grilla/MisDDJJConsultaGrillaApi";
 import { esES } from "@mui/x-date-pickers/locales";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
-import { CSVLink } from "react-csv";
+import { CSVLink, CSVDownload } from "react-csv";
 import localStorageService from "@/components/localStorage/localStorageService";
-export const ConsultaMisDDJJ = ({
+export const MisDDJJConsulta = ({
   setDDJJState,
   setPeriodo,
   rows_mis_ddjj,
@@ -31,12 +31,7 @@ export const ConsultaMisDDJJ = ({
     ["George Abuladze", 33, "politician"],
     ["Nick Tsereteli", 19, "public worker"],
   ]);
-  const handleSubmit = (e) => {
-    setData([...data, [fullName, age, occupation]]);
-    setFullName("");
-    setAge(0);
-    setOccupation("");
-  };
+
   const ID_EMPRESA = localStorageService.getEmpresaId();
 
   const handleChangeDesde = (date) => setDesde(date);
@@ -51,14 +46,14 @@ export const ConsultaMisDDJJ = ({
         const { $d: $hasta } = hasta;
 
         const fechaDesde = new Date($desde);
-        fechaDesde.setDate(1); // Seteamos el día del mes a 1
-        fechaDesde.setUTCHours(0, 0, 0, 0); // Ajustamos la zona horaria a UTC
-        const fechaIsoDesde = fechaDesde.toISOString(); // Convertimos la fecha a ISO
+        fechaDesde.setDate(1); 
+        fechaDesde.setUTCHours(0, 0, 0, 0); 
+        const fechaIsoDesde = fechaDesde.toISOString(); 
 
         const fechaHasta = new Date($hasta);
-        fechaHasta.setDate(1); // Seteamos el día del mes a 1
-        fechaHasta.setUTCHours(0, 0, 0, 0); // Ajustamos la zona horaria a UTC
-        const fechaIsoHasta = fechaHasta.toISOString(); // Convertimos la fecha a ISO
+        fechaHasta.setDate(1); 
+        fechaHasta.setUTCHours(0, 0, 0, 0); 
+        const fechaIsoHasta = fechaHasta.toISOString(); 
 
         const declaracionesFiltradas = ddjjResponse.filter((ddjj) => {
           const fecha = new Date(ddjj.periodo);
@@ -77,7 +72,6 @@ export const ConsultaMisDDJJ = ({
 
   const exportarDeclaracionesJuradas = () => {
     console.log("Exportar declaraciones juradas");
-    //console.log(rows_mis_ddjj);
   };
 
   return (
@@ -100,10 +94,9 @@ export const ConsultaMisDDJJ = ({
               <DesktopDatePicker
                 label={"Periodo desde"}
                 views={["month", "year"]}
-                closeOnSelect={false}
+                closeOnSelect={true}
                 onChange={handleChangeDesde}
                 value={desde}
-                slotProps={{ actionBar: { actions: ["cancel", "accept"] } }}
               />
             </DemoContainer>
           </LocalizationProvider>
@@ -118,10 +111,9 @@ export const ConsultaMisDDJJ = ({
               <DesktopDatePicker
                 label={"Periodo hasta"}
                 views={["month", "year"]}
-                closeOnSelect={false}
+                closeOnSelect={true}
                 onChange={handleChangeHasta}
                 value={hasta}
-                slotProps={{ actionBar: { actions: ["cancel", "accept"] } }}
               />
             </DemoContainer>
           </LocalizationProvider>

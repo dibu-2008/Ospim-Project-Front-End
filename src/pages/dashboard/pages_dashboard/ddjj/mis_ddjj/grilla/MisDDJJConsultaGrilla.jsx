@@ -110,6 +110,9 @@ export const MisDDJJConsultaGrilla = ({
   const PresentarDeclaracionesJuradas = async (id) => {
     const updatedRow = { ...rowsMisDdjj.find((row) => row.id === id) };
     const data = await axiosDDJJ.presentar(ID_EMPRESA, id);
+   
+    console.log("data: ", data);
+
     if (data) {
       updatedRow.estado = data.estado || null;
       updatedRow.secuencia = data.secuencia || null;
@@ -122,29 +125,15 @@ export const MisDDJJConsultaGrilla = ({
     return updatedRow;
   };
 
+
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true;
     }
   };
 
-  const handleEditClick = (id, row) => async () => {
-    const ddjj = await axiosDDJJ.getDDJJ(ID_EMPRESA, id);
-    console.log("ddjj: ", ddjj);
-
-    const { periodo, afiliados } = ddjj;
-
-    const fecha = formatter.periodo2(periodo);
-    console.log("fecha: ", fecha);
-
-    // Agregarle a afiliados la propiedad isNew con el valor de false
-    afiliados.forEach((afiliado) => (afiliado.isNew = false));
-
-    //Actualizo estados de solapa DDJJ y cambio de Tab
-    setPeticion("PUT");
-    setPeriodo(dayjs(fecha));
-    setRowsAltaDDJJ(afiliados);
-    setDDJJState(ddjj);
+  const handleEditClick = (id) => async () => {
+    setDDJJState({ id: id });
     setTabState(0);
   };
 
@@ -222,7 +211,7 @@ export const MisDDJJConsultaGrilla = ({
       field: "periodo",
       headerName: "Periodo",
       flex: 1,
-      editable: true,
+      editable: false,
       type: "date",
       headerAlign: "center",
       align: "center",
@@ -235,7 +224,7 @@ export const MisDDJJConsultaGrilla = ({
       field: "secuencia",
       headerName: "Numero",
       flex: 1,
-      editable: true,
+      editable: false,
       headerAlign: "center",
       align: "center",
       headerClassName: "header--cell",
@@ -259,7 +248,7 @@ export const MisDDJJConsultaGrilla = ({
       field: "total" + elem,
       headerName: "Total " + elem,
       flex: 1,
-      editable: true,
+      editable: false,
       headerAlign: "center",
       align: "center",
       headerClassName: "header--cell",
@@ -345,7 +334,7 @@ export const MisDDJJConsultaGrilla = ({
             icon={<EditIcon />}
             label="Edit"
             className="textPrimary"
-            onClick={handleEditClick(id, row)}
+            onClick={handleEditClick(id)}
             color="inherit"
           />,
           <GridActionsCellItem
@@ -391,11 +380,6 @@ export const MisDDJJConsultaGrilla = ({
           localeText={dataGridStyle.toolbarText}
           slots={{
             toolbar: GridToolbar,
-          }}
-          slotProps={{
-            toolbar: {
-              showQuickFilter: true,
-            },
           }}
           sx={{
             "& .MuiDataGrid-virtualScroller::-webkit-scrollbar": {
