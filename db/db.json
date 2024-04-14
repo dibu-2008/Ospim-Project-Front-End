@@ -4137,6 +4137,22 @@
       "aporte": "AMTIMA",
       "vigencia": "2024-08-01T03:00:00.000Z",
       "id": 5
+    },
+    {
+      "cuit": "1",
+      "periodo_original": "2024-07-01T03:00:00.000Z",
+      "importe": 1,
+      "aporte": "ART.46",
+      "vigencia": "2024-11-01T03:00:00.000Z",
+      "id": 6
+    },
+    {
+      "cuit": "2",
+      "periodo_original": "2024-06-01T03:00:00.000Z",
+      "importe": 1,
+      "aporte": "AMTIMA",
+      "vigencia": "2024-07-01T03:00:00.000Z",
+      "id": 7
     }
   ]
 }

@@ -49,22 +49,21 @@ export const crearAjuste = async ( body ) => {
     const URL = `${BACKEND_URL}/sigeco/ajustes`;
     try {
         const response = await axiosCrud.crear(URL, body)
+        swal.showSuccess(HTTP_MSG_ALTA);
         return response
     }catch (error){
-        const HTTP_MSG = HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`
-        showErrorBackEnd(HTTP_MSG,error);
+        showErrorBackEnd(HTTP_MSG_ALTA_ERROR, error);
     }
 }
 
 export const editAjuste = async (id, body) => {
     const URL = `${BACKEND_URL}/sigeco/ajustes/${ id }`;
     try {
-        console.log(URL)
         const response = await axiosCrud.actualizar(URL, body)
+        swal.showSuccess(HTTP_MSG_MODI);
         return response
     }catch (error){
-        const HTTP_MSG = HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`
-        showErrorBackEnd(HTTP_MSG,error);
+        showErrorBackEnd(HTTP_MSG_MODI_ERROR, error);
     }
 }
 
