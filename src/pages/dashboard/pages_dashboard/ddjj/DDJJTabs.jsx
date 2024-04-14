@@ -44,7 +44,6 @@ function a11yProps(index) {
   };
 }
 
-
 export const DDJJTabs = () => {
   const [DDJJState, setDDJJState] = useState({});
   const [periodo, setPeriodo] = useState(null);
