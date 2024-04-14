@@ -82,7 +82,6 @@ function EditToolbar(props) {
 export const DDJJAltaEmpleadosGrilla = ({
   rowsAltaDDJJ,
   setRowsAltaDDJJ,
-  rowsAltaDDJJAux,
   camaras,
   categoriasFiltradas,
   setCategoriasFiltradas,

@@ -39,11 +39,8 @@ export const DDJJAlta = ({
   setPeriodo,
   rowsAltaDDJJ,
   setRowsAltaDDJJ,
-  rowsAltaDDJJAux,
-  // setRowsAltaDDJJAux,
-  peticion,
 }) => {
-  
+
   const [camaras, setCamaras] = useState([]);
   const [todasLasCategorias, setTodasLasCategorias] = useState([]);
   const [categoriasFiltradas, setCategoriasFiltradas] = useState([]);
@@ -61,6 +58,7 @@ export const DDJJAlta = ({
   const [otroPeriodo, setOtroPeriodo] = useState(null);
   const [rowModesModel, setRowModesModel] = useState({});
   const ID_EMPRESA = localStorageService.getEmpresaId();
+  const [tituloSec, setTituloSec] = useState("");
 
   const handleChangePeriodo = (date) => setPeriodo(date);
 
@@ -99,15 +97,28 @@ export const DDJJAlta = ({
     ObtenerPlantaEmpresas();
   }, []);
 
+  const getTituloSec = (secuencia) => {
+    if(secuencia === 0){
+      return "Original";
+    }else if(secuencia === null || secuencia === undefined){
+      return "Pendiente";
+    }else {
+      return "Rectificativa Nro: " + secuencia;
+    }
+  }
+
   // useEffect(() para llenar las grillas 
   useEffect(() => {
-    
+
     const obtenerDDJJ = async (ddjj, idDDJJ, idEmpresa) => {
       if (ddjj && idDDJJ) {
         try {
-          
+
           const ddjj = await axiosDDJJ.getDDJJ(idEmpresa, idDDJJ);
           console.log(ddjj.periodo);
+
+          setTituloSec(getTituloSec(ddjj.secuencia));
+
           setPeriodo(dayjs(ddjj.periodo));
           setRowsAltaDDJJ(ddjj.afiliados);
         } catch (error) {
@@ -115,9 +126,11 @@ export const DDJJAlta = ({
         }
       }
     }
-  
+
     obtenerDDJJ(DDJJState, DDJJState.id, ID_EMPRESA);
   }, [DDJJState]);
+
+   
 
   const importarAfiliado = async () => {
 
@@ -162,7 +175,7 @@ export const DDJJAlta = ({
 
       setRowsAltaDDJJ(afiliadoImportadoConInte);
     } else {
-      
+
       swal.showSuccess(IMPORTACION_OK);
 
       setRowsAltaDDJJ(afiliadoImportadoConInte);
@@ -257,7 +270,7 @@ export const DDJJAlta = ({
             confirm("Recorda que si subis un archivo, se perderan los datos de la ddjj actual")
           }
         } else {
-          
+
         }
       };
 
@@ -268,13 +281,13 @@ export const DDJJAlta = ({
   const handleElegirOtroChange = (event) => {
     setMostrarPeriodos(event.target.value === "elegirOtro");
   };
-  
+
   const guardarDeclaracionJurada = async () => {
 
     let DDJJ = {
       periodo: periodo,
       afiliados: rowsAltaDDJJ.map((item) => {
-       
+
         const registroNew = {
           errores: item.errores,
           cuil: !item.cuil ? null : item.cuil,
@@ -390,13 +403,14 @@ export const DDJJAlta = ({
 
           console.log("Estoy dentro de los errores")
 
-          if(DDJJState.id){
+          if (DDJJState.id) {
             bOK = await axiosDDJJ.actualizar(ID_EMPRESA, DDJJ);
-          }else{
+          } else {
             const data = await axiosDDJJ.crear(ID_EMPRESA, DDJJ);
-            if(data){
+            if (data) {
               //setDDJJCreada(data);
               setDDJJState(data);
+              setTituloSec(getTituloSec(data.secuencia));
             }
           }
         } else {
@@ -416,20 +430,21 @@ export const DDJJAlta = ({
 
       console.log("Estoy fuera de los errores")
 
-      if(DDJJState.id){
+      if (DDJJState.id) {
         console.log("Dentro de ACTUALIZAR");
         bOK = await axiosDDJJ.actualizar(ID_EMPRESA, DDJJ);
-      }else{
+      } else {
         console.log("Dentro de CREAR");
         const data = await axiosDDJJ.crear(ID_EMPRESA, DDJJ);
-        if(data){
+        if (data) {
           //setDDJJCreada(data);
           setDDJJState(data);
+          setTituloSec(getTituloSec(data.secuencia));
         }
       }
-    } 
+    }
   };
-  
+
 
   const presentarDeclaracionJurada = async () => {
 
@@ -450,6 +465,7 @@ export const DDJJAlta = ({
         console.log("newDDJJState - pre SET: ");
         console.log(newDDJJState);
         setDDJJState(newDDJJState);
+        setTituloSec(getTituloSec(newDDJJState.secuencia));
       }
     }
   };
@@ -477,26 +493,9 @@ export const DDJJAlta = ({
               />
             </DemoContainer>
           </LocalizationProvider>
-          {
-            DDJJState.secuencia === 0 ? (
-              <Typography variant="h6">
-                Formulario: Original
-              </Typography>
-            ) : (
-
-              DDJJState.secuencia ? (
-                <Typography variant="h6">
-                  Formulario: Rectif. {DDJJState.secuencia}
-                </Typography>
-
-
-              ) : (
-                <Typography variant="h6">
-                  Formulario: Pendiente
-                </Typography>
-              )
-            )
-          }
+          <Typography variant="h6">
+            Formulario: {tituloSec}
+          </Typography>
         </Stack>
       </div>
 
@@ -611,7 +610,6 @@ export const DDJJAlta = ({
           <DDJJAltaEmpleadosGrilla
             rowsAltaDDJJ={rowsAltaDDJJ}
             setRowsAltaDDJJ={setRowsAltaDDJJ}
-            rowsAltaDDJJAux={rowsAltaDDJJAux}
             camaras={camaras}
             categoriasFiltradas={categoriasFiltradas}
             setCategoriasFiltradas={setCategoriasFiltradas}
