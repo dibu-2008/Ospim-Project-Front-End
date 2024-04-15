@@ -25,6 +25,8 @@ import { Ajustes } from "@/pages/dashboard/pages_dashboard/ajustes/Ajustes"
 
 
 
+
+
 const PagosPage = () => <div>Contenido de la página de pagos</div>;
 
 const AppRouter = () => {
@@ -45,7 +47,7 @@ const AppRouter = () => {
             <Route path="inicio" index element={<Inicio />} />
             <Route path="publicaciones" element={<Publicaciones />} />
             <Route path="feriados" element={<Feriados />} />
-            <Route path="ddjj" element={<DeclaracionesJuradas />} />
+            <Route path="ddjj" element={<DDJJTabs />} />
             <Route path="ddjjconsultaempleado" element={<DDJJConsultaEmpleado />} />
             <Route path="boletas" element={<Boletas />} />
             <Route path="pagos" element={<PagosPage />} />
