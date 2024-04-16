@@ -96,16 +96,16 @@ export const MisDDJJConsultaGrilla = ({
 
   useEffect(() => {
     const ObtenerMisDeclaracionesJuradas = async () => {
-      let ddjjResponse = await axiosDDJJ.consultar(ID_EMPRESA);
+      //let ddjjResponse = await axiosDDJJ.consultar(ID_EMPRESA);
 
       //Agrego las columnas deTotales de Aportes
-      ddjjResponse = await castearMisDDJJ(ddjjResponse);
+      const ddjjResponse = await castearMisDDJJ(rowsMisDdjj);
 
       setRowsMisDdjj(ddjjResponse.map((item) => ({ id: item.id, ...item })));
     };
 
     ObtenerMisDeclaracionesJuradas();
-  }, []);
+  }, [rowsMisDdjj]);
 
   const PresentarDeclaracionesJuradas = async (id) => {
     const updatedRow = { ...rowsMisDdjj.find((row) => row.id === id) };

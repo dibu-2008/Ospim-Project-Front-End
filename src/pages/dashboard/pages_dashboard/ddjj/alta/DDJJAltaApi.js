@@ -146,6 +146,28 @@ export const validaCuil = async (empresaId, cuiles) => {
 
 };
 
+const obtenerPeriodoAnterior = async (periodo) => {
+  
+  let query = "";
+
+  if(periodo !== null){
+    query = `?periodo=${periodo}`;
+  }
+
+  const URL = `/ddjj/periodo-anterior/${query}`;
+
+  try {
+    const data = await axiosCrud.consultar(URL);
+    return data || [];
+  }catch (error) {
+    showErrorBackEnd(
+      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
+      error
+    );
+    return [];
+  }
+}
+
 export const axiosDDJJ = {
   getCamaras: async function () {
     return obtenerCamaras();
@@ -184,4 +206,7 @@ export const axiosDDJJ = {
   presentar: async function (empresaId, ddjjId) {
     return presentar(empresaId, ddjjId);
   },
+  getPeriodoAnterior: async function (periodo) {
+    return obtenerPeriodoAnterior(periodo);
+  }
 };

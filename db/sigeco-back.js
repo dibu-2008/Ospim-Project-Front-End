@@ -220,6 +220,11 @@ module.exports = (req, res, next) => {
       return "DDJJ-PRESENTAR";
     }
 
+    if (req.method === "GET" && req.url.startsWith("/ddjj/periodo-anterior")) {
+    
+      return "DDJJ-CONSULTA-PERIODO-ANTERIOR";
+    }
+
     return "----";
   }
 
@@ -326,6 +331,9 @@ module.exports = (req, res, next) => {
       break;
     case "DDJJ-PRESENTAR":
       presentarDDJJ(req, res);
+      break;
+    case "DDJJ-CONSULTA-PERIODO-ANTERIOR":
+      getDDJJPeriodoAnterior(req, res);
       break;
     case "----":
       // code block
@@ -862,4 +870,92 @@ module.exports = (req, res, next) => {
 function presentarDDJJ(req, res) {
   // quiero que esta funcion me reporte { estado = "PR", secuencia = 1 }
   res.status(200).jsonp({ estado: "PR", secuencia: 1 })
+}
+
+function getDDJJPeriodoAnterior(req, res) {
+
+  console.log("XXXX : ", req.query);
+
+  let periodito = ""
+
+  const hoy = new Date()
+  const hoyMenosTresDias = new Date(hoy.setDate(hoy.getDate() - 3))
+  console.log(hoyMenosTresDias); 
+
+  hoyMenosTresDias.setUTCHours(3);
+  hoyMenosTresDias.setUTCMinutes(0);
+  hoyMenosTresDias.setUTCSeconds(0);
+  hoyMenosTresDias.setUTCMilliseconds(0);
+
+  
+  if(req.query.periodo) {
+    const fechaParseada = new Date(Date.parse(req.query.periodo));
+    fechaParseada.setDate(1); 
+    periodito = fechaParseada.toISOString();
+  }else if(
+    req.query.periodo === null || 
+    req.query.periodo === ""   || 
+    req.query.periodo === undefined) {
+    periodito = hoyMenosTresDias
+  }
+
+  
+  const ddjj = [
+    {
+      id: 120,
+      secuencia: 0,
+      periodo: periodito,
+      secuencia: 2,
+      afiliados: [
+        {
+          cuil: "123123213213",
+          inte: 1,
+          apellido: "sdasd",
+          nombre: "asdas",
+          fechaIngreso: null,
+          empresaDomicilioId: 3,
+          camara: "CAENA",
+          categoria: "D",
+          remunerativo: 545000.7,
+          noRemunerativo: 25000,
+          uomaSocio: false,
+          amtimaSocio: false,
+          id: 1
+        },
+        {
+          cuil: "20949118682",
+          inte: 1,
+          apellido: "Salinas",
+          nombre: "Luis",
+          fechaIngreso: "2001-01-01T03:00:00.000Z",
+          empresaDomicilioId: 3,
+          camara: "CAENA",
+          categoria: "D",
+          remunerativo: 545000.7,
+          noRemunerativo: 25000,
+          uomaSocio: false,
+          amtimaSocio: false,
+          id: 2
+        },
+        {
+          cuil: "20294465996",
+          inte: 1,
+          apellido: "Carlos",
+          nombre: "Sanchez",
+          fechaIngreso: "2010-01-01T03:00:00.000Z",
+          empresaDomicilioId: 3,
+          camara: "CAENA",
+          categoria: "D",
+          remunerativo: 545000.7,
+          noRemunerativo: 25000,
+          uomaSocio: false,
+          amtimaSocio: false,
+          id: 3
+        }
+      ]
+    }
+  ]
+
+  res.status(200).jsonp(ddjj)
+
 }

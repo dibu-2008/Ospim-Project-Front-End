@@ -41,6 +41,8 @@ export const MisDDJJConsulta = ({
   const buscarDeclaracionesJuradas = async () => {
     try {
       const ddjjResponse = await axiosDDJJ.consultar(ID_EMPRESA);
+      setRowsMisDdjj(ddjjResponse);
+      console.log("ddjjResponse", ddjjResponse);
       if (desde && desde.$d && hasta && hasta.$d) {
         const { $d: $desde } = desde;
         const { $d: $hasta } = hasta;
@@ -61,6 +63,10 @@ export const MisDDJJConsulta = ({
             fecha >= new Date(fechaIsoDesde) && fecha <= new Date(fechaIsoHasta)
           );
         });
+        console.log("declaracionesFiltradas", declaracionesFiltradas)
+
+        
+
         setRowsMisDdjj(declaracionesFiltradas);
       } else {
         setRowsMisDdjj(ddjjResponse);

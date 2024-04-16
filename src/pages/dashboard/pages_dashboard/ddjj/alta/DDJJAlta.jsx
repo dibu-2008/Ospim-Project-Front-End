@@ -470,6 +470,34 @@ export const DDJJAlta = ({
     }
   };
 
+  const buscarPeriodoAnterior = async () => {
+
+    if (!mostrarPeriodos) {
+      console.log("Ultimo Período Presentado");
+      const ultimoPeriodoPresentadoRes = await axiosDDJJ.getPeriodoAnterior(otroPeriodo);
+      console.log("ultimoPeriodoPresentadoRes");
+      console.log(ultimoPeriodoPresentadoRes);
+      setTituloSec(getTituloSec(ultimoPeriodoPresentadoRes[0].secuencia));
+      setRowsAltaDDJJ(ultimoPeriodoPresentadoRes[0].afiliados);
+      /* setDDJJState((prevState) => ({
+        ...prevState,
+        afiliados: ultimoPeriodoPresentadoRes[0].afiliados,
+      })); */
+      setOcultarEmpleadosGrilla(!ocultarEmpleadosGrilla);
+
+    }else {
+      console.log("Elegir otro");
+      const otroPeriodoRes = await axiosDDJJ.getPeriodoAnterior(otroPeriodo);
+      setRowsAltaDDJJ(otroPeriodoRes[0].afiliados);
+      setDDJJState((prevState) => ({
+        ...prevState,
+        afiliados: otroPeriodoRes[0].afiliados,
+      }));
+      setOcultarEmpleadosGrilla(!ocultarEmpleadosGrilla);
+    }
+    
+  }
+
   return (
     <div className="mis_alta_declaraciones_juradas_container">
       <div className="periodo_container">
@@ -581,7 +609,7 @@ export const DDJJAlta = ({
               marginLeft: "114px",
               padding: "6px 45px",
             }}
-            onClick={() => setOcultarEmpleadosGrilla(!ocultarEmpleadosGrilla)}
+            onClick={buscarPeriodoAnterior}
           >
             Buscar
           </Button>
@@ -640,7 +668,7 @@ export const DDJJAlta = ({
                   variant="contained"
                   sx={{ padding: "6px 52px", marginLeft: "10px" }}
                   onClick={guardarDeclaracionJurada}
-                  disabled={someRowInEditMode || rowsAltaDDJJ.length === 0}
+                  disabled={someRowInEditMode || rowsAltaDDJJ?.length === 0}
                 >
                   Guardar
                 </Button>
