@@ -53,7 +53,7 @@ function ddjjTotalesAportes(ddjj, colAportes) {
   return vecAportesConTotales;
 }
 
-function castearMisDDJJ(ddjjResponse) {
+export function castearMisDDJJ(ddjjResponse) {
   let colAportes = misDDJJColumnaAporteGet(ddjjResponse);
   ddjjResponse.forEach((dj) => {
     let colAportesConTotales = ddjjTotalesAportes(dj, colAportes);
@@ -96,10 +96,10 @@ export const MisDDJJConsultaGrilla = ({
 
   useEffect(() => {
     const ObtenerMisDeclaracionesJuradas = async () => {
-      let ddjjResponse = await axiosDDJJ.consultar(ID_EMPRESA);
+      //let ddjjResponse = await axiosDDJJ.consultar(ID_EMPRESA);
 
       //Agrego las columnas deTotales de Aportes
-      ddjjResponse = await castearMisDDJJ(ddjjResponse);
+      const ddjjResponse = await castearMisDDJJ(rowsMisDdjj);
 
       setRowsMisDdjj(ddjjResponse.map((item) => ({ id: item.id, ...item })));
     };

@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   GridRowModes,
   DataGrid,
@@ -805,7 +805,7 @@ export const DDJJAltaEmpleadosGrilla = ({
           <DataGrid
             apiRef={gridApiRef}
             className="afiliados"
-            rows={rowsAltaDDJJ}
+            rows={rowsAltaDDJJ || []}
             columns={columns}
             columnVisibilityModel={{ errores: false }}
             editMode="row"
@@ -842,7 +842,7 @@ export const DDJJAltaEmpleadosGrilla = ({
               },
             }}
             initialState={{
-              ...rowsAltaDDJJ.initialState,
+              ...rowsAltaDDJJ?.initialState,
               pagination: {
                 paginationModel: { pageSize: 5 },
               },

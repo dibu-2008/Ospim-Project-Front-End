@@ -187,6 +187,31 @@
         }
       ],
       "id": 3
+    },
+    {
+      "razonSocial": "Luis Salinas",
+      "cuit": "20949118682",
+      "clave": "123",
+      "email": "luis@luis1.com",
+      "telefono": "1139192460",
+      "telefono_prefijo": "12",
+      "whatsapp": "123456789",
+      "whatsapp_prefijo": "011",
+      "ramoId": 2,
+      "domicilios": [
+        {
+          "tipo": "FISCAL",
+          "provinciaId": 3,
+          "localidadId": 265,
+          "calle": "1",
+          "piso": "1",
+          "depto": "1",
+          "oficina": "1",
+          "cp": "1",
+          "planta": "1"
+        }
+      ],
+      "id": 4
     }
   ],
   "rol": [
@@ -1061,7 +1086,7 @@
       "nombre": "20233725006",
       "rol": [
         {
-          "descripcion": "EMPLEADOR"
+          "descripcion": "EMPLEADO"
         }
       ]
     },
@@ -3747,6 +3772,233 @@
       ],
       "empresaId": "1",
       "id": 231
+    },
+    {
+      "periodo": "2018-02-14T03:00:00.000Z",
+      "afiliados": [
+        {
+          "cuil": "20949118682",
+          "inte": 0,
+          "apellido": "Salinas",
+          "nombre": "Luis",
+          "fechaIngreso": "2024-04-05T03:00:00.000Z",
+          "empresaDomicilioId": 4,
+          "camara": "FAIM",
+          "categoria": "D",
+          "remunerativo": "1",
+          "noRemunerativo": "1",
+          "uomaSocio": true,
+          "amtimaSocio": true,
+          "id": 1
+        }
+      ],
+      "id": 232
+    },
+    {
+      "periodo": "2025-04-15T03:00:00.000Z",
+      "afiliados": [
+        {
+          "cuil": "123123213213",
+          "inte": null,
+          "apellido": "sdasd",
+          "nombre": "asdas",
+          "fechaIngreso": "2024-04-30T03:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "uomaSocio": false,
+          "amtimaSocio": false,
+          "id": 1
+        },
+        {
+          "cuil": "20949118682",
+          "inte": 1,
+          "apellido": "Salinas",
+          "nombre": "Luis",
+          "fechaIngreso": "2001-01-01T03:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "uomaSocio": false,
+          "amtimaSocio": false,
+          "id": 2
+        },
+        {
+          "cuil": "20294465996",
+          "inte": 1,
+          "apellido": "Carlos",
+          "nombre": "Sanchez",
+          "fechaIngreso": "2010-01-01T03:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "uomaSocio": false,
+          "amtimaSocio": false,
+          "id": 3
+        }
+      ],
+      "id": 233
+    },
+    {
+      "periodo": "2025-05-15T03:00:00.000Z",
+      "afiliados": [
+        {
+          "cuil": "123123213213",
+          "inte": 1,
+          "apellido": "sdasd",
+          "nombre": "asdas",
+          "fechaIngreso": null,
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "uomaSocio": false,
+          "amtimaSocio": false,
+          "id": 1
+        },
+        {
+          "cuil": "20949118682",
+          "inte": 1,
+          "apellido": "Salinas",
+          "nombre": "Luis",
+          "fechaIngreso": "2001-01-01T03:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "uomaSocio": false,
+          "amtimaSocio": false,
+          "id": 2
+        },
+        {
+          "cuil": "20294465996",
+          "inte": 1,
+          "apellido": "Carlos",
+          "nombre": "Sanchez",
+          "fechaIngreso": "2010-01-01T03:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "uomaSocio": false,
+          "amtimaSocio": false,
+          "id": 3
+        }
+      ],
+      "id": 234
+    },
+    {
+      "periodo": "2025-05-15T03:00:00.000Z",
+      "afiliados": [
+        {
+          "cuil": "123123213213",
+          "inte": 1,
+          "apellido": "sdasd",
+          "nombre": "asdas",
+          "fechaIngreso": null,
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "uomaSocio": false,
+          "amtimaSocio": false,
+          "id": 1
+        },
+        {
+          "cuil": "20949118682",
+          "inte": 1,
+          "apellido": "Salinas",
+          "nombre": "Luis",
+          "fechaIngreso": "2001-01-01T03:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "uomaSocio": false,
+          "amtimaSocio": false,
+          "id": 2
+        },
+        {
+          "cuil": "20294465996",
+          "inte": 1,
+          "apellido": "Carlos",
+          "nombre": "Sanchez",
+          "fechaIngreso": "2010-01-01T03:00:00.000Z",
+          "empresaDomicilioId": 3,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 545000.7,
+          "noRemunerativo": 25000,
+          "uomaSocio": false,
+          "amtimaSocio": false,
+          "id": 3
+        }
+      ],
+      "empresaId": "1",
+      "id": 235
+    },
+    {
+      "periodo": "2017-02-17T03:00:00.000Z",
+      "afiliados": [
+        {
+          "cuil": 20949118682,
+          "inte": 0,
+          "apellido": "Salinas",
+          "nombre": "Luis",
+          "fechaIngreso": "2024-02-15T03:00:00.000Z",
+          "empresaDomicilioId": 8,
+          "camara": "FAIM",
+          "categoria": "C",
+          "remunerativo": 1000,
+          "noRemunerativo": 2000,
+          "uomaSocio": true,
+          "amtimaSocio": true,
+          "id": 1
+        },
+        {
+          "cuil": 20949118782,
+          "inte": null,
+          "apellido": "Bueno",
+          "nombre": "Diego",
+          "fechaIngreso": "2024-03-15T03:00:00.000Z",
+          "empresaDomicilioId": 10,
+          "camara": "CAENA",
+          "categoria": "A",
+          "remunerativo": 3000,
+          "noRemunerativo": 6000,
+          "uomaSocio": false,
+          "amtimaSocio": false,
+          "id": 2
+        },
+        {
+          "cuil": 21345667876,
+          "inte": null,
+          "apellido": "Lopez",
+          "nombre": "Jose",
+          "fechaIngreso": "2024-04-18T03:00:00.000Z",
+          "empresaDomicilioId": 10,
+          "camara": "CAENA",
+          "categoria": "D",
+          "remunerativo": 4000,
+          "noRemunerativo": 5000,
+          "uomaSocio": true,
+          "amtimaSocio": false,
+          "id": 3
+        }
+      ],
+      "empresaId": "1",
+      "id": 236
     }
   ],
   "afiliado": [

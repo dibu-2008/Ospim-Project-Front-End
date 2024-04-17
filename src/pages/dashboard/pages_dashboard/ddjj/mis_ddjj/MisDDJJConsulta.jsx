@@ -5,7 +5,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import "./MisDDJJConsulta.css";
-import { MisDDJJConsultaGrilla } from "./grilla/MisDDJJConsultaGrilla";
+import { MisDDJJConsultaGrilla, castearMisDDJJ } from "./grilla/MisDDJJConsultaGrilla";
 import { axiosDDJJ } from "./grilla/MisDDJJConsultaGrillaApi";
 import { esES } from "@mui/x-date-pickers/locales";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
@@ -41,6 +41,8 @@ export const MisDDJJConsulta = ({
   const buscarDDJJ = async () => {
     try {
       const ddjjResponse = await axiosDDJJ.consultar(ID_EMPRESA);
+      setRowsMisDdjj(ddjjResponse);
+      console.log("ddjjResponse", ddjjResponse);
       if (desde && desde.$d && hasta && hasta.$d) {
         console.log("buscarDDJJ - ENTRO !!");
         const { $d: $desde } = desde;
@@ -62,10 +64,19 @@ export const MisDDJJConsulta = ({
             fecha >= new Date(fechaIsoDesde) && fecha <= new Date(fechaIsoHasta)
           );
         });
+        console.log("declaracionesFiltradas", declaracionesFiltradas)
+
+        const declaracionesFiltradasCasteadas = castearMisDDJJ(declaracionesFiltradas);
+        console.log("declaracionesFiltradasCasteadas", declaracionesFiltradasCasteadas)
+
         setRowsMisDdjj(declaracionesFiltradas);
       } else {
-        console.log("buscarDeclaracionesJuradas - NO ENTRO !!");
+
+        const declaracionesFiltradasCasteadas = castearMisDDJJ(ddjjResponse);
+        console.log("declaracionesFiltradasCasteadas", declaracionesFiltradasCasteadas)
+        
         setRowsMisDdjj(ddjjResponse);
+
       }
     } catch (error) {
       console.error("Error al buscar declaraciones juradas:", error);
