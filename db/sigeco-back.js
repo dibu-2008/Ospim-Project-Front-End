@@ -776,21 +776,20 @@ module.exports = (req, res, next) => {
   }
 
 
-  function getBoletaDetalle() {
-    const declaracion_jurada_id = req.query.ddjj_id
-    const boletasDetalle = req.app.db.__wrapped__.boletas;
+  function getBoletaDetalle(){
+    const declaracion_jurada_id       = req.query.ddjj_id
+    const boletasDetalle              = req.app.db.__wrapped__.boletas;
     const tieneBoletasParaDeclaracion = boletasDetalle.declaracion_jurada_id == declaracion_jurada_id
     const error404 = {descripcion: "No se encontraron boletas para la declaracion jurada"}
 
     tieneBoletasParaDeclaracion ? res.status(200).jsonp(boletasDetalle) : res.status(404).jsonp(error404)
   }
 
-  function calcula_diferencia_de_dias(dia_mayor, dia_menor) {
+  function  calcula_diferencia_de_dias(dia_mayor, dia_menor) {
     return (new Date(dia_mayor) - new Date(dia_menor)) / (1000 * 60 * 60 * 24);
   }
-  }
 
-  function guardarBoletas() {
+  function guardarBoletas(){
     const numero_boleta = req.app.db.__wrapped__.boletas_guardadas.length
     console.log(req.body)
     req.body.forEach( (element, index) =>{
@@ -801,7 +800,7 @@ module.exports = (req, res, next) => {
     res.status(201).send(null)
   }
 
-  function calcularInteres() {
+  function calcularInteres(){
     const { codigoBoleta } = req.query
     const { intencion_de_pago } = req.body
     const interes_diario = 0.01
@@ -815,12 +814,11 @@ module.exports = (req, res, next) => {
       boleta.interes = parseFloat(monto_interes.toFixed(2))
     }
 
-
     boleta.intencion_de_pago = intencion_de_pago
     res.status(200).jsonp({...boleta})
   }
 
-  function calcularInteresBoletas() {
+  function calcularInteresBoletas(){
     //Calcula el interes de todas las boletas de una sola vez
     const { intencion_de_pago } = req.body
     const interes_diario = 0.01
@@ -829,8 +827,8 @@ module.exports = (req, res, next) => {
 
     const boletasActualizadas = boletas.detalle_boletas.map(boleta =>{
       const diferencia_en_dias = calcula_diferencia_de_dias(intencion_de_pago, boleta.vencimiento)
-      if (diferencia_en_dias >= 0) {
-        const monto_interes = boleta.total_acumulado * interes_diario * diferencia_en_dias
+      if (diferencia_en_dias >= 0){
+        const monto_interes = boleta.total_acumulado * interes_diario *  diferencia_en_dias
         boleta.total_final = boleta.total_acumulado + monto_interes
         boleta.intencion_de_pago = intencion_de_pago
         boleta.interes = parseFloat(monto_interes.toFixed(2))
@@ -841,30 +839,29 @@ module.exports = (req, res, next) => {
     res.status(200).jsonp(boletasActualizadas)
   }
 
-  function getBoletaByDDJJIDandCodigo() {
+  function getBoletaByDDJJIDandCodigo(){
     const { ddjj_id, codigo } = req.query
     const BOLETAS_BY_DDDJJ = req.app.db.__wrapped__.boletas_guardadas.con_ddjj.find(boletasddjj => boletasddjj.declaracion_jurada_id == ddjj_id )
     const BOLETA_BY_CODIGO = BOLETAS_BY_DDDJJ.detalle_boletas.find(boleta => boleta.codigo == codigo)
     res.status(200).jsonp(BOLETA_BY_CODIGO)
   }
 
-  function getBoletaDetalleImpresa() {
+  function getBoletaDetalleImpresa(){
     const file = `${__dirname}/detalle_boleta.pdf`;
     res.download(file);
-    res.download(file);
   }
 
-  function getBoletaImpresa() {
+  function getBoletaImpresa(){
     const file = `${__dirname}/boletas.pdf`;
     res.download(file);
-    res.download(file);
   }
 
-  function tieneRectificativa() {
-    const { empresaId, periodo } = req.query
+  function tieneRectificativa(){
+    const {empresaId, periodo} = req.query
     const rectificativa = empresaId == 1 && periodo == '2024-01'
     res.status(200).jsonp({rectificativa})
   }
+
 
   function generarBoletaSinDDJJ(){
     const file = `${__dirname}/boleta_blanca.pdf`;
@@ -880,7 +877,7 @@ module.exports = (req, res, next) => {
     res.download(file);
   }
 
-  function getBoletaById() {
+  function getBoletaById(){
     const { numeroBoleta } = req.query
     const boleta = req.app.db.__wrapped__.boletas_guardadas.con_ddjj.find(boleta => boleta.numero_boleta == numeroBoleta )
     res.status(200).jsonp(boleta)
@@ -918,7 +915,9 @@ module.exports = (req, res, next) => {
     req.app.db.write()
     res.status(204).send(null)
   }
+
   function presentarDDJJ(req, res) {
     // quiero que esta funcion me reporte { estado = "PR", secuencia = 1 }
     res.status(200).jsonp({ estado: "PR", secuencia: 1 })
   }
+}

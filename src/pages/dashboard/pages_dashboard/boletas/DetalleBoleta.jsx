@@ -133,7 +133,7 @@ export const DetalleBoleta = () => {
             </TableHead>
             <TableBody>
               <TableRow key={boletaDetalle.descripcion}>
-                <TableCell>{existeDato(boletaDetalle.periodo).replace('-','/')}</TableCell>
+                <TableCell>{existeDato(boletaDetalle.periodo)?formatter.periodo(boletaDetalle.periodo):""}</TableCell>
                 <TableCell>{boletaDetalle.tipo_ddjj? boletaDetalle.tipo_ddjj : 'Original'}</TableCell>
                 <TableCell>{boletaDetalle.nro_boleta? boletaDetalle.nro_boleta : 1}</TableCell>
                 <TableCell>{existeDato(boletaDetalle.descripcion)}</TableCell>

@@ -2,6 +2,7 @@
 import axios from 'axios'
 import { axiosCrud } from '@/components/axios/axiosCrud';
 import { showErrorBackEnd } from "@/components/axios/showErrorBackEnd";
+import formatter from '@/common/formatter';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
@@ -69,6 +70,9 @@ export const downloadPdfBoleta = async (empresa_id, ddjj_id, concepto) => {
 export const modificarBoletaById = async (empresa_id,numero_boleta,body) => {
   const URL = `${BACKEND_URL}/empresa/${empresa_id}/numero-boleta/${numero_boleta}/modificar`;
   try {
+    console.log(body)
+    body.intencion_de_pago = formatter.toFechaValida(body.intencion_de_pago)
+    body.periodo =  formatter.toFechaValida(body.intencion_de_pago)
     console.log(body)
    // const reponse = await axiosCrud.crear(URL,body)
    // return reponse
