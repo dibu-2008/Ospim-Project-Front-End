@@ -6,6 +6,7 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 export const logon = async (usuario, clave) => {
   const URL = `${BACKEND_URL}/auth/login`;
+  console.log(URL)
   let jsonResponse = {
     token: null,
     tokenRefresco: null,

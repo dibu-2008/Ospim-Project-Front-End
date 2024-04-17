@@ -53,7 +53,7 @@ function ddjjTotalesAportes(ddjj, colAportes) {
   return vecAportesConTotales;
 }
 
-function castearMisDDJJ(ddjjResponse) {
+export function castearMisDDJJ(ddjjResponse) {
   let colAportes = misDDJJColumnaAporteGet(ddjjResponse);
   ddjjResponse.forEach((dj) => {
     let colAportesConTotales = ddjjTotalesAportes(dj, colAportes);
@@ -105,7 +105,7 @@ export const MisDDJJConsultaGrilla = ({
     };
 
     ObtenerMisDeclaracionesJuradas();
-  }, [rowsMisDdjj]);
+  }, []);
 
   const PresentarDeclaracionesJuradas = async (id) => {
     const updatedRow = { ...rowsMisDdjj.find((row) => row.id === id) };
