@@ -13,3 +13,11 @@
     color: white!important;
     background-color: #1A76D2!important;
 }
+
+.importes{
+    text-align: right!important;
+}
+
+.even{
+    background-color: rgb(238, 238, 238);
+}

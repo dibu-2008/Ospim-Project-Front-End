@@ -100,8 +100,8 @@ export const Boletas = () => {
             { field: 'tipo_ddjj', headerName: 'Tipo DDJJ', flex: 1 },
             { field: 'numero_boleta', headerName: 'Número', flex: 0.8 },
             { field: 'descripcion', headerName: 'Concepto', flex: 1 },
-            { field: 'total_final', headerName: 'Importe Boleta', flex: 1, valueFormatter: (params) => params.value?formatter.currency.format(params.value):'' },
-            { field: 'importe_recibido', headerName: 'Importe Recibido', flex: 1, valueFormatter: (params) => params.value?formatter.currency.format(params.value):''},
+            { field: 'total_final', headerName: 'Importe Boleta', flex: 1, align: 'right', valueFormatter: (params) => params.value?formatter.currency.format(params.value):'' },
+            { field: 'importe_recibido', headerName: 'Importe Recibido', flex: 1, align: 'right', valueFormatter: (params) => params.value?formatter.currency.format(params.value):''},
             { field: 'fecha_de_pago', headerName: 'Fecha de Pago', flex: 1, valueFormatter: (params) => params.value?formatter.date(params.value):''},
             { field: 'intencion_de_pago', headerName: 'Intencion de Pago', flex: 1, valueFormatter: (params) =>  params.value?formatter.date(params.value):''},
             { field: 'forma_de_pago', headerName: 'Metodo de Pago', flex: 0.8 },
@@ -124,6 +124,9 @@ export const Boletas = () => {
               ),
             },
           ]}
+          getRowClassName={(params) =>
+            boletasVisibles.indexOf(params.row) % 2 === 0 ? "even" : ""
+          }
           pageSize={50}
           components={{
             Toolbar: () => (
@@ -155,7 +158,7 @@ export const Boletas = () => {
             { field: 'id', headerName: 'Nro. Boleta', flex: 0.5 },
             { field: 'entidad', headerName: 'Entidad', flex: 0.8, valueFormatter: (params) => params.value?params.value.replace('-','/'):'' },
             { field: 'nroActa', headerName: 'Nro. Acta', flex: 1 },
-            { field: 'importe', headerName: 'Importe', flex: 1, valueFormatter: (params) => params.value?formatter.currency.format(params.value):''},
+            { field: 'importe', headerName: 'Importe', align: 'right', flex: 1, valueFormatter: (params) => params.value?formatter.currency.format(params.value):''},
             { field: 'razon_de_pago', headerName: 'Razon de pago', flex: 1 },
             {
               field: 'acciones',

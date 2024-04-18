@@ -9,6 +9,10 @@
     text-align: left !important;
 }
 
+.importes{
+    text-align: right!important;
+}
+
 .titulos{
     min-height: 56px;
     max-height: 56px;

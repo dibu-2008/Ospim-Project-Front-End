@@ -123,7 +123,7 @@ export const DetalleBoleta = () => {
                 <TableCell className='cw'>N Boleta</TableCell>
                 <TableCell className='cw'>Concepto</TableCell>
                 <TableCell className='cw'>Subtotal</TableCell>
-                <TableCell className='cw'>Intereses</TableCell>
+                <TableCell className='cw' >Intereses</TableCell>
                 <TableCell className='cw'>Importe Boleta</TableCell>
                 {boletaDetalle.importe_recibido && <TableCell className='cw'>Importe Recibido</TableCell>}
                 {boletaDetalle.fecha_de_pago && <TableCell className='cw'>Fecha de Pago</TableCell>}
@@ -137,11 +137,11 @@ export const DetalleBoleta = () => {
                 <TableCell>{boletaDetalle.tipo_ddjj? boletaDetalle.tipo_ddjj : 'Original'}</TableCell>
                 <TableCell>{boletaDetalle.nro_boleta? boletaDetalle.nro_boleta : 1}</TableCell>
                 <TableCell>{existeDato(boletaDetalle.descripcion)}</TableCell>
-                <TableCell>{existeDato(formatter.currency.format(boletaDetalle.total_acumulado))}</TableCell>
-                <TableCell>{existeDato(formatter.currency.format(boletaDetalle.interes))}</TableCell>
-                <TableCell>{existeDato(formatter.currency.format(boletaDetalle.total_acumulado + boletaDetalle.interes))}</TableCell>
-                {boletaDetalle.importe_recibido && <TableCell>{existeDato(formatter.currency.format(boletaDetalle.importe_recibido))}</TableCell>}
-                {boletaDetalle.fecha_de_pago && <TableCell>{existeDato(formatter.date(boletaDetalle.fecha_de_pago))}</TableCell>}
+                <TableCell className='importes'>{existeDato(formatter.currency.format(boletaDetalle.total_acumulado))}</TableCell>
+                <TableCell className='importes'>{existeDato(formatter.currency.format(boletaDetalle.interes))}</TableCell>
+                <TableCell className='importes'>{existeDato(formatter.currency.format(boletaDetalle.total_acumulado + boletaDetalle.interes))}</TableCell>
+                {boletaDetalle.importe_recibido && <TableCell className='importes'>{existeDato(formatter.currency.format(boletaDetalle.importe_recibido))}</TableCell>}
+                {boletaDetalle.fecha_de_pago && <TableCell >{existeDato(formatter.date(boletaDetalle.fecha_de_pago))}</TableCell>}
                 <TableCell>{isEditable && modoEdicion?
                   (<TextField type="date"
                   inputProps={{min:hoy}}
@@ -198,7 +198,7 @@ export const DetalleBoleta = () => {
                 <TableCell>
                   Subtotal
                 </TableCell>
-                <TableCell>
+                <TableCell className='importes'>
                   {formatter.currency.format(existeDato(boletaDetalle.total_acumulado))}
                 </TableCell>
               </TableRow>
@@ -206,7 +206,7 @@ export const DetalleBoleta = () => {
                 <TableCell>
                   Interes
                 </TableCell>
-                <TableCell>
+                <TableCell className='importes'>
                   {boletaDetalle.interes? formatter.currency.format(boletaDetalle.interes) : formatter.currency.format(0) }
                 </TableCell>
               </TableRow>
@@ -214,17 +214,15 @@ export const DetalleBoleta = () => {
                 <TableCell>
                   Ajustes
                 </TableCell>
-                <TableCell>
-                {formatter.currency.format( (boletaDetalle.ajustes) ?boletaDetalle.ajustes.reduce((acumulador, ajuste) => acumulador + ajuste.monto, 0):0)}
-                  {//boletaDetalle.ajuste? formatter.currency.format(boletaDetalle.ajuste) : formatter.currency.format(0)
-                  }
+                <TableCell className='importes'>
+                {formatter.currency.format( (boletaDetalle.ajustes) ? boletaDetalle.ajustes.reduce((acumulador, ajuste) => acumulador + ajuste.monto, 0):0)}
                 </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>
                   Total Final
                 </TableCell>
-                <TableCell>
+                <TableCell className='importes'>
                   {existeDato(formatter.currency.format(boletaDetalle.total_final))}
                 </TableCell>
               </TableRow>
