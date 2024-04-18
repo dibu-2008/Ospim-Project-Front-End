@@ -95,7 +95,7 @@ export const DetalleBoleta = () => {
     setModoEdicion(!modoEdicion)
   }
 
-  const existeDato = dato => dato ? dato: ''
+  const existeDato = value => value !== null && value !== '' ? value : ''
   return (
       <div className='boletas_container'>
         <h1>Detalle boleta {boletaDetalle.descripcion}</h1>
@@ -145,9 +145,9 @@ export const DetalleBoleta = () => {
                 <TableCell>{isEditable && modoEdicion?
                   (<TextField type="date"
                   inputProps={{min:hoy}}
-                  value={intencionDePago}
+                  value={existeDato(intencionDePago) && intencionDePago}
                   onChange={event => handlesSetIntencionDePago(event.target.value)}/>)
-                  :existeDato(formatter.date(boletaDetalle.intencion_de_pago))}
+                  :existeDato(boletaDetalle.intencion_de_pago)?formatter.date(boletaDetalle.intencion_de_pago):''}
                 </TableCell>
                 <TableCell>
                   {isEditable && modoEdicion ? (

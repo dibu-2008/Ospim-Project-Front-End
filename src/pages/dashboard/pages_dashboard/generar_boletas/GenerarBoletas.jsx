@@ -143,7 +143,7 @@ export const GenerarBoletas = () => {
     return (
         <div className='generador_boletas_container'>
             <h1>Boleta de Pago</h1>
-            <p>Periodo: { boletas && boletas.periodo  ?
+            <p>Periodo: { boletas && boletas.periodo && boletas.periodo !== null && boletas.periodo !== '' ?
             formatter.periodo(boletas.periodo,'-'):
             ''} </p>
             <TableContainer component={Paper}>
@@ -160,7 +160,7 @@ export const GenerarBoletas = () => {
                         <TableRow>
                             <TableCell>Vencimiento</TableCell>
                             {boletas.detalle_boletas && boletas.detalle_boletas.map((boleta) => (
-                                <TableCell  key={boleta.codigo}>{formatter.date(boleta.vencimiento)}</TableCell>
+                                <TableCell  key={boleta.codigo}>{boleta.vencimiento !== null && boleta.vencimiento !== '' ? formatter.date(boleta.vencimiento):""}</TableCell>
                             ))}
                         </TableRow>
                         <TableRow>
