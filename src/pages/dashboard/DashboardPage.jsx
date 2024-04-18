@@ -206,7 +206,10 @@ const DashboardPage = () => {
                     </NavLink>
                   )}
                   {!isRolEmpleador && (
-                    <NavLink to="./ddjjconsultaempleado" className="icon-container">
+                    <NavLink
+                      to="./ddjjconsultaempleado"
+                      className="icon-container"
+                    >
                       <LibraryBooksIcon className="icon-link" />{" "}
                       {open && <span className="icon-link">DDJJ Consulta</span>}
                     </NavLink>
@@ -267,15 +270,12 @@ const DashboardPage = () => {
                     </NavLink>
                   )}
                   {!isRolEmpleador && (
-                    <NavLink
-                      to="./interesesafip"
-                      className="icon-container"
-                    >
-                      <img 
-                        src={afipIcon} 
-                        alt="afip" 
-                        className="icon-link" 
-                        style={{width: 24, height: 24}}
+                    <NavLink to="./interesesafip" className="icon-container">
+                      <img
+                        src={afipIcon}
+                        alt="afip"
+                        className="icon-link"
+                        style={{ width: 24, height: 24 }}
                       />{" "}
                       {open && (
                         <span className="icon-link">Intereses Afip</span>

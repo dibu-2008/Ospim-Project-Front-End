@@ -1,15 +1,23 @@
 .generador_boletas_container {
-    margin: 50px auto;
-    width: 90%;
+  margin: 50px auto;
+  width: 90%;
 }
 
 .generador_boletas_container h1 {
-    color: #1A76D2;
-    margin-bottom: 65px;
-    text-align: left !important;
+  color: #1a76d2;
+  margin-bottom: 65px;
+  text-align: left !important;
 }
 
 .cwbcb {
-    color: white!important;
-    background-color: #1A76D2!important;
+  color: white !important;
+  background-color: #1a76d2 !important;
+}
+
+.importes {
+  text-align: right !important;
+}
+
+.even {
+  background-color: rgb(238, 238, 238);
 }
