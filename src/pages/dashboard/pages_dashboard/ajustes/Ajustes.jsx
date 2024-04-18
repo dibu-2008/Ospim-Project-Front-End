@@ -1,40 +1,47 @@
-import { Typography, Button, Box } from "@mui/material";
+import * as locales from "@mui/material/locale";
+import { useState, useEffect, useMemo } from "react";
+import { Box, Button } from "@mui/material";
+
+import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import SaveIcon from "@mui/icons-material/Save";
+import CancelIcon from "@mui/icons-material/Close";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import {
   GridRowModes,
   GridToolbar,
   GridToolbarContainer,
-  GridRowEditStopReasons,
   GridActionsCellItem,
+  GridRowEditStopReasons,
 } from "@mui/x-data-grid";
-import AddIcon from "@mui/icons-material/Add";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/DeleteOutlined";
-import SaveIcon from "@mui/icons-material/Save";
-import CancelIcon from "@mui/icons-material/Close";
-import * as locales from "@mui/material/locale";
+import { axiosAjustes } from "./AjustesApi";
 import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
-import { useState, useEffect, useMemo, useRef } from "react";
-import { StripedDataGrid, dataGridStyle } from "@/common/dataGridStyle";
-import Swal from "sweetalert2";
-import "./InteresesAfip.css";
-import { axiosIntereses } from "./InteresesAfipApi";
+import "./ajustes.css";
 import formatter from "@/common/formatter";
+import { StripedDataGrid, dataGridStyle } from "@/common/dataGridStyle";
+import { InputPeriodo } from "@/components/InputPeriodo";
+import swal from "@/components/swal/swal";
+import Swal from "sweetalert2";
 
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 500,
+  bgcolor: "background.paper",
+  border: "2px solid #1A76D2",
+  boxShadow: 24,
+  p: 4,
+};
+
+// Traerme las etiquetas del dom que tengas la clase .MuiDataGrid-cell--editable
 const crearNuevoRegistro = (props) => {
-  const {
-    setRows,
-    rows,
-    setRowModesModel,
-    volverPrimerPagina,
-    showQuickFilter,
-    themeWithLocale,
-  } = props;
+  const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
 
   const altaHandleClick = () => {
-    const newReg = { vigenciaDesde: "", vigenciaHasta: "", indice: "" };
-
+    const newReg = {};
     volverPrimerPagina();
-
     setRows((oldRows) => [newReg, ...oldRows]);
     setRowModesModel((oldModel) => ({
       [0]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
@@ -43,20 +50,16 @@ const crearNuevoRegistro = (props) => {
   };
 
   return (
-    <GridToolbarContainer
-      theme={themeWithLocale}
-      style={{ display: "flex", justifyContent: "space-between" }}
-    >
+    <GridToolbarContainer>
+      <GridToolbar showQuickFilter={props.showQuickFilter} />
       <Button color="primary" startIcon={<AddIcon />} onClick={altaHandleClick}>
         Nuevo Registro
       </Button>
-      <GridToolbar showQuickFilter={showQuickFilter} />
     </GridToolbarContainer>
   );
 };
 
-export const InteresesAfip = () => {
-  const apiRef = useRef(null);
+export const Ajustes = () => {
   const [locale, setLocale] = useState("esES");
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
@@ -65,13 +68,6 @@ export const InteresesAfip = () => {
     page: 0,
   });
 
-  const theme = useTheme();
-
-  const themeWithLocale = useMemo(
-    () => createTheme(theme, locales[locale]),
-    [locale, theme]
-  );
-
   const volverPrimerPagina = () => {
     setPaginationModel((prevPaginationModel) => ({
       ...prevPaginationModel,
@@ -79,20 +75,51 @@ export const InteresesAfip = () => {
     }));
   };
 
-  const obtenerIntereses = async () => {
-    const response = await axiosIntereses.consultar();
-    console.log(response);
+  const theme = useTheme();
+
+  const themeWithLocale = useMemo(
+    () => createTheme(theme, locales[locale]),
+    [locale, theme]
+  );
+
+  const ObtenerAjustes = async () => {
+    const response = await axiosAjustes.consultar();
     setRows(response);
   };
 
   useEffect(() => {
-    obtenerIntereses();
+    ObtenerAjustes();
   }, []);
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true;
     }
+  };
+
+  const handleDeleteClick = (row) => async () => {
+    const showSwalConfirm = async () => {
+      try {
+        Swal.fire({
+          title: "¿Estás seguro?",
+          text: "¡No podrás revertir esto!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#1A76D2",
+          cancelButtonColor: "#6c757d",
+          confirmButtonText: "Si, bórralo!",
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            const bBajaOk = await axiosAjustes.eliminar(row.id);
+            if (bBajaOk) setRows(rows.filter((rowAux) => rowAux.id !== row.id));
+          }
+        });
+      } catch (error) {
+        console.error("Error al ejecutar eliminarFeriado:", error);
+      }
+    };
+
+    showSwalConfirm();
   };
 
   const handleEditClick = (row) => () => {
@@ -109,31 +136,6 @@ export const InteresesAfip = () => {
       ...rowModesModel,
       [rows.indexOf(row)]: { mode: GridRowModes.View },
     });
-  };
-
-  const handleDeleteClick = (row) => async () => {
-    const showSwalConfirm = async () => {
-      try {
-        Swal.fire({
-          title: "¿Estás seguro?",
-          text: "¡No podrás revertir esto!",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#1A76D2",
-          cancelButtonColor: "#6c757d",
-          confirmButtonText: "Si, bórralo!",
-        }).then(async (result) => {
-          if (result.isConfirmed) {
-            const bBajaOk = await axiosIntereses.eliminar(row.id);
-            if (bBajaOk) setRows(rows.filter((rowAux) => rowAux.id !== row.id));
-          }
-        });
-      } catch (error) {
-        console.error("Error al ejecutar eliminarFeriado:", error);
-      }
-    };
-
-    showSwalConfirm();
   };
 
   const handleCancelClick = (row) => () => {
@@ -157,7 +159,8 @@ export const InteresesAfip = () => {
 
     if (!newRow.id) {
       try {
-        const data = await axiosIntereses.crear(newRow);
+        console.log(newRow);
+        const data = await axiosAjustes.crear(newRow);
         if (data && data.id) {
           newRow.id = data.id;
           bOk = true;
@@ -173,7 +176,8 @@ export const InteresesAfip = () => {
       }
     } else {
       try {
-        bOk = await axiosIntereses.actualizar(newRow);
+        console.log(newRow);
+        bOk = await axiosAjustes.actualizar(newRow.id, newRow);
         if (bOk) {
           const rowsNew = rows.map((row) =>
             row.id === newRow.id ? newRow : row
@@ -200,36 +204,31 @@ export const InteresesAfip = () => {
 
   const columnas = [
     {
-      field: "vigenciaDesde",
-      headerName: "Vigencia Desde",
+      field: "cuit",
+      headerName: "CUIT",
       flex: 1,
-      type: "date",
+      type: "text",
       editable: true,
       headerAlign: "center",
       align: "center",
       headerClassName: "header--cell",
+    },
+    {
+      field: "periodo_original",
+      headerName: "PERIODO ORIGINAL",
+      flex: 1,
+      editable: true,
+      headerAlign: "center",
+      align: "center",
       valueFormatter: (params) => {
-        console.log("valueFormatter - params: ");
-        console.log(params);
-        return formatter.date(params.value);
+        return formatter.periodo(params.value);
       },
-    },
-    {
-      field: "vigenciaHasta",
-      headerName: "Vigencia Hasta",
-      flex: 1,
-      type: "date",
-      editable: true,
-      headerAlign: "center",
-      align: "center",
+      renderEditCell: (params) => <InputPeriodo {...params} />,
       headerClassName: "header--cell",
-      valueFormatter: ({ value }) => {
-        return formatter.date(value);
-      },
     },
     {
-      field: "indice",
-      headerName: "Indice",
+      field: "importe",
+      headerName: "IMPORTE",
       flex: 1,
       type: "number",
       editable: true,
@@ -238,10 +237,47 @@ export const InteresesAfip = () => {
       headerClassName: "header--cell",
     },
     {
+      field: "aporte",
+      headerName: "TIPO APORTE",
+      type: "singleSelect",
+      editable: true,
+      flex: 1,
+      valueOptions: ["ART.46", "AMTIMA", "UOMA"],
+      valueGetter: (params) => params.row.aporte || "",
+      headerAlign: "center",
+      align: "center",
+      headerClassName: "header--cell",
+    },
+    {
+      field: "vigencia",
+      headerName: "VIGENTE DESDE",
+      width: 200,
+      flex: 1,
+      editable: true,
+      headerAlign: "center",
+      align: "center",
+      type: "date",
+      valueFormatter: (params) => {
+        return formatter.periodo(params.value);
+      },
+      renderEditCell: (params) => <InputPeriodo {...params} />,
+      headerClassName: "header--cell",
+    },
+    {
+      field: "nro_boleta",
+      headerName: "NRO BOLETA",
+      width: 150,
+      editable: false,
+      type: "number",
+      headerAlign: "center",
+      align: "center",
+      headerClassName: "header--cell",
+    },
+    {
       field: "actions",
       type: "actions",
       headerName: "Acciones",
-      flex: 2,
+      flex: 1,
       cellClassName: "actions",
       headerAlign: "center",
       align: "center",
@@ -289,43 +325,53 @@ export const InteresesAfip = () => {
   ];
 
   return (
-    <Box className="intereses_container">
-      <Typography variant="h2" gutterBottom>
-        Intereses Afip
-      </Typography>
-      <ThemeProvider theme={themeWithLocale}>
-        <StripedDataGrid
-          //apiRef={apiRef.current}
-          rows={rows}
-          columns={columnas}
-          getRowId={(row) => rows.indexOf(row)}
-          getRowClassName={(params) =>
-            rows.indexOf(params.row) % 2 === 0 ? "even" : "odd"
-          }
-          editMode="row"
-          rowModesModel={rowModesModel}
-          onRowModesModelChange={handleRowModesModelChange}
-          onRowEditStop={handleRowEditStop}
-          processRowUpdate={(updatedRow, originalRow) =>
-            processRowUpdate(updatedRow, originalRow)
-          }
-          localeText={dataGridStyle.toolbarText}
-          slots={{ toolbar: crearNuevoRegistro }}
-          slotProps={{
-            toolbar: {
-              setRows,
-              rows,
-              setRowModesModel,
-              volverPrimerPagina,
-              showQuickFilter: true,
-              themeWithLocale,
-            },
-          }}
-          paginationModel={paginationModel}
-          onPaginationModelChange={setPaginationModel}
-          pageSizeOptions={[50, 75, 100]}
-        />
-      </ThemeProvider>
-    </Box>
+    <div className="ajustes_container">
+      <h1
+        style={{
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        Administración de Ajustes
+      </h1>
+      <Box
+        sx={{
+          height: "600px",
+          width: "100%",
+          "& .actions": {
+            color: "text.secondary",
+          },
+          "& .textPrimary": {
+            color: "text.primary",
+          },
+        }}
+      >
+        <ThemeProvider theme={themeWithLocale}>
+          <StripedDataGrid
+            rows={rows}
+            columns={columnas}
+            getRowId={(row) => rows.indexOf(row)}
+            getRowClassName={(params) =>
+              rows.indexOf(params.row) % 2 === 0 ? "even" : "odd"
+            }
+            editMode="row"
+            rowModesModel={rowModesModel}
+            onRowModesModelChange={handleRowModesModelChange}
+            onRowEditStop={handleRowEditStop}
+            processRowUpdate={(updatedRow, originalRow) =>
+              processRowUpdate(updatedRow, originalRow)
+            }
+            localeText={dataGridStyle.toolbarText}
+            slots={{ toolbar: crearNuevoRegistro }}
+            slotProps={{
+              toolbar: { setRows, rows, setRowModesModel, volverPrimerPagina },
+            }}
+            paginationModel={paginationModel}
+            onPaginationModelChange={setPaginationModel}
+            pageSizeOptions={[50, 75, 100]}
+          />
+        </ThemeProvider>
+      </Box>
+    </div>
   );
 };
