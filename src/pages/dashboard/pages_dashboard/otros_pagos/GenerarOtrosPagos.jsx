@@ -60,7 +60,7 @@ export const GenerarOtrosPagos = () => {
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
           <TextField
-            label="Fecha intención de Pago"
+            label="Fecha intension de Pago"
             type="date"
             fullWidth
             value={intencionDePago}

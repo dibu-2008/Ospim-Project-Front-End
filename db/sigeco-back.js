@@ -197,17 +197,7 @@ module.exports = (req, res, next) => {
       req.method === "POST" &&
       req.url.startsWith("/empresa/ddjj/calcular-interes")
     ) {
-    }
-    if (
-      req.method === "POST" &&
-      req.url.startsWith("/empresa/ddjj/calcular-interes")
-    ) {
       return "CALCULAR-INTERESES";
-    }
-    if (
-      req.method === "GET" &&
-      req.url.startsWith("/empresa/ddjj/boleta/codigo")
-    ) {
     }
     if (
       req.method === "GET" &&
@@ -264,10 +254,6 @@ module.exports = (req, res, next) => {
     if (req.method === "GET" && req.url.startsWith("/empresa/1/boleta/")) {
       console.log("Si entre");
       return "GET-BOLETA-SIN-DDJJ";
-    }
-
-    if (req.method === "PATCH" && req.url.startsWith("/DDJJ/")) {
-      return "DDJJ-PRESENTAR";
     }
 
     return "----";
@@ -364,7 +350,6 @@ module.exports = (req, res, next) => {
       break;
     case "FERIADOS-DUPLICAR":
       feriadosDuplicar();
-      break;
       break;
     case "GET-BOLETA-BY-ID":
       getBoletaById();
@@ -978,5 +963,53 @@ module.exports = (req, res, next) => {
   function presentarDDJJ(req, res) {
     // quiero que esta funcion me reporte { estado = "PR", secuencia = 1 }
     res.status(200).jsonp({ estado: "PR", secuencia: 1 });
+  }
+
+  function updateAjuste() {
+    const { id } = req.query;
+    console.log("id pedido " + id);
+    const index = req.app.db.__wrapped__.ajustes.findIndex(
+      (element) => element.id == id
+    );
+    console.log("index del elemento " + index);
+    req.app.db.__wrapped__.ajustes[index] = req.body;
+    req.app.db.write();
+    res.status(201).send(null);
+  }
+
+  function deleteAjuste() {
+    const { id } = req.query;
+    console.log(id);
+    const ajustesActualizados = req.app.db.__wrapped__.ajustes.filter(
+      (item) => item.id != id
+    );
+    console.log(ajustesActualizados);
+    req.app.db.__wrapped__.ajustes = ajustesActualizados;
+    req.app.db.write();
+    res.status(204).send(null);
+  }
+
+  function updateAjuste() {
+    const { id } = req.query;
+    console.log("id pedido " + id);
+    const index = req.app.db.__wrapped__.ajustes.findIndex(
+      (element) => element.id == id
+    );
+    console.log("index del elemento " + index);
+    req.app.db.__wrapped__.ajustes[index] = req.body;
+    req.app.db.write();
+    res.status(201).send(null);
+  }
+
+  function deleteAjuste() {
+    const { id } = req.query;
+    console.log(id);
+    const ajustesActualizados = req.app.db.__wrapped__.ajustes.filter(
+      (item) => item.id != id
+    );
+    console.log(ajustesActualizados);
+    req.app.db.__wrapped__.ajustes = ajustesActualizados;
+    req.app.db.write();
+    res.status(204).send(null);
   }
 };

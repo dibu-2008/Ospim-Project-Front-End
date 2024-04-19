@@ -252,13 +252,13 @@ const DashboardPage = () => {
                       )}
                     </NavLink>
                   )}
-                  {!isRolEmpleador && (
+                  {isRolEmpleador && (
                     <NavLink to="./roles" className="icon-container">
                       <CoPresentIcon className="icon-link" />{" "}
                       {open && <span className="icon-link">Roles</span>}
                     </NavLink>
                   )}
-                  {!isRolEmpleador && (
+                  {isRolEmpleador && (
                     <NavLink
                       to="./altausuariointerno"
                       className="icon-container"

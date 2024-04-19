@@ -144,7 +144,6 @@ export const Boletas = () => {
               field: "total_final",
               headerName: "Importe Boleta",
               flex: 1,
-              align: "right",
               valueFormatter: (params) =>
                 params.value ? formatter.currency.format(params.value) : "",
             },
@@ -152,7 +151,6 @@ export const Boletas = () => {
               field: "importe_recibido",
               headerName: "Importe Recibido",
               flex: 1,
-              align: "right",
               valueFormatter: (params) =>
                 params.value ? formatter.currency.format(params.value) : "",
             },
@@ -206,9 +204,6 @@ export const Boletas = () => {
               ),
             },
           ]}
-          getRowClassName={(params) =>
-            boletasVisibles.indexOf(params.row) % 2 === 0 ? "even" : ""
-          }
           pageSize={50}
           components={{
             Toolbar: () => (
@@ -252,7 +247,6 @@ export const Boletas = () => {
             {
               field: "importe",
               headerName: "Importe",
-              align: "right",
               flex: 1,
               valueFormatter: (params) =>
                 params.value ? formatter.currency.format(params.value) : "",

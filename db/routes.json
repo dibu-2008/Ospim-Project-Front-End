@@ -58,7 +58,7 @@
   "/empresa/:empresaId/numero-boleta/:numeroBoleta": "/empresa/numero-boleta/?numeroBoleta=:numeroBoleta",
   "/empresa/:empresaId/numero-boleta/:numeroBoleta/modificar": "/empresa/numero_boleta/modificar/?numeroBoleta=:numeroBoleta",
   "/empresa/:empresaId/generar-boleta-sin-ddjj": "/empresa/otras_boletas",
-  "/sigeco/afip/intereses": "/intereses",
+  "/sigeco/intereses": "/intereses",
   "/sigeco/ajustes": "/ajustes",
   "/sigeco/ajustes/:id": "/sigeco/ajustes/?id=:id"
 }

@@ -43,7 +43,7 @@ const AppRouter = () => {
           <Route path="inicio" index element={<Inicio />} />
           <Route path="publicaciones" element={<Publicaciones />} />
           <Route path="feriados" element={<Feriados />} />
-          <Route path="ddjj" element={<DDJJTabs />} />
+          <Route path="ddjj" element={<DeclaracionesJuradas />} />
           <Route
             path="ddjjconsultaempleado"
             element={<DDJJConsultaEmpleado />}
