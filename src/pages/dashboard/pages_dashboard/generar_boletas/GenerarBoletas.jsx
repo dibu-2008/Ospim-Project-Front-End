@@ -36,7 +36,6 @@ export const GenerarBoletas = () => {
     const [ primeraSeleccion, setPrimeraSeleccion ] = useState(true)
     const [ primeraSeleccionFDP, setPrimeraSeleccionFDP ] = useState(true)
     const [ habilitaBoton, sethabilitaBoton ] = useState(true)
-    //const [ selectedFDP, setSelectedFDP ] = useState({}) // esto tengo que revisar si sigue siendo necesario
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -162,7 +161,7 @@ export const GenerarBoletas = () => {
     return (
         <div className='generador_boletas_container'>
             <h1>Boleta de Pago</h1>
-            <p>Periodo: { boletas && boletas.periodo  ?
+            <p>Periodo: { boletas && boletas.periodo && boletas.periodo !== null && boletas.periodo !== '' ?
             formatter.periodo(boletas.periodo,'-'):
             ''} </p>
             <TableContainer component={Paper}>
@@ -179,7 +178,7 @@ export const GenerarBoletas = () => {
                         <TableRow>
                             <TableCell>Vencimiento</TableCell>
                             {boletas.detalle_boletas && boletas.detalle_boletas.map((boleta) => (
-                                <TableCell  key={boleta.codigo}>{formatter.date(boleta.vencimiento)}</TableCell>
+                                <TableCell  key={boleta.codigo}>{boleta.vencimiento !== null && boleta.vencimiento !== '' ? formatter.date(boleta.vencimiento):""}</TableCell>
                             ))}
                         </TableRow>
                         <TableRow>
@@ -221,20 +220,20 @@ export const GenerarBoletas = () => {
                         <TableRow>
                             <TableCell className='cwbcb' style={{ width: '5em' }}>CUIL</TableCell>
                             <TableCell className='cwbcb' style={{ width: '5em' }}>Apellido</TableCell>
-                            <TableCell className='cwbcb' style={{ width: '12em' }}>Remunerativo</TableCell>
+                            <TableCell className='cwbcb importes' style={{ width: '20em' }}>Remunerativo</TableCell>
                             {boletas.detalle_boletas && boletas.detalle_boletas.map((boleta) => (
-                                <TableCell className='cwbcb' key={boleta.codigo}>{boleta.descripcion}</TableCell>
+                                <TableCell className='cwbcb importes' style={{ width: '20em' }} key={boleta.codigo}>{boleta.descripcion}</TableCell>
                             ))}
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {afiliados.map((afiliado, index) => (
-                            <TableRow key={index}>
+                            <TableRow key={index} className={index % 2 === 0 ? "" : "even" }>
                                 <TableCell>{afiliado.cuil}</TableCell>
                                 <TableCell>{afiliado.apellido}</TableCell>
-                                <TableCell>{afiliado.remunerativo}</TableCell>
+                                <TableCell className='importes'>{afiliado.remunerativo}</TableCell>
                                 {afiliado.boletas.map((boleta, boletaIndex) => (
-                                    <TableCell key={boletaIndex}>{boleta}</TableCell>
+                                    <TableCell className='importes' key={boletaIndex}>{boleta}</TableCell>
                                 ))}
                             </TableRow>
                         ))}
@@ -249,19 +248,19 @@ export const GenerarBoletas = () => {
                         <TableRow>
                             <TableCell className='cwbcb'>Total Acumulado</TableCell>
                             {boletas.detalle_boletas && boletas.detalle_boletas.map((boleta) => (
-                                <TableCell key={boleta.codigo}>{formatter.currency.format(boleta.total_acumulado) }</TableCell>
+                                <TableCell key={boleta.codigo} className='importes'>{formatter.currency.format(boleta.total_acumulado) }</TableCell>
                             ))}
                         </TableRow>
                         <TableRow>
                             <TableCell className='cwbcb'>Interes</TableCell>
                             {boletas.detalle_boletas && boletas.detalle_boletas.map((boleta) => (
-                                <TableCell key={boleta.codigo}>{formatter.currency.format(boleta.interes)}</TableCell>
+                                <TableCell key={boleta.codigo} className='importes'>{formatter.currency.format(boleta.interes)}</TableCell>
                             ))}
                         </TableRow>
                         <TableRow>
                             <TableCell className='cwbcb' style={{width:'24.5em'}}>Ajustes</TableCell>
                             {boletas.detalle_boletas && boletas.detalle_boletas.map((boleta) => (
-                                <TableCell style={{width:'27.5em'}} key={boleta.codigo}>
+                                <TableCell className='importes' style={{width:'27.5em'}}  key={boleta.codigo}>
                                     {formatter.currency.format(boleta.ajustes.reduce((acumulador, ajuste) => acumulador + ajuste.monto, 0))}
                                 </TableCell>
                             ))}
@@ -269,7 +268,7 @@ export const GenerarBoletas = () => {
                         <TableRow>
                             <TableCell className='cwbcb' >Total Final</TableCell>
                             {boletas.detalle_boletas && boletas.detalle_boletas.map((boleta) => (
-                                <TableCell key={boleta.codigo} style={{ backgroundColor: 'lightblue' }}>{formatter.currency.format(boleta.total_final)}</TableCell>
+                                <TableCell key={boleta.codigo} className='importes' style={{ backgroundColor: 'lightblue' }}>{formatter.currency.format(boleta.total_final)}</TableCell>
                             ))}
                         </TableRow>
                     </TableBody>

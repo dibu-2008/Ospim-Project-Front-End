@@ -74,6 +74,8 @@ const esFechaValida = (fechaString) => {
 const toFechaValida = (value) => {
   if (esFechaValida(value)) {
     return sumaTresHoras(new Date(value)).toISOString();
+  } else if (value.length === 10) {
+    return sumaTresHoras(new Date(value)).toISOString();
   } else {
     return sumaTresHoras(new Date(`${value}-01`)).toISOString();
   }

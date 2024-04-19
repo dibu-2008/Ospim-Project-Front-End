@@ -34,7 +34,7 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-
+const isNotNull = (value) => (value !== null && value !== "" ? value : "");
 // Traerme las etiquetas del dom que tengas la clase .MuiDataGrid-cell--editable
 const crearNuevoRegistro = (props) => {
   const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
@@ -221,7 +221,7 @@ export const Ajustes = () => {
       headerAlign: "center",
       align: "center",
       valueFormatter: (params) => {
-        return formatter.periodo(params.value);
+        return isNotNull(params.value) ? formatter.periodo(params.value) : "";
       },
       renderEditCell: (params) => <InputPeriodo {...params} />,
       headerClassName: "header--cell",

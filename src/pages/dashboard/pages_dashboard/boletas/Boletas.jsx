@@ -78,6 +78,8 @@ export const Boletas = () => {
     );
   };
 
+  const isNotNull = (value) => (value !== null && value !== "" ? value : "");
+
   return (
     <div className="boletas_container">
       {window.location.href.split("/").slice(3).join("/") ===
@@ -144,29 +146,39 @@ export const Boletas = () => {
               field: "total_final",
               headerName: "Importe Boleta",
               flex: 1,
+              align: "right",
               valueFormatter: (params) =>
-                params.value ? formatter.currency.format(params.value) : "",
+                params.value && isNotNull(params.value)
+                  ? formatter.currency.format(params.value)
+                  : "",
             },
             {
               field: "importe_recibido",
               headerName: "Importe Recibido",
               flex: 1,
+              align: "right",
               valueFormatter: (params) =>
-                params.value ? formatter.currency.format(params.value) : "",
+                params.value && isNotNull(params.value)
+                  ? formatter.currency.format(params.value)
+                  : "",
             },
             {
               field: "fecha_de_pago",
               headerName: "Fecha de Pago",
               flex: 1,
               valueFormatter: (params) =>
-                params.value ? formatter.date(params.value) : "",
+                params.value && isNotNull(params.value)
+                  ? formatter.date(params.value)
+                  : "",
             },
             {
               field: "intencion_de_pago",
               headerName: "Intencion de Pago",
               flex: 1,
               valueFormatter: (params) =>
-                params.value ? formatter.date(params.value) : "",
+                params.value && isNotNull(params.value)
+                  ? formatter.date(params.value)
+                  : "",
             },
             { field: "forma_de_pago", headerName: "Metodo de Pago", flex: 0.8 },
             {
@@ -204,6 +216,9 @@ export const Boletas = () => {
               ),
             },
           ]}
+          getRowClassName={(params) =>
+            boletasVisibles.indexOf(params.row) % 2 === 0 ? "even" : ""
+          }
           pageSize={50}
           components={{
             Toolbar: () => (
@@ -247,6 +262,7 @@ export const Boletas = () => {
             {
               field: "importe",
               headerName: "Importe",
+              align: "right",
               flex: 1,
               valueFormatter: (params) =>
                 params.value ? formatter.currency.format(params.value) : "",
