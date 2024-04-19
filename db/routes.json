@@ -60,5 +60,6 @@
   "/empresa/:empresaId/generar-boleta-sin-ddjj": "/empresa/otras_boletas",
   "/sigeco/intereses": "/intereses",
   "/sigeco/ajustes": "/ajustes",
-  "/sigeco/ajustes/:id": "/sigeco/ajustes/?id=:id"
+  "/sigeco/ajustes/:id": "/sigeco/ajustes/?id=:id",
+  "/ddjj/totales": "/ddjjConsulta"
 }
