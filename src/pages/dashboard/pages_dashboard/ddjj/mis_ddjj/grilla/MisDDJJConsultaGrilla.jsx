@@ -1,24 +1,24 @@
-import { useState, useEffect } from "react";
-import Box from "@mui/material/Box";
-import formatter from "@/common/formatter";
+import { useState, useEffect } from 'react';
+import Box from '@mui/material/Box';
+import formatter from '@/common/formatter';
 import {
   GridRowModes,
   GridActionsCellItem,
   GridRowEditStopReasons,
   GridToolbar,
-} from "@mui/x-data-grid";
-import Button from "@mui/material/Button";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/DeleteOutlined";
-import SaveIcon from "@mui/icons-material/Save";
-import CancelIcon from "@mui/icons-material/Close";
-import LocalPrintshopIcon from "@mui/icons-material/LocalPrintshop";
-import { axiosDDJJ } from "./MisDDJJConsultaGrillaApi";
-import Swal from "sweetalert2";
-import dayjs from "dayjs";
-import { useNavigate } from "react-router-dom";
-import { StripedDataGrid, dataGridStyle } from "@/common/dataGridStyle";
-import localStorageService from "@/components/localStorage/localStorageService";
+} from '@mui/x-data-grid';
+import Button from '@mui/material/Button';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Close';
+import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
+import { axiosDDJJ } from './MisDDJJConsultaGrillaApi';
+import Swal from 'sweetalert2';
+import dayjs from 'dayjs';
+import { useNavigate } from 'react-router-dom';
+import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
+import localStorageService from '@/components/localStorage/localStorageService';
 
 function misDDJJColumnaAporteGet(ddjjResponse) {
   //toma todas las ddjj de la consulta de "Mis DDJJ" y arma "vector de Columnas Aportes"
@@ -53,13 +53,13 @@ function ddjjTotalesAportes(ddjj, colAportes) {
   return vecAportesConTotales;
 }
 
-function castearMisDDJJ(ddjjResponse) {
+export function castearMisDDJJ(ddjjResponse) {
   let colAportes = misDDJJColumnaAporteGet(ddjjResponse);
   ddjjResponse.forEach((dj) => {
     let colAportesConTotales = ddjjTotalesAportes(dj, colAportes);
 
     colAportesConTotales.forEach((regTot) => {
-      dj["total" + regTot.codigo] = regTot.importe;
+      dj['total' + regTot.codigo] = regTot.importe;
     });
   });
   return ddjjResponse;
@@ -96,10 +96,10 @@ export const MisDDJJConsultaGrilla = ({
 
   useEffect(() => {
     const ObtenerMisDeclaracionesJuradas = async () => {
-      let ddjjResponse = await axiosDDJJ.consultar(ID_EMPRESA);
+      //let ddjjResponse = await axiosDDJJ.consultar(ID_EMPRESA);
 
       //Agrego las columnas deTotales de Aportes
-      ddjjResponse = await castearMisDDJJ(ddjjResponse);
+      const ddjjResponse = await castearMisDDJJ(rowsMisDdjj);
 
       setRowsMisDdjj(ddjjResponse.map((item) => ({ id: item.id, ...item })));
     };
@@ -110,21 +110,20 @@ export const MisDDJJConsultaGrilla = ({
   const PresentarDeclaracionesJuradas = async (id) => {
     const updatedRow = { ...rowsMisDdjj.find((row) => row.id === id) };
     const data = await axiosDDJJ.presentar(ID_EMPRESA, id);
-   
-    console.log("data: ", data);
+
+    console.log('data: ', data);
 
     if (data) {
       updatedRow.estado = data.estado || null;
       updatedRow.secuencia = data.secuencia || null;
 
       setRowsMisDdjj(
-        rowsMisDdjj.map((row) => (row.id === id ? updatedRow : row))
+        rowsMisDdjj.map((row) => (row.id === id ? updatedRow : row)),
       );
     }
 
     return updatedRow;
   };
-
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -149,26 +148,26 @@ export const MisDDJJConsultaGrilla = ({
     const showSwalConfirm = async () => {
       try {
         Swal.fire({
-          title: "¿Estás seguro?",
-          text: "¡No podrás revertir esto!",
-          icon: "warning",
+          title: '¿Estás seguro?',
+          text: '¡No podrás revertir esto!',
+          icon: 'warning',
           showCancelButton: true,
-          confirmButtonColor: "#1A76D2",
-          cancelButtonColor: "#6c757d",
-          confirmButtonText: "Si, bórralo!",
+          confirmButtonColor: '#1A76D2',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: 'Si, bórralo!',
         }).then(async (result) => {
           console.log(
-            "handleDeleteClick() - ID_EMPRESA: " + ID_EMPRESA + " id: " + id
+            'handleDeleteClick() - ID_EMPRESA: ' + ID_EMPRESA + ' id: ' + id,
           );
           if (result.isConfirmed) {
             const bRta = await axiosDDJJ.eliminar(ID_EMPRESA, id);
-            console.log("bRta: " + bRta);
+            console.log('bRta: ' + bRta);
             if (bRta)
               setRowsMisDdjj(rowsMisDdjj.filter((row) => row.id !== id));
           }
         });
       } catch (error) {
-        console.error("Error al ejecutar eliminarFeriado:", error);
+        console.error('Error al ejecutar eliminarFeriado:', error);
       }
     };
 
@@ -195,7 +194,7 @@ export const MisDDJJConsultaGrilla = ({
     }
 
     setRowsMisDdjj(
-      rowsMisDdjj.map((row) => (row.id === newRow.id ? updatedRow : row))
+      rowsMisDdjj.map((row) => (row.id === newRow.id ? updatedRow : row)),
     );
 
     return updatedRow;
@@ -208,34 +207,34 @@ export const MisDDJJConsultaGrilla = ({
   //1ro seteo columans fijas
   let columns = [
     {
-      field: "periodo",
-      headerName: "Periodo",
+      field: 'periodo',
+      headerName: 'Periodo',
       flex: 1,
       editable: false,
-      type: "date",
-      headerAlign: "center",
-      align: "center",
-      headerClassName: "header--cell",
+      type: 'date',
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
       valueFormatter: (params) => {
         return formatter.periodo(params.value);
       },
     },
     {
-      field: "secuencia",
-      headerName: "Numero",
+      field: 'secuencia',
+      headerName: 'Numero',
       flex: 1,
       editable: false,
-      headerAlign: "center",
-      align: "center",
-      headerClassName: "header--cell",
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
       valueGetter: (params) => {
         // Si secuencia es 0 es "Original" sino es "Rectificativa"+secuencia
         if (params.value === null) {
-          return "Pendiente";
+          return 'Pendiente';
         } else if (params.value === 0) {
-          return "Original";
+          return 'Original';
         } else {
-          return "Rectif. " + params.value;
+          return 'Rectif. ' + params.value;
         }
       },
     },
@@ -245,25 +244,25 @@ export const MisDDJJConsultaGrilla = ({
 
   colAportes.forEach((elem) => {
     columns.push({
-      field: "total" + elem,
-      headerName: "Total " + elem,
+      field: 'total' + elem,
+      headerName: 'Total ' + elem,
       flex: 1,
       editable: false,
-      headerAlign: "center",
-      align: "center",
-      headerClassName: "header--cell",
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
       valueFormatter: (params) => formatter.currency.format(params.value || 0),
     });
   });
 
   columns.push({
-    field: "actions",
-    headerName: "Acciones",
+    field: 'actions',
+    headerName: 'Acciones',
     flex: 2,
-    type: "actions",
-    headerAlign: "center",
-    align: "center",
-    headerClassName: "header--cell",
+    type: 'actions',
+    headerAlign: 'center',
+    align: 'center',
+    headerClassName: 'header--cell',
     getActions: ({ id, row }) => {
       const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
@@ -273,7 +272,7 @@ export const MisDDJJConsultaGrilla = ({
             icon={<SaveIcon />}
             label="Save"
             sx={{
-              color: "primary.main",
+              color: 'primary.main',
             }}
             onClick={handleSaveClick(id)}
           />,
@@ -287,11 +286,11 @@ export const MisDDJJConsultaGrilla = ({
         ];
       }
 
-      if (row.estado === "PE") {
+      if (row.estado === 'PE') {
         return [
           <Button
             sx={{
-              width: "160px",
+              width: '160px',
             }}
             onClick={() => PresentarDeclaracionesJuradas(id)}
             variant="contained"
@@ -322,8 +321,8 @@ export const MisDDJJConsultaGrilla = ({
         return [
           <Button
             sx={{
-              width: "160px",
-              marginLeft: "-40px",
+              width: '160px',
+              marginLeft: '-40px',
             }}
             variant="contained"
             onClick={handleGenerarBoletaClick(id)}
@@ -353,19 +352,19 @@ export const MisDDJJConsultaGrilla = ({
       style={{
         marginTop: 50,
         height: 400,
-        width: "100%",
+        width: '100%',
       }}
     >
       <Box
         sx={{
-          margin: "0 auto",
-          height: "600px",
-          width: "100%%",
-          "& .actions": {
-            color: "text.secondary",
+          margin: '0 auto',
+          height: '600px',
+          width: '100%%',
+          '& .actions': {
+            color: 'text.secondary',
           },
-          "& .textPrimary": {
-            color: "text.primary",
+          '& .textPrimary': {
+            color: 'text.primary',
           },
         }}
       >
@@ -382,12 +381,12 @@ export const MisDDJJConsultaGrilla = ({
             toolbar: GridToolbar,
           }}
           sx={{
-            "& .MuiDataGrid-virtualScroller::-webkit-scrollbar": {
-              width: "8px",
-              visibility: "visible",
+            '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
+              width: '8px',
+              visibility: 'visible',
             },
-            "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb": {
-              backgroundColor: "#ccc",
+            '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
+              backgroundColor: '#ccc',
             },
           }}
           paginationModel={paginationModel}

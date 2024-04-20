@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import React, { useEffect, useState } from 'react';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 export const CarouselText = ({ contenido }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -21,7 +21,7 @@ export const CarouselText = ({ contenido }) => {
 
   const goToPrevSlide = () => {
     setCurrentIndex(
-      (prevIndex) => (prevIndex - 1 + contenido.length) % contenido.length
+      (prevIndex) => (prevIndex - 1 + contenido.length) % contenido.length,
     );
   };
 
@@ -31,16 +31,16 @@ export const CarouselText = ({ contenido }) => {
         <div>
           <div
             style={{
-              height: "400px",
-              borderRadius: "10px",
-              width: "100%",
-              paddingTop: "10px",
-              boxShadow: "0px 0px 10px 0px #1A76D2",
+              height: '400px',
+              borderRadius: '10px',
+              width: '100%',
+              paddingTop: '10px',
+              boxShadow: '0px 0px 10px 0px #1A76D2',
             }}
           >
             <h2
               style={{
-                margin: "10px 0px 0px 15px",
+                margin: '10px 0px 0px 15px',
               }}
             >
               Novedades
@@ -48,27 +48,27 @@ export const CarouselText = ({ contenido }) => {
 
             <div
               style={{
-                display: "flex",
-                flexDirection: "column",
-                height: "100%",
-                justifyContent: "center",
-                alignItems: "center",
-                marginTop: "-50px",
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100%',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginTop: '-50px',
               }}
             >
               <h2
                 style={{
-                  color: "#1A76D2",
-                  marginBottom: "20px",
+                  color: '#1A76D2',
+                  marginBottom: '20px',
                 }}
               >
                 {contenido[currentIndex].titulo}
               </h2>
               <p
                 style={{
-                  width: "50%",
-                  margin: "0 auto",
-                  textAlign: "center",
+                  width: '50%',
+                  margin: '0 auto',
+                  textAlign: 'center',
                 }}
               >
                 {contenido[currentIndex].cuerpo}
@@ -77,31 +77,31 @@ export const CarouselText = ({ contenido }) => {
           </div>
           <div
             style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginTop: "-220px",
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginTop: '-220px',
             }}
           >
             <span
               onClick={goToPrevSlide}
               style={{
-                cursor: "pointer",
-                marginLeft: "100px",
-                marginTop: "-110px",
+                cursor: 'pointer',
+                marginLeft: '100px',
+                marginTop: '-110px',
               }}
             >
               <ArrowBackIosNewIcon
                 sx={{
-                  fontSize: "50px",
-                  color: "#1A76D2",
+                  fontSize: '50px',
+                  color: '#1A76D2',
                 }}
               />
             </span>
             <div
               style={{
-                display: "flex",
-                marginTop: "100px",
+                display: 'flex',
+                marginTop: '100px',
               }}
             >
               {contenido.map((_, index) => (
@@ -109,10 +109,10 @@ export const CarouselText = ({ contenido }) => {
                   key={index}
                   onClick={() => setCurrentIndex(index)}
                   style={{
-                    cursor: "pointer",
-                    margin: "0 5px",
-                    fontSize: "30px",
-                    color: index === currentIndex ? "#1A76D2" : "#ccc",
+                    cursor: 'pointer',
+                    margin: '0 5px',
+                    fontSize: '30px',
+                    color: index === currentIndex ? '#1A76D2' : '#ccc',
                   }}
                 >
                   &bull;
@@ -122,15 +122,15 @@ export const CarouselText = ({ contenido }) => {
             <span
               onClick={goToNextSlide}
               style={{
-                cursor: "pointer",
-                marginRight: "100px",
-                marginTop: "-110px",
+                cursor: 'pointer',
+                marginRight: '100px',
+                marginTop: '-110px',
               }}
             >
               <ArrowForwardIosIcon
                 sx={{
-                  fontSize: "50px",
-                  color: "#1A76D2",
+                  fontSize: '50px',
+                  color: '#1A76D2',
                 }}
               />
             </span>

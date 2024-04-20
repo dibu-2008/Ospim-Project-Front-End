@@ -2,11 +2,11 @@ import * as locales from "@mui/material/locale";
 import { useState, useEffect, useMemo } from "react";
 import { Box, Button } from "@mui/material";
 
-import AddIcon from "@mui/icons-material/Add";
-import EditIcon from "@mui/icons-material/Edit";
-import SaveIcon from "@mui/icons-material/Save";
-import CancelIcon from "@mui/icons-material/Close";
-import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Close';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import {
   GridRowModes,
   GridToolbar,
@@ -24,13 +24,13 @@ import swal from "@/components/swal/swal";
 import Swal from "sweetalert2";
 
 const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
   width: 500,
-  bgcolor: "background.paper",
-  border: "2px solid #1A76D2",
+  bgcolor: 'background.paper',
+  border: '2px solid #1A76D2',
   boxShadow: 24,
   p: 4,
 };
@@ -44,7 +44,7 @@ const crearNuevoRegistro = (props) => {
     volverPrimerPagina();
     setRows((oldRows) => [newReg, ...oldRows]);
     setRowModesModel((oldModel) => ({
-      [0]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
+      [0]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
       ...oldModel,
     }));
   };
@@ -60,7 +60,7 @@ const crearNuevoRegistro = (props) => {
 };
 
 export const Ajustes = () => {
-  const [locale, setLocale] = useState("esES");
+  const [locale, setLocale] = useState('esES');
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
   const [paginationModel, setPaginationModel] = useState({
@@ -79,7 +79,7 @@ export const Ajustes = () => {
 
   const themeWithLocale = useMemo(
     () => createTheme(theme, locales[locale]),
-    [locale, theme]
+    [locale, theme],
   );
 
   const ObtenerAjustes = async () => {
@@ -101,13 +101,13 @@ export const Ajustes = () => {
     const showSwalConfirm = async () => {
       try {
         Swal.fire({
-          title: "¿Estás seguro?",
-          text: "¡No podrás revertir esto!",
-          icon: "warning",
+          title: '¿Estás seguro?',
+          text: '¡No podrás revertir esto!',
+          icon: 'warning',
           showCancelButton: true,
-          confirmButtonColor: "#1A76D2",
-          cancelButtonColor: "#6c757d",
-          confirmButtonText: "Si, bórralo!",
+          confirmButtonColor: '#1A76D2',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: 'Si, bórralo!',
         }).then(async (result) => {
           if (result.isConfirmed) {
             const bBajaOk = await axiosAjustes.eliminar(row.id);
@@ -115,7 +115,7 @@ export const Ajustes = () => {
           }
         });
       } catch (error) {
-        console.error("Error al ejecutar eliminarFeriado:", error);
+        console.error('Error al ejecutar eliminarFeriado:', error);
       }
     };
 
@@ -123,7 +123,7 @@ export const Ajustes = () => {
   };
 
   const handleEditClick = (row) => () => {
-    console.log("handleEditClick - row:");
+    console.log('handleEditClick - row:');
     console.log(row);
     setRowModesModel({
       ...rowModesModel,
@@ -154,7 +154,7 @@ export const Ajustes = () => {
   };
 
   const processRowUpdate = async (newRow, oldRow) => {
-    console.log("processRowUpdate - INIT");
+    console.log('processRowUpdate - INIT');
     let bOk = false;
 
     if (!newRow.id) {
@@ -167,11 +167,11 @@ export const Ajustes = () => {
           const newRows = rows.map((row) => (!row.id ? newRow : row));
           setRows(newRows);
         } else {
-          console.log("alta sin ID generado");
+          console.log('alta sin ID generado');
         }
       } catch (error) {
         console.log(
-          "X - processRowUpdate - ALTA - ERROR: " + JSON.stringify(error)
+          'X - processRowUpdate - ALTA - ERROR: ' + JSON.stringify(error),
         );
       }
     } else {
@@ -180,13 +180,13 @@ export const Ajustes = () => {
         bOk = await axiosAjustes.actualizar(newRow.id, newRow);
         if (bOk) {
           const rowsNew = rows.map((row) =>
-            row.id === newRow.id ? newRow : row
+            row.id === newRow.id ? newRow : row,
           );
           setRows(rowsNew);
         }
       } catch (error) {
         console.log(
-          "X - processRowUpdate - MODI - ERROR: " + JSON.stringify(error)
+          'X - processRowUpdate - MODI - ERROR: ' + JSON.stringify(error),
         );
       }
     }
@@ -274,14 +274,14 @@ export const Ajustes = () => {
       headerClassName: "header--cell",
     },
     {
-      field: "actions",
-      type: "actions",
-      headerName: "Acciones",
+      field: 'actions',
+      type: 'actions',
+      headerName: 'Acciones',
       flex: 1,
-      cellClassName: "actions",
-      headerAlign: "center",
-      align: "center",
-      headerClassName: "header--cell",
+      cellClassName: 'actions',
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
       getActions: ({ row }) => {
         const isInEditMode =
           rowModesModel[rows.indexOf(row)]?.mode === GridRowModes.Edit;
@@ -291,7 +291,7 @@ export const Ajustes = () => {
             <GridActionsCellItem
               icon={<SaveIcon />}
               label="Guardar"
-              sx={{ color: "primary.main" }}
+              sx={{ color: 'primary.main' }}
               onClick={handleSaveClick(row)}
             />,
             <GridActionsCellItem
@@ -328,21 +328,21 @@ export const Ajustes = () => {
     <div className="ajustes_container">
       <h1
         style={{
-          display: "flex",
-          alignItems: "center",
+          display: 'flex',
+          alignItems: 'center',
         }}
       >
         Administración de Ajustes
       </h1>
       <Box
         sx={{
-          height: "600px",
-          width: "100%",
-          "& .actions": {
-            color: "text.secondary",
+          height: '600px',
+          width: '100%',
+          '& .actions': {
+            color: 'text.secondary',
           },
-          "& .textPrimary": {
-            color: "text.primary",
+          '& .textPrimary': {
+            color: 'text.primary',
           },
         }}
       >
@@ -352,7 +352,7 @@ export const Ajustes = () => {
             columns={columnas}
             getRowId={(row) => rows.indexOf(row)}
             getRowClassName={(params) =>
-              rows.indexOf(params.row) % 2 === 0 ? "even" : "odd"
+              rows.indexOf(params.row) % 2 === 0 ? 'even' : 'odd'
             }
             editMode="row"
             rowModesModel={rowModesModel}

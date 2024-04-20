@@ -1,5 +1,5 @@
-import * as locales from "@mui/material/locale";
-import { useState, useEffect, useMemo, useRef } from "react";
+import * as locales from '@mui/material/locale';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import {
   Box,
   Button,
@@ -9,14 +9,14 @@ import {
   Tooltip,
   alpha,
   styled,
-} from "@mui/material";
+} from '@mui/material';
 
-import { Add, Edit, DeleteOutlined, Save, Close } from "@mui/icons-material";
-import AddIcon from "@mui/icons-material/Add";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/DeleteOutlined";
-import SaveIcon from "@mui/icons-material/Save";
-import CancelIcon from "@mui/icons-material/Close";
+import { Add, Edit, DeleteOutlined, Save, Close } from '@mui/icons-material';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Close';
 
 import {
   GridRowModes,
@@ -24,34 +24,34 @@ import {
   GridToolbarContainer,
   GridActionsCellItem,
   GridRowEditStopReasons,
-} from "@mui/x-data-grid";
-import { axiosFeriados } from "./FeriadosApi";
-import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
+} from '@mui/x-data-grid';
+import { axiosFeriados } from './FeriadosApi';
+import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 
-import Swal from "sweetalert2";
-import "./Feriados.css";
-import DateRangeIcon from "@mui/icons-material/DateRange";
-import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
+import Swal from 'sweetalert2';
+import './Feriados.css';
+import DateRangeIcon from '@mui/icons-material/DateRange';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
 
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { esES } from "@mui/x-date-pickers/locales";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DatePicker } from "@mui/x-date-pickers";
-import formatter from "@/common/formatter";
-import swal from "@/components/swal/swal";
-import { StripedDataGrid, dataGridStyle } from "@/common/dataGridStyle";
-import { ToastContainer } from "react-toastify";
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { esES } from '@mui/x-date-pickers/locales';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers';
+import formatter from '@/common/formatter';
+import swal from '@/components/swal/swal';
+import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
+import { ToastContainer } from 'react-toastify';
 
 const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
   width: 500,
-  bgcolor: "background.paper",
-  border: "2px solid #1A76D2",
+  bgcolor: 'background.paper',
+  border: '2px solid #1A76D2',
   boxShadow: 24,
   p: 4,
 };
@@ -63,35 +63,36 @@ const crearNuevoRegistro = (props) => {
     setRowModesModel,
     volverPrimerPagina,
     showQuickFilter,
-    themeWithLocale
+    themeWithLocale,
   } = props;
 
   const altaHandleClick = () => {
-    const newReg = { fecha: "" };
+    const newReg = { fecha: '' };
 
     volverPrimerPagina();
 
     setRows((oldRows) => [newReg, ...oldRows]);
     setRowModesModel((oldModel) => ({
-      [0]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
+      [0]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
       ...oldModel,
     }));
   };
 
   return (
-    <GridToolbarContainer theme={themeWithLocale} style={{ display: 'flex', justifyContent: 'space-between' }}>
+    <GridToolbarContainer
+      theme={themeWithLocale}
+      style={{ display: 'flex', justifyContent: 'space-between' }}
+    >
       <Button color="primary" startIcon={<AddIcon />} onClick={altaHandleClick}>
         Nuevo Registro
       </Button>
-      <GridToolbar
-        showQuickFilter={showQuickFilter}
-      />
+      <GridToolbar showQuickFilter={showQuickFilter} />
     </GridToolbarContainer>
   );
 };
 
 export const Feriados = () => {
-  const [locale, setLocale] = useState("esES");
+  const [locale, setLocale] = useState('esES');
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
   const [paginationModel, setPaginationModel] = useState({
@@ -121,7 +122,7 @@ export const Feriados = () => {
 
   const themeWithLocale = useMemo(
     () => createTheme(theme, locales[locale]),
-    [locale, theme]
+    [locale, theme],
   );
 
   const ObtenerFeriados = async () => {
@@ -140,7 +141,7 @@ export const Feriados = () => {
   };
 
   const handleEditClick = (row) => () => {
-    console.log("handleEditClick - row:");
+    console.log('handleEditClick - row:');
     console.log(row);
     setRowModesModel({
       ...rowModesModel,
@@ -159,13 +160,13 @@ export const Feriados = () => {
     const showSwalConfirm = async () => {
       try {
         Swal.fire({
-          title: "¿Estás seguro?",
-          text: "¡No podrás revertir esto!",
-          icon: "warning",
+          title: '¿Estás seguro?',
+          text: '¡No podrás revertir esto!',
+          icon: 'warning',
           showCancelButton: true,
-          confirmButtonColor: "#1A76D2",
-          cancelButtonColor: "#6c757d",
-          confirmButtonText: "Si, bórralo!",
+          confirmButtonColor: '#1A76D2',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: 'Si, bórralo!',
         }).then(async (result) => {
           if (result.isConfirmed) {
             const bBajaOk = await axiosFeriados.eliminar(row.id);
@@ -173,7 +174,7 @@ export const Feriados = () => {
           }
         });
       } catch (error) {
-        console.error("Error al ejecutar eliminarFeriado:", error);
+        console.error('Error al ejecutar eliminarFeriado:', error);
       }
     };
 
@@ -196,7 +197,7 @@ export const Feriados = () => {
   };
 
   const processRowUpdate = async (newRow, oldRow) => {
-    console.log("processRowUpdate - INIT");
+    console.log('processRowUpdate - INIT');
     let bOk = false;
 
     if (!newRow.id) {
@@ -208,11 +209,11 @@ export const Feriados = () => {
           const newRows = rows.map((row) => (!row.id ? newRow : row));
           setRows(newRows);
         } else {
-          console.log("alta sin ID generado");
+          console.log('alta sin ID generado');
         }
       } catch (error) {
         console.log(
-          "X - processRowUpdate - ALTA - ERROR: " + JSON.stringify(error)
+          'X - processRowUpdate - ALTA - ERROR: ' + JSON.stringify(error),
         );
       }
     } else {
@@ -220,13 +221,13 @@ export const Feriados = () => {
         bOk = await axiosFeriados.actualizar(newRow);
         if (bOk) {
           const rowsNew = rows.map((row) =>
-            row.id === newRow.id ? newRow : row
+            row.id === newRow.id ? newRow : row,
           );
           setRows(rowsNew);
         }
       } catch (error) {
         console.log(
-          "X - processRowUpdate - MODI - ERROR: " + JSON.stringify(error)
+          'X - processRowUpdate - MODI - ERROR: ' + JSON.stringify(error),
         );
       }
     }
@@ -245,14 +246,14 @@ export const Feriados = () => {
   const obSubmitAnio = async (e) => {
     e.preventDefault();
     const anio = fecha.$y;
-    console.log("anio: " + anio);
+    console.log('anio: ' + anio);
     const response = await axiosFeriados.duplicar(anio);
 
     if (response) {
-      swal.showSuccess("Año duplicado correctamente");
+      swal.showSuccess('Año duplicado correctamente');
       ObtenerFeriados();
     } else {
-      swal.showError("Error al duplicar el año");
+      swal.showError('Error al duplicar el año');
     }
 
     handleClose();
@@ -260,27 +261,27 @@ export const Feriados = () => {
 
   const columnas = [
     {
-      field: "fecha",
-      headerName: "Fecha",
+      field: 'fecha',
+      headerName: 'Fecha',
       flex: 1,
-      type: "date",
+      type: 'date',
       editable: true,
-      headerAlign: "center",
-      align: "center",
-      headerClassName: "header--cell",
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
       valueFormatter: ({ value }) => {
         return formatter.date(value);
-      }
+      },
     },
     {
-      field: "actions",
-      type: "actions",
-      headerName: "Acciones",
+      field: 'actions',
+      type: 'actions',
+      headerName: 'Acciones',
       flex: 1,
-      cellClassName: "actions",
-      headerAlign: "center",
-      align: "center",
-      headerClassName: "header--cell",
+      cellClassName: 'actions',
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
       getActions: ({ row }) => {
         const isInEditMode =
           rowModesModel[rows.indexOf(row)]?.mode === GridRowModes.Edit;
@@ -290,7 +291,7 @@ export const Feriados = () => {
             <GridActionsCellItem
               icon={<SaveIcon />}
               label="Guardar"
-              sx={{ color: "primary.main" }}
+              sx={{ color: 'primary.main' }}
               onClick={handleSaveClick(row)}
             />,
             <GridActionsCellItem
@@ -327,35 +328,35 @@ export const Feriados = () => {
     <div className="feriados_container">
       <h1
         style={{
-          display: "flex",
-          alignItems: "center",
+          display: 'flex',
+          alignItems: 'center',
         }}
       >
         Administración de feriados
         <Tooltip
           title="Pasar feriados años siguiente"
-          sx={{ marginLeft: "10px", cursor: "pointer" }}
+          sx={{ marginLeft: '10px', cursor: 'pointer' }}
         >
           <IconButton onClick={handleOpen}>
             <DateRangeIcon
               sx={{
-                fontSize: "2.5rem",
-                color: "#1A76D2",
+                fontSize: '2.5rem',
+                color: '#1A76D2',
               }}
             />
           </IconButton>
         </Tooltip>
       </h1>
-      <ToastContainer style={{ marginRight: "6rem", marginTop: "3rem" }} />
+      <ToastContainer style={{ marginRight: '6rem', marginTop: '3rem' }} />
       <Box
         sx={{
-          height: "600px",
-          width: "100%",
-          "& .actions": {
-            color: "text.secondary",
+          height: '600px',
+          width: '100%',
+          '& .actions': {
+            color: 'text.secondary',
           },
-          "& .textPrimary": {
-            color: "text.primary",
+          '& .textPrimary': {
+            color: 'text.primary',
           },
         }}
       >
@@ -365,7 +366,7 @@ export const Feriados = () => {
             columns={columnas}
             getRowId={(row) => rows.indexOf(row)}
             getRowClassName={(params) =>
-              rows.indexOf(params.row) % 2 === 0 ? "even" : "odd"
+              rows.indexOf(params.row) % 2 === 0 ? 'even' : 'odd'
             }
             editMode="row"
             rowModesModel={rowModesModel}
@@ -383,7 +384,7 @@ export const Feriados = () => {
                 volverPrimerPagina,
                 showQuickFilter: true,
                 showColumnMenu: true,
-                themeWithLocale
+                themeWithLocale,
               },
             }}
             paginationModel={paginationModel}
@@ -405,11 +406,11 @@ export const Feriados = () => {
               variant="h4"
               component="h2"
               sx={{
-                textAlign: "center",
+                textAlign: 'center',
                 backgroundColor: alpha(theme.palette.primary.main, 0.1),
-                borderRadius: "5px",
-                width: "400px",
-                marginBottom: "20px",
+                borderRadius: '5px',
+                width: '400px',
+                marginBottom: '20px',
                 color: theme.palette.primary.main,
               }}
             >
@@ -417,15 +418,15 @@ export const Feriados = () => {
             </Typography>
             <LocalizationProvider
               dateAdapter={AdapterDayjs}
-              adapterLocale={"es"}
+              adapterLocale={'es'}
               localeText={
                 esES.components.MuiLocalizationProvider.defaultProps.localeText
               }
             >
-              <DemoContainer components={["DatePicker"]}>
+              <DemoContainer components={['DatePicker']}>
                 <DatePicker
-                  label={"Año"}
-                  views={["year"]}
+                  label={'Año'}
+                  views={['year']}
                   onChange={handleChangeFecha}
                   value={fecha}
                 />
@@ -434,18 +435,18 @@ export const Feriados = () => {
             <Box
               display="flex"
               justifyContent="space-between"
-              sx={{ width: "76%" }}
+              sx={{ width: '76%' }}
             >
               <Button
                 variant="contained"
-                sx={{ marginTop: "20px" }}
+                sx={{ marginTop: '20px' }}
                 type="submit"
               >
                 Enviar
               </Button>
               <Button
                 variant="contained"
-                sx={{ marginTop: "20px" }}
+                sx={{ marginTop: '20px' }}
                 onClick={handleClose}
               >
                 Cancelar

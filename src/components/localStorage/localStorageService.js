@@ -1,10 +1,10 @@
 export const getToken = () => {
-  let auxStateLogin = localStorage.getItem("stateLogin");
+  let auxStateLogin = localStorage.getItem('stateLogin');
   let TOKEN = null;
 
   if (auxStateLogin != null) {
-    auxStateLogin = JSON.parse(localStorage.getItem("stateLogin"));
-    if (auxStateLogin.hasOwnProperty("usuarioLogueado")) {
+    auxStateLogin = JSON.parse(localStorage.getItem('stateLogin'));
+    if (auxStateLogin.hasOwnProperty('usuarioLogueado')) {
       TOKEN = auxStateLogin.usuarioLogueado.usuario.token;
       return TOKEN;
     }
@@ -13,14 +13,14 @@ export const getToken = () => {
 };
 
 export const getEmpresaId = () => {
-  let auxStateLogin = localStorage.getItem("stateLogin");
+  let auxStateLogin = localStorage.getItem('stateLogin');
   if (auxStateLogin != null) {
-    auxStateLogin = JSON.parse(localStorage.getItem("stateLogin"));
-    if (auxStateLogin.hasOwnProperty("usuarioLogueado")) {
+    auxStateLogin = JSON.parse(localStorage.getItem('stateLogin'));
+    if (auxStateLogin.hasOwnProperty('usuarioLogueado')) {
       auxStateLogin = auxStateLogin.usuarioLogueado;
-      if (auxStateLogin.hasOwnProperty("empresa")) {
+      if (auxStateLogin.hasOwnProperty('empresa')) {
         auxStateLogin = auxStateLogin.empresa;
-        if (auxStateLogin.hasOwnProperty("id")) {
+        if (auxStateLogin.hasOwnProperty('id')) {
           return auxStateLogin.id;
         }
       }
@@ -29,12 +29,12 @@ export const getEmpresaId = () => {
 };
 
 export const getRol = () => {
-  let auxStateLogin = localStorage.getItem("stateLogin");
+  let auxStateLogin = localStorage.getItem('stateLogin');
   let ROL = null;
 
   if (auxStateLogin != null) {
-    auxStateLogin = JSON.parse(localStorage.getItem("stateLogin"));
-    if (auxStateLogin.hasOwnProperty("usuarioLogueado")) {
+    auxStateLogin = JSON.parse(localStorage.getItem('stateLogin'));
+    if (auxStateLogin.hasOwnProperty('usuarioLogueado')) {
       ROL = auxStateLogin.usuarioLogueado.usuario.rol[0].descripcion;
       return ROL;
     }
@@ -45,7 +45,7 @@ export const getRol = () => {
 
 export const isRolEmpleador = () => {
   let ROL = getRol();
-  if (ROL == "EMPLEADOR") return true;
+  if (ROL == 'EMPLEADOR') return true;
   return false;
 };
 

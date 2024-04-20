@@ -217,7 +217,7 @@ export const Boletas = () => {
             },
           ]}
           getRowClassName={(params) =>
-            boletasVisibles.indexOf(params.row) % 2 === 0 ? "even" : ""
+            boletasVisibles.indexOf(params.row) % 2 === 0 ? 'even' : ''
           }
           pageSize={50}
           components={{

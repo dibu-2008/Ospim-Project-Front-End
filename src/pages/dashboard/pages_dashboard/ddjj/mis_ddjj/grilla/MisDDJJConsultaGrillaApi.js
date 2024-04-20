@@ -1,7 +1,7 @@
-import oAxios from "@components/axios/axiosInstace";
-import { axiosCrud } from "@components/axios/axiosCrud";
-import { showErrorBackEnd } from "@/components/axios/showErrorBackEnd";
-import swal from "@/components/swal/swal";
+import oAxios from '@components/axios/axiosInstace';
+import { axiosCrud } from '@components/axios/axiosCrud';
+import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
+import swal from '@/components/swal/swal';
 
 const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
 const HTTP_MSG_MODI = import.meta.env.VITE_HTTP_MSG_MODI;
@@ -12,14 +12,14 @@ const HTTP_MSG_BAJA_ERROR = import.meta.env.VITE_HTTP_MSG_BAJA_ERROR;
 const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
 
 export const obtenerAportes = async () => {
-  const URL = "/aportes/";
+  const URL = '/aportes/';
   try {
     const data = await axiosCrud.consultar(URL);
     return data || [];
   } catch (error) {
     showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
-      error
+      error,
     );
     return [];
   }
@@ -32,15 +32,15 @@ export const obtenerMisDeclaracionesJuradas = async (empresaId) => {
     return data || [];
   } catch (error) {
     console.log(
-      "obtenerMisDeclaracionesJuradas() - catch-error - URL: " +
+      'obtenerMisDeclaracionesJuradas() - catch-error - URL: ' +
         URL +
-        " - status: " +
-        error.status
+        ' - status: ' +
+        error.status,
     );
 
     showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
-      error
+      error,
     );
     return [];
   }
@@ -54,7 +54,7 @@ export const obtenerMiDeclaracionJurada = async (empresaId, ddjjId) => {
   } catch (error) {
     showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
-      error
+      error,
     );
     return [];
   }
@@ -65,17 +65,17 @@ export const imprimirDeclaracionJurada = async (empresaId, ddjjId) => {
 
   try {
     const response = await oAxios.get(URL, {
-      responseType: "blob",
+      responseType: 'blob',
     });
 
     const url = window.URL.createObjectURL(new Blob([response.data]));
-    const link = document.createElement("a");
+    const link = document.createElement('a');
     link.href = url;
-    link.setAttribute("download", `DeclaracionJurada${ddjjId}.pdf`);
+    link.setAttribute('download', `DeclaracionJurada${ddjjId}.pdf`);
     document.body.appendChild(link);
     link.click();
   } catch (error) {
-    showErrorBackEnd("Error de Impresion", error);
+    showErrorBackEnd('Error de Impresion', error);
   }
 };
 

@@ -4,9 +4,9 @@ import { generalTheme } from './generalTheme';
 
 export const AppTheme = ({ children }) => {
   return (
-    <ThemeProvider theme={ generalTheme }>
+    <ThemeProvider theme={generalTheme}>
       <CssBaseline />
-      { children }
+      {children}
     </ThemeProvider>
-  )
-}
+  );
+};

@@ -1,55 +1,55 @@
-import * as locales from "@mui/material/locale";
-import { useState, useEffect, useMemo } from "react";
+import * as locales from '@mui/material/locale';
+import { useState, useEffect, useMemo } from 'react';
 import {
   GridRowModes,
   GridToolbarContainer,
   GridActionsCellItem,
   GridRowEditStopReasons,
   GridToolbar,
-} from "@mui/x-data-grid";
-import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import AddIcon from "@mui/icons-material/Add";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/DeleteOutlined";
-import SaveIcon from "@mui/icons-material/Save";
-import CancelIcon from "@mui/icons-material/Close";
-import { axiosCuitsRestringidos } from "./CuitsRestringidosApi";
-import Swal from "sweetalert2";
-import { StripedDataGrid, dataGridStyle } from "@/common/dataGridStyle";
-import "./CuitsRestringidos.css";
+} from '@mui/x-data-grid';
+import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Close';
+import { axiosCuitsRestringidos } from './CuitsRestringidosApi';
+import Swal from 'sweetalert2';
+import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
+import './CuitsRestringidos.css';
 
 function EditToolbar(props) {
-  const { 
-    setRows, 
-    setRowModesModel, 
+  const {
+    setRows,
+    setRowModesModel,
     volverPrimerPagina,
     showQuickFilter,
-    themeWithLocale
+    themeWithLocale,
   } = props;
 
   const altaHandleClick = () => {
-
-    const newReg = { cuit: "", observacion: "" }
+    const newReg = { cuit: '', observacion: '' };
 
     volverPrimerPagina();
 
-    setRows((oldRows) => [newReg,...oldRows]);
+    setRows((oldRows) => [newReg, ...oldRows]);
     setRowModesModel((oldModel) => ({
-      [0]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
+      [0]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
       ...oldModel,
     }));
   };
 
   return (
-    <GridToolbarContainer theme={themeWithLocale} style={{ display: 'flex', justifyContent: 'space-between' }}>
+    <GridToolbarContainer
+      theme={themeWithLocale}
+      style={{ display: 'flex', justifyContent: 'space-between' }}
+    >
       <Button color="primary" startIcon={<AddIcon />} onClick={altaHandleClick}>
         Nuevo Registro
       </Button>
-      <GridToolbar
-        showQuickFilter={showQuickFilter}
-      />
+      <GridToolbar showQuickFilter={showQuickFilter} />
     </GridToolbarContainer>
   );
 }
@@ -57,13 +57,12 @@ function EditToolbar(props) {
 const paginacion = {
   pageSize: 50,
   page: 0,
-}
+};
 
 export const CuitsRestringidos = () => {
-
   const [paginationModel, setPaginationModel] = useState(paginacion);
   const [rowModesModel, setRowModesModel] = useState({});
-  const [locale, setLocale] = useState("esES");
+  const [locale, setLocale] = useState('esES');
   const [rows, setRows] = useState([]);
 
   const volverPrimerPagina = () => {
@@ -77,7 +76,7 @@ export const CuitsRestringidos = () => {
 
   const themeWithLocale = useMemo(
     () => createTheme(theme, locales[locale]),
-    [locale, theme]
+    [locale, theme],
   );
 
   useEffect(() => {
@@ -95,28 +94,30 @@ export const CuitsRestringidos = () => {
   };
 
   const handleEditClick = (row) => () => {
-    setRowModesModel({ 
-      ...rowModesModel, 
-      [rows.indexOf(row)]: { mode: GridRowModes.Edit } });
+    setRowModesModel({
+      ...rowModesModel,
+      [rows.indexOf(row)]: { mode: GridRowModes.Edit },
+    });
   };
 
   const handleSaveClick = (row) => () => {
-    setRowModesModel({ 
-      ...rowModesModel, 
-      [rows.indexOf(row)]: { mode: GridRowModes.View } });
+    setRowModesModel({
+      ...rowModesModel,
+      [rows.indexOf(row)]: { mode: GridRowModes.View },
+    });
   };
 
   const handleDeleteClick = (row) => async () => {
     const showSwalConfirm = async () => {
       try {
         Swal.fire({
-          title: "¿Estás seguro?",
-          text: "¡No podrás revertir esto!",
-          icon: "warning",
+          title: '¿Estás seguro?',
+          text: '¡No podrás revertir esto!',
+          icon: 'warning',
           showCancelButton: true,
-          confirmButtonColor: "#1A76D2",
-          cancelButtonColor: "#6c757d",
-          confirmButtonText: "Si, bórralo!",
+          confirmButtonColor: '#1A76D2',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: 'Si, bórralo!',
         }).then(async (result) => {
           if (result.isConfirmed) {
             const bBajaOk = await axiosCuitsRestringidos.eliminar(row.id);
@@ -124,7 +125,7 @@ export const CuitsRestringidos = () => {
           }
         });
       } catch (error) {
-        console.error("Error al ejecutar eliminarFeriado:", error);
+        console.error('Error al ejecutar eliminarFeriado:', error);
       }
     };
 
@@ -134,9 +135,9 @@ export const CuitsRestringidos = () => {
   const handleCancelClick = (row) => () => {
     setRowModesModel({
       ...rowModesModel,
-      [rows.indexOf(row)]: { 
-        mode: GridRowModes.View, 
-        ignoreModifications: true 
+      [rows.indexOf(row)]: {
+        mode: GridRowModes.View,
+        ignoreModifications: true,
       },
     });
 
@@ -148,50 +149,49 @@ export const CuitsRestringidos = () => {
 
   const processRowUpdate = async (newRow, oldRow) => {
     let bOk = false;
-    console.log("1 - processRowUpdate - newRow: " + JSON.stringify(newRow));
+    console.log('1 - processRowUpdate - newRow: ' + JSON.stringify(newRow));
     if (!newRow.id) {
-      console.log("2 - processRowUpdate - ALTA ");
+      console.log('2 - processRowUpdate - ALTA ');
       try {
         const data = await axiosCuitsRestringidos.crear(newRow);
-        console.log("data: " + JSON.stringify(data));
+        console.log('data: ' + JSON.stringify(data));
         if (data && data.id) {
           newRow.id = data.id;
           bOk = true;
 
-          console.log("ALTA - rows: ");
+          console.log('ALTA - rows: ');
           console.log(rows);
           const newRows = rows.map((row) => (!row.id ? newRow : row));
           console.log(newRows);
           setRows(newRows);
         } else {
-          console.log("alta sin ID generado");
+          console.log('alta sin ID generado');
         }
       } catch (error) {
         console.log(
-          "X - processRowUpdate - ALTA - ERROR: " + JSON.stringify(error)
+          'X - processRowUpdate - ALTA - ERROR: ' + JSON.stringify(error),
         );
       }
     } else {
-      console.log("3 - processRowUpdate - MODI ");
+      console.log('3 - processRowUpdate - MODI ');
       try {
-
         bOk = await axiosCuitsRestringidos.actualizar(newRow);
-        console.log("4 - processRowUpdate - MODI - bOk: " + bOk);
-     
+        console.log('4 - processRowUpdate - MODI - bOk: ' + bOk);
+
         if (bOk) {
           const rowsNew = rows.map((row) =>
-            row.id === newRow.id ? newRow : row
+            row.id === newRow.id ? newRow : row,
           );
           setRows(rowsNew);
         }
       } catch (error) {
         console.log(
-          "X - processRowUpdate - MODI - ERROR: " + JSON.stringify(error)
+          'X - processRowUpdate - MODI - ERROR: ' + JSON.stringify(error),
         );
       }
     }
 
-    console.log("5 -processRowUpdate-FIN-newRow: " + JSON.stringify(newRow));
+    console.log('5 -processRowUpdate-FIN-newRow: ' + JSON.stringify(newRow));
 
     if (bOk) {
       return newRow;
@@ -206,33 +206,33 @@ export const CuitsRestringidos = () => {
 
   const columns = [
     {
-      field: "cuit",
-      headerName: "CUIT",
+      field: 'cuit',
+      headerName: 'CUIT',
       flex: 1,
       editable: true,
-      headerAlign: "center",
-      align: "center",
-      headerClassName: "header--cell",
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
     },
     {
-      field: "observacion",
-      headerName: "Observacion",
+      field: 'observacion',
+      headerName: 'Observacion',
       flex: 1,
       editable: true,
-      headerAlign: "center",
-      align: "center",
-      headerClassName: "header--cell",
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
     },
     {
-      field: "actions",
-      type: "actions",
-      headerName: "Acciones",
-      headerAlign: "center",
-      align: "center",
-      headerClassName: "header--cell",
+      field: 'actions',
+      type: 'actions',
+      headerName: 'Acciones',
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
       flex: 1,
       getActions: ({ row }) => {
-        const isInEditMode = 
+        const isInEditMode =
           rowModesModel[rows.indexOf(row)]?.mode === GridRowModes.Edit;
 
         if (isInEditMode) {
@@ -241,7 +241,7 @@ export const CuitsRestringidos = () => {
               icon={<SaveIcon />}
               label="Guardar"
               sx={{
-                color: "primary.main",
+                color: 'primary.main',
               }}
               onClick={handleSaveClick(row)}
             />,
@@ -279,8 +279,8 @@ export const CuitsRestringidos = () => {
       <h1>Administracion de Cuits restringidos</h1>
       <Box
         sx={{
-          height: "600px",
-          width: "100%",
+          height: '600px',
+          width: '100%',
         }}
       >
         <ThemeProvider theme={themeWithLocale}>
@@ -289,7 +289,7 @@ export const CuitsRestringidos = () => {
             columns={columns}
             getRowId={(row) => rows.indexOf(row)}
             getRowClassName={(params) =>
-              rows.indexOf(params.row) % 2 === 0 ? "even" : "odd"
+              rows.indexOf(params.row) % 2 === 0 ? 'even' : 'odd'
             }
             editMode="row"
             rowModesModel={rowModesModel}
@@ -303,24 +303,24 @@ export const CuitsRestringidos = () => {
               toolbar: EditToolbar,
             }}
             slotProps={{
-              toolbar: { 
-                setRows, 
-                setRowModesModel, 
+              toolbar: {
+                setRows,
+                setRowModesModel,
                 volverPrimerPagina,
                 showQuickFilter: true,
-                themeWithLocale
-              }
+                themeWithLocale,
+              },
             }}
             sx={{
-              "& .MuiDataGrid-virtualScroller::-webkit-scrollbar": {
-                width: "8px",
-                visibility: "visible",
+              '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
+                width: '8px',
+                visibility: 'visible',
               },
-              "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb": {
-                backgroundColor: "#ccc",
+              '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
+                backgroundColor: '#ccc',
               },
-              "& .css-1iyq7zh-MuiDataGrid-columnHeaders": {
-                backgroundColor: "#1A76D2 !important",
+              '& .css-1iyq7zh-MuiDataGrid-columnHeaders': {
+                backgroundColor: '#1A76D2 !important',
               },
             }}
             paginationModel={paginationModel}

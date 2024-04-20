@@ -3,16 +3,16 @@ import {
   logon,
   logonDFA,
   usuarioLogueadoHabilitadoDFA,
-} from "./LoginApi.js";
-import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { useFormLoginInternalUser } from "../../hooks/useFormLoginInternalUser.js";
-import { InputComponent } from "@components/InputComponent.jsx";
-import { ButtonComponent } from "@components/ButtonComponent.jsx";
-import { showSwalSuccess } from "./LoginShowAlert.js";
-import Alert from "@mui/material/Alert";
-import Stack from "@mui/material/Stack";
-import "./LoginPage.css";
+} from './LoginApi.js';
+import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useFormLoginInternalUser } from '../../hooks/useFormLoginInternalUser.js';
+import { InputComponent } from '@components/InputComponent.jsx';
+import { ButtonComponent } from '@components/ButtonComponent.jsx';
+import { showSwalSuccess } from './LoginShowAlert.js';
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
+import './LoginPage.css';
 import {
   Button,
   FormControl,
@@ -21,10 +21,11 @@ import {
   InputLabel,
   OutlinedInput,
   TextField,
-} from "@mui/material";
-import { ThreeCircles } from "react-loader-spinner";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
-import localStorageService from "@/components/localStorage/localStorageService.js";
+} from '@mui/material';
+import { ThreeCircles } from 'react-loader-spinner';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import localStorageService from '@/components/localStorage/localStorageService.js';
+import NavBar from '@/components/navbar/NavBar.jsx';
 
 const VITE_WELCOME_PORTAL = import.meta.env.VITE_WELCOME_PORTAL;
 
@@ -35,7 +36,7 @@ export const LoginPage = () => {
   const [showVerificationForm, setShowVerificationForm] = useState(false);
   const [showAlertUser, setShowAlertUser] = useState(false);
   const [showAlertPassword, setShowAlertPassword] = useState(false);
-  const [verificationCode, setVerificationCode] = useState("310279");
+  const [verificationCode, setVerificationCode] = useState('310279');
   const [token, setToken] = useState(null);
   const [refreshToken, setRefreshToken] = useState(null);
   const [showLoading, setShowLoading] = useState(true);
@@ -58,8 +59,8 @@ export const LoginPage = () => {
     OnInputChangeLoginInternalUser,
     OnResetFormLoginInternalUser,
   } = useFormLoginInternalUser({
-    user: "",
-    passwordLoginInternalUser: "",
+    user: '',
+    passwordLoginInternalUser: '',
   });
 
   useEffect(() => {
@@ -70,7 +71,7 @@ export const LoginPage = () => {
 
   //Link a Registrar Compania
   const redirectToRegister = () => {
-    navigate("/registercompany", {
+    navigate('/registercompany', {
       replace: true,
     });
   };
@@ -89,51 +90,51 @@ export const LoginPage = () => {
   //Submit Form de Loguin
   const onLoginInternalUser = async (e) => {
     e.preventDefault();
-    if (user === "" || passwordLoginInternalUser === "") {
-      if (user === "") setShowAlertUser(true);
-      if (passwordLoginInternalUser === "") setShowAlertPassword(true);
+    if (user === '' || passwordLoginInternalUser === '') {
+      if (user === '') setShowAlertUser(true);
+      if (passwordLoginInternalUser === '') setShowAlertPassword(true);
       return false;
     }
 
     const loginDto = await logon(user, passwordLoginInternalUser);
-    console.log("ESTOY EN LA LINEA 90 RESPUESTA DE LOGINDTO");
+    console.log('ESTOY EN LA LINEA 90 RESPUESTA DE LOGINDTO');
     console.log(loginDto); // AQUI ES DONDE SE OBTIENE EL TOKEN Y EL TOKEN DE REFRESCO
 
     if (loginDto && loginDto.token) {
-      console.log("EXISTE loginDto.token");
+      console.log('EXISTE loginDto.token');
       setToken(loginDto.token);
       const usuarioConDFA = await usuarioLogueadoHabilitadoDFA(loginDto.token);
-      console.log("usuarioConDFA: ", usuarioConDFA); // TRUE O FALSE
+      console.log('usuarioConDFA: ', usuarioConDFA); // TRUE O FALSE
       let bUsuarioConDFA = false;
       if (usuarioConDFA && usuarioConDFA.valor) {
         bUsuarioConDFA = true;
       }
       console.log(bUsuarioConDFA);
       if (bUsuarioConDFA) {
-        console.log("usuarioHabilitadoDFA: TRUE !!!");
+        console.log('usuarioHabilitadoDFA: TRUE !!!');
         setShowInternalUserForm(false); // Esconde el form de usuario y clave
         setShowVerificationForm(true); // Muestra el form de DFA
       } else {
-        console.log("usuarioHabilitadoDFA: FALSE !!!");
+        console.log('usuarioHabilitadoDFA: FALSE !!!');
         setToken(loginDto.token);
         setRefreshToken(loginDto.tokenRefresco);
         //OnResetFormLoginInternalUser();
 
         const usuarioLogueado = await consultarUsuarioLogueado(loginDto.token);
-        console.log("usuarioLogueado: ");
+        console.log('usuarioLogueado: ');
         console.log(usuarioLogueado);
 
         getUsuarioLogueadoInfo(
           usuarioLogueado,
           loginDto.token,
-          loginDto.tokenRefresco
+          loginDto.tokenRefresco,
         );
 
         showSwalSuccess(VITE_WELCOME_PORTAL);
       }
     } else {
       console.log(loginDto);
-      console.log("onLoginInternalUser - INIT-loginDto:NO EXISTE");
+      console.log('onLoginInternalUser - INIT-loginDto:NO EXISTE');
     }
     OnResetFormLoginInternalUser();
   };
@@ -148,7 +149,7 @@ export const LoginPage = () => {
     e.preventDefault();
 
     const logonDfa = await logonDFA(token, verificationCode);
-    console.log("ESTOY EN LA LINEA 141 RESPUESTA DE logonDfa");
+    console.log('ESTOY EN LA LINEA 141 RESPUESTA DE logonDfa');
 
     if (logonDfa) {
       //showSwalSuccess(VITE_WELCOME_PORTAL);
@@ -163,23 +164,23 @@ export const LoginPage = () => {
 
   //Consulta Datos Usuario Logueado
   const getUsuarioLogueadoInfo = (usuarioLogueado, token, refreshToken) => {
-    console.log("usuarioInfoFinal - init");
+    console.log('usuarioInfoFinal - init');
     console.log(usuarioLogueado);
-    if (usuarioLogueado.hasOwnProperty("usuario")) {
+    if (usuarioLogueado.hasOwnProperty('usuario')) {
       usuarioLogueado.usuario.token = token;
       usuarioLogueado.usuario.tokenRefresco = refreshToken;
       console.log(usuarioLogueado);
-      navigate("/dashboard/inicio", {
+      navigate('/dashboard/inicio', {
         replace: true,
         state: {
           logged: true,
           usuarioLogueado,
         },
       });
-      console.log("HIZO navigate() !! ");
+      console.log('HIZO navigate() !! ');
     } else {
       console.log(
-        "usuarioInfoFinal - usuarioLogueado.hasOwnProperty() = FALSE"
+        'usuarioInfoFinal - usuarioLogueado.hasOwnProperty() = FALSE',
       );
     }
   };
@@ -195,124 +196,135 @@ export const LoginPage = () => {
   }, [showVerificationForm]); // useEffect se ejecutará cuando showVerificationForm cambie
 
   return (
-    <div className="wrapper_container">
-      {showInternalUserForm && (
-        <div className="wrapper">
-          <div className="contenedor_form">
-            <form onSubmit={onLoginInternalUser}>
-              <h1>Iniciar Sesión</h1>
-              <div className="input-group contenedor_usuario">
-                <TextField
-                  type="text"
-                  name="user"
-                  id="user"
-                  value={user}
-                  onChange={onInputChangeUser}
-                  autoComplete="off"
-                  label="Usuario"
-                  className="input_data"
-                />
-                {showAlertUser && (
-                  <Stack sx={{ width: "100%" }} spacing={2}>
-                    <Alert severity="error">Campo requerido</Alert>
-                  </Stack>
-                )}
-              </div>
-              <div className="input-group">
-                <FormControl variant="outlined">
-                  <InputLabel htmlFor="outlined-adornment-password">
-                    Password
-                  </InputLabel>
-                  <OutlinedInput
-                    type={showPassword ? "text" : "password"}
-                    name="passwordLoginInternalUser"
-                    id="passwordLoginInternalUser"
-                    value={passwordLoginInternalUser}
-                    onChange={onInputChangePassword}
-                    autoComplete="off"
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
-                          edge="end"
-                        >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                    label="Password"
-                  />
-                </FormControl>
-                {showAlertPassword && (
-                  <Stack sx={{ width: "100%" }} spacing={2}>
-                    <Alert severity="error">Campo requerido</Alert>
-                  </Stack>
-                )}
-              </div>
-              <Button
-                variant="contained"
-                sx={{
-                  marginTop:
-                    showAlertUser && showAlertPassword ? "50px" : "120px",
-                }}
-                type="submit"
-                className="siguiente"
-              >
-                SIGUIENTE
-              </Button>
-              <div className="container_btn_pass_firts">
-                <a className="link_animado">Recupero de Contraseña</a>
-                <a className="link_animado" onClick={redirectToRegister}>
-                  Ingreso por primera vez
-                </a>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-      {showVerificationForm && (
-        <div className="wrapper">
-          <div className="contenedor_form_code">
-            <h1>Ingrese Token de validación</h1>
-
-            <form onSubmit={onVerificationCodeSubmit}>
-              <div className="input_group_code">
-                <ThreeCircles
-                  visible={showLoading}
-                  height="100"
-                  width="100"
-                  color="#1A76D2"
-                  ariaLabel="three-circles-loading"
-                  wrapperStyle={{
-                    margin: "0 auto",
-                  }}
-                  wrapperClass=""
-                />
-                {showInputComponent && (
+    <div className="container_login_page">
+      <NavBar
+        estilos={{
+          backgroundColor: '#1a76d2',
+        }}
+        estilosLogo={{
+          width: '100px',
+        }}
+        mostrarBtn={false}
+      />
+      <div className="wrapper_container">
+        {showInternalUserForm && (
+          <div className="wrapper">
+            <div className="contenedor_form">
+              <form onSubmit={onLoginInternalUser}>
+                <h1>Iniciar Sesión</h1>
+                <div className="input-group contenedor_usuario">
                   <TextField
                     type="text"
-                    name="verificationCode"
-                    id="verificationCode"
-                    value={verificationCode}
-                    onChange={onVerificationCodeChange}
+                    name="user"
+                    id="user"
+                    value={user}
+                    onChange={onInputChangeUser}
                     autoComplete="off"
-                    label="Código"
+                    label="Usuario"
                     className="input_data"
                   />
-                )}
-              </div>
-              <ButtonComponent
-                styles={{
-                  marginTop: "157px",
-                }}
-                name={"INGRESAR"}
-              />
-            </form>
+                  {showAlertUser && (
+                    <Stack sx={{ width: '100%' }} spacing={2}>
+                      <Alert severity="error">Campo requerido</Alert>
+                    </Stack>
+                  )}
+                </div>
+                <div className="input-group">
+                  <FormControl variant="outlined">
+                    <InputLabel htmlFor="outlined-adornment-password">
+                      Password
+                    </InputLabel>
+                    <OutlinedInput
+                      type={showPassword ? 'text' : 'password'}
+                      name="passwordLoginInternalUser"
+                      id="passwordLoginInternalUser"
+                      value={passwordLoginInternalUser}
+                      onChange={onInputChangePassword}
+                      autoComplete="off"
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowPassword}
+                            onMouseDown={handleMouseDownPassword}
+                            edge="end"
+                          >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                      label="Password"
+                    />
+                  </FormControl>
+                  {showAlertPassword && (
+                    <Stack sx={{ width: '100%' }} spacing={2}>
+                      <Alert severity="error">Campo requerido</Alert>
+                    </Stack>
+                  )}
+                </div>
+                <Button
+                  variant="contained"
+                  sx={{
+                    marginTop:
+                      showAlertUser && showAlertPassword ? '50px' : '120px',
+                  }}
+                  type="submit"
+                  className="siguiente"
+                >
+                  SIGUIENTE
+                </Button>
+                <div className="container_btn_pass_firts">
+                  <a className="link_animado">Recupero de Contraseña</a>
+                  <a className="link_animado" onClick={redirectToRegister}>
+                    Ingreso por primera vez
+                  </a>
+                </div>
+              </form>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+        {showVerificationForm && (
+          <div className="wrapper">
+            <div className="contenedor_form_code">
+              <h1>Ingrese Token de validación</h1>
+
+              <form onSubmit={onVerificationCodeSubmit}>
+                <div className="input_group_code">
+                  <ThreeCircles
+                    visible={showLoading}
+                    height="100"
+                    width="100"
+                    color="#1A76D2"
+                    ariaLabel="three-circles-loading"
+                    wrapperStyle={{
+                      margin: '0 auto',
+                    }}
+                    wrapperClass=""
+                  />
+                  {showInputComponent && (
+                    <TextField
+                      type="text"
+                      name="verificationCode"
+                      id="verificationCode"
+                      value={verificationCode}
+                      onChange={onVerificationCodeChange}
+                      autoComplete="off"
+                      label="Código"
+                      className="input_data"
+                    />
+                  )}
+                </div>
+                <ButtonComponent
+                  styles={{
+                    marginTop: '157px',
+                  }}
+                  name={'INGRESAR'}
+                />
+              </form>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

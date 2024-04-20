@@ -1,6 +1,6 @@
-import { axiosCrud } from "@components/axios/axiosCrud";
-import { showErrorBackEnd } from "@/components/axios/showErrorBackEnd";
-import swal from "@components/swal/swal";
+import { axiosCrud } from '@components/axios/axiosCrud';
+import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
+import swal from '@components/swal/swal';
 
 const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
 const HTTP_MSG_MODI = import.meta.env.VITE_HTTP_MSG_MODI;
@@ -18,30 +18,30 @@ export const consultarRamo = async () => {
   } catch (error) {
     showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
-      error
+      error,
     );
     return [];
   }
 };
 
 export const consultarEmpresa = async () => {
-  const URL = "/auth/login/usuario";
+  const URL = '/auth/login/usuario';
   try {
     const data = await axiosCrud.consultar(URL);
     return data || [];
   } catch (error) {
     showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
-      error
+      error,
     );
     return [];
   }
 };
 
 export const actualizar = async (registro) => {
-  const URL = "/empresa";
+  const URL = '/empresa';
   try {
-    console.log("registro: ");
+    console.log('registro: ');
     console.log(registro);
     const response = await axiosCrud.actualizar(URL, registro);
     if (response == true) {

@@ -1,14 +1,14 @@
 .feriados_container {
-    margin: 50px auto;
-    width: 90%;
+  margin: 50px auto;
+  width: 90%;
 }
 
 .feriados_container h1 {
-    color: #1A76D2;
-    margin-bottom: 65px;
-    text-align: left !important;
+  color: #1a76d2;
+  margin-bottom: 65px;
+  text-align: left !important;
 }
 
-.even{
-    background-color: rgb(238, 238, 238);
+.even {
+  background-color: rgb(238, 238, 238);
 }

@@ -1,27 +1,25 @@
-import { useState } from 'react'
+import { useState } from 'react';
 
 export const useFormLoginInternalUser = (initialState = {}) => {
-    const [formState, setFormState] = useState(initialState);
+  const [formState, setFormState] = useState(initialState);
 
-    const OnInputChangeLoginInternalUser = ({ target }) => {
+  const OnInputChangeLoginInternalUser = ({ target }) => {
+    const { name, value } = target;
 
-        const { name, value } = target;
+    setFormState({
+      ...formState,
+      [name]: value,
+    });
+  };
 
-        setFormState({
-            ...formState,
-            [name]: value
-        });
+  const OnResetFormLoginInternalUser = () => {
+    setFormState(initialState);
+  };
 
-    }
-
-    const OnResetFormLoginInternalUser = () => {
-        setFormState(initialState);
-    }
-
-    return {
-        ...formState,
-        formState,
-        OnInputChangeLoginInternalUser,
-        OnResetFormLoginInternalUser
-    }
-}
+  return {
+    ...formState,
+    formState,
+    OnInputChangeLoginInternalUser,
+    OnResetFormLoginInternalUser,
+  };
+};

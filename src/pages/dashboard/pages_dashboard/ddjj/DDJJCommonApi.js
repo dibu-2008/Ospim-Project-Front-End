@@ -1,6 +1,6 @@
-import oAxios from "@components/axios/axiosInstace";
-import { showErrorBackEnd } from "@/components/axios/showErrorBackEnd";
-import swal from "@/components/swal/swal";
+import oAxios from '@components/axios/axiosInstace';
+import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
+import swal from '@/components/swal/swal';
 
 const HTTP_MSG_MODI = import.meta.env.VITE_HTTP_MSG_MODI;
 const HTTP_MSG_MODI_ERROR = import.meta.env.VITE_HTTP_MSG_MODI_ERROR;

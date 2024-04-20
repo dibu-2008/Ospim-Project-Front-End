@@ -1,5 +1,5 @@
-import oAxios from "@components/axios/axiosInstace";
-import { errorBackendResponse } from "../../../../errors/errorBackendResponse";
+import oAxios from '@components/axios/axiosInstace';
+import { errorBackendResponse } from '../../../../errors/errorBackendResponse';
 
 export const ObtenerDatosDeContacto = async () => {
   /*
@@ -11,7 +11,7 @@ export const ObtenerDatosDeContacto = async () => {
   return contacto;
   */
   const URL = `/ospim/contacto`;
-  console.log("ObtenerDatosDeContacto - URL: ");
+  console.log('ObtenerDatosDeContacto - URL: ');
   console.log(URL);
 
   try {
@@ -19,8 +19,8 @@ export const ObtenerDatosDeContacto = async () => {
     const data = await response.data;
     return data || [];
   } catch (error) {
-    console.log("ObtenerDatosDeContacto - ERROR 11 ");
-    console.log("ObtenerDatosDeContacto - ERROR - error: ");
+    console.log('ObtenerDatosDeContacto - ERROR 11 ');
+    console.log('ObtenerDatosDeContacto - ERROR - error: ');
     console.log(error);
     errorBackendResponse(error);
   }
@@ -34,7 +34,7 @@ export const ObtenerPublicacionesVigentes = async () => {
     const data = await response.data;
     return data || [];
   } catch (error) {
-    console.log("ObtenerPublicacionesVigentes - ERROR");
+    console.log('ObtenerPublicacionesVigentes - ERROR');
     errorBackendResponse(error);
   }
 };
