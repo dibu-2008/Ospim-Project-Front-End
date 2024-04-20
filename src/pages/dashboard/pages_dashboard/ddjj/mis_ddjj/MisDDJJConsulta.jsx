@@ -38,24 +38,25 @@ export const MisDDJJConsulta = ({
 
   const handleChangeHasta = (date) => setHasta(date);
 
-  const buscarDeclaracionesJuradas = async () => {
+  const buscarDDJJ = async () => {
     try {
       const ddjjResponse = await axiosDDJJ.consultar(ID_EMPRESA);
       setRowsMisDdjj(ddjjResponse);
       console.log("ddjjResponse", ddjjResponse);
       if (desde && desde.$d && hasta && hasta.$d) {
+        console.log("buscarDDJJ - ENTRO !!");
         const { $d: $desde } = desde;
         const { $d: $hasta } = hasta;
 
         const fechaDesde = new Date($desde);
-        fechaDesde.setDate(1); 
-        fechaDesde.setUTCHours(0, 0, 0, 0); 
-        const fechaIsoDesde = fechaDesde.toISOString(); 
+        fechaDesde.setDate(1);
+        fechaDesde.setUTCHours(0, 0, 0, 0);
+        const fechaIsoDesde = fechaDesde.toISOString();
 
         const fechaHasta = new Date($hasta);
-        fechaHasta.setDate(1); 
-        fechaHasta.setUTCHours(0, 0, 0, 0); 
-        const fechaIsoHasta = fechaHasta.toISOString(); 
+        fechaHasta.setDate(1);
+        fechaHasta.setUTCHours(0, 0, 0, 0);
+        const fechaIsoHasta = fechaHasta.toISOString();
 
         const declaracionesFiltradas = ddjjResponse.filter((ddjj) => {
           const fecha = new Date(ddjj.periodo);
@@ -80,10 +81,6 @@ export const MisDDJJConsulta = ({
     } catch (error) {
       console.error("Error al buscar declaraciones juradas:", error);
     }
-  };
-
-  const exportarDeclaracionesJuradas = () => {
-    console.log("Exportar declaraciones juradas");
   };
 
   return (
@@ -137,15 +134,9 @@ export const MisDDJJConsulta = ({
           justifyContent="center"
           alignItems="center"
         >
-          <Button onClick={buscarDeclaracionesJuradas} variant="contained">
+          <Button onClick={buscarDDJJ} variant="contained">
             Buscar
           </Button>
-
-          <CSVLink data={data}>
-            <Button variant="contained" onClick={exportarDeclaracionesJuradas}>
-              Exportar CSV
-            </Button>
-          </CSVLink>
         </Stack>
       </div>
       <Stack direction="row" justifyContent="center" alignItems="center">
