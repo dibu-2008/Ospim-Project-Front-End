@@ -14,9 +14,10 @@ const formatDate = (value) => {
     const day = date.getUTCDate().toString().padStart(2, "0");
     const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
     const year = date.getUTCFullYear();
-
-    return `${day}/${month}/${year}`;
+    const strFecha = `${day}/${month}/${year}`;
+    return strFecha;
   } catch (error) {
+    console.log(error);
     return "";
   }
 };
@@ -53,20 +54,39 @@ const formatPeriodo2 = (value) => {
 
 const formatFechaGrilla = (value) => {
   try {
-
-    return new Date(value).toISOString().split('T')[0];
-
-  }catch (error) {
+    return new Date(value).toISOString().split("T")[0];
+  } catch (error) {
     return "";
   }
-}
+};
+
+const sumaTresHoras = (value) => {
+  const fecha = value;
+  const nuevaFecha = new Date(fecha.getTime() + 3 * 60 * 60 * 1000);
+  return nuevaFecha;
+};
+
+const esFechaValida = (fechaString) => {
+  let fecha = new Date(fechaString);
+  return !isNaN(fecha.getTime()) && fechaString === fecha.toISOString();
+};
+
+const toFechaValida = (value) => {
+  if (esFechaValida(value)) {
+    return sumaTresHoras(new Date(value)).toISOString();
+  } else if (value.length === 10) {
+    return sumaTresHoras(new Date(value)).toISOString();
+  } else {
+    return sumaTresHoras(new Date(`${value}-01`)).toISOString();
+  }
+};
 
 const formatter = {
   currency: formatCurrency,
   date: formatDate,
   periodo: formatPeriodo,
   periodo2: formatPeriodo2,
-  fechaGrilla: formatFechaGrilla
+  fechaGrilla: formatFechaGrilla,
 };
 
 export default formatter;

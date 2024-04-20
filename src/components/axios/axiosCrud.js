@@ -1,4 +1,3 @@
-
 import oAxios from "@components/axios/axiosInstace";
 
 export const axiosCrud = {
@@ -66,7 +65,11 @@ export const axiosActualizar = async (UrlApi, oEntidad) => {
     delete oEntidad.id;
     const response = await oAxios.put(URL, oEntidad);
     oEntidad.id = pkId;
-    if (response.status !== 204 && response.status !== 200) {
+    if (
+      response.status !== 204 &&
+      response.status !== 200 &&
+      response.status !== 201
+    ) {
       //JsonServer devuelve 200
       console.log(
         `axiosCrud.actualizar() - ERROR 2 - UrlApi: ${UrlApi} - response.status !== 204 - response: ${JSON.stringify(
@@ -93,6 +96,7 @@ export const axiosEliminar = async (UrlApi, id) => {
   const URL = `${UrlApi}/${id}`;
   try {
     const response = await oAxios.delete(URL);
+    console.log(response);
     if (response.status !== 204 && response.status !== 200) {
       //JsonServer devuelve 200
       console.log(

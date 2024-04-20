@@ -12,65 +12,63 @@ const HTTP_MSG_BAJA_ERROR = import.meta.env.VITE_HTTP_MSG_BAJA_ERROR;
 const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
 
 export const obtenerDDJJ = async () => {
-    const URL = `/ddjjConsulta`;
-    try {
-        const data = await axiosCrud.consultar(URL);
-        return data || [];
-    } catch (error) {
-        console.log(
-            "obtenerMisDeclaracionesJuradas() - catch-error - URL: " +
-            URL +
-            " - status: " +
-            error.status
-        );
+  const URL = `/ddjj/totales`;
+  try {
+    const data = await axiosCrud.consultar(URL);
+    return data || [];
+  } catch (error) {
+    console.log(
+      "obtenerMisDeclaracionesJuradas() - catch-error - URL: " +
+        URL +
+        " - status: " +
+        error.status
+    );
 
-        showErrorBackEnd(
-            HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
-            error
-        );
-        return [];
-    }
+    showErrorBackEnd(
+      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
+      error
+    );
+    return [];
+  }
 };
 
 export const consultaDDJJfiltrada = async (desde, hasta, cuit) => {
-    
-    let queryStringDesde = "";
-    let queryStringHasta = "";
-    
-    if (desde !== null) {
-        queryStringDesde = `&desde=${encodeURIComponent(desde)}`;
-    }
-    if (hasta !== null) {
-        queryStringHasta = `&hasta=${encodeURIComponent(hasta)}`;
-    }
-    
-    const URL = `/ddjj/totales?cuit=${cuit}${queryStringDesde}${queryStringHasta}`;
+  let queryStringDesde = "";
+  let queryStringHasta = "";
 
-    try {
-        const data = await axiosCrud.consultar(URL);
-        return data || [];
-    } catch (error) {
-        console.log(
-            "obtenerPorRangoCuit() - catch-error - URL: " +
-            URL +
-            " - status: " +
-            error.status
-        );
+  if (desde !== null) {
+    queryStringDesde = `&desde=${encodeURIComponent(desde)}`;
+  }
+  if (hasta !== null) {
+    queryStringHasta = `&hasta=${encodeURIComponent(hasta)}`;
+  }
 
-        showErrorBackEnd(
-            HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
-            error
-        );
-        return [];
-    }
-}
+  const URL = `/ddjj/totales?cuit=${cuit}${queryStringDesde}${queryStringHasta}`;
 
+  try {
+    const data = await axiosCrud.consultar(URL);
+    return data || [];
+  } catch (error) {
+    console.log(
+      "obtenerPorRangoCuit() - catch-error - URL: " +
+        URL +
+        " - status: " +
+        error.status
+    );
+
+    showErrorBackEnd(
+      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
+      error
+    );
+    return [];
+  }
+};
 
 export const axiosDDJJEmpleado = {
-    consultar: async function () {
-        return obtenerDDJJ();
-    },
-    consultarFiltrado: async function (desde, hasta, cuit) {
-        return consultaDDJJfiltrada(desde, hasta, cuit);
-    },
+  consultar: async function () {
+    return obtenerDDJJ();
+  },
+  consultarFiltrado: async function (desde, hasta, cuit) {
+    return consultaDDJJfiltrada(desde, hasta, cuit);
+  },
 };

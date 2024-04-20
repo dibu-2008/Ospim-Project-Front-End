@@ -63,7 +63,7 @@ const crearNuevoRegistro = (props) => {
     setRowModesModel,
     volverPrimerPagina,
     showQuickFilter,
-    themeWithLocale
+    themeWithLocale,
   } = props;
 
   const altaHandleClick = () => {
@@ -79,13 +79,14 @@ const crearNuevoRegistro = (props) => {
   };
 
   return (
-    <GridToolbarContainer theme={themeWithLocale} style={{ display: 'flex', justifyContent: 'space-between' }}>
+    <GridToolbarContainer
+      theme={themeWithLocale}
+      style={{ display: "flex", justifyContent: "space-between" }}
+    >
       <Button color="primary" startIcon={<AddIcon />} onClick={altaHandleClick}>
         Nuevo Registro
       </Button>
-      <GridToolbar
-        showQuickFilter={showQuickFilter}
-      />
+      <GridToolbar showQuickFilter={showQuickFilter} />
     </GridToolbarContainer>
   );
 };
@@ -270,7 +271,7 @@ export const Feriados = () => {
       headerClassName: "header--cell",
       valueFormatter: ({ value }) => {
         return formatter.date(value);
-      }
+      },
     },
     {
       field: "actions",
@@ -383,7 +384,7 @@ export const Feriados = () => {
                 volverPrimerPagina,
                 showQuickFilter: true,
                 showColumnMenu: true,
-                themeWithLocale
+                themeWithLocale,
               },
             }}
             paginationModel={paginationModel}
