@@ -6,7 +6,6 @@ import { Inicio } from "../pages/dashboard/pages_dashboard/inicio/Inicio";
 import NavBar from "../components/navbar/NavBar";
 import { DatosEmpresa } from "../pages/dashboard/pages_dashboard/datos_empresa/DatosEmpresa";
 import { Publicaciones } from "../pages/dashboard/pages_dashboard/publicaciones/Publicaciones";
-import { DDJJTabs } from "@/pages/dashboard/pages_dashboard/ddjj/DDJJTabs";
 import { RegisterPage } from "../pages/RegisterPage";
 import DashboardPage from "../pages/dashboard/DashboardPage";
 import { LoginPage } from "../pages/login/LoginPage";

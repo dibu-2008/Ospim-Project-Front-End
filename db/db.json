@@ -212,6 +212,42 @@
         }
       ],
       "id": 4
+    },
+    {
+      "razonSocial": "",
+      "cuit": "",
+      "clave": "",
+      "email": "",
+      "telefono": "",
+      "telefono_prefijo": "",
+      "whatsapp": "",
+      "whatsapp_prefijo": "",
+      "ramoId": "",
+      "domicilios": [
+        {
+          "tipo": "",
+          "provinciaId": "",
+          "localidadId": "",
+          "calle": "",
+          "piso": "",
+          "oficina": "",
+          "cp": "",
+          "planta": ""
+        }
+      ],
+      "id": 5
+    },
+    {
+      "razonSocial": "",
+      "cuit": "",
+      "clave": "",
+      "email": "",
+      "telefono": "",
+      "telefono_prefijo": "",
+      "whatsapp": "",
+      "whatsapp_prefijo": "",
+      "ramoId": "",
+      "id": 6
     }
   ],
   "rol": [
@@ -1086,7 +1122,7 @@
       "nombre": "20233725006",
       "rol": [
         {
-          "descripcion": "EMPLEADO"
+          "descripcion": "EMPLEADOR"
         }
       ]
     },
