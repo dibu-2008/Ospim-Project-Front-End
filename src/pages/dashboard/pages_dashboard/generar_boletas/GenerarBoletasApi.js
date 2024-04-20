@@ -1,7 +1,7 @@
-import formatter from "@/common/formatter";
-import { axiosCrud } from "@/components/axios/axiosCrud";
-import oAxios from "@/components/axios/axiosInstace";
-import { showErrorBackEnd } from "@/components/axios/showErrorBackEnd";
+import formatter from '@/common/formatter';
+import { axiosCrud } from '@/components/axios/axiosCrud';
+import oAxios from '@/components/axios/axiosInstace';
+import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
@@ -28,7 +28,7 @@ export const calcularInteresBoleta = async (
   empresa_id,
   ddjj_id,
   boleta_codigo,
-  intencion_de_pago
+  intencion_de_pago,
 ) => {
   const URL = `${BACKEND_URL}/empresa/${empresa_id}/ddjj/${ddjj_id}/boleta/${boleta_codigo}/calcular-interes`;
   console.log(URL);
@@ -45,7 +45,7 @@ export const calcularInteresBoleta = async (
 export const calcularInteresBoletas = async (
   empresa_id,
   ddjj_id,
-  intencion_de_pago
+  intencion_de_pago,
 ) => {
   const URL = `${BACKEND_URL}/empresa/${empresa_id}/ddjj/${ddjj_id}/calcular-intereses`;
   try {
@@ -77,7 +77,7 @@ export const generarBoletasPost = async (empresa_id, ddjj_id, boletas) => {
     if (response) {
       return response;
     } else {
-      console.error("Error al generar boletas");
+      console.error('Error al generar boletas');
     }
   } catch (error) {
     const HTTP_MSG =

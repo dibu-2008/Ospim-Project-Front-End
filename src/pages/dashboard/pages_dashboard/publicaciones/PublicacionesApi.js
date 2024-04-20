@@ -1,6 +1,6 @@
-import { axiosCrud } from "@components/axios/axiosCrud";
-import { showErrorBackEnd } from "@/components/axios/showErrorBackEnd";
-import swal from "@/components/swal/swal";
+import { axiosCrud } from '@components/axios/axiosCrud';
+import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
+import swal from '@/components/swal/swal';
 
 const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
 const HTTP_MSG_MODI = import.meta.env.VITE_HTTP_MSG_MODI;
@@ -9,7 +9,7 @@ const HTTP_MSG_ALTA_ERROR = import.meta.env.VITE_HTTP_MSG_ALTA_ERROR;
 const HTTP_MSG_MODI_ERROR = import.meta.env.VITE_HTTP_MSG_MODI_ERROR;
 const HTTP_MSG_BAJA_ERROR = import.meta.env.VITE_HTTP_MSG_BAJA_ERROR;
 
-const URL_ENTITY = "/publicaciones";
+const URL_ENTITY = '/publicaciones';
 
 export const axiosPublicaciones = {
   consultar: async function (UrlApi) {
@@ -36,7 +36,7 @@ export const consultar = async () => {
   } catch (error) {
     showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL_ENTITY} - status: ${error.status})`,
-      error
+      error,
     );
     return [];
   }
@@ -55,10 +55,10 @@ export const crear = async (nuevoReg) => {
   } catch (error) {
     console.log(
       `crearCuitRestringido() - ERROR 1 - nuevoReg: ${JSON.stringify(
-        nuevoReg
-      )} - error: ${JSON.stringify(error)}`
+        nuevoReg,
+      )} - error: ${JSON.stringify(error)}`,
     );
-    console.log("crearCuitRestringido - ERROR - return {}   ");
+    console.log('crearCuitRestringido - ERROR - return {}   ');
     return {};
   }
 };
@@ -75,7 +75,7 @@ export const actualizar = async (reg) => {
     }
   } catch (error) {
     console.log(
-      `actualizarCuitRestringido() - ERROR 1 - error: ${JSON.stringify(error)}`
+      `actualizarCuitRestringido() - ERROR 1 - error: ${JSON.stringify(error)}`,
     );
     return false;
   }
@@ -94,7 +94,7 @@ export const eliminar = async (id) => {
     }
   } catch (error) {
     console.log(
-      `eliminarCuitRestringido() - ERROR 1 - error: ${JSON.stringify(error)}`
+      `eliminarCuitRestringido() - ERROR 1 - error: ${JSON.stringify(error)}`,
     );
     return false;
   }

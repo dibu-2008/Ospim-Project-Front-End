@@ -1,13 +1,13 @@
-import * as locales from "@mui/material/locale";
-import { useState, useEffect, useMemo } from "react";
-import { Box, Button } from "@mui/material";
+import * as locales from '@mui/material/locale';
+import { useState, useEffect, useMemo } from 'react';
+import { Box, Button } from '@mui/material';
 
-import { Add, Edit, DeleteOutlined, Save, Close } from "@mui/icons-material";
-import AddIcon from "@mui/icons-material/Add";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/DeleteOutlined";
-import SaveIcon from "@mui/icons-material/Save";
-import CancelIcon from "@mui/icons-material/Close";
+import { Add, Edit, DeleteOutlined, Save, Close } from '@mui/icons-material';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Close';
 
 import {
   GridRowModes,
@@ -16,22 +16,22 @@ import {
   GridActionsCellItem,
   GridRowEditStopReasons,
   GridToolbar,
-} from "@mui/x-data-grid";
+} from '@mui/x-data-grid';
 
-import { axiosRoles } from "./RolesApi";
-import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
+import { axiosRoles } from './RolesApi';
+import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 
-import Swal from "sweetalert2";
-import "./Roles.css";
+import Swal from 'sweetalert2';
+import './Roles.css';
 
 const crearNuevoRegistro = (props) => {
-  const { 
-    setRows, 
-    rows, 
-    setRowModesModel, 
+  const {
+    setRows,
+    rows,
+    setRowModesModel,
     volverPrimerPagina,
     showQuickFilter,
-    themeWithLocale
+    themeWithLocale,
   } = props;
 
   const altaHandleClick = () => {
@@ -41,27 +41,28 @@ const crearNuevoRegistro = (props) => {
     const id = newId;
     volverPrimerPagina();
 
-    setRows((oldRows) => [{ id, descripcion: "", isNew: true }, ...oldRows]);
+    setRows((oldRows) => [{ id, descripcion: '', isNew: true }, ...oldRows]);
     setRowModesModel((oldModel) => ({
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
+      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
       ...oldModel,
     }));
   };
 
   return (
-    <GridToolbarContainer theme={themeWithLocale} style={{ display: 'flex', justifyContent: 'space-between' }}>
+    <GridToolbarContainer
+      theme={themeWithLocale}
+      style={{ display: 'flex', justifyContent: 'space-between' }}
+    >
       <Button color="primary" startIcon={<AddIcon />} onClick={altaHandleClick}>
         Nuevo Registro
       </Button>
-      <GridToolbar
-        showQuickFilter={showQuickFilter}
-      />
+      <GridToolbar showQuickFilter={showQuickFilter} />
     </GridToolbarContainer>
   );
 };
 
 export const Roles = () => {
-  const [locale, setLocale] = useState("esES");
+  const [locale, setLocale] = useState('esES');
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
   const [paginationModel, setPaginationModel] = useState({
@@ -80,7 +81,7 @@ export const Roles = () => {
 
   const themeWithLocale = useMemo(
     () => createTheme(theme, locales[locale]),
-    [locale, theme]
+    [locale, theme],
   );
 
   useEffect(() => {
@@ -109,13 +110,13 @@ export const Roles = () => {
     const showSwalConfirm = async () => {
       try {
         Swal.fire({
-          title: "¿Estás seguro?",
-          text: "¡No podrás revertir esto!",
-          icon: "warning",
+          title: '¿Estás seguro?',
+          text: '¡No podrás revertir esto!',
+          icon: 'warning',
           showCancelButton: true,
-          confirmButtonColor: "#1A76D2",
-          cancelButtonColor: "#6c757d",
-          confirmButtonText: "Si, bórralo!",
+          confirmButtonColor: '#1A76D2',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: 'Si, bórralo!',
         }).then(async (result) => {
           if (result.isConfirmed) {
             const bBajaOk = await axiosRoles.eliminar(id);
@@ -123,7 +124,7 @@ export const Roles = () => {
           }
         });
       } catch (error) {
-        console.error("Error al ejecutar eliminarRoles:", error);
+        console.error('Error al ejecutar eliminarRoles:', error);
       }
     };
 
@@ -143,11 +144,11 @@ export const Roles = () => {
   };
 
   const processRowUpdate = async (newRow, oldRow) => {
-    console.log("processRowUpdate - INIT");
+    console.log('processRowUpdate - INIT');
     let bOk = false;
 
     if (newRow.isNew) {
-      console.log("processRowUpdate - ALTA");
+      console.log('processRowUpdate - ALTA');
       try {
         delete newRow.id;
         delete newRow.isNew;
@@ -159,26 +160,26 @@ export const Roles = () => {
           const newRows = rows.map((row) => (row.isNew ? newRow : row));
           setRows(newRows);
         } else {
-          console.log("alta sin ID generado");
+          console.log('alta sin ID generado');
         }
       } catch (error) {
         console.log(
-          "X - processRowUpdate - ALTA - ERROR: " + JSON.stringify(error)
+          'X - processRowUpdate - ALTA - ERROR: ' + JSON.stringify(error),
         );
       }
     } else {
-      console.log("3 - processRowUpdate - MODI ");
+      console.log('3 - processRowUpdate - MODI ');
       try {
         delete newRow.isNew;
         bOk = await axiosRoles.actualizar(newRow);
-        console.log("4 - processRowUpdate - MODI - bOk: " + bOk);
+        console.log('4 - processRowUpdate - MODI - bOk: ' + bOk);
         newRow.isNew = false;
         if (bOk) {
           setRows(rows.map((row) => (row.id === newRow.id ? newRow : row)));
         }
       } catch (error) {
         console.log(
-          "X - processRowUpdate - MODI - ERROR: " + JSON.stringify(error)
+          'X - processRowUpdate - MODI - ERROR: ' + JSON.stringify(error),
         );
       }
     }
@@ -196,24 +197,24 @@ export const Roles = () => {
 
   const columnas = [
     {
-      field: "descripcion",
-      headerName: "Descripción",
+      field: 'descripcion',
+      headerName: 'Descripción',
       flex: 1,
-      type: "string",
+      type: 'string',
       editable: true,
-      headerAlign: "center",
-      align: "center",
-      headerClassName: "header--cell",
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
     },
     {
-      field: "actions",
-      type: "actions",
-      headerName: "Acciones",
+      field: 'actions',
+      type: 'actions',
+      headerName: 'Acciones',
       flex: 1,
-      cellClassName: "actions",
-      headerAlign: "center",
-      align: "center",
-      headerClassName: "header--cell",
+      cellClassName: 'actions',
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
@@ -222,7 +223,7 @@ export const Roles = () => {
             <GridActionsCellItem
               icon={<SaveIcon />}
               label="Guardar"
-              sx={{ color: "primary.main" }}
+              sx={{ color: 'primary.main' }}
               onClick={handleSaveClick(id)}
             />,
             <GridActionsCellItem
@@ -258,13 +259,13 @@ export const Roles = () => {
       <h1>Administración de Roles</h1>
       <Box
         sx={{
-          height: "600px",
-          width: "100%",
-          "& .actions": {
-            color: "text.secondary",
+          height: '600px',
+          width: '100%',
+          '& .actions': {
+            color: 'text.secondary',
           },
-          "& .textPrimary": {
-            color: "text.primary",
+          '& .textPrimary': {
+            color: 'text.primary',
           },
         }}
       >
@@ -281,25 +282,25 @@ export const Roles = () => {
             }
             slots={{ toolbar: crearNuevoRegistro }}
             slotProps={{
-              toolbar: { 
-                setRows, 
-                rows, 
-                setRowModesModel, 
+              toolbar: {
+                setRows,
+                rows,
+                setRowModesModel,
                 volverPrimerPagina,
                 showQuickFilter: true,
-                themeWithLocale
+                themeWithLocale,
               },
             }}
             sx={{
-              "& .MuiDataGrid-virtualScroller::-webkit-scrollbar": {
-                width: "8px",
-                visibility: "visible",
+              '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
+                width: '8px',
+                visibility: 'visible',
               },
-              "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb": {
-                backgroundColor: "#ccc",
+              '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
+                backgroundColor: '#ccc',
               },
-              "& .css-1iyq7zh-MuiDataGrid-columnHeaders": {
-                backgroundColor: "#1A76D2 !important",
+              '& .css-1iyq7zh-MuiDataGrid-columnHeaders': {
+                backgroundColor: '#1A76D2 !important',
               },
             }}
             paginationModel={paginationModel}

@@ -1,6 +1,6 @@
-import { axiosCrud } from "@components/axios/axiosCrud";
-import { showErrorBackEnd } from "@/components/axios/showErrorBackEnd";
-import swal from "@/components/swal/swal";
+import { axiosCrud } from '@components/axios/axiosCrud';
+import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
+import swal from '@/components/swal/swal';
 
 const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
 const HTTP_MSG_MODI = import.meta.env.VITE_HTTP_MSG_MODI;
@@ -10,7 +10,7 @@ const HTTP_MSG_MODI_ERROR = import.meta.env.VITE_HTTP_MSG_MODI_ERROR;
 const HTTP_MSG_BAJA_ERROR = import.meta.env.VITE_HTTP_MSG_BAJA_ERROR;
 const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
 
-const URL_ENTITY = "/roles";
+const URL_ENTITY = '/roles';
 
 export const axiosRoles = {
   consultar: async function () {
@@ -41,21 +41,21 @@ export const consultar = async () => {
   } catch (error) {
     showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL_ENTITY} - status: ${error.status})`,
-      error
+      error,
     );
     return [];
   }
 };
 
 export const deUsuarioConsultar = async () => {
-  let URL = URL_ENTITY + "/usuario-interno";
+  let URL = URL_ENTITY + '/usuario-interno';
   try {
     const data = await axiosCrud.consultar(URL);
     return data || [];
   } catch (error) {
     showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
-      error
+      error,
     );
     return [];
   }

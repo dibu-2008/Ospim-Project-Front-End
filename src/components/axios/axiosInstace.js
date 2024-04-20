@@ -1,5 +1,5 @@
-import axios from "axios";
-import localStorageService from "@/components/localStorage/localStorageService";
+import axios from 'axios';
+import localStorageService from '@/components/localStorage/localStorageService';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -10,10 +10,10 @@ const oAxios = axios.create({
 });
 
 // Alter defaults after instance has been created
-oAxios.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
-oAxios.defaults.headers.common["Access-Control-Allow-Headers"] =
-  "POST, GET, PUT, DELETE, OPTIONS, HEAD, Authorization, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Access-Control-Allow-Origin";
-oAxios.defaults.headers.common["Content-Type"] = "application/json";
+oAxios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+oAxios.defaults.headers.common['Access-Control-Allow-Headers'] =
+  'POST, GET, PUT, DELETE, OPTIONS, HEAD, Authorization, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Access-Control-Allow-Origin';
+oAxios.defaults.headers.common['Content-Type'] = 'application/json';
 
 oAxios.interceptors.request.use(
   (req) => {
@@ -26,11 +26,11 @@ oAxios.interceptors.request.use(
   (error) => {
     console.log(
       `** oAxios.interceptors - REQUEST - ERROR - error: ${JSON.stringify(
-        error
-      )}`
+        error,
+      )}`,
     );
     return Promise.reject(error);
-  }
+  },
 );
 
 oAxios.interceptors.response.use(
@@ -40,25 +40,25 @@ oAxios.interceptors.response.use(
   (error) => {
     console.log(
       `** oAxios.interceptors - RESPONSE - ERROR - error: ${JSON.stringify(
-        error
-      )}`
+        error,
+      )}`,
     );
 
     if (error.response.status == 401) {
       console.log(
-        "** oAxios.interceptors - RESPONSE - HTTP - ERROR 401 - VOY AL LOGUIN"
+        '** oAxios.interceptors - RESPONSE - HTTP - ERROR 401 - VOY AL LOGUIN',
       );
-      window.location.href = "/";
-      console.log("HTTP - ERROR 401 - ya ajusto window.location.href  ");
+      window.location.href = '/';
+      console.log('HTTP - ERROR 401 - ya ajusto window.location.href  ');
     }
 
     if (error.response.status == 404) {
-      console.log("** oAxios.interceptors - RESPONSE - HTTP - ERROR 404");
+      console.log('** oAxios.interceptors - RESPONSE - HTTP - ERROR 404');
       if (error.response.config.url) {
         console.log(
-          "- URL INCORRECTA: " +
+          '- URL INCORRECTA: ' +
             error.response.config.url +
-            ". verificar que el Backend este activo"
+            '. verificar que el Backend este activo',
         );
       }
     }
@@ -66,14 +66,14 @@ oAxios.interceptors.response.use(
     if (error.response && error.response.data) {
       const oJsonResponse = error.response.data;
       console.log(
-        "** oAxios.interceptors - RESPONSE - HTTP - oJsonResponse:" +
-          JSON.stringify(oJsonResponse)
+        '** oAxios.interceptors - RESPONSE - HTTP - oJsonResponse:' +
+          JSON.stringify(oJsonResponse),
       );
     }
 
     error.status = error.response.status;
     return Promise.reject(error);
-  }
+  },
 );
 
 export default oAxios;

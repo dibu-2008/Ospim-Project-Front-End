@@ -1,4 +1,4 @@
-const formatCurrency = new Intl.NumberFormat("es-CL", {
+const formatCurrency = new Intl.NumberFormat('es-CL', {
   minimumFractionDigits: 2,
   useGrouping: true,
 });
@@ -11,30 +11,30 @@ const formatDate = (value) => {
   try {
     const date = new Date(value);
 
-    const day = date.getUTCDate().toString().padStart(2, "0");
-    const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
+    const day = date.getUTCDate().toString().padStart(2, '0');
+    const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
     const year = date.getUTCFullYear();
     const strFecha = `${day}/${month}/${year}`;
     return strFecha;
   } catch (error) {
     console.log(error);
-    return "";
+    return '';
   }
 };
 
 const formatPeriodo = (value, separador) => {
   try {
     if (!separador) {
-      separador = "/";
+      separador = '/';
     }
     const date = new Date(value);
 
-    const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
+    const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
     const year = date.getUTCFullYear();
 
     return `${month}${separador}${year}`;
   } catch (error) {
-    return "";
+    return '';
   }
 };
 
@@ -42,21 +42,21 @@ const formatPeriodo2 = (value) => {
   try {
     const date = new Date(value);
 
-    const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
+    const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
     const year = date.getUTCFullYear();
-    const day = date.getUTCDate().toString().padStart(2, "0");
+    const day = date.getUTCDate().toString().padStart(2, '0');
 
     return `${year}-${month}-${day}`;
   } catch (error) {
-    return "";
+    return '';
   }
 };
 
 const formatFechaGrilla = (value) => {
   try {
-    return new Date(value).toISOString().split("T")[0];
+    return new Date(value).toISOString().split('T')[0];
   } catch (error) {
-    return "";
+    return '';
   }
 };
 

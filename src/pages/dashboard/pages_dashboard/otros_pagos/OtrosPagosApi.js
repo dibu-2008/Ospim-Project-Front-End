@@ -1,6 +1,6 @@
-import axios from "axios";
-import { showErrorBackEnd } from "@/components/axios/showErrorBackEnd";
-import { axiosCrud } from "@components/axios/axiosCrud";
+import axios from 'axios';
+import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
+import { axiosCrud } from '@components/axios/axiosCrud';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
@@ -12,14 +12,14 @@ export const generarBoletaSinDDJJ = async (empresa_id, body) => {
     const response = await axiosCrud.crear(URL, { ...body });
     if (response) {
       const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement("a");
+      const link = document.createElement('a');
       link.href = url;
-      link.setAttribute("download", "boleta.pdf");
+      link.setAttribute('download', 'boleta.pdf');
       document.body.appendChild(link);
       link.click();
       link.remove();
     } else {
-      console.error("Error al generar boletas");
+      console.error('Error al generar boletas');
     }
   } catch (error) {
     const HTTP_MSG =
@@ -45,18 +45,18 @@ export const downloadPdfDetalle = async () => {
   try {
     const response = await axios({
       url: URL,
-      method: "GET",
-      responseType: "blob",
+      method: 'GET',
+      responseType: 'blob',
     });
     const url = window.URL.createObjectURL(new Blob([response.data]));
-    const link = document.createElement("a");
+    const link = document.createElement('a');
     link.href = url;
-    link.setAttribute("download", "boleta.pdf");
+    link.setAttribute('download', 'boleta.pdf');
     document.body.appendChild(link);
     link.click();
     link.remove();
   } catch (error) {
-    console.error("Error al descargar el archivo PDF:", error);
+    console.error('Error al descargar el archivo PDF:', error);
   }
 };
 
@@ -66,19 +66,19 @@ export const downloadPdfBoletaSinDDJJ = async () => {
   try {
     const response = await axios({
       url: URL,
-      method: "GET",
-      responseType: "blob",
+      method: 'GET',
+      responseType: 'blob',
     });
 
     const url = window.URL.createObjectURL(new Blob([response.data]));
-    const link = document.createElement("a");
+    const link = document.createElement('a');
     link.href = url;
-    link.setAttribute("download", "boleta.pdf");
+    link.setAttribute('download', 'boleta.pdf');
     document.body.appendChild(link);
     link.click();
     link.remove();
   } catch (error) {
-    console.error("Error al descargar el archivo PDF:", error);
+    console.error('Error al descargar el archivo PDF:', error);
   }
 };
 
@@ -89,13 +89,13 @@ export const downloadPdfBoletaBlanca = async (empresa_id, boleta_id) => {
     //const response =await axiosCrud.consultar(URL)
     const response = await axios({
       url: URL,
-      method: "GET",
-      responseType: "blob",
+      method: 'GET',
+      responseType: 'blob',
     });
     const url = window.URL.createObjectURL(new Blob([response.data]));
-    const link = document.createElement("a");
+    const link = document.createElement('a');
     link.href = url;
-    link.setAttribute("download", "boleta.pdf");
+    link.setAttribute('download', 'boleta.pdf');
     document.body.appendChild(link);
     link.click();
     link.remove();

@@ -1,6 +1,6 @@
-import { axiosCrud } from "@components/axios/axiosCrud";
-import { showErrorBackEnd } from "@/components/axios/showErrorBackEnd";
-import swal from "@/components/swal/swal";
+import { axiosCrud } from '@components/axios/axiosCrud';
+import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
+import swal from '@/components/swal/swal';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -12,7 +12,7 @@ const HTTP_MSG_MODI_ERROR = import.meta.env.VITE_HTTP_MSG_MODI_ERROR;
 const HTTP_MSG_BAJA_ERROR = import.meta.env.VITE_HTTP_MSG_BAJA_ERROR;
 const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
 
-const URL_ENTITY = "/feriados";
+const URL_ENTITY = '/feriados';
 
 export const axiosFeriados = {
   consultar: async function (UrlApi) {
@@ -43,7 +43,7 @@ export const consultar = async () => {
   } catch (error) {
     showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL_ENTITY} - status: ${error.status})`,
-      error
+      error,
     );
     return [];
   }
@@ -107,17 +107,16 @@ export const duplicarFeriados = async (anio) => {
   } catch (error) {
     showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL_ENTITY} - status: ${error.status})`,
-      error
+      error,
     );
     return [];
   }
 };
 
-
 const styles = {
-  position: "top-right",
+  position: 'top-right',
   autoClose: 2000,
   style: {
-    fontSize: "1rem",
+    fontSize: '1rem',
   },
-}
+};

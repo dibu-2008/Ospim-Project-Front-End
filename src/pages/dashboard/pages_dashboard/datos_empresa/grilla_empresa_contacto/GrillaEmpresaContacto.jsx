@@ -1,19 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import {
   GridRowModes,
   DataGrid,
   GridToolbarContainer,
   GridActionsCellItem,
   GridRowEditStopReasons,
-} from "@mui/x-data-grid";
-import { Button, Box } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/DeleteOutlined";
-import CancelIcon from "@mui/icons-material/Close";
-import SaveIcon from "@mui/icons-material/Save";
-import { axiosContacto } from "./GrillaEmpresaContactoApi";
-import Swal from "sweetalert2";
+} from '@mui/x-data-grid';
+import { Button, Box } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import CancelIcon from '@mui/icons-material/Close';
+import SaveIcon from '@mui/icons-material/Save';
+import { axiosContacto } from './GrillaEmpresaContactoApi';
+import Swal from 'sweetalert2';
 
 function EditToolbar(props) {
   const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
@@ -28,12 +28,12 @@ function EditToolbar(props) {
     volverPrimerPagina();
 
     setRows((oldRows) => [
-      { id, tipo: "", prefijo: "", valor: "", isNew: true },
+      { id, tipo: '', prefijo: '', valor: '', isNew: true },
       ...oldRows,
     ]);
     setRowModesModel((oldModel) => ({
       ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
+      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
     }));
   };
 
@@ -71,7 +71,7 @@ export const GrillaEmpresaContacto = ({ idEmpresa, rows, setRows }) => {
 
   useEffect(() => {
     const getDatosEmpresa = async () => {
-      console.log("** getDatosEmpresa - idEmpresa: " + idEmpresa);
+      console.log('** getDatosEmpresa - idEmpresa: ' + idEmpresa);
       const datosEmpresa = await axiosContacto.obtenerDatosEmpresa(idEmpresa);
       setRows(datosEmpresa.map((item) => ({ ...item, id: item.id })));
     };
@@ -96,13 +96,13 @@ export const GrillaEmpresaContacto = ({ idEmpresa, rows, setRows }) => {
     const showSwalConfirm = async () => {
       try {
         Swal.fire({
-          title: "¿Estás seguro?",
-          text: "¡No podrás revertir esto!",
-          icon: "warning",
+          title: '¿Estás seguro?',
+          text: '¡No podrás revertir esto!',
+          icon: 'warning',
           showCancelButton: true,
-          confirmButtonColor: "#1A76D2",
-          cancelButtonColor: "#6c757d",
-          confirmButtonText: "Si, bórralo!",
+          confirmButtonColor: '#1A76D2',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: 'Si, bórralo!',
         }).then(async (result) => {
           if (result.isConfirmed) {
             const bBajaOk = await axiosContacto.eliminar(idEmpresa, id);
@@ -110,7 +110,7 @@ export const GrillaEmpresaContacto = ({ idEmpresa, rows, setRows }) => {
           }
         });
       } catch (error) {
-        console.error("Error al ejecutar eliminarContacto:", error);
+        console.error('Error al ejecutar eliminarContacto:', error);
       }
     };
 
@@ -143,25 +143,25 @@ export const GrillaEmpresaContacto = ({ idEmpresa, rows, setRows }) => {
           const newRows = rows.map((row) => (row.isNew ? newRow : row));
           setRows(newRows);
         } else {
-          console.log("alta sin ID generado");
+          console.log('alta sin ID generado');
         }
       } catch (error) {
         console.log(
-          "X - processRowUpdate - ALTA - ERROR: " + JSON.stringify(error)
+          'X - processRowUpdate - ALTA - ERROR: ' + JSON.stringify(error),
         );
       }
     } else {
       try {
         delete newRow.isNew;
         bOk = await axiosContacto.actualizar(idEmpresa, newRow);
-        console.log("4 - processRowUpdate - MODI - bOk: " + bOk);
+        console.log('4 - processRowUpdate - MODI - bOk: ' + bOk);
         newRow.isNew = false;
         if (bOk) {
           setRows(rows.map((row) => (row.id === newRow.id ? newRow : row)));
         }
       } catch (error) {
         console.log(
-          "X - processRowUpdate - MODI - ERROR: " + JSON.stringify(error)
+          'X - processRowUpdate - MODI - ERROR: ' + JSON.stringify(error),
         );
       }
     }
@@ -179,14 +179,14 @@ export const GrillaEmpresaContacto = ({ idEmpresa, rows, setRows }) => {
 
   const columns = [
     {
-      field: "tipo",
-      headerName: "Tipo de contacto",
+      field: 'tipo',
+      headerName: 'Tipo de contacto',
       flex: 1,
       editable: true,
-      type: "singleSelect",
-      headerAlign: "center",
-      align: "center",
-      headerClassName: "header--cell",
+      type: 'singleSelect',
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
       valueOptions: tipoContacto.map((item) => {
         return {
           value: item.codigo,
@@ -195,33 +195,33 @@ export const GrillaEmpresaContacto = ({ idEmpresa, rows, setRows }) => {
       }),
     },
     {
-      field: "prefijo",
-      headerName: "Prefijo",
+      field: 'prefijo',
+      headerName: 'Prefijo',
       flex: 1,
-      type: "string",
+      type: 'string',
       editable: true,
-      headerAlign: "center",
-      align: "center",
-      headerClassName: "header--cell",
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
     },
     {
-      field: "valor",
-      headerName: "Valor de contacto",
+      field: 'valor',
+      headerName: 'Valor de contacto',
       flex: 1,
-      type: "string",
+      type: 'string',
       editable: true,
-      headerAlign: "center",
-      align: "center",
-      headerClassName: "header--cell",
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
     },
     {
-      field: "actions",
-      headerName: "Acciones",
+      field: 'actions',
+      headerName: 'Acciones',
       flex: 1,
-      type: "actions",
-      headerAlign: "center",
-      align: "center",
-      headerClassName: "header--cell",
+      type: 'actions',
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
@@ -231,7 +231,7 @@ export const GrillaEmpresaContacto = ({ idEmpresa, rows, setRows }) => {
               icon={<SaveIcon />}
               label="Save"
               sx={{
-                color: "primary.main",
+                color: 'primary.main',
               }}
               onClick={handleSaveClick(id)}
             />,
@@ -267,14 +267,14 @@ export const GrillaEmpresaContacto = ({ idEmpresa, rows, setRows }) => {
   return (
     <Box
       sx={{
-        height: "600px",
-        width: "100%",
-        overflowX: "scroll",
-        "& .actions": {
-          color: "text.secondary",
+        height: '600px',
+        width: '100%',
+        overflowX: 'scroll',
+        '& .actions': {
+          color: 'text.secondary',
         },
-        "& .textPrimary": {
-          color: "text.primary",
+        '& .textPrimary': {
+          color: 'text.primary',
         },
       }}
     >
@@ -295,15 +295,15 @@ export const GrillaEmpresaContacto = ({ idEmpresa, rows, setRows }) => {
           toolbar: { setRows, rows, setRowModesModel, volverPrimerPagina },
         }}
         sx={{
-          "& .MuiDataGrid-virtualScroller::-webkit-scrollbar": {
-            width: "8px",
-            visibility: "visible",
+          '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
+            width: '8px',
+            visibility: 'visible',
           },
-          "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb": {
-            backgroundColor: "#ccc",
+          '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
+            backgroundColor: '#ccc',
           },
-          "& .css-1iyq7zh-MuiDataGrid-columnHeaders": {
-            backgroundColor: "#1A76D2 !important",
+          '& .css-1iyq7zh-MuiDataGrid-columnHeaders': {
+            backgroundColor: '#1A76D2 !important',
           },
         }}
         paginationModel={paginationModel}

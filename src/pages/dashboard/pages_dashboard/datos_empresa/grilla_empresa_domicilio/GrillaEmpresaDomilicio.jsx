@@ -1,20 +1,20 @@
-import { useState, useEffect } from "react";
-import { MenuItem, Select } from "@mui/material";
+import { useState, useEffect } from 'react';
+import { MenuItem, Select } from '@mui/material';
 import {
   GridRowModes,
   DataGrid,
   GridToolbarContainer,
   GridActionsCellItem,
   GridRowEditStopReasons,
-} from "@mui/x-data-grid";
-import { Box, Button } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/DeleteOutlined";
-import SaveIcon from "@mui/icons-material/Save";
-import CancelIcon from "@mui/icons-material/Close";
-import { axiosDomicilio } from "./GrillaEmpresaDomicilioApi";
-import Swal from "sweetalert2";
+} from '@mui/x-data-grid';
+import { Box, Button } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Close';
+import { axiosDomicilio } from './GrillaEmpresaDomicilioApi';
+import Swal from 'sweetalert2';
 
 function EditToolbar(props) {
   const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
@@ -29,23 +29,23 @@ function EditToolbar(props) {
     setRows((oldRows) => [
       {
         id,
-        tipo: "",
-        provinciaId: "",
-        localidadId: "",
-        calle: "",
-        piso: "",
-        dpto: "",
-        oficina: "",
-        cp: "",
-        planta: "",
-        valor: "",
+        tipo: '',
+        provinciaId: '',
+        localidadId: '',
+        calle: '',
+        piso: '',
+        dpto: '',
+        oficina: '',
+        cp: '',
+        planta: '',
+        valor: '',
         isNew: true,
       },
       ...oldRows,
     ]);
     setRowModesModel((oldModel) => ({
       ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
+      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
     }));
   };
 
@@ -104,7 +104,7 @@ export const GrillaEmpresaDomilicio = ({ idEmpresa, rows, setRows }) => {
     for (const reg of rowsDomicilio) {
       try {
         const vecRegProv = localidadesTemp.filter(
-          (locTmp) => locTmp.provinciaId == reg.provinciaId
+          (locTmp) => locTmp.provinciaId == reg.provinciaId,
         );
 
         if (vecRegProv.length == 0) {
@@ -118,7 +118,7 @@ export const GrillaEmpresaDomilicio = ({ idEmpresa, rows, setRows }) => {
           localidadesTemp.push(...localidadesConIdProvincia);
         }
       } catch (error) {
-        console.error("** Error al obtener localidades:", error);
+        console.error('** Error al obtener localidades:', error);
       }
     }
     setLocalidades(localidadesTemp);
@@ -170,13 +170,13 @@ export const GrillaEmpresaDomilicio = ({ idEmpresa, rows, setRows }) => {
     const showSwalConfirm = async () => {
       try {
         Swal.fire({
-          title: "¿Estás seguro?",
-          text: "¡No podrás revertir esto!",
-          icon: "warning",
+          title: '¿Estás seguro?',
+          text: '¡No podrás revertir esto!',
+          icon: 'warning',
           showCancelButton: true,
-          confirmButtonColor: "#1A76D2",
-          cancelButtonColor: "#6c757d",
-          confirmButtonText: "Si, bórralo!",
+          confirmButtonColor: '#1A76D2',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: 'Si, bórralo!',
         }).then(async (result) => {
           if (result.isConfirmed) {
             const bBajaOk = await axiosDomicilio.eliminar(idEmpresa, id);
@@ -184,7 +184,7 @@ export const GrillaEmpresaDomilicio = ({ idEmpresa, rows, setRows }) => {
           }
         });
       } catch (error) {
-        console.error("Error al ejecutar eliminarDomicilio:", error);
+        console.error('Error al ejecutar eliminarDomicilio:', error);
       }
     };
 
@@ -217,25 +217,25 @@ export const GrillaEmpresaDomilicio = ({ idEmpresa, rows, setRows }) => {
           const newRows = rows.map((row) => (row.isNew ? newRow : row));
           setRows(newRows);
         } else {
-          console.log("alta sin ID generado");
+          console.log('alta sin ID generado');
         }
       } catch (error) {
         console.log(
-          "X - processRowUpdate - ALTA - ERROR: " + JSON.stringify(error)
+          'X - processRowUpdate - ALTA - ERROR: ' + JSON.stringify(error),
         );
       }
     } else {
       try {
         delete newRow.isNew;
         bOk = await axiosDomicilio.actualizar(idEmpresa, newRow);
-        console.log("4 - processRowUpdate - MODI - bOk: " + bOk);
+        console.log('4 - processRowUpdate - MODI - bOk: ' + bOk);
         newRow.isNew = false;
         if (bOk) {
           setRows(rows.map((row) => (row.id === newRow.id ? newRow : row)));
         }
       } catch (error) {
         console.log(
-          "X - processRowUpdate - MODI - ERROR: " + JSON.stringify(error)
+          'X - processRowUpdate - MODI - ERROR: ' + JSON.stringify(error),
         );
       }
     }
@@ -255,32 +255,32 @@ export const GrillaEmpresaDomilicio = ({ idEmpresa, rows, setRows }) => {
 
   const handleCellEditStart = (params, event, details) => {
     // Realiza acciones personalizadas cuando comienza la edición de una celda
-    console.log("Cell edit started:", params, event, details);
+    console.log('Cell edit started:', params, event, details);
   };
 
   const columns = [
     {
-      field: "tipo",
-      headerName: "Tipo",
+      field: 'tipo',
+      headerName: 'Tipo',
       flex: 1,
       editable: true,
-      type: "singleSelect",
-      headerAlign: "center",
-      align: "center",
-      headerClassName: "header--cell",
+      type: 'singleSelect',
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
       getOptionValue: (dato) => dato.codigo,
       getOptionLabel: (dato) => dato.descripcion,
       valueOptions: tipoDomicilio,
     },
     {
-      field: "provinciaId",
-      headerName: "Provincia",
+      field: 'provinciaId',
+      headerName: 'Provincia',
       flex: 2,
       editable: true,
-      type: "singleSelect",
-      headerAlign: "center",
-      align: "center",
-      headerClassName: "header--cell",
+      type: 'singleSelect',
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
       valueOptions: provincias,
       getOptionValue: (dato) => dato.id,
       getOptionLabel: (dato) => dato.descripcion,
@@ -293,21 +293,21 @@ export const GrillaEmpresaDomilicio = ({ idEmpresa, rows, setRows }) => {
               // Limpiar el valor de la localidad
               params.api.setEditCellValue({
                 id: params.id,
-                field: "localidadId",
-                value: "",
+                field: 'localidadId',
+                value: '',
               });
               params.api.setEditCellValue(
                 {
                   id: params.id,
-                  field: "provinciaId",
+                  field: 'provinciaId',
                   value: e.target.value,
                 },
-                e.target.value
+                e.target.value,
               );
 
-              console.log("params:", params);
+              console.log('params:', params);
               console.log(params.row.localidadId);
-              params.row.localidadId = "";
+              params.row.localidadId = '';
             }}
             sx={{ width: 200 }}
           >
@@ -323,14 +323,14 @@ export const GrillaEmpresaDomilicio = ({ idEmpresa, rows, setRows }) => {
       },
     },
     {
-      field: "localidadId",
-      headerName: "Localidad",
+      field: 'localidadId',
+      headerName: 'Localidad',
       flex: 2,
       editable: true,
-      type: "singleSelect",
-      headerAlign: "center",
-      align: "center",
-      headerClassName: "header--cell",
+      type: 'singleSelect',
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
       //valueOptions: localidadesList,
       valueOptions: ({ row }) => {
         var options = localidades.filter((item) => {
@@ -352,10 +352,10 @@ export const GrillaEmpresaDomilicio = ({ idEmpresa, rows, setRows }) => {
               params.api.setEditCellValue(
                 {
                   id: params.id,
-                  field: "localidadId",
+                  field: 'localidadId',
                   value: e.target.value,
                 },
-                e.target.value
+                e.target.value,
               );
             }}
             sx={{ width: 220 }}
@@ -372,67 +372,67 @@ export const GrillaEmpresaDomilicio = ({ idEmpresa, rows, setRows }) => {
       },
     },
     {
-      field: "calle",
-      headerName: "Calle",
+      field: 'calle',
+      headerName: 'Calle',
       flex: 2,
       editable: true,
-      headerAlign: "center",
-      align: "center",
-      headerClassName: "header--cell",
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
     },
     {
-      field: "piso",
-      headerName: "Piso",
+      field: 'piso',
+      headerName: 'Piso',
       flex: 1,
       editable: true,
-      headerAlign: "center",
-      align: "center",
-      headerClassName: "header--cell",
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
     },
     {
-      field: "depto",
-      headerName: "Depto",
+      field: 'depto',
+      headerName: 'Depto',
       flex: 1,
       editable: true,
-      headerAlign: "center",
-      align: "center",
-      headerClassName: "header--cell",
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
     },
     {
-      field: "oficina",
-      headerName: "Oficina",
+      field: 'oficina',
+      headerName: 'Oficina',
       flex: 1,
       editable: true,
-      headerAlign: "center",
-      align: "center",
-      headerClassName: "header--cell",
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
     },
     {
-      field: "cp",
-      headerName: "CP",
+      field: 'cp',
+      headerName: 'CP',
       flex: 1,
       editable: true,
-      headerAlign: "center",
-      align: "center",
-      headerClassName: "header--cell",
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
     },
     {
-      field: "planta",
-      headerName: "Planta",
+      field: 'planta',
+      headerName: 'Planta',
       flex: 1,
       editable: true,
-      headerAlign: "center",
-      align: "center",
-      headerClassName: "header--cell",
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
     },
     {
-      field: "actions",
-      type: "actions",
-      headerName: "Acciones",
+      field: 'actions',
+      type: 'actions',
+      headerName: 'Acciones',
       flex: 2,
-      headerAlign: "center",
-      align: "center",
-      headerClassName: "header--cell",
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
@@ -442,7 +442,7 @@ export const GrillaEmpresaDomilicio = ({ idEmpresa, rows, setRows }) => {
               icon={<SaveIcon />}
               label="Save"
               sx={{
-                color: "primary.main",
+                color: 'primary.main',
               }}
               onClick={handleSaveClick(id)}
             />,
@@ -478,14 +478,14 @@ export const GrillaEmpresaDomilicio = ({ idEmpresa, rows, setRows }) => {
   return (
     <Box
       sx={{
-        height: "600px",
-        width: "100%",
-        overflowX: "scroll",
-        "& .actions": {
-          color: "text.secondary",
+        height: '600px',
+        width: '100%',
+        overflowX: 'scroll',
+        '& .actions': {
+          color: 'text.secondary',
         },
-        "& .textPrimary": {
-          color: "text.primary",
+        '& .textPrimary': {
+          color: 'text.primary',
         },
       }}
     >
@@ -513,16 +513,16 @@ export const GrillaEmpresaDomilicio = ({ idEmpresa, rows, setRows }) => {
         }}
         sx={{
           // ...
-          "& .MuiDataGrid-virtualScroller::-webkit-scrollbar": {
-            width: "8px",
-            visibility: "visible",
+          '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
+            width: '8px',
+            visibility: 'visible',
           },
-          "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb": {
-            backgroundColor: "#ccc",
+          '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
+            backgroundColor: '#ccc',
           },
         }}
         localeText={{
-          noRowsLabel: "",
+          noRowsLabel: '',
         }}
         paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}

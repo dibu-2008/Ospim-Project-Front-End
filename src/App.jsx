@@ -1,15 +1,14 @@
-import AppRouter from './router/AppRouter'
-import { AppTheme } from './theme'
+import AppRouter from './router/AppRouter';
+import { AppTheme } from './theme';
 
 function App() {
-
   return (
     <>
       <AppTheme>
         <AppRouter />
       </AppTheme>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

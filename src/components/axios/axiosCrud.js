@@ -1,4 +1,4 @@
-import oAxios from "@components/axios/axiosInstace";
+import oAxios from '@components/axios/axiosInstace';
 
 export const axiosCrud = {
   consultar: async function (UrlApi) {
@@ -38,19 +38,19 @@ export const axiosCrear = async (UrlApi, oEntidad) => {
     if (response.status !== 201) {
       console.log(
         `axiosCrud.crear() - ERROR 2 - UrlApi: ${UrlApi} - response.status !== 201 - response: ${JSON.stringify(
-          response
-        )}`
+          response,
+        )}`,
       );
       return {};
     }
     return response.data || {};
   } catch (error) {
-    console.log("axiosCrud.crear() - catch() - ");
+    console.log('axiosCrud.crear() - catch() - ');
     if (error && error.response && error.response.data) {
       return error.response.data;
     } else {
       console.log(
-        "axiosCrud.crear() - catch() - error: " + JSON.stringify(error)
+        'axiosCrud.crear() - catch() - error: ' + JSON.stringify(error),
       );
       return {};
     }
@@ -73,8 +73,8 @@ export const axiosActualizar = async (UrlApi, oEntidad) => {
       //JsonServer devuelve 200
       console.log(
         `axiosCrud.actualizar() - ERROR 2 - UrlApi: ${UrlApi} - response.status !== 204 - response: ${JSON.stringify(
-          response
-        )} `
+          response,
+        )} `,
       );
       return false;
     }
@@ -85,7 +85,7 @@ export const axiosActualizar = async (UrlApi, oEntidad) => {
       return error.response.data;
     } else {
       console.log(
-        "axiosCrud.actualizar() - catch() - error: " + JSON.stringify(error)
+        'axiosCrud.actualizar() - catch() - error: ' + JSON.stringify(error),
       );
       return false;
     }
@@ -100,7 +100,7 @@ export const axiosEliminar = async (UrlApi, id) => {
     if (response.status !== 204 && response.status !== 200) {
       //JsonServer devuelve 200
       console.log(
-        `axiosCrud.eliminar() - ERROR 2 - UrlApi: ${UrlApi} - response: ${response}`
+        `axiosCrud.eliminar() - ERROR 2 - UrlApi: ${UrlApi} - response: ${response}`,
       );
       return false;
     }
@@ -111,7 +111,7 @@ export const axiosEliminar = async (UrlApi, id) => {
       return error.response.data;
     } else {
       console.log(
-        "axiosCrud.eliminar() - catch() - error: " + JSON.stringify(error)
+        'axiosCrud.eliminar() - catch() - error: ' + JSON.stringify(error),
       );
     }
     return false;

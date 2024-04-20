@@ -1,8 +1,8 @@
-import oAxios from "@components/axios/axiosInstace";
-import { axiosCrud } from "@components/axios/axiosCrud";
-import { showErrorBackEnd } from "@/components/axios/showErrorBackEnd";
-import { presentar } from "@/pages/dashboard/pages_dashboard/ddjj/DDJJCommonApi";
-import swal from "@/components/swal/swal";
+import oAxios from '@components/axios/axiosInstace';
+import { axiosCrud } from '@components/axios/axiosCrud';
+import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
+import { presentar } from '@/pages/dashboard/pages_dashboard/ddjj/DDJJCommonApi';
+import swal from '@/components/swal/swal';
 
 const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
 const HTTP_MSG_MODI = import.meta.env.VITE_HTTP_MSG_MODI;
@@ -20,35 +20,35 @@ export const obtenerAfiliados = async (cuil) => {
   } catch (error) {
     showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
-      error
+      error,
     );
     return [];
   }
 };
 
 export const obtenerCamaras = async () => {
-  const URL = "/camara";
+  const URL = '/camara';
   try {
     const data = await axiosCrud.consultar(URL);
     return data || [];
   } catch (error) {
     showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
-      error
+      error,
     );
     return [];
   }
 };
 
 export const obtenerCategorias = async () => {
-  const URL = "camara/categoria";
+  const URL = 'camara/categoria';
   try {
     const data = await axiosCrud.consultar(URL);
     return data || [];
   } catch (error) {
     showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
-      error
+      error,
     );
     return [];
   }
@@ -62,7 +62,7 @@ export const obtenerPlantaEmpresas = async (empresaId) => {
   } catch (error) {
     showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
-      error
+      error,
     );
     return [];
   }
@@ -76,7 +76,7 @@ export const obtenerMiDeclaracionJurada = async (empresaId, ddjjId) => {
   } catch (error) {
     showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
-      error
+      error,
     );
     return [];
   }
@@ -100,13 +100,12 @@ export const crearAltaDeclaracionJurada = async (empresaId, registro) => {
 export const actualizarDeclaracionJurada = async (empresaId, registro) => {
   const URL = `/empresa/${empresaId}/ddjj`;
   console.log(URL);
-  console.log("DENTRO DE LA FUNCION ACTUALIZAR DDJJ ", registro);
+  console.log('DENTRO DE LA FUNCION ACTUALIZAR DDJJ ', registro);
   try {
     const response = await axiosCrud.actualizar(URL, registro);
     if (response == true) {
       swal.showSuccess(HTTP_MSG_MODI);
       return true;
-
     }
     throw response;
   } catch (error) {
@@ -143,14 +142,12 @@ export const validaCuil = async (empresaId, cuiles) => {
       return errores || [];
     }
   }
-
 };
 
 const obtenerPeriodoAnterior = async (periodo) => {
-  
-  let query = "";
+  let query = '';
 
-  if(periodo !== null){
+  if (periodo !== null) {
     query = `?periodo=${periodo}`;
   }
 
@@ -159,14 +156,14 @@ const obtenerPeriodoAnterior = async (periodo) => {
   try {
     const data = await axiosCrud.consultar(URL);
     return data || [];
-  }catch (error) {
+  } catch (error) {
     showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
-      error
+      error,
     );
     return [];
   }
-}
+};
 
 export const axiosDDJJ = {
   getCamaras: async function () {
@@ -208,5 +205,5 @@ export const axiosDDJJ = {
   },
   getPeriodoAnterior: async function (periodo) {
     return obtenerPeriodoAnterior(periodo);
-  }
+  },
 };

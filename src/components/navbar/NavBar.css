@@ -1,7 +1,5 @@
 header {
 	display: flex;
-	position: sticky;
-	top: 0;
 	justify-content: space-between;
 	align-items: center;
 	padding: 25px;
@@ -11,6 +9,7 @@ header {
 	z-index: 3;
 	width: 86%;
 	margin: 0 auto;
+	height: 15vh;
 }
 
 header div {
@@ -29,6 +28,15 @@ header .entidades {
 	text-decoration: none;
 	color: #fff;
 	font-size: 1rem;
+}
+
+.entidadesL h4 {
+    margin-bottom: -2px;
+	display: flex;
+	text-decoration: none;
+	color: #fff;
+	font-size: 2rem;
+	margin: 0 auto;
 }
 
 nav,

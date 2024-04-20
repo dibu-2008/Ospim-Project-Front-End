@@ -1,16 +1,19 @@
-import { useState } from "react";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
-import "./MisDDJJConsulta.css";
-import { MisDDJJConsultaGrilla, castearMisDDJJ } from "./grilla/MisDDJJConsultaGrilla";
-import { axiosDDJJ } from "./grilla/MisDDJJConsultaGrillaApi";
-import { esES } from "@mui/x-date-pickers/locales";
-import { DesktopDatePicker } from "@mui/x-date-pickers";
-import { CSVLink, CSVDownload } from "react-csv";
-import localStorageService from "@/components/localStorage/localStorageService";
+import { useState } from 'react';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import './MisDDJJConsulta.css';
+import {
+  MisDDJJConsultaGrilla,
+  castearMisDDJJ,
+} from './grilla/MisDDJJConsultaGrilla';
+import { axiosDDJJ } from './grilla/MisDDJJConsultaGrillaApi';
+import { esES } from '@mui/x-date-pickers/locales';
+import { DesktopDatePicker } from '@mui/x-date-pickers';
+import { CSVLink, CSVDownload } from 'react-csv';
+import localStorageService from '@/components/localStorage/localStorageService';
 export const MisDDJJConsulta = ({
   setDDJJState,
   setPeriodo,
@@ -22,14 +25,14 @@ export const MisDDJJConsulta = ({
 }) => {
   const [desde, setDesde] = useState(null);
   const [hasta, setHasta] = useState(null);
-  const [fullName, setFullName] = useState("");
+  const [fullName, setFullName] = useState('');
   const [age, setAge] = useState(0);
-  const [occupation, setOccupation] = useState("");
+  const [occupation, setOccupation] = useState('');
   const [data, setData] = useState([
-    ["Full Name", "Age", "Occupation"],
-    ["Irakli Tchigladze", 32, "writer"],
-    ["George Abuladze", 33, "politician"],
-    ["Nick Tsereteli", 19, "public worker"],
+    ['Full Name', 'Age', 'Occupation'],
+    ['Irakli Tchigladze', 32, 'writer'],
+    ['George Abuladze', 33, 'politician'],
+    ['Nick Tsereteli', 19, 'public worker'],
   ]);
 
   const ID_EMPRESA = localStorageService.getEmpresaId();
@@ -42,9 +45,9 @@ export const MisDDJJConsulta = ({
     try {
       const ddjjResponse = await axiosDDJJ.consultar(ID_EMPRESA);
       setRowsMisDdjj(ddjjResponse);
-      console.log("ddjjResponse", ddjjResponse);
+      console.log('ddjjResponse', ddjjResponse);
       if (desde && desde.$d && hasta && hasta.$d) {
-        console.log("buscarDDJJ - ENTRO !!");
+        console.log('buscarDDJJ - ENTRO !!');
         const { $d: $desde } = desde;
         const { $d: $hasta } = hasta;
 
@@ -64,22 +67,28 @@ export const MisDDJJConsulta = ({
             fecha >= new Date(fechaIsoDesde) && fecha <= new Date(fechaIsoHasta)
           );
         });
-        console.log("declaracionesFiltradas", declaracionesFiltradas)
+        console.log('declaracionesFiltradas', declaracionesFiltradas);
 
-        const declaracionesFiltradasCasteadas = castearMisDDJJ(declaracionesFiltradas);
-        console.log("declaracionesFiltradasCasteadas", declaracionesFiltradasCasteadas)
+        const declaracionesFiltradasCasteadas = castearMisDDJJ(
+          declaracionesFiltradas,
+        );
+        console.log(
+          'declaracionesFiltradasCasteadas',
+          declaracionesFiltradasCasteadas,
+        );
 
         setRowsMisDdjj(declaracionesFiltradas);
       } else {
-
         const declaracionesFiltradasCasteadas = castearMisDDJJ(ddjjResponse);
-        console.log("declaracionesFiltradasCasteadas", declaracionesFiltradasCasteadas)
-        
-        setRowsMisDdjj(ddjjResponse);
+        console.log(
+          'declaracionesFiltradasCasteadas',
+          declaracionesFiltradasCasteadas,
+        );
 
+        setRowsMisDdjj(ddjjResponse);
       }
     } catch (error) {
-      console.error("Error al buscar declaraciones juradas:", error);
+      console.error('Error al buscar declaraciones juradas:', error);
     }
   };
 
@@ -94,15 +103,15 @@ export const MisDDJJConsulta = ({
         >
           <LocalizationProvider
             dateAdapter={AdapterDayjs}
-            adapterLocale={"es"}
+            adapterLocale={'es'}
             localeText={
               esES.components.MuiLocalizationProvider.defaultProps.localeText
             }
           >
-            <DemoContainer components={["DatePicker"]}>
+            <DemoContainer components={['DatePicker']}>
               <DesktopDatePicker
-                label={"Periodo desde"}
-                views={["month", "year"]}
+                label={'Periodo desde'}
+                views={['month', 'year']}
                 closeOnSelect={true}
                 onChange={handleChangeDesde}
                 value={desde}
@@ -111,15 +120,15 @@ export const MisDDJJConsulta = ({
           </LocalizationProvider>
           <LocalizationProvider
             dateAdapter={AdapterDayjs}
-            adapterLocale={"es"}
+            adapterLocale={'es'}
             localeText={
               esES.components.MuiLocalizationProvider.defaultProps.localeText
             }
           >
-            <DemoContainer components={["DatePicker"]}>
+            <DemoContainer components={['DatePicker']}>
               <DesktopDatePicker
-                label={"Periodo hasta"}
-                views={["month", "year"]}
+                label={'Periodo hasta'}
+                views={['month', 'year']}
                 closeOnSelect={true}
                 onChange={handleChangeHasta}
                 value={hasta}

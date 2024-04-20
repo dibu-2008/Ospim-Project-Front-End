@@ -1,8 +1,8 @@
-import localStorageService from "@components/localStorage/localStorageService";
-import "./DatosEmpresa.css";
-import { useEffect, useState, useMemo } from "react";
-import { GrillaEmpresaContacto } from "./grilla_empresa_contacto/GrillaEmpresaContacto";
-import { GrillaEmpresaDomilicio } from "./grilla_empresa_domicilio/GrillaEmpresaDomilicio";
+import localStorageService from '@components/localStorage/localStorageService';
+import './DatosEmpresa.css';
+import { useEffect, useState, useMemo } from 'react';
+import { GrillaEmpresaContacto } from './grilla_empresa_contacto/GrillaEmpresaContacto';
+import { GrillaEmpresaDomilicio } from './grilla_empresa_domicilio/GrillaEmpresaDomilicio';
 import {
   Button,
   Select,
@@ -13,11 +13,11 @@ import {
   TextField,
   Tabs,
   Tab,
-} from "@mui/material";
-import PropTypes from "prop-types";
-import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
-import * as locales from "@mui/material/locale";
-import axiosDatosEmpre from "./DatosEmpresaApi";
+} from '@mui/material';
+import PropTypes from 'prop-types';
+import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
+import * as locales from '@mui/material/locale';
+import axiosDatosEmpre from './DatosEmpresaApi';
 
 // Logica de los tabs inicio
 function CustomTabPanel(props) {
@@ -49,20 +49,20 @@ CustomTabPanel.propTypes = {
 function a11yProps(index) {
   return {
     id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
   };
 }
 
 export const DatosEmpresa = () => {
   const ID_EMPRESA = localStorageService.getEmpresaId();
-  console.log("DatosEmpresa - INIT - ID_EMPRESA: " + ID_EMPRESA);
-  const [locale, setLocale] = useState("esES");
+  console.log('DatosEmpresa - INIT - ID_EMPRESA: ' + ID_EMPRESA);
+  const [locale, setLocale] = useState('esES');
   const [rowsContacto, setRowsContacto] = useState([]);
   const [rowsDomicilio, setRowsDomicilio] = useState([]);
-  const [idEmpresa, setIdEmpresa] = useState("");
-  const [cuit, setCuit] = useState("");
-  const [razonSocial, setRazonSocial] = useState("");
-  const [ramo, setRamo] = useState("");
+  const [idEmpresa, setIdEmpresa] = useState('');
+  const [cuit, setCuit] = useState('');
+  const [razonSocial, setRazonSocial] = useState('');
+  const [ramo, setRamo] = useState('');
   const [ramos, setRamos] = useState([]);
   const [tabState, setTabState] = useState(0);
 
@@ -70,13 +70,13 @@ export const DatosEmpresa = () => {
 
   const themeWithLocale = useMemo(
     () => createTheme(theme, locales[locale]),
-    [locale, theme]
+    [locale, theme],
   );
 
   useEffect(() => {
     const ObtenerEmpresa = async () => {
       const empresa = await axiosDatosEmpre.consultarEmpresa();
-      console.log("** ObtenerEmpresa - empresa: " + JSON.stringify(empresa));
+      console.log('** ObtenerEmpresa - empresa: ' + JSON.stringify(empresa));
       setCuit(empresa.empresa.cuit);
       setRazonSocial(empresa.empresa.razonSocial);
       setIdEmpresa(empresa.empresa.id);
@@ -126,12 +126,12 @@ export const DatosEmpresa = () => {
 
       <form
         style={{
-          display: "flex",
-          flexDirection: "row",
-          width: "100%",
-          justifyContent: "space-around",
-          alignContent: "center",
-          margin: "50px auto",
+          display: 'flex',
+          flexDirection: 'row',
+          width: '100%',
+          justifyContent: 'space-around',
+          alignContent: 'center',
+          margin: '50px auto',
         }}
         onSubmit={onSubmitModificarEmpresa}
       >
@@ -153,9 +153,9 @@ export const DatosEmpresa = () => {
         />
         <Box
           sx={{
-            textAlign: "left",
-            color: "#606060",
-            width: "200px",
+            textAlign: 'left',
+            color: '#606060',
+            width: '200px',
           }}
         >
           <FormControl fullWidth>
@@ -182,8 +182,8 @@ export const DatosEmpresa = () => {
         </Button>
       </form>
       {/* Tabs */}
-      <Box sx={{ width: "100%" }}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+      <Box sx={{ width: '100%' }}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs
             value={tabState}
             onChange={handleChangeTabState}

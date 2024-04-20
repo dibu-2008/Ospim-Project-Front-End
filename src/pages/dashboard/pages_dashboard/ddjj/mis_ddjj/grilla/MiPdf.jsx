@@ -1,9 +1,9 @@
-import React from "react";
-import { Page, Text, View, Document, StyleSheet } from "@react-pdf/renderer";
+import React from 'react';
+import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 
 const styles = StyleSheet.create({
-  page: { backgroundColor: "#1A76D2" },
-  section: { color: "white", textAlign: "center", margin: 30 },
+  page: { backgroundColor: '#1A76D2' },
+  section: { color: 'white', textAlign: 'center', margin: 30 },
 });
 
 // Create Document Component
@@ -14,9 +14,9 @@ export const MyDocument = ({ rows_mis_ddjj }) => (
         <View style={styles.section}>
           <Text>Periodo: {row.periodo}</Text>
           <Text>
-            Numero:{" "}
+            Numero:{' '}
             {row.secuencia === 0
-              ? "Original"
+              ? 'Original'
               : `Rectificativa ${row.secuencia}`}
           </Text>
           <Text>Total UOMA CS: {row.totalUomaCS}</Text>

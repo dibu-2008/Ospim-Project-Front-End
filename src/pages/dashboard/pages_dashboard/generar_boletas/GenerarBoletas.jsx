@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   Table,
   TableBody,
@@ -12,22 +12,22 @@ import {
   MenuItem,
   Select,
   Box,
-} from "@mui/material";
-import { axiosGenerarBoletas } from "./GenerarBoletasApi";
-import "./GenerarBoletas.css";
-import formatter from "@/common/formatter";
-import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+} from '@mui/material';
+import { axiosGenerarBoletas } from './GenerarBoletasApi';
+import './GenerarBoletas.css';
+import formatter from '@/common/formatter';
+import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 //import { Boletas } from '../boletas/Boletas';
 
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const GenerarBoletas = () => {
   const { id } = useParams();
 
   const DDJJ_ID = id;
-  const ID_EMPRESA = JSON.parse(localStorage.getItem("stateLogin"))
+  const ID_EMPRESA = JSON.parse(localStorage.getItem('stateLogin'))
     .usuarioLogueado.empresa.id;
 
   const [boletas, setBoletas] = useState({});
@@ -43,7 +43,7 @@ export const GenerarBoletas = () => {
       try {
         const data = await axiosGenerarBoletas.getBoletasByDDJJid(
           ID_EMPRESA,
-          DDJJ_ID
+          DDJJ_ID,
         );
         setDefaultFDP(data);
         setAfiliados(ordenarAfiliadosBoletas(data));
@@ -51,7 +51,7 @@ export const GenerarBoletas = () => {
         setPrimeraSeleccionFDP(true);
         sethabilitaBoton(true);
       } catch (error) {
-        console.error("Error al obtener las boletas:", error);
+        console.error('Error al obtener las boletas:', error);
         navigate(`/dashboard/ddjj`);
       }
     };
@@ -60,7 +60,7 @@ export const GenerarBoletas = () => {
 
   const setDefaultFDP = (data) => {
     data.detalle_boletas.forEach(
-      (element) => (element.forma_de_pago = "Ventanilla")
+      (element) => (element.forma_de_pago = 'Ventanilla'),
     );
     setBoletas(data);
   };
@@ -80,7 +80,7 @@ export const GenerarBoletas = () => {
           };
         }
         const index = boletas.detalle_boletas.findIndex(
-          (detalle) => detalle.codigo === boleta.codigo
+          (detalle) => detalle.codigo === boleta.codigo,
         );
         afiliados[cuil].boletas[index] = afiliado.capital;
       });
@@ -99,7 +99,7 @@ export const GenerarBoletas = () => {
 
   const checkFields = () => {
     boletas.detalle_boletas.forEach((boleta) => {
-      if (boleta.intencion_de_pago === "") return true;
+      if (boleta.intencion_de_pago === '') return true;
     });
     return false;
   };
@@ -111,15 +111,15 @@ export const GenerarBoletas = () => {
       const response = await axiosGenerarBoletas.calcularInteresBoletas(
         123,
         DDJJ_ID,
-        fechaToISO
+        fechaToISO,
       );
       const updatedDetalleBoletas = response.data.map((boleta) => {
         const prevBoleta = boletas.detalle_boletas.find(
-          (prevBoleta) => prevBoleta.codigo === boleta.codigo
+          (prevBoleta) => prevBoleta.codigo === boleta.codigo,
         );
         return {
           ...boleta,
-          forma_de_pago: prevBoleta ? prevBoleta.forma_de_pago : "Ventanilla",
+          forma_de_pago: prevBoleta ? prevBoleta.forma_de_pago : 'Ventanilla',
         };
       });
       setBoletas((prevBoletas) => ({
@@ -129,13 +129,13 @@ export const GenerarBoletas = () => {
       sethabilitaBoton(checkFields());
     } else {
       const boletaIndex = boletas.detalle_boletas.findIndex(
-        (element) => element.codigo === codigo
+        (element) => element.codigo === codigo,
       );
       const response = await axiosGenerarBoletas.calcularInteresBoleta(
         123,
         DDJJ_ID,
         codigo,
-        fechaToISO
+        fechaToISO,
       );
       setInteresInDetalleBoleta(boletaIndex, response);
       sethabilitaBoton(false);
@@ -161,7 +161,7 @@ export const GenerarBoletas = () => {
       setPrimeraSeleccionFDP(false);
     } else {
       const boletaIndex = boletas.detalle_boletas.findIndex(
-        (element) => element.codigo === codigo
+        (element) => element.codigo === codigo,
       );
       setFormaDePagoInBoleta(boletaIndex, value);
     }
@@ -170,39 +170,39 @@ export const GenerarBoletas = () => {
   const toggleDetail = () => setShowDetail(!showDetail);
 
   const generarBoletas = async () => {
-    const redirect = () => (window.location.href = "/dashboard/boletas");
+    const redirect = () => (window.location.href = '/dashboard/boletas');
     try {
       await axiosGenerarBoletas.generarBoletasPost(
         ID_EMPRESA,
         DDJJ_ID,
-        boletas
+        boletas,
       );
       sethabilitaBoton(true);
-      toast.success("¡Toast de éxito!", {
+      toast.success('¡Toast de éxito!', {
         onClose: () => {
           redirect();
         },
       });
     } catch (error) {
       console.error(error);
-      toast.error("Ocurrio un problema");
+      toast.error('Ocurrio un problema');
       redirect();
     }
   };
 
-  const hoy = new Date().toISOString().split("T")[0];
+  const hoy = new Date().toISOString().split('T')[0];
 
   return (
     <div className="generador_boletas_container">
       <h1>Boleta de Pago</h1>
       <p>
-        Periodo:{" "}
+        Periodo:{' '}
         {boletas &&
         boletas.periodo &&
         boletas.periodo !== null &&
-        boletas.periodo !== ""
-          ? formatter.periodo(boletas.periodo, "-")
-          : ""}{" "}
+        boletas.periodo !== ''
+          ? formatter.periodo(boletas.periodo, '-')
+          : ''}{' '}
       </p>
       <TableContainer component={Paper}>
         <Table>
@@ -223,9 +223,9 @@ export const GenerarBoletas = () => {
               {boletas.detalle_boletas &&
                 boletas.detalle_boletas.map((boleta) => (
                   <TableCell key={boleta.codigo}>
-                    {boleta.vencimiento !== null && boleta.vencimiento !== ""
+                    {boleta.vencimiento !== null && boleta.vencimiento !== ''
                       ? formatter.date(boleta.vencimiento)
-                      : ""}
+                      : ''}
                   </TableCell>
                 ))}
             </TableRow>
@@ -237,7 +237,7 @@ export const GenerarBoletas = () => {
                     <TextField
                       type="date"
                       inputProps={{ min: hoy }}
-                      value={boleta.intencion_de_pago.split("T")[0]}
+                      value={boleta.intencion_de_pago.split('T')[0]}
                       onChange={(event) =>
                         setIntencionDePago(boleta.codigo, event.target.value)
                       }
@@ -251,7 +251,7 @@ export const GenerarBoletas = () => {
                 boletas.detalle_boletas.map((boleta) => (
                   <TableCell key={boleta.codigo}>
                     <Select
-                      value={boleta.forma_de_pago || ""}
+                      value={boleta.forma_de_pago || ''}
                       onChange={(event) =>
                         setFormaDePago(boleta.codigo, event.target.value)
                       }
@@ -263,7 +263,7 @@ export const GenerarBoletas = () => {
                   </TableCell>
                 ))}
             </TableRow>
-            <TableRow style={{ marginTop: "2em" }}>
+            <TableRow style={{ marginTop: '2em' }}>
               <TableCell
                 colSpan={
                   boletas.detalle_boletas
@@ -285,20 +285,20 @@ export const GenerarBoletas = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell className="cwbcb" style={{ width: "5em" }}>
+                <TableCell className="cwbcb" style={{ width: '5em' }}>
                   CUIL
                 </TableCell>
-                <TableCell className="cwbcb" style={{ width: "5em" }}>
+                <TableCell className="cwbcb" style={{ width: '5em' }}>
                   Apellido
                 </TableCell>
-                <TableCell className="cwbcb importes" style={{ width: "20em" }}>
+                <TableCell className="cwbcb importes" style={{ width: '20em' }}>
                   Remunerativo
                 </TableCell>
                 {boletas.detalle_boletas &&
                   boletas.detalle_boletas.map((boleta) => (
                     <TableCell
                       className="cwbcb importes"
-                      style={{ width: "20em" }}
+                      style={{ width: '20em' }}
                       key={boleta.codigo}
                     >
                       {boleta.descripcion}
@@ -308,7 +308,7 @@ export const GenerarBoletas = () => {
             </TableHead>
             <TableBody>
               {afiliados.map((afiliado, index) => (
-                <TableRow key={index} className={index % 2 === 0 ? "" : "even"}>
+                <TableRow key={index} className={index % 2 === 0 ? '' : 'even'}>
                   <TableCell>{afiliado.cuil}</TableCell>
                   <TableCell>{afiliado.apellido}</TableCell>
                   <TableCell className="importes">
@@ -326,7 +326,7 @@ export const GenerarBoletas = () => {
         </TableContainer>
       )}
 
-      <TableContainer component={Paper} style={{ marginTop: "3em" }}>
+      <TableContainer component={Paper} style={{ marginTop: '3em' }}>
         <Table>
           <TableBody>
             <TableRow>
@@ -348,21 +348,21 @@ export const GenerarBoletas = () => {
                 ))}
             </TableRow>
             <TableRow>
-              <TableCell className="cwbcb" style={{ width: "24.5em" }}>
+              <TableCell className="cwbcb" style={{ width: '24.5em' }}>
                 Ajustes
               </TableCell>
               {boletas.detalle_boletas &&
                 boletas.detalle_boletas.map((boleta) => (
                   <TableCell
                     className="importes"
-                    style={{ width: "27.5em" }}
+                    style={{ width: '27.5em' }}
                     key={boleta.codigo}
                   >
                     {formatter.currency.format(
                       boleta.ajustes.reduce(
                         (acumulador, ajuste) => acumulador + ajuste.monto,
-                        0
-                      )
+                        0,
+                      ),
                     )}
                   </TableCell>
                 ))}
@@ -374,7 +374,7 @@ export const GenerarBoletas = () => {
                   <TableCell
                     key={boleta.codigo}
                     className="importes"
-                    style={{ backgroundColor: "lightblue" }}
+                    style={{ backgroundColor: 'lightblue' }}
                   >
                     {formatter.currency.format(boleta.total_final)}
                   </TableCell>
@@ -401,13 +401,13 @@ export const GenerarBoletas = () => {
           .map((boleta, index) => (
             <div key={index}>
               {index === 0 && (
-                <h3 style={{ color: "#1A76D2" }}>Ajustes aplicados</h3>
+                <h3 style={{ color: '#1A76D2' }}>Ajustes aplicados</h3>
               )}
               <p>{boleta.descripcion}</p>
               <ul>
                 {boleta.ajustes.map((ajuste, index) => (
                   <li key={index}>
-                    {ajuste.descripcion}:{" "}
+                    {ajuste.descripcion}:{' '}
                     {formatter.currency.format(ajuste.monto)}
                   </li>
                 ))}

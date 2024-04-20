@@ -1,7 +1,7 @@
-import oAxios from "@components/axios/axiosInstace";
-import { axiosCrud } from "@components/axios/axiosCrud";
-import { showErrorBackEnd } from "@/components/axios/showErrorBackEnd";
-import swal from "@/components/swal/swal";
+import oAxios from '@components/axios/axiosInstace';
+import { axiosCrud } from '@components/axios/axiosCrud';
+import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
+import swal from '@/components/swal/swal';
 
 const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
 const HTTP_MSG_MODI = import.meta.env.VITE_HTTP_MSG_MODI;
@@ -18,23 +18,23 @@ export const obtenerDDJJ = async () => {
     return data || [];
   } catch (error) {
     console.log(
-      "obtenerMisDeclaracionesJuradas() - catch-error - URL: " +
+      'obtenerMisDeclaracionesJuradas() - catch-error - URL: ' +
         URL +
-        " - status: " +
-        error.status
+        ' - status: ' +
+        error.status,
     );
 
     showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
-      error
+      error,
     );
     return [];
   }
 };
 
 export const consultaDDJJfiltrada = async (desde, hasta, cuit) => {
-  let queryStringDesde = "";
-  let queryStringHasta = "";
+  let queryStringDesde = '';
+  let queryStringHasta = '';
 
   if (desde !== null) {
     queryStringDesde = `&desde=${encodeURIComponent(desde)}`;
@@ -50,15 +50,15 @@ export const consultaDDJJfiltrada = async (desde, hasta, cuit) => {
     return data || [];
   } catch (error) {
     console.log(
-      "obtenerPorRangoCuit() - catch-error - URL: " +
+      'obtenerPorRangoCuit() - catch-error - URL: ' +
         URL +
-        " - status: " +
-        error.status
+        ' - status: ' +
+        error.status,
     );
 
     showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
-      error
+      error,
     );
     return [];
   }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   Typography,
   TextField,
@@ -9,36 +9,36 @@ import {
   Select,
   Box,
   Grid,
-} from "@mui/material";
-import { generarBoletaSinDDJJ } from "./OtrosPagosApi";
-import "./OtrosPagos.css";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+} from '@mui/material';
+import { generarBoletaSinDDJJ } from './OtrosPagosApi';
+import './OtrosPagos.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const GenerarOtrosPagos = () => {
-  const [intencionDePago, setIntencionDePago] = useState("");
-  const [entidad, setEntidad] = useState("");
-  const [nroActa, setNroActa] = useState("");
-  const [importe, setImporte] = useState("");
+  const [intencionDePago, setIntencionDePago] = useState('');
+  const [entidad, setEntidad] = useState('');
+  const [nroActa, setNroActa] = useState('');
+  const [importe, setImporte] = useState('');
   const [deshabilitar, setDeshabilitar] = useState(false);
 
-  const ID_EMPRESA = JSON.parse(localStorage.getItem("stateLogin"))
+  const ID_EMPRESA = JSON.parse(localStorage.getItem('stateLogin'))
     .usuarioLogueado.empresa.id;
-  const hoy = new Date().toISOString().split("T")[0];
+  const hoy = new Date().toISOString().split('T')[0];
 
   const handleImprimir = async () => {
-    const redirect = () => (window.location.href = "/dashboard/boletas");
+    const redirect = () => (window.location.href = '/dashboard/boletas');
     const body = {
       entidad,
       nroActa,
       importe,
       intencionDePago: new Date(`${intencionDePago}`).toISOString(),
-      razon_de_pago: "Nro Acta: " + nroActa,
+      razon_de_pago: 'Nro Acta: ' + nroActa,
     };
     try {
       setDeshabilitar(true);
       await generarBoletaSinDDJJ(ID_EMPRESA, body).then(() => {
-        toast.success("Boleta generada con exito", {
+        toast.success('Boleta generada con exito', {
           onClose: () => {
             redirect();
           },
@@ -46,7 +46,7 @@ export const GenerarOtrosPagos = () => {
       });
     } catch (error) {
       console.error(error);
-      toast.error("Ocurrio un problema al intentar generar la boleta");
+      toast.error('Ocurrio un problema al intentar generar la boleta');
       redirect();
     }
     //console.log(body);

@@ -1,12 +1,12 @@
-import axios from "axios";
-import { errorBackendResponse } from "../../errors/errorBackendResponse";
-import localStorageService from "@/components/localStorage/localStorageService";
+import axios from 'axios';
+import { errorBackendResponse } from '../../errors/errorBackendResponse';
+import localStorageService from '@/components/localStorage/localStorageService';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 export const logon = async (usuario, clave) => {
   const URL = `${BACKEND_URL}/auth/login`;
-  console.log(URL)
+  console.log(URL);
   let jsonResponse = {
     token: null,
     tokenRefresco: null,
@@ -49,7 +49,7 @@ export const logonDFA = async (token, codigo) => {
   const codigoVerificacion = {
     codigo: codigo,
   };
-  console.log("** logonDFA - localStorageService.getToken(): token");
+  console.log('** logonDFA - localStorageService.getToken(): token');
   console.log(token);
   try {
     const response = await axios.post(URL, codigoVerificacion, {
@@ -67,7 +67,7 @@ export const logonDFA = async (token, codigo) => {
 
 export const consultarUsuarioLogueado = async (token) => {
   const URL = `${BACKEND_URL}/auth/login/usuario`;
-  console.log("consultarUsuarioLogueado - INIT");
+  console.log('consultarUsuarioLogueado - INIT');
   try {
     const response = await axios.get(URL, {
       headers: {
@@ -79,7 +79,7 @@ export const consultarUsuarioLogueado = async (token) => {
 
     return data || {};
   } catch (error) {
-    console.log("consultarUsuarioLogueado - ERRROR");
+    console.log('consultarUsuarioLogueado - ERRROR');
     errorBackendResponse(error);
   }
 };

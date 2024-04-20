@@ -1,6 +1,6 @@
-import { axiosCrud } from "@components/axios/axiosCrud";
-import { showErrorBackEnd } from "@/components/axios/showErrorBackEnd";
-import swal from "@/components/swal/swal";
+import { axiosCrud } from '@components/axios/axiosCrud';
+import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
+import swal from '@/components/swal/swal';
 
 const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
 const HTTP_MSG_MODI = import.meta.env.VITE_HTTP_MSG_MODI;
@@ -11,28 +11,28 @@ const HTTP_MSG_BAJA_ERROR = import.meta.env.VITE_HTTP_MSG_BAJA_ERROR;
 const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
 
 export const obtenerTipoDomicilio = async () => {
-  const URL = "/empresa/public/domicilio/tipo";
+  const URL = '/empresa/public/domicilio/tipo';
   try {
     const data = await axiosCrud.consultar(URL);
     return data || [];
   } catch (error) {
     showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
-      error
+      error,
     );
     return [];
   }
 };
 
 export const obtenerProvincias = async () => {
-  const URL = "/public/provincia";
+  const URL = '/public/provincia';
   try {
     const data = await axiosCrud.consultar(URL);
     return data || [];
   } catch (error) {
     showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
-      error
+      error,
     );
     return [];
   }
@@ -49,7 +49,7 @@ export const obtenerLocalidades = async (idProvincia) => {
   } catch (error) {
     showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
-      error
+      error,
     );
     return [];
   }

@@ -1,7 +1,7 @@
-import { axiosCrud } from "@components/axios/axiosCrud";
-import { showErrorBackEnd } from "@/components/axios/showErrorBackEnd";
-import formatter from "@/common/formatter";
-import swal from "@/components/swal/swal";
+import { axiosCrud } from '@components/axios/axiosCrud';
+import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
+import formatter from '@/common/formatter';
+import swal from '@/components/swal/swal';
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
 const HTTP_MSG_MODI = import.meta.env.VITE_HTTP_MSG_MODI;
@@ -74,7 +74,7 @@ export const eliminar = async (id) => {
       swal.showSuccess(
         HTTP_MSG_BAJA
           ? HTTP_MSG_BAJA
-          : "El registro se elimino sastisfactoriamente"
+          : 'El registro se elimino sastisfactoriamente',
       );
       return true;
     }

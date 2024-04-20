@@ -1,20 +1,22 @@
-import { useState, useEffect } from "react";
-import { InputComponent } from "../../components/InputComponent";
-import { ButtonComponent } from "../../components/ButtonComponent";
-import { useFormRegisterCompany } from "../../hooks/useFormRegisterCompany";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import { GrillaRegistroDomilicio } from "./grilla_registro_domicilio/GrillaRegistroDomicilio";
-import { registrarEmpresa, getRamo } from "./RegistroEmpresaApi";
-import TextField from "@mui/material/TextField";
-import Box from "@mui/material/Box";
-import Fab from "@mui/material/Fab";
-import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
-import AddIcon from "@mui/icons-material/Add";
-import "./RegistroEmpresa.css";
-import NavBar from "@/components/navbar/NavBar";
-import { showErrorBackEnd } from "@/components/axios/showErrorBackEnd";
+import { useState, useEffect } from 'react';
+import { InputComponent } from '../../components/InputComponent';
+import { ButtonComponent } from '../../components/ButtonComponent';
+import { useFormRegisterCompany } from '../../hooks/useFormRegisterCompany';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import { GrillaRegistroDomilicio } from './grilla_registro_domicilio/GrillaRegistroDomicilio';
+import { registrarEmpresa, getRamo } from './RegistroEmpresaApi';
+import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
+import Fab from '@mui/material/Fab';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import AddIcon from '@mui/icons-material/Add';
+import './RegistroEmpresa.css';
+import NavBar from '@/components/navbar/NavBar';
+import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
+import { IconButton, InputAdornment, OutlinedInput } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 export const RegistroEmpresa = () => {
   const [additionalEmail, setAddionalEmail] = useState([]);
@@ -23,9 +25,11 @@ export const RegistroEmpresa = () => {
   const [phoneAlternativos, setPhoneAlternativos] = useState([]);
   const [idPhoneAlternativos, setIdPhoneAlternativos] = useState(2);
   const [idEmailAlternativos, setIdEmailAlternativos] = useState(2);
-  const [ramoAux, setRamoAux] = useState("");
+  const [ramoAux, setRamoAux] = useState('');
   const [ramos, setRamos] = useState([]);
   const [rowsDomicilio, setRowsDomicilio] = useState([]);
+  const [showPassword, setShowPassword] = useState(true);
+  const [showPasswordRepeat, setShowPasswordRepeat] = useState(true);
 
   useEffect(() => {
     const getRamos = async () => {
@@ -53,27 +57,40 @@ export const RegistroEmpresa = () => {
     OnInputChangeRegisterCompany,
     OnResetFormRegisterCompany,
   } = useFormRegisterCompany({
-    cuit: "",
-    razonSocial: "",
-    email_first: "",
-    email_second: "",
-    password: "",
-    repeatPassword: "",
-    prefijo_first: "",
-    phone_first: "",
-    prefijo_second: "",
-    phone_second: "",
-    whatsapp: "",
-    whatsapp_prefijo: "",
-    ramo: "",
+    cuit: '',
+    razonSocial: '',
+    email_first: '',
+    email_second: '',
+    password: '',
+    repeatPassword: '',
+    prefijo_first: '',
+    phone_first: '',
+    prefijo_second: '',
+    phone_second: '',
+    whatsapp: '',
+    whatsapp_prefijo: '',
+    ramo: '',
   });
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+  const handleClickShowPasswordRepeat = () =>
+    setShowPasswordRepeat((show) => !show);
+
+  const handleMouseDownPasswordRepeat = (event) => {
+    event.preventDefault();
+  };
 
   const OnSubmitRegisterCompany = async (e) => {
     e.preventDefault();
 
     // Validar de que password y repeatPassword sean iguales
     if (password !== repeatPassword) {
-      showErrorBackEnd("Las contraseñas no coinciden", {});
+      showErrorBackEnd('Las contraseñas no coinciden', {});
       return;
     }
 
@@ -94,7 +111,7 @@ export const RegistroEmpresa = () => {
       phoneAlternativos.length > 0 &&
       (prefijo_second || phone_second)
     ) {
-      usuarioEmpresa["telefonosAlternativos"] = [
+      usuarioEmpresa['telefonosAlternativos'] = [
         {
           prefijo: prefijo_second,
           nro: phone_second,
@@ -112,7 +129,7 @@ export const RegistroEmpresa = () => {
         phoneAlternativos.length > 0 &&
         (prefijo_second || phone_second)
       )
-        usuarioEmpresa["telefonosAlternativos"] = [
+        usuarioEmpresa['telefonosAlternativos'] = [
           {
             prefijo: prefijo_second,
             nro: phone_second,
@@ -141,7 +158,7 @@ export const RegistroEmpresa = () => {
     }
 
     if (rowsDomicilio && rowsDomicilio.length > 0) {
-      usuarioEmpresa["domicilios"] = rowsDomicilio.map((row) => ({
+      usuarioEmpresa['domicilios'] = rowsDomicilio.map((row) => ({
         tipo: row.tipo,
         provinciaId: row.provinciaId,
         localidadId: row.localidadId,
@@ -164,13 +181,13 @@ export const RegistroEmpresa = () => {
       setAdditionalPhone([]);
       setRowsDomicilio([]);
       OnResetFormRegisterCompany();
-    } 
+    }
   };
 
   const OnChangeRamos = (e) => {
     OnInputChangeRegisterCompany({
       target: {
-        name: "ramos",
+        name: 'ramos',
         value: e.target.value,
       },
     });
@@ -182,7 +199,7 @@ export const RegistroEmpresa = () => {
 
     const values = [...additionalEmail];
     const newEmail = {
-      email: "",
+      email: '',
       id: idEmailAlternativos,
     };
     values.push(newEmail);
@@ -195,8 +212,8 @@ export const RegistroEmpresa = () => {
 
     const values = [...additionalPhone];
     const newPhone = {
-      prefijo: "",
-      nro: "",
+      prefijo: '',
+      nro: '',
       id: idPhoneAlternativos,
     };
     values.push(newPhone);
@@ -206,7 +223,12 @@ export const RegistroEmpresa = () => {
 
   return (
     <main>
-      <NavBar />
+      <NavBar
+        estilos={{
+          backgroundColor: '#1a76d2',
+        }}
+        mostrarBtn={true}
+      />
       <div className="registro_empresa_container">
         <form
           onSubmit={OnSubmitRegisterCompany}
@@ -225,13 +247,15 @@ export const RegistroEmpresa = () => {
             />
             <span
               style={{
-                position: "absolute",
-                marginTop: "18px",
-                marginLeft: "515px",
-                fontSize: "20px",
-                color: "rgb(255, 0, 0)"
+                position: 'absolute',
+                marginTop: '18px',
+                marginLeft: '515px',
+                fontSize: '20px',
+                color: 'rgb(255, 0, 0)',
               }}
-            >*</span>
+            >
+              *
+            </span>
           </div>
           <div className="input-group">
             <TextField
@@ -244,13 +268,15 @@ export const RegistroEmpresa = () => {
             />
             <span
               style={{
-                position: "absolute",
-                marginTop: "18px",
-                marginLeft: "515px",
-                fontSize: "20px",
-                color: "rgb(255, 0, 0)"
+                position: 'absolute',
+                marginTop: '18px',
+                marginLeft: '515px',
+                fontSize: '20px',
+                color: 'rgb(255, 0, 0)',
               }}
-            >*</span>
+            >
+              *
+            </span>
           </div>
           <div className="input-group">
             <TextField
@@ -260,23 +286,25 @@ export const RegistroEmpresa = () => {
               value={email_first}
               onChange={OnInputChangeRegisterCompany}
               inputProps={{
-                autoComplete: "new-password",
+                autoComplete: 'new-password',
               }}
               label="E-mail principal N° 1"
             />
             <span
               style={{
-                position: "absolute",
-                marginTop: "18px",
-                marginLeft: "515px",
-                fontSize: "20px",
-                color: "rgb(255, 0, 0)"
+                position: 'absolute',
+                marginTop: '18px',
+                marginLeft: '515px',
+                fontSize: '20px',
+                color: 'rgb(255, 0, 0)',
               }}
-            >*</span>
+            >
+              *
+            </span>
           </div>
           <div
             style={{
-              position: "relative",
+              position: 'relative',
             }}
             className="input-group"
           >
@@ -287,20 +315,20 @@ export const RegistroEmpresa = () => {
               value={email_second}
               onChange={OnInputChangeRegisterCompany}
               inputProps={{
-                autoComplete: "new-password",
+                autoComplete: 'new-password',
               }}
               label="E-mail Alternativo N° 2"
             />
-            <Box sx={{ "& > :not(style)": { m: 1 } }}>
+            <Box sx={{ '& > :not(style)': { m: 1 } }}>
               <Fab
                 size="small"
                 color="primary"
                 aria-label="add"
                 style={{
-                  position: "absolute",
-                  marginTop: "-48px",
-                  marginLeft: "255px",
-                  zIndex: "1",
+                  position: 'absolute',
+                  marginTop: '-48px',
+                  marginLeft: '255px',
+                  zIndex: '1',
                 }}
                 onClick={handleAddEmail}
               >
@@ -315,7 +343,7 @@ export const RegistroEmpresa = () => {
                 id={String(input.id)}
                 name={`additionalEmail_${input.id}`}
                 inputProps={{
-                  autoComplete: "new-password",
+                  autoComplete: 'new-password',
                 }}
                 label="Correo Electrónico Adicional"
                 value={input.email}
@@ -332,56 +360,92 @@ export const RegistroEmpresa = () => {
             </div>
           ))}
           <div className="input-group">
-            <InputComponent
-              type="password"
-              name="password"
-              value={password}
-              onChange={OnInputChangeRegisterCompany}
-              autoComplete="off"
-              variant="filled"
-              label="Contraseña"
-            />
+            <FormControl variant="outlined">
+              <InputLabel htmlFor="outlined-adornment-password">
+                Contraseña
+              </InputLabel>
+              <OutlinedInput
+                type={showPassword ? 'text' : 'password'}
+                name="password"
+                value={password}
+                onChange={OnInputChangeRegisterCompany}
+                autoComplete="off"
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                label="Password"
+              />
+            </FormControl>
             <span
               style={{
-                position: "absolute",
-                marginTop: "18px",
-                marginLeft: "515px",
-                fontSize: "20px",
-                color: "rgb(255, 0, 0)"
+                position: 'absolute',
+                marginTop: '18px',
+                marginLeft: '515px',
+                fontSize: '20px',
+                color: 'rgb(255, 0, 0)',
               }}
-            >*</span>
+            >
+              *
+            </span>
           </div>
           <div className="input-group">
-            <InputComponent
-              type="password"
-              name="repeatPassword"
-              value={repeatPassword}
-              onChange={OnInputChangeRegisterCompany}
-              autoComplete="off"
-              variant="filled"
-              label="Repetir Contraseña"
-            />
+            <FormControl variant="outlined">
+              <InputLabel htmlFor="outlined-adornment-password">
+                Repetir Contraseña
+              </InputLabel>
+              <OutlinedInput
+                type={showPasswordRepeat ? 'text' : 'password'}
+                name="repeatPassword"
+                value={repeatPassword}
+                onChange={OnInputChangeRegisterCompany}
+                autoComplete="off"
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPasswordRepeat}
+                      onMouseDown={handleMouseDownPasswordRepeat}
+                      edge="end"
+                    >
+                      {showPasswordRepeat ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                label="Password"
+              />
+            </FormControl>
             <span
               style={{
-                position: "absolute",
-                marginTop: "18px",
-                marginLeft: "515px",
-                fontSize: "20px",
-                color: "rgb(255, 0, 0)"
+                position: 'absolute',
+                marginTop: '18px',
+                marginLeft: '515px',
+                fontSize: '20px',
+                color: 'rgb(255, 0, 0)',
               }}
-            >*</span>
+            >
+              *
+            </span>
           </div>
           <div className="input-group">
             <div
               style={{
-                display: "flex",
-                alignItems: "center",
-                marginBottom: "10px",
+                display: 'flex',
+                alignItems: 'center',
+                marginBottom: '10px',
               }}
             >
               <div
                 style={{
-                  width: "20%",
+                  width: '20%',
                 }}
               >
                 <TextField
@@ -394,17 +458,19 @@ export const RegistroEmpresa = () => {
                 />
               </div>
               <span
-              style={{
-                position: "absolute",
-                marginTop: "18px",
-                marginLeft: "515px",
-                fontSize: "20px",
-                color: "rgb(255, 0, 0)"
-              }}
-            >*</span>
+                style={{
+                  position: 'absolute',
+                  marginTop: '18px',
+                  marginLeft: '515px',
+                  fontSize: '20px',
+                  color: 'rgb(255, 0, 0)',
+                }}
+              >
+                *
+              </span>
               <div
                 style={{
-                  width: "80%",
+                  width: '80%',
                 }}
               >
                 <TextField
@@ -415,7 +481,7 @@ export const RegistroEmpresa = () => {
                   autoComplete="off"
                   label="Teléfono principal N° 1"
                   sx={{
-                    width: "100%",
+                    width: '100%',
                   }}
                 />
               </div>
@@ -424,14 +490,14 @@ export const RegistroEmpresa = () => {
           <div className="input-group">
             <div
               style={{
-                display: "flex",
-                alignItems: "center",
-                marginBottom: "10px",
+                display: 'flex',
+                alignItems: 'center',
+                marginBottom: '10px',
               }}
             >
               <div
                 style={{
-                  width: "20%",
+                  width: '20%',
                 }}
               >
                 <TextField
@@ -445,7 +511,7 @@ export const RegistroEmpresa = () => {
               </div>
               <div
                 style={{
-                  width: "80%",
+                  width: '80%',
                 }}
               >
                 <TextField
@@ -456,19 +522,19 @@ export const RegistroEmpresa = () => {
                   autoComplete="off"
                   label="Teléfono Alternativo N° 1"
                   sx={{
-                    width: "100%",
+                    width: '100%',
                   }}
                 />
-                <Box sx={{ "& > :not(style)": { m: 1 } }}>
+                <Box sx={{ '& > :not(style)': { m: 1 } }}>
                   <Fab
                     size="small"
                     color="primary"
                     aria-label="add"
                     style={{
-                      position: "absolute",
-                      marginTop: "-48px",
-                      marginLeft: "205px",
-                      zIndex: "1",
+                      position: 'absolute',
+                      marginTop: '-48px',
+                      marginLeft: '205px',
+                      zIndex: '1',
                     }}
                     onClick={handleAddPhone}
                   >
@@ -482,14 +548,14 @@ export const RegistroEmpresa = () => {
             <div className="input-group" key={input.id}>
               <div
                 style={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginBottom: "10px",
+                  display: 'flex',
+                  alignItems: 'center',
+                  marginBottom: '10px',
                 }}
               >
                 <div
                   style={{
-                    width: "20%",
+                    width: '20%',
                   }}
                 >
                   <TextField
@@ -512,7 +578,7 @@ export const RegistroEmpresa = () => {
 
                 <div
                   style={{
-                    width: "80%",
+                    width: '80%',
                   }}
                 >
                   <TextField
@@ -531,7 +597,7 @@ export const RegistroEmpresa = () => {
                     autoComplete="off"
                     label="Teléfono Alternativo"
                     sx={{
-                      width: "100%",
+                      width: '100%',
                     }}
                   />
                 </div>
@@ -541,14 +607,14 @@ export const RegistroEmpresa = () => {
           <div className="input-group">
             <div
               style={{
-                display: "flex",
-                alignItems: "center",
-                marginBottom: "10px",
+                display: 'flex',
+                alignItems: 'center',
+                marginBottom: '10px',
               }}
             >
               <div
                 style={{
-                  width: "20%",
+                  width: '20%',
                 }}
               >
                 <InputComponent
@@ -562,17 +628,19 @@ export const RegistroEmpresa = () => {
                 />
               </div>
               <span
-              style={{
-                position: "absolute",
-                marginTop: "18px",
-                marginLeft: "515px",
-                fontSize: "20px",
-                color: "rgb(255, 0, 0)"
-              }}
-            >*</span>
+                style={{
+                  position: 'absolute',
+                  marginTop: '18px',
+                  marginLeft: '515px',
+                  fontSize: '20px',
+                  color: 'rgb(255, 0, 0)',
+                }}
+              >
+                *
+              </span>
               <div
                 style={{
-                  width: "80%",
+                  width: '80%',
                 }}
               >
                 <TextField
@@ -583,7 +651,7 @@ export const RegistroEmpresa = () => {
                   autoComplete="off"
                   label="Whatsapp"
                   sx={{
-                    width: "100%",
+                    width: '100%',
                   }}
                 />
               </div>
@@ -592,9 +660,9 @@ export const RegistroEmpresa = () => {
           <div className="input-group">
             <Box
               sx={{
-                textAlign: "left",
-                color: "#606060",
-                width: "100%",
+                textAlign: 'left',
+                color: '#606060',
+                width: '100%',
               }}
             >
               <FormControl fullWidth>
@@ -618,28 +686,30 @@ export const RegistroEmpresa = () => {
             </Box>
             <span
               style={{
-                position: "absolute",
-                marginTop: "18px",
-                marginLeft: "515px",
-                fontSize: "20px",
-                color: "rgb(255, 0, 0)"
+                position: 'absolute',
+                marginTop: '18px',
+                marginLeft: '515px',
+                fontSize: '20px',
+                color: 'rgb(255, 0, 0)',
               }}
-            >*</span>
+            >
+              *
+            </span>
           </div>
 
           <div
             className="input-group"
             style={{
-              position: "relative",
+              position: 'relative',
             }}
           ></div>
           <p
             style={{
-              marginTop: "20px",
-              marginBottom: "15px",
-              color: "#18365D",
-              display: "flex",
-              alignItems: "center",
+              marginTop: '20px',
+              marginBottom: '15px',
+              color: '#18365D',
+              display: 'flex',
+              alignItems: 'center',
             }}
           >
             Domicilios declarados: (Para completar el registro, deberá agregar
@@ -653,9 +723,9 @@ export const RegistroEmpresa = () => {
 
           <ButtonComponent
             styles={{
-              width: "auto",
-              marginTop: "20px",
-              padding: "15px",
+              width: 'auto',
+              marginTop: '20px',
+              padding: '15px',
             }}
             className="btn_ingresar"
             name="REGISTRAR EMPRESA"

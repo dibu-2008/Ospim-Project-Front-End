@@ -1,34 +1,39 @@
-import { useNavigate } from "react-router-dom"
-import { useFormLoginCompany } from "../hooks/useFormLoginCompany"
+import { useNavigate } from 'react-router-dom';
+import { useFormLoginCompany } from '../hooks/useFormLoginCompany';
 
 export const RegisterPage = () => {
-
   // Recorda que le cambiaste todas las propiedades al custonHook de useFormLoginCompany ya esta
 
   // Crear el form como debe de ser para resgistar empresa
 
   const navigate = useNavigate();
 
-  const { name, email, password, OnInputChangeLoginCompany, OnResetFormLoginCompany } = useFormLoginCompany({
+  const {
+    name,
+    email,
+    password,
+    OnInputChangeLoginCompany,
+    OnResetFormLoginCompany,
+  } = useFormLoginCompany({
     name: '',
     email: '',
-    password: ''
-  })
+    password: '',
+  });
 
   const onRegister = (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     navigate('/dashboard', {
       replace: true,
       state: {
         logged: true,
         name,
-        email
-      }
-    })
+        email,
+      },
+    });
 
-    OnResetFormLoginCompany()
-  }
+    OnResetFormLoginCompany();
+  };
 
   return (
     <div className="wrapper_container">
@@ -44,8 +49,9 @@ export const RegisterPage = () => {
                 value={name}
                 onChange={OnInputChangeLoginCompany}
                 required
-                autoComplete="off" 
-                placeholder="Nombre"/>
+                autoComplete="off"
+                placeholder="Nombre"
+              />
             </div>
             {/********************************************************/}
             <div className="input-group">
@@ -56,9 +62,9 @@ export const RegisterPage = () => {
                 value={email}
                 onChange={OnInputChangeLoginCompany}
                 required
-                autoComplete="off" 
-                placeholder="E-mail"/>
-              
+                autoComplete="off"
+                placeholder="E-mail"
+              />
             </div>
             {/********************************************************/}
             <div className="input-group">
@@ -70,14 +76,15 @@ export const RegisterPage = () => {
                 onChange={OnInputChangeLoginCompany}
                 required
                 autoComplete="off"
-                placeholder="Password"/>
+                placeholder="Password"
+              />
             </div>
-            <button 
-            style={{ marginTop: '10px' }} 
-            className="btn_ingresar">REGISTRARSE</button>
+            <button style={{ marginTop: '10px' }} className="btn_ingresar">
+              REGISTRARSE
+            </button>
           </form>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

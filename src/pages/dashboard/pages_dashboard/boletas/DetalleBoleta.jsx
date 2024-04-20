@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { DataGrid } from "@mui/x-data-grid";
+import React, { useEffect, useState } from 'react';
+import { DataGrid } from '@mui/x-data-grid';
 import {
   Table,
   TableBody,
@@ -11,39 +11,39 @@ import {
   Select,
   MenuItem,
   TextField,
-} from "@mui/material";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Button from "@mui/material/Button";
-import "./Boletas.css";
-import { Box } from "@mui/system";
+} from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Button from '@mui/material/Button';
+import './Boletas.css';
+import { Box } from '@mui/system';
 import {
   downloadPdfDetalle,
   downloadPdfBoleta,
   getBoletaById,
   modificarBoletaById,
-} from "./BoletasApi";
-import formatter from "@/common/formatter";
-import { useParams } from "react-router-dom";
-import { calcularInteresBoleta } from "../generar_boletas/GenerarBoletasApi";
+} from './BoletasApi';
+import formatter from '@/common/formatter';
+import { useParams } from 'react-router-dom';
+import { calcularInteresBoleta } from '../generar_boletas/GenerarBoletasApi';
 
 export const DetalleBoleta = () => {
   //const boletaDetalle = JSON.parse(localStorage.getItem('boletaDetalle'));
   const [boletaDetalle, setBoletaDetalle] = useState([]);
   const [afiliadosRows, setAfiliadosRows] = useState([]);
   const [isEditable, setIsEditable] = useState(true);
-  const [metodoPago, setMetodoPago] = useState("");
-  const [intencionDePago, setIntencionDePago] = useState("");
-  const [ddjj_id, setDDDJJ_id] = useState("");
-  const [codigo, setCodigo] = useState("");
+  const [metodoPago, setMetodoPago] = useState('');
+  const [intencionDePago, setIntencionDePago] = useState('');
+  const [ddjj_id, setDDDJJ_id] = useState('');
+  const [codigo, setCodigo] = useState('');
   const [modoEdicion, setModoEdicion] = useState(false);
   const [respaldoBoleta, setRespaldoBoleta] = useState([]);
   const [ajustes, setAjustes] = useState([]);
 
-  const ID_EMPRESA = JSON.parse(localStorage.getItem("stateLogin"))
+  const ID_EMPRESA = JSON.parse(localStorage.getItem('stateLogin'))
     .usuarioLogueado.empresa.id;
   const { numero_boleta } = useParams();
   console.log(numero_boleta);
-  const hoy = new Date().toISOString().split("T")[0];
+  const hoy = new Date().toISOString().split('T')[0];
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -54,7 +54,7 @@ export const DetalleBoleta = () => {
           response.data.afiliados.map((afiliado, index) => ({
             ...afiliado,
             id: index + 1,
-          }))
+          })),
         );
         setMetodoPago(response.data.forma_de_pago);
         setIntencionDePago(response.data.intencion_de_pago);
@@ -64,7 +64,7 @@ export const DetalleBoleta = () => {
         setAjustes(response.data.ajustes);
         setRespaldoBoleta(JSON.parse(JSON.stringify(response.data)));
       } catch (error) {
-        console.error("Error al obtener los datos de la boleta:", error);
+        console.error('Error al obtener los datos de la boleta:', error);
       }
     };
     fetchData();
@@ -80,7 +80,7 @@ export const DetalleBoleta = () => {
       ID_EMPRESA,
       ddjj_id,
       codigo,
-      value
+      value,
     );
     // Realizar la copia superficial del objeto original
     let objetoModificado = { ...boletaDetalle };
@@ -113,7 +113,7 @@ export const DetalleBoleta = () => {
     setModoEdicion(!modoEdicion);
   };
 
-  const existeDato = (value) => (value !== null && value !== "" ? value : "");
+  const existeDato = (value) => (value !== null && value !== '' ? value : '');
   return (
     <div className="boletas_container">
       <h1>Detalle boleta {boletaDetalle.descripcion}</h1>
@@ -123,7 +123,7 @@ export const DetalleBoleta = () => {
           downloadPdfBoleta(
             ID_EMPRESA,
             boletaDetalle.declaracion_jurada_id,
-            boletaDetalle.codigo
+            boletaDetalle.codigo,
           )
         }
       >
@@ -186,10 +186,10 @@ export const DetalleBoleta = () => {
               <TableCell>
                 {existeDato(boletaDetalle.periodo)
                   ? formatter.periodo(boletaDetalle.periodo)
-                  : ""}
+                  : ''}
               </TableCell>
               <TableCell>
-                {boletaDetalle.tipo_ddjj ? boletaDetalle.tipo_ddjj : "Original"}
+                {boletaDetalle.tipo_ddjj ? boletaDetalle.tipo_ddjj : 'Original'}
               </TableCell>
               <TableCell>
                 {boletaDetalle.nro_boleta ? boletaDetalle.nro_boleta : 1}
@@ -197,7 +197,7 @@ export const DetalleBoleta = () => {
               <TableCell>{existeDato(boletaDetalle.descripcion)}</TableCell>
               <TableCell className="importes">
                 {existeDato(
-                  formatter.currency.format(boletaDetalle.total_acumulado)
+                  formatter.currency.format(boletaDetalle.total_acumulado),
                 )}
               </TableCell>
               <TableCell className="importes">
@@ -206,14 +206,14 @@ export const DetalleBoleta = () => {
               <TableCell className="importes">
                 {existeDato(
                   formatter.currency.format(
-                    boletaDetalle.total_acumulado + boletaDetalle.interes
-                  )
+                    boletaDetalle.total_acumulado + boletaDetalle.interes,
+                  ),
                 )}
               </TableCell>
               {boletaDetalle.importe_recibido && (
                 <TableCell className="importes">
                   {existeDato(
-                    formatter.currency.format(boletaDetalle.importe_recibido)
+                    formatter.currency.format(boletaDetalle.importe_recibido),
                   )}
                 </TableCell>
               )}
@@ -235,7 +235,7 @@ export const DetalleBoleta = () => {
                 ) : existeDato(boletaDetalle.intencion_de_pago) ? (
                   formatter.date(boletaDetalle.intencion_de_pago)
                 ) : (
-                  ""
+                  ''
                 )}
               </TableCell>
               <TableCell>
@@ -260,30 +260,30 @@ export const DetalleBoleta = () => {
       </TableContainer>
       <Box
         sx={{
-          width: "100%",
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: "#1A76D2",
-            color: "white",
+          width: '100%',
+          '& .MuiDataGrid-columnHeaders': {
+            backgroundColor: '#1A76D2',
+            color: 'white',
           },
         }}
       >
-        <div style={{ height: 300, width: "100%" }}>
+        <div style={{ height: 300, width: '100%' }}>
           <DataGrid
             rows={afiliadosRows}
             columns={[
-              { field: "cuil", headerName: "CUIL", flex: 1 },
-              { field: "apellido", headerName: "Apellido", flex: 1 },
-              { field: "nombre", headerName: "Nombre", flex: 1 },
+              { field: 'cuil', headerName: 'CUIL', flex: 1 },
+              { field: 'apellido', headerName: 'Apellido', flex: 1 },
+              { field: 'nombre', headerName: 'Nombre', flex: 1 },
               {
-                field: "remunerativo",
-                headerName: "Remunerativo",
+                field: 'remunerativo',
+                headerName: 'Remunerativo',
                 flex: 1,
                 valueFormatter: (params) =>
                   formatter.currency.format(params.value),
               },
               {
-                field: "capital",
-                headerName: "Capital",
+                field: 'capital',
+                headerName: 'Capital',
                 flex: 1,
                 valueFormatter: (params) =>
                   formatter.currency.format(params.value),
@@ -303,7 +303,7 @@ export const DetalleBoleta = () => {
                 <TableCell>Subtotal</TableCell>
                 <TableCell className="importes">
                   {formatter.currency.format(
-                    existeDato(boletaDetalle.total_acumulado)
+                    existeDato(boletaDetalle.total_acumulado),
                   )}
                 </TableCell>
               </TableRow>
@@ -322,9 +322,9 @@ export const DetalleBoleta = () => {
                     boletaDetalle.ajustes
                       ? boletaDetalle.ajustes.reduce(
                           (acumulador, ajuste) => acumulador + ajuste.monto,
-                          0
+                          0,
                         )
-                      : 0
+                      : 0,
                   )}
                 </TableCell>
               </TableRow>
@@ -332,7 +332,7 @@ export const DetalleBoleta = () => {
                 <TableCell>Total Final</TableCell>
                 <TableCell className="importes">
                   {existeDato(
-                    formatter.currency.format(boletaDetalle.total_final)
+                    formatter.currency.format(boletaDetalle.total_final),
                   )}
                 </TableCell>
               </TableRow>
@@ -344,12 +344,12 @@ export const DetalleBoleta = () => {
           ajustes.map((ajuste, index) => (
             <div key={index} className="w30">
               {index === 0 && (
-                <h3 style={{ color: "#1A76D2" }}>Ajustes aplicados</h3>
+                <h3 style={{ color: '#1A76D2' }}>Ajustes aplicados</h3>
               )}
               <p>{ajuste.descripcion}</p>
               <ul>
                 <li key={index}>
-                  {ajuste.descripcion}:{" "}
+                  {ajuste.descripcion}:{' '}
                   {formatter.currency.format(ajuste.monto)}
                 </li>
               </ul>
