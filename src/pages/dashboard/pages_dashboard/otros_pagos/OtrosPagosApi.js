@@ -1,4 +1,6 @@
 import axios from 'axios';
+import oAxios from '@components/axios/axiosInstace';
+
 import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
 import { axiosCrud } from '@components/axios/axiosCrud';
 
@@ -9,8 +11,17 @@ export const generarBoletaSinDDJJ = async (empresa_id, body) => {
   try {
     console.log(body);
     const URL = `${BACKEND_URL}/empresa/${empresa_id}/generar-boleta-sin-ddjj`;
-    const response = await axiosCrud.crear(URL, { ...body });
-    if (response) {
+
+    const response = await oAxios.request({
+      url: URL,
+      method: 'post',
+      responseType: 'blob',
+      data: body
+    });
+    //const response = await axiosCrud.crear(URL, { ...body });    
+    
+    if (response) {      
+      //Ojo que response.data => NO EXISTE 
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
