@@ -195,50 +195,105 @@
       "descripcion": "ROOT"
     },
     {
-      "id": 7,
+      "id": 2,
       "descripcion": "ADMINISTRATIVO"
     },
     {
       "descripcion": "CONTADURIA",
-      "id": 8
+      "id": 3
     },
     {
       "descripcion": "PRUEBA III",
-      "id": 9
+      "id": 4
     }
   ],
-  "funcionalidad": [
+
+  "rolFuncionalidades": [
     {
-      "codigo": "FERIADO",
-      "descripcion": "Tabla Feriados"
+      "rolId": 1,
+      "descripcion": "ROOT",
+      "funcionalidades": [
+        {
+          "id": 1,
+          "descripcion": "FERIADO"
+        },
+        {
+          "id": 2,
+          "descripcion": "AJUSTES"
+        },
+        {
+          "id": 3,
+          "descripcion": "ROLES"
+        },
+        {
+          "id": 4,
+          "descripcion": "INTERESES"
+        }
+      ]
     },
     {
-      "codigo": "USUA-INTER",
-      "descripcion": "Tabla Usuario Interno"
+      "rolId": 2,
+      "descripcion": "ADMINISTRATIVO",
+      "funcionalidades": [
+        {
+          "id": 3,
+          "descripcion": "ROLES"
+        },
+        {
+          "id": 4,
+          "descripcion": "INTERESES"
+        }
+      ]
     },
     {
-      "codigo": "USUA-EMPRE",
-      "descripcion": "Tabla Usuario Empresa"
+      "rolId": 3,
+      "descripcion": "ADMINISTRATIVO",
+      "funcionalidades": [
+        {
+          "id": 1,
+          "descripcion": "FERIADO"
+        },
+        {
+          "id": 2,
+          "descripcion": "AJUSTES"
+        }
+      ]
+    },
+    {
+      "descripcion": "PRUEBA III",
+      "id": 4,
+      "funcionalidades": [
+        {
+          "id": 2,
+          "descripcion": "AJUSTES"
+        },
+        {
+          "id": 3,
+          "descripcion": "ROLES"
+        }
+      ]
     }
   ],
-  "rolFuncionalidad": [
+
+  "funcionalidades": [
     {
-      "rolId": 1,
-      "funcionalidad": "FERIADO"
+      "id": 1,
+      "descripcion": "FERIADO"
     },
     {
-      "rolId": 1,
-      "funcionalidad": "USUA-INTER"
+      "id": 2,
+      "descripcion": "AJUSTES"
     },
     {
-      "rolId": 1,
-      "funcionalidad": "USUA-EMPRE"
+      "id": 3,
+      "descripcion": "ROLES"
     },
     {
-      "rolId": "7",
-      "funcionalidad": "USUA-EMPRE"
+      "id": 4,
+      "descripcion": "INTERESES"
     }
   ],
+
   "feriados": [
     {
       "fecha": "2024-02-13T03:00:00.000Z",
