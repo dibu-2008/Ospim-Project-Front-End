@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import {
   Typography,
   TextField,
@@ -21,13 +22,15 @@ export const GenerarOtrosPagos = () => {
   const [nroActa, setNroActa] = useState('');
   const [importe, setImporte] = useState('');
   const [deshabilitar, setDeshabilitar] = useState(false);
+  const navigate = useNavigate
 
   const ID_EMPRESA = JSON.parse(localStorage.getItem('stateLogin'))
     .usuarioLogueado.empresa.id;
   const hoy = new Date().toISOString().split('T')[0];
 
   const handleImprimir = async () => {
-    const redirect = () => (window.location.href = '/dashboard/boletas');
+    //const redirect = () => (window.location.href = '/dashboard/boletas');
+    
     const body = {
       entidad,
       nroActa,
@@ -40,7 +43,7 @@ export const GenerarOtrosPagos = () => {
       await generarBoletaSinDDJJ(ID_EMPRESA, body).then(() => {
         toast.success('Boleta generada con exito', {
           onClose: () => {
-            redirect();
+            navigate(window.location.href = '/dashboard/boletas')
           },
         });
       });

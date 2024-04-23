@@ -207,7 +207,6 @@
       "id": 4
     }
   ],
-
   "rolFuncionalidades": [
     {
       "rolId": 1,
@@ -274,7 +273,6 @@
       ]
     }
   ],
-
   "funcionalidades": [
     {
       "id": 1,
@@ -293,7 +291,6 @@
       "descripcion": "INTERESES"
     }
   ],
-
   "feriados": [
     {
       "fecha": "2024-02-13T03:00:00.000Z",
@@ -4898,6 +4895,30 @@
         "intencionDePago": "2024-04-19T00:00:00.000Z",
         "razon_de_pago": "Nro Acta: 4444",
         "id": 8
+      },
+      {
+        "entidad": "OSPIM",
+        "nroActa": "123",
+        "importe": "123",
+        "intencionDePago": "2024-04-27T00:00:00.000Z",
+        "razon_de_pago": "Nro Acta: 123",
+        "id": 9
+      },
+      {
+        "entidad": "OSPIM",
+        "nroActa": "111",
+        "importe": "23",
+        "intencionDePago": "2024-04-28T00:00:00.000Z",
+        "razon_de_pago": "Nro Acta: 111",
+        "id": 10
+      },
+      {
+        "entidad": "OSPIM",
+        "nroActa": "321",
+        "importe": "333",
+        "intencionDePago": "2024-04-27T00:00:00.000Z",
+        "razon_de_pago": "Nro Acta: 321",
+        "id": 11
       }
     ]
   },
