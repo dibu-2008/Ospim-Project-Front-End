@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Typography,
   TextField,
@@ -21,6 +22,7 @@ export const GenerarOtrosPagos = () => {
   const [nroActa, setNroActa] = useState('');
   const [importe, setImporte] = useState('');
   const [deshabilitar, setDeshabilitar] = useState(false);
+  const navigate = useNavigate();
 
   const ID_EMPRESA = JSON.parse(localStorage.getItem('stateLogin'))
     .usuarioLogueado.empresa.id;
@@ -40,14 +42,14 @@ export const GenerarOtrosPagos = () => {
       await generarBoletaSinDDJJ(ID_EMPRESA, body).then(() => {
         toast.success('Boleta generada con exito', {
           onClose: () => {
-            redirect();
+            navigate('/dashboard/boletas');
           },
         });
       });
     } catch (error) {
       console.error(error);
       toast.error('Ocurrio un problema al intentar generar la boleta');
-      redirect();
+      navigate('/dashboard/boletas');
     }
     //console.log(body);
   };
