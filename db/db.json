@@ -4790,6 +4790,7 @@
         "nroActa": "123123",
         "importe": "1431234",
         "razon_de_pago": "Nro Acta: 123123",
+        "intencion_de_pago": "2024-03-16T03:00:00.000Z",
         "id": 1
       },
       {
@@ -4797,6 +4798,7 @@
         "nroActa": "123123",
         "importe": "1431234",
         "razon_de_pago": "Nro Acta: 123123",
+        "intencion_de_pago": "2024-03-16T03:00:00.000Z",
         "id": 2
       },
       {
@@ -4804,6 +4806,7 @@
         "nroActa": "321",
         "importe": "44452",
         "razon_de_pago": "Nro Acta: 321",
+        "intencion_de_pago": "2024-03-16T03:00:00.000Z",
         "id": 3
       },
       {
@@ -4811,14 +4814,15 @@
         "nroActa": "999",
         "importe": "123",
         "razon_de_pago": "Nro Acta: 999",
+        "intencion_de_pago": "2024-03-16T03:00:00.000Z",
         "id": 4
       },
       {
         "entidad": "OSPIM",
         "nroActa": "3335555",
         "importe": "3334444",
-        "intencionDePago": "2024-03-31",
         "razon_de_pago": "Nro Acta: 3335555",
+        "intencion_de_pago": "2024-03-16T03:00:00.000Z",
         "id": 9
       },
       {
@@ -4826,21 +4830,22 @@
         "nroActa": "123123",
         "importe": "1431234",
         "razon_de_pago": "Nro Acta: 123123",
+        "intencion_de_pago": "2024-03-16T03:00:00.000Z",
         "id": 6
       },
       {
         "entidad": "OSPIM",
         "nroActa": "1111",
         "importe": "1111",
-        "intencionDePago": "2024-04-10",
         "razon_de_pago": "Nro Acta: 1111",
+        "intencion_de_pago": "2024-03-16T03:00:00.000Z",
         "id": 7
       },
       {
         "entidad": "OSPIM",
         "nroActa": "4444",
         "importe": "44444",
-        "intencionDePago": "2024-04-19T00:00:00.000Z",
+        "intencion_de_pago": "2024-04-19T00:00:00.000Z",
         "razon_de_pago": "Nro Acta: 4444",
         "id": 8
       },
@@ -4848,7 +4853,7 @@
         "entidad": "OSPIM",
         "nroActa": "11111",
         "importe": "111133333",
-        "intencionDePago": "2024-04-26T00:00:00.000Z",
+        "intencion_de_pago": "2024-04-26T00:00:00.000Z",
         "razon_de_pago": "Nro Acta: 11111",
         "id": 9
       }

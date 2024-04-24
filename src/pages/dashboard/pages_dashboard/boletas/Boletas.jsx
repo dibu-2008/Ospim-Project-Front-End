@@ -261,11 +261,20 @@ export const Boletas = () => {
             { field: 'nroActa', headerName: 'Nro. Acta', flex: 1 },
             {
               field: 'importe',
-              headerName: 'Importe',
+              headerName: 'Importe Boleta',
               align: 'right',
               flex: 1,
               valueFormatter: (params) =>
                 params.value ? formatter.currency.format(params.value) : '',
+            },
+            {
+              field: 'intencion_de_pago',
+              headerName: 'Intencion de Pago',              
+              flex: 1,
+              valueFormatter: (params) =>
+                params.value && isNotNull(params.value)
+                  ? formatter.date(params.value)
+                  : '',
             },
             { field: 'razon_de_pago', headerName: 'Razon de pago', flex: 1 },
             {
