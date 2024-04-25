@@ -41,6 +41,7 @@
   "/roles": "/rol",
   "/funcionalidades/by-rol":"/rolFuncionalidades",
   "/funcionalidad/:codigo/rol/:rolId": "/rolFuncionalidad/?rolId=:rolId&funcionalidad=:codigo",
+  "/funcionalidades/:id":"/funcionalidades/id?id=:id",
   "/aportes/detalle/": "/aportesDetalle/",
   "/aportes/:codigo": "/aportes/?codigo=:codigo",
   "/aportes/:codigo/detalle/:id": "/aportesDetalle/:id",

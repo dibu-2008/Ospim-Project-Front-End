@@ -29,8 +29,7 @@ export const GenerarOtrosPagos = () => {
   const hoy = new Date().toISOString().split('T')[0];
 
   const handleImprimir = async () => {
-    //const redirect = () => (window.location.href = '/dashboard/boletas');
-    
+
     const body = {
       entidad,
       nroActa,
@@ -50,9 +49,9 @@ export const GenerarOtrosPagos = () => {
     } catch (error) {
       console.error(error);
       toast.error('Ocurrio un problema al intentar generar la boleta');
-      redirect();
+      navigate(window.location.href = '/dashboard/boletas')
     }
-    //console.log(body);
+
   };
 
   return (

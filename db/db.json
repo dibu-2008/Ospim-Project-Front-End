@@ -209,68 +209,82 @@
   ],
   "rolFuncionalidades": [
     {
-      "rolId": 1,
       "descripcion": "ROOT",
       "funcionalidades": [
         {
           "id": 1,
-          "descripcion": "FERIADO"
+          "descripcion": "FERIADO",
+          "activo": true
         },
         {
           "id": 2,
-          "descripcion": "AJUSTES"
+          "descripcion": "AJUSTES",
+          "activo": false
         },
         {
           "id": 3,
-          "descripcion": "ROLES"
+          "descripcion": "ROLES",
+          "activo": false
         },
         {
           "id": 4,
-          "descripcion": "INTERESES"
+          "descripcion": "INTERESES",
+          "activo": true
         }
-      ]
+      ],
+      "id": 1
     },
     {
-      "rolId": 2,
-      "descripcion": "ADMINISTRATIVO",
-      "funcionalidades": [
-        {
-          "id": 3,
-          "descripcion": "ROLES"
-        },
-        {
-          "id": 4,
-          "descripcion": "INTERESES"
-        }
-      ]
-    },
-    {
-      "rolId": 3,
       "descripcion": "ADMINISTRATIVO",
       "funcionalidades": [
         {
           "id": 1,
-          "descripcion": "FERIADO"
+          "descripcion": "FERIADO",
+          "activo": false
         },
         {
           "id": 2,
-          "descripcion": "AJUSTES"
-        }
-      ]
-    },
-    {
-      "descripcion": "PRUEBA III",
-      "id": 4,
-      "funcionalidades": [
-        {
-          "id": 2,
-          "descripcion": "AJUSTES"
+          "descripcion": "AJUSTES",
+          "activo": true
         },
         {
           "id": 3,
-          "descripcion": "ROLES"
+          "descripcion": "ROLES",
+          "activo": false
+        },
+        {
+          "id": 4,
+          "descripcion": "INTERESES",
+          "activo": false
         }
-      ]
+      ],
+      "id": 2
+    },
+    {
+      "descripcion": "EJECUTIVO",
+      "funcionalidades": [
+        {
+          "id": 1,
+          "descripcion": "FERIADO",
+          "activo": false
+        },
+        {
+          "id": 2,
+          "descripcion": "AJUSTES",
+          "activo": false
+        },
+        {
+          "id": 3,
+          "descripcion": "ROLES",
+          "activo": false
+        },
+        {
+          "id": 4,
+          "descripcion": "INTERESES",
+          "activo": false
+        }
+      ],
+      "id": 3
     }
   ],
   "funcionalidades": [
