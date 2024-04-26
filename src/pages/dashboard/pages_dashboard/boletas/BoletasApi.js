@@ -9,7 +9,7 @@ const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
 
 export const getBoletasByDDJJid = async (empresa_id, ddjj_id) => {
   const URL = `/empresa/${empresa_id}/ddjj/${ddjj_id}/boletas`;
-  return axios.get(URL);
+  return oAxios.get(URL);
 };
 
 export const getBoletasByEmpresa = async (empresa_id) => {
@@ -44,7 +44,6 @@ export const axiosBoletas = {
   getBoletasByDDJJid,
   getBoletasByEmpresa,
   getBoletaById,
-  downloadPdfDetalle,
   modificarBoletaById,
   boletaPdfDownload,  
 };

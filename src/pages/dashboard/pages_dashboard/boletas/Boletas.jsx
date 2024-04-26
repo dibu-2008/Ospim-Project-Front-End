@@ -203,7 +203,6 @@ export const Boletas = () => {
                       )
                       }
                     }
-                    }
                   >
                     <PrintIcon />
                   </IconButton>

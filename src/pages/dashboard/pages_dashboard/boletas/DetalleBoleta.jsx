@@ -17,7 +17,6 @@ import Button from '@mui/material/Button';
 import './Boletas.css';
 import { Box } from '@mui/system';
 import {
-  downloadPdfDetalle,
   getBoletaById,
   modificarBoletaById,
 } from './BoletasApi';

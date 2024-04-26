@@ -13,7 +13,7 @@ const calcularInteres = async (url, intencion_de_pago) => {
 };
 
 export const getBoletasByDDJJid = async (empresa_id, ddjj_id) => {
-  const URL = `${BACKEND_URL}/empresa/${empresa_id}/ddjj/${ddjj_id}/boletas`;
+  const URL = `/empresa/${empresa_id}/ddjj/${ddjj_id}/boletas`;
   try {
     const data = await axiosCrud.consultar(URL);
     return data;
