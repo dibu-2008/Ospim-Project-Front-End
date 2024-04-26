@@ -16,11 +16,27 @@ const showSwalError = (descripcion) => {
       icon: 'error',
       title: 'Error de Validación',
       text: descripcion,
-      showConfirmButton: false,
-      timer: 3000,
+      showConfirmButton: true,
+      confirmButtonText: 'Aceptar',
     });
   } catch (error) {
     console.log('showSwalError-ERROR:');
+    console.log(error);
+  }
+};
+
+const showSwalWarning = (descripcion) => {
+  try {
+    console.log('showSwalWarning - descripcion:' + descripcion);
+    Swal.fire({
+      icon: 'warning',
+      title: 'Advertencia',
+      text: descripcion,
+      showConfirmButton: true,
+      confirmButtonText: 'Aceptar',
+    });
+  } catch (error) {
+    console.log('showSwalWarning-ERROR:');
     console.log(error);
   }
 };
@@ -53,6 +69,9 @@ const swal = {
 
   showSuccess: async function (descripcion) {
     return showSwallSuccess(descripcion);
+  },
+  showWarning: async function (descripcion) {
+    return showSwalWarning(descripcion);
   },
 };
 

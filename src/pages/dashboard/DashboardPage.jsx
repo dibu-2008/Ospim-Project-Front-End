@@ -187,6 +187,18 @@ const DashboardPage = () => {
                     <HomeIcon className="icon-link" />{' '}
                     {open && <span className="icon-link">Inicio</span>}
                   </NavLink>
+                  {isRolEmpleador && (
+                    <NavLink to="./misdatos" className="icon-container">
+                      <PersonIcon className="icon-link" />{' '}
+                      {open && <span className="icon-link">Datos Empresa</span>}
+                    </NavLink>
+                  )}
+                  {isRolEmpleador && (
+                    <NavLink to="./pagos" className="icon-container">
+                      <AccountBalanceWalletIcon className="icon-link" />{' '}
+                      {open && <span className="icon-link">Pagos</span>}
+                    </NavLink>
+                  )}
                   {!isRolEmpleador && (
                     <NavLink to="./publicaciones" className="icon-container">
                       <PreviewIcon className="icon-link" />{' '}
@@ -218,18 +230,6 @@ const DashboardPage = () => {
                     <NavLink to="./boletas" className="icon-container">
                       <StyleIcon className="icon-link" />{' '}
                       {open && <span className="icon-link">Boletas</span>}
-                    </NavLink>
-                  )}
-                  {isRolEmpleador && (
-                    <NavLink to="./pagos" className="icon-container">
-                      <AccountBalanceWalletIcon className="icon-link" />{' '}
-                      {open && <span className="icon-link">Pagos</span>}
-                    </NavLink>
-                  )}
-                  {isRolEmpleador && (
-                    <NavLink to="./misdatos" className="icon-container">
-                      <PersonIcon className="icon-link" />{' '}
-                      {open && <span className="icon-link">Datos Empresa</span>}
                     </NavLink>
                   )}
                   {isRolEmpleador && (
