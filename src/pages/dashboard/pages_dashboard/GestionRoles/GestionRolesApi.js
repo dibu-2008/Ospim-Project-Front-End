@@ -31,7 +31,7 @@ const getFuncionalidades = async () => {
 
 const getFuncionalidadesByRol = async () => {
     try {
-      const URL = `/funcionalidades/by-rol`;
+      const URL = `/funcionalidades`;
       const response = await axiosCrud.consultar(URL); // esto me tiene que devolver funcionales_activas, funcionalidades_inactivas
       return response;
     } catch (error) {
