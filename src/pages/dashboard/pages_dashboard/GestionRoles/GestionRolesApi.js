@@ -20,6 +20,7 @@ const getRoles = async () => {
 const getFuncionalidades = async () => {
   try {
     const URL = '/funcionalidades';
+     //const URL = '/roles/funcionalidades';
     const response = await axiosCrud.consultar(URL); // esto me tiene que devolver funcionales_activas, funcionalidades_inactivas
     return response;
   } catch (error) {
@@ -43,9 +44,9 @@ const getFuncionalidadesByRol = async () => {
 
   const putFuncionalidades = async (body) => {
     try {
-        console.log(body)
-        const URL = `/funcionalidades/actualizar`;
-        const response = await axiosCrud.actualizar(URL, body); // esto me tiene que devolver funcionales_activas, funcionalidades_inactivas
+      const URL = `/funcionalidades/actualizar`;
+      //const URL = `/roles/${body.id}/funcionalidades`;  
+      const response = await axiosCrud.actualizar(URL, body); // esto me tiene que devolver funcionales_activas, funcionalidades_inactivas
         return response;
       } catch (error) {
         const HTTP_MSG =

@@ -11,12 +11,13 @@ import {
   GridToolbarColumnsButton,
   GridToolbarFilterButton,
   GridToolbarExport,
-} from '@mui/x-data-grid';
-import { useNavigate } from 'react-router-dom';
-import { getBoletasByEmpresa } from './BoletasApi';
+} from "@mui/x-data-grid";
+import { useNavigate } from "react-router-dom";
+import { getBoletasByEmpresa } from "./BoletasApi";
 import { boletaPdfDownload } from '@/common/api/BoletaCommonApi';
-import formatter from '@/common/formatter';
-import './Boletas.css';
+import { CSVLink } from "react-csv";
+import formatter from "@/common/formatter";
+import "./Boletas.css";
 
 export const Boletas = () => {
   const ID_EMPRESA = JSON.parse(localStorage.getItem("stateLogin"))
@@ -37,7 +38,7 @@ export const Boletas = () => {
         setBoletasVisibles(
           response.data["con_ddjj"].flatMap((boleta) => ({
             ...boleta,
-            id: `${boleta.numero_boleta}`,
+            id: `${boleta.id}`,
           }))
         );
         setBoletasSinDDJJ(response.data["sin_ddjj"]);
@@ -200,6 +201,7 @@ export const Boletas = () => {
                         ID_EMPRESA,
                         params.row.id
                       )
+                      }
                     }
                     }
                   >

@@ -117,12 +117,12 @@ export const DetalleBoleta = () => {
   return (
     <div className="boletas_container">
       <h1>Detalle boleta {boletaDetalle.descripcion}</h1>
-      <Button onClick={downloadPdfDetalle}>Descargar Detalle</Button>
+      <Button  >Descargar Detalle</Button>
       <Button
         onClick={() =>
           boletaPdfDownload(
             ID_EMPRESA,
-            boletaDetalle.declaracion_jurada_id
+            boletaDetalle.id 
           )
         }
       >
