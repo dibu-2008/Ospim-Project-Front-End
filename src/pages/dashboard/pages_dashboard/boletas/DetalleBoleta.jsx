@@ -17,11 +17,10 @@ import Button from '@mui/material/Button';
 import './Boletas.css';
 import { Box } from '@mui/system';
 import {
-  downloadPdfDetalle,
-  downloadPdfBoleta,
   getBoletaById,
   modificarBoletaById,
 } from './BoletasApi';
+import { boletaPdfDownload } from '@/common/api/BoletaCommonApi';
 import formatter from '@/common/formatter';
 import { useParams } from 'react-router-dom';
 import { calcularInteresBoleta } from '../generar_boletas/GenerarBoletasApi';
@@ -117,13 +116,12 @@ export const DetalleBoleta = () => {
   return (
     <div className="boletas_container">
       <h1>Detalle boleta {boletaDetalle.descripcion}</h1>
-      <Button onClick={downloadPdfDetalle}>Descargar Detalle</Button>
+      <Button  >Descargar Detalle</Button>
       <Button
         onClick={() =>
-          downloadPdfBoleta(
+          boletaPdfDownload(
             ID_EMPRESA,
-            boletaDetalle.declaracion_jurada_id,
-            boletaDetalle.codigo,
+            boletaDetalle.id 
           )
         }
       >

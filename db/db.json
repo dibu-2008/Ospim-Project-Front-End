@@ -224,7 +224,7 @@
         {
           "id": 3,
           "descripcion": "DDJJ",
-          "activo": true
+          "activo": false
         },
         {
           "id": 4,
@@ -264,7 +264,7 @@
         {
           "id": 11,
           "descripcion": "ROLES",
-          "activo": false
+          "activo": true
         },
         {
           "id": 12,

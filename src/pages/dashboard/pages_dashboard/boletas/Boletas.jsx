@@ -13,8 +13,8 @@ import {
   GridToolbarExport,
 } from "@mui/x-data-grid";
 import { useNavigate } from "react-router-dom";
-import { getBoletasByEmpresa, downloadPdfBoleta } from "./BoletasApi";
-import { downloadPdfBoletaBlanca } from "../otros_pagos/OtrosPagosApi";
+import { getBoletasByEmpresa } from "./BoletasApi";
+import { boletaPdfDownload } from '@/common/api/BoletaCommonApi';
 import { CSVLink } from "react-csv";
 import formatter from "@/common/formatter";
 import "./Boletas.css";
@@ -38,7 +38,7 @@ export const Boletas = () => {
         setBoletasVisibles(
           response.data["con_ddjj"].flatMap((boleta) => ({
             ...boleta,
-            id: `${boleta.numero_boleta}`,
+            id: `${boleta.id}`,
           }))
         );
         setBoletasSinDDJJ(response.data["sin_ddjj"]);
@@ -195,12 +195,13 @@ export const Boletas = () => {
                   </IconButton>
                   <IconButton
                     size="small"
-                    onClick={() =>
-                      downloadPdfBoleta(
+                    onClick={() => {
+                      console.log( 'boletaPdfDownload-row:',params.row);
+                      boletaPdfDownload(
                         ID_EMPRESA,
-                        params.row.declaracion_jurada_id,
-                        params.row.codigo
+                        params.row.id 
                       )
+                      }
                     }
                   >
                     <PrintIcon />
@@ -277,7 +278,7 @@ export const Boletas = () => {
                   <IconButton
                     size="small"
                     onClick={() =>
-                      downloadPdfBoletaBlanca(ID_EMPRESA, params.row.id)
+                      boletaPdfDownload(ID_EMPRESA, params.row.id)
                     }
                   >
                     <PrintIcon />
