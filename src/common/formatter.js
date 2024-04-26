@@ -87,6 +87,7 @@ const formatter = {
   periodo: formatPeriodo,
   periodo2: formatPeriodo2,
   fechaGrilla: formatFechaGrilla,
+  toFechaValida
 };
 
 export default formatter;

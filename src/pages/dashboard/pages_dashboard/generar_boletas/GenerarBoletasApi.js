@@ -30,7 +30,7 @@ export const calcularInteresBoleta = async (
   boleta_codigo,
   intencion_de_pago,
 ) => {
-  const URL = `${BACKEND_URL}/empresa/${empresa_id}/ddjj/${ddjj_id}/boleta/${boleta_codigo}/calcular-interes`;
+  const URL = `/empresa/${empresa_id}/ddjj/${ddjj_id}/boleta/${boleta_codigo}/calcular-interes`;
   console.log(URL);
   try {
     const response = await calcularInteres(URL, intencion_de_pago);
@@ -47,7 +47,7 @@ export const calcularInteresBoletas = async (
   ddjj_id,
   intencion_de_pago,
 ) => {
-  const URL = `${BACKEND_URL}/empresa/${empresa_id}/ddjj/${ddjj_id}/calcular-intereses`;
+  const URL = `/empresa/${empresa_id}/ddjj/${ddjj_id}/calcular-intereses`;
   try {
     const response = await calcularInteres(URL, intencion_de_pago);
     return response;
@@ -70,7 +70,7 @@ const ordernarBoletas = (boletas) => {
 
 export const generarBoletasPost = async (empresa_id, ddjj_id, boletas) => {
   try {
-    const URL = `${BACKEND_URL}/empresa/${empresa_id}/ddjj/${ddjj_id}/guardar-boletas`;
+    const URL = `/empresa/${empresa_id}/ddjj/${ddjj_id}/guardar-boletas`;
     const arr_boletas = ordernarBoletas(boletas);
 
     const response = await axiosCrud.crear(URL, arr_boletas);
