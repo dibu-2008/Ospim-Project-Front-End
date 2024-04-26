@@ -4254,6 +4254,7 @@
   "boletas_guardadas": {
     "con_ddjj": [
       {
+        "id": 1,
         "codigo": "ART46",
         "descripcion": "Art. 46",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4300,6 +4301,7 @@
         "numero_boleta": 1
       },
       {
+        "id": 1,
         "codigo": "ANTIMACS",
         "descripcion": "ANTIMA Cuota Social",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4326,6 +4328,7 @@
         "numero_boleta": 2
       },
       {
+        "id": 1,
         "codigo": "UOMACS",
         "descripcion": "UOMA Cuota Social",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4370,6 +4373,7 @@
         "numero_boleta": 3
       },
       {
+        "id": 1,
         "codigo": "ART46",
         "descripcion": "Art. 46",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4408,6 +4412,7 @@
         "numero_boleta": 4
       },
       {
+        "id": 1,
         "codigo": "ANTIMACS",
         "descripcion": "ANTIMA Cuota Social",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4432,6 +4437,7 @@
         "numero_boleta": 5
       },
       {
+        "id": 1,
         "codigo": "UOMACS",
         "descripcion": "UOMA Cuota Social",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4470,6 +4476,7 @@
         "numero_boleta": 6
       },
       {
+        "id": 1,
         "codigo": "ART46",
         "descripcion": "Art. 46",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4508,6 +4515,7 @@
         "numero_boleta": 7
       },
       {
+        "id": 1,
         "codigo": "UOMACS",
         "descripcion": "UOMA Cuota Social",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4546,6 +4554,7 @@
         "numero_boleta": 8
       },
       {
+        "id": 1,
         "codigo": "ART46",
         "descripcion": "Art. 46",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4584,6 +4593,7 @@
         "numero_boleta": 9
       },
       {
+        "id": 1,
         "codigo": "ANTIMACS",
         "descripcion": "ANTIMA Cuota Social",
         "vencimiento": "2024-02-21",
@@ -4608,6 +4618,7 @@
         "numero_boleta": 10
       },
       {
+        "id": 1,
         "codigo": "UOMACS",
         "descripcion": "UOMA Cuota Social",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4646,6 +4657,7 @@
         "numero_boleta": 11
       },
       {
+        "id": 1,
         "codigo": "ART46",
         "descripcion": "Art. 46",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4684,6 +4696,7 @@
         "numero_boleta": 12
       },
       {
+        "id": 1,
         "codigo": "UOMACS",
         "descripcion": "UOMA Cuota Social",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4722,6 +4735,7 @@
         "numero_boleta": 22
       },
       {
+        "id": 1,
         "codigo": "ART46",
         "descripcion": "Art. 46",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4760,6 +4774,7 @@
         "numero_boleta": 23
       },
       {
+        "id": 1,
         "codigo": "ANTIMACS",
         "descripcion": "ANTIMA Cuota Social",
         "vencimiento": "2024-02-21T00:00:00.000Z",
@@ -4791,6 +4806,7 @@
         "importe": "1431234",
         "razon_de_pago": "Nro Acta: 123123",
         "intencion_de_pago": "2024-03-16T03:00:00.000Z",
+        "secuencia":10,
         "id": 1
       },
       {
@@ -4799,6 +4815,7 @@
         "importe": "1431234",
         "razon_de_pago": "Nro Acta: 123123",
         "intencion_de_pago": "2024-03-16T03:00:00.000Z",
+        "secuencia":12,
         "id": 2
       },
       {
@@ -4807,6 +4824,7 @@
         "importe": "44452",
         "razon_de_pago": "Nro Acta: 321",
         "intencion_de_pago": "2024-03-16T03:00:00.000Z",
+        "secuencia":13,
         "id": 3
       },
       {
@@ -4815,6 +4833,7 @@
         "importe": "123",
         "razon_de_pago": "Nro Acta: 999",
         "intencion_de_pago": "2024-03-16T03:00:00.000Z",
+        "secuencia":14,
         "id": 4
       },
       {
@@ -4823,6 +4842,7 @@
         "importe": "3334444",
         "razon_de_pago": "Nro Acta: 3335555",
         "intencion_de_pago": "2024-03-16T03:00:00.000Z",
+        "secuencia":19,
         "id": 9
       },
       {
@@ -4831,6 +4851,7 @@
         "importe": "1431234",
         "razon_de_pago": "Nro Acta: 123123",
         "intencion_de_pago": "2024-03-16T03:00:00.000Z",
+        "secuencia":16,
         "id": 6
       },
       {
@@ -4839,6 +4860,7 @@
         "importe": "1111",
         "razon_de_pago": "Nro Acta: 1111",
         "intencion_de_pago": "2024-03-16T03:00:00.000Z",
+        "secuencia":17,
         "id": 7
       },
       {
@@ -4847,6 +4869,7 @@
         "importe": "44444",
         "intencion_de_pago": "2024-04-19T00:00:00.000Z",
         "razon_de_pago": "Nro Acta: 4444",
+        "secuencia":18,
         "id": 8
       },
       {
@@ -4855,7 +4878,8 @@
         "importe": "111133333",
         "intencion_de_pago": "2024-04-26T00:00:00.000Z",
         "razon_de_pago": "Nro Acta: 11111",
-        "id": 9
+        "secuencia":29,
+        "id": 19
       }
     ]
   },

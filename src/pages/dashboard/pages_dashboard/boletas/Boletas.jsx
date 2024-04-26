@@ -13,9 +13,8 @@ import {
   GridToolbarExport,
 } from '@mui/x-data-grid';
 import { useNavigate } from 'react-router-dom';
-import { getBoletasByEmpresa, downloadPdfBoleta } from './BoletasApi';
-import { downloadPdfBoletaBlanca } from '../otros_pagos/OtrosPagosApi';
-import { CSVLink } from 'react-csv';
+import { getBoletasByEmpresa } from './BoletasApi';
+import { boletaPdfDownload } from '@/common/api/BoletaCommonApi';
 import formatter from '@/common/formatter';
 import './Boletas.css';
 
@@ -195,12 +194,13 @@ export const Boletas = () => {
                   </IconButton>
                   <IconButton
                     size="small"
-                    onClick={() =>
-                      downloadPdfBoleta(
+                    onClick={() => {
+                      console.log("boletaPdfDownload - params.row.id", params.row.id)
+                      boletaPdfDownload(
                         ID_EMPRESA,
-                        params.row.declaracion_jurada_id,
-                        params.row.codigo,
+                        params.row.id
                       )
+                    }
                     }
                   >
                     <PrintIcon />
@@ -250,7 +250,7 @@ export const Boletas = () => {
         <DataGrid
           rows={boletasSinDDJJ}
           columns={[
-            { field: 'id', headerName: 'Nro. Boleta', flex: 0.5 },
+            { field: 'secuencia', headerName: 'Nro. Boleta', flex: 0.5 },
             {
               field: 'entidad',
               headerName: 'Entidad',
@@ -285,8 +285,10 @@ export const Boletas = () => {
                 <>
                   <IconButton
                     size="small"
-                    onClick={() =>
-                      downloadPdfBoletaBlanca(ID_EMPRESA, params.row.id)
+                    onClick={() => {
+                      console.log("boletaPdfDownload - params.row.id", params.row.id)
+                      boletaPdfDownload(ID_EMPRESA, params.row.id)
+                      }
                     }
                   >
                     <PrintIcon />

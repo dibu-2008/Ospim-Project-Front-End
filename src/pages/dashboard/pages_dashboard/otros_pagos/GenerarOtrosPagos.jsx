@@ -12,6 +12,7 @@ import {
   Grid,
 } from '@mui/material';
 import { generarBoletaSinDDJJ } from './OtrosPagosApi';
+import { getEmpresaId } from '@/components/localStorage/localStorageService'
 import './OtrosPagos.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -24,8 +25,8 @@ export const GenerarOtrosPagos = () => {
   const [deshabilitar, setDeshabilitar] = useState(false);
   const navigate = useNavigate();
 
-  const ID_EMPRESA = JSON.parse(localStorage.getItem('stateLogin'))
-    .usuarioLogueado.empresa.id;
+  const ID_EMPRESA = getEmpresaId();
+  
   const hoy = new Date().toISOString().split('T')[0];
 
   const handleImprimir = async () => {

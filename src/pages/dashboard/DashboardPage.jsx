@@ -282,6 +282,19 @@ const DashboardPage = () => {
                       )}
                     </NavLink>
                   )}
+                  {!isRolEmpleador && (
+                    <NavLink to="./ajustes" className="icon-container">
+                      <img
+                        src={afipIcon}
+                        alt="afip"
+                        className="icon-link"
+                        style={{ width: 24, height: 24 }}
+                      />{' '}
+                      {open && (
+                        <span className="icon-link">Ajustes</span>
+                      )}
+                    </NavLink>
+                  )}
                 </ListItemIcon>
               </ListItemButton>
             </ListItem>

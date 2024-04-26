@@ -93,33 +93,10 @@ export const downloadPdfBoletaSinDDJJ = async () => {
   }
 };
 
-export const downloadPdfBoletaBlanca = async (empresa_id, boleta_id) => {
-  const URL = `${BACKEND_URL}/empresa/${empresa_id}/boleta/${boleta_id}`;
-  console.log(URL);
-  try {
-    //const response =await axiosCrud.consultar(URL)
-    const response = await axios({
-      url: URL,
-      method: 'GET',
-      responseType: 'blob',
-    });
-    const url = window.URL.createObjectURL(new Blob([response.data]));
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', 'boleta.pdf');
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-  } catch (error) {
-    const HTTP_MSG =
-      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`;
-    showErrorBackEnd(HTTP_MSG, error);
-  }
-};
+ 
 
 export const axiosOtrosPagos = {
   generarBoletaSinDDJJ,
   tieneRectificativa,
   downloadPdfDetalle,
-  downloadPdfBoletaBlanca,
 };

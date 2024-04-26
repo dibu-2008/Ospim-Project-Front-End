@@ -18,10 +18,10 @@ import './Boletas.css';
 import { Box } from '@mui/system';
 import {
   downloadPdfDetalle,
-  downloadPdfBoleta,
   getBoletaById,
   modificarBoletaById,
 } from './BoletasApi';
+import { boletaPdfDownload } from '@/common/api/BoletaCommonApi';
 import formatter from '@/common/formatter';
 import { useParams } from 'react-router-dom';
 import { calcularInteresBoleta } from '../generar_boletas/GenerarBoletasApi';
@@ -120,10 +120,9 @@ export const DetalleBoleta = () => {
       <Button onClick={downloadPdfDetalle}>Descargar Detalle</Button>
       <Button
         onClick={() =>
-          downloadPdfBoleta(
+          boletaPdfDownload(
             ID_EMPRESA,
-            boletaDetalle.declaracion_jurada_id,
-            boletaDetalle.codigo,
+            boletaDetalle.declaracion_jurada_id
           )
         }
       >
