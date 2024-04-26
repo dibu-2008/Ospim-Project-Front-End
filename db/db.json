@@ -213,23 +213,73 @@
       "funcionalidades": [
         {
           "id": 1,
-          "descripcion": "FERIADO",
+          "descripcion": "PUBLICACIONES",
           "activo": true
         },
         {
           "id": 2,
-          "descripcion": "AJUSTES",
-          "activo": false
+          "descripcion": "FERIADOS",
+          "activo": true
         },
         {
           "id": 3,
+          "descripcion": "DDJJ",
+          "activo": true
+        },
+        {
+          "id": 4,
+          "descripcion": "DDJJ_CONSULTA",
+          "activo": true
+        },
+        {
+          "id": 5,
+          "descripcion": "BOLETAS",
+          "activo": true
+        },
+        {
+          "id": 6,
+          "descripcion": "PAGOS",
+          "activo": true
+        },
+        {
+          "id": 7,
+          "descripcion": "DATOS_EMPRESA",
+          "activo": true
+        },
+        {
+          "id": 8,
+          "descripcion": "BOLETA_BLANCA",
+          "activo": true
+        },
+        {
+          "id": 9,
+          "descripcion": "GESTION_ROLES",
+          "activo": true
+        },
+        {
+          "id": 10,
+          "descripcion": "CUITS_RESTRINGIDOS",
+          "activo": true
+        },
+        {
+          "id": 11,
           "descripcion": "ROLES",
           "activo": false
         },
         {
-          "id": 4,
-          "descripcion": "INTERESES",
+          "id": 12,
+          "descripcion": "USUARIO_INTERNO",
           "activo": true
+        },
+        {
+          "id": 13,
+          "descripcion": "INTERESES_AFIP",
+          "activo": true
+        },
+        {
+          "id": 14,
+          "descripcion": "AJUSTES",
+          "activo": false
         }
       ],
       "id": 1
@@ -239,22 +289,72 @@
       "funcionalidades": [
         {
           "id": 1,
-          "descripcion": "FERIADO",
-          "activo": false
+          "descripcion": "PUBLICACIONES",
+          "activo": true
         },
         {
           "id": 2,
-          "descripcion": "AJUSTES",
+          "descripcion": "FERIADOS",
           "activo": true
         },
         {
           "id": 3,
+          "descripcion": "DDJJ",
+          "activo": true
+        },
+        {
+          "id": 4,
+          "descripcion": "DDJJ_CONSULTA",
+          "activo": true
+        },
+        {
+          "id": 5,
+          "descripcion": "BOLETAS",
+          "activo": true
+        },
+        {
+          "id": 6,
+          "descripcion": "PAGOS",
+          "activo": true
+        },
+        {
+          "id": 7,
+          "descripcion": "DATOS_EMPRESA",
+          "activo": true
+        },
+        {
+          "id": 8,
+          "descripcion": "BOLETA_BLANCA",
+          "activo": true
+        },
+        {
+          "id": 9,
+          "descripcion": "GESTION_ROLES",
+          "activo": true
+        },
+        {
+          "id": 10,
+          "descripcion": "CUITS_RESTRINGIDOS",
+          "activo": true
+        },
+        {
+          "id": 11,
           "descripcion": "ROLES",
           "activo": false
         },
         {
-          "id": 4,
-          "descripcion": "INTERESES",
+          "id": 12,
+          "descripcion": "USUARIO_INTERNO",
+          "activo": true
+        },
+        {
+          "id": 13,
+          "descripcion": "INTERESES_AFIP",
+          "activo": true
+        },
+        {
+          "id": 14,
+          "descripcion": "AJUSTES",
           "activo": false
         }
       ],
@@ -265,32 +365,158 @@
       "funcionalidades": [
         {
           "id": 1,
-          "descripcion": "FERIADO",
-          "activo": false
+          "descripcion": "PUBLICACIONES",
+          "activo": true
         },
         {
           "id": 2,
-          "descripcion": "AJUSTES",
-          "activo": false
+          "descripcion": "FERIADOS",
+          "activo": true
         },
         {
           "id": 3,
+          "descripcion": "DDJJ",
+          "activo": true
+        },
+        {
+          "id": 4,
+          "descripcion": "DDJJ_CONSULTA",
+          "activo": true
+        },
+        {
+          "id": 5,
+          "descripcion": "BOLETAS",
+          "activo": true
+        },
+        {
+          "id": 6,
+          "descripcion": "PAGOS",
+          "activo": true
+        },
+        {
+          "id": 7,
+          "descripcion": "DATOS_EMPRESA",
+          "activo": true
+        },
+        {
+          "id": 8,
+          "descripcion": "BOLETA_BLANCA",
+          "activo": true
+        },
+        {
+          "id": 9,
+          "descripcion": "GESTION_ROLES",
+          "activo": true
+        },
+        {
+          "id": 10,
+          "descripcion": "CUITS_RESTRINGIDOS",
+          "activo": true
+        },
+        {
+          "id": 11,
           "descripcion": "ROLES",
           "activo": false
         },
         {
-          "id": 4,
-          "descripcion": "INTERESES",
+          "id": 12,
+          "descripcion": "USUARIO_INTERNO",
+          "activo": true
+        },
+        {
+          "id": 13,
+          "descripcion": "INTERESES_AFIP",
+          "activo": true
+        },
+        {
+          "id": 14,
+          "descripcion": "AJUSTES",
           "activo": false
         }
       ],
       "id": 3
+    },
+    {
+      "descripcion": "EMPLEADOR",
+      "funcionalidades": [
+        {
+          "id": 1,
+          "descripcion": "PUBLICACIONES",
+          "activo": true
+        },
+        {
+          "id": 2,
+          "descripcion": "FERIADOS",
+          "activo": true
+        },
+        {
+          "id": 3,
+          "descripcion": "DDJJ",
+          "activo": true
+        },
+        {
+          "id": 4,
+          "descripcion": "DDJJ_CONSULTA",
+          "activo": true
+        },
+        {
+          "id": 5,
+          "descripcion": "BOLETAS",
+          "activo": true
+        },
+        {
+          "id": 6,
+          "descripcion": "PAGOS",
+          "activo": true
+        },
+        {
+          "id": 7,
+          "descripcion": "DATOS_EMPRESA",
+          "activo": true
+        },
+        {
+          "id": 8,
+          "descripcion": "BOLETA_BLANCA",
+          "activo": true
+        },
+        {
+          "id": 9,
+          "descripcion": "GESTION_ROLES",
+          "activo": true
+        },
+        {
+          "id": 10,
+          "descripcion": "CUITS_RESTRINGIDOS",
+          "activo": true
+        },
+        {
+          "id": 11,
+          "descripcion": "ROLES",
+          "activo": true
+        },
+        {
+          "id": 12,
+          "descripcion": "USUARIO_INTERNO",
+          "activo": true
+        },
+        {
+          "id": 13,
+          "descripcion": "INTERESES_AFIP",
+          "activo": true
+        },
+        {
+          "id": 14,
+          "descripcion": "AJUSTES",
+          "activo": true
+        }
+      ],
+      "id": 4
     }
   ],
   "funcionalidades": [
     {
       "id": 1,
-      "descripcion": "FERIADO"
+      "descripcion": "FERIADOS"
     },
     {
       "id": 2,

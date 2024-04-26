@@ -44,7 +44,7 @@ const getFuncionalidadesByRol = async () => {
   const putFuncionalidades = async (body) => {
     try {
         console.log(body)
-        const URL = `/funcionalidades`;
+        const URL = `/funcionalidades/actualizar`;
         const response = await axiosCrud.actualizar(URL, body); // esto me tiene que devolver funcionales_activas, funcionalidades_inactivas
         return response;
       } catch (error) {
