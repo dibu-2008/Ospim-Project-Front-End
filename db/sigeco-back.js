@@ -1,30 +1,30 @@
 module.exports = (req, res, next) => {
-  console.log("Middleware - SIGECO - INIT - getAPI: " + getAPI(req, res));
+  console.log('Middleware - SIGECO - INIT - getAPI: ' + getAPI(req, res));
 
-  console.log("Middleware - SIGECO - req.url: " + req.method + "->" + req.url);
+  console.log('Middleware - SIGECO - req.url: ' + req.method + '->' + req.url);
   //console.log("Middleware - SIGECO - req.body:" + req.body);
 
   function getAPI(req, res) {
-    if (req.method === "GET" && req.url == "/ospim/contacto") {
-      return "OSPIM-CONTACTO";
+    if (req.method === 'GET' && req.url == '/ospim/contacto') {
+      return 'OSPIM-CONTACTO';
     }
 
-    if (req.method === "GET" && req.url.endsWith("/DDJJ/imprimir/")) {
-      return "DDJJ-IMPRIMIR";
-    }
-
-    if (
-      req.method === "POST" &&
-      req.url.toLowerCase().endsWith("/ddjj/validar")
-    ) {
-      return "DDJJ-VALIDAR-NIVEL2";
+    if (req.method === 'GET' && req.url.endsWith('/DDJJ/imprimir/')) {
+      return 'DDJJ-IMPRIMIR';
     }
 
     if (
-      req.method === "POST" &&
-      req.url.endsWith("/ddjj/upload/nomina/validaCuil")
+      req.method === 'POST' &&
+      req.url.toLowerCase().endsWith('/ddjj/validar')
     ) {
-      console.log("URL:", req.url);
+      return 'DDJJ-VALIDAR-NIVEL2';
+    }
+
+    if (
+      req.method === 'POST' &&
+      req.url.endsWith('/ddjj/upload/nomina/validaCuil')
+    ) {
+      console.log('URL:', req.url);
 
       const [cuil1, cuil2, cuil3] = req.body;
 
@@ -32,21 +32,21 @@ module.exports = (req, res, next) => {
       if (cuil1.length === 11 && cuil2.length === 11 && cuil3.length === 11) {
         const jsonExitoso = [
           {
-            cuil: "20949118682",
+            cuil: '20949118682',
             inte: 0,
-            apellido: "Salinas",
-            nombre: "luis",
+            apellido: 'Salinas',
+            nombre: 'luis',
             cuilValido: true,
           },
           {
-            cuil: "20949118782",
+            cuil: '20949118782',
             inte: null,
             apellido: null,
             nombre: null,
             cuilValido: true,
           },
           {
-            cuil: "21345667876",
+            cuil: '21345667876',
             inte: null,
             apellido: null,
             nombre: null,
@@ -60,8 +60,8 @@ module.exports = (req, res, next) => {
           {
             cuil: cuil1,
             inte: 0,
-            apellido: "Salinas",
-            nombre: "luis",
+            apellido: 'Salinas',
+            nombre: 'luis',
             cuilValido: true,
           },
           {
@@ -84,190 +84,190 @@ module.exports = (req, res, next) => {
       }
     }
 
-    if (req.method === "GET" && req.url.startsWith("/feriados/duplicar/")) {
-      return "FERIADOS-DUPLICAR";
+    if (req.method === 'GET' && req.url.startsWith('/feriados/duplicar/')) {
+      return 'FERIADOS-DUPLICAR';
     }
 
     let regEx = /([DDJJConsulta]|[DDJJ])/i;
     if (
-      req.method === "GET" &&
+      req.method === 'GET' &&
       regEx.test(req.url) &&
-      !req.url.startsWith("/empresa/periodo/tiene-rectificativa") &&
+      !req.url.startsWith('/empresa/periodo/tiene-rectificativa') &&
       req.query.empresaId &&
       req.query.periodo
     ) {
-      return "DDJJ-PERIODO-VALIDAR";
+      return 'DDJJ-PERIODO-VALIDAR';
     }
 
     if (
-      req.method === "POST" &&
-      req.url.startsWith("/DDJJ?") &&
+      req.method === 'POST' &&
+      req.url.startsWith('/DDJJ?') &&
       req.query.empresaId
     ) {
-      return "DDJJ-ALTA-V2";
+      return 'DDJJ-ALTA-V2';
     }
 
     if (
-      req.method === "GET" &&
-      req.url === "/auth/dfa/usuario-loguedo-habilitado"
+      req.method === 'GET' &&
+      req.url === '/auth/dfa/usuario-loguedo-habilitado'
     ) {
-      return "LOGIN-HABILITADO";
+      return 'LOGIN-HABILITADO';
     }
 
-    if (req.method === "POST" && req.url === "/auth/login-dfa") {
-      return "LOGIN-DFA";
+    if (req.method === 'POST' && req.url === '/auth/login-dfa') {
+      return 'LOGIN-DFA';
     }
-    if (req.method === "POST" && req.url === "/auth/login") {
-      return "LOGIN";
+    if (req.method === 'POST' && req.url === '/auth/login') {
+      return 'LOGIN';
     }
 
     let pattern = /\bcategoria/;
     let result = req.url.search(pattern);
-    if ((req.method === "POST" || req.method === "PUT") && result > -1) {
-      return "CATEGORIAS";
+    if ((req.method === 'POST' || req.method === 'PUT') && result > -1) {
+      return 'CATEGORIAS';
     }
 
     if (
-      req.method === "GET" &&
-      req.url.startsWith("/comun/cui/") &&
-      req.url.endsWith("/validar")
+      req.method === 'GET' &&
+      req.url.startsWith('/comun/cui/') &&
+      req.url.endsWith('/validar')
     ) {
-      return "COMUN-CUI-VALIDAR";
+      return 'COMUN-CUI-VALIDAR';
     }
     ///empresa/:empresaId/domicilio/planta/
     if (
-      req.method === "GET" &&
-      req.url.startsWith("/empresaDomicilio/planta")
+      req.method === 'GET' &&
+      req.url.startsWith('/empresaDomicilio/planta')
     ) {
       ///empresaDomicilio/planta?empresaId=1
-      return "EMPRESA-PLANTA-CONSULTA";
+      return 'EMPRESA-PLANTA-CONSULTA';
     }
 
-    if (req.method === "POST" && req.url.startsWith("/empresaDomicilio")) {
-      return "EMPRESA-DOMICILIO-ALTA";
+    if (req.method === 'POST' && req.url.startsWith('/empresaDomicilio')) {
+      return 'EMPRESA-DOMICILIO-ALTA';
     }
 
-    if (req.method === "POST" && req.url.startsWith("/DDJJConsulta")) {
-      return "DDJJ-ALTA";
+    if (req.method === 'POST' && req.url.startsWith('/DDJJConsulta')) {
+      return 'DDJJ-ALTA';
     }
-    if (req.method === "PUT" && req.url.startsWith("/DDJJConsulta")) {
-      return "DDJJ-MODI";
-    }
-
-    if (
-      req.method === "GET" &&
-      req.url.startsWith("/rol/funcionalidad/getRel")
-    ) {
-      return "ROL-FUNC-REL-CONS";
-    }
-
-    if (req.method === "PUT" && req.url.startsWith("/rolFuncionalidad/")) {
-      return "ROL-FUNC-REL-ALTA";
-    }
-
-    if (req.method === "DELETE" && req.url.startsWith("/rolFuncionalidad/")) {
-      return "ROL-FUNC-REL-BAJA";
-    }
-
-    if (req.method === "DELETE" && req.url.startsWith("/aportes/?")) {
-      return "APORTES-BAJA";
-    }
-
-    if (req.method === "PUT" && req.url.startsWith("/aportes/?")) {
-      return "APORTES-MODI";
+    if (req.method === 'PUT' && req.url.startsWith('/DDJJConsulta')) {
+      return 'DDJJ-MODI';
     }
 
     if (
-      (req.method === "PUT" || req.method === "POST") &&
-      req.url.startsWith("/aportesDetalle/?")
+      req.method === 'GET' &&
+      req.url.startsWith('/rol/funcionalidad/getRel')
     ) {
-      return "APORTE-DETALLE-ALTA";
+      return 'ROL-FUNC-REL-CONS';
     }
 
-    if (req.method === "GET" && req.url.startsWith("/empresa/ddjj/boletas")) {
-      return "BOLETA-DETALLE";
+    if (req.method === 'PUT' && req.url.startsWith('/rolFuncionalidad/')) {
+      return 'ROL-FUNC-REL-ALTA';
+    }
+
+    if (req.method === 'DELETE' && req.url.startsWith('/rolFuncionalidad/')) {
+      return 'ROL-FUNC-REL-BAJA';
+    }
+
+    if (req.method === 'DELETE' && req.url.startsWith('/aportes/?')) {
+      return 'APORTES-BAJA';
+    }
+
+    if (req.method === 'PUT' && req.url.startsWith('/aportes/?')) {
+      return 'APORTES-MODI';
+    }
+
+    if (
+      (req.method === 'PUT' || req.method === 'POST') &&
+      req.url.startsWith('/aportesDetalle/?')
+    ) {
+      return 'APORTE-DETALLE-ALTA';
+    }
+
+    if (req.method === 'GET' && req.url.startsWith('/empresa/ddjj/boletas')) {
+      return 'BOLETA-DETALLE';
     }
     if (
-      req.method === "POST" &&
-      req.url.startsWith("empresa/ddjj/boleta/calcular-interes")
+      req.method === 'POST' &&
+      req.url.startsWith('empresa/ddjj/boleta/calcular-interes')
     ) {
-      return "CALCULAR-INTERES";
+      return 'CALCULAR-INTERES';
     }
     if (
-      req.method === "POST" &&
-      req.url.startsWith("/empresa/ddjj/calcular-interes")
-    ) {
-    }
-    if (
-      req.method === "POST" &&
-      req.url.startsWith("/empresa/ddjj/calcular-interes")
-    ) {
-      return "CALCULAR-INTERESES";
-    }
-    if (
-      req.method === "GET" &&
-      req.url.startsWith("/empresa/ddjj/boleta/codigo")
+      req.method === 'POST' &&
+      req.url.startsWith('/empresa/ddjj/calcular-interes')
     ) {
     }
     if (
-      req.method === "GET" &&
-      req.url.startsWith("/empresa/ddjj/boleta/codigo")
+      req.method === 'POST' &&
+      req.url.startsWith('/empresa/ddjj/calcular-interes')
     ) {
-      return "BOLETA-DDJJ-CODIGO";
+      return 'CALCULAR-INTERESES';
     }
     if (
-      req.method === "GET" &&
-      req.url.startsWith("/empresa/ddjj/boleta-pago/concepto/imprimir-detalle")
+      req.method === 'GET' &&
+      req.url.startsWith('/empresa/ddjj/boleta/codigo')
     ) {
-      return "DETALLE-BOLETA-IMPRIMIR";
     }
     if (
-      req.method === "GET" &&
-      req.url.startsWith("/empresa/ddjj/boleta-pago/concepto/imprimir-boleta")
+      req.method === 'GET' &&
+      req.url.startsWith('/empresa/ddjj/boleta/codigo')
     ) {
-      return "BOLETA-IMPRIMIR";
+      return 'BOLETA-DDJJ-CODIGO';
     }
     if (
-      req.method === "GET" &&
-      req.url.startsWith("/empresa/periodo/tiene-rectificativa")
+      req.method === 'GET' &&
+      req.url.startsWith('/empresa/ddjj/boleta-pago/concepto/imprimir-detalle')
     ) {
-      return "TIENE-RECTIFICATIVA";
+      return 'DETALLE-BOLETA-IMPRIMIR';
     }
-    if (req.method === "POST" && req.url.startsWith("/empresa/otras_boletas")) {
+    if (
+      req.method === 'GET' &&
+      req.url.startsWith('/empresa/ddjj/boleta-pago/concepto/imprimir-boleta')
+    ) {
+      return 'BOLETA-IMPRIMIR';
+    }
+    if (
+      req.method === 'GET' &&
+      req.url.startsWith('/empresa/periodo/tiene-rectificativa')
+    ) {
+      return 'TIENE-RECTIFICATIVA';
+    }
+    if (req.method === 'POST' && req.url.startsWith('/empresa/otras_boletas')) {
       //REVISAR ESTA PARTE
-      return "GENERAR-SIN-DDJJ";
+      return 'GENERAR-SIN-DDJJ';
     }
     if (
-      req.method === "POST" &&
-      req.url.startsWith("/empresa/ddjj/guardar-boletas")
+      req.method === 'POST' &&
+      req.url.startsWith('/empresa/ddjj/guardar-boletas')
     ) {
-      return "GUARDAR-BOLETAS";
+      return 'GUARDAR-BOLETAS';
     }
-    if (req.method === "GET" && req.url.startsWith("/empresa/numero-boleta")) {
-      return "GET-BOLETA-BY-ID";
+    if (req.method === 'GET' && req.url.startsWith('/empresa/numero-boleta')) {
+      return 'GET-BOLETA-BY-ID';
     }
     if (
-      req.method === "POST" &&
-      req.url.startsWith("/empresa/numero_boleta/modificar")
+      req.method === 'POST' &&
+      req.url.startsWith('/empresa/numero_boleta/modificar')
     ) {
-      return "MODIFICAR-BOLETA-BY-ID";
+      return 'MODIFICAR-BOLETA-BY-ID';
     }
-    if (req.url.startsWith("/sigeco/ajustes")) {
-      if (req.method === "PUT") {
-        return "UPDATE-AJUSTE";
+    if (req.url.startsWith('/sigeco/ajustes')) {
+      if (req.method === 'PUT') {
+        return 'UPDATE-AJUSTE';
       } else {
-        console.log("entre");
-        return "DELETE-AJUSTE";
+        console.log('entre');
+        return 'DELETE-AJUSTE';
       }
     }
-    console.log("ESTO ES EL URL QUE ESTA COMPARANDO: " + req.url);
-    if (req.method === "GET" && req.url.startsWith("/empresa/1/boleta/")) {
-      console.log("Si entre");
-      return "GET-BOLETA-SIN-DDJJ";
+    console.log('ESTO ES EL URL QUE ESTA COMPARANDO: ' + req.url);
+    if (req.method === 'GET' && req.url.startsWith('/empresa/1/boleta/')) {
+      console.log('Si entre');
+      return 'GET-BOLETA-SIN-DDJJ';
     }
 
-    if (req.method === "PATCH" && req.url.startsWith("/DDJJ/")) {
-      return "DDJJ-PRESENTAR";
+    if (req.method === 'PATCH' && req.url.startsWith('/DDJJ/')) {
+      return 'DDJJ-PRESENTAR';
     }
 
     if(req.method === "PUT" && req.url.startsWith("/funcionalidades/id")){
@@ -282,117 +282,117 @@ module.exports = (req, res, next) => {
   }
 
   switch (getAPI(req, res)) {
-    case "DDJJ-MISDDJJ-CONSULTA":
+    case 'DDJJ-MISDDJJ-CONSULTA':
       ddjjGenerarTotales();
       break;
-    case "DDJJ-PERIODO-VALIDAR":
+    case 'DDJJ-PERIODO-VALIDAR':
       validarPeriodo();
       break;
-    case "LOGIN-HABILITADO":
+    case 'LOGIN-HABILITADO':
       validarLoguinHabilitado();
       next();
       break;
-    case "LOGIN-DFA":
+    case 'LOGIN-DFA':
       validarLoguinDFA();
       break;
-    case "LOGIN":
+    case 'LOGIN':
       validarLoguin();
       break;
-    case "CATEGORIAS":
+    case 'CATEGORIAS':
       categoriasURL();
       break;
-    case "COMUN-CUI-VALIDAR":
+    case 'COMUN-CUI-VALIDAR':
       validarCUI();
       break;
-    case "EMPRESA-PLANTA-CONSULTA":
+    case 'EMPRESA-PLANTA-CONSULTA':
       empresaPlataConsulta();
       break;
-    case "EMPRESA-DOMICILIO-ALTA":
+    case 'EMPRESA-DOMICILIO-ALTA':
       empresaDomicilioAlta();
       break;
-    case "DDJJ-ALTA":
+    case 'DDJJ-ALTA':
       DDJJSetParams();
       break;
-    case "DDJJ-ALTA-V2":
+    case 'DDJJ-ALTA-V2':
       DDJJSetParamsV2();
       break;
-    case "DDJJ-IMPRIMIR":
+    case 'DDJJ-IMPRIMIR':
       DDJJImprimir();
       break;
-    case "DDJJ-MODI":
+    case 'DDJJ-MODI':
       DDJJSetParams();
       break;
-    case "ROL-FUNC-REL-CONS":
+    case 'ROL-FUNC-REL-CONS':
       RolFuncionalidadRelCons();
       break;
-    case "ROL-FUNC-REL-ALTA":
+    case 'ROL-FUNC-REL-ALTA':
       RolFuncionalidadRelAlta();
       break;
-    case "ROL-FUNC-REL-BAJA":
+    case 'ROL-FUNC-REL-BAJA':
       RolFuncionalidadRelBaja();
       break;
-    case "APORTES-BAJA":
+    case 'APORTES-BAJA':
       AportesBaja();
       break;
-    case "APORTES-MODI":
+    case 'APORTES-MODI':
       AportesModi();
       break;
-    case "APORTE-DETALLE-ALTA":
+    case 'APORTE-DETALLE-ALTA':
       AporteDetalleAlta();
       break;
-    case "DDJJ-VALIDAR-NIVEL2":
+    case 'DDJJ-VALIDAR-NIVEL2':
       ddjjValidarN2(req, res);
       break;
-    case "BOLETA-DETALLE":
+    case 'BOLETA-DETALLE':
       getBoletaDetalle();
       break;
-    case "CALCULAR-INTERES":
+    case 'CALCULAR-INTERES':
       calcularInteres();
       break;
-    case "CALCULAR-INTERESES":
+    case 'CALCULAR-INTERESES':
       calcularInteresBoletas();
       break;
-    case "BOLETA-DDJJ-CODIGO":
+    case 'BOLETA-DDJJ-CODIGO':
       getBoletaByDDJJIDandCodigo();
       break;
-    case "DETALLE-BOLETA-IMPRIMIR":
+    case 'DETALLE-BOLETA-IMPRIMIR':
       getBoletaDetalleImpresa();
       break;
-    case "BOLETA-IMPRIMIR":
+    case 'BOLETA-IMPRIMIR':
       getBoletaImpresa();
       break;
-    case "TIENE-RECTIFICATIVA":
+    case 'TIENE-RECTIFICATIVA':
       tieneRectificativa();
       break;
-    case "GUARDAR-BOLETAS":
+    case 'GUARDAR-BOLETAS':
       guardarBoletas();
       break;
-    case "GENERAR-SIN-DDJJ":
+    case 'GENERAR-SIN-DDJJ':
       generarBoletaSinDDJJ();
       break;
-    case "FERIADOS-DUPLICAR":
+    case 'FERIADOS-DUPLICAR':
       feriadosDuplicar();
       break;
       break;
-    case "GET-BOLETA-BY-ID":
+    case 'GET-BOLETA-BY-ID':
       getBoletaById();
       break;
-    case "MODIFICAR-BOLETA-BY-ID":
+    case 'MODIFICAR-BOLETA-BY-ID':
       modificarBoletaById();
       break;
-    case "GET-BOLETA-SIN-DDJJ":
+    case 'GET-BOLETA-SIN-DDJJ':
       getBoletaSinDDJJ();
       break;
-    case "UPDATE-AJUSTE":
+    case 'UPDATE-AJUSTE':
       updateAjuste();
       break;
-    case "DELETE-AJUSTE":
+    case 'DELETE-AJUSTE':
       deleteAjuste();
       break;
-    case "OSPIM-CONTACTO":
+    case 'OSPIM-CONTACTO':
       getOspimContacto();
       break;
-    case "DDJJ-PRESENTAR":
+    case 'DDJJ-PRESENTAR':
       presentarDDJJ(req, res);
       break;
     case "ACTUALIZAR-ROL-FUNCIONALIDAD":
@@ -416,9 +416,9 @@ module.exports = (req, res, next) => {
 
   function getOspimContacto() {
     let contacto = {};
-    contacto.email = "mesadeayuda@ospim.com.ar";
-    contacto.telefono = "011-4502-2075";
-    contacto.whasap = "15-4569-4545";
+    contacto.email = 'mesadeayuda@ospim.com.ar';
+    contacto.telefono = '011-4502-2075';
+    contacto.whasap = '15-4569-4545';
     res.status(200).send(contacto);
   }
 
@@ -430,7 +430,7 @@ module.exports = (req, res, next) => {
 
     afiliados.forEach((afiliado, index) => {
       Object.entries(afiliado).forEach(([key, value]) => {
-        if (key !== "inte" && (value === null || value === undefined)) {
+        if (key !== 'inte' && (value === null || value === undefined)) {
           errores.push({
             //codigo: `CAMPO_${key.toUpperCase()}_VACIO`,
             codigo: key,
@@ -492,10 +492,10 @@ module.exports = (req, res, next) => {
       res.status(200).send(null);
     } else {
       res.status(404).jsonp({
-        tipo: "ERROR_APP_BUSINESS",
-        ticket: "TK-156269",
-        codigo: "CODIGO_INVALIDO",
-        descripcion: "Codigo inexistente.",
+        tipo: 'ERROR_APP_BUSINESS',
+        ticket: 'TK-156269',
+        codigo: 'CODIGO_INVALIDO',
+        descripcion: 'Codigo inexistente.',
       });
     }
   }
@@ -504,7 +504,7 @@ module.exports = (req, res, next) => {
     let codigo = req.query.codigo;
     let aportesDB = req.app.db.__wrapped__.aportes;
     let aportesIndex = aportesDB.findIndex((elem) => elem.codigo == codigo);
-    console.log("aportesIndex: " + aportesIndex);
+    console.log('aportesIndex: ' + aportesIndex);
     if (aportesIndex > -1) {
       if (req.body.descripcion)
         aportesDB[aportesIndex].descripcion = req.body.descripcion;
@@ -513,10 +513,10 @@ module.exports = (req, res, next) => {
       res.status(200).send(null);
     } else {
       res.status(404).jsonp({
-        tipo: "ERROR_APP_BUSINESS",
-        ticket: "TK-156269",
-        codigo: "CODIGO_INVALIDO",
-        descripcion: "Codigo inexistente.",
+        tipo: 'ERROR_APP_BUSINESS',
+        ticket: 'TK-156269',
+        codigo: 'CODIGO_INVALIDO',
+        descripcion: 'Codigo inexistente.',
       });
     }
   }
@@ -524,7 +524,7 @@ module.exports = (req, res, next) => {
   function RolFuncionalidadRelBaja() {
     let rolId = req.query.rolId;
     let funcCodigo = req.query.funcionalidad;
-    console.log("rolId:" + rolId + " - funcCodigo:" + funcCodigo);
+    console.log('rolId:' + rolId + ' - funcCodigo:' + funcCodigo);
 
     let reg = { rolId: rolId, funcionalidad: funcCodigo };
 
@@ -539,7 +539,7 @@ module.exports = (req, res, next) => {
       req.app.db.__wrapped__.rolFuncionalidad = lstFiltrado;
       req.app.db.write();
     } else {
-      console.log("NO SE PUEDE BOORAR lo que NO EXSISTE !...");
+      console.log('NO SE PUEDE BOORAR lo que NO EXSISTE !...');
     }
     res.status(200).send(null);
   }
@@ -547,7 +547,7 @@ module.exports = (req, res, next) => {
   function RolFuncionalidadRelAlta() {
     let rolId = req.query.rolId;
     let funcCodigo = req.query.funcionalidad;
-    console.log("rolId:" + rolId + " - funcCodigo:" + funcCodigo);
+    console.log('rolId:' + rolId + ' - funcCodigo:' + funcCodigo);
 
     let reg = { rolId: rolId, funcionalidad: funcCodigo };
 
@@ -562,7 +562,7 @@ module.exports = (req, res, next) => {
       rolFuncDB.push(reg);
       req.app.db.write();
     } else {
-      console.log("YA EXSITE !...");
+      console.log('YA EXSITE !...');
     }
     res.status(201).send(null);
   }
@@ -570,8 +570,8 @@ module.exports = (req, res, next) => {
   function RolFuncionalidadRelCons() {
     let rolId = req.query.rolId;
 
-    console.log("rolId: " + rolId);
-    if (rolId && rolId != ":id") {
+    console.log('rolId: ' + rolId);
+    if (rolId && rolId != ':id') {
       let rolFuncDB = req.app.db.__wrapped__.rolFuncionalidad;
       //let rolFuncDB = req.app.db.get("rolFuncionalidad");
       const lstFiltrado = rolFuncDB.filter((element) => {
@@ -589,7 +589,7 @@ module.exports = (req, res, next) => {
 
   function empresaDomicilioAlta() {
     let empresaId = req.query.empresaId;
-    console.log("empresaId: " + empresaId);
+    console.log('empresaId: ' + empresaId);
     if (empresaId) {
       req.body.empresaId = empresaId;
     }
@@ -627,19 +627,19 @@ module.exports = (req, res, next) => {
   function categoriasURL() {
     const { camaraCodigo, descripcion } = req.body;
     console.log(
-      "Middleware - SIGECO - categoriasURL() - INIT - camaraCodigo:" +
-        camaraCodigo
+      'Middleware - SIGECO - categoriasURL() - INIT - camaraCodigo:' +
+        camaraCodigo,
     );
     if (
-      camaraCodigo != "CAENA" &&
-      camaraCodigo != "FAIM" &&
-      camaraCodigo != "CEPA"
+      camaraCodigo != 'CAENA' &&
+      camaraCodigo != 'FAIM' &&
+      camaraCodigo != 'CEPA'
     ) {
       res.status(412).jsonp({
-        tipo: "ERROR_APP_BUSINESS",
-        ticket: "TK-156269",
-        codigo: "CODIGO_INVALIDO",
-        descripcion: "Valor de camaraCodigo (" + camaraCodigo + ") invalido.",
+        tipo: 'ERROR_APP_BUSINESS',
+        ticket: 'TK-156269',
+        codigo: 'CODIGO_INVALIDO',
+        descripcion: 'Valor de camaraCodigo (' + camaraCodigo + ') invalido.',
       });
     } else {
       next();
@@ -648,23 +648,23 @@ module.exports = (req, res, next) => {
 
   function validarLoguin() {
     // Handle the login request here
-    console.log("Middleware - SIGECO - validarLoguin() - INIT");
+    console.log('Middleware - SIGECO - validarLoguin() - INIT');
 
     const { usuario, clave } = req.body;
-    if (usuario != "admin" || (clave != "Prueba123" && clave != "Prueba3333")) {
+    if (usuario != 'admin' || (clave != 'Prueba123' && clave != 'Prueba3333')) {
       res.status(401).jsonp({
-        tipo: "ERROR_APP_BUSINESS",
-        ticket: "TK-156269",
-        codigo: "CODIGO_INVALIDO",
-        descripcion: "Credenciales invalidas.",
+        tipo: 'ERROR_APP_BUSINESS',
+        ticket: 'TK-156269',
+        codigo: 'CODIGO_INVALIDO',
+        descripcion: 'Credenciales invalidas.',
       });
 
       console.log(res.statusCode);
     } else {
       const response = {
-        token: "ncvfjlkcovkelvkeivnfjkvevcfo.cmkdwocjoiwcmw.dnmiwedfiwejndfmwe",
+        token: 'ncvfjlkcovkelvkeivnfjkvevcfo.cmkdwocjoiwcmw.dnmiwedfiwejndfmwe',
         tokenRefresco:
-          "2ncvfjlkcovkelvkeivnfjkvevcfo.cmkdwocjoiwcmw.dnmiwedfiwejndfmwe",
+          '2ncvfjlkcovkelvkeivnfjkvevcfo.cmkdwocjoiwcmw.dnmiwedfiwejndfmwe',
       };
       res.json(response);
     }
@@ -678,26 +678,26 @@ module.exports = (req, res, next) => {
   }
 
   function validarLoguinDFA() {
-    console.log("Middleware - SIGECO - validarLoguinDFA() - INIT");
+    console.log('Middleware - SIGECO - validarLoguinDFA() - INIT');
 
     const { codigo } = req.body;
-    if (codigo != "310279") {
+    if (codigo != '310279') {
       res.status(401).jsonp({
-        tipo: "ERROR_APP_BUSINESS",
-        ticket: "TK-156269",
-        codigo: "CODIGO_INVALIDO",
-        descripcion: "Codigo de verificación invalido.",
+        tipo: 'ERROR_APP_BUSINESS',
+        ticket: 'TK-156269',
+        codigo: 'CODIGO_INVALIDO',
+        descripcion: 'Codigo de verificación invalido.',
       });
 
       console.log(
-        "Middleware - SIGECO - validarLoguinDFA() - res.statusCode: " +
-          res.statusCode
+        'Middleware - SIGECO - validarLoguinDFA() - res.statusCode: ' +
+          res.statusCode,
       );
     } else {
       const response = {
-        token: "ncvfjlkcovkelvkeivnfjkvevcfo.cmkdwocjoiwcmw.dnmiwedfiwejndfmwe",
+        token: 'ncvfjlkcovkelvkeivnfjkvevcfo.cmkdwocjoiwcmw.dnmiwedfiwejndfmwe',
         tokenRefresco:
-          "2ncvfjlkcovkelvkeivnfjkvevcfo.cmkdwocjoiwcmw.dnmiwedfiwejndfmwe",
+          '2ncvfjlkcovkelvkeivnfjkvevcfo.cmkdwocjoiwcmw.dnmiwedfiwejndfmwe',
       };
       res.json(response);
       /* En la sección donde manejas la ruta "/auth/login-dfa" con el método POST, estás llamando a res.json(response) y luego a next(). En este caso, res.json() envía la respuesta al cliente, pero luego también estás pasando la solicitud al siguiente middleware con next(). Esto puede resultar en un conflicto, ya que la respuesta ya se ha enviado al cliente. */
@@ -712,14 +712,14 @@ module.exports = (req, res, next) => {
     var periodo = new Date(
       req.query.periodo.substring(0, 4),
       req.query.periodo.substring(4, 6) - 1,
-      "01"
+      '01',
     );
 
     const reg = ddjj.find((element) => {
       const fecha = new Date(
         element.periodo.substring(0, 4),
         element.periodo.substring(5, 7) - 1,
-        "01"
+        '01',
       );
 
       return (
@@ -736,35 +736,33 @@ module.exports = (req, res, next) => {
 
   function DDJJSetParamsV2() {
     let empresaId = req.query.empresaId;
-    if (empresaId != ":empresaId") {
+    if (empresaId != ':empresaId') {
       req.body.empresaId = empresaId;
-      req.body.estado = "PE";
+      req.body.estado = 'PE';
       req.body.secuencia = null;
 
       let vecAfiliados = req.body.afiliados;
-      let vecAfiliadosNew = vecAfiliados.map(function callback(
-        element,
-        index,
-        array
-      ) {
-        // Return value for new_array
-        element.aportes = DDJJSetParamsAporteV2(
-          element.remunerativo,
-          element.uomaSocio,
-          element.amtimaSocio
-        );
+      let vecAfiliadosNew = vecAfiliados.map(
+        function callback(element, index, array) {
+          // Return value for new_array
+          element.aportes = DDJJSetParamsAporteV2(
+            element.remunerativo,
+            element.uomaSocio,
+            element.amtimaSocio,
+          );
 
-        return element;
-      });
+          return element;
+        },
+      );
       req.body.afiliados = vecAfiliadosNew;
 
       next();
     } else {
       res.status(401).jsonp({
-        tipo: "ERROR_APP_BUSINESS",
-        ticket: "TK-156270",
-        codigo: "CODIGO_INVALIDO",
-        descripcion: "Debe indicar la empresa de la DDJJ .",
+        tipo: 'ERROR_APP_BUSINESS',
+        ticket: 'TK-156270',
+        codigo: 'CODIGO_INVALIDO',
+        descripcion: 'Debe indicar la empresa de la DDJJ .',
       });
     }
   }
@@ -773,24 +771,24 @@ module.exports = (req, res, next) => {
     let aportes = [];
     let imp = remuneracion * 0.02;
     let impArt46 = 2570 * 0.02;
-    aportes[0] = { aporte: "ART46", importe: impArt46 };
+    aportes[0] = { aporte: 'ART46', importe: impArt46 };
     if (buomaSocio) {
-      aportes[1] = { aporte: "UOMACS", importe: imp };
-      aportes[2] = { aporte: "UOMAAS", importe: imp };
+      aportes[1] = { aporte: 'UOMACS', importe: imp };
+      aportes[2] = { aporte: 'UOMAAS', importe: imp };
       if (bamtimaSocio) {
-        aportes[3] = { aporte: "AMTIMACS", importe: 7500 };
+        aportes[3] = { aporte: 'AMTIMACS', importe: 7500 };
       }
     }
     return aportes;
   }
 
   function DDJJSetParams() {
-    console.log("DDJJAlta - Hola");
+    console.log('DDJJAlta - Hola');
     let empresaId = req.query.empresaId;
-    if (empresaId != ":empresaId") {
-      console.log("empresaId: " + empresaId);
+    if (empresaId != ':empresaId') {
+      console.log('empresaId: ' + empresaId);
       req.body.empresaId = empresaId;
-      req.body.estado = "PE";
+      req.body.estado = 'PE';
       req.body.secuencia = null;
       req.body.totalART46 = genRand(100000, 1000000, 2);
       req.body.totalAmtimaCS = genRand(100000, 1000000, 2);
@@ -801,10 +799,10 @@ module.exports = (req, res, next) => {
       next();
     } else {
       res.status(401).jsonp({
-        tipo: "ERROR_APP_BUSINESS",
-        ticket: "TK-156270",
-        codigo: "CODIGO_INVALIDO",
-        descripcion: "Debe indicar la empresa de la DDJJ .",
+        tipo: 'ERROR_APP_BUSINESS',
+        ticket: 'TK-156270',
+        codigo: 'CODIGO_INVALIDO',
+        descripcion: 'Debe indicar la empresa de la DDJJ .',
       });
 
       console.log(res.statusCode);
@@ -823,7 +821,7 @@ module.exports = (req, res, next) => {
     const tieneBoletasParaDeclaracion =
       boletasDetalle.declaracion_jurada_id == declaracion_jurada_id;
     const error404 = {
-      descripcion: "No se encontraron boletas para la declaracion jurada",
+      descripcion: 'No se encontraron boletas para la declaracion jurada',
     };
 
     tieneBoletasParaDeclaracion
@@ -851,12 +849,12 @@ module.exports = (req, res, next) => {
     const { intencion_de_pago } = req.body;
     const interes_diario = 0.01;
     const boletaOrig = req.app.db.__wrapped__.boletas.detalle_boletas.find(
-      (boleta) => boleta.codigo === codigoBoleta
+      (boleta) => boleta.codigo === codigoBoleta,
     );
     const boleta = JSON.parse(JSON.stringify(boletaOrig));
     const diferencia_en_dias = calcula_diferencia_de_dias(
       intencion_de_pago,
-      boleta.vencimiento
+      boleta.vencimiento,
     );
 
     if (diferencia_en_dias >= 0) {
@@ -880,7 +878,7 @@ module.exports = (req, res, next) => {
     const boletasActualizadas = boletas.detalle_boletas.map((boleta) => {
       const diferencia_en_dias = calcula_diferencia_de_dias(
         intencion_de_pago,
-        boleta.vencimiento
+        boleta.vencimiento,
       );
       if (diferencia_en_dias >= 0) {
         const monto_interes =
@@ -899,10 +897,10 @@ module.exports = (req, res, next) => {
     const { ddjj_id, codigo } = req.query;
     const BOLETAS_BY_DDDJJ =
       req.app.db.__wrapped__.boletas_guardadas.con_ddjj.find(
-        (boletasddjj) => boletasddjj.declaracion_jurada_id == ddjj_id
+        (boletasddjj) => boletasddjj.declaracion_jurada_id == ddjj_id,
       );
     const BOLETA_BY_CODIGO = BOLETAS_BY_DDDJJ.detalle_boletas.find(
-      (boleta) => boleta.codigo == codigo
+      (boleta) => boleta.codigo == codigo,
     );
     res.status(200).jsonp(BOLETA_BY_CODIGO);
   }
@@ -919,7 +917,7 @@ module.exports = (req, res, next) => {
 
   function tieneRectificativa() {
     const { empresaId, periodo } = req.query;
-    const rectificativa = empresaId == 1 && periodo == "2024-01";
+    const rectificativa = empresaId == 1 && periodo == '2024-01';
     res.status(200).jsonp({ rectificativa });
   }
 
@@ -943,7 +941,7 @@ module.exports = (req, res, next) => {
   function getBoletaById() {
     const { numeroBoleta } = req.query;
     const boleta = req.app.db.__wrapped__.boletas_guardadas.con_ddjj.find(
-      (boleta) => boleta.numero_boleta == numeroBoleta
+      (boleta) => boleta.numero_boleta == numeroBoleta,
     );
     res.status(200).jsonp(boleta);
   }
@@ -951,10 +949,10 @@ module.exports = (req, res, next) => {
   function modificarBoletaById() {
     const { numeroBoleta } = req.query;
     const index = req.app.db.__wrapped__.boletas_guardadas.con_ddjj.findIndex(
-      (element) => element.numero_boleta == numeroBoleta
+      (element) => element.numero_boleta == numeroBoleta,
     );
     req.app.db.__wrapped__.boletas_guardadas.con_ddjj.forEach((element) =>
-      console.log(element.numero_boleta)
+      console.log(element.numero_boleta),
     );
     try {
       req.app.db.__wrapped__.boletas_guardadas.con_ddjj[index] = req.body;
@@ -967,11 +965,11 @@ module.exports = (req, res, next) => {
 
   function updateAjuste() {
     const { id } = req.query;
-    console.log("id pedido " + id);
+    console.log('id pedido ' + id);
     const index = req.app.db.__wrapped__.ajustes.findIndex(
-      (element) => element.id == id
+      (element) => element.id == id,
     );
-    console.log("index del elemento " + index);
+    console.log('index del elemento ' + index);
     req.app.db.__wrapped__.ajustes[index] = req.body;
     req.app.db.write();
     res.status(201).send(null);
@@ -981,7 +979,7 @@ module.exports = (req, res, next) => {
     const { id } = req.query;
     console.log(id);
     const ajustesActualizados = req.app.db.__wrapped__.ajustes.filter(
-      (item) => item.id != id
+      (item) => item.id != id,
     );
     console.log(ajustesActualizados);
     req.app.db.__wrapped__.ajustes = ajustesActualizados;
@@ -991,7 +989,7 @@ module.exports = (req, res, next) => {
 
   function presentarDDJJ(req, res) {
     // quiero que esta funcion me reporte { estado = "PR", secuencia = 1 }
-    res.status(200).jsonp({ estado: "PR", secuencia: 1 });
+    res.status(200).jsonp({ estado: 'PR', secuencia: 1 });
   }
 
   function updateRolFuncionalidad(){

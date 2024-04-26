@@ -106,11 +106,13 @@ export const DDJJAltaEmpleadosGrilla = ({
 
   const obtenerAfiliados = async (params, cuilElegido) => {
     if (cuilElegido === '') {
-      swal.showError('Debe ingresar un CUIL y presionar la lupa');
+      swal.showWarning('Debe ingresar un CUIL y presionar la lupa');
     }
 
     if (cuilElegido.length < 11) {
-      swal.showError('El CUIL ingresado es incorrecto, debe tener 11 dígitos.');
+      swal.showWarning(
+        'El CUIL ingresado es incorrecto, debe tener 11 dígitos.',
+      );
     } else {
       const afiliados = await axiosDDJJ.getAfiliado(cuilElegido);
 
@@ -156,8 +158,8 @@ export const DDJJAltaEmpleadosGrilla = ({
         const abueloNombre = textFieldNombre.parentNode.parentNode;
         abueloNombre.style.display = 'block';
       } else {
-        swal.showError(
-          'No se encontraron afiliados con el CUIL ingresado, ingreselos manualmente.',
+        swal.showWarning(
+          'CUIL inexistente, al presentarse la DDJJ, el mismo, será incorporado a la lista de la nómina del CUIT correspondiente.',
         );
 
         const textFieldApellido = document.getElementById(
@@ -271,12 +273,18 @@ export const DDJJAltaEmpleadosGrilla = ({
     return cellClassName;
   };
 
+  const formatModoEdit = (params) => {
+    return String(params.value)
+      .replace(/\./g, '')
+      .replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  };
+
   const columns = [
     {
       field: 'cuil',
       type: 'string',
       headerName: 'CUIL',
-      flex: 2,
+      width: 300,
       editable: true,
       headerAlign: 'center',
       align: 'center',
@@ -290,6 +298,7 @@ export const DDJJAltaEmpleadosGrilla = ({
               value={params.value || ''}
               onChange={(event) => {
                 const newValue = event.target.value;
+
                 params.api.setEditCellValue({
                   id: params.id,
                   field: 'cuil',
@@ -322,10 +331,10 @@ export const DDJJAltaEmpleadosGrilla = ({
       field: 'apellido',
       type: 'string',
       headerName: 'Apellido',
-      flex: 1.5,
+      width: 150,
       editable: true,
-      headerAlign: 'center',
-      align: 'center',
+      headerAlign: 'left',
+      align: 'left',
       headerClassName: 'header--cell',
       renderEditCell: (params) => {
         return afiliado?.apellido ? (
@@ -384,10 +393,10 @@ export const DDJJAltaEmpleadosGrilla = ({
       field: 'nombre',
       type: 'string',
       headerName: 'Nombre',
-      flex: 1,
+      width: 150,
       editable: true,
-      headerAlign: 'center',
-      align: 'center',
+      headerAlign: 'left',
+      align: 'left',
       headerClassName: 'header--cell',
       renderEditCell: (params) => {
         return afiliado?.nombre ? (
@@ -444,7 +453,7 @@ export const DDJJAltaEmpleadosGrilla = ({
     {
       field: 'camara',
       headerName: 'Camara',
-      flex: 1,
+      width: 100,
       editable: true,
       headerAlign: 'center',
       align: 'center',
@@ -500,7 +509,7 @@ export const DDJJAltaEmpleadosGrilla = ({
       field: 'categoria',
       type: 'singleSelect',
       headerName: 'Categoria',
-      flex: 1,
+      width: 100,
       editable: true,
       headerAlign: 'center',
       align: 'center',
@@ -536,7 +545,7 @@ export const DDJJAltaEmpleadosGrilla = ({
       field: 'fechaIngreso',
       type: 'date',
       headerName: 'Ingreso',
-      flex: 1.3,
+      width: 150,
       editable: true,
       headerAlign: 'center',
       align: 'center',
@@ -552,15 +561,17 @@ export const DDJJAltaEmpleadosGrilla = ({
       field: 'empresaDomicilioId',
       type: 'singleSelect',
       headerName: 'Planta',
-      flex: 1,
+      width: 100,
       editable: true,
-      headerAlign: 'center',
-      align: 'center',
+      headerAlign: 'left',
+      align: 'left',
       headerClassName: 'header--cell',
-      valueOptions: plantas.map((planta) => {
-        return { value: planta.id, label: planta.planta };
-      }),
-      valueFormatter: ({ value }) => value || '',
+      valueOptions: plantas,
+      valueFormatter: ({ value }) => {
+        if (value === '') return '';
+        if (value === null) return '';
+        return plantas.find((planta) => planta.id === value)?.planta || '';
+      },
       renderEditCell: (params) => {
         return (
           <Select
@@ -589,22 +600,51 @@ export const DDJJAltaEmpleadosGrilla = ({
       field: 'remunerativo',
       type: 'string',
       headerName: 'Remunerativo',
-      flex: 1,
+      width: 200,
       editable: true,
-      headerAlign: 'center',
-      align: 'center',
+      headerAlign: 'right',
+      align: 'right',
       headerClassName: 'header--cell',
       valueFormatter: ({ value }) => {
         if (value === '') return '';
         if (value === null) return '';
         return formatter.currency.format(value || 0);
       },
+      renderEditCell: (params) => {
+        return (
+          <TextField
+            fullWidth
+            value={formatModoEdit(params) || ''}
+            onChange={(event) => {
+              const newValue = event.target.value;
+              params.api.setEditCellValue({
+                id: params.id,
+                field: 'remunerativo',
+                value: newValue,
+              });
+            }}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderColor: 'transparent',
+                },
+                '&:hover fieldset': {
+                  borderColor: 'transparent',
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: 'transparent',
+                },
+              },
+            }}
+          />
+        );
+      },
     },
     {
       field: 'noRemunerativo',
       type: 'string',
       renderHeader: () => (
-        <div style={{ textAlign: 'center', color: '#fff', fontSize: '0.8rem' }}>
+        <div style={{ textAlign: 'right', color: '#fff', fontSize: '0.8rem' }}>
           <span role="img" aria-label="enjoy">
             No
             <br />
@@ -612,7 +652,7 @@ export const DDJJAltaEmpleadosGrilla = ({
           </span>
         </div>
       ),
-      flex: 1,
+      width: 200,
       editable: true,
       headerAlign: 'center',
       align: 'center',
@@ -635,7 +675,7 @@ export const DDJJAltaEmpleadosGrilla = ({
           </span>
         </div>
       ),
-      flex: 1,
+      width: 100,
       editable: true,
       headerAlign: 'center',
       align: 'center',
@@ -682,7 +722,7 @@ export const DDJJAltaEmpleadosGrilla = ({
           </span>
         </div>
       ),
-      flex: 1,
+      width: 100,
       editable: true,
       headerAlign: 'center',
       align: 'center',
@@ -719,14 +759,14 @@ export const DDJJAltaEmpleadosGrilla = ({
     {
       field: 'errores',
       headerName: 'Errores',
-      flex: 1,
+      width: 100,
       type: 'boolean',
     },
     {
       field: 'actions',
       type: 'actions',
       headerName: 'Acciones',
-      flex: 1,
+      width: 100,
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell',
