@@ -25,7 +25,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export const GenerarBoletas = () => {
   const { id } = useParams();
-
+console.log(id)
   const DDJJ_ID = id;
   const ID_EMPRESA = JSON.parse(localStorage.getItem('stateLogin'))
     .usuarioLogueado.empresa.id;
@@ -45,6 +45,8 @@ export const GenerarBoletas = () => {
           ID_EMPRESA,
           DDJJ_ID,
         );
+
+        console.log(data)
         setDefaultFDP(data);
         setAfiliados(ordenarAfiliadosBoletas(data));
         setPrimeraSeleccion(true);
@@ -170,7 +172,8 @@ export const GenerarBoletas = () => {
   const toggleDetail = () => setShowDetail(!showDetail);
 
   const generarBoletas = async () => {
-    const redirect = () => (window.location.href = '/dashboard/boletas');
+    
+    
     try {
       await axiosGenerarBoletas.generarBoletasPost(
         ID_EMPRESA,
@@ -180,13 +183,13 @@ export const GenerarBoletas = () => {
       sethabilitaBoton(true);
       toast.success('¡Toast de éxito!', {
         onClose: () => {
-          redirect();
+          navigate(`/dashboard/boletas`);
         },
       });
     } catch (error) {
       console.error(error);
       toast.error('Ocurrio un problema');
-      redirect();
+      navigate(`/dashboard/boletas`);
     }
   };
 

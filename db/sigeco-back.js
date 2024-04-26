@@ -840,6 +840,7 @@ module.exports = (req, res, next) => {
     console.log(req.body);
     req.body.forEach((element, index) => {
       element.numero_boleta = numero_boleta + index;
+      element.id = 10000 + index
       req.app.db.__wrapped__.boletas_guardadas.con_ddjj.push(element);
       req.app.db.write();
     });
