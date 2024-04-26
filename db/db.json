@@ -4726,5 +4726,12 @@
       "id": 7
     }
   ],
-  "modificacion-cuiles": []
+  "ddjj-modificacion-datos": [
+    {
+      "cuil": "20949118682",
+      "apellido": "Salinas",
+      "nombre": "Luiss",
+      "id": 1
+    }
+  ]
 }

@@ -119,6 +119,12 @@ export const DDJJAltaEmpleadosGrilla = ({
   const [locale, setLocale] = useState('esES');
   const [inteDataBase, setInteDataBase] = useState(null);
   const [open, setOpen] = useState(false);
+  const [dataModal, setDataModal] = useState({
+    cuil: '',
+    apellido: '',
+    nombre: '',
+  });
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -305,6 +311,22 @@ export const DDJJAltaEmpleadosGrilla = ({
       .replace(/\B(?=(\d{3})+(?!\d))/g, '.');
   };
 
+  const handleDataModal = (row) => () => {
+    setDataModal({
+      cuil: row.cuil,
+      apellido: row.apellido,
+      nombre: row.nombre,
+    });
+    handleOpen();
+  };
+
+  const handleChangeDataModal = (event, field) => {
+    setDataModal((prevDataModal) => ({
+      ...prevDataModal,
+      [field]: event.target.value,
+    }));
+  };
+
   const columns = [
     {
       field: 'cuil',
@@ -354,14 +376,26 @@ export const DDJJAltaEmpleadosGrilla = ({
               }}
               onClick={() => obtenerAfiliados(params, params.value)}
             />
-            <CreateIcon
-              sx={{
-                fontSize: '1.8rem',
-                color: '#1A76D2',
-                cursor: 'pointer',
-              }}
-              onClick={handleOpen}
-            />
+            {afiliado?.cuil === params.value ? (
+              <CreateIcon
+                sx={{
+                  fontSize: '1.8rem',
+                  color: '#1A76D2',
+                  cursor: 'pointer',
+                }}
+                onClick={handleDataModal(params.row)}
+              />
+            ) : (
+              <CreateIcon
+                sx={{
+                  fontSize: '1.8rem',
+                  color: '#1A76D2',
+                  cursor: 'pointer',
+                  visibility: 'hidden',
+                }}
+                onClick={handleDataModal(params.row)}
+              />
+            )}
           </div>
         );
       },
@@ -851,8 +885,11 @@ export const DDJJAltaEmpleadosGrilla = ({
     },
   ];
 
-  const modifCuiles = () => {
-    console.log('modifCuiles');
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+
+    const resp = axiosDDJJ.actualizarNombreApellido(dataModal);
+    console.log(resp);
   };
 
   return (
@@ -941,7 +978,7 @@ export const DDJJAltaEmpleadosGrilla = ({
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <form onSubmit={modifCuiles}>
+          <form onSubmit={handleFormSubmit}>
             <Typography
               variant="h4"
               component="h2"
@@ -959,8 +996,25 @@ export const DDJJAltaEmpleadosGrilla = ({
             <TextField
               fullWidth
               label="CUIL"
+              value={dataModal.cuil}
               variant="outlined"
               sx={{ marginBottom: '20px' }}
+            />
+            <TextField
+              fullWidth
+              label="Apellido"
+              value={dataModal.apellido}
+              variant="outlined"
+              sx={{ marginBottom: '20px' }}
+              onChange={(e) => handleChangeDataModal(e, 'apellido')}
+            />
+            <TextField
+              fullWidth
+              label="Nombre"
+              value={dataModal.nombre}
+              variant="outlined"
+              sx={{ marginBottom: '20px' }}
+              onChange={(e) => handleChangeDataModal(e, 'nombre')}
             />
             <Box
               display="flex"
