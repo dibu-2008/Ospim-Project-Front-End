@@ -15,15 +15,38 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
+import CreateIcon from '@mui/icons-material/Create';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import * as locales from '@mui/material/locale';
 import formatter from '@/common/formatter';
-import { Box, Button, TextField, Select, MenuItem } from '@mui/material';
+import {
+  Box,
+  Button,
+  TextField,
+  Select,
+  MenuItem,
+  IconButton,
+  alpha,
+  Modal,
+} from '@mui/material';
 import { axiosDDJJ } from '../DDJJAltaApi';
 import './DDJJAltaEmpleadosGrilla.css';
 import { dataGridStyle } from '@/common/dataGridStyle';
 import dayjs from 'dayjs';
 import swal from '@/components/swal/swal';
+import Typography from '@mui/material/Typography';
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 500,
+  bgcolor: 'background.paper',
+  border: '2px solid #1A76D2',
+  boxShadow: 24,
+  p: 4,
+};
 
 function EditToolbar(props) {
   const {
@@ -95,6 +118,9 @@ export const DDJJAltaEmpleadosGrilla = ({
 }) => {
   const [locale, setLocale] = useState('esES');
   const [inteDataBase, setInteDataBase] = useState(null);
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   const theme = useTheme();
   const themeWithLocale = useMemo(
@@ -320,8 +346,21 @@ export const DDJJAltaEmpleadosGrilla = ({
               }}
             />
             <SearchIcon
-              style={{ marginLeft: 8, cursor: 'pointer' }}
+              sx={{
+                fontSize: '1.8rem',
+                color: '#1A76D2',
+                cursor: 'pointer',
+                marginRight: '15px',
+              }}
               onClick={() => obtenerAfiliados(params, params.value)}
+            />
+            <CreateIcon
+              sx={{
+                fontSize: '1.8rem',
+                color: '#1A76D2',
+                cursor: 'pointer',
+              }}
+              onClick={handleOpen}
             />
           </div>
         );
@@ -812,6 +851,10 @@ export const DDJJAltaEmpleadosGrilla = ({
     },
   ];
 
+  const modifCuiles = () => {
+    console.log('modifCuiles');
+  };
+
   return (
     <div>
       <Box
@@ -891,6 +934,57 @@ export const DDJJAltaEmpleadosGrilla = ({
           }}
         ></div>
       </Box>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <form onSubmit={modifCuiles}>
+            <Typography
+              variant="h4"
+              component="h2"
+              sx={{
+                textAlign: 'center',
+                backgroundColor: alpha(theme.palette.primary.main, 0.1),
+                borderRadius: '5px',
+                width: '400px',
+                marginBottom: '20px',
+                color: theme.palette.primary.main,
+              }}
+            >
+              Gestion Datos DDJJ
+            </Typography>
+            <TextField
+              fullWidth
+              label="CUIL"
+              variant="outlined"
+              sx={{ marginBottom: '20px' }}
+            />
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              sx={{ width: '76%' }}
+            >
+              <Button
+                variant="contained"
+                sx={{ marginTop: '20px' }}
+                type="submit"
+              >
+                Enviar
+              </Button>
+              <Button
+                variant="contained"
+                sx={{ marginTop: '20px' }}
+                onClick={handleClose}
+              >
+                Cancelar
+              </Button>
+            </Box>
+          </form>
+        </Box>
+      </Modal>
     </div>
   );
 };
