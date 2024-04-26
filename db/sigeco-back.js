@@ -270,6 +270,14 @@ module.exports = (req, res, next) => {
       return "DDJJ-PRESENTAR";
     }
 
+    if(req.method === "PUT" && req.url.startsWith("/funcionalidades/id")){
+      console.log('Llegamos al coso que me manda a la funcion')
+      return "ACTUALIZAR-ROL-FUNCIONALIDAD"
+    }
+    if (req.method === "GET" && req.url.startsWith("/rolFuncionalidades/by-rol")){
+      return "GET-FUNCIONALIDAD-BY-ROL"
+    }
+
     return "----";
   }
 
@@ -386,6 +394,12 @@ module.exports = (req, res, next) => {
       break;
     case "DDJJ-PRESENTAR":
       presentarDDJJ(req, res);
+      break;
+    case "ACTUALIZAR-ROL-FUNCIONALIDAD":
+      updateRolFuncionalidad();
+      break;
+    case "GET-FUNCIONALIDAD-BY-ROL":
+      getFuncionalidadesByRol();
       break;
     case "----":
       // code block
@@ -979,4 +993,24 @@ module.exports = (req, res, next) => {
     // quiero que esta funcion me reporte { estado = "PR", secuencia = 1 }
     res.status(200).jsonp({ estado: "PR", secuencia: 1 });
   }
+
+  function updateRolFuncionalidad(){
+    console.log( 'Estoy en el update' )
+    const {id} = req.query
+    const index = req.app.db.__wrapped__.rolFuncionalidades.findIndex(element => element.id == id)
+    req.body.id = parseInt(id)
+    req.app.db.__wrapped__.rolFuncionalidades[index] = req.body;
+    req.app.db.write();
+    res.status(201).send(null);
+  }
+
+  function getFuncionalidadesByRol(){
+    console.log('llegue')
+    const {rol} = req.query
+    console.log(rol)
+    const rolfuncionalidad = req.app.db.__wrapped__.rolFuncionalidades.find(element => element.descripcion === rol)
+
+    res.status(200).jsonp(rolfuncionalidad);
+  }
+
 };
