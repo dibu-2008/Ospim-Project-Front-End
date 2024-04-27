@@ -13,7 +13,7 @@ export const getBoletasByDDJJid = async (empresa_id, ddjj_id) => {
 };
 
 export const getBoletasByEmpresa = async (empresa_id) => {
-  const URL = `/empresa/${empresa_id}/boletas`;
+  const URL = `/empresa/${empresa_id}/boletas/consulta-gral`;
   return oAxios.get(URL);
 };
 
