@@ -48,7 +48,7 @@
   "/aportes/:codigo/detalle/:id": "/aportesDetalle/:id",
   "/aportes/:codigo/detalle/": "/aportesDetalle/?aporte=:codigo",
   
-  "/empresa/:empresaId/ddjj/:ddjjId/boletas": "/empresa/ddjj/boletas/?ddjj_id=:ddjjId",
+  "/empresa/:empresaId/ddjj/:ddjjId/boletas-armado": "/empresa/ddjj/boletas/?ddjj_id=:ddjjId",
   "/empresa/:empresaId/ddjj/:ddjjId/boleta/:boletaCodigo/calcular-interes": "empresa/ddjj/boleta/calcular-interes/?codigoBoleta=:boletaCodigo",
   "/empresa/:empresaId/ddjj/:ddjjId/calcular-intereses": "/empresa/ddjj/calcular-intereses",
   "/empresa/:empresaId/ddjj/:ddjjId/codigo-boleta/:codigoBoleta": "/empresa/ddjj/boleta/codigo/?ddjj_id=:ddjjId&codigo=:codigoBoleta",
