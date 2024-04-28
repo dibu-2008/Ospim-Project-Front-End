@@ -15,12 +15,12 @@ export const showErrorBackEnd = (HTTP_MSG, rta) => {
         swal.showErrorBusiness(rta.descripcion);
       } else {
         console.log('* showErrorBackEnd - NOOO ERROR_BUSINESS');
-        swal.showError(`${ERROR_MESSAGE} ${rta.ticket}`);
+        swal.showError(`${ERROR_MESSAGE} ${rta.ticket}`); // confirm
       }
     } else {
       console.log('* showErrorBackEnd - NOOO ticket');
       console.log(rta);
-      swal.showError(HTTP_MSG);
+      swal.showWarning(HTTP_MSG);
     }
   } catch (error) {
     console.log('* showErrorBackEnd - CATCH !!! ');
