@@ -1,4 +1,11 @@
 {
+  "ospim-contacto": [
+    {
+      "email": "ospim@gmail.com",
+      "telefono": "15-5988-2246",
+      "whasap": "15-5555-8000"
+    }
+  ],
   "entidad": [
     {
       "codigo": "UOMA",
@@ -692,32 +699,6 @@
   ],
   "empresaDomicilio": [
     {
-      "empresaId": 1,
-      "tipo": "REAL",
-      "provinciaId": 3,
-      "localidadId": 265,
-      "calle": "San Juan",
-      "piso": "1",
-      "depto": "B",
-      "oficina": "5",
-      "cp": "1417",
-      "planta": "Planta 2",
-      "id": 2
-    },
-    {
-      "tipo": "REAL",
-      "provinciaId": 3,
-      "localidadId": 265,
-      "calle": "San Luis de las camelias II",
-      "piso": "7",
-      "depto": "B",
-      "oficina": "12",
-      "cp": "1417",
-      "planta": "Planta 5",
-      "empresaId": 1,
-      "id": 3
-    },
-    {
       "tipo": "FISCAL",
       "provinciaId": 10,
       "localidadId": 1893,
@@ -756,6 +737,34 @@
       "planta": "Planta 1",
       "empresaId": "2",
       "id": 6
+    },
+    {
+      "tipo": "",
+      "provinciaId": 10,
+      "localidadId": 1893,
+      "calle": "",
+      "piso": "",
+      "dpto": "",
+      "oficina": "",
+      "cp": "",
+      "planta": "",
+      "valor": "",
+      "empresaId": "1",
+      "id": 7
+    },
+    {
+      "tipo": "",
+      "provinciaId": 10,
+      "localidadId": 1893,
+      "calle": "",
+      "piso": "",
+      "dpto": "",
+      "oficina": "",
+      "cp": "",
+      "planta": "",
+      "valor": "",
+      "empresaId": "1",
+      "id": 8
     }
   ],
   "empresaContacto": [
