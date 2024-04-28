@@ -833,6 +833,12 @@
       "prefijo": "11",
       "valor": "111111111111",
       "id": 18
+    },
+    {
+      "tipo": "TEL",
+      "prefijo": "11",
+      "valor": "9999999999999",
+      "id": 19
     }
   ],
   "empresaContactoTipo": [
