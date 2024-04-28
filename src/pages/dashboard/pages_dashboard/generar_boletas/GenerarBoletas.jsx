@@ -240,7 +240,7 @@ console.log(id)
                     <TextField
                       type="date"
                       inputProps={{ min: hoy }}
-                      value={boleta.intencion_de_pago.split('T')[0]}
+                      value={boleta.intencion_de_pago?.split('T')[0]}
                       onChange={(event) =>
                         setIntencionDePago(boleta.codigo, event.target.value)
                       }
@@ -362,7 +362,7 @@ console.log(id)
                     key={boleta.codigo}
                   >
                     {formatter.currency.format(
-                      boleta.ajustes.reduce(
+                      boleta.ajustes?.reduce(
                         (acumulador, ajuste) => acumulador + ajuste.monto,
                         0,
                       ),
@@ -400,7 +400,7 @@ console.log(id)
 
       {boletas.detalle_boletas &&
         boletas.detalle_boletas
-          .filter((boleta) => boleta.ajustes.length > 0)
+          .filter((boleta) => boleta.ajustes?.length > 0)
           .map((boleta, index) => (
             <div key={index}>
               {index === 0 && (
