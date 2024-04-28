@@ -21,6 +21,7 @@ import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 import * as locales from '@mui/material/locale';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import { axiosDDJJEmpleado } from './DDJJConsultaEmpleadoApi';
+import dayjs from 'dayjs';
 
 function DDJJColumnaAporteGet(ddjjResponse) {
   //toma todas las ddjj de la consulta de "Mis DDJJ" y arma "vector de Columnas Aportes"
@@ -125,12 +126,23 @@ export const DDJJConsultaEmpleado = () => {
   const buscarDDJJ = async () => {
     // Busqueda por rango de periodo
     if (desde !== null && hasta !== null && cuit === '') {
-      const desdeFor = formatter.date(desde.$d);
-      const hastaFor = formatter.date(hasta.$d);
+      const desdeDayjs = dayjs(desde.$d)
+        .set('hour', 3)
+        .set('minute', 0)
+        .set('second', 0)
+        .set('millisecond', 0)
+        .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+
+      const hastaDayjs = dayjs(hasta.$d)
+        .set('hour', 3)
+        .set('minute', 0)
+        .set('second', 0)
+        .set('millisecond', 0)
+        .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
 
       const ddjjResponse = await axiosDDJJEmpleado.consultarFiltrado(
-        desdeFor,
-        hastaFor,
+        desdeDayjs,
+        hastaDayjs,
         null,
       );
 
@@ -156,12 +168,23 @@ export const DDJJConsultaEmpleado = () => {
 
     // Busqueda por rango de periodo y cuit
     if (desde !== null && hasta !== null && cuit !== '') {
-      const desdeFor = formatter.date(desde.$d);
-      const hastaFor = formatter.date(hasta.$d);
+      const desdeDayjs = dayjs(desde.$d)
+        .set('hour', 3)
+        .set('minute', 0)
+        .set('second', 0)
+        .set('millisecond', 0)
+        .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+
+      const hastaDayjs = dayjs(hasta.$d)
+        .set('hour', 3)
+        .set('minute', 0)
+        .set('second', 0)
+        .set('millisecond', 0)
+        .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
 
       const ddjjResponse = await axiosDDJJEmpleado.consultarFiltrado(
-        desdeFor,
-        hastaFor,
+        desdeDayjs,
+        hastaDayjs,
         cuit,
       );
 
