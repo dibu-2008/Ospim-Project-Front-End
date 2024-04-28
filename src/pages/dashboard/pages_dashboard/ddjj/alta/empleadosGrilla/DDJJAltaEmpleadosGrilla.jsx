@@ -15,15 +15,38 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
+import CreateIcon from '@mui/icons-material/Create';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import * as locales from '@mui/material/locale';
 import formatter from '@/common/formatter';
-import { Box, Button, TextField, Select, MenuItem } from '@mui/material';
+import {
+  Box,
+  Button,
+  TextField,
+  Select,
+  MenuItem,
+  IconButton,
+  alpha,
+  Modal,
+} from '@mui/material';
 import { axiosDDJJ } from '../DDJJAltaApi';
 import './DDJJAltaEmpleadosGrilla.css';
 import { dataGridStyle } from '@/common/dataGridStyle';
 import dayjs from 'dayjs';
 import swal from '@/components/swal/swal';
+import Typography from '@mui/material/Typography';
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 500,
+  bgcolor: 'background.paper',
+  border: '2px solid #1A76D2',
+  boxShadow: 24,
+  p: 4,
+};
 
 function EditToolbar(props) {
   const {
@@ -95,6 +118,15 @@ export const DDJJAltaEmpleadosGrilla = ({
 }) => {
   const [locale, setLocale] = useState('esES');
   const [inteDataBase, setInteDataBase] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [dataModal, setDataModal] = useState({
+    cuil: '',
+    apellido: '',
+    nombre: '',
+  });
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   const theme = useTheme();
   const themeWithLocale = useMemo(
@@ -279,6 +311,22 @@ export const DDJJAltaEmpleadosGrilla = ({
       .replace(/\B(?=(\d{3})+(?!\d))/g, '.');
   };
 
+  const handleDataModal = (row) => () => {
+    setDataModal({
+      cuil: row.cuil,
+      apellido: row.apellido,
+      nombre: row.nombre,
+    });
+    handleOpen();
+  };
+
+  const handleChangeDataModal = (event, field) => {
+    setDataModal((prevDataModal) => ({
+      ...prevDataModal,
+      [field]: event.target.value,
+    }));
+  };
+
   const columns = [
     {
       field: 'cuil',
@@ -320,9 +368,34 @@ export const DDJJAltaEmpleadosGrilla = ({
               }}
             />
             <SearchIcon
-              style={{ marginLeft: 8, cursor: 'pointer' }}
+              sx={{
+                fontSize: '1.8rem',
+                color: '#1A76D2',
+                cursor: 'pointer',
+                marginRight: '15px',
+              }}
               onClick={() => obtenerAfiliados(params, params.value)}
             />
+            {afiliado?.cuil === params.value ? (
+              <CreateIcon
+                sx={{
+                  fontSize: '1.8rem',
+                  color: '#1A76D2',
+                  cursor: 'pointer',
+                }}
+                onClick={handleDataModal(params.row)}
+              />
+            ) : (
+              <CreateIcon
+                sx={{
+                  fontSize: '1.8rem',
+                  color: '#1A76D2',
+                  cursor: 'pointer',
+                  visibility: 'hidden',
+                }}
+                onClick={handleDataModal(params.row)}
+              />
+            )}
           </div>
         );
       },
@@ -812,6 +885,13 @@ export const DDJJAltaEmpleadosGrilla = ({
     },
   ];
 
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+
+    const resp = axiosDDJJ.actualizarNombreApellido(dataModal);
+    console.log(resp);
+  };
+
   return (
     <div>
       <Box
@@ -891,6 +971,74 @@ export const DDJJAltaEmpleadosGrilla = ({
           }}
         ></div>
       </Box>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <form onSubmit={handleFormSubmit}>
+            <Typography
+              variant="h4"
+              component="h2"
+              sx={{
+                textAlign: 'center',
+                backgroundColor: alpha(theme.palette.primary.main, 0.1),
+                borderRadius: '5px',
+                width: '400px',
+                marginBottom: '20px',
+                color: theme.palette.primary.main,
+              }}
+            >
+              Gestion Datos DDJJ
+            </Typography>
+            <TextField
+              fullWidth
+              label="CUIL"
+              value={dataModal.cuil}
+              variant="outlined"
+              sx={{ marginBottom: '20px' }}
+            />
+            <TextField
+              fullWidth
+              label="Apellido"
+              value={dataModal.apellido}
+              variant="outlined"
+              sx={{ marginBottom: '20px' }}
+              onChange={(e) => handleChangeDataModal(e, 'apellido')}
+            />
+            <TextField
+              fullWidth
+              label="Nombre"
+              value={dataModal.nombre}
+              variant="outlined"
+              sx={{ marginBottom: '20px' }}
+              onChange={(e) => handleChangeDataModal(e, 'nombre')}
+            />
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              sx={{ width: '76%' }}
+            >
+              <Button
+                variant="contained"
+                sx={{ marginTop: '20px' }}
+                type="submit"
+              >
+                Enviar
+              </Button>
+              <Button
+                variant="contained"
+                sx={{ marginTop: '20px' }}
+                onClick={handleClose}
+              >
+                Cancelar
+              </Button>
+            </Box>
+          </form>
+        </Box>
+      </Modal>
     </div>
   );
 };

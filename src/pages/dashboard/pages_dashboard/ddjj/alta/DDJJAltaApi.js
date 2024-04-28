@@ -165,6 +165,25 @@ const obtenerPeriodoAnterior = async (periodo) => {
   }
 };
 
+const actualizarNombreApellido = async (registro) => {
+  const URL = `/ddjj-modificacion-datos`;
+
+  try {
+    const response = await axiosCrud.crear(URL, registro);
+
+    console.log(response);
+
+    if (response == true) {
+      swal.showSuccess(HTTP_MSG_MODI);
+      return true;
+    }
+    throw response;
+  } catch (error) {
+    showErrorBackEnd(HTTP_MSG_MODI_ERROR, error);
+    return false;
+  }
+};
+
 export const axiosDDJJ = {
   getCamaras: async function () {
     return obtenerCamaras();
@@ -205,5 +224,8 @@ export const axiosDDJJ = {
   },
   getPeriodoAnterior: async function (periodo) {
     return obtenerPeriodoAnterior(periodo);
+  },
+  actualizarNombreApellido: async function (registro) {
+    return actualizarNombreApellido(registro);
   },
 };
