@@ -8,12 +8,12 @@ const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
 
 const calcularInteres = async (url, intencion_de_pago) => {
   const body = { intencion_de_pago: intencion_de_pago };
-  const response = await oAxios.post(url, body);
+  const response = await oAxios.get(url, body);
   return response;
 };
 
 export const getBoletasByDDJJid = async (empresa_id, ddjj_id) => {
-  const URL = `/empresa/${empresa_id}/ddjj/${ddjj_id}/boletas-armado`;
+  const URL = `/empresa/${empresa_id}/ddjj/${ddjj_id}/boletas/armar`;
   try {
     const data = await axiosCrud.consultar(URL);
     return data;
@@ -30,10 +30,11 @@ export const calcularInteresBoleta = async (
   boleta_codigo,
   intencion_de_pago,
 ) => {
-  const URL = `/empresa/${empresa_id}/ddjj/${ddjj_id}/boleta/${boleta_codigo}/calcular-interes`;
+  const URL = `/empresa/${empresa_id}/ddjj/${ddjj_id}/boletas/${boleta_codigo}/armar`;
   console.log(URL);
   try {
     const response = await calcularInteres(URL, intencion_de_pago);
+    console.log("calcularInteresBoleta - response", response);
     return response;
   } catch (error) {
     const HTTP_MSG =
@@ -42,15 +43,25 @@ export const calcularInteresBoleta = async (
   }
 };
 
+
 export const calcularInteresBoletas = async (
   empresa_id,
   ddjj_id,
   intencion_de_pago,
 ) => {
-  const URL = `/empresa/${empresa_id}/ddjj/${ddjj_id}/calcular-intereses`;
+  //const URL = `/empresa/${empresa_id}/ddjj/${ddjj_id}/calcular-intereses`;
+  const URL = `/empresa/${empresa_id}/ddjj/${ddjj_id}/boletas/armar`;
   try {
     const response = await calcularInteres(URL, intencion_de_pago);
-    return response;
+    console.log("intencion_de_pago: ", intencion_de_pago);
+    console.log("calcularInteresBoletas.response: ", response);
+
+    if (response && response.data && response.data.detalle_boletas) {
+      return response.data.detalle_boletas; //TODO: ver estooo
+    } else {
+      return [];
+    }
+    //return response;
   } catch (error) {
     const HTTP_MSG =
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`;

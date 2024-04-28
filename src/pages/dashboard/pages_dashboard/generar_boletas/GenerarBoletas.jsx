@@ -16,6 +16,7 @@ import {
 import { axiosGenerarBoletas } from './GenerarBoletasApi';
 import './GenerarBoletas.css';
 import formatter from '@/common/formatter';
+import { getEmpresaId } from '@/components/localStorage/localStorageService';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 //import { Boletas } from '../boletas/Boletas';
@@ -27,8 +28,7 @@ export const GenerarBoletas = () => {
   const { id } = useParams();
 console.log(id)
   const DDJJ_ID = id;
-  const ID_EMPRESA = JSON.parse(localStorage.getItem('stateLogin'))
-    .usuarioLogueado.empresa.id;
+  const ID_EMPRESA = getEmpresaId();
 
   const [boletas, setBoletas] = useState({});
   const [showDetail, setShowDetail] = useState(false);
@@ -110,12 +110,13 @@ console.log(id)
     const fechaToISO = new Date(`${fecha}`).toISOString();
     if (primeraSeleccion) {
       setPrimeraSeleccion(false);
-      const response = await axiosGenerarBoletas.calcularInteresBoletas(
-        123,
+      const data = await axiosGenerarBoletas.calcularInteresBoletas(
+        ID_EMPRESA,
         DDJJ_ID,
         fechaToISO,
       );
-      const updatedDetalleBoletas = response.data.map((boleta) => {
+      console.log("setIntencionDePago - response - data: ", data )
+      const updatedDetalleBoletas = data.map((boleta) => {
         const prevBoleta = boletas.detalle_boletas.find(
           (prevBoleta) => prevBoleta.codigo === boleta.codigo,
         );
