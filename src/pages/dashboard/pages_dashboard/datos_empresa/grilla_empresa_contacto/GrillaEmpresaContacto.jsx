@@ -19,21 +19,18 @@ function EditToolbar(props) {
   const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
 
   const handleClick = () => {
-    const maxId = rows ? Math.max(...rows.map((row) => row.id), 0) : 1;
-
-    const newId = maxId + 1;
-
-    const id = newId;
+    const newReg = {
+      tipo: '',
+      prefijo: '',
+      valor: '',
+    };
 
     volverPrimerPagina();
 
-    setRows((oldRows) => [
-      { id, tipo: '', prefijo: '', valor: '', isNew: true },
-      ...oldRows,
-    ]);
+    setRows((oldRows) => [newReg, ...oldRows]);
     setRowModesModel((oldModel) => ({
+      [0]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
       ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
     }));
   };
 
@@ -50,7 +47,7 @@ export const GrillaEmpresaContacto = ({ idEmpresa, rows, setRows }) => {
   const [rowModesModel, setRowModesModel] = useState({});
   const [tipoContacto, setTipoContacto] = useState([]);
   const [paginationModel, setPaginationModel] = useState({
-    pageSize: 10,
+    pageSize: 50,
     page: 0,
   });
 
@@ -64,7 +61,7 @@ export const GrillaEmpresaContacto = ({ idEmpresa, rows, setRows }) => {
   useEffect(() => {
     const getTipoContacto = async () => {
       const tipo = await axiosContacto.obtenerTipo();
-      setTipoContacto(tipo.map((item) => ({ ...item })));
+      setTipoContacto(tipo);
     };
     getTipoContacto();
   }, []);
@@ -73,7 +70,7 @@ export const GrillaEmpresaContacto = ({ idEmpresa, rows, setRows }) => {
     const getDatosEmpresa = async () => {
       console.log('** getDatosEmpresa - idEmpresa: ' + idEmpresa);
       const datosEmpresa = await axiosContacto.obtenerDatosEmpresa(idEmpresa);
-      setRows(datosEmpresa.map((item) => ({ ...item, id: item.id })));
+      setRows(datosEmpresa);
     };
     getDatosEmpresa();
   }, []);
@@ -84,15 +81,21 @@ export const GrillaEmpresaContacto = ({ idEmpresa, rows, setRows }) => {
     }
   };
 
-  const handleEditClick = (id) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+  const handleEditClick = (row) => () => {
+    setRowModesModel({
+      ...rowModesModel,
+      [rows.indexOf(row)]: { mode: GridRowModes.Edit },
+    });
   };
 
-  const handleSaveClick = (id) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+  const handleSaveClick = (row) => () => {
+    setRowModesModel({
+      ...rowModesModel,
+      [rows.indexOf(row)]: { mode: GridRowModes.View },
+    });
   };
 
-  const handleDeleteClick = (id) => async () => {
+  const handleDeleteClick = (row) => async () => {
     const showSwalConfirm = async () => {
       try {
         Swal.fire({
@@ -105,8 +108,8 @@ export const GrillaEmpresaContacto = ({ idEmpresa, rows, setRows }) => {
           confirmButtonText: 'Si, bórralo!',
         }).then(async (result) => {
           if (result.isConfirmed) {
-            const bBajaOk = await axiosContacto.eliminar(idEmpresa, id);
-            if (bBajaOk) setRows(rows.filter((row) => row.id !== id));
+            const bBajaOk = await axiosContacto.eliminar(idEmpresa, row.id);
+            if (bBajaOk) setRows(rows.filter((rowAux) => rowAux.id !== row.id));
           }
         });
       } catch (error) {
@@ -117,30 +120,30 @@ export const GrillaEmpresaContacto = ({ idEmpresa, rows, setRows }) => {
     showSwalConfirm();
   };
 
-  const handleCancelClick = (id) => () => {
+  const handleCancelClick = (row) => () => {
     setRowModesModel({
       ...rowModesModel,
-      [id]: { mode: GridRowModes.View, ignoreModifications: true },
+      [rows.indexOf(row)]: {
+        mode: GridRowModes.View,
+        ignoreModifications: true,
+      },
     });
 
-    const editedRow = rows.find((row) => row.id === id);
-    if (editedRow.isNew) {
-      setRows(rows.filter((row) => row.id !== id));
+    const editedRow = rows.find((reg) => reg.id === row.id);
+    if (!editedRow.id) {
+      setRows(rows.filter((reg) => reg.id !== row.id));
     }
   };
 
   const processRowUpdate = async (newRow, oldRow) => {
     let bOk = false;
-    if (newRow.isNew) {
+    if (!newRow.id) {
       try {
-        delete newRow.id;
-        delete newRow.isNew;
         const data = await axiosContacto.crear(idEmpresa, newRow);
         if (data && data.id) {
           newRow.id = data.id;
-          newRow.isNew = false;
           bOk = true;
-          const newRows = rows.map((row) => (row.isNew ? newRow : row));
+          const newRows = rows.map((row) => (!row.id ? newRow : row));
           setRows(newRows);
         } else {
           console.log('alta sin ID generado');
@@ -152,12 +155,13 @@ export const GrillaEmpresaContacto = ({ idEmpresa, rows, setRows }) => {
       }
     } else {
       try {
-        delete newRow.isNew;
         bOk = await axiosContacto.actualizar(idEmpresa, newRow);
         console.log('4 - processRowUpdate - MODI - bOk: ' + bOk);
-        newRow.isNew = false;
         if (bOk) {
-          setRows(rows.map((row) => (row.id === newRow.id ? newRow : row)));
+          const rowsNew = rows.map((row) =>
+            row.id === newRow.id ? newRow : row,
+          );
+          setRows(rowsNew);
         }
       } catch (error) {
         console.log(
@@ -222,8 +226,9 @@ export const GrillaEmpresaContacto = ({ idEmpresa, rows, setRows }) => {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell',
-      getActions: ({ id }) => {
-        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+      getActions: ({ row }) => {
+        const isInEditMode =
+          rowModesModel[rows.indexOf(row)]?.mode === GridRowModes.Edit;
 
         if (isInEditMode) {
           return [
@@ -233,13 +238,13 @@ export const GrillaEmpresaContacto = ({ idEmpresa, rows, setRows }) => {
               sx={{
                 color: 'primary.main',
               }}
-              onClick={handleSaveClick(id)}
+              onClick={handleSaveClick(row)}
             />,
             <GridActionsCellItem
               icon={<CancelIcon />}
               label="Cancel"
               className="textPrimary"
-              onClick={handleCancelClick(id)}
+              onClick={handleCancelClick(row)}
               color="inherit"
             />,
           ];
@@ -250,13 +255,13 @@ export const GrillaEmpresaContacto = ({ idEmpresa, rows, setRows }) => {
             icon={<EditIcon />}
             label="Edit"
             className="textPrimary"
-            onClick={handleEditClick(id)}
+            onClick={handleEditClick(row)}
             color="inherit"
           />,
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Delete"
-            onClick={handleDeleteClick(id)}
+            onClick={handleDeleteClick(row)}
             color="inherit"
           />,
         ];
@@ -281,6 +286,10 @@ export const GrillaEmpresaContacto = ({ idEmpresa, rows, setRows }) => {
       <DataGrid
         rows={rows}
         columns={columns}
+        getRowId={(row) => rows.indexOf(row)}
+        getRowClassName={(params) =>
+          rows.indexOf(params.row) % 2 === 0 ? 'even' : 'odd'
+        }
         editMode="row"
         rowModesModel={rowModesModel}
         onRowModesModelChange={handleRowModesModelChange}
@@ -308,7 +317,7 @@ export const GrillaEmpresaContacto = ({ idEmpresa, rows, setRows }) => {
         }}
         paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}
-        pageSizeOptions={[10, 15, 25]}
+        pageSizeOptions={[50, 75, 100]}
       />
     </Box>
   );

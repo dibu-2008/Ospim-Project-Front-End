@@ -796,12 +796,6 @@
       "id": 12
     },
     {
-      "tipo": "TEL2",
-      "prefijo": "012",
-      "valor": "2233-5566",
-      "id": 13
-    },
-    {
       "tipo": "MAIL",
       "prefijo": "",
       "valor": "system@fit.com.ar",
@@ -824,6 +818,12 @@
       "prefijo": "014",
       "valor": "3434-8080",
       "id": 17
+    },
+    {
+      "tipo": "TEL",
+      "prefijo": "11",
+      "valor": "111111111111",
+      "id": 18
     }
   ],
   "empresaContactoTipo": [
