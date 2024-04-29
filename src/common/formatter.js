@@ -28,10 +28,8 @@ const formatPeriodo = (value, separador) => {
       separador = '/';
     }
     const date = new Date(value);
-
     const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
     const year = date.getUTCFullYear();
-
     return `${month}${separador}${year}`;
   } catch (error) {
     return '';
@@ -87,7 +85,7 @@ const formatter = {
   periodo: formatPeriodo,
   periodo2: formatPeriodo2,
   fechaGrilla: formatFechaGrilla,
-  toFechaValida
+  toFechaValida,
 };
 
 export default formatter;

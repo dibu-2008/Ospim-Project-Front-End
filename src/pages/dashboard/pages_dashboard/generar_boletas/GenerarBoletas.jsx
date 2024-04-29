@@ -94,7 +94,8 @@ console.log(id)
   const setInteresInDetalleBoleta = (boletaIndex, response) => {
     const newDetalleBoletas = [...boletas.detalle_boletas];
     const fdp = newDetalleBoletas[boletaIndex].forma_de_pago;
-    newDetalleBoletas[boletaIndex] = response.data;
+    newDetalleBoletas[boletaIndex] = response;
+    console.log(newDetalleBoletas)
     newDetalleBoletas[boletaIndex].forma_de_pago = fdp;
     setBoletas({ ...boletas, detalle_boletas: newDetalleBoletas });
   };
@@ -110,12 +111,15 @@ console.log(id)
     const fechaToISO = new Date(`${fecha}`).toISOString();
     if (primeraSeleccion) {
       setPrimeraSeleccion(false);
+      console.log(ID_EMPRESA)
+      console.log(DDJJ_ID)
       const response = await axiosGenerarBoletas.calcularInteresBoletas(
-        123,
+        ID_EMPRESA,
         DDJJ_ID,
         fechaToISO,
       );
-      const updatedDetalleBoletas = response.data.map((boleta) => {
+      console.log(response)
+      const updatedDetalleBoletas = response.detalle_boletas.map((boleta) => {
         const prevBoleta = boletas.detalle_boletas.find(
           (prevBoleta) => prevBoleta.codigo === boleta.codigo,
         );
@@ -134,11 +138,12 @@ console.log(id)
         (element) => element.codigo === codigo,
       );
       const response = await axiosGenerarBoletas.calcularInteresBoleta(
-        123,
+        ID_EMPRESA,
         DDJJ_ID,
         codigo,
         fechaToISO,
       );
+      console.log(response)
       setInteresInDetalleBoleta(boletaIndex, response);
       sethabilitaBoton(false);
     }
@@ -172,8 +177,6 @@ console.log(id)
   const toggleDetail = () => setShowDetail(!showDetail);
 
   const generarBoletas = async () => {
-    
-    
     try {
       await axiosGenerarBoletas.generarBoletasPost(
         ID_EMPRESA,

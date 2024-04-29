@@ -26,7 +26,6 @@ import { useParams } from 'react-router-dom';
 import { calcularInteresBoleta } from '../generar_boletas/GenerarBoletasApi';
 
 export const DetalleBoleta = () => {
-  //const boletaDetalle = JSON.parse(localStorage.getItem('boletaDetalle'));
   const [boletaDetalle, setBoletaDetalle] = useState([]);
   const [afiliadosRows, setAfiliadosRows] = useState([]);
   const [isEditable, setIsEditable] = useState(true);
@@ -48,20 +47,21 @@ export const DetalleBoleta = () => {
       try {
         const response = await getBoletaById(ID_EMPRESA, numero_boleta);
         console.log(response);
-        setBoletaDetalle(response.data);
+        setBoletaDetalle(response);
         setAfiliadosRows(
-          response.data.afiliados.map((afiliado, index) => ({
+          response.afiliados.map((afiliado, index) => ({
             ...afiliado,
             id: index + 1,
           })),
         );
-        setMetodoPago(response.data.forma_de_pago);
-        setIntencionDePago(response.data.intencion_de_pago);
-        setDDDJJ_id(response.data.declaracion_jurada_id);
-        setCodigo(response.data.codigo);
-        setIsEditable(!response.data.fecha_de_pago);
-        setAjustes(response.data.ajustes);
-        setRespaldoBoleta(JSON.parse(JSON.stringify(response.data)));
+        setMetodoPago(response.forma_de_pago);
+        setIntencionDePago(response.intencion_de_pago);
+        setDDDJJ_id(response.declaracion_jurada_id);
+        setCodigo(response.codigo);
+        setIsEditable(!response.fecha_de_pago);
+        setAjustes(response.ajustes);
+        setRespaldoBoleta(JSON.parse(JSON.stringify(response)));
+        console.log(boletaDetalle.periodo)
       } catch (error) {
         console.error('Error al obtener los datos de la boleta:', error);
       }
@@ -70,7 +70,7 @@ export const DetalleBoleta = () => {
   }, []);
 
   const guardarBoleta = () => {
-    modificarBoletaById(ID_EMPRESA, numero_boleta, boletaDetalle);
+    modificarBoletaById(ID_EMPRESA, boletaDetalle);
   };
 
   const handlesSetIntencionDePago = async (value) => {
@@ -81,10 +81,9 @@ export const DetalleBoleta = () => {
       codigo,
       value,
     );
-    // Realizar la copia superficial del objeto original
     let objetoModificado = { ...boletaDetalle };
 
-    // Recorrer las claves del objeto a cambiar y asignar sus valores al objeto modificado
+
     for (let key in response.data) {
       if (response.data.hasOwnProperty(key)) {
         objetoModificado[key] = response.data[key];
