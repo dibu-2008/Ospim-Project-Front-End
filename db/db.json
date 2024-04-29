@@ -908,7 +908,7 @@
       "nombre": "20233725006",
       "rol": [
         {
-          "descripcion": "EMPLEADOR"
+          "descripcion": "EMPLEADO"
         }
       ]
     },
@@ -3664,11 +3664,6 @@
   ],
   "cuit-restringido": [
     {
-      "cuit": "40518267004",
-      "observacion": "xxxxxx",
-      "id": 3
-    },
-    {
       "id": 4,
       "cuit": "23659874103",
       "observacion": "Cuit restringido por irregularidades contables"
@@ -3737,11 +3732,6 @@
       "cuit": "30789154024",
       "observacion": "Cuit bajo sospecha de lavado de activos",
       "id": 20
-    },
-    {
-      "cuit": "ddedd",
-      "observacion": "dddddxxxx",
-      "id": 21
     }
   ],
   "aportes": [
