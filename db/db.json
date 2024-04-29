@@ -171,10 +171,6 @@
   ],
   "feriados": [
     {
-      "fecha": "2024-02-13T03:00:00.000Z",
-      "id": 4
-    },
-    {
       "fecha": "2024-01-11T03:00:00.000Z",
       "id": 5
     },
@@ -459,7 +455,7 @@
       "id": 73
     }
   ],
-  "intereses": [
+  "afip-intereses": [
     {
       "vigenciaDesde": "2024-04-04T03:00:00.000Z",
       "vigenciaHasta": "2024-04-06T03:00:00.000Z",
@@ -471,6 +467,24 @@
       "vigenciaHasta": "2024-04-12T03:00:00.000Z",
       "indice": 3,
       "id": 2
+    },
+    {
+      "vigenciaDesde": "2024-04-17T03:00:00.000Z",
+      "vigenciaHasta": "2024-04-16T03:00:00.000Z",
+      "indice": 3,
+      "id": 3
+    },
+    {
+      "vigenciaDesde": "2024-04-24T03:00:00.000Z",
+      "vigenciaHasta": "2024-04-20T03:00:00.000Z",
+      "indice": 5,
+      "id": 4
+    },
+    {
+      "vigenciaDesde": "2024-04-04T03:00:00.000Z",
+      "vigenciaHasta": "2024-04-06T03:00:00.000Z",
+      "indice": 10,
+      "id": 10
     }
   ],
   "usuario-interno": [
@@ -543,13 +557,6 @@
     }
   ],
   "publicaciones": [
-    {
-      "titulo": "Publicacion 05",
-      "cuerpo": "xx",
-      "vigenciaDesde": "2024-02-13T03:00:00.000Z",
-      "vigenciaHasta": "2025-02-13T03:00:00.000Z",
-      "id": 18
-    },
     {
       "titulo": "Publicacion 07",
       "cuerpo": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto amet consequuntur eos. Blanditiis veniam ad reprehenderit distinctio ab, aliquam maxime, labore id error. Sequi provident expedita adipisci odio laudantium alias!",
