@@ -76,6 +76,12 @@ export const LoginPage = () => {
     });
   };
 
+  const redirectToRecupero = () => {
+    navigate('/recupero', {
+      replace: true,
+    });
+  };
+
   //Eventos para Form de Loguin (usuario-clave)
   const onInputChangeUser = (e) => {
     OnInputChangeLoginInternalUser(e);
@@ -274,7 +280,9 @@ export const LoginPage = () => {
                   SIGUIENTE
                 </Button>
                 <div className="container_btn_pass_firts">
-                  <a className="link_animado">Recupero de Contraseña</a>
+                  <a className="link_animado" onClick={redirectToRecupero}>
+                    Recupero de Contraseña
+                  </a>
                   <a className="link_animado" onClick={redirectToRegister}>
                     Ingreso por primera vez
                   </a>

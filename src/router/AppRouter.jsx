@@ -5,7 +5,7 @@ import { Inicio } from '../pages/dashboard/pages_dashboard/inicio/Inicio';
 import NavBar from '../components/navbar/NavBar';
 import { DatosEmpresa } from '../pages/dashboard/pages_dashboard/datos_empresa/DatosEmpresa';
 import { Publicaciones } from '../pages/dashboard/pages_dashboard/publicaciones/Publicaciones';
-import { RegisterPage } from '../pages/RegisterPage';
+import { RecuperoPage } from '../pages/recupero/RecuperoPage';
 import DashboardPage from '../pages/dashboard/DashboardPage';
 import { LoginPage } from '../pages/login/LoginPage';
 import { Feriados } from '../pages/dashboard/pages_dashboard/feriados/Feriados';
@@ -31,7 +31,7 @@ const AppRouter = () => {
       <Routes>
         {/* <Route path="/" element={<NavBar />}> */}
         <Route path="login" element={<LoginPage />} />
-        <Route path="register" element={<RegisterPage />} />
+        <Route path="recupero" element={<RecuperoPage />} />
         <Route
           path="/dashboard"
           element={
