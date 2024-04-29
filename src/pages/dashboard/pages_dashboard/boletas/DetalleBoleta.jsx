@@ -12,15 +12,14 @@ import {
   MenuItem,
   TextField,
 } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import './Boletas.css';
 import { Box } from '@mui/system';
+import { getBoletaById, modificarBoletaById } from './BoletasApi';
 import {
-  getBoletaById,
-  modificarBoletaById,
-} from './BoletasApi';
-import { boletaPdfDownload } from '@/common/api/BoletaCommonApi';
+  boletaPdfDownload,
+  detallePdfDownload,
+} from '@/common/api/BoletaCommonApi';
 import formatter from '@/common/formatter';
 import { useParams } from 'react-router-dom';
 import { calcularInteresBoleta } from '../generar_boletas/GenerarBoletasApi';
@@ -61,7 +60,7 @@ export const DetalleBoleta = () => {
         setIsEditable(!response.fecha_de_pago);
         setAjustes(response.ajustes);
         setRespaldoBoleta(JSON.parse(JSON.stringify(response)));
-        console.log(boletaDetalle.periodo)
+        console.log(boletaDetalle.periodo);
       } catch (error) {
         console.error('Error al obtener los datos de la boleta:', error);
       }
@@ -82,7 +81,6 @@ export const DetalleBoleta = () => {
       value,
     );
     let objetoModificado = { ...boletaDetalle };
-
 
     for (let key in response.data) {
       if (response.data.hasOwnProperty(key)) {
@@ -115,15 +113,14 @@ export const DetalleBoleta = () => {
   return (
     <div className="boletas_container">
       <h1>Detalle boleta {boletaDetalle.descripcion}</h1>
-      <Button  >Descargar Detalle</Button>
       <Button
-        onClick={() =>
-          boletaPdfDownload(
-            ID_EMPRESA,
-            boletaDetalle.id 
-          )
-        }
+        onClick={() => {
+          detallePdfDownload(ID_EMPRESA, boletaDetalle.id);
+        }}
       >
+        Descargar Detalle
+      </Button>
+      <Button onClick={() => boletaPdfDownload(ID_EMPRESA, boletaDetalle.id)}>
         Descargar Boleta
       </Button>
       {isEditable && !modoEdicion && (

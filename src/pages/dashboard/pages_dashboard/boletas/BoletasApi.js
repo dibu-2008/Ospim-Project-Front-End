@@ -12,7 +12,7 @@ export const getBoletasByDDJJid = async (empresa_id, ddjj_id) => {
   try {
     const URL = `/empresa/${empresa_id}/ddjj/${ddjj_id}/boletas/armado`;
     const response = axiosCrud.consultar(URL);
-    return response
+    return response;
   } catch (error) {
     const HTTP_MSG =
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`;
@@ -24,7 +24,7 @@ export const getBoletasByEmpresa = async (empresa_id) => {
   try {
     const URL = `/empresa/${empresa_id}/boletas/consulta-gral`;
     const response = axiosCrud.consultar(URL);
-    return response
+    return response;
   } catch (error) {
     const HTTP_MSG =
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`;
@@ -34,7 +34,7 @@ export const getBoletasByEmpresa = async (empresa_id) => {
 
 export const getBoletaById = async (empresa_id, boleta_id) => {
   const URL = `/empresa/${empresa_id}/boletas/${boleta_id}`;
-  const response = axiosCrud.consultar(URL)
+  const response = axiosCrud.consultar(URL);
   return response;
 };
 
@@ -43,7 +43,14 @@ export const modificarBoletaById = async (empresa_id, body) => {
   try {
     body.intencion_de_pago = formatter.toFechaValida(body.intencion_de_pago);
     body.periodo = formatter.toFechaValida(body.intencion_de_pago);
-    await axiosCrud.actualizar(URL, body)
+    // Descomentar en caso de querer enviar solo los datos que se modifican
+    /*
+     const bodynuevo ={
+     'intencion_de_pago':body.intencion_de_pago,
+      'forma_de_pago':body.forma_de_pago}
+      await axiosCrud.actualizar(URL, bodynuevo)
+      */
+    await axiosCrud.actualizar(URL, body);
   } catch (error) {
     const HTTP_MSG =
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`;
