@@ -62,6 +62,5 @@ export const axiosBoletas = {
   getBoletasByDDJJid,
   getBoletasByEmpresa,
   getBoletaById,
-  modificarBoletaById,
-  boletaPdfDownload,  
+  modificarBoletaById, 
 };
