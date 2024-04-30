@@ -35,7 +35,9 @@ export const axiosConsultar = async (UrlApi) => {
 export const axiosCrear = async (UrlApi, oEntidad) => {
   try {
     const response = await oAxios.post(UrlApi, oEntidad);
-    if (response.status !== 201) {
+    console.log(response.status)
+    console.log(response.status !== 200)
+    if (response.status !== 201 && response.status !== 200) {
       console.log(
         `axiosCrud.crear() - ERROR 2 - UrlApi: ${UrlApi} - response.status !== 201 - response: ${JSON.stringify(
           response,

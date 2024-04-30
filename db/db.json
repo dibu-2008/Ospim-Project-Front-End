@@ -4381,17 +4381,51 @@
         "descripcion": "UOMA Cuota Social",
         "vencimiento": "2024-02-21T03:00:00.000Z",
         "periodo": "2024-01-01T03:00:00.000Z",
-        "total_acumulado": 21810,
-        "interes": 7851.6,
+        "total_acumulado": 13410,
+        "interes": 4827.6,
         "ajuste": 0,
-        "ajustes": [
+        "total_final": 18237.6,
+        "intencion_de_pago": "2024-03-16T03:00:00.000Z",
+        "fecha_de_pago": "2024-03-16T03:00:00.000Z",
+        "afiliados": [
           {
-            "descripcion": "Por moras reiteradas",
-            "monto": 2333
+            "cuil": "27367071112",
+            "apellido": "Nelo",
+            "nombre": "Rosario",
+            "remunerativo": 10,
+            "capital": 8400
+          },
+          {
+            "cuil": "2731722324248",
+            "apellido": "Nelo",
+            "nombre": "Manfredo",
+            "remunerativo": 100000,
+            "capital": 7610
+          },
+          {
+            "cuil": "273712728848",
+            "apellido": "Nelo",
+            "nombre": "Sabario",
+            "remunerativo": 100000,
+            "capital": 5800
           }
         ],
-        "total_final": 29661.6,
-        "intencion_de_pago": "2024-03-28T03:00:00.000Z",
+        "forma_de_pago": "Red Link",
+        "declaracion_jurada_id": 120,
+        "tipo_ddjj": "Original",
+        "numero_boleta": 3,
+        "id": 4000
+      },
+      {
+        "codigo": "UOMACS",
+        "descripcion": "UOMA Cuota Social",
+        "vencimiento": "2024-02-21T03:00:00.000Z",
+        "periodo": "2024-04-30T06:00:00.000Z",
+        "total_acumulado": 21810,
+        "interes": 15021.64,
+        "ajuste": 0,
+        "total_final": 36831.6375,
+        "intencion_de_pago": "2024-04-30T03:00:00.000Z",
         "afiliados": [
           {
             "cuil": "27367071112",
@@ -4418,48 +4452,14 @@
         "forma_de_pago": "Ventanilla",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
-        "numero_boleta": 3,
-        "id": 3
-      },
-      {
-        "id": 1,
-        "codigo": "ART46",
-        "descripcion": "Art. 46",
-        "vencimiento": "2024-02-21T03:00:00.000Z",
-        "periodo": "2024-01-01T03:00:00.000Z",
-        "total_acumulado": 1484,
-        "interes": 563.92,
-        "ajuste": 0,
-        "total_final": 2047.92,
-        "intencion_de_pago": "2024-03-30T03:00:00.000Z",
-        "afiliados": [
+        "numero_boleta": 11,
+        "ajustes": [
           {
-            "cuil": "27367071112",
-            "apellido": "Nelo",
-            "nombre": "Rosario",
-            "remunerativo": 200000,
-            "capital": 520
-          },
-          {
-            "cuil": "2731722324248",
-            "apellido": "Nelo",
-            "nombre": "Manfredo",
-            "remunerativo": 100000,
-            "capital": 482
-          },
-          {
-            "cuil": "273712728848",
-            "apellido": "Nelo",
-            "nombre": "Sabario",
-            "remunerativo": 200000,
-            "capital": 482
+            "descripcion": "Por moras reiteradas",
+            "monto": 2333
           }
         ],
-        "forma_de_pago": "PagoMisCuentas",
-        "declaracion_jurada_id": 120,
-        "tipo_ddjj": "Original",
-        "numero_boleta": 4,
-        "id": 4
+        "id": 400312
       },
       {
         "id": 1,

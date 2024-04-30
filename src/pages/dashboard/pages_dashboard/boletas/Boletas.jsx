@@ -34,17 +34,19 @@ export const Boletas = () => {
     const fetchData = async () => {
       try {
         const response = await getBoletasByEmpresa(ID_EMPRESA);
-        setBoletas(response.data["con_ddjj"]);
+        console.log(response)
+        console.log(response['con_ddjj'])
+        setBoletas(response['con_ddjj']);
         setBoletasVisibles(
-          response.data["con_ddjj"].flatMap((boleta) => ({
+          response['con_ddjj'].flatMap((boleta) => ({
             ...boleta,
             id: `${boleta.id}`,
           }))
         );
-        setBoletasSinDDJJ(response.data["sin_ddjj"]);
+        setBoletasSinDDJJ(response['sin_ddjj']);
         console.log(response);
         setBoletasSinAfiliados(
-          response.data["con_ddjj"].flatMap((boleta) => {
+          response['sin_ddjj'].flatMap((boleta) => {
             const { afiliados, ...rest } = boleta;
             return { ...rest };
           })
@@ -59,7 +61,7 @@ export const Boletas = () => {
 
   const handleViewClick = (boletaDetalle) => {
     console.log(boletaDetalle.numero_boleta);
-    navigate(`/dashboard/detalleboleta/${boletaDetalle.numero_boleta}`);
+    navigate(`/dashboard/detalleboleta/${boletaDetalle.id}`);
   };
 
   const handleSearch = () => {

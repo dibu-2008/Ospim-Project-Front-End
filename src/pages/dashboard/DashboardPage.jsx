@@ -47,7 +47,7 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import localStorageService from '@/components/localStorage/localStorageService';
-import { getFuncionalidadesByRol } from './DashboardPageApi'
+import { getFuncionalidadesByRol } from './DashboardPageApi';
 
 const drawerWidth = 270;
 
@@ -120,24 +120,19 @@ const Drawer = styled(MuiDrawer, {
 
 const DashboardPage = () => {
   const navigate = useNavigate();
-  const [value, setValue] = useState(0);
-  const isRolEmpleador = localStorageService.isRolEmpleador();
-  console.log('ROL USUARIO Empleador??: ', isRolEmpleador); // IMPRIME EMPLEADOR
-  const [rolFuncionalidades, setRolFuncionalidades] = useState({})
-  const rol = localStorageService.getRol()
+  //const [value, setValue] = useState(0);
+  //const isRolEmpleador = localStorageService.isRolEmpleador();
+  const [rolFuncionalidades, setRolFuncionalidades] = useState({});
+  const rol = localStorageService.getRol();
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log(rol + 'cosa')
-      const {funcionalidades} = await getFuncionalidadesByRol(rol);
+      const { funcionalidades } = await getFuncionalidadesByRol(rol);
       const roles = {};
-      console.log(funcionalidades)
-      funcionalidades.forEach(funcionalidad => {
+      funcionalidades.forEach((funcionalidad) => {
         roles[funcionalidad.descripcion] = funcionalidad.activo;
       });
-      setRolFuncionalidades(roles)
-      console.log(rolFuncionalidades)
-      console.log(rolFuncionalidades.INTERESES)
+      setRolFuncionalidades(roles);
     };
     fetchData();
   }, []);
@@ -315,9 +310,7 @@ const DashboardPage = () => {
                         className="icon-link"
                         style={{ width: 24, height: 24 }}
                       />{' '}
-                      {open && (
-                        <span className="icon-link">Ajustes</span>
-                      )}
+                      {open && <span className="icon-link">Ajustes</span>}
                     </NavLink>
                   )}
                 </ListItemIcon>

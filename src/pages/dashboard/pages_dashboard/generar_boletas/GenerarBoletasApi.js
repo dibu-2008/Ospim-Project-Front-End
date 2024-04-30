@@ -8,13 +8,17 @@ const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
 
 const calcularInteres = async (url, intencion_de_pago) => {
   const body = { intencion_de_pago: intencion_de_pago };
-  const response = await oAxios.get(url, body);
+  //const response = await oAxios.get(url, body);
+  console.log(body)
+  const response = await axiosCrud.crear(url,body)
   return response;
 };
 
 export const getBoletasByDDJJid = async (empresa_id, ddjj_id) => {
   const URL = `/empresa/${empresa_id}/ddjj/${ddjj_id}/boletas/armar`;
   try {
+    console.log(empresa_id)
+    console.log(ddjj_id)
     const data = await axiosCrud.consultar(URL);
     return data;
   } catch (error) {
@@ -34,8 +38,8 @@ export const calcularInteresBoleta = async (
   console.log(URL);
   try {
     const response = await calcularInteres(URL, intencion_de_pago);
-    console.log("calcularInteresBoleta - response", response);
-    return response;
+    console.log(response.detalle_boletas)
+    return response.detalle_boletas[0];
   } catch (error) {
     const HTTP_MSG =
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`;
@@ -50,18 +54,12 @@ export const calcularInteresBoletas = async (
   intencion_de_pago,
 ) => {
   //const URL = `/empresa/${empresa_id}/ddjj/${ddjj_id}/calcular-intereses`;
-  const URL = `/empresa/${empresa_id}/ddjj/${ddjj_id}/boletas/armar`;
+  const URL = `/empresa/${empresa_id}/ddjj/${ddjj_id}/boletas/armar`
   try {
+    console.log(intencion_de_pago)
     const response = await calcularInteres(URL, intencion_de_pago);
-    console.log("intencion_de_pago: ", intencion_de_pago);
-    console.log("calcularInteresBoletas.response: ", response);
-
-    if (response && response.data && response.data.detalle_boletas) {
-      return response.data.detalle_boletas; //TODO: ver estooo
-    } else {
-      return [];
-    }
-    //return response;
+    console.log(response)
+    return response;
   } catch (error) {
     const HTTP_MSG =
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`;

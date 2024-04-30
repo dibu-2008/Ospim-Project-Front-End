@@ -184,26 +184,23 @@ module.exports = (req, res, next) => {
       return 'APORTE-DETALLE-ALTA';
     }
 
-    if (req.method === 'GET' && req.url.startsWith('/empresa/ddjj/boletas')) {
-      return 'BOLETA-DETALLE';
+    if (req.method === "GET" && req.url.startsWith("/empresa/ddjj/boletas")) {
+      console.log('Entre en el boleta detalle')
+        return "BOLETA-DETALLE";
     }
     if (
-      req.method === 'POST' &&
-      req.url.startsWith('empresa/ddjj/boleta/calcular-interes')
+      req.method === "POST" &&
+      req.url.startsWith("/empresa/ddjj/boletas")
     ) {
-      return 'CALCULAR-INTERES';
+      return "CALCULAR-INTERESES";
     }
     if (
-      req.method === 'POST' &&
-      req.url.startsWith('/empresa/ddjj/calcular-interes')
+      req.method === "POST" &&
+      req.url.startsWith("/empresa/ddjj/boleta")
     ) {
+      return "CALCULAR-INTERES";
     }
-    if (
-      req.method === 'POST' &&
-      req.url.startsWith('/empresa/ddjj/calcular-interes')
-    ) {
-      return 'CALCULAR-INTERESES';
-    }
+
     if (
       req.method === 'GET' &&
       req.url.startsWith('/empresa/ddjj/boleta/codigo')
@@ -243,14 +240,16 @@ module.exports = (req, res, next) => {
     ) {
       return 'GUARDAR-BOLETAS';
     }
-    if (req.method === 'GET' && req.url.startsWith('/empresa/numero-boleta')) {
-      return 'GET-BOLETA-BY-ID';
+    if (req.method === "GET" && req.url.startsWith("/empresa/boletas")) {
+      console.log('Entre donde queria')
+      return "GET-BOLETA-BY-ID";
     }
     if (
-      req.method === 'POST' &&
-      req.url.startsWith('/empresa/numero_boleta/modificar')
+      req.method === "PUT" &&
+      req.url.startsWith("/empresa/boletas")
     ) {
-      return 'MODIFICAR-BOLETA-BY-ID';
+      console.log('entramos por aca')
+      return "MODIFICAR-BOLETA-BY-ID";
     }
     if (req.url.startsWith('/sigeco/ajustes')) {
       if (req.method === 'PUT') {
@@ -846,9 +845,12 @@ module.exports = (req, res, next) => {
   }
 
   function calcularInteres() {
+    console.log('entre en calcular interes')
     const { codigoBoleta } = req.query;
     const { intencion_de_pago } = req.body;
     const interes_diario = 0.01;
+    console.log(req.body)
+    console.log( codigoBoleta)
     const boletaOrig = req.app.db.__wrapped__.boletas.detalle_boletas.find(
       (boleta) => boleta.codigo === codigoBoleta,
     );
@@ -866,7 +868,11 @@ module.exports = (req, res, next) => {
     }
 
     boleta.intencion_de_pago = intencion_de_pago;
-    res.status(200).jsonp({ ...boleta });
+    const nueva_estructura = {"declaracion_jurada_id": 120,
+    "tipo_ddjj": "Original",
+    "periodo": "2024-01-01T03:00:00.000Z"}
+    nueva_estructura.detalle_boletas = [boleta]
+    res.status(200).jsonp(nueva_estructura);
   }
 
   function calcularInteresBoletas() {
@@ -875,8 +881,11 @@ module.exports = (req, res, next) => {
     const interes_diario = 0.01;
     const boletasOrig = req.app.db.__wrapped__.boletas;
     const boletas = JSON.parse(JSON.stringify(boletasOrig));
-
-    const boletasActualizadas = boletas.detalle_boletas.map((boleta) => {
+    const nueva_estructura = {"declaracion_jurada_id": 120,
+    "tipo_ddjj": "Original",
+    "periodo": "2024-01-01T03:00:00.000Z",
+    "detalle_boletas":[]}
+    boletas.detalle_boletas.map((boleta) => {
       const diferencia_en_dias = calcula_diferencia_de_dias(
         intencion_de_pago,
         boleta.vencimiento,
@@ -888,10 +897,12 @@ module.exports = (req, res, next) => {
         boleta.intencion_de_pago = intencion_de_pago;
         boleta.interes = parseFloat(monto_interes.toFixed(2));
       }
-
-      return { ...boleta, intencion_de_pago };
+      nueva_estructura.detalle_boletas.push(boleta)
+      //nueva_estructura.intencion_de_pago = intencion_de_pago
+      //return { ...nueva_estructura};
     });
-    res.status(200).jsonp(boletasActualizadas);
+    
+    res.status(200).jsonp(nueva_estructura);
   }
 
   function getBoletaByDDJJIDandCodigo() {
@@ -940,17 +951,17 @@ module.exports = (req, res, next) => {
   }
 
   function getBoletaById() {
-    const { numeroBoleta } = req.query;
+    const { id } = req.query;
     const boleta = req.app.db.__wrapped__.boletas_guardadas.con_ddjj.find(
-      (boleta) => boleta.numero_boleta == numeroBoleta,
+      (boleta) => boleta.id == id
     );
     res.status(200).jsonp(boleta);
   }
 
   function modificarBoletaById() {
-    const { numeroBoleta } = req.query;
+    const { id } = req.query;
     const index = req.app.db.__wrapped__.boletas_guardadas.con_ddjj.findIndex(
-      (element) => element.numero_boleta == numeroBoleta,
+      (element) => element.id == id
     );
     req.app.db.__wrapped__.boletas_guardadas.con_ddjj.forEach((element) =>
       console.log(element.numero_boleta),
