@@ -58,6 +58,9 @@
   
   "/empresa/:empresaId/ddjj/:ddjjId/codigo-boleta/:codigoBoleta": "/empresa/ddjj/boleta/codigo/?ddjj_id=:ddjjId&codigo=:codigoBoleta",
   "/empresa/:empresaId/ddjj/:ddjjId/guardar-boletas": "/empresa/ddjj/guardar-boletas",
+  "/empresa/:empresaId/ddjj/:ddjjId/boletas/generar": "/empresa/ddjj/guardar-boletas",
+
+
 
   "/empresa/:empresaId/boleta-pago/:id/imprimir-detalle": "/empresa/ddjj/boleta-pago/concepto/imprimir-detalle",
   "/empresa/:empresaId/boleta-pago/:id/imprimir": "/empresa/ddjj/boleta-pago/concepto/imprimir-boleta",

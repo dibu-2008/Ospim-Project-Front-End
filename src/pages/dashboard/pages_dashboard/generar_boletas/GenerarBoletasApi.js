@@ -79,7 +79,7 @@ const ordernarBoletas = (boletas) => {
 
 export const generarBoletasPost = async (empresa_id, ddjj_id, boletas) => {
   try {
-    const URL = `/empresa/${empresa_id}/ddjj/${ddjj_id}/guardar-boletas`;
+    const URL = `/empresa/${empresa_id}/ddjj/${ddjj_id}/boletas/generar`;
     const arr_boletas = ordernarBoletas(boletas);
 
     const response = await axiosCrud.crear(URL, arr_boletas);
