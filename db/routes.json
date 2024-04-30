@@ -63,7 +63,8 @@
   "/empresa/:empresaId/periodo/:periodo/tiene-rectificativa": "/empresa/periodo/tiene-rectificativa?empresaId=:empresaId&periodo=:periodo",
 
   "/empresa/:empresaId/generar-boleta-sin-ddjj": "/empresa/otras_boletas",
-  "/sigeco/intereses": "/intereses",
+  "/afip/intereses/:id":"/afip/intereses/?id=:id",
+  "/afip/intereses": "/intereses",
   "/sigeco/ajustes": "/ajustes",
   "/sigeco/ajustes/:id": "/sigeco/ajustes/?id=:id",
   "/ddjj/totales": "/ddjjConsulta"

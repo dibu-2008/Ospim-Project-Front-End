@@ -277,6 +277,13 @@ module.exports = (req, res, next) => {
       return "GET-FUNCIONALIDAD-BY-ROL"
     }
 
+    if (req.method === "DELETE" && req.url.startsWith("/afip/intereses")){
+      return "DELETE-INTERES"
+    }
+    if (req.method === "PUT" && req.url.startsWith("/afip/intereses")){
+      return "UPDATE-INTERES"
+    }
+
     return "----";
   }
 
@@ -399,6 +406,12 @@ module.exports = (req, res, next) => {
       break;
     case "GET-FUNCIONALIDAD-BY-ROL":
       getFuncionalidadesByRol();
+      break;
+    case "DELETE-INTERES":
+      deleteInteres();
+      break;
+    case "UPDATE-INTERES":
+      updateInteres();
       break;
     case "----":
       // code block
@@ -1024,5 +1037,33 @@ module.exports = (req, res, next) => {
 
     res.status(200).jsonp(rolfuncionalidad);
   }
+
+
+  function deleteInteres(){
+    const { id } = req.query
+    console.log(req.query)
+    console.log(req.body)
+    console.log(id)
+    const interes = req.app.db.__wrapped__.intereses.filter(
+      (item) => item.id != id
+    );
+    console.log(interes)
+    req.app.db.__wrapped__.intereses = interes
+    req.app.db.write();
+    res.status(204).send(null)
+  }
+
+  function updateInteres(){
+    const {id} = req.query
+    console.log(req.query)
+    console.log(req.body)
+    const index = req.app.db.__wrapped__.intereses.findIndex(element => element.id == parseInt(id))
+    req.body.id = parseInt(id)
+    
+    req.app.db.__wrapped__.intereses[index] = req.body;
+    req.app.db.write();
+    res.status(201).send(null);
+  }
+
 
 };
