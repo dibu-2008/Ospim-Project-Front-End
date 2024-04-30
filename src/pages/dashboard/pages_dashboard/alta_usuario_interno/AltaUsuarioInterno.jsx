@@ -45,6 +45,7 @@ import './AltaUsuarioInterno.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { dataGridStyle } from '@/common/dataGridStyle';
+import { margin } from '@mui/system';
 
 const style = {
   position: 'absolute',
@@ -287,22 +288,6 @@ export const AltaUsuarioInterno = () => {
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
-  };
-
-  const handleNombre = (e) => {
-    setNombre(e.target.value);
-  };
-
-  const handleApellido = (e) => {
-    setApellido(e.target.value);
-  };
-
-  const handleUsuario = (e) => {
-    setUsuario(e.target.value);
-  };
-
-  const handleEmail = (e) => {
-    setEmail(e.target.value);
   };
 
   const handleClave = (e) => {
@@ -580,49 +565,43 @@ export const AltaUsuarioInterno = () => {
               </Typography>
               <Grid container spacing={2}>
                 <Grid item xs={6}>
-                  <TextField
-                    value={nombre}
-                    label="Nombre"
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    onChange={handleNombre}
-                  />
+                  <p
+                    style={{
+                      marginLeft: '10px',
+                    }}
+                  >
+                    {nombre}
+                  </p>
                 </Grid>
                 <Grid item xs={6}>
-                  <TextField
-                    value={apellido}
-                    label="Apellido"
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    onChange={handleApellido}
-                  />
+                  <p
+                    style={{
+                      marginLeft: '10px',
+                    }}
+                  >
+                    {apellido}
+                  </p>
                 </Grid>
               </Grid>
 
               <Grid container spacing={2}>
                 <Grid item xs={6}>
-                  <TextField
-                    value={usuario}
-                    label="Usuario"
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    //onChange={handleUsuario}
-                    sx={{ backgroundColor: '#f5f5f5' }}
-                  />
+                  <p
+                    style={{
+                      marginLeft: '10px',
+                    }}
+                  >
+                    {usuario}
+                  </p>
                 </Grid>
                 <Grid item xs={6}>
-                  <TextField
-                    value={email}
-                    label="email"
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    //onChange={handleEmail}
-                    sx={{ backgroundColor: '#f5f5f5' }}
-                  />
+                  <p
+                    style={{
+                      marginLeft: '10px',
+                    }}
+                  >
+                    {email}
+                  </p>
                 </Grid>
               </Grid>
               <Grid container spacing={2}>
@@ -643,7 +622,7 @@ export const AltaUsuarioInterno = () => {
                           onMouseDown={handleMouseDownPassword}
                           edge="end"
                         >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                          {showPassword ? <Visibility /> : <VisibilityOff />}
                         </IconButton>
                       </InputAdornment>
                     }
@@ -666,7 +645,7 @@ export const AltaUsuarioInterno = () => {
                           onMouseDown={handleMouseDownPassword}
                           edge="end"
                         >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                          {showPassword ? <Visibility /> : <VisibilityOff />}
                         </IconButton>
                       </InputAdornment>
                     }

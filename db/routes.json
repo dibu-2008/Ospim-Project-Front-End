@@ -1,5 +1,6 @@
 {
   "/afiliados/cuil/:cuil": "/afiliado/?cuil=:cuil",
+  "/ospim/contacto/": "/ospim-contacto",
   "/publicaciones/vigentes": "/publicacionesVigentes",
   "/usuario/empresa/public/": "/usuario-empresa-alta",
   "/usuario/empresa/": "/usuario-empresa-alta",

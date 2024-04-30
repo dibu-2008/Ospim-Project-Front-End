@@ -1,4 +1,11 @@
 {
+  "ospim-contacto": [
+    {
+      "email": "ospim@gmail.com",
+      "telefono": "15-5988-2246",
+      "whasap": "15-5555-8000"
+    }
+  ],
   "entidad": [
     {
       "codigo": "UOMA",
@@ -984,32 +991,6 @@
   ],
   "empresaDomicilio": [
     {
-      "empresaId": 1,
-      "tipo": "REAL",
-      "provinciaId": 3,
-      "localidadId": 265,
-      "calle": "San Juan",
-      "piso": "1",
-      "depto": "B",
-      "oficina": "5",
-      "cp": "1417",
-      "planta": "Planta 2",
-      "id": 2
-    },
-    {
-      "tipo": "REAL",
-      "provinciaId": 3,
-      "localidadId": 265,
-      "calle": "San Luis de las camelias II",
-      "piso": "7",
-      "depto": "B",
-      "oficina": "12",
-      "cp": "1417",
-      "planta": "Planta 5",
-      "empresaId": 1,
-      "id": 3
-    },
-    {
       "tipo": "FISCAL",
       "provinciaId": 10,
       "localidadId": 1893,
@@ -1048,6 +1029,34 @@
       "planta": "Planta 1",
       "empresaId": "2",
       "id": 6
+    },
+    {
+      "tipo": "",
+      "provinciaId": 10,
+      "localidadId": 1893,
+      "calle": "",
+      "piso": "",
+      "dpto": "",
+      "oficina": "",
+      "cp": "",
+      "planta": "",
+      "valor": "",
+      "empresaId": "1",
+      "id": 7
+    },
+    {
+      "tipo": "",
+      "provinciaId": 10,
+      "localidadId": 1893,
+      "calle": "",
+      "piso": "",
+      "dpto": "",
+      "oficina": "",
+      "cp": "",
+      "planta": "",
+      "valor": "",
+      "empresaId": "1",
+      "id": 8
     }
   ],
   "empresaContacto": [
@@ -1088,12 +1097,6 @@
       "id": 12
     },
     {
-      "tipo": "TEL2",
-      "prefijo": "012",
-      "valor": "2233-5566",
-      "id": 13
-    },
-    {
       "tipo": "MAIL",
       "prefijo": "",
       "valor": "system@fit.com.ar",
@@ -1116,6 +1119,18 @@
       "prefijo": "014",
       "valor": "3434-8080",
       "id": 17
+    },
+    {
+      "tipo": "TEL",
+      "prefijo": "11",
+      "valor": "111111111111",
+      "id": 18
+    },
+    {
+      "tipo": "TEL",
+      "prefijo": "11",
+      "valor": "9999999999999",
+      "id": 19
     }
   ],
   "empresaContactoTipo": [
@@ -1185,7 +1200,7 @@
       "nombre": "20233725006",
       "rol": [
         {
-          "descripcion": "EMPLEADOR"
+          "descripcion": "EMPLEADO"
         }
       ]
     },
@@ -3941,11 +3956,6 @@
   ],
   "cuit-restringido": [
     {
-      "cuit": "40518267004",
-      "observacion": "xxxxxx",
-      "id": 3
-    },
-    {
       "id": 4,
       "cuit": "23659874103",
       "observacion": "Cuit restringido por irregularidades contables"
@@ -4014,11 +4024,6 @@
       "cuit": "30789154024",
       "observacion": "Cuit bajo sospecha de lavado de activos",
       "id": 20
-    },
-    {
-      "cuit": "ddedd",
-      "observacion": "dddddxxxx",
-      "id": 21
     }
   ],
   "aportes": [
