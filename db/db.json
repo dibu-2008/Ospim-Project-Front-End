@@ -386,61 +386,87 @@
         },
         {
           "id": 4,
-          "descripcion": "DDJJ_CONSULTA",
-          "activo": true
-        },
-        {
-          "id": 5,
           "descripcion": "BOLETAS",
           "activo": true
         },
         {
-          "id": 6,
+          "id": 5,
           "descripcion": "PAGOS",
           "activo": true
         },
         {
-          "id": 7,
+          "id": 6,
           "descripcion": "DATOS_EMPRESA",
           "activo": true
         },
         {
-          "id": 8,
+          "id": 7,
           "descripcion": "BOLETA_BLANCA",
           "activo": true
         },
         {
-          "id": 9,
+          "id": 8,
           "descripcion": "GESTION_ROLES",
           "activo": true
         },
         {
-          "id": 10,
+          "id": 9,
           "descripcion": "CUITS_RESTRINGIDOS",
           "activo": true
         },
         {
-          "id": 11,
+          "id": 10,
           "descripcion": "ROLES",
           "activo": true
         },
         {
-          "id": 12,
+          "id": 11,
           "descripcion": "USUARIO_INTERNO",
           "activo": true
         },
         {
-          "id": 13,
+          "id": 12,
           "descripcion": "INTERESES_AFIP",
           "activo": true
         },
         {
-          "id": 14,
+          "id": 13,
           "descripcion": "AJUSTES",
           "activo": true
         }
       ],
       "id": 4
+    },
+    {
+      "descripcion": "EMPLEADO",
+      "funcionalidades": [
+        {
+          "id": 1,
+          "descripcion": "PUBLICACIONES",
+          "activo": true
+        },
+        {
+          "id": 2,
+          "descripcion": "FERIADOS",
+          "activo": true
+        },
+        {
+          "id": 3,
+          "descripcion": "DDJJ_CONSULTA",
+          "activo": true
+        },
+        {
+          "id": 4,
+          "descripcion": "CUITS_RESTRINGIDOS",
+          "activo": true
+        },
+        {
+          "id": 5,
+          "descripcion": "INTERESES_AFIP",
+          "activo": true
+        }
+      ],
+      "id": 5
     }
   ],
   "funcionalidades": [
@@ -763,6 +789,44 @@
       "vigenciaHasta": "2024-04-12T03:00:00.000Z",
       "indice": 3,
       "id": 2
+    }
+  ],
+  "afip-intereses": [
+    {
+      "vigenciaDesde": "2024-04-11T03:00:00.000Z",
+      "vigenciaHasta": "2024-04-12T03:00:00.000Z",
+      "indice": 3,
+      "id": 2
+    },
+    {
+      "vigenciaDesde": "2024-04-17T03:00:00.000Z",
+      "vigenciaHasta": "2024-04-16T03:00:00.000Z",
+      "indice": 3,
+      "id": 3
+    },
+    {
+      "vigenciaDesde": "2024-04-24T03:00:00.000Z",
+      "vigenciaHasta": "2024-04-20T03:00:00.000Z",
+      "indice": 5,
+      "id": 4
+    },
+    {
+      "vigenciaDesde": "2024-04-04T03:00:00.000Z",
+      "vigenciaHasta": "2024-04-06T03:00:00.000Z",
+      "indice": 10,
+      "id": 10
+    },
+    {
+      "vigenciaDesde": "2024-04-01T03:00:00.000Z",
+      "vigenciaHasta": "2024-04-07T03:00:00.000Z",
+      "indice": 8,
+      "id": 11
+    },
+    {
+      "vigenciaDesde": "2024-05-09T03:00:00.000Z",
+      "vigenciaHasta": "2024-05-14T03:00:00.000Z",
+      "indice": 4,
+      "id": 12
     }
   ],
   "usuario-interno": [
@@ -1200,7 +1264,7 @@
       "nombre": "20233725006",
       "rol": [
         {
-          "descripcion": "EMPLEADO"
+          "descripcion": "EMPLEADOR"
         }
       ]
     },
@@ -4349,11 +4413,10 @@
         "forma_de_pago": "Ventanilla",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
-        "numero_boleta": 1,
-        "id": 1
+        "numero_boleta": 1
       },
       {
-        "id": 1,
+        "id": 2,
         "codigo": "ANTIMACS",
         "descripcion": "ANTIMA Cuota Social",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4377,11 +4440,10 @@
         "forma_de_pago": "Ventanilla",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
-        "numero_boleta": 2,
-        "id": 2
+        "numero_boleta": 2
       },
       {
-        "id": 1,
+        "id": 4000,
         "codigo": "UOMACS",
         "descripcion": "UOMA Cuota Social",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4418,8 +4480,7 @@
         "forma_de_pago": "Red Link",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
-        "numero_boleta": 3,
-        "id": 4000
+        "numero_boleta": 3
       },
       {
         "codigo": "UOMACS",
@@ -4467,7 +4528,7 @@
         "id": 400312
       },
       {
-        "id": 1,
+        "id": 5,
         "codigo": "ANTIMACS",
         "descripcion": "ANTIMA Cuota Social",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4489,11 +4550,10 @@
         "forma_de_pago": "Ventanilla",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
-        "numero_boleta": 5,
-        "id": 5
+        "numero_boleta": 5
       },
       {
-        "id": 1,
+        "id": 6,
         "codigo": "UOMACS",
         "descripcion": "UOMA Cuota Social",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4529,11 +4589,10 @@
         "forma_de_pago": "Ventanilla",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
-        "numero_boleta": 6,
-        "id": 6
+        "numero_boleta": 6
       },
       {
-        "id": 1,
+        "id": 7,
         "codigo": "ART46",
         "descripcion": "Art. 46",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4569,11 +4628,10 @@
         "forma_de_pago": "Ventanilla",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
-        "numero_boleta": 7,
-        "id": 7
+        "numero_boleta": 7
       },
       {
-        "id": 1,
+        "id": 8,
         "codigo": "UOMACS",
         "descripcion": "UOMA Cuota Social",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4609,11 +4667,10 @@
         "forma_de_pago": "Red Link",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
-        "numero_boleta": 8,
-        "id": 8
+        "numero_boleta": 8
       },
       {
-        "id": 1,
+        "id": 9,
         "codigo": "ART46",
         "descripcion": "Art. 46",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4649,11 +4706,10 @@
         "forma_de_pago": "Red Link",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
-        "numero_boleta": 9,
-        "id": 9
+        "numero_boleta": 9
       },
       {
-        "id": 1,
+        "id": 11234,
         "codigo": "ANTIMACS",
         "descripcion": "ANTIMA Cuota Social",
         "vencimiento": "2024-02-21",
@@ -4675,11 +4731,10 @@
         "forma_de_pago": "Red Link",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
-        "numero_boleta": 10,
-        "id": 11234
+        "numero_boleta": 10
       },
       {
-        "id": 1,
+        "id": 11,
         "codigo": "UOMACS",
         "descripcion": "UOMA Cuota Social",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4715,11 +4770,10 @@
         "forma_de_pago": "Ventanilla",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
-        "numero_boleta": 11,
-        "id": 11
+        "numero_boleta": 11
       },
       {
-        "id": 1,
+        "id": 12,
         "codigo": "ART46",
         "descripcion": "Art. 46",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4755,11 +4809,10 @@
         "forma_de_pago": "Ventanilla",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
-        "numero_boleta": 12,
-        "id": 12
+        "numero_boleta": 12
       },
       {
-        "id": 1,
+        "id": 22,
         "codigo": "UOMACS",
         "descripcion": "UOMA Cuota Social",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4795,11 +4848,10 @@
         "forma_de_pago": "Ventanilla",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
-        "numero_boleta": 22,
-        "id": 22
+        "numero_boleta": 22
       },
       {
-        "id": 1,
+        "id": 23,
         "codigo": "ART46",
         "descripcion": "Art. 46",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4835,11 +4887,10 @@
         "forma_de_pago": "Ventanilla",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
-        "numero_boleta": 23,
-        "id": 23
+        "numero_boleta": 23
       },
       {
-        "id": 1,
+        "id": 24,
         "codigo": "ANTIMACS",
         "descripcion": "ANTIMA Cuota Social",
         "vencimiento": "2024-02-21T00:00:00.000Z",
@@ -4861,8 +4912,7 @@
         "forma_de_pago": "Ventanilla",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
-        "numero_boleta": 24,
-        "id": 24
+        "numero_boleta": 24
       }
     ],
     "sin_ddjj": [

@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Button } from "@mui/material";
+import { Button } from '@mui/material';
 import { axiosGestionRoles } from './GestionRolesApi';
 import './GestionRoles.css';
-
 
 export const DragAndDrop = ({ tareas }) => {
   //console.log(tareas.funcionalidades)
@@ -29,16 +28,15 @@ export const DragAndDrop = ({ tareas }) => {
       activo: true,
     },
   ];
-  const [id, setRolId] = useState('')
-  const [descripcion, setDescripcion ] = useState('')
+  const [id, setRolId] = useState('');
+  const [descripcion, setDescripcion] = useState('');
   const [funcionalidades, setTasks] = useState(tareas || funcionalidades_t);
   useEffect(() => {
-    console.log(tareas)
+    console.log(tareas);
     if (tareas) {
       setTasks(tareas.funcionalidades || funcionalidades_t);
-      setRolId(tareas.id)
-      setDescripcion(tareas.descripcion)
-
+      setRolId(tareas.id);
+      setDescripcion(tareas.descripcion);
     }
   }, [tareas]);
 
@@ -70,14 +68,13 @@ export const DragAndDrop = ({ tareas }) => {
     setTasks(newState);
   };
 
-  const handleClick = () =>{
-    console.log({id, descripcion, funcionalidades})
-    axiosGestionRoles.putFuncionalidades({id, descripcion, funcionalidades})
-  }
+  const handleClick = () => {
+    console.log({ id, descripcion, funcionalidades });
+    axiosGestionRoles.putFuncionalidades({ id, descripcion, funcionalidades });
+  };
 
   return (
     <>
-
       <div className="drag-and-drop">
         <div className="column column--1">
           <h3>Activas</h3>
@@ -121,9 +118,14 @@ export const DragAndDrop = ({ tareas }) => {
           </div>
         </div>
 
-        <Button variant="contained" className="button_act" onClick={handleClick}>Actualizar</Button>
+        <Button
+          variant="contained"
+          className="button_act"
+          onClick={handleClick}
+        >
+          Actualizar
+        </Button>
       </div>
-       
     </>
   );
 };

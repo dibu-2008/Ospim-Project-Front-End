@@ -22,7 +22,7 @@ import { DDJJConsultaEmpleado } from '@/pages/dashboard/pages_dashboard/ddjj/ddj
 import { InteresesAfip } from '@/pages/dashboard/pages_dashboard/intereses_afip/InteresesAfip';
 import { Ajustes } from '@/pages/dashboard/pages_dashboard/ajustes/Ajustes';
 import { DDJJTabs } from '@/pages/dashboard/pages_dashboard/ddjj/DDJJTabs';
-import { GestionRoles } from '@/pages/dashboard/pages_dashboard/GestionRoles/GestionRoles';
+import { GestionRoles } from '@/pages/dashboard/pages_dashboard/gestionRoles/GestionRoles';
 
 const PagosPage = () => <div>Contenido de la página de pagos</div>;
 
