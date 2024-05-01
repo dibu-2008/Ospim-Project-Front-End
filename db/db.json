@@ -457,12 +457,6 @@
   ],
   "afip-intereses": [
     {
-      "vigenciaDesde": "2024-04-04T03:00:00.000Z",
-      "vigenciaHasta": "2024-04-06T03:00:00.000Z",
-      "indice": 1,
-      "id": 1
-    },
-    {
       "vigenciaDesde": "2024-04-11T03:00:00.000Z",
       "vigenciaHasta": "2024-04-12T03:00:00.000Z",
       "indice": 3,
@@ -485,6 +479,12 @@
       "vigenciaHasta": "2024-04-06T03:00:00.000Z",
       "indice": 10,
       "id": 10
+    },
+    {
+      "vigenciaDesde": "2024-04-01T03:00:00.000Z",
+      "vigenciaHasta": "2024-04-07T03:00:00.000Z",
+      "indice": 8,
+      "id": 11
     }
   ],
   "usuario-interno": [
@@ -558,13 +558,6 @@
   ],
   "publicaciones": [
     {
-      "titulo": "Publicacion 07",
-      "cuerpo": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto amet consequuntur eos. Blanditiis veniam ad reprehenderit distinctio ab, aliquam maxime, labore id error. Sequi provident expedita adipisci odio laudantium alias!",
-      "vigenciaDesde": "2024-02-07T03:00:00.000Z",
-      "vigenciaHasta": "2025-02-07T03:00:00.000Z",
-      "id": 20
-    },
-    {
       "titulo": "Titulo Pabada 1",
       "cuerpo": "Cuerpo Pabada 1",
       "vigenciaDesde": "2023-12-05T03:00:00.000Z",
@@ -605,6 +598,27 @@
       "vigenciaDesde": "2024-04-12T03:00:00.000Z",
       "vigenciaHasta": "2024-04-12T03:00:00.000Z",
       "id": 34
+    },
+    {
+      "titulo": "fdsfdsfds",
+      "cuerpo": "sdfsdfdsfsdf",
+      "vigenciaDesde": "2024-04-10T03:00:00.000Z",
+      "vigenciaHasta": "2024-04-17T03:00:00.000Z",
+      "id": 35
+    },
+    {
+      "titulo": "fgsdffd",
+      "cuerpo": "sdfdsf",
+      "vigenciaDesde": "2024-04-04T03:00:00.000Z",
+      "vigenciaHasta": "2024-04-11T03:00:00.000Z",
+      "id": 36
+    },
+    {
+      "titulo": "zzzzzzzzz",
+      "cuerpo": "sdfsdfdsfdsf",
+      "vigenciaDesde": "2024-04-17T03:00:00.000Z",
+      "vigenciaHasta": "2024-04-25T03:00:00.000Z",
+      "id": 37
     }
   ],
   "publicacionesVigentes": [
@@ -3671,11 +3685,6 @@
   ],
   "cuit-restringido": [
     {
-      "id": 4,
-      "cuit": "23659874103",
-      "observacion": "Cuit restringido por irregularidades contables"
-    },
-    {
       "id": 5,
       "cuit": "18930475012",
       "observacion": "Cuit restringido por no cumplir con obligaciones tributarias"
@@ -3739,6 +3748,11 @@
       "cuit": "30789154024",
       "observacion": "Cuit bajo sospecha de lavado de activos",
       "id": 20
+    },
+    {
+      "cuit": "34123213213123",
+      "observacion": "",
+      "id": 21
     }
   ],
   "aportes": [
