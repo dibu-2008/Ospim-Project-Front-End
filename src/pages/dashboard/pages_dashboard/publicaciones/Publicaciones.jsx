@@ -5,6 +5,7 @@ import {
   GridRowModes,
   GridActionsCellItem,
   GridRowEditStopReasons,
+  useGridApiRef,
 } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
 import EditIcon from '@mui/icons-material/Edit';
@@ -18,6 +19,7 @@ import './Publicaciones.css';
 import { ThreeCircles } from 'react-loader-spinner';
 import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 import formatter from '@/common/formatter';
+import { handleServerError } from '@/helpers/handleServerError';
 
 const paginacion = {
   pageSize: 50,
@@ -30,6 +32,9 @@ export const Publicaciones = () => {
   const [rowModesModel, setRowModesModel] = useState({});
   const [showDataGrid, setShowDataGrid] = useState(false);
   const [paginationModel, setPaginationModel] = useState(paginacion);
+
+  const gridApiRef = useGridApiRef();
+
   const theme = useTheme();
   const themeWithLocale = useMemo(
     () => createTheme(theme, locales[locale]),
@@ -86,7 +91,11 @@ export const Publicaciones = () => {
         }).then(async (result) => {
           if (result.isConfirmed) {
             const bBajaOk = await axiosPublicaciones.eliminar(row.id);
-            if (bBajaOk) setRows(rows.filter((reg) => reg.id !== row.id));
+            if (bBajaOk) {
+              setRows(rows.filter((reg) => reg.id !== row.id));
+            } else {
+              setRows(rows);
+            }
           }
         });
       } catch (error) {
@@ -117,16 +126,31 @@ export const Publicaciones = () => {
     if (!newRow.id) {
       try {
         const data = await axiosPublicaciones.crear(newRow);
+
         if (data && data.id) {
           newRow.id = data.id;
           bOk = true;
           const newRows = rows.map((row) => (!row.id ? newRow : row));
           setRows(newRows);
+          setRowModesModel({
+            ...rowModesModel,
+            [rows.indexOf(newRow)]: { mode: GridRowModes.View },
+          });
+        } else {
+          handleServerError(
+            rows,
+            newRow,
+            setRows,
+            setRowModesModel,
+            GridRowModes,
+            false,
+          );
         }
       } catch (error) {
         console.log(
-          'X - processRowUpdate - ALTA - ERROR: ' + JSON.stringify(error),
+          'X - processRowUpdate - MODI - ERROR: ' + JSON.stringify(error),
         );
+        setRows(rows.filter((reg) => reg.id !== newRow.id));
       }
     } else {
       try {
@@ -136,11 +160,21 @@ export const Publicaciones = () => {
             row.id === newRow.id ? newRow : row,
           );
           setRows(rowsNew);
+        } else {
+          handleServerError(
+            rows,
+            oldRow,
+            setRows,
+            setRowModesModel,
+            GridRowModes,
+            true,
+          );
         }
       } catch (error) {
         console.log(
           'X - processRowUpdate - MODI - ERROR: ' + JSON.stringify(error),
         );
+        setRows(rows.filter((reg) => reg.id !== newRow.id));
       }
     }
 
@@ -153,6 +187,10 @@ export const Publicaciones = () => {
 
   const handleRowModesModelChange = (newRowModesModel) => {
     setRowModesModel(newRowModesModel);
+  };
+
+  const handleProcessRowUpdateError = (error) => {
+    console.error('Error al actualizar la fila:', error);
   };
 
   useEffect(() => {
@@ -241,7 +279,6 @@ export const Publicaciones = () => {
             />,
           ];
         }
-
         return [
           <GridActionsCellItem
             icon={<EditIcon />}
@@ -317,6 +354,7 @@ export const Publicaciones = () => {
         {showDataGrid && (
           <ThemeProvider theme={themeWithLocale}>
             <StripedDataGrid
+              apiRef={gridApiRef}
               rows={rows}
               columns={columns}
               editMode="row"
@@ -330,6 +368,9 @@ export const Publicaciones = () => {
               processRowUpdate={(updatedRow, originalRow) =>
                 processRowUpdate(updatedRow, originalRow)
               }
+              onProcessRowUpdateError={(error, params) => {
+                handleProcessRowUpdateError(error, params);
+              }}
               localeText={dataGridStyle.toolbarText}
               slots={{
                 toolbar: EditarNuevaFila,
