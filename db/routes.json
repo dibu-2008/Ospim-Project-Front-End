@@ -67,5 +67,7 @@
   "/afip/intereses": "/intereses",
   "/sigeco/ajustes": "/ajustes",
   "/sigeco/ajustes/:id": "/sigeco/ajustes/?id=:id",
-  "/ddjj/totales": "/ddjjConsulta"
+  "/ddjj/totales": "/ddjjConsulta",
+
+  "/error/401":"/error/401"
 }

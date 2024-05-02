@@ -283,6 +283,9 @@ module.exports = (req, res, next) => {
     if (req.method === "PUT" && req.url.startsWith("/afip/intereses")){
       return "UPDATE-INTERES"
     }
+    if (req.url.startsWith("/error/401")){
+      return "ERROR401"
+    }
 
     return "----";
   }
@@ -412,6 +415,9 @@ module.exports = (req, res, next) => {
       break;
     case "UPDATE-INTERES":
       updateInteres();
+      break;
+    case "ERROR401":
+      err401();
       break;
     case "----":
       // code block
@@ -1065,5 +1071,13 @@ module.exports = (req, res, next) => {
     res.status(201).send(null);
   }
 
-
+  function err401(){
+    res.status(412).jsonp({
+      "tipo": "ERROR_APP_BUSINESS",
+      "ticket": "SGC-07168420",
+      "codigo": "DDJJ_CON_BOLETAS",
+      "descripcion": "La Declaracion Jurada ya cuenta con las Boletas de Pago generadas",
+      "args": {}
+  });
+  }
 };
