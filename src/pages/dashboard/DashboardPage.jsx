@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import logo from '../../assets/logo.svg';
 import afipIcon from '../../assets/afip.svg';
 import BottomNavigation from '@mui/material/BottomNavigation';
@@ -47,6 +47,7 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import localStorageService from '@/components/localStorage/localStorageService';
+import { getFuncionalidadesByRol } from './DashboardPageApi';
 
 const drawerWidth = 270;
 
@@ -119,9 +120,22 @@ const Drawer = styled(MuiDrawer, {
 
 const DashboardPage = () => {
   const navigate = useNavigate();
-  const [value, setValue] = useState(0);
-  const isRolEmpleador = localStorageService.isRolEmpleador();
-  console.log('ROL USUARIO Empleador??: ', isRolEmpleador); // IMPRIME EMPLEADOR
+  //const [value, setValue] = useState(0);
+  //const isRolEmpleador = localStorageService.isRolEmpleador();
+  const [rolFuncionalidades, setRolFuncionalidades] = useState({});
+  const rol = localStorageService.getRol();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { funcionalidades } = await getFuncionalidadesByRol(rol);
+      const roles = {};
+      funcionalidades.forEach((funcionalidad) => {
+        roles[funcionalidad.descripcion] = funcionalidad.activo;
+      });
+      setRolFuncionalidades(roles);
+    };
+    fetchData();
+  }, []);
 
   const onLogout = () => {
     navigate('/login', { replace: true });
@@ -187,37 +201,25 @@ const DashboardPage = () => {
                     <HomeIcon className="icon-link" />{' '}
                     {open && <span className="icon-link">Inicio</span>}
                   </NavLink>
-                  {isRolEmpleador && (
-                    <NavLink to="./misdatos" className="icon-container">
-                      <PersonIcon className="icon-link" />{' '}
-                      {open && <span className="icon-link">Datos Empresa</span>}
-                    </NavLink>
-                  )}
-                  {isRolEmpleador && (
-                    <NavLink to="./pagos" className="icon-container">
-                      <AccountBalanceWalletIcon className="icon-link" />{' '}
-                      {open && <span className="icon-link">Pagos</span>}
-                    </NavLink>
-                  )}
-                  {!isRolEmpleador && (
+                  {rolFuncionalidades.PUBLICACIONES && (
                     <NavLink to="./publicaciones" className="icon-container">
                       <PreviewIcon className="icon-link" />{' '}
                       {open && <span className="icon-link">Publicaciones</span>}
                     </NavLink>
                   )}
-                  {!isRolEmpleador && (
+                  {rolFuncionalidades.FERIADOS && (
                     <NavLink to="./feriados" className="icon-container">
                       <DateRangeIcon className="icon-link" />{' '}
                       {open && <span className="icon-link">Feriados</span>}
                     </NavLink>
                   )}
-                  {isRolEmpleador && (
+                  {rolFuncionalidades.DDJJ && (
                     <NavLink to="./ddjj" className="icon-container">
                       <LibraryBooksIcon className="icon-link" />{' '}
                       {open && <span className="icon-link">DDJJ</span>}
                     </NavLink>
                   )}
-                  {!isRolEmpleador && (
+                  {rolFuncionalidades.DDJJ_CONSULTA && (
                     <NavLink
                       to="./ddjjconsultaempleado"
                       className="icon-container"
@@ -226,13 +228,25 @@ const DashboardPage = () => {
                       {open && <span className="icon-link">DDJJ Consulta</span>}
                     </NavLink>
                   )}
-                  {isRolEmpleador && (
+                  {rolFuncionalidades.BOLETAS && (
                     <NavLink to="./boletas" className="icon-container">
                       <StyleIcon className="icon-link" />{' '}
                       {open && <span className="icon-link">Boletas</span>}
                     </NavLink>
                   )}
-                  {isRolEmpleador && (
+                  {rolFuncionalidades.PAGOS && (
+                    <NavLink to="./pagos" className="icon-container">
+                      <AccountBalanceWalletIcon className="icon-link" />{' '}
+                      {open && <span className="icon-link">Pagos</span>}
+                    </NavLink>
+                  )}
+                  {rolFuncionalidades.DATOS_EMPRESA && (
+                    <NavLink to="./misdatos" className="icon-container">
+                      <PersonIcon className="icon-link" />{' '}
+                      {open && <span className="icon-link">Datos Empresa</span>}
+                    </NavLink>
+                  )}
+                  {rolFuncionalidades.BOLETA_BLANCA && (
                     <NavLink
                       to="./generarotrospagos"
                       className="icon-container"
@@ -241,7 +255,13 @@ const DashboardPage = () => {
                       {open && <span className="icon-link">Boleta Blanca</span>}
                     </NavLink>
                   )}
-                  {!isRolEmpleador && (
+                  {rolFuncionalidades.GESTION_ROLES && (
+                    <NavLink to="./gestion-roles" className="icon-container">
+                      <DateRangeIcon className="icon-link" />{' '}
+                      {open && <span className="icon-link">Gestion Roles</span>}
+                    </NavLink>
+                  )}
+                  {rolFuncionalidades.CUITS_RESTRINGIDOS && (
                     <NavLink
                       to="./cuitsrestringidos"
                       className="icon-container"
@@ -252,13 +272,13 @@ const DashboardPage = () => {
                       )}
                     </NavLink>
                   )}
-                  {isRolEmpleador && (
+                  {rolFuncionalidades.ROLES && (
                     <NavLink to="./roles" className="icon-container">
                       <CoPresentIcon className="icon-link" />{' '}
                       {open && <span className="icon-link">Roles</span>}
                     </NavLink>
                   )}
-                  {isRolEmpleador && (
+                  {rolFuncionalidades.USUARIO_INTERNO && (
                     <NavLink
                       to="./altausuariointerno"
                       className="icon-container"
@@ -269,7 +289,7 @@ const DashboardPage = () => {
                       )}
                     </NavLink>
                   )}
-                  {!isRolEmpleador && (
+                  {rolFuncionalidades.INTERESES_AFIP && (
                     <NavLink to="./interesesafip" className="icon-container">
                       <img
                         src={afipIcon}
@@ -280,6 +300,17 @@ const DashboardPage = () => {
                       {open && (
                         <span className="icon-link">Intereses Afip</span>
                       )}
+                    </NavLink>
+                  )}
+                  {rolFuncionalidades.AJUSTES && (
+                    <NavLink to="./ajustes" className="icon-container">
+                      <img
+                        src={afipIcon}
+                        alt="afip"
+                        className="icon-link"
+                        style={{ width: 24, height: 24 }}
+                      />{' '}
+                      {open && <span className="icon-link">Ajustes</span>}
                     </NavLink>
                   )}
                 </ListItemIcon>

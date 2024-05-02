@@ -1,6 +1,6 @@
-import * as locales from '@mui/material/locale';
-import { useState, useEffect, useMemo } from 'react';
-import { Box, Button } from '@mui/material';
+import * as locales from "@mui/material/locale";
+import { useState, useEffect, useMemo } from "react";
+import { Box, Button } from "@mui/material";
 
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
@@ -13,15 +13,15 @@ import {
   GridToolbarContainer,
   GridActionsCellItem,
   GridRowEditStopReasons,
-} from '@mui/x-data-grid';
-import { axiosAjustes } from './AjustesApi';
-import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
-import './ajustes.css';
-import formatter from '@/common/formatter';
-import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
-import { InputPeriodo } from '@/components/InputPeriodo';
-import swal from '@/components/swal/swal';
-import Swal from 'sweetalert2';
+} from "@mui/x-data-grid";
+import { axiosAjustes } from "./AjustesApi";
+import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
+import "./ajustes.css";
+import formatter from "@/common/formatter";
+import { StripedDataGrid, dataGridStyle } from "@/common/dataGridStyle";
+import { InputPeriodo } from "@/components/InputPeriodo";
+import swal from "@/components/swal/swal";
+import Swal from "sweetalert2";
 
 const style = {
   position: 'absolute',
@@ -34,7 +34,7 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-const isNotNull = (value) => (value !== null && value !== '' ? value : '');
+const isNotNull = (value) => (value !== null && value !== "" ? value : "");
 // Traerme las etiquetas del dom que tengas la clase .MuiDataGrid-cell--editable
 const crearNuevoRegistro = (props) => {
   const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
@@ -204,74 +204,74 @@ export const Ajustes = () => {
 
   const columnas = [
     {
-      field: 'cuit',
-      headerName: 'CUIT',
+      field: "cuit",
+      headerName: "CUIT",
       flex: 1,
-      type: 'text',
+      type: "text",
       editable: true,
-      headerAlign: 'center',
-      align: 'center',
-      headerClassName: 'header--cell',
+      headerAlign: "center",
+      align: "center",
+      headerClassName: "header--cell",
     },
     {
-      field: 'periodo_original',
-      headerName: 'PERIODO ORIGINAL',
+      field: "periodo_original",
+      headerName: "PERIODO ORIGINAL",
       flex: 1,
       editable: true,
-      headerAlign: 'center',
-      align: 'center',
+      headerAlign: "center",
+      align: "center",
       valueFormatter: (params) => {
-        return isNotNull(params.value) ? formatter.periodo(params.value) : '';
+        return isNotNull(params.value) ? formatter.periodo(params.value) : "";
       },
       renderEditCell: (params) => <InputPeriodo {...params} />,
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
     },
     {
-      field: 'importe',
-      headerName: 'IMPORTE',
+      field: "importe",
+      headerName: "IMPORTE",
       flex: 1,
-      type: 'number',
+      type: "number",
       editable: true,
-      headerAlign: 'center',
-      align: 'center',
-      headerClassName: 'header--cell',
+      headerAlign: "center",
+      align: "center",
+      headerClassName: "header--cell",
     },
     {
-      field: 'aporte',
-      headerName: 'TIPO APORTE',
-      type: 'singleSelect',
+      field: "aporte",
+      headerName: "TIPO APORTE",
+      type: "singleSelect",
       editable: true,
       flex: 1,
-      valueOptions: ['ART.46', 'AMTIMA', 'UOMA'],
-      valueGetter: (params) => params.row.aporte || '',
-      headerAlign: 'center',
-      align: 'center',
-      headerClassName: 'header--cell',
+      valueOptions: ["ART.46", "AMTIMA", "UOMA"],
+      valueGetter: (params) => params.row.aporte || "",
+      headerAlign: "center",
+      align: "center",
+      headerClassName: "header--cell",
     },
     {
-      field: 'vigencia',
-      headerName: 'VIGENTE DESDE',
+      field: "vigencia",
+      headerName: "VIGENTE DESDE",
       width: 200,
       flex: 1,
       editable: true,
-      headerAlign: 'center',
-      align: 'center',
-      type: 'date',
+      headerAlign: "center",
+      align: "center",
+      type: "date",
       valueFormatter: (params) => {
         return formatter.periodo(params.value);
       },
       renderEditCell: (params) => <InputPeriodo {...params} />,
-      headerClassName: 'header--cell',
+      headerClassName: "header--cell",
     },
     {
-      field: 'nro_boleta',
-      headerName: 'NRO BOLETA',
+      field: "nro_boleta",
+      headerName: "NRO BOLETA",
       width: 150,
       editable: false,
-      type: 'number',
-      headerAlign: 'center',
-      align: 'center',
-      headerClassName: 'header--cell',
+      type: "number",
+      headerAlign: "center",
+      align: "center",
+      headerClassName: "header--cell",
     },
     {
       field: 'actions',

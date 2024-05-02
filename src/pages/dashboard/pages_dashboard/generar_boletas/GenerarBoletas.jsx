@@ -16,6 +16,7 @@ import {
 import { axiosGenerarBoletas } from './GenerarBoletasApi';
 import './GenerarBoletas.css';
 import formatter from '@/common/formatter';
+import { getEmpresaId } from '@/components/localStorage/localStorageService';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 //import { Boletas } from '../boletas/Boletas';
@@ -25,10 +26,9 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export const GenerarBoletas = () => {
   const { id } = useParams();
-
+console.log(id)
   const DDJJ_ID = id;
-  const ID_EMPRESA = JSON.parse(localStorage.getItem('stateLogin'))
-    .usuarioLogueado.empresa.id;
+  const ID_EMPRESA = getEmpresaId();
 
   const [boletas, setBoletas] = useState({});
   const [showDetail, setShowDetail] = useState(false);
@@ -45,6 +45,8 @@ export const GenerarBoletas = () => {
           ID_EMPRESA,
           DDJJ_ID,
         );
+
+        console.log(data)
         setDefaultFDP(data);
         setAfiliados(ordenarAfiliadosBoletas(data));
         setPrimeraSeleccion(true);
@@ -92,7 +94,8 @@ export const GenerarBoletas = () => {
   const setInteresInDetalleBoleta = (boletaIndex, response) => {
     const newDetalleBoletas = [...boletas.detalle_boletas];
     const fdp = newDetalleBoletas[boletaIndex].forma_de_pago;
-    newDetalleBoletas[boletaIndex] = response.data;
+    newDetalleBoletas[boletaIndex] = response;
+    console.log(newDetalleBoletas)
     newDetalleBoletas[boletaIndex].forma_de_pago = fdp;
     setBoletas({ ...boletas, detalle_boletas: newDetalleBoletas });
   };
@@ -108,12 +111,15 @@ export const GenerarBoletas = () => {
     const fechaToISO = new Date(`${fecha}`).toISOString();
     if (primeraSeleccion) {
       setPrimeraSeleccion(false);
+      console.log(ID_EMPRESA)
+      console.log(DDJJ_ID)
       const response = await axiosGenerarBoletas.calcularInteresBoletas(
-        123,
+        ID_EMPRESA,
         DDJJ_ID,
         fechaToISO,
       );
-      const updatedDetalleBoletas = response.data.map((boleta) => {
+      console.log(response)
+      const updatedDetalleBoletas = response.detalle_boletas.map((boleta) => {
         const prevBoleta = boletas.detalle_boletas.find(
           (prevBoleta) => prevBoleta.codigo === boleta.codigo,
         );
@@ -132,11 +138,12 @@ export const GenerarBoletas = () => {
         (element) => element.codigo === codigo,
       );
       const response = await axiosGenerarBoletas.calcularInteresBoleta(
-        123,
+        ID_EMPRESA,
         DDJJ_ID,
         codigo,
         fechaToISO,
       );
+      console.log(response)
       setInteresInDetalleBoleta(boletaIndex, response);
       sethabilitaBoton(false);
     }
@@ -170,7 +177,6 @@ export const GenerarBoletas = () => {
   const toggleDetail = () => setShowDetail(!showDetail);
 
   const generarBoletas = async () => {
-    const redirect = () => (window.location.href = '/dashboard/boletas');
     try {
       await axiosGenerarBoletas.generarBoletasPost(
         ID_EMPRESA,
@@ -180,13 +186,13 @@ export const GenerarBoletas = () => {
       sethabilitaBoton(true);
       toast.success('¡Toast de éxito!', {
         onClose: () => {
-          redirect();
+          navigate(`/dashboard/boletas`);
         },
       });
     } catch (error) {
       console.error(error);
       toast.error('Ocurrio un problema');
-      redirect();
+      navigate(`/dashboard/boletas`);
     }
   };
 
@@ -237,7 +243,7 @@ export const GenerarBoletas = () => {
                     <TextField
                       type="date"
                       inputProps={{ min: hoy }}
-                      value={boleta.intencion_de_pago.split('T')[0]}
+                      value={boleta.intencion_de_pago?.split('T')[0]}
                       onChange={(event) =>
                         setIntencionDePago(boleta.codigo, event.target.value)
                       }
@@ -359,7 +365,7 @@ export const GenerarBoletas = () => {
                     key={boleta.codigo}
                   >
                     {formatter.currency.format(
-                      boleta.ajustes.reduce(
+                      boleta.ajustes?.reduce(
                         (acumulador, ajuste) => acumulador + ajuste.monto,
                         0,
                       ),
@@ -397,7 +403,7 @@ export const GenerarBoletas = () => {
 
       {boletas.detalle_boletas &&
         boletas.detalle_boletas
-          .filter((boleta) => boleta.ajustes.length > 0)
+          .filter((boleta) => boleta.ajustes?.length > 0)
           .map((boleta, index) => (
             <div key={index}>
               {index === 0 && (

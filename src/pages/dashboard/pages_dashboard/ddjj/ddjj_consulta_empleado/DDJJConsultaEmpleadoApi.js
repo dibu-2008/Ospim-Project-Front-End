@@ -33,20 +33,31 @@ export const obtenerDDJJ = async () => {
 };
 
 export const consultaDDJJfiltrada = async (desde, hasta, cuit) => {
-  let queryStringDesde = '';
-  let queryStringHasta = '';
+  
+  let queryString ='';
 
   if (desde !== null) {
-    queryStringDesde = `&desde=${encodeURIComponent(desde)}`;
+    queryString +=  `&desde=${desde}`;
   }
   if (hasta !== null) {
-    queryStringHasta = `&hasta=${encodeURIComponent(hasta)}`;
+    queryString +=  `&hasta=${hasta}`;
+  }
+  if (cuit != null) {
+    queryString +=  `&cuit=${cuit}`;
   }
 
-  const URL = `/ddjj/totales?cuit=${cuit}${queryStringDesde}${queryStringHasta}`;
+  //const URL = `/ddjj/totales?cuit=${cuit}${queryStringDesde}${queryStringHasta}`;
+  const URL = `/ddjj/totales?${queryString}`;
+  //const URL = "/ddjj/totales";
+  //const jsonBody = {};
+  //jsonBody.desde = desde;
+  //jsonBody.hasta = hasta;
+  //jsonBody.cuit = cuit;
 
   try {
     const data = await axiosCrud.consultar(URL);
+    //const data = await oAxios.get(URL, jsonBody);
+    //const data = await oAxios({ URL, jsonBody });
     return data || [];
   } catch (error) {
     console.log(

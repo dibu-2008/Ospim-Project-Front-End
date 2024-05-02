@@ -125,48 +125,366 @@
       "descripcion": "ROOT"
     },
     {
-      "id": 7,
+      "id": 2,
       "descripcion": "ADMINISTRATIVO"
     },
     {
       "descripcion": "CONTADURIA",
-      "id": 8
+      "id": 3
     },
     {
       "descripcion": "PRUEBA III",
-      "id": 9
+      "id": 4
     }
   ],
-  "funcionalidad": [
+  "rolFuncionalidades": [
     {
-      "codigo": "FERIADO",
-      "descripcion": "Tabla Feriados"
+      "descripcion": "ROOT",
+      "funcionalidades": [
+        {
+          "id": 1,
+          "descripcion": "PUBLICACIONES",
+          "activo": true
+        },
+        {
+          "id": 2,
+          "descripcion": "FERIADOS",
+          "activo": true
+        },
+        {
+          "id": 3,
+          "descripcion": "DDJJ",
+          "activo": false
+        },
+        {
+          "id": 4,
+          "descripcion": "DDJJ_CONSULTA",
+          "activo": true
+        },
+        {
+          "id": 5,
+          "descripcion": "BOLETAS",
+          "activo": true
+        },
+        {
+          "id": 6,
+          "descripcion": "PAGOS",
+          "activo": true
+        },
+        {
+          "id": 7,
+          "descripcion": "DATOS_EMPRESA",
+          "activo": true
+        },
+        {
+          "id": 8,
+          "descripcion": "BOLETA_BLANCA",
+          "activo": true
+        },
+        {
+          "id": 9,
+          "descripcion": "GESTION_ROLES",
+          "activo": true
+        },
+        {
+          "id": 10,
+          "descripcion": "CUITS_RESTRINGIDOS",
+          "activo": true
+        },
+        {
+          "id": 11,
+          "descripcion": "ROLES",
+          "activo": true
+        },
+        {
+          "id": 12,
+          "descripcion": "USUARIO_INTERNO",
+          "activo": true
+        },
+        {
+          "id": 13,
+          "descripcion": "INTERESES_AFIP",
+          "activo": true
+        },
+        {
+          "id": 14,
+          "descripcion": "AJUSTES",
+          "activo": false
+        }
+      ],
+      "id": 1
     },
     {
-      "codigo": "USUA-INTER",
-      "descripcion": "Tabla Usuario Interno"
+      "descripcion": "ADMINISTRATIVO",
+      "funcionalidades": [
+        {
+          "id": 1,
+          "descripcion": "PUBLICACIONES",
+          "activo": true
+        },
+        {
+          "id": 2,
+          "descripcion": "FERIADOS",
+          "activo": true
+        },
+        {
+          "id": 3,
+          "descripcion": "DDJJ",
+          "activo": true
+        },
+        {
+          "id": 4,
+          "descripcion": "DDJJ_CONSULTA",
+          "activo": true
+        },
+        {
+          "id": 5,
+          "descripcion": "BOLETAS",
+          "activo": true
+        },
+        {
+          "id": 6,
+          "descripcion": "PAGOS",
+          "activo": true
+        },
+        {
+          "id": 7,
+          "descripcion": "DATOS_EMPRESA",
+          "activo": true
+        },
+        {
+          "id": 8,
+          "descripcion": "BOLETA_BLANCA",
+          "activo": true
+        },
+        {
+          "id": 9,
+          "descripcion": "GESTION_ROLES",
+          "activo": true
+        },
+        {
+          "id": 10,
+          "descripcion": "CUITS_RESTRINGIDOS",
+          "activo": true
+        },
+        {
+          "id": 11,
+          "descripcion": "ROLES",
+          "activo": false
+        },
+        {
+          "id": 12,
+          "descripcion": "USUARIO_INTERNO",
+          "activo": true
+        },
+        {
+          "id": 13,
+          "descripcion": "INTERESES_AFIP",
+          "activo": true
+        },
+        {
+          "id": 14,
+          "descripcion": "AJUSTES",
+          "activo": false
+        }
+      ],
+      "id": 2
     },
     {
-      "codigo": "USUA-EMPRE",
-      "descripcion": "Tabla Usuario Empresa"
+      "descripcion": "EJECUTIVO",
+      "funcionalidades": [
+        {
+          "id": 1,
+          "descripcion": "PUBLICACIONES",
+          "activo": true
+        },
+        {
+          "id": 2,
+          "descripcion": "FERIADOS",
+          "activo": true
+        },
+        {
+          "id": 3,
+          "descripcion": "DDJJ",
+          "activo": true
+        },
+        {
+          "id": 4,
+          "descripcion": "DDJJ_CONSULTA",
+          "activo": true
+        },
+        {
+          "id": 5,
+          "descripcion": "BOLETAS",
+          "activo": true
+        },
+        {
+          "id": 6,
+          "descripcion": "PAGOS",
+          "activo": true
+        },
+        {
+          "id": 7,
+          "descripcion": "DATOS_EMPRESA",
+          "activo": true
+        },
+        {
+          "id": 8,
+          "descripcion": "BOLETA_BLANCA",
+          "activo": true
+        },
+        {
+          "id": 9,
+          "descripcion": "GESTION_ROLES",
+          "activo": true
+        },
+        {
+          "id": 10,
+          "descripcion": "CUITS_RESTRINGIDOS",
+          "activo": true
+        },
+        {
+          "id": 11,
+          "descripcion": "ROLES",
+          "activo": false
+        },
+        {
+          "id": 12,
+          "descripcion": "USUARIO_INTERNO",
+          "activo": true
+        },
+        {
+          "id": 13,
+          "descripcion": "INTERESES_AFIP",
+          "activo": true
+        },
+        {
+          "id": 14,
+          "descripcion": "AJUSTES",
+          "activo": false
+        }
+      ],
+      "id": 3
+    },
+    {
+      "descripcion": "EMPLEADOR",
+      "funcionalidades": [
+        {
+          "id": 1,
+          "descripcion": "PUBLICACIONES",
+          "activo": true
+        },
+        {
+          "id": 2,
+          "descripcion": "FERIADOS",
+          "activo": true
+        },
+        {
+          "id": 3,
+          "descripcion": "DDJJ",
+          "activo": true
+        },
+        {
+          "id": 4,
+          "descripcion": "BOLETAS",
+          "activo": true
+        },
+        {
+          "id": 5,
+          "descripcion": "PAGOS",
+          "activo": true
+        },
+        {
+          "id": 6,
+          "descripcion": "DATOS_EMPRESA",
+          "activo": true
+        },
+        {
+          "id": 7,
+          "descripcion": "BOLETA_BLANCA",
+          "activo": true
+        },
+        {
+          "id": 8,
+          "descripcion": "GESTION_ROLES",
+          "activo": true
+        },
+        {
+          "id": 9,
+          "descripcion": "CUITS_RESTRINGIDOS",
+          "activo": true
+        },
+        {
+          "id": 10,
+          "descripcion": "ROLES",
+          "activo": true
+        },
+        {
+          "id": 11,
+          "descripcion": "USUARIO_INTERNO",
+          "activo": true
+        },
+        {
+          "id": 12,
+          "descripcion": "INTERESES_AFIP",
+          "activo": true
+        },
+        {
+          "id": 13,
+          "descripcion": "AJUSTES",
+          "activo": true
+        }
+      ],
+      "id": 4
+    },
+    {
+      "descripcion": "EMPLEADO",
+      "funcionalidades": [
+        {
+          "id": 1,
+          "descripcion": "PUBLICACIONES",
+          "activo": true
+        },
+        {
+          "id": 2,
+          "descripcion": "FERIADOS",
+          "activo": true
+        },
+        {
+          "id": 3,
+          "descripcion": "DDJJ_CONSULTA",
+          "activo": true
+        },
+        {
+          "id": 4,
+          "descripcion": "CUITS_RESTRINGIDOS",
+          "activo": true
+        },
+        {
+          "id": 5,
+          "descripcion": "INTERESES_AFIP",
+          "activo": true
+        }
+      ],
+      "id": 5
     }
   ],
-  "rolFuncionalidad": [
+  "funcionalidades": [
     {
-      "rolId": 1,
-      "funcionalidad": "FERIADO"
+      "id": 1,
+      "descripcion": "FERIADOS"
     },
     {
-      "rolId": 1,
-      "funcionalidad": "USUA-INTER"
+      "id": 2,
+      "descripcion": "AJUSTES"
     },
     {
-      "rolId": 1,
-      "funcionalidad": "USUA-EMPRE"
+      "id": 3,
+      "descripcion": "ROLES"
     },
     {
-      "rolId": "7",
-      "funcionalidad": "USUA-EMPRE"
+      "id": 4,
+      "descripcion": "INTERESES"
     }
   ],
   "feriados": [
@@ -485,6 +803,44 @@
       "vigenciaHasta": "2024-04-07T03:00:00.000Z",
       "indice": 8,
       "id": 11
+    }
+  ],
+  "afip-intereses": [
+    {
+      "vigenciaDesde": "2024-04-11T03:00:00.000Z",
+      "vigenciaHasta": "2024-04-12T03:00:00.000Z",
+      "indice": 3,
+      "id": 2
+    },
+    {
+      "vigenciaDesde": "2024-04-17T03:00:00.000Z",
+      "vigenciaHasta": "2024-04-16T03:00:00.000Z",
+      "indice": 3,
+      "id": 3
+    },
+    {
+      "vigenciaDesde": "2024-04-24T03:00:00.000Z",
+      "vigenciaHasta": "2024-04-20T03:00:00.000Z",
+      "indice": 5,
+      "id": 4
+    },
+    {
+      "vigenciaDesde": "2024-04-04T03:00:00.000Z",
+      "vigenciaHasta": "2024-04-06T03:00:00.000Z",
+      "indice": 10,
+      "id": 10
+    },
+    {
+      "vigenciaDesde": "2024-04-01T03:00:00.000Z",
+      "vigenciaHasta": "2024-04-07T03:00:00.000Z",
+      "indice": 8,
+      "id": 11
+    },
+    {
+      "vigenciaDesde": "2024-05-09T03:00:00.000Z",
+      "vigenciaHasta": "2024-05-14T03:00:00.000Z",
+      "indice": 4,
+      "id": 12
     }
   ],
   "usuario-interno": [
@@ -929,7 +1285,7 @@
       "nombre": "20233725006",
       "rol": [
         {
-          "descripcion": "EMPLEADO"
+          "descripcion": "EMPLEADOR"
         }
       ]
     },
@@ -3858,30 +4214,6 @@
         "codigo": "UOMACS",
         "descripcion": "UOMA Cuota Social",
         "vencimiento": "2024-02-21T03:00:00.000Z",
-        "periodo": "01-2024",
-        "total_acumulado": 7800,
-        "interes": 2340,
-        "ajuste": 0,
-        "total_final": 10140,
-        "intencion_de_pago": "2024-03-22T03:00:00.000Z",
-        "afiliados": [
-          {
-            "cuil": "27367071112",
-            "apellido": "Nelo",
-            "nombre": "Rosario",
-            "remunerativo": 200000,
-            "capital": 7800
-          }
-        ],
-        "forma_de_pago": "Red Link",
-        "declaracion_jurada_id": 120,
-        "tipo_ddjj": "Original",
-        "numero_boleta": 10
-      },
-      {
-        "codigo": "UOMACS",
-        "descripcion": "UOMA Cuota Social",
-        "vencimiento": "2024-02-21T03:00:00.000Z",
         "periodo": "2024-01-01T03:00:00.000Z",
         "total_acumulado": 21810,
         "interes": 0,
@@ -3967,82 +4299,6 @@
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
         "numero_boleta": 12
-      },
-      {
-        "codigo": "UOMACS",
-        "descripcion": "UOMA Cuota Social",
-        "vencimiento": "2024-02-21T03:00:00.000Z",
-        "periodo": "2024-01-01T03:00:00.000Z",
-        "total_acumulado": 21810,
-        "interes": 14367.34,
-        "ajuste": 0,
-        "total_final": 36177.3375,
-        "intencion_de_pago": "2024-04-27",
-        "afiliados": [
-          {
-            "cuil": "27367071112",
-            "apellido": "Nelo",
-            "nombre": "Rosario",
-            "remunerativo": 200000,
-            "capital": 8400
-          },
-          {
-            "cuil": "2731722324248",
-            "apellido": "Nelo",
-            "nombre": "Manfredo",
-            "remunerativo": 100000,
-            "capital": 7610
-          },
-          {
-            "cuil": "273712728848",
-            "apellido": "Nelo",
-            "nombre": "Sabario",
-            "remunerativo": 100000,
-            "capital": 5800
-          }
-        ],
-        "forma_de_pago": "Ventanilla",
-        "declaracion_jurada_id": 120,
-        "tipo_ddjj": "Original",
-        "numero_boleta": 22
-      },
-      {
-        "codigo": "ART46",
-        "descripcion": "Art. 46",
-        "vencimiento": "2024-02-21T03:00:00.000Z",
-        "periodo": "2024-01-01T03:00:00.000Z",
-        "total_acumulado": 1484,
-        "interes": 977.59,
-        "ajuste": 0,
-        "total_final": 2461.585,
-        "intencion_de_pago": "2024-04-27",
-        "afiliados": [
-          {
-            "cuil": "27367071112",
-            "apellido": "Nelo",
-            "nombre": "Rosario",
-            "remunerativo": 200000,
-            "capital": 520
-          },
-          {
-            "cuil": "2731722324248",
-            "apellido": "Nelo",
-            "nombre": "Manfredo",
-            "remunerativo": 100000,
-            "capital": 482
-          },
-          {
-            "cuil": "273712728848",
-            "apellido": "Nelo",
-            "nombre": "Sabario",
-            "remunerativo": 200000,
-            "capital": 482
-          }
-        ],
-        "forma_de_pago": "Ventanilla",
-        "declaracion_jurada_id": 120,
-        "tipo_ddjj": "Original",
-        "numero_boleta": 23
       },
       {
         "codigo": "ANTIMACS",
@@ -4134,6 +4390,7 @@
   "boletas_guardadas": {
     "con_ddjj": [
       {
+        "id": 1,
         "codigo": "ART46",
         "descripcion": "Art. 46",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4180,6 +4437,7 @@
         "numero_boleta": 1
       },
       {
+        "id": 2,
         "codigo": "ANTIMACS",
         "descripcion": "ANTIMA Cuota Social",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4206,21 +4464,55 @@
         "numero_boleta": 2
       },
       {
+        "id": 4000,
         "codigo": "UOMACS",
         "descripcion": "UOMA Cuota Social",
         "vencimiento": "2024-02-21T03:00:00.000Z",
         "periodo": "2024-01-01T03:00:00.000Z",
-        "total_acumulado": 21810,
-        "interes": 7851.6,
+        "total_acumulado": 13410,
+        "interes": 4827.6,
         "ajuste": 0,
-        "ajustes": [
+        "total_final": 18237.6,
+        "intencion_de_pago": "2024-03-16T03:00:00.000Z",
+        "fecha_de_pago": "2024-03-16T03:00:00.000Z",
+        "afiliados": [
           {
-            "descripcion": "Por moras reiteradas",
-            "monto": 2333
+            "cuil": "27367071112",
+            "apellido": "Nelo",
+            "nombre": "Rosario",
+            "remunerativo": 10,
+            "capital": 8400
+          },
+          {
+            "cuil": "2731722324248",
+            "apellido": "Nelo",
+            "nombre": "Manfredo",
+            "remunerativo": 100000,
+            "capital": 7610
+          },
+          {
+            "cuil": "273712728848",
+            "apellido": "Nelo",
+            "nombre": "Sabario",
+            "remunerativo": 100000,
+            "capital": 5800
           }
         ],
-        "total_final": 29661.6,
-        "intencion_de_pago": "2024-03-28T03:00:00.000Z",
+        "forma_de_pago": "Red Link",
+        "declaracion_jurada_id": 120,
+        "tipo_ddjj": "Original",
+        "numero_boleta": 3
+      },
+      {
+        "codigo": "UOMACS",
+        "descripcion": "UOMA Cuota Social",
+        "vencimiento": "2024-02-21T03:00:00.000Z",
+        "periodo": "2024-04-30T06:00:00.000Z",
+        "total_acumulado": 21810,
+        "interes": 15021.64,
+        "ajuste": 0,
+        "total_final": 36831.6375,
+        "intencion_de_pago": "2024-04-30T03:00:00.000Z",
         "afiliados": [
           {
             "cuil": "27367071112",
@@ -4247,47 +4539,17 @@
         "forma_de_pago": "Ventanilla",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
-        "numero_boleta": 3
-      },
-      {
-        "codigo": "ART46",
-        "descripcion": "Art. 46",
-        "vencimiento": "2024-02-21T03:00:00.000Z",
-        "periodo": "2024-01-01T03:00:00.000Z",
-        "total_acumulado": 1484,
-        "interes": 563.92,
-        "ajuste": 0,
-        "total_final": 2047.92,
-        "intencion_de_pago": "2024-03-30T03:00:00.000Z",
-        "afiliados": [
+        "numero_boleta": 11,
+        "ajustes": [
           {
-            "cuil": "27367071112",
-            "apellido": "Nelo",
-            "nombre": "Rosario",
-            "remunerativo": 200000,
-            "capital": 520
-          },
-          {
-            "cuil": "2731722324248",
-            "apellido": "Nelo",
-            "nombre": "Manfredo",
-            "remunerativo": 100000,
-            "capital": 482
-          },
-          {
-            "cuil": "273712728848",
-            "apellido": "Nelo",
-            "nombre": "Sabario",
-            "remunerativo": 200000,
-            "capital": 482
+            "descripcion": "Por moras reiteradas",
+            "monto": 2333
           }
         ],
-        "forma_de_pago": "PagoMisCuentas",
-        "declaracion_jurada_id": 120,
-        "tipo_ddjj": "Original",
-        "numero_boleta": 4
+        "id": 400312
       },
       {
+        "id": 5,
         "codigo": "ANTIMACS",
         "descripcion": "ANTIMA Cuota Social",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4312,6 +4574,7 @@
         "numero_boleta": 5
       },
       {
+        "id": 6,
         "codigo": "UOMACS",
         "descripcion": "UOMA Cuota Social",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4350,6 +4613,7 @@
         "numero_boleta": 6
       },
       {
+        "id": 7,
         "codigo": "ART46",
         "descripcion": "Art. 46",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4388,6 +4652,7 @@
         "numero_boleta": 7
       },
       {
+        "id": 8,
         "codigo": "UOMACS",
         "descripcion": "UOMA Cuota Social",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4426,6 +4691,7 @@
         "numero_boleta": 8
       },
       {
+        "id": 9,
         "codigo": "ART46",
         "descripcion": "Art. 46",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4464,6 +4730,7 @@
         "numero_boleta": 9
       },
       {
+        "id": 11234,
         "codigo": "ANTIMACS",
         "descripcion": "ANTIMA Cuota Social",
         "vencimiento": "2024-02-21",
@@ -4488,6 +4755,7 @@
         "numero_boleta": 10
       },
       {
+        "id": 11,
         "codigo": "UOMACS",
         "descripcion": "UOMA Cuota Social",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4526,6 +4794,7 @@
         "numero_boleta": 11
       },
       {
+        "id": 12,
         "codigo": "ART46",
         "descripcion": "Art. 46",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4564,6 +4833,7 @@
         "numero_boleta": 12
       },
       {
+        "id": 22,
         "codigo": "UOMACS",
         "descripcion": "UOMA Cuota Social",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4602,6 +4872,7 @@
         "numero_boleta": 22
       },
       {
+        "id": 23,
         "codigo": "ART46",
         "descripcion": "Art. 46",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4640,6 +4911,7 @@
         "numero_boleta": 23
       },
       {
+        "id": 24,
         "codigo": "ANTIMACS",
         "descripcion": "ANTIMA Cuota Social",
         "vencimiento": "2024-02-21T00:00:00.000Z",
@@ -4670,59 +4942,81 @@
         "nroActa": "123123",
         "importe": "1431234",
         "razon_de_pago": "Nro Acta: 123123",
-        "id": 1
+        "id": 101
       },
       {
         "entidad": "AMTIMA",
         "nroActa": "123123",
         "importe": "1431234",
         "razon_de_pago": "Nro Acta: 123123",
-        "id": 2
+        "id": 102
       },
       {
         "entidad": "UOMA",
         "nroActa": "321",
         "importe": "44452",
         "razon_de_pago": "Nro Acta: 321",
-        "id": 3
+        "id": 103
       },
       {
         "entidad": "OSPIM",
         "nroActa": "999",
         "importe": "123",
         "razon_de_pago": "Nro Acta: 999",
-        "id": 4
+        "id": 104
       },
       {
         "entidad": "OSPIM",
         "nroActa": "3335555",
         "importe": "3334444",
-        "intencionDePago": "2024-03-31",
         "razon_de_pago": "Nro Acta: 3335555",
-        "id": 9
+        "id": 109
       },
       {
         "entidad": "AMTIMA",
         "nroActa": "123123",
         "importe": "1431234",
         "razon_de_pago": "Nro Acta: 123123",
-        "id": 6
+        "id": 106
       },
       {
         "entidad": "OSPIM",
         "nroActa": "1111",
         "importe": "1111",
-        "intencionDePago": "2024-04-10",
         "razon_de_pago": "Nro Acta: 1111",
-        "id": 7
+        "id": 107
       },
       {
         "entidad": "OSPIM",
         "nroActa": "4444",
         "importe": "44444",
-        "intencionDePago": "2024-04-19T00:00:00.000Z",
+        "intencion_de_pago": "2024-04-19T00:00:00.000Z",
         "razon_de_pago": "Nro Acta: 4444",
-        "id": 8
+        "id": 108
+      },
+      {
+        "entidad": "OSPIM",
+        "nroActa": "123",
+        "importe": "123",
+        "intencionDePago": "2024-04-27T00:00:00.000Z",
+        "razon_de_pago": "Nro Acta: 123",
+        "id": 1029
+      },
+      {
+        "entidad": "OSPIM",
+        "nroActa": "111",
+        "importe": "23",
+        "intencionDePago": "2024-04-28T00:00:00.000Z",
+        "razon_de_pago": "Nro Acta: 111",
+        "id": 110
+      },
+      {
+        "entidad": "OSPIM",
+        "nroActa": "321",
+        "importe": "333",
+        "intencionDePago": "2024-04-27T00:00:00.000Z",
+        "razon_de_pago": "Nro Acta: 321",
+        "id": 111
       }
     ]
   },
