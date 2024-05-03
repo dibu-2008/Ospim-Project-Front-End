@@ -62,7 +62,7 @@ export const GenerarBoletas = () => {
 
   const setDefaultFDP = (data) => {
     data.detalle_boletas.forEach(
-      (element) => (element.forma_de_pago = 'Ventanilla'),
+      (element) => (element.forma_de_pago = 'VENTANILLA'),
     );
     setBoletas(data);
   };
@@ -125,7 +125,7 @@ export const GenerarBoletas = () => {
         );
         return {
           ...boleta,
-          forma_de_pago: prevBoleta ? prevBoleta.forma_de_pago : 'Ventanilla',
+          forma_de_pago: prevBoleta ? prevBoleta.forma_de_pago : 'VENTANILLA',
         };
       });
       setBoletas((prevBoletas) => ({
@@ -178,27 +178,20 @@ export const GenerarBoletas = () => {
 
   const generarBoletas = async () => {
     try {
-      const response = await axiosGenerarBoletas.generarBoletasPost(
+      const data = await axiosGenerarBoletas.generarBoletasPost(
         ID_EMPRESA,
         DDJJ_ID,
         boletas,
       );
-      sethabilitaBoton(true);
-      console.log('Este es el response ', response);
-      console.log('Este es el response ', response.data);
-      if (response.id !== undefined) {
-        toast.success('¡Toast de éxito!', {
-          onClose: () => {
-            navigate('/dashboard/boletas');
-          },
-        });
-      } else {
-        //TODO: ver como mostrar error.-
-        toast.error('Ocurrio un problema. El registro no pudo ser creado');
+      console.log('Este es el response ', data);
+      if (data) {
+        sethabilitaBoton(true);
       }
     } catch (error) {
       console.error(error);
-      toast.error('!Ocurrio un problema');
+      toast.error(
+        '!Ocurrio un problema. No se pudieron generar las Boletas de Pago',
+      );
       navigate('/dashboard/boletas');
     }
   };
@@ -269,9 +262,9 @@ export const GenerarBoletas = () => {
                         setFormaDePago(boleta.codigo, event.target.value)
                       }
                     >
-                      <MenuItem value="Ventanilla">Ventanilla</MenuItem>
-                      <MenuItem value="Red Link">Red Link</MenuItem>
-                      <MenuItem value="PagoMisCuentas">PagoMisCuentas</MenuItem>
+                      <MenuItem value="VENTANILLA">Ventanilla</MenuItem>
+                      <MenuItem value="REDLINK">Red Link</MenuItem>
+                      <MenuItem value="PMCUENTAS">PagoMisCuentas</MenuItem>
                     </Select>
                   </TableCell>
                 ))}

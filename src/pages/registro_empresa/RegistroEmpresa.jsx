@@ -94,6 +94,7 @@ export const RegistroEmpresa = () => {
   };
 
   const OnSubmitRegisterCompany = async (e) => {
+    console.log('OnSubmitRegisterCompany - INIT');
     e.preventDefault();
 
     // Validar de que password y repeatPassword sean iguales
@@ -735,11 +736,13 @@ export const RegistroEmpresa = () => {
           <Button
             className="btn_ingresar"
             variant="contained"
+            type="submit"
             sx={{
               width: 'auto',
               marginTop: '20px',
               padding: '15px',
             }}
+            /*
             disabled={
               !cuit ||
               !razonSocial ||
@@ -751,7 +754,8 @@ export const RegistroEmpresa = () => {
               !whatsapp_prefijo ||
               !whatsapp ||
               !ramoAux
-            }
+          }
+          */
           >
             REGISTRAR EMPRESA
           </Button>
