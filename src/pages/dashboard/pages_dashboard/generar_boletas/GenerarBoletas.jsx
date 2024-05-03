@@ -26,7 +26,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export const GenerarBoletas = () => {
   const { id } = useParams();
-console.log(id)
+  console.log(id);
   const DDJJ_ID = id;
   const ID_EMPRESA = getEmpresaId();
 
@@ -46,7 +46,7 @@ console.log(id)
           DDJJ_ID,
         );
 
-        console.log(data)
+        console.log(data);
         setDefaultFDP(data);
         setAfiliados(ordenarAfiliadosBoletas(data));
         setPrimeraSeleccion(true);
@@ -95,7 +95,7 @@ console.log(id)
     const newDetalleBoletas = [...boletas.detalle_boletas];
     const fdp = newDetalleBoletas[boletaIndex].forma_de_pago;
     newDetalleBoletas[boletaIndex] = response;
-    console.log(newDetalleBoletas)
+    console.log(newDetalleBoletas);
     newDetalleBoletas[boletaIndex].forma_de_pago = fdp;
     setBoletas({ ...boletas, detalle_boletas: newDetalleBoletas });
   };
@@ -111,14 +111,14 @@ console.log(id)
     const fechaToISO = new Date(`${fecha}`).toISOString();
     if (primeraSeleccion) {
       setPrimeraSeleccion(false);
-      console.log(ID_EMPRESA)
-      console.log(DDJJ_ID)
+      console.log(ID_EMPRESA);
+      console.log(DDJJ_ID);
       const response = await axiosGenerarBoletas.calcularInteresBoletas(
         ID_EMPRESA,
         DDJJ_ID,
         fechaToISO,
       );
-      console.log(response)
+      console.log(response);
       const updatedDetalleBoletas = response.detalle_boletas.map((boleta) => {
         const prevBoleta = boletas.detalle_boletas.find(
           (prevBoleta) => prevBoleta.codigo === boleta.codigo,
@@ -143,7 +143,7 @@ console.log(id)
         codigo,
         fechaToISO,
       );
-      console.log(response)
+      console.log(response);
       setInteresInDetalleBoleta(boletaIndex, response);
       sethabilitaBoton(false);
     }
@@ -178,21 +178,28 @@ console.log(id)
 
   const generarBoletas = async () => {
     try {
-      await axiosGenerarBoletas.generarBoletasPost(
+      const response = await axiosGenerarBoletas.generarBoletasPost(
         ID_EMPRESA,
         DDJJ_ID,
         boletas,
       );
       sethabilitaBoton(true);
-      toast.success('¡Toast de éxito!', {
-        onClose: () => {
-          navigate(`/dashboard/boletas`);
-        },
-      });
+      console.log('Este es el response ', response);
+      console.log('Este es el response ', response.data);
+      if (response.id !== undefined) {
+        toast.success('¡Toast de éxito!', {
+          onClose: () => {
+            navigate('/dashboard/boletas');
+          },
+        });
+      } else {
+        //TODO: ver como mostrar error.-
+        toast.error('Ocurrio un problema. El registro no pudo ser creado');
+      }
     } catch (error) {
       console.error(error);
-      toast.error('Ocurrio un problema');
-      navigate(`/dashboard/boletas`);
+      toast.error('!Ocurrio un problema');
+      navigate('/dashboard/boletas');
     }
   };
 
