@@ -1,8 +1,6 @@
 {
   "/afiliados/cuil/:cuil": "/afiliado/?cuil=:cuil",
   "/ospim/contacto/": "/ospim-contacto",
-  "/afip/intereses": "/afip-intereses",
-  "/afip/intereses/:id": "/afip-intereses/:id",
   "/publicaciones/vigentes": "/publicacionesVigentes",
   "/usuario/empresa/public/": "/usuario-empresa-alta",
   "/usuario/empresa/": "/usuario-empresa-alta",

@@ -301,8 +301,8 @@ export const DDJJAlta = ({
             : item.empresaDomicilioId,
           camara: !item.camara ? null : item.camara,
           categoria: !item.categoria ? null : item.categoria,
-          remunerativo: !item.remunerativo ? null : item.remunerativo,
-          noRemunerativo: !item.noRemunerativo ? null : item.noRemunerativo,
+          remunerativo: !item.remunerativo ? null : +item.remunerativo,
+          noRemunerativo: !item.noRemunerativo ? null : +item.noRemunerativo,
           uomaSocio: item.uomaSocio === '' ? null : item.uomaSocio,
           amtimaSocio: item.amtimaSocio === '' ? null : item.amtimaSocio,
         };

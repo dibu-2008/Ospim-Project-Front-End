@@ -1,16 +1,16 @@
 .icon-toggle {
-	color : #1A76D2 !important;
+  color: #1a76d2 !important;
 }
 .icon-container {
-    display: flex;
-	padding: 10px;
-    align-items: center; /* Esto centra verticalmente los elementos */
-    text-decoration: none;
+  display: flex;
+  padding: 10px;
+  align-items: center; /* Esto centra verticalmente los elementos */
+  text-decoration: none;
 }
 
 .icon-container .icon-link {
-    display: flex; /* Asegura que el texto esté alineado verticalmente */
-    align-items: center; /* Centra verticalmente el texto */
-    margin-left: 10px;
-    color : #1A76D2 !important;
+  display: flex; /* Asegura que el texto esté alineado verticalmente */
+  align-items: center; /* Centra verticalmente el texto */
+  margin-left: 10px;
+  color: #1a76d2 !important;
 }

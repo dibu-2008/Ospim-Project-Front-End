@@ -259,13 +259,6 @@ export const DDJJAltaEmpleadosGrilla = ({
     console.log('processRowUpdate - INIT');
     if (newRow.isNew) {
       const fila = { ...newRow, inte: inteDataBase, errores: false };
-      console.log('Nueva Fila');
-      console.log(fila);
-      console.log('Nueva Fila - newRow: ');
-      console.log(newRow);
-      console.log('Nueva Fila - rowsAltaDDJJ: ');
-      console.log(rowsAltaDDJJ);
-
       setRowsAltaDDJJ(
         rowsAltaDDJJ.map((row) => (row.id === newRow.id ? fila : row)),
       );
@@ -273,8 +266,6 @@ export const DDJJAltaEmpleadosGrilla = ({
       return { ...fila, isNew: false };
     } else {
       const fila = { ...newRow, inte: inteDataBase };
-      console.log('Fila a modificar');
-      console.log(fila);
 
       setRowsAltaDDJJ(
         rowsAltaDDJJ.map((row) => (row.id === newRow.id ? fila : row)),
@@ -305,8 +296,13 @@ export const DDJJAltaEmpleadosGrilla = ({
     return cellClassName;
   };
 
-  const formatModoEdit = (params) => {
-    return String(params.value)
+  const formatModoEdit = (valor) => {
+    if (valor === '') return '';
+    if (valor === null) return '';
+    if (valor === undefined) return '';
+    if (valor === 0) return '';
+
+    return String(valor)
       .replace(/\./g, '')
       .replace(/\B(?=(\d{3})+(?!\d))/g, '.');
   };
@@ -329,13 +325,61 @@ export const DDJJAltaEmpleadosGrilla = ({
 
   const columns = [
     {
+      field: 'actions',
+      type: 'actions',
+      headerName: 'Acciones',
+      width: 100,
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
+      getActions: ({ id }) => {
+        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+
+        if (isInEditMode) {
+          return [
+            <GridActionsCellItem
+              icon={<SaveIcon />}
+              label="Save"
+              sx={{
+                color: 'primary.main',
+              }}
+              onClick={handleSaveClick(id)}
+            />,
+            <GridActionsCellItem
+              icon={<CancelIcon />}
+              label="Cancel"
+              className="textPrimary"
+              onClick={handleCancelClick(id)}
+              color="inherit"
+            />,
+          ];
+        }
+
+        return [
+          <GridActionsCellItem
+            icon={<EditIcon />}
+            label="Edit"
+            className="textPrimary"
+            onClick={handleEditClick(id)}
+            color="inherit"
+          />,
+          <GridActionsCellItem
+            icon={<DeleteIcon />}
+            label="Delete"
+            onClick={handleDeleteClick(id)}
+            color="inherit"
+          />,
+        ];
+      },
+    },
+    {
       field: 'cuil',
       type: 'string',
       headerName: 'CUIL',
-      width: 300,
+      width: 280,
       editable: true,
-      headerAlign: 'center',
-      align: 'center',
+      headerAlign: 'left',
+      align: 'left',
       headerClassName: 'header--cell',
       renderEditCell: (params) => {
         return (
@@ -356,13 +400,13 @@ export const DDJJAltaEmpleadosGrilla = ({
               sx={{
                 '& .MuiOutlinedInput-root': {
                   '& fieldset': {
-                    borderColor: 'transparent', // Color del borde cuando no está enfocado
+                    borderColor: 'transparent',
                   },
                   '&:hover fieldset': {
-                    borderColor: 'transparent', // Color del borde al pasar el ratón
+                    borderColor: 'transparent',
                   },
                   '&.Mui-focused fieldset': {
-                    borderColor: 'transparent', // Color del borde cuando está enfocado
+                    borderColor: 'transparent',
                   },
                 },
               }}
@@ -372,7 +416,7 @@ export const DDJJAltaEmpleadosGrilla = ({
                 fontSize: '1.8rem',
                 color: '#1A76D2',
                 cursor: 'pointer',
-                marginRight: '15px',
+                //margin: '0px 10px 0px -50px',
               }}
               onClick={() => obtenerAfiliados(params, params.value)}
             />
@@ -528,8 +572,8 @@ export const DDJJAltaEmpleadosGrilla = ({
       headerName: 'Camara',
       width: 100,
       editable: true,
-      headerAlign: 'center',
-      align: 'center',
+      headerAlign: 'left',
+      align: 'left',
       type: 'singleSelect',
       valueFormatter: ({ value }) => value || '',
       valueOptions: camaras.map(({ codigo, descripcion }) => {
@@ -537,8 +581,6 @@ export const DDJJAltaEmpleadosGrilla = ({
       }),
       headerClassName: 'header--cell',
       renderEditCell: (params) => {
-        // validar
-
         return (
           <Select
             fullWidth
@@ -584,13 +626,12 @@ export const DDJJAltaEmpleadosGrilla = ({
       headerName: 'Categoria',
       width: 100,
       editable: true,
-      headerAlign: 'center',
-      align: 'center',
+      headerAlign: 'left',
+      align: 'left',
       headerClassName: 'header--cell',
       valueOptions: categoriasFiltradas,
       valueFormatter: ({ value }) => value || '',
       renderEditCell: (params) => {
-        console.log(params);
         return (
           <Select
             fullWidth
@@ -620,8 +661,8 @@ export const DDJJAltaEmpleadosGrilla = ({
       headerName: 'Ingreso',
       width: 150,
       editable: true,
-      headerAlign: 'center',
-      align: 'center',
+      headerAlign: 'left',
+      align: 'left',
       headerClassName: 'header--cell',
       valueFormatter: ({ value }) => {
         if (!value) return '';
@@ -683,17 +724,17 @@ export const DDJJAltaEmpleadosGrilla = ({
         if (value === null) return '';
         return formatter.currency.format(value || 0);
       },
-      renderEditCell: (params) => {
+      /* renderEditCell: (params) => {
         return (
           <TextField
             fullWidth
-            value={formatModoEdit(params) || ''}
+            value={formatModoEdit(params.value) || ''}
             onChange={(event) => {
               const newValue = event.target.value;
               params.api.setEditCellValue({
                 id: params.id,
                 field: 'remunerativo',
-                value: newValue,
+                value: newValue.toString().replace(/\./g, ''),
               });
             }}
             sx={{
@@ -711,7 +752,7 @@ export const DDJJAltaEmpleadosGrilla = ({
             }}
           />
         );
-      },
+      }, */
     },
     {
       field: 'noRemunerativo',
@@ -735,6 +776,35 @@ export const DDJJAltaEmpleadosGrilla = ({
         if (value === null) return '';
         return formatter.currency.format(value || 0);
       },
+      /* renderEditCell: (params) => {
+        return (
+          <TextField
+            fullWidth
+            value={formatModoEdit(params.value) || ''}
+            onChange={(event) => {
+              const newValue = event.target.value;
+              params.api.setEditCellValue({
+                id: params.id,
+                field: 'noRemunerativo',
+                value: newValue.toString().replace(/\./g, ''),
+              });
+            }}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderColor: 'transparent',
+                },
+                '&:hover fieldset': {
+                  borderColor: 'transparent',
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: 'transparent',
+                },
+              },
+            }}
+          />
+        );
+      }, */
     },
     {
       field: 'uomaSocio',
@@ -758,8 +828,6 @@ export const DDJJAltaEmpleadosGrilla = ({
         { value: false, label: 'No' },
       ],
       valueFormatter: ({ value }) => {
-        console.log('Estoy de adherido al sindicato');
-        console.log(value);
         if (value === '') return '';
         if (value === null) return '';
         return value ? 'Si' : 'No';
@@ -805,7 +873,6 @@ export const DDJJAltaEmpleadosGrilla = ({
         { value: false, label: 'No' },
       ],
       valueFormatter: ({ value }) => {
-        console.log(value);
         if (value === '') return '';
         if (value === null) return '';
         return value ? 'Si' : 'No';
@@ -834,54 +901,6 @@ export const DDJJAltaEmpleadosGrilla = ({
       headerName: 'Errores',
       width: 100,
       type: 'boolean',
-    },
-    {
-      field: 'actions',
-      type: 'actions',
-      headerName: 'Acciones',
-      width: 100,
-      headerAlign: 'center',
-      align: 'center',
-      headerClassName: 'header--cell',
-      getActions: ({ id }) => {
-        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
-
-        if (isInEditMode) {
-          return [
-            <GridActionsCellItem
-              icon={<SaveIcon />}
-              label="Save"
-              sx={{
-                color: 'primary.main',
-              }}
-              onClick={handleSaveClick(id)}
-            />,
-            <GridActionsCellItem
-              icon={<CancelIcon />}
-              label="Cancel"
-              className="textPrimary"
-              onClick={handleCancelClick(id)}
-              color="inherit"
-            />,
-          ];
-        }
-
-        return [
-          <GridActionsCellItem
-            icon={<EditIcon />}
-            label="Edit"
-            className="textPrimary"
-            onClick={handleEditClick(id)}
-            color="inherit"
-          />,
-          <GridActionsCellItem
-            icon={<DeleteIcon />}
-            label="Delete"
-            onClick={handleDeleteClick(id)}
-            color="inherit"
-          />,
-        ];
-      },
     },
   ];
 
