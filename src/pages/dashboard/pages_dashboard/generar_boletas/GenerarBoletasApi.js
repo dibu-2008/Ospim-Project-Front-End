@@ -5,20 +5,30 @@ import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
+const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
+const HTTP_MSG_ALTA_ERROR = import.meta.env.VITE_HTTP_MSG_ALTA_ERROR;
+
+const styles = {
+  position: 'top-right',
+  autoClose: 2000,
+  style: {
+    fontSize: '1rem',
+  },
+};
 
 const calcularInteres = async (url, intencion_de_pago) => {
   const body = { intencion_de_pago: intencion_de_pago };
   //const response = await oAxios.get(url, body);
-  console.log(body)
-  const response = await axiosCrud.crear(url,body)
+  console.log(body);
+  const response = await axiosCrud.crear(url, body);
   return response;
 };
 
 export const getBoletasByDDJJid = async (empresa_id, ddjj_id) => {
   const URL = `/empresa/${empresa_id}/ddjj/${ddjj_id}/boletas/armar`;
   try {
-    console.log(empresa_id)
-    console.log(ddjj_id)
+    console.log(empresa_id);
+    console.log(ddjj_id);
     const data = await axiosCrud.consultar(URL);
     return data;
   } catch (error) {
@@ -38,7 +48,7 @@ export const calcularInteresBoleta = async (
   console.log(URL);
   try {
     const response = await calcularInteres(URL, intencion_de_pago);
-    console.log(response.detalle_boletas)
+    console.log(response.detalle_boletas);
     return response.detalle_boletas[0];
   } catch (error) {
     const HTTP_MSG =
@@ -53,11 +63,11 @@ export const calcularInteresBoletas = async (
   intencion_de_pago,
 ) => {
   //const URL = `/empresa/${empresa_id}/ddjj/${ddjj_id}/calcular-intereses`;
-  const URL = `/empresa/${empresa_id}/ddjj/${ddjj_id}/boletas/armar`
+  const URL = `/empresa/${empresa_id}/ddjj/${ddjj_id}/boletas/armar`;
   try {
-    console.log(intencion_de_pago)
+    console.log(intencion_de_pago);
     const response = await calcularInteres(URL, intencion_de_pago);
-    console.log(response)
+    console.log(response);
     return response;
   } catch (error) {
     const HTTP_MSG =
@@ -81,16 +91,15 @@ export const generarBoletasPost = async (empresa_id, ddjj_id, boletas) => {
     const URL = `/empresa/${empresa_id}/ddjj/${ddjj_id}/guardar-boletas`;
     const arr_boletas = ordernarBoletas(boletas);
 
-    const response = await axiosCrud.crear(URL, arr_boletas);
-    if (response) {
-      return response;
-    } else {
-      console.error('Error al generar boletas');
+    const data = await axiosCrud.crear(URL, arr_boletas);
+    if (data && data.id) {
+      toast.info(HTTP_MSG_ALTA, styles);
+      return data;
     }
+    throw data;
   } catch (error) {
-    const HTTP_MSG =
-      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`;
-    showErrorBackEnd(HTTP_MSG, error);
+    showErrorBackEnd(HTTP_MSG_ALTA_ERROR, error);
+    return {};
   }
 };
 
