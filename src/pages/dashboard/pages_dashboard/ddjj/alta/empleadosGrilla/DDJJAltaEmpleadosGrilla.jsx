@@ -305,12 +305,6 @@ export const DDJJAltaEmpleadosGrilla = ({
     return cellClassName;
   };
 
-  const formatModoEdit = (params) => {
-    return String(params.value)
-      .replace(/\./g, '')
-      .replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-  };
-
   const handleDataModal = (row) => () => {
     setDataModal({
       cuil: row.cuil,
@@ -687,7 +681,7 @@ export const DDJJAltaEmpleadosGrilla = ({
         return (
           <TextField
             fullWidth
-            value={formatModoEdit(params) || ''}
+            value={params.value || ''}
             onChange={(event) => {
               const newValue = event.target.value;
               params.api.setEditCellValue({
