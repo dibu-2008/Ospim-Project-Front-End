@@ -81,7 +81,6 @@ export const InteresesAfip = () => {
 
   const obtenerIntereses = async () => {
     const response = await axiosIntereses.consultar();
-    console.log(response);
     setRows(response);
   };
 
@@ -96,8 +95,6 @@ export const InteresesAfip = () => {
   };
 
   const handleEditClick = (row) => () => {
-    console.log('handleEditClick - row:');
-    console.log(row);
     setRowModesModel({
       ...rowModesModel,
       [rows.indexOf(row)]: { mode: GridRowModes.Edit },
@@ -209,8 +206,6 @@ export const InteresesAfip = () => {
       align: 'center',
       headerClassName: 'header--cell',
       valueFormatter: (params) => {
-        console.log('valueFormatter - params: ');
-        console.log(params);
         return formatter.date(params.value);
       },
     },

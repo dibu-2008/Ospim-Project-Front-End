@@ -62,7 +62,7 @@ export const axiosCrear = async (UrlApi, oEntidad) => {
 export const axiosActualizar = async (UrlApi, oEntidad) => {
   const pkId = oEntidad.id;
   const URL = `${UrlApi}/${pkId}`;
-
+  console.log(URL)
   try {
     delete oEntidad.id;
     const response = await oAxios.put(URL, oEntidad);

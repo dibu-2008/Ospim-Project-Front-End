@@ -779,16 +779,16 @@
   ],
   "intereses": [
     {
-      "vigenciaDesde": "2024-04-04T03:00:00.000Z",
-      "vigenciaHasta": "2024-04-06T03:00:00.000Z",
-      "indice": 1,
-      "id": 1
-    },
-    {
       "vigenciaDesde": "2024-04-11T03:00:00.000Z",
       "vigenciaHasta": "2024-04-12T03:00:00.000Z",
       "indice": 3,
       "id": 2
+    },
+    {
+      "vigenciaDesde": "2024-04-19T03:00:00.000Z",
+      "vigenciaHasta": "2024-04-12T03:00:00.000Z",
+      "indice": 2,
+      "id": 3
     }
   ],
   "afip-intereses": [
@@ -1400,7 +1400,7 @@
     },
     {
       "id": 123,
-      "estado": "PR",
+      "estado": "BG",
       "empresaId": 1,
       "periodo": "2023-09-01T03:00:00.000Z",
       "secuencia": 0,
