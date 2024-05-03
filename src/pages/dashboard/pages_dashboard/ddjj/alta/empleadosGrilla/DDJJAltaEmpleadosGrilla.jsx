@@ -729,6 +729,7 @@ export const DDJJAltaEmpleadosGrilla = ({
           <TextField
             fullWidth
             value={formatModoEdit(params.value) || ''}
+            value={params.value || ''}
             onChange={(event) => {
               const newValue = event.target.value;
               params.api.setEditCellValue({

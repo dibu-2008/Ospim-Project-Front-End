@@ -240,9 +240,9 @@ export const DetalleBoleta = () => {
                       handleSetMetodoPago(event.target.value)
                     }
                   >
-                    <MenuItem value="Ventanilla">Ventanilla</MenuItem>
-                    <MenuItem value="Red Link">Red Link</MenuItem>
-                    <MenuItem value="PagoMisCuentas">PagoMisCuentas</MenuItem>
+                    <MenuItem value="VENTANILLA">Ventanilla</MenuItem>
+                    <MenuItem value="REDLINK">Red Link</MenuItem>
+                    <MenuItem value="PMCUENTAS">PagoMisCuentas</MenuItem>
                   </Select>
                 ) : (
                   boletaDetalle.forma_de_pago

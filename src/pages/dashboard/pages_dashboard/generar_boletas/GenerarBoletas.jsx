@@ -26,7 +26,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export const GenerarBoletas = () => {
   const { id } = useParams();
-console.log(id)
+  console.log(id);
   const DDJJ_ID = id;
   const ID_EMPRESA = getEmpresaId();
 
@@ -46,7 +46,7 @@ console.log(id)
           DDJJ_ID,
         );
 
-        console.log(data)
+        console.log(data);
         setDefaultFDP(data);
         setAfiliados(ordenarAfiliadosBoletas(data));
         setPrimeraSeleccion(true);
@@ -62,7 +62,7 @@ console.log(id)
 
   const setDefaultFDP = (data) => {
     data.detalle_boletas.forEach(
-      (element) => (element.forma_de_pago = 'Ventanilla'),
+      (element) => (element.forma_de_pago = 'VENTANILLA'),
     );
     setBoletas(data);
   };
@@ -95,7 +95,7 @@ console.log(id)
     const newDetalleBoletas = [...boletas.detalle_boletas];
     const fdp = newDetalleBoletas[boletaIndex].forma_de_pago;
     newDetalleBoletas[boletaIndex] = response;
-    console.log(newDetalleBoletas)
+    console.log(newDetalleBoletas);
     newDetalleBoletas[boletaIndex].forma_de_pago = fdp;
     setBoletas({ ...boletas, detalle_boletas: newDetalleBoletas });
   };
@@ -111,21 +111,21 @@ console.log(id)
     const fechaToISO = new Date(`${fecha}`).toISOString();
     if (primeraSeleccion) {
       setPrimeraSeleccion(false);
-      console.log(ID_EMPRESA)
-      console.log(DDJJ_ID)
+      console.log(ID_EMPRESA);
+      console.log(DDJJ_ID);
       const response = await axiosGenerarBoletas.calcularInteresBoletas(
         ID_EMPRESA,
         DDJJ_ID,
         fechaToISO,
       );
-      console.log(response)
+      console.log(response);
       const updatedDetalleBoletas = response.detalle_boletas.map((boleta) => {
         const prevBoleta = boletas.detalle_boletas.find(
           (prevBoleta) => prevBoleta.codigo === boleta.codigo,
         );
         return {
           ...boleta,
-          forma_de_pago: prevBoleta ? prevBoleta.forma_de_pago : 'Ventanilla',
+          forma_de_pago: prevBoleta ? prevBoleta.forma_de_pago : 'VENTANILLA',
         };
       });
       setBoletas((prevBoletas) => ({
@@ -143,7 +143,7 @@ console.log(id)
         codigo,
         fechaToISO,
       );
-      console.log(response)
+      console.log(response);
       setInteresInDetalleBoleta(boletaIndex, response);
       sethabilitaBoton(false);
     }
@@ -178,21 +178,21 @@ console.log(id)
 
   const generarBoletas = async () => {
     try {
-      await axiosGenerarBoletas.generarBoletasPost(
+      const data = await axiosGenerarBoletas.generarBoletasPost(
         ID_EMPRESA,
         DDJJ_ID,
         boletas,
       );
-      sethabilitaBoton(true);
-      toast.success('¡Toast de éxito!', {
-        onClose: () => {
-          navigate(`/dashboard/boletas`);
-        },
-      });
+      console.log('Este es el response ', data);
+      if (data) {
+        sethabilitaBoton(true);
+      }
     } catch (error) {
       console.error(error);
-      toast.error('Ocurrio un problema');
-      navigate(`/dashboard/boletas`);
+      toast.error(
+        '!Ocurrio un problema. No se pudieron generar las Boletas de Pago',
+      );
+      navigate('/dashboard/boletas');
     }
   };
 
@@ -262,9 +262,9 @@ console.log(id)
                         setFormaDePago(boleta.codigo, event.target.value)
                       }
                     >
-                      <MenuItem value="Ventanilla">Ventanilla</MenuItem>
-                      <MenuItem value="Red Link">Red Link</MenuItem>
-                      <MenuItem value="PagoMisCuentas">PagoMisCuentas</MenuItem>
+                      <MenuItem value="VENTANILLA">Ventanilla</MenuItem>
+                      <MenuItem value="REDLINK">Red Link</MenuItem>
+                      <MenuItem value="PMCUENTAS">PagoMisCuentas</MenuItem>
                     </Select>
                   </TableCell>
                 ))}

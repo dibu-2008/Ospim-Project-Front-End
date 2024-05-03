@@ -1383,7 +1383,7 @@
     },
     {
       "id": 123,
-      "estado": "PR",
+      "estado": "BG",
       "empresaId": 1,
       "periodo": "2023-09-01T03:00:00.000Z",
       "secuencia": 0,
@@ -3904,7 +3904,7 @@
             "capital": 5800
           }
         ],
-        "forma_de_pago": "Ventanilla",
+        "forma_de_pago": "VENTANILLA",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
         "numero_boleta": 11
@@ -3951,7 +3951,7 @@
             "capital": 482
           }
         ],
-        "forma_de_pago": "Ventanilla",
+        "forma_de_pago": "VENTANILLA",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
         "numero_boleta": 12
@@ -3975,7 +3975,7 @@
             "capital": 7800
           }
         ],
-        "forma_de_pago": "Ventanilla",
+        "forma_de_pago": "VENTANILLA",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
         "numero_boleta": 24
@@ -4087,7 +4087,7 @@
             "capital": 482
           }
         ],
-        "forma_de_pago": "Ventanilla",
+        "forma_de_pago": "VENTANILLA",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
         "numero_boleta": 1
@@ -4114,7 +4114,7 @@
             "capital": 7800
           }
         ],
-        "forma_de_pago": "Ventanilla",
+        "forma_de_pago": "VENTANILLA",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
         "numero_boleta": 2
@@ -4154,7 +4154,7 @@
             "capital": 5800
           }
         ],
-        "forma_de_pago": "Red Link",
+        "forma_de_pago": "REDLINK",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
         "numero_boleta": 3
@@ -4192,7 +4192,7 @@
             "capital": 5800
           }
         ],
-        "forma_de_pago": "Ventanilla",
+        "forma_de_pago": "VENTANILLA",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
         "numero_boleta": 11,
@@ -4224,7 +4224,7 @@
             "capital": 7800
           }
         ],
-        "forma_de_pago": "Ventanilla",
+        "forma_de_pago": "VENTANILLA",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
         "numero_boleta": 5
@@ -4263,7 +4263,7 @@
             "capital": 5800
           }
         ],
-        "forma_de_pago": "Ventanilla",
+        "forma_de_pago": "VENTANILLA",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
         "numero_boleta": 6
@@ -4302,7 +4302,7 @@
             "capital": 482
           }
         ],
-        "forma_de_pago": "Ventanilla",
+        "forma_de_pago": "VENTANILLA",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
         "numero_boleta": 7
@@ -4341,7 +4341,7 @@
             "capital": 5800
           }
         ],
-        "forma_de_pago": "Red Link",
+        "forma_de_pago": "REDLINK",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
         "numero_boleta": 8
@@ -4380,7 +4380,7 @@
             "capital": 482
           }
         ],
-        "forma_de_pago": "Red Link",
+        "forma_de_pago": "REDLINK",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
         "numero_boleta": 9
@@ -4405,7 +4405,7 @@
             "capital": 7800
           }
         ],
-        "forma_de_pago": "Red Link",
+        "forma_de_pago": "REDLINK",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
         "numero_boleta": 10
@@ -4444,7 +4444,7 @@
             "capital": 5800
           }
         ],
-        "forma_de_pago": "Ventanilla",
+        "forma_de_pago": "VENTANILLA",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
         "numero_boleta": 11
@@ -4483,7 +4483,7 @@
             "capital": 482
           }
         ],
-        "forma_de_pago": "Ventanilla",
+        "forma_de_pago": "VENTANILLA",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
         "numero_boleta": 12
@@ -4522,7 +4522,7 @@
             "capital": 5800
           }
         ],
-        "forma_de_pago": "Ventanilla",
+        "forma_de_pago": "VENTANILLA",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
         "numero_boleta": 22
@@ -4561,7 +4561,7 @@
             "capital": 482
           }
         ],
-        "forma_de_pago": "Ventanilla",
+        "forma_de_pago": "VENTANILLA",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
         "numero_boleta": 23
@@ -4586,7 +4586,7 @@
             "capital": 7800
           }
         ],
-        "forma_de_pago": "Ventanilla",
+        "forma_de_pago": "VENTANILLA",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
         "numero_boleta": 24
