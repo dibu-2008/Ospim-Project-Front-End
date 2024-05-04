@@ -59,7 +59,7 @@ export const crear = async (registro) => {
 
 export const actualizar = async (registro) => {
   try {
-    console.log(registro)
+
     const response = await axiosCrud.actualizar(URL_ENTITY, registro);
     if (response == true) {
       swal.showSuccess(HTTP_MSG_MODI);

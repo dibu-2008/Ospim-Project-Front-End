@@ -2,7 +2,7 @@ import localStorageService from '@components/localStorage/localStorageService';
 import './DatosEmpresa.css';
 import { useEffect, useState, useMemo } from 'react';
 import { GrillaEmpresaContacto } from './grilla_empresa_contacto/GrillaEmpresaContacto';
-import { GrillaEmpresaDomilicio } from './grilla_empresa_domicilio/GrillaEmpresaDomilicio';
+import { GrillaEmpresaDomicilio } from './grilla_empresa_domicilio/GrillaEmpresaDomicilio';
 import {
   Button,
   Select,
@@ -204,7 +204,7 @@ export const DatosEmpresa = () => {
         </CustomTabPanel>
         <CustomTabPanel value={tabState} index={1}>
           <ThemeProvider theme={themeWithLocale}>
-            <GrillaEmpresaDomilicio
+            <GrillaEmpresaDomicilio
               idEmpresa={ID_EMPRESA}
               rows={rowsDomicilio}
               setRows={setRowsDomicilio}

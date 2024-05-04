@@ -46,6 +46,11 @@ console.log(id)
           DDJJ_ID,
         );
 
+        if (data.status === 401) {
+          console.log()
+          //navigate(`/dashboard/ddjj`);
+        }
+
         console.log(data)
         setDefaultFDP(data);
         setAfiliados(ordenarAfiliadosBoletas(data));
@@ -54,7 +59,7 @@ console.log(id)
         sethabilitaBoton(true);
       } catch (error) {
         console.error('Error al obtener las boletas:', error);
-        navigate(`/dashboard/ddjj`);
+       // navigate(`/dashboard/ddjj`);
       }
     };
     fetchData();
@@ -178,17 +183,23 @@ console.log(id)
 
   const generarBoletas = async () => {
     try {
-      await axiosGenerarBoletas.generarBoletasPost(
+      const response = await axiosGenerarBoletas.generarBoletasPost(
         ID_EMPRESA,
         DDJJ_ID,
         boletas,
       );
       sethabilitaBoton(true);
-      toast.success('¡Toast de éxito!', {
-        onClose: () => {
-          navigate(`/dashboard/boletas`);
-        },
-      });
+      console.log("Este es el response " + response)
+      if (response !== undefined ){
+        toast.success('¡Toast de éxito!', {
+          onClose: () => {
+            navigate(`/dashboard/boletas`);
+          },
+        });
+      } else {
+        toast.error('Ocurrio un problema');
+      }
+
     } catch (error) {
       console.error(error);
       toast.error('Ocurrio un problema');

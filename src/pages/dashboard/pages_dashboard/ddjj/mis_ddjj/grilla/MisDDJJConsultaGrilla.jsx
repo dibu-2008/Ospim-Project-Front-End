@@ -317,7 +317,7 @@ export const MisDDJJConsultaGrilla = ({
             onClick={() => declaracionJuradasImpresion(id)}
           />,
         ];
-      } else {
+      } else if (row.estado == 'PR' && row.estado !== 'BG'){
         return [
           <Button
             sx={{
@@ -329,6 +329,22 @@ export const MisDDJJConsultaGrilla = ({
           >
             Generar Boleta
           </Button>,
+          <GridActionsCellItem
+            icon={<EditIcon />}
+            label="Edit"
+            className="textPrimary"
+            onClick={handleEditClick(id)}
+            color="inherit"
+          />,
+          <GridActionsCellItem
+            icon={<LocalPrintshopIcon />}
+            label="Print"
+            color="inherit"
+            onClick={() => declaracionJuradasImpresion(id)}
+          />,
+        ];
+      }else if (row.estado === 'BG'){
+        return [
           <GridActionsCellItem
             icon={<EditIcon />}
             label="Edit"

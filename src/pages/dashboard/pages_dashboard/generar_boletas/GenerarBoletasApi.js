@@ -1,15 +1,16 @@
+import { error401 } from '@/common/api/ErrorCommonApi';
 import formatter from '@/common/formatter';
 import { axiosCrud } from '@/components/axios/axiosCrud';
 import oAxios from '@/components/axios/axiosInstace';
 import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
 
+
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
 
+
 const calcularInteres = async (url, intencion_de_pago) => {
-  const body = { intencion_de_pago: intencion_de_pago };
-  //const response = await oAxios.get(url, body);
-  console.log(body)
+  const body ={ intencion_de_pago: intencion_de_pago };
   const response = await axiosCrud.crear(url,body)
   return response;
 };
@@ -80,12 +81,16 @@ export const generarBoletasPost = async (empresa_id, ddjj_id, boletas) => {
   try {
     const URL = `/empresa/${empresa_id}/ddjj/${ddjj_id}/guardar-boletas`;
     const arr_boletas = ordernarBoletas(boletas);
+    console.log(arr_boletas)
 
     const response = await axiosCrud.crear(URL, arr_boletas);
+    //const response = await error401()
     if (response) {
+      console.log(response)
       return response;
     } else {
       console.error('Error al generar boletas');
+      
     }
   } catch (error) {
     const HTTP_MSG =

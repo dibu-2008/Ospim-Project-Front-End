@@ -1,17 +1,15 @@
-import oAxios from '@components/axios/axiosInstace';
-import axios from 'axios';
 import { axiosCrud } from '@/components/axios/axiosCrud';
 import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
 
 import formatter from '@/common/formatter';
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
 
 export const getBoletasByDDJJid = async (empresa_id, ddjj_id) => {
   try {
     const URL = `/empresa/${empresa_id}/ddjj/${ddjj_id}/boletas/armado`;
     const response = axiosCrud.consultar(URL);
+    console.log(response)
     return response;
   } catch (error) {
     const HTTP_MSG =
@@ -34,12 +32,18 @@ export const getBoletasByEmpresa = async (empresa_id) => {
 
 export const getBoletaById = async (empresa_id, boleta_id) => {
   const URL = `/empresa/${empresa_id}/boletas/${boleta_id}`;
-  const response = axiosCrud.consultar(URL);
-  return response;
+  try {
+    const response = axiosCrud.consultar(URL);
+    return response;
+  } catch (error){
+    console.log(error)
+    return false
+  }
+
 };
 
 export const modificarBoletaById = async (empresa_id, body) => {
-  const URL = `${BACKEND_URL}/empresa/${empresa_id}/boletas`;
+  const URL = `/empresa/${empresa_id}/boletas`;
   try {
     body.intencion_de_pago = formatter.toFechaValida(body.intencion_de_pago);
     body.periodo = formatter.toFechaValida(body.intencion_de_pago);

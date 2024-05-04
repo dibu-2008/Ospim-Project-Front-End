@@ -115,7 +115,7 @@ export const Ajustes = () => {
           }
         });
       } catch (error) {
-        console.error('Error al ejecutar eliminarFeriado:', error);
+        console.error('Error al ejecutar eliminarAjuste:', error);
       }
     };
 

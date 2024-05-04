@@ -23,6 +23,7 @@ import {
 import formatter from '@/common/formatter';
 import { useParams } from 'react-router-dom';
 import { calcularInteresBoleta } from '../generar_boletas/GenerarBoletasApi';
+import { useNavigate } from 'react-router-dom';
 
 export const DetalleBoleta = () => {
   const [boletaDetalle, setBoletaDetalle] = useState([]);
@@ -35,6 +36,7 @@ export const DetalleBoleta = () => {
   const [modoEdicion, setModoEdicion] = useState(false);
   const [respaldoBoleta, setRespaldoBoleta] = useState([]);
   const [ajustes, setAjustes] = useState([]);
+  const navigate = useNavigate();
 
   const ID_EMPRESA = JSON.parse(localStorage.getItem('stateLogin'))
     .usuarioLogueado.empresa.id;
@@ -45,6 +47,7 @@ export const DetalleBoleta = () => {
     const fetchData = async () => {
       try {
         const response = await getBoletaById(ID_EMPRESA, numero_boleta);
+
         console.log(response);
         setBoletaDetalle(response);
         setAfiliadosRows(

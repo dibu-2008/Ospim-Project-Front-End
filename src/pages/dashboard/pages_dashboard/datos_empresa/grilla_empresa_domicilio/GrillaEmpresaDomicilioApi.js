@@ -28,6 +28,7 @@ export const obtenerProvincias = async () => {
   const URL = '/provincia';
   try {
     const data = await axiosCrud.consultar(URL);
+    console.log(data)
     return data || [];
   } catch (error) {
     showErrorBackEnd(
@@ -54,6 +55,7 @@ export const obtenerLocalidades = async (idProvincia) => {
 
 export const obtenerDomicilios = async (empresaId) => {
   const URL = `/empresa/${empresaId}/domicilio`;
+  console.log(URL)
   try {
     const data = await axiosCrud.consultar(URL);
     return data || [];
