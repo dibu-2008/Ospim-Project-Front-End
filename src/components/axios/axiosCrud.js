@@ -33,6 +33,7 @@ export const axiosConsultar = async (UrlApi) => {
 };
 
 export const axiosCrear = async (UrlApi, oEntidad) => {
+  console.log(UrlApi)
   try {
     const response = await oAxios.post(UrlApi, oEntidad);
     console.log(response.status)

@@ -1,116 +1,62 @@
-import { axiosCrud } from '@components/axios/axiosCrud';
-import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
-import swal from '@components/swal/swal';
+import { axiosEntity } from '@/components/axios/EntityCrud';
 
-const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
-const HTTP_MSG_MODI = import.meta.env.VITE_HTTP_MSG_MODI;
-const HTTP_MSG_BAJA = import.meta.env.VITE_HTTP_MSG_BAJA;
 const HTTP_MSG_ALTA_ERROR = import.meta.env.VITE_HTTP_MSG_ALTA_ERROR;
-const HTTP_MSG_MODI_ERROR = import.meta.env.VITE_HTTP_MSG_MODI_ERROR;
-const HTTP_MSG_BAJA_ERROR = import.meta.env.VITE_HTTP_MSG_BAJA_ERROR;
-const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
+
+const adaptadorCrearDomicilio = async (domicilio) => {
+  try {
+    const provincias = await obtenerProvincias();
+    const provincia = provincias.find(
+      (element) => element.descripcion == domicilio.provincia,
+    );
+    const localidades = await obtenerLocalidades(provincia.id);
+    const localidad = localidades.find(
+      (element) => element.descripcion == domicilio.localidad,
+    );
+    domicilio.provincia = provincia.id;
+    domicilio.localidad = localidad.id;
+    return domicilio;
+  } catch (error) {
+    toast.error(HTTP_MSG_ALTA_ERROR);
+    return error;
+  }
+};
 
 export const obtenerTipoDomicilio = async () => {
   const URL = '/empresa/domicilio/tipo';
-  try {
-    const data = await axiosCrud.consultar(URL);
-    return data || [];
-  } catch (error) {
-    showErrorBackEnd(
-      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
-      error,
-    );
-    return [];
-  }
+  return await axiosEntity.consultar(URL);
 };
 
 export const obtenerProvincias = async () => {
   const URL = '/provincia';
-  try {
-    const data = await axiosCrud.consultar(URL);
-    console.log(data)
-    return data || [];
-  } catch (error) {
-    showErrorBackEnd(
-      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
-      error,
-    );
-    return [];
-  }
+  return await axiosEntity.consultar(URL);
 };
 
 export const obtenerLocalidades = async (idProvincia) => {
   const URL = `/provincia/${idProvincia}/localidad`;
-  try {
-    const data = await axiosCrud.consultar(URL);
-    return data || [];
-  } catch (error) {
-    showErrorBackEnd(
-      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
-      error,
-    );
-    return [];
-  }
+  return await axiosEntity.consultar(URL);
 };
 
 export const obtenerDomicilios = async (empresaId) => {
   const URL = `/empresa/${empresaId}/domicilio`;
-  console.log(URL)
-  try {
-    const data = await axiosCrud.consultar(URL);
-    return data || [];
-  } catch (error) {
-    showErrorBackEnd(
-      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
-      error,
-    );
-    return [];
-  }
+  return await axiosEntity.consultar(URL);
 };
 
 export const crearDomicilio = async (empresaId, domicilio) => {
   const URL = `/empresa/${empresaId}/domicilio`;
-  try {
-    const data = await axiosCrud.crear(URL, domicilio);
-    if (data && data.id) {
-      swal.showSuccess(HTTP_MSG_ALTA);
-      return data;
-    }
-    throw data;
-  } catch (error) {
-    showErrorBackEnd(HTTP_MSG_ALTA_ERROR, error);
-    return {};
-  }
+
+  const domiAdapt = await adaptadorCrearDomicilio(domicilio);
+  return await axiosEntity.crear(URL, domiAdapt);
 };
 
 export const actualizarDomicilio = async (empresaId, domicilio) => {
-  const URL = `/empresa/${empresaId}/domicilio/${domicilio.id}`;
-  try {
-    const response = await axiosCrud.actualizar(URL, domicilio);
-    if (response == true) {
-      swal.showSuccess(HTTP_MSG_MODI);
-      return true;
-    }
-    throw response;
-  } catch (error) {
-    showErrorBackEnd(HTTP_MSG_MODI_ERROR, error);
-    return false;
-  }
+  const URL = `/empresa/${empresaId}/domicilio`;
+  return await axiosEntity.actualizar(URL, domicilio);
 };
 
 export const eliminarDomicilio = async (empresaId, idDomicilio) => {
   const URL = `/empresa/${empresaId}/domicilio`;
-  try {
-    const response = await axiosCrud.eliminar(URL, idDomicilio);
-    if (response == true) {
-      swal.showSuccess(HTTP_MSG_BAJA);
-      return true;
-    }
-    throw response;
-  } catch (error) {
-    showErrorBackEnd(HTTP_MSG_BAJA_ERROR, error);
-    return false;
-  }
+  axiosEntity.init(URL);
+  return await axiosEntity.eliminar(URL, idDomicilio);
 };
 
 export const axiosDomicilio = {

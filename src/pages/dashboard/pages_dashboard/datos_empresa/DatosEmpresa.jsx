@@ -18,6 +18,8 @@ import PropTypes from 'prop-types';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import * as locales from '@mui/material/locale';
 import axiosDatosEmpre from './DatosEmpresaApi';
+import { ToastContainer } from 'react-toastify';
+
 
 // Logica de los tabs inicio
 function CustomTabPanel(props) {
@@ -122,6 +124,7 @@ export const DatosEmpresa = () => {
 
   return (
     <div className="datos_empresa_container">
+      <ToastContainer />
       <h1>Mis datos empresas</h1>
 
       <form
