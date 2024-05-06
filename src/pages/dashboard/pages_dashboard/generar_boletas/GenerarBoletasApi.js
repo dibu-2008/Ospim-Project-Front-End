@@ -1,8 +1,8 @@
 import { error401 } from '@/common/api/ErrorCommonApi';
 import formatter from '@/common/formatter';
 import { axiosCrud } from '@/components/axios/axiosCrud';
-import oAxios from '@/components/axios/axiosInstace';
 import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
+import { toast } from 'react-toastify';
 
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -90,19 +90,20 @@ const ordernarBoletas = (boletas) => {
 
 export const generarBoletasPost = async (empresa_id, ddjj_id, boletas) => {
   try {
-    const URL = `/empresa/${empresa_id}/ddjj/${ddjj_id}/guardar-boletas`;
+    const URL = `/empresa/${empresa_id}/ddjj/${ddjj_id}/boletas/generar`;
     const arr_boletas = ordernarBoletas(boletas);
     console.log(arr_boletas)
 
-    const data = await axiosCrud.crear(URL, arr_boletas);
-    if (data && data.id) {
+    const data = await axiosCrud.crearN(URL, arr_boletas);
+    if (data == true) {
       toast.info(HTTP_MSG_ALTA, styles);
       return data;
     }
     throw data;
   } catch (error) {
+    console.log('generarBoletasPost - catch ...');
     showErrorBackEnd(HTTP_MSG_ALTA_ERROR, error);
-    return {};
+    return false;
   }
 };
 

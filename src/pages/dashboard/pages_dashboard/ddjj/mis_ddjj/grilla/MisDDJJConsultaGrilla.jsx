@@ -189,10 +189,6 @@ export const MisDDJJConsultaGrilla = ({
   const processRowUpdate = async (newRow) => {
     const updatedRow = { ...newRow, isNew: false };
 
-    if (newRow.isNew) {
-    } else {
-    }
-
     setRowsMisDdjj(
       rowsMisDdjj.map((row) => (row.id === newRow.id ? updatedRow : row)),
     );

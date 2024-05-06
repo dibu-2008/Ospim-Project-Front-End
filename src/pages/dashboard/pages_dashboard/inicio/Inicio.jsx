@@ -16,6 +16,7 @@ export const Inicio = () => {
   useEffect(() => {
     const getDatosContacto = async () => {
       const datosContacto = await ObtenerDatosDeContacto();
+      console.log('getDatosContacto() - ', datosContacto);
       setDatosContacto(datosContacto);
     };
     getDatosContacto();
@@ -53,19 +54,19 @@ export const Inicio = () => {
               <span>
                 <EmailIcon />
               </span>
-              {datosContacto ? datosContacto.email : ''}
+              {datosContacto ? datosContacto[0]?.email : ''}
             </div>
             <div>
               <span>
                 <LocalPhoneIcon />
               </span>
-              {datosContacto ? datosContacto.telefono : ''}
+              {datosContacto ? datosContacto[0]?.telefono : ''}
             </div>
             <div>
               <span>
                 <WhatsAppIcon />
               </span>
-              {datosContacto ? datosContacto.whasap : ''}
+              {datosContacto ? datosContacto[0]?.whasap : ''}
             </div>
           </div>
 

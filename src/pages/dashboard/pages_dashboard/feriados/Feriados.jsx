@@ -68,9 +68,7 @@ const crearNuevoRegistro = (props) => {
 
   const altaHandleClick = () => {
     const newReg = { fecha: '' };
-
     volverPrimerPagina();
-
     setRows((oldRows) => [newReg, ...oldRows]);
     setRowModesModel((oldModel) => ({
       [0]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
@@ -100,17 +98,6 @@ export const Feriados = () => {
     page: 0,
   });
 
-  //const gridRef = useRef(null);
-
-  // State del modal *************************************************
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const [fecha, setFecha] = useState(null);
-
-  const handleChangeFecha = (date) => setFecha(date);
-  // State del modal *************************************************
-
   const volverPrimerPagina = () => {
     setPaginationModel((prevPaginationModel) => ({
       ...prevPaginationModel,
@@ -125,13 +112,22 @@ export const Feriados = () => {
     [locale, theme],
   );
 
-  const ObtenerFeriados = async () => {
+  // State del modal *************************************************
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const [fecha, setFecha] = useState(null);
+
+  const handleChangeFecha = (date) => setFecha(date);
+  // State del modal *************************************************
+
+  const ConsultarEntidad = async () => {
     const response = await axiosFeriados.consultar();
     setRows(response);
   };
 
   useEffect(() => {
-    ObtenerFeriados();
+    ConsultarEntidad();
   }, []);
 
   const handleRowEditStop = (params, event) => {
@@ -243,6 +239,7 @@ export const Feriados = () => {
     setRowModesModel(newRowModesModel);
   };
 
+  //Metodo para Duplicar Feriados de 1 a;o Particular
   const obSubmitAnio = async (e) => {
     e.preventDefault();
     const anio = fecha.$y;

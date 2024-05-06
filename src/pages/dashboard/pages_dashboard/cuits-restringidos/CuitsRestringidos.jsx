@@ -121,7 +121,7 @@ export const CuitsRestringidos = () => {
         }).then(async (result) => {
           if (result.isConfirmed) {
             const bBajaOk = await axiosCuitsRestringidos.eliminar(row.id);
-            if (bBajaOk) setRows(rows.filter((row) => row.id !== id));
+            if (bBajaOk) setRows(rows.filter((rowAux) => rowAux.id !== row.id));
           }
         });
       } catch (error) {

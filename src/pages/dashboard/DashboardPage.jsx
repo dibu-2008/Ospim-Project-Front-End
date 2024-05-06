@@ -46,10 +46,12 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import ReceiptIcon from '@mui/icons-material/Receipt';
+import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
 import localStorageService from '@/components/localStorage/localStorageService';
 import { getFuncionalidadesByRol } from './DashboardPageApi';
+import logo2 from '../../assets/logo_2.svg';
 
-const drawerWidth = 270;
+const drawerWidth = 200;
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -75,28 +77,10 @@ const closedMixin = (theme) => ({
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'flex-end',
-  padding: theme.spacing(0, 1),
+  justifyContent: 'flex-start',
+  padding: '0 24px',
   // necessary for content to be below app bar
   ...theme.mixins.toolbar,
-}));
-
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme, open }) => ({
-  zIndex: theme.zIndex.drawer + 1,
-  transition: theme.transitions.create(['width', 'margin'], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }),
 }));
 
 const Drawer = styled(MuiDrawer, {
@@ -115,8 +99,6 @@ const Drawer = styled(MuiDrawer, {
     '& .MuiDrawer-paper': closedMixin(theme),
   }),
 }));
-
-// Drawer final ************************
 
 const DashboardPage = () => {
   const navigate = useNavigate();
@@ -142,25 +124,17 @@ const DashboardPage = () => {
     localStorage.removeItem('stateLogin');
   };
 
-  // Drawer inicio
   const [open, setOpen] = useState(false);
 
   const handleDrawerToggle = () => {
     setOpen(!open);
   };
 
-  // Drawer final ************************
-
   return (
     <>
       <Box sx={{ display: 'flex' }}>
         <Drawer variant="permanent" open={open}>
           <DrawerHeader sx={{ marginTop: 2, marginBottom: 2 }}>
-            <img
-              src={logo}
-              alt="imagen del logo"
-              style={{ marginRight: 140 }}
-            />
             <IconButton
               color="inherit"
               aria-label="toggle drawer"
@@ -177,14 +151,15 @@ const DashboardPage = () => {
           <Divider />
           <List
             style={{
-              marginTop: 50,
+              marginTop: -7,
+              marginBottom: -10,
             }}
           >
             <ListItem disablePadding sx={{ display: 'block' }}>
               <ListItemButton
                 sx={{
                   minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
+                  justifyContent: 'initial',
                   px: 2.5,
                 }}
               >
@@ -195,6 +170,7 @@ const DashboardPage = () => {
                     justifyContent: 'center',
                     display: 'flex',
                     flexDirection: 'column',
+                    marginLeft: '-18px',
                   }}
                 >
                   <NavLink to="./inicio" className="icon-container">
@@ -289,28 +265,18 @@ const DashboardPage = () => {
                       )}
                     </NavLink>
                   )}
+                  {rolFuncionalidades.AJUSTES && (
+                    <NavLink to="./ajustes" className="icon-container">
+                      <SettingsApplicationsIcon className="icon-link" />{' '}
+                      {open && <span className="icon-link">Ajustes</span>}
+                    </NavLink>
+                  )}
                   {rolFuncionalidades.INTERESES_AFIP && (
                     <NavLink to="./interesesafip" className="icon-container">
-                      <img
-                        src={afipIcon}
-                        alt="afip"
-                        className="icon-link"
-                        style={{ width: 24, height: 24 }}
-                      />{' '}
+                      <img src={afipIcon} alt="afip" className="icon-link" />{' '}
                       {open && (
                         <span className="icon-link">Intereses Afip</span>
                       )}
-                    </NavLink>
-                  )}
-                  {rolFuncionalidades.AJUSTES && (
-                    <NavLink to="./ajustes" className="icon-container">
-                      <img
-                        src={afipIcon}
-                        alt="afip"
-                        className="icon-link"
-                        style={{ width: 24, height: 24 }}
-                      />{' '}
-                      {open && <span className="icon-link">Ajustes</span>}
                     </NavLink>
                   )}
                 </ListItemIcon>
@@ -320,15 +286,14 @@ const DashboardPage = () => {
           <Divider />
           <List
             style={{
-              marginTop: 40,
-              marginLeft: 5,
+              marginTop: -7,
             }}
           >
             <ListItem disablePadding sx={{ display: 'block' }}>
               <ListItemButton
                 sx={{
                   minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
+                  justifyContent: 'initial',
                   px: 2.5,
                 }}
               >
@@ -339,6 +304,7 @@ const DashboardPage = () => {
                     justifyContent: 'center',
                     display: 'flex',
                     flexDirection: 'column',
+                    marginLeft: '-18px',
                   }}
                 >
                   <NavLink className="icon-container" onClick={onLogout}>
@@ -350,8 +316,79 @@ const DashboardPage = () => {
             </ListItem>
           </List>
         </Drawer>
-        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-          <Outlet />
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              backgroundColor: '#1a76d2',
+              height: 110,
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              zIndex: 1000,
+              paddingLeft: 80,
+              paddingRight: 80,
+            }}
+          >
+            <img
+              style={{
+                marginLeft: 120,
+                width: 75,
+              }}
+              src={logo2}
+              alt="imglogo"
+            />
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginRight: 80,
+              }}
+            >
+              <h4
+                style={{
+                  marginLeft: 30,
+                  color: '#fff',
+                  fontSize: '2rem',
+                }}
+              >
+                UOMA
+              </h4>
+              <h4
+                style={{
+                  marginLeft: 30,
+                  color: '#fff',
+                  fontSize: '2rem',
+                }}
+              >
+                OSPIM
+              </h4>
+              <h4
+                style={{
+                  marginLeft: 30,
+                  color: '#fff',
+                  fontSize: '2rem',
+                }}
+              >
+                AMTIMA
+              </h4>
+            </div>
+          </div>
+          <div
+            style={{
+              marginTop: '180px',
+            }}
+          >
+            <Outlet />
+          </div>
         </Box>
       </Box>
     </>

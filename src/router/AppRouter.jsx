@@ -5,7 +5,7 @@ import { Inicio } from '../pages/dashboard/pages_dashboard/inicio/Inicio';
 import NavBar from '../components/navbar/NavBar';
 import { DatosEmpresa } from '../pages/dashboard/pages_dashboard/datos_empresa/DatosEmpresa';
 import { Publicaciones } from '../pages/dashboard/pages_dashboard/publicaciones/Publicaciones';
-import { RegisterPage } from '../pages/RegisterPage';
+import { RecuperoPage } from '../pages/recupero/RecuperoPage';
 import DashboardPage from '../pages/dashboard/DashboardPage';
 import { LoginPage } from '../pages/login/LoginPage';
 import { Feriados } from '../pages/dashboard/pages_dashboard/feriados/Feriados';
@@ -22,7 +22,7 @@ import { DDJJConsultaEmpleado } from '@/pages/dashboard/pages_dashboard/ddjj/ddj
 import { InteresesAfip } from '@/pages/dashboard/pages_dashboard/intereses_afip/InteresesAfip';
 import { Ajustes } from '@/pages/dashboard/pages_dashboard/ajustes/Ajustes';
 import { DDJJTabs } from '@/pages/dashboard/pages_dashboard/ddjj/DDJJTabs';
-import { GestionRoles } from '@/pages/dashboard/pages_dashboard/GestionRoles/GestionRoles';
+import { GestionRoles } from '@/pages/dashboard/pages_dashboard/gestionRoles/GestionRoles';
 
 const PagosPage = () => <div>Contenido de la página de pagos</div>;
 
@@ -32,7 +32,7 @@ const AppRouter = () => {
       <Routes>
         {/* <Route path="/" element={<NavBar />}> */}
         <Route path="login" element={<LoginPage />} />
-        <Route path="register" element={<RegisterPage />} />
+        <Route path="recupero" element={<RecuperoPage />} />
         <Route
           path="/dashboard"
           element={

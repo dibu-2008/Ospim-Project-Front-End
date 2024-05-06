@@ -15,15 +15,38 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
+import CreateIcon from '@mui/icons-material/Create';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import * as locales from '@mui/material/locale';
 import formatter from '@/common/formatter';
-import { Box, Button, TextField, Select, MenuItem } from '@mui/material';
+import {
+  Box,
+  Button,
+  TextField,
+  Select,
+  MenuItem,
+  IconButton,
+  alpha,
+  Modal,
+} from '@mui/material';
 import { axiosDDJJ } from '../DDJJAltaApi';
 import './DDJJAltaEmpleadosGrilla.css';
 import { dataGridStyle } from '@/common/dataGridStyle';
 import dayjs from 'dayjs';
 import swal from '@/components/swal/swal';
+import Typography from '@mui/material/Typography';
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 500,
+  bgcolor: 'background.paper',
+  border: '2px solid #1A76D2',
+  boxShadow: 24,
+  p: 4,
+};
 
 function EditToolbar(props) {
   const {
@@ -95,6 +118,15 @@ export const DDJJAltaEmpleadosGrilla = ({
 }) => {
   const [locale, setLocale] = useState('esES');
   const [inteDataBase, setInteDataBase] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [dataModal, setDataModal] = useState({
+    cuil: '',
+    apellido: '',
+    nombre: '',
+  });
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   const theme = useTheme();
   const themeWithLocale = useMemo(
@@ -106,11 +138,13 @@ export const DDJJAltaEmpleadosGrilla = ({
 
   const obtenerAfiliados = async (params, cuilElegido) => {
     if (cuilElegido === '') {
-      swal.showError('Debe ingresar un CUIL y presionar la lupa');
+      swal.showWarning('Debe ingresar un CUIL y presionar la lupa');
     }
 
     if (cuilElegido.length < 11) {
-      swal.showError('El CUIL ingresado es incorrecto, debe tener 11 dígitos.');
+      swal.showWarning(
+        'El CUIL ingresado es incorrecto, debe tener 11 dígitos.',
+      );
     } else {
       const afiliados = await axiosDDJJ.getAfiliado(cuilElegido);
 
@@ -156,8 +190,8 @@ export const DDJJAltaEmpleadosGrilla = ({
         const abueloNombre = textFieldNombre.parentNode.parentNode;
         abueloNombre.style.display = 'block';
       } else {
-        swal.showError(
-          'No se encontraron afiliados con el CUIL ingresado, ingreselos manualmente.',
+        swal.showWarning(
+          'CUIL inexistente, al presentarse la DDJJ, el mismo, será incorporado a la lista de la nómina del CUIT correspondiente.',
         );
 
         const textFieldApellido = document.getElementById(
@@ -225,13 +259,6 @@ export const DDJJAltaEmpleadosGrilla = ({
     console.log('processRowUpdate - INIT');
     if (newRow.isNew) {
       const fila = { ...newRow, inte: inteDataBase, errores: false };
-      console.log('Nueva Fila');
-      console.log(fila);
-      console.log('Nueva Fila - newRow: ');
-      console.log(newRow);
-      console.log('Nueva Fila - rowsAltaDDJJ: ');
-      console.log(rowsAltaDDJJ);
-
       setRowsAltaDDJJ(
         rowsAltaDDJJ.map((row) => (row.id === newRow.id ? fila : row)),
       );
@@ -239,8 +266,6 @@ export const DDJJAltaEmpleadosGrilla = ({
       return { ...fila, isNew: false };
     } else {
       const fila = { ...newRow, inte: inteDataBase };
-      console.log('Fila a modificar');
-      console.log(fila);
 
       setRowsAltaDDJJ(
         rowsAltaDDJJ.map((row) => (row.id === newRow.id ? fila : row)),
@@ -271,15 +296,90 @@ export const DDJJAltaEmpleadosGrilla = ({
     return cellClassName;
   };
 
+  const formatModoEdit = (valor) => {
+    if (valor === '') return '';
+    if (valor === null) return '';
+    if (valor === undefined) return '';
+    if (valor === 0) return '';
+
+    return String(valor)
+      .replace(/\./g, '')
+      .replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  };
+
+  const handleDataModal = (row) => () => {
+    setDataModal({
+      cuil: row.cuil,
+      apellido: row.apellido,
+      nombre: row.nombre,
+    });
+    handleOpen();
+  };
+
+  const handleChangeDataModal = (event, field) => {
+    setDataModal((prevDataModal) => ({
+      ...prevDataModal,
+      [field]: event.target.value,
+    }));
+  };
+
   const columns = [
+    {
+      field: 'actions',
+      type: 'actions',
+      headerName: 'Acciones',
+      width: 100,
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
+      getActions: ({ id }) => {
+        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+
+        if (isInEditMode) {
+          return [
+            <GridActionsCellItem
+              icon={<SaveIcon />}
+              label="Save"
+              sx={{
+                color: 'primary.main',
+              }}
+              onClick={handleSaveClick(id)}
+            />,
+            <GridActionsCellItem
+              icon={<CancelIcon />}
+              label="Cancel"
+              className="textPrimary"
+              onClick={handleCancelClick(id)}
+              color="inherit"
+            />,
+          ];
+        }
+
+        return [
+          <GridActionsCellItem
+            icon={<EditIcon />}
+            label="Edit"
+            className="textPrimary"
+            onClick={handleEditClick(id)}
+            color="inherit"
+          />,
+          <GridActionsCellItem
+            icon={<DeleteIcon />}
+            label="Delete"
+            onClick={handleDeleteClick(id)}
+            color="inherit"
+          />,
+        ];
+      },
+    },
     {
       field: 'cuil',
       type: 'string',
       headerName: 'CUIL',
-      flex: 2,
+      width: 280,
       editable: true,
-      headerAlign: 'center',
-      align: 'center',
+      headerAlign: 'left',
+      align: 'left',
       headerClassName: 'header--cell',
       renderEditCell: (params) => {
         return (
@@ -290,6 +390,7 @@ export const DDJJAltaEmpleadosGrilla = ({
               value={params.value || ''}
               onChange={(event) => {
                 const newValue = event.target.value;
+
                 params.api.setEditCellValue({
                   id: params.id,
                   field: 'cuil',
@@ -299,21 +400,46 @@ export const DDJJAltaEmpleadosGrilla = ({
               sx={{
                 '& .MuiOutlinedInput-root': {
                   '& fieldset': {
-                    borderColor: 'transparent', // Color del borde cuando no está enfocado
+                    borderColor: 'transparent',
                   },
                   '&:hover fieldset': {
-                    borderColor: 'transparent', // Color del borde al pasar el ratón
+                    borderColor: 'transparent',
                   },
                   '&.Mui-focused fieldset': {
-                    borderColor: 'transparent', // Color del borde cuando está enfocado
+                    borderColor: 'transparent',
                   },
                 },
               }}
             />
             <SearchIcon
-              style={{ marginLeft: 8, cursor: 'pointer' }}
+              sx={{
+                fontSize: '1.8rem',
+                color: '#1A76D2',
+                cursor: 'pointer',
+                //margin: '0px 10px 0px -50px',
+              }}
               onClick={() => obtenerAfiliados(params, params.value)}
             />
+            {afiliado?.cuil === params.value ? (
+              <CreateIcon
+                sx={{
+                  fontSize: '1.8rem',
+                  color: '#1A76D2',
+                  cursor: 'pointer',
+                }}
+                onClick={handleDataModal(params.row)}
+              />
+            ) : (
+              <CreateIcon
+                sx={{
+                  fontSize: '1.8rem',
+                  color: '#1A76D2',
+                  cursor: 'pointer',
+                  visibility: 'hidden',
+                }}
+                onClick={handleDataModal(params.row)}
+              />
+            )}
           </div>
         );
       },
@@ -322,10 +448,10 @@ export const DDJJAltaEmpleadosGrilla = ({
       field: 'apellido',
       type: 'string',
       headerName: 'Apellido',
-      flex: 1.5,
+      width: 150,
       editable: true,
-      headerAlign: 'center',
-      align: 'center',
+      headerAlign: 'left',
+      align: 'left',
       headerClassName: 'header--cell',
       renderEditCell: (params) => {
         return afiliado?.apellido ? (
@@ -384,10 +510,10 @@ export const DDJJAltaEmpleadosGrilla = ({
       field: 'nombre',
       type: 'string',
       headerName: 'Nombre',
-      flex: 1,
+      width: 150,
       editable: true,
-      headerAlign: 'center',
-      align: 'center',
+      headerAlign: 'left',
+      align: 'left',
       headerClassName: 'header--cell',
       renderEditCell: (params) => {
         return afiliado?.nombre ? (
@@ -444,10 +570,10 @@ export const DDJJAltaEmpleadosGrilla = ({
     {
       field: 'camara',
       headerName: 'Camara',
-      flex: 1,
+      width: 100,
       editable: true,
-      headerAlign: 'center',
-      align: 'center',
+      headerAlign: 'left',
+      align: 'left',
       type: 'singleSelect',
       valueFormatter: ({ value }) => value || '',
       valueOptions: camaras.map(({ codigo, descripcion }) => {
@@ -455,8 +581,6 @@ export const DDJJAltaEmpleadosGrilla = ({
       }),
       headerClassName: 'header--cell',
       renderEditCell: (params) => {
-        // validar
-
         return (
           <Select
             fullWidth
@@ -500,15 +624,14 @@ export const DDJJAltaEmpleadosGrilla = ({
       field: 'categoria',
       type: 'singleSelect',
       headerName: 'Categoria',
-      flex: 1,
+      width: 100,
       editable: true,
-      headerAlign: 'center',
-      align: 'center',
+      headerAlign: 'left',
+      align: 'left',
       headerClassName: 'header--cell',
       valueOptions: categoriasFiltradas,
       valueFormatter: ({ value }) => value || '',
       renderEditCell: (params) => {
-        console.log(params);
         return (
           <Select
             fullWidth
@@ -536,10 +659,10 @@ export const DDJJAltaEmpleadosGrilla = ({
       field: 'fechaIngreso',
       type: 'date',
       headerName: 'Ingreso',
-      flex: 1.3,
+      width: 150,
       editable: true,
-      headerAlign: 'center',
-      align: 'center',
+      headerAlign: 'left',
+      align: 'left',
       headerClassName: 'header--cell',
       valueFormatter: ({ value }) => {
         if (!value) return '';
@@ -552,15 +675,17 @@ export const DDJJAltaEmpleadosGrilla = ({
       field: 'empresaDomicilioId',
       type: 'singleSelect',
       headerName: 'Planta',
-      flex: 1,
+      width: 100,
       editable: true,
-      headerAlign: 'center',
-      align: 'center',
+      headerAlign: 'left',
+      align: 'left',
       headerClassName: 'header--cell',
-      valueOptions: plantas.map((planta) => {
-        return { value: planta.id, label: planta.planta };
-      }),
-      valueFormatter: ({ value }) => value || '',
+      valueOptions: plantas,
+      valueFormatter: ({ value }) => {
+        if (value === '') return '';
+        if (value === null) return '';
+        return plantas.find((planta) => planta.id === value)?.planta || '';
+      },
       renderEditCell: (params) => {
         return (
           <Select
@@ -589,22 +714,52 @@ export const DDJJAltaEmpleadosGrilla = ({
       field: 'remunerativo',
       type: 'string',
       headerName: 'Remunerativo',
-      flex: 1,
+      width: 200,
       editable: true,
-      headerAlign: 'center',
-      align: 'center',
+      headerAlign: 'right',
+      align: 'right',
       headerClassName: 'header--cell',
       valueFormatter: ({ value }) => {
         if (value === '') return '';
         if (value === null) return '';
         return formatter.currency.format(value || 0);
       },
+      /* renderEditCell: (params) => {
+        return (
+          <TextField
+            fullWidth
+            value={formatModoEdit(params.value) || ''}
+            value={params.value || ''}
+            onChange={(event) => {
+              const newValue = event.target.value;
+              params.api.setEditCellValue({
+                id: params.id,
+                field: 'remunerativo',
+                value: newValue.toString().replace(/\./g, ''),
+              });
+            }}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderColor: 'transparent',
+                },
+                '&:hover fieldset': {
+                  borderColor: 'transparent',
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: 'transparent',
+                },
+              },
+            }}
+          />
+        );
+      }, */
     },
     {
       field: 'noRemunerativo',
       type: 'string',
       renderHeader: () => (
-        <div style={{ textAlign: 'center', color: '#fff', fontSize: '0.8rem' }}>
+        <div style={{ textAlign: 'right', color: '#fff', fontSize: '0.8rem' }}>
           <span role="img" aria-label="enjoy">
             No
             <br />
@@ -612,7 +767,7 @@ export const DDJJAltaEmpleadosGrilla = ({
           </span>
         </div>
       ),
-      flex: 1,
+      width: 200,
       editable: true,
       headerAlign: 'center',
       align: 'center',
@@ -622,6 +777,35 @@ export const DDJJAltaEmpleadosGrilla = ({
         if (value === null) return '';
         return formatter.currency.format(value || 0);
       },
+      /* renderEditCell: (params) => {
+        return (
+          <TextField
+            fullWidth
+            value={formatModoEdit(params.value) || ''}
+            onChange={(event) => {
+              const newValue = event.target.value;
+              params.api.setEditCellValue({
+                id: params.id,
+                field: 'noRemunerativo',
+                value: newValue.toString().replace(/\./g, ''),
+              });
+            }}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderColor: 'transparent',
+                },
+                '&:hover fieldset': {
+                  borderColor: 'transparent',
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: 'transparent',
+                },
+              },
+            }}
+          />
+        );
+      }, */
     },
     {
       field: 'uomaSocio',
@@ -635,7 +819,7 @@ export const DDJJAltaEmpleadosGrilla = ({
           </span>
         </div>
       ),
-      flex: 1,
+      width: 100,
       editable: true,
       headerAlign: 'center',
       align: 'center',
@@ -645,8 +829,6 @@ export const DDJJAltaEmpleadosGrilla = ({
         { value: false, label: 'No' },
       ],
       valueFormatter: ({ value }) => {
-        console.log('Estoy de adherido al sindicato');
-        console.log(value);
         if (value === '') return '';
         if (value === null) return '';
         return value ? 'Si' : 'No';
@@ -682,7 +864,7 @@ export const DDJJAltaEmpleadosGrilla = ({
           </span>
         </div>
       ),
-      flex: 1,
+      width: 100,
       editable: true,
       headerAlign: 'center',
       align: 'center',
@@ -692,7 +874,6 @@ export const DDJJAltaEmpleadosGrilla = ({
         { value: false, label: 'No' },
       ],
       valueFormatter: ({ value }) => {
-        console.log(value);
         if (value === '') return '';
         if (value === null) return '';
         return value ? 'Si' : 'No';
@@ -719,58 +900,17 @@ export const DDJJAltaEmpleadosGrilla = ({
     {
       field: 'errores',
       headerName: 'Errores',
-      flex: 1,
+      width: 100,
       type: 'boolean',
     },
-    {
-      field: 'actions',
-      type: 'actions',
-      headerName: 'Acciones',
-      flex: 1,
-      headerAlign: 'center',
-      align: 'center',
-      headerClassName: 'header--cell',
-      getActions: ({ id }) => {
-        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
-
-        if (isInEditMode) {
-          return [
-            <GridActionsCellItem
-              icon={<SaveIcon />}
-              label="Save"
-              sx={{
-                color: 'primary.main',
-              }}
-              onClick={handleSaveClick(id)}
-            />,
-            <GridActionsCellItem
-              icon={<CancelIcon />}
-              label="Cancel"
-              className="textPrimary"
-              onClick={handleCancelClick(id)}
-              color="inherit"
-            />,
-          ];
-        }
-
-        return [
-          <GridActionsCellItem
-            icon={<EditIcon />}
-            label="Edit"
-            className="textPrimary"
-            onClick={handleEditClick(id)}
-            color="inherit"
-          />,
-          <GridActionsCellItem
-            icon={<DeleteIcon />}
-            label="Delete"
-            onClick={handleDeleteClick(id)}
-            color="inherit"
-          />,
-        ];
-      },
-    },
   ];
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+
+    const resp = axiosDDJJ.actualizarNombreApellido(dataModal);
+    console.log(resp);
+  };
 
   return (
     <div>
@@ -851,6 +991,74 @@ export const DDJJAltaEmpleadosGrilla = ({
           }}
         ></div>
       </Box>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <form onSubmit={handleFormSubmit}>
+            <Typography
+              variant="h4"
+              component="h2"
+              sx={{
+                textAlign: 'center',
+                backgroundColor: alpha(theme.palette.primary.main, 0.1),
+                borderRadius: '5px',
+                width: '400px',
+                marginBottom: '20px',
+                color: theme.palette.primary.main,
+              }}
+            >
+              Gestion Datos DDJJ
+            </Typography>
+            <TextField
+              fullWidth
+              label="CUIL"
+              value={dataModal.cuil}
+              variant="outlined"
+              sx={{ marginBottom: '20px' }}
+            />
+            <TextField
+              fullWidth
+              label="Apellido"
+              value={dataModal.apellido}
+              variant="outlined"
+              sx={{ marginBottom: '20px' }}
+              onChange={(e) => handleChangeDataModal(e, 'apellido')}
+            />
+            <TextField
+              fullWidth
+              label="Nombre"
+              value={dataModal.nombre}
+              variant="outlined"
+              sx={{ marginBottom: '20px' }}
+              onChange={(e) => handleChangeDataModal(e, 'nombre')}
+            />
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              sx={{ width: '76%' }}
+            >
+              <Button
+                variant="contained"
+                sx={{ marginTop: '20px' }}
+                type="submit"
+              >
+                Enviar
+              </Button>
+              <Button
+                variant="contained"
+                sx={{ marginTop: '20px' }}
+                onClick={handleClose}
+              >
+                Cancelar
+              </Button>
+            </Box>
+          </form>
+        </Box>
+      </Modal>
     </div>
   );
 };

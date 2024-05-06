@@ -198,10 +198,10 @@ export const Boletas = () => {
                   <IconButton
                     size="small"
                     onClick={() => {
-                      console.log( 'boletaPdfDownload-row:',params.row);
+                      console.log("boletaPdfDownload - params.row.id", params.row.id)
                       boletaPdfDownload(
                         ID_EMPRESA,
-                        params.row.id 
+                        params.row.id
                       )
                       }
                     }
@@ -253,7 +253,7 @@ export const Boletas = () => {
         <DataGrid
           rows={boletasSinDDJJ}
           columns={[
-            { field: "id", headerName: "Nro. Boleta", flex: 0.5 },
+            { field: 'secuencia', headerName: 'Nro. Boleta', flex: 0.5 },
             {
               field: "entidad",
               headerName: "Entidad",
@@ -270,7 +270,16 @@ export const Boletas = () => {
               valueFormatter: (params) =>
                 params.value ? formatter.currency.format(params.value) : "",
             },
-            { field: "razon_de_pago", headerName: "Razon de pago", flex: 1 },
+            {
+              field: 'intencion_de_pago',
+              headerName: 'Intencion de Pago',              
+              flex: 1,
+              valueFormatter: (params) =>
+                params.value && isNotNull(params.value)
+                  ? formatter.date(params.value)
+                  : '',
+            },
+            { field: 'razon_de_pago', headerName: 'Razon de pago', flex: 1 },
             {
               field: "acciones",
               headerName: "Acciones",
@@ -279,8 +288,10 @@ export const Boletas = () => {
                 <>
                   <IconButton
                     size="small"
-                    onClick={() =>
+                    onClick={() => {
+                      console.log("boletaPdfDownload - params.row.id", params.row.id)
                       boletaPdfDownload(ID_EMPRESA, params.row.id)
+                      }
                     }
                   >
                     <PrintIcon />

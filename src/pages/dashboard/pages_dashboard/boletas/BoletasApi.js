@@ -1,3 +1,4 @@
+import oAxios from '@components/axios/axiosInstace';
 import { axiosCrud } from '@/components/axios/axiosCrud';
 import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
 
@@ -62,9 +63,10 @@ export const modificarBoletaById = async (empresa_id, body) => {
   }
 };
 
+
 export const axiosBoletas = {
   getBoletasByDDJJid,
   getBoletasByEmpresa,
   getBoletaById,
-  modificarBoletaById,
+  modificarBoletaById, 
 };

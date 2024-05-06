@@ -1,4 +1,11 @@
 {
+  "ospim-contacto": [
+    {
+      "email": "ospim@gmail.com",
+      "telefono": "15-5988-2246",
+      "whasap": "15-5555-8000"
+    }
+  ],
   "entidad": [
     {
       "codigo": "UOMA",
@@ -110,83 +117,6 @@
         }
       ],
       "id": 1
-    },
-    {
-      "razonSocial": "Luis Salinas",
-      "cuit": "20949118682",
-      "clave": "123",
-      "email": "luig@gmail.com",
-      "telefono": "1234567845",
-      "telefono_prefijo": "011",
-      "whatsapp": "4345345435345",
-      "whatsapp_prefijo": "12",
-      "ramoId": 4,
-      "telefonosAlternativos": [
-        {
-          "prefijo": "011",
-          "nro": "423423423423"
-        },
-        {
-          "prefijo": "12",
-          "nro": "3213213223123"
-        }
-      ],
-      "domicilios": [
-        {
-          "tipo": "FISCAL",
-          "provinciaId": 10,
-          "localidadId": 1893,
-          "calle": "ancon",
-          "piso": "1",
-          "depto": "1",
-          "oficina": "1",
-          "cp": "1223",
-          "planta": "Planta 1"
-        }
-      ],
-      "id": 2
-    },
-    {
-      "razonSocial": "dsfsdfds",
-      "cuit": "2234234324",
-      "clave": "123",
-      "email": "luis@luis1.com",
-      "telefono": "01530990849",
-      "telefono_prefijo": "8",
-      "whatsapp": "22342132132313",
-      "whatsapp_prefijo": "23",
-      "ramoId": 5,
-      "telefonosAlternativos": [
-        {
-          "prefijo": "11",
-          "nro": "123123213213213"
-        },
-        {
-          "prefijo": "34",
-          "nro": "1231231232132132"
-        }
-      ],
-      "[object Object]": [
-        {
-          "email": "luis@luis2.com"
-        },
-        {
-          "email": "ospim2@gmail.com"
-        }
-      ],
-      "domicilios": [
-        {
-          "tipo": "",
-          "provinciaId": "",
-          "localidadId": "",
-          "calle": "",
-          "piso": "",
-          "oficina": "",
-          "cp": "",
-          "planta": ""
-        }
-      ],
-      "id": 3
     }
   ],
   "rol": [
@@ -456,61 +386,87 @@
         },
         {
           "id": 4,
-          "descripcion": "DDJJ_CONSULTA",
-          "activo": true
-        },
-        {
-          "id": 5,
           "descripcion": "BOLETAS",
           "activo": true
         },
         {
-          "id": 6,
+          "id": 5,
           "descripcion": "PAGOS",
           "activo": true
         },
         {
-          "id": 7,
+          "id": 6,
           "descripcion": "DATOS_EMPRESA",
           "activo": true
         },
         {
-          "id": 8,
+          "id": 7,
           "descripcion": "BOLETA_BLANCA",
           "activo": true
         },
         {
-          "id": 9,
+          "id": 8,
           "descripcion": "GESTION_ROLES",
           "activo": true
         },
         {
-          "id": 10,
+          "id": 9,
           "descripcion": "CUITS_RESTRINGIDOS",
           "activo": true
         },
         {
-          "id": 11,
+          "id": 10,
           "descripcion": "ROLES",
           "activo": true
         },
         {
-          "id": 12,
+          "id": 11,
           "descripcion": "USUARIO_INTERNO",
           "activo": true
         },
         {
-          "id": 13,
+          "id": 12,
           "descripcion": "INTERESES_AFIP",
           "activo": true
         },
         {
-          "id": 14,
+          "id": 13,
           "descripcion": "AJUSTES",
           "activo": true
         }
       ],
       "id": 4
+    },
+    {
+      "descripcion": "EMPLEADO",
+      "funcionalidades": [
+        {
+          "id": 1,
+          "descripcion": "PUBLICACIONES",
+          "activo": true
+        },
+        {
+          "id": 2,
+          "descripcion": "FERIADOS",
+          "activo": true
+        },
+        {
+          "id": 3,
+          "descripcion": "DDJJ_CONSULTA",
+          "activo": true
+        },
+        {
+          "id": 4,
+          "descripcion": "CUITS_RESTRINGIDOS",
+          "activo": true
+        },
+        {
+          "id": 5,
+          "descripcion": "INTERESES_AFIP",
+          "activo": true
+        }
+      ],
+      "id": 5
     }
   ],
   "funcionalidades": [
@@ -532,10 +488,6 @@
     }
   ],
   "feriados": [
-    {
-      "fecha": "2024-02-13T03:00:00.000Z",
-      "id": 4
-    },
     {
       "fecha": "2024-01-11T03:00:00.000Z",
       "id": 5
@@ -821,18 +773,36 @@
       "id": 73
     }
   ],
-  "intereses": [
+  "afip-intereses": [
     {
-      "vigenciaDesde": "2024-04-11T03:00:00.000Z",
-      "vigenciaHasta": "2024-04-12T03:00:00.000Z",
-      "indice": 3,
+      "vigenciaDesde": "2021-04-04T03:00:00.000Z",
+      "vigenciaHasta": "2024-04-06T03:00:00.000Z",
+      "indice": 10,
       "id": 2
     },
     {
-      "vigenciaDesde": "2024-04-19T03:00:00.000Z",
-      "vigenciaHasta": "2024-04-12T03:00:00.000Z",
-      "indice": 2,
+      "vigenciaDesde": "2024-04-17T03:00:00.000Z",
+      "vigenciaHasta": "2024-04-16T03:00:00.000Z",
+      "indice": 3,
       "id": 3
+    },
+    {
+      "vigenciaDesde": "2024-04-24T03:00:00.000Z",
+      "vigenciaHasta": "2024-04-20T03:00:00.000Z",
+      "indice": 5,
+      "id": 4
+    },
+    {
+      "vigenciaDesde": "2024-04-04T03:00:00.000Z",
+      "vigenciaHasta": "2024-04-06T03:00:00.000Z",
+      "indice": 10,
+      "id": 10
+    },
+    {
+      "vigenciaDesde": "2024-04-01T03:00:00.000Z",
+      "vigenciaHasta": "2024-04-07T03:00:00.000Z",
+      "indice": 8,
+      "id": 11
     }
   ],
   "usuario-interno": [
@@ -906,20 +876,6 @@
   ],
   "publicaciones": [
     {
-      "titulo": "Publicacion 05",
-      "cuerpo": "xx",
-      "vigenciaDesde": "2024-02-13T03:00:00.000Z",
-      "vigenciaHasta": "2025-02-13T03:00:00.000Z",
-      "id": 18
-    },
-    {
-      "titulo": "Publicacion 07",
-      "cuerpo": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto amet consequuntur eos. Blanditiis veniam ad reprehenderit distinctio ab, aliquam maxime, labore id error. Sequi provident expedita adipisci odio laudantium alias!",
-      "vigenciaDesde": "2024-02-07T03:00:00.000Z",
-      "vigenciaHasta": "2025-02-07T03:00:00.000Z",
-      "id": 20
-    },
-    {
       "titulo": "Titulo Pabada 1",
       "cuerpo": "Cuerpo Pabada 1",
       "vigenciaDesde": "2023-12-05T03:00:00.000Z",
@@ -960,6 +916,27 @@
       "vigenciaDesde": "2024-04-12T03:00:00.000Z",
       "vigenciaHasta": "2024-04-12T03:00:00.000Z",
       "id": 34
+    },
+    {
+      "titulo": "fdsfdsfds",
+      "cuerpo": "sdfsdfdsfsdf",
+      "vigenciaDesde": "2024-04-10T03:00:00.000Z",
+      "vigenciaHasta": "2024-04-17T03:00:00.000Z",
+      "id": 35
+    },
+    {
+      "titulo": "fgsdffd",
+      "cuerpo": "sdfdsf",
+      "vigenciaDesde": "2024-04-04T03:00:00.000Z",
+      "vigenciaHasta": "2024-04-11T03:00:00.000Z",
+      "id": 36
+    },
+    {
+      "titulo": "zzzzzzzzz",
+      "cuerpo": "sdfsdfdsfdsf",
+      "vigenciaDesde": "2024-04-17T03:00:00.000Z",
+      "vigenciaHasta": "2024-04-25T03:00:00.000Z",
+      "id": 37
     }
   ],
   "publicacionesVigentes": [
@@ -1295,12 +1272,6 @@
       "id": 12
     },
     {
-      "tipo": "TEL2",
-      "prefijo": "012",
-      "valor": "2233-5566",
-      "id": 13
-    },
-    {
       "tipo": "MAIL",
       "prefijo": "",
       "valor": "system@fit.com.ar",
@@ -1323,6 +1294,18 @@
       "prefijo": "014",
       "valor": "3434-8080",
       "id": 17
+    },
+    {
+      "tipo": "TEL",
+      "prefijo": "11",
+      "valor": "111111111111",
+      "id": 18
+    },
+    {
+      "tipo": "TEL",
+      "prefijo": "11",
+      "valor": "9999999999999",
+      "id": 19
     }
   ],
   "empresaContactoTipo": [
@@ -3795,331 +3778,47 @@
       "id": 224
     },
     {
-      "periodo": null,
+      "periodo": "2024-02-02T03:00:00.000Z",
       "afiliados": [
         {
-          "cuil": 20949118682,
+          "cuil": "20949118682",
           "inte": 0,
           "apellido": "Salinas",
           "nombre": "Luis",
-          "fechaIngreso": "2024-02-15T03:00:00.000Z",
-          "empresaDomicilioId": 8,
-          "camara": null,
-          "categoria": null,
-          "remunerativo": 1000,
-          "noRemunerativo": 2000,
+          "fechaIngreso": "2024-05-09T03:00:00.000Z",
+          "empresaDomicilioId": 4,
+          "camara": "FAIM",
+          "categoria": "C",
+          "remunerativo": 111111111,
+          "noRemunerativo": 222222222,
           "uomaSocio": true,
           "amtimaSocio": true,
           "id": 1
-        },
-        {
-          "cuil": 20949118782,
-          "inte": null,
-          "apellido": "Bueno",
-          "nombre": "Diego",
-          "fechaIngreso": "2024-03-15T03:00:00.000Z",
-          "empresaDomicilioId": 10,
-          "camara": null,
-          "categoria": null,
-          "remunerativo": 3000,
-          "noRemunerativo": 6000,
-          "uomaSocio": false,
-          "amtimaSocio": false,
-          "id": 2
-        },
-        {
-          "cuil": 21345667676,
-          "apellido": "Lopez",
-          "nombre": "Jose",
-          "fechaIngreso": "2024-04-18T03:00:00.000Z",
-          "empresaDomicilioId": 10,
-          "camara": "CAENA",
-          "categoria": "D",
-          "remunerativo": null,
-          "noRemunerativo": null,
-          "uomaSocio": true,
-          "amtimaSocio": false,
-          "id": 3
-        },
-        {
-          "cuil": 93822767344,
-          "apellido": "Stack",
-          "nombre": "Tony",
-          "fechaIngreso": "2024-05-19T03:00:00.000Z",
-          "empresaDomicilioId": 10,
-          "camara": "CAENA",
-          "categoria": "A",
-          "remunerativo": 6000,
-          "noRemunerativo": 5000,
-          "uomaSocio": false,
-          "amtimaSocio": false,
-          "id": 4
         }
       ],
-      "empresaId": "1",
       "id": 225
     },
     {
-      "periodo": "2022-01-13T03:00:00.000Z",
+      "periodo": null,
       "afiliados": [
         {
-          "cuil": 20949118682,
-          "inte": 0,
-          "apellido": "Salinas",
-          "nombre": "Luis",
-          "fechaIngreso": "2024-02-15T03:00:00.000Z",
-          "empresaDomicilioId": 8,
-          "camara": null,
-          "categoria": null,
-          "remunerativo": 1000,
-          "noRemunerativo": 2000,
-          "uomaSocio": true,
-          "amtimaSocio": true,
-          "id": 1
-        },
-        {
-          "cuil": 20949118782,
+          "cuil": null,
           "inte": null,
-          "apellido": "Bueno",
-          "nombre": "Diego",
-          "fechaIngreso": "2024-03-15T03:00:00.000Z",
-          "empresaDomicilioId": 10,
+          "apellido": null,
+          "nombre": null,
+          "fechaIngreso": null,
+          "empresaDomicilioId": null,
           "camara": null,
           "categoria": null,
-          "remunerativo": 3000,
-          "noRemunerativo": 6000,
-          "uomaSocio": false,
-          "amtimaSocio": false,
-          "id": 2
-        },
-        {
-          "cuil": 21345667676,
-          "apellido": "Lopez",
-          "nombre": "Jose",
-          "fechaIngreso": "2024-04-18T03:00:00.000Z",
-          "empresaDomicilioId": 10,
-          "camara": "CAENA",
-          "categoria": "D",
-          "remunerativo": null,
-          "noRemunerativo": null,
-          "uomaSocio": true,
-          "amtimaSocio": false,
-          "id": 3
-        },
-        {
-          "cuil": 93822767344,
-          "apellido": "Stack",
-          "nombre": "Tony",
-          "fechaIngreso": "2024-05-19T03:00:00.000Z",
-          "empresaDomicilioId": 10,
-          "camara": "CAENA",
-          "categoria": "A",
-          "remunerativo": 6000,
-          "noRemunerativo": 5000,
-          "uomaSocio": false,
-          "amtimaSocio": false,
-          "id": 4
+          "remunerativo": 11111111,
+          "noRemunerativo": 111111111,
+          "uomaSocio": null,
+          "amtimaSocio": null,
+          "id": 1
         }
       ],
       "empresaId": "1",
       "id": 226
-    },
-    {
-      "periodo": "2024-04-13T03:00:00.000Z",
-      "afiliados": [
-        {
-          "cuil": 20949118682,
-          "inte": null,
-          "apellido": "Salinas",
-          "nombre": "Luis",
-          "fechaIngreso": "2024-02-15T03:00:00.000Z",
-          "empresaDomicilioId": 8,
-          "camara": "FAIM",
-          "categoria": "C",
-          "remunerativo": 1000,
-          "noRemunerativo": 2000,
-          "uomaSocio": true,
-          "amtimaSocio": false,
-          "id": 1
-        },
-        {
-          "cuil": 20949118782,
-          "inte": null,
-          "apellido": "Bueno",
-          "nombre": "Diego",
-          "fechaIngreso": "2024-03-15T03:00:00.000Z",
-          "empresaDomicilioId": 10,
-          "camara": "CAENA",
-          "categoria": "A",
-          "remunerativo": 3000,
-          "noRemunerativo": 6000,
-          "uomaSocio": false,
-          "amtimaSocio": false,
-          "id": 2
-        },
-        {
-          "cuil": 21345667876,
-          "inte": null,
-          "apellido": "Lopez",
-          "nombre": "Jose",
-          "fechaIngreso": "2024-04-18T03:00:00.000Z",
-          "empresaDomicilioId": 10,
-          "camara": "CAENA",
-          "categoria": "D",
-          "remunerativo": 4000,
-          "noRemunerativo": 5000,
-          "uomaSocio": true,
-          "amtimaSocio": false,
-          "id": 3
-        }
-      ],
-      "id": 227
-    },
-    {
-      "periodo": null,
-      "afiliados": [
-        {
-          "cuil": "20949118682",
-          "inte": 0,
-          "apellido": "Salinas",
-          "nombre": "Luis",
-          "fechaIngreso": "2024-04-19T03:00:00.000Z",
-          "empresaDomicilioId": 12,
-          "camara": "FAIM",
-          "categoria": "D",
-          "remunerativo": "1",
-          "noRemunerativo": "1",
-          "uomaSocio": true,
-          "amtimaSocio": true,
-          "id": 1
-        }
-      ],
-      "id": 228
-    },
-    {
-      "periodo": null,
-      "afiliados": [
-        {
-          "cuil": "20949118682",
-          "inte": 0,
-          "apellido": "Salinas",
-          "nombre": "Luis",
-          "fechaIngreso": "2024-04-10T03:00:00.000Z",
-          "empresaDomicilioId": 9,
-          "camara": "CAENA",
-          "categoria": "C",
-          "remunerativo": "1",
-          "noRemunerativo": "1",
-          "uomaSocio": false,
-          "amtimaSocio": false,
-          "id": 1
-        }
-      ],
-      "empresaId": "1",
-      "id": 229
-    },
-    {
-      "periodo": null,
-      "afiliados": [
-        {
-          "cuil": "44444444444",
-          "inte": 0,
-          "apellido": "sssss",
-          "nombre": "ssss",
-          "fechaIngreso": null,
-          "empresaDomicilioId": null,
-          "camara": "FAIM",
-          "categoria": "C",
-          "remunerativo": null,
-          "noRemunerativo": null,
-          "uomaSocio": null,
-          "amtimaSocio": null,
-          "id": 3
-        },
-        {
-          "cuil": "3333333333",
-          "inte": 0,
-          "apellido": "ssss",
-          "nombre": "ssssss",
-          "fechaIngreso": null,
-          "empresaDomicilioId": null,
-          "camara": null,
-          "categoria": null,
-          "remunerativo": null,
-          "noRemunerativo": null,
-          "uomaSocio": null,
-          "amtimaSocio": null,
-          "id": 2
-        },
-        {
-          "cuil": "20949118682",
-          "inte": 0,
-          "apellido": "Salinas",
-          "nombre": "Luis",
-          "fechaIngreso": null,
-          "empresaDomicilioId": null,
-          "camara": null,
-          "categoria": null,
-          "remunerativo": null,
-          "noRemunerativo": null,
-          "uomaSocio": null,
-          "amtimaSocio": null,
-          "id": 1
-        }
-      ],
-      "id": 230
-    },
-    {
-      "periodo": "2022-05-14T03:00:00.000Z",
-      "afiliados": [
-        {
-          "cuil": 20949118682,
-          "inte": 0,
-          "apellido": "Salinas",
-          "nombre": "Luis",
-          "fechaIngreso": "2024-02-15T03:00:00.000Z",
-          "empresaDomicilioId": 8,
-          "camara": "FAIM",
-          "categoria": "C",
-          "remunerativo": 1000,
-          "noRemunerativo": 2000,
-          "uomaSocio": true,
-          "amtimaSocio": true,
-          "id": 1
-        },
-        {
-          "cuil": 20949118782,
-          "inte": null,
-          "apellido": "Bueno",
-          "nombre": "Diego",
-          "fechaIngreso": "2024-03-15T03:00:00.000Z",
-          "empresaDomicilioId": 10,
-          "camara": "CAENA",
-          "categoria": "A",
-          "remunerativo": 3000,
-          "noRemunerativo": 6000,
-          "uomaSocio": false,
-          "amtimaSocio": false,
-          "id": 2
-        },
-        {
-          "cuil": 21345667876,
-          "inte": null,
-          "apellido": "Lopez",
-          "nombre": "Jose",
-          "fechaIngreso": "2024-04-18T03:00:00.000Z",
-          "empresaDomicilioId": 10,
-          "camara": "CAENA",
-          "categoria": "D",
-          "remunerativo": 4000,
-          "noRemunerativo": 5000,
-          "uomaSocio": true,
-          "amtimaSocio": false,
-          "id": 3
-        }
-      ],
-      "empresaId": "1",
-      "id": 231
     }
   ],
   "afiliado": [
@@ -4167,16 +3866,6 @@
     }
   ],
   "cuit-restringido": [
-    {
-      "cuit": "40518267004",
-      "observacion": "xxxxxx",
-      "id": 3
-    },
-    {
-      "id": 4,
-      "cuit": "23659874103",
-      "observacion": "Cuit restringido por irregularidades contables"
-    },
     {
       "id": 5,
       "cuit": "18930475012",
@@ -4243,8 +3932,8 @@
       "id": 20
     },
     {
-      "cuit": "ddedd",
-      "observacion": "dddddxxxx",
+      "cuit": "34123213213123",
+      "observacion": "",
       "id": 21
     }
   ],
@@ -4385,7 +4074,7 @@
             "capital": 5800
           }
         ],
-        "forma_de_pago": "Ventanilla",
+        "forma_de_pago": "VENTANILLA",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
         "numero_boleta": 11
@@ -4432,7 +4121,7 @@
             "capital": 482
           }
         ],
-        "forma_de_pago": "Ventanilla",
+        "forma_de_pago": "VENTANILLA",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
         "numero_boleta": 12
@@ -4456,7 +4145,7 @@
             "capital": 7800
           }
         ],
-        "forma_de_pago": "Ventanilla",
+        "forma_de_pago": "VENTANILLA",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
         "numero_boleta": 24
@@ -4527,6 +4216,7 @@
   "boletas_guardadas": {
     "con_ddjj": [
       {
+        "id": 1,
         "codigo": "ART46",
         "descripcion": "Art. 46",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4567,13 +4257,13 @@
             "capital": 482
           }
         ],
-        "forma_de_pago": "Ventanilla",
+        "forma_de_pago": "VENTANILLA",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
-        "numero_boleta": 1,
-        "id": 1
+        "numero_boleta": 1
       },
       {
+        "id": 2,
         "codigo": "ANTIMACS",
         "descripcion": "ANTIMA Cuota Social",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4594,13 +4284,13 @@
             "capital": 7800
           }
         ],
-        "forma_de_pago": "Ventanilla",
+        "forma_de_pago": "VENTANILLA",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
-        "numero_boleta": 2,
-        "id": 2
+        "numero_boleta": 2
       },
       {
+        "id": 4000,
         "codigo": "UOMACS",
         "descripcion": "UOMA Cuota Social",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4634,11 +4324,10 @@
             "capital": 5800
           }
         ],
-        "forma_de_pago": "Red Link",
+        "forma_de_pago": "REDLINK",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
-        "numero_boleta": 3,
-        "id": 4000
+        "numero_boleta": 3
       },
       {
         "codigo": "UOMACS",
@@ -4673,7 +4362,7 @@
             "capital": 5800
           }
         ],
-        "forma_de_pago": "Ventanilla",
+        "forma_de_pago": "VENTANILLA",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
         "numero_boleta": 11,
@@ -4686,6 +4375,7 @@
         "id": 400312
       },
       {
+        "id": 5,
         "codigo": "ANTIMACS",
         "descripcion": "ANTIMA Cuota Social",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4704,13 +4394,13 @@
             "capital": 7800
           }
         ],
-        "forma_de_pago": "Ventanilla",
+        "forma_de_pago": "VENTANILLA",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
-        "numero_boleta": 5,
-        "id": 5
+        "numero_boleta": 5
       },
       {
+        "id": 6,
         "codigo": "UOMACS",
         "descripcion": "UOMA Cuota Social",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4743,13 +4433,13 @@
             "capital": 5800
           }
         ],
-        "forma_de_pago": "Ventanilla",
+        "forma_de_pago": "VENTANILLA",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
-        "numero_boleta": 6,
-        "id": 6
+        "numero_boleta": 6
       },
       {
+        "id": 7,
         "codigo": "ART46",
         "descripcion": "Art. 46",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4782,13 +4472,13 @@
             "capital": 482
           }
         ],
-        "forma_de_pago": "Ventanilla",
+        "forma_de_pago": "VENTANILLA",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
-        "numero_boleta": 7,
-        "id": 7
+        "numero_boleta": 7
       },
       {
+        "id": 8,
         "codigo": "UOMACS",
         "descripcion": "UOMA Cuota Social",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4821,13 +4511,13 @@
             "capital": 5800
           }
         ],
-        "forma_de_pago": "Red Link",
+        "forma_de_pago": "REDLINK",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
-        "numero_boleta": 8,
-        "id": 8
+        "numero_boleta": 8
       },
       {
+        "id": 9,
         "codigo": "ART46",
         "descripcion": "Art. 46",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4860,13 +4550,13 @@
             "capital": 482
           }
         ],
-        "forma_de_pago": "Red Link",
+        "forma_de_pago": "REDLINK",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
-        "numero_boleta": 9,
-        "id": 9
+        "numero_boleta": 9
       },
       {
+        "id": 11234,
         "codigo": "ANTIMACS",
         "descripcion": "ANTIMA Cuota Social",
         "vencimiento": "2024-02-21",
@@ -4885,13 +4575,13 @@
             "capital": 7800
           }
         ],
-        "forma_de_pago": "Red Link",
+        "forma_de_pago": "REDLINK",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
-        "numero_boleta": 10,
-        "id": 11234
+        "numero_boleta": 10
       },
       {
+        "id": 11,
         "codigo": "UOMACS",
         "descripcion": "UOMA Cuota Social",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4924,13 +4614,13 @@
             "capital": 5800
           }
         ],
-        "forma_de_pago": "Ventanilla",
+        "forma_de_pago": "VENTANILLA",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
-        "numero_boleta": 11,
-        "id": 11
+        "numero_boleta": 11
       },
       {
+        "id": 12,
         "codigo": "ART46",
         "descripcion": "Art. 46",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -4963,13 +4653,13 @@
             "capital": 482
           }
         ],
-        "forma_de_pago": "Ventanilla",
+        "forma_de_pago": "VENTANILLA",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
-        "numero_boleta": 12,
-        "id": 12
+        "numero_boleta": 12
       },
       {
+        "id": 22,
         "codigo": "UOMACS",
         "descripcion": "UOMA Cuota Social",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -5002,13 +4692,13 @@
             "capital": 5800
           }
         ],
-        "forma_de_pago": "Ventanilla",
+        "forma_de_pago": "VENTANILLA",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
-        "numero_boleta": 22,
-        "id": 22
+        "numero_boleta": 22
       },
       {
+        "id": 23,
         "codigo": "ART46",
         "descripcion": "Art. 46",
         "vencimiento": "2024-02-21T03:00:00.000Z",
@@ -5041,13 +4731,13 @@
             "capital": 482
           }
         ],
-        "forma_de_pago": "Ventanilla",
+        "forma_de_pago": "VENTANILLA",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
-        "numero_boleta": 23,
-        "id": 23
+        "numero_boleta": 23
       },
       {
+        "id": 24,
         "codigo": "ANTIMACS",
         "descripcion": "ANTIMA Cuota Social",
         "vencimiento": "2024-02-21T00:00:00.000Z",
@@ -5066,53 +4756,10 @@
             "capital": 7800
           }
         ],
-        "forma_de_pago": "Ventanilla",
+        "forma_de_pago": "VENTANILLA",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
-        "numero_boleta": 24,
-        "id": 24
-      },
-      {
-        "codigo": "UOMACS",
-        "intencion_de_pago": "2024-05-09T03:00:00.000Z",
-        "forma_de_pago": "Ventanilla",
-        "numero_boleta": null,
-        "id": 10000
-      },
-      {
-        "codigo": "ART46",
-        "intencion_de_pago": "2024-05-09T03:00:00.000Z",
-        "forma_de_pago": "Ventanilla",
-        "numero_boleta": null,
-        "id": 10001
-      },
-      {
-        "codigo": "ANTIMACS",
-        "intencion_de_pago": "2024-05-09T03:00:00.000Z",
-        "forma_de_pago": "Ventanilla",
-        "numero_boleta": null,
-        "id": 10002
-      },
-      {
-        "codigo": "UOMACS",
-        "intencion_de_pago": "2024-05-15T03:00:00.000Z",
-        "forma_de_pago": "Ventanilla",
-        "numero_boleta": null,
-        "id": 10000
-      },
-      {
-        "codigo": "ART46",
-        "intencion_de_pago": "2024-05-15T03:00:00.000Z",
-        "forma_de_pago": "Ventanilla",
-        "numero_boleta": null,
-        "id": 10001
-      },
-      {
-        "codigo": "ANTIMACS",
-        "intencion_de_pago": "2024-05-15T03:00:00.000Z",
-        "forma_de_pago": "Ventanilla",
-        "numero_boleta": null,
-        "id": 10002
+        "numero_boleta": 24
       }
     ],
     "sin_ddjj": [
@@ -5148,7 +4795,6 @@
         "entidad": "OSPIM",
         "nroActa": "3335555",
         "importe": "3334444",
-        "intencionDePago": "2024-03-31",
         "razon_de_pago": "Nro Acta: 3335555",
         "id": 109
       },
@@ -5163,7 +4809,6 @@
         "entidad": "OSPIM",
         "nroActa": "1111",
         "importe": "1111",
-        "intencionDePago": "2024-04-10",
         "razon_de_pago": "Nro Acta: 1111",
         "id": 107
       },
@@ -5171,7 +4816,7 @@
         "entidad": "OSPIM",
         "nroActa": "4444",
         "importe": "44444",
-        "intencionDePago": "2024-04-19T00:00:00.000Z",
+        "intencion_de_pago": "2024-04-19T00:00:00.000Z",
         "razon_de_pago": "Nro Acta: 4444",
         "id": 108
       },
@@ -5225,6 +4870,14 @@
       "aporte": "AMTIMA",
       "vigencia": "2024-07-01T03:00:00.000Z",
       "id": 7
+    }
+  ],
+  "ddjj-modificacion-datos": [
+    {
+      "cuil": "20949118682",
+      "apellido": "Salinas",
+      "nombre": "Luiss",
+      "id": 1
     }
   ]
 }

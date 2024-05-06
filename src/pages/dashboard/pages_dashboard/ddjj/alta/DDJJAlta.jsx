@@ -301,8 +301,8 @@ export const DDJJAlta = ({
             : item.empresaDomicilioId,
           camara: !item.camara ? null : item.camara,
           categoria: !item.categoria ? null : item.categoria,
-          remunerativo: !item.remunerativo ? null : item.remunerativo,
-          noRemunerativo: !item.noRemunerativo ? null : item.noRemunerativo,
+          remunerativo: !item.remunerativo ? null : +item.remunerativo,
+          noRemunerativo: !item.noRemunerativo ? null : +item.noRemunerativo,
           uomaSocio: item.uomaSocio === '' ? null : item.uomaSocio,
           amtimaSocio: item.amtimaSocio === '' ? null : item.amtimaSocio,
         };
@@ -474,22 +474,40 @@ export const DDJJAlta = ({
         await axiosDDJJ.getPeriodoAnterior(otroPeriodo);
       console.log('ultimoPeriodoPresentadoRes');
       console.log(ultimoPeriodoPresentadoRes);
-      setTituloSec(getTituloSec(ultimoPeriodoPresentadoRes[0].secuencia));
-      setRowsAltaDDJJ(ultimoPeriodoPresentadoRes[0].afiliados);
-      /* setDDJJState((prevState) => ({
-        ...prevState,
-        afiliados: ultimoPeriodoPresentadoRes[0].afiliados,
-      })); */
-      setOcultarEmpleadosGrilla(!ocultarEmpleadosGrilla);
+      if (ultimoPeriodoPresentadoRes.length === 0) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se encontró un período anterior',
+        });
+        return;
+      } else {
+        setTituloSec(getTituloSec(ultimoPeriodoPresentadoRes[0].secuencia));
+        setRowsAltaDDJJ(ultimoPeriodoPresentadoRes[0].afiliados);
+        /* setDDJJState((prevState) => ({
+          ...prevState,
+          afiliados: ultimoPeriodoPresentadoRes[0].afiliados,
+        })); */
+        setOcultarEmpleadosGrilla(!ocultarEmpleadosGrilla);
+      }
     } else {
       console.log('Elegir otro');
       const otroPeriodoRes = await axiosDDJJ.getPeriodoAnterior(otroPeriodo);
-      setRowsAltaDDJJ(otroPeriodoRes[0].afiliados);
-      setDDJJState((prevState) => ({
-        ...prevState,
-        afiliados: otroPeriodoRes[0].afiliados,
-      }));
-      setOcultarEmpleadosGrilla(!ocultarEmpleadosGrilla);
+      if (otroPeriodoRes.length === 0) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se encontró la DDJJ para el período seleccionado.',
+        });
+        return;
+      } else {
+        setRowsAltaDDJJ(otroPeriodoRes[0].afiliados);
+        setDDJJState((prevState) => ({
+          ...prevState,
+          afiliados: otroPeriodoRes[0].afiliados,
+        }));
+        setOcultarEmpleadosGrilla(!ocultarEmpleadosGrilla);
+      }
     }
   };
 
@@ -516,7 +534,7 @@ export const DDJJAlta = ({
               />
             </DemoContainer>
           </LocalizationProvider>
-          <Typography variant="h6">Formulario: {tituloSec}</Typography>
+          <Typography variant="h6"> DDJJ: {tituloSec}</Typography>
         </Stack>
       </div>
 

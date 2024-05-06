@@ -1,13 +1,8 @@
-import {
-  MenuItem,
-  FormControl,
-  InputLabel,
-  Select,
-} from '@mui/material';
+import { MenuItem, FormControl, InputLabel, Select } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { axiosGestionRoles } from './GestionRolesApi';
 import { DragAndDrop } from './DragAndDrop';
-import './GestionRoles.css'
+import './GestionRoles.css';
 
 export const GestionRoles = () => {
   const [roles, setRoles] = useState([]);
@@ -27,30 +22,32 @@ export const GestionRoles = () => {
     setRol(selectedRol || {});
   };
 
+  useEffect(() => {
+    console.log(roles);
+  }, []);
+
   return (
     <>
-		<div className='container'>
-			<h1>Gestion Roles</h1>
-      <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Nombre Rol</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={rol.id || ''}
-          label="Rol"
-          onChange={handleChange}
-        >
-          {roles.map((element) => (
-            <MenuItem key={element.id} value={element.id}>
-              {element.descripcion}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <DragAndDrop
-        tareas={roles.find((e) => e.id == rol.id)}
-      ></DragAndDrop>
-			</div>
+      <div className="container">
+        <h1>Gestion Roles</h1>
+        <FormControl fullWidth>
+          <InputLabel id="demo-simple-select-label">Nombre Rol</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={rol.id || ''}
+            label="Rol"
+            onChange={handleChange}
+          >
+            {roles.map((element) => (
+              <MenuItem key={element.id} value={element.id}>
+                {element.descripcion}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <DragAndDrop tareas={roles.find((e) => e.id == rol.id)}></DragAndDrop>
+      </div>
     </>
   );
 };

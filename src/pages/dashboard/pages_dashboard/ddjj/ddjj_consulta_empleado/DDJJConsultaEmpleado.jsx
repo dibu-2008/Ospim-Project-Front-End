@@ -21,6 +21,7 @@ import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 import * as locales from '@mui/material/locale';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import { axiosDDJJEmpleado } from './DDJJConsultaEmpleadoApi';
+import dayjs from 'dayjs';
 
 function DDJJColumnaAporteGet(ddjjResponse) {
   //toma todas las ddjj de la consulta de "Mis DDJJ" y arma "vector de Columnas Aportes"
@@ -86,12 +87,14 @@ const CustomToolbar = (props) => {
 };
 
 export const DDJJConsultaEmpleado = () => {
+  const ahora = dayjs();
+  const ahoraMasUnMes = ahora.add(1, 'month');
   const [showCuitRazonSocial, setShowCuitRazonSocial] = useState(true);
   const [paginationModel, setPaginationModel] = useState(paginacion);
   const [rowModesModel, setRowModesModel] = useState({});
   const [locale, setLocale] = useState('esES');
-  const [desde, setDesde] = useState(null);
-  const [hasta, setHasta] = useState(null);
+  const [desde, setDesde] = useState(ahora);
+  const [hasta, setHasta] = useState(ahoraMasUnMes);
   const [cuit, setCuit] = useState('');
   const [rows, setRows] = useState([]);
   const theme = useTheme();
@@ -124,50 +127,38 @@ export const DDJJConsultaEmpleado = () => {
 
   const buscarDDJJ = async () => {
     // Busqueda por rango de periodo
-    if (desde !== null && hasta !== null && cuit === '') {
-      const desdeFor = formatter.date(desde.$d);
-      const hastaFor = formatter.date(hasta.$d);
-
-      const ddjjResponse = await axiosDDJJEmpleado.consultarFiltrado(
-        desdeFor,
-        hastaFor,
-        null,
-      );
-
-      if (ddjjResponse.length > 0) {
-        setRows(ddjjResponse);
-        setShowCuitRazonSocial(true);
-      }
+    let desdeDayjs = null;
+    if (desde !== null) {
+      desdeDayjs = dayjs(desde.$d)
+        .set('hour', 3)
+        .set('minute', 0)
+        .set('second', 0)
+        .set('millisecond', 0)
+        .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+    }
+    let hastaDayjs = null;
+    if (hasta !== null) {
+      hastaDayjs = dayjs(hasta.$d)
+        .set('hour', 3)
+        .set('minute', 0)
+        .set('second', 0)
+        .set('millisecond', 0)
+        .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+    }
+    let cuitFlt = null;
+    if (cuit != '') {
+      cuitFlt = cuit;
     }
 
-    // Busqueda por cuit
-    if (cuit !== '' && desde === null && hasta === null) {
-      const ddjjResponse = await axiosDDJJEmpleado.consultarFiltrado(
-        null,
-        null,
-        cuit,
-      );
+    const ddjjResponse = await axiosDDJJEmpleado.consultarFiltrado(
+      desdeDayjs,
+      hastaDayjs,
+      cuitFlt,
+    );
 
-      if (ddjjResponse.length > 0) {
-        setRows(ddjjResponse);
-        setShowCuitRazonSocial(false);
-      }
-    }
-
-    // Busqueda por rango de periodo y cuit
-    if (desde !== null && hasta !== null && cuit !== '') {
-      const desdeFor = formatter.date(desde.$d);
-      const hastaFor = formatter.date(hasta.$d);
-
-      const ddjjResponse = await axiosDDJJEmpleado.consultarFiltrado(
-        desdeFor,
-        hastaFor,
-        cuit,
-      );
-
-      if (ddjjResponse.length > 0) {
-        setRows(ddjjResponse);
-      }
+    if (ddjjResponse.length > 0) {
+      setRows(ddjjResponse);
+      setShowCuitRazonSocial(false);
     }
   };
 

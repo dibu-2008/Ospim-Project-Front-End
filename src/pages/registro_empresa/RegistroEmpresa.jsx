@@ -12,10 +12,18 @@ import Fab from '@mui/material/Fab';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import AddIcon from '@mui/icons-material/Add';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import './RegistroEmpresa.css';
 import NavBar from '@/components/navbar/NavBar';
 import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
-import { IconButton, InputAdornment, OutlinedInput } from '@mui/material';
+import {
+  Autocomplete,
+  Button,
+  IconButton,
+  InputAdornment,
+  OutlinedInput,
+  Tooltip,
+} from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 export const RegistroEmpresa = () => {
@@ -86,6 +94,7 @@ export const RegistroEmpresa = () => {
   };
 
   const OnSubmitRegisterCompany = async (e) => {
+    console.log('OnSubmitRegisterCompany - INIT');
     e.preventDefault();
 
     // Validar de que password y repeatPassword sean iguales
@@ -163,6 +172,7 @@ export const RegistroEmpresa = () => {
         provinciaId: row.provinciaId,
         localidadId: row.localidadId,
         calle: row.calle,
+        numeroDomicilio: row.numeroDomicilio,
         piso: row.piso,
         depto: row.depto,
         oficina: row.oficina,
@@ -245,16 +255,17 @@ export const RegistroEmpresa = () => {
               autoComplete="off"
               label="CUIT"
             />
-            <span
-              style={{
-                position: 'absolute',
-                marginTop: '18px',
-                marginLeft: '515px',
-                fontSize: '20px',
-                color: 'rgb(255, 0, 0)',
-              }}
-            >
-              *
+            <span style={styContToolAst}>
+              <Tooltip
+                followCursor
+                title="Ingrese el CUIT sin guiones ni espacios. Ejemplo: 30715478567"
+                sx={{ cursor: 'pointer' }}
+              >
+                <IconButton>
+                  <HelpOutlineIcon />
+                </IconButton>
+              </Tooltip>
+              <div style={styAst}>*</div>
             </span>
           </div>
           <div className="input-group">
@@ -266,16 +277,17 @@ export const RegistroEmpresa = () => {
               autoComplete="off"
               label="Razón Social"
             />
-            <span
-              style={{
-                position: 'absolute',
-                marginTop: '18px',
-                marginLeft: '515px',
-                fontSize: '20px',
-                color: 'rgb(255, 0, 0)',
-              }}
-            >
-              *
+            <span style={styContToolAst}>
+              <Tooltip
+                followCursor
+                title="Ingrese la Razón Social de la empresa. Ejemplo: Empresa S.A."
+                sx={{ cursor: 'pointer' }}
+              >
+                <IconButton>
+                  <HelpOutlineIcon />
+                </IconButton>
+              </Tooltip>
+              <div style={styAst}>*</div>
             </span>
           </div>
           <div className="input-group">
@@ -290,16 +302,17 @@ export const RegistroEmpresa = () => {
               }}
               label="E-mail principal N° 1"
             />
-            <span
-              style={{
-                position: 'absolute',
-                marginTop: '18px',
-                marginLeft: '515px',
-                fontSize: '20px',
-                color: 'rgb(255, 0, 0)',
-              }}
-            >
-              *
+            <span style={styContToolAst}>
+              <Tooltip
+                followCursor
+                title="Ingrese el E-mail principal de la empresa. Ejemplo: ejemplo@empresa.com"
+                sx={{ cursor: 'pointer' }}
+              >
+                <IconButton>
+                  <HelpOutlineIcon />
+                </IconButton>
+              </Tooltip>
+              <div style={styAst}>*</div>
             </span>
           </div>
           <div
@@ -385,16 +398,17 @@ export const RegistroEmpresa = () => {
                 label="Password"
               />
             </FormControl>
-            <span
-              style={{
-                position: 'absolute',
-                marginTop: '18px',
-                marginLeft: '515px',
-                fontSize: '20px',
-                color: 'rgb(255, 0, 0)',
-              }}
-            >
-              *
+            <span style={styContToolAst}>
+              <Tooltip
+                followCursor
+                title="Ingrese la contraseña de la empresa. Debe contener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un carácter especial. Ejemplo: Abc12345$"
+                sx={{ cursor: 'pointer' }}
+              >
+                <IconButton>
+                  <HelpOutlineIcon />
+                </IconButton>
+              </Tooltip>
+              <div style={styAst}>*</div>
             </span>
           </div>
           <div className="input-group">
@@ -627,17 +641,6 @@ export const RegistroEmpresa = () => {
                   label="Prefijo"
                 />
               </div>
-              <span
-                style={{
-                  position: 'absolute',
-                  marginTop: '18px',
-                  marginLeft: '515px',
-                  fontSize: '20px',
-                  color: 'rgb(255, 0, 0)',
-                }}
-              >
-                *
-              </span>
               <div
                 style={{
                   width: '80%',
@@ -655,6 +658,18 @@ export const RegistroEmpresa = () => {
                   }}
                 />
               </div>
+              <span style={styContToolAst}>
+                <Tooltip
+                  followCursor
+                  title="Ingrese el CUIT sin guiones ni espacios. Ejemplo: 30715478567"
+                  sx={{ cursor: 'pointer' }}
+                >
+                  <IconButton>
+                    <HelpOutlineIcon />
+                  </IconButton>
+                </Tooltip>
+                <div style={styAst}>*</div>
+              </span>
             </div>
           </div>
           <div className="input-group">
@@ -696,7 +711,6 @@ export const RegistroEmpresa = () => {
               *
             </span>
           </div>
-
           <div
             className="input-group"
             style={{
@@ -715,23 +729,53 @@ export const RegistroEmpresa = () => {
             Domicilios declarados: (Para completar el registro, deberá agregar
             por lo menos el Domicilio Fiscal)
           </p>
-
           <GrillaRegistroDomilicio
             rows={rowsDomicilio}
             setRows={setRowsDomicilio}
           />
-
-          <ButtonComponent
-            styles={{
+          <Button
+            className="btn_ingresar"
+            variant="contained"
+            type="submit"
+            sx={{
               width: 'auto',
               marginTop: '20px',
               padding: '15px',
             }}
-            className="btn_ingresar"
-            name="REGISTRAR EMPRESA"
-          ></ButtonComponent>
+            /*
+            disabled={
+              !cuit ||
+              !razonSocial ||
+              !email_first ||
+              !password ||
+              !repeatPassword ||
+              !prefijo_first ||
+              !phone_first ||
+              !whatsapp_prefijo ||
+              !whatsapp ||
+              !ramoAux
+          }
+          */
+          >
+            REGISTRAR EMPRESA
+          </Button>
         </form>
       </div>
     </main>
   );
+};
+
+const styContToolAst = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  height: '100%',
+  position: 'absolute',
+  marginLeft: '500px',
+  fontSize: '20px',
+};
+
+const styAst = {
+  marginTop: '10px',
+  color: 'rgb(255, 0, 0)',
 };
