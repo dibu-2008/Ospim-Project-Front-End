@@ -46,6 +46,11 @@ export const GenerarBoletas = () => {
           DDJJ_ID,
         );
 
+        if (data.status === 401) {
+          console.log()
+          //navigate(`/dashboard/ddjj`);
+        }
+
         console.log(data);
         setDefaultFDP(data);
         setAfiliados(ordenarAfiliadosBoletas(data));
@@ -54,7 +59,7 @@ export const GenerarBoletas = () => {
         sethabilitaBoton(true);
       } catch (error) {
         console.error('Error al obtener las boletas:', error);
-        navigate(`/dashboard/ddjj`);
+       // navigate(`/dashboard/ddjj`);
       }
     };
     fetchData();

@@ -1071,11 +1071,13 @@ module.exports = (req, res, next) => {
 
   function err401(){
     res.status(412).jsonp({
+      "status":412,
+      "error":"Not Found",
       "tipo": "ERROR_APP_BUSINESS",
       "ticket": "SGC-07168420",
       "codigo": "DDJJ_CON_BOLETAS",
       "descripcion": "La Declaracion Jurada ya cuenta con las Boletas de Pago generadas",
-      "args": {}
+      "args": {},
   });
   }
 };

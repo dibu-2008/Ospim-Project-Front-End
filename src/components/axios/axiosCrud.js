@@ -36,6 +36,7 @@ export const axiosConsultar = async (UrlApi) => {
 };
 
 export const axiosCrear = async (UrlApi, oEntidad) => {
+  console.log(UrlApi)
   try {
     const response = await oAxios.post(UrlApi, oEntidad);
     console.log(response.status);
@@ -52,6 +53,9 @@ export const axiosCrear = async (UrlApi, oEntidad) => {
   } catch (error) {
     console.log('axiosCrud.crear() - catch() - ');
     if (error && error.response && error.response.data) {
+      //console.log("Este es el error response data: " + error.response.data)
+      //console.log("Este es el error response: " + error.response)
+      console.log("Este es el error : " + error)
       return error.response.data;
     } else {
       console.log(
