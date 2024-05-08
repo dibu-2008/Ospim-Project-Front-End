@@ -27,7 +27,6 @@ const crearNuevoRegistro = (props) => {
   const altaHandleClick = () => {
     if (!isOnEditMode) {
       const newReg = {
-        id: '',
         tipo: '',
         provincia: {
           id: '',
@@ -39,13 +38,12 @@ const crearNuevoRegistro = (props) => {
           descripcion: '',
         },
         calle: '',
+        calleNro: '',
         piso: '',
         depto: '',
         oficina: '',
         cp: '',
         planta: '',
-        valor: '',
-        isNew: true,
       };
       volverPrimerPagina();
       setRows((oldRows) => [newReg, ...oldRows]);
@@ -197,6 +195,9 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
           //toast.success("El registro se creo correctamente")
           const newRows = rows.map((row) => (!row.id ? newRow : row));
           setRows(newRows);
+
+          console.log('** processRowUpdate - ALTA - oldRow: ', oldRow);
+          console.log('** processRowUpdate - ALTA - newRow: ', newRow);
         } else {
           console.log('alta sin ID generado');
         }
@@ -296,6 +297,15 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
     {
       field: 'calle',
       headerName: 'Calle',
+      flex: 2,
+      editable: true,
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
+    },
+    {
+      field: 'calleNro',
+      headerName: 'Altura',
       flex: 2,
       editable: true,
       headerAlign: 'center',

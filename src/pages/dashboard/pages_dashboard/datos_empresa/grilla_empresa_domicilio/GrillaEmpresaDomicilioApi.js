@@ -14,6 +14,11 @@ const adaptadorCrearDomicilio = async (domicilio) => {
     );
     domicilio.provincia = provincia.id;
     domicilio.localidad = localidad.id;
+    delete domicilio.provincia;
+    domicilio.provinciaId = provincia.id;
+    delete domicilio.localidad;
+    domicilio.localidadId = localidad.id;
+    delete domicilio.isNew;
     return domicilio;
   } catch (error) {
     toast.error(HTTP_MSG_ALTA_ERROR);
@@ -55,7 +60,6 @@ export const actualizarDomicilio = async (empresaId, domicilio) => {
 
 export const eliminarDomicilio = async (empresaId, idDomicilio) => {
   const URL = `/empresa/${empresaId}/domicilio`;
-  axiosEntity.init(URL);
   return await axiosEntity.eliminar(URL, idDomicilio);
 };
 
