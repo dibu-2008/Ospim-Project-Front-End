@@ -15,7 +15,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
-import { axiosDomicilio } from './GrillaEmpresaDomicilioApi';
+import {
+  adaptadorDomicilioGrilla,
+  axiosDomicilio,
+} from './GrillaEmpresaDomicilioApi';
 import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 import Swal from 'sweetalert2';
 
@@ -182,7 +185,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
     isOnEditMode = false;
   };
   const processRowUpdate = async (newRow, oldRow) => {
-    console.log('processRowUpdate - INIT');
+    console.log('processRowUpdate - INIT - newRow:', newRow);
     let bOk = false;
 
     if (!newRow.id) {
@@ -193,6 +196,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
           newRow.id = data.id;
           bOk = true;
           //toast.success("El registro se creo correctamente")
+          newRow = await adaptadorDomicilioGrilla(newRow);
           const newRows = rows.map((row) => (!row.id ? newRow : row));
           setRows(newRows);
 
@@ -210,7 +214,10 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
       try {
         bOk = await axiosDomicilio.actualizar(idEmpresa, newRow);
         console.log('4 - processRowUpdate - MODI - bOk: ' + bOk);
+        console.log('** processRowUpdate - MODI - oldRow: ', oldRow);
+        console.log('** processRowUpdate - MODI - newRow: ', newRow);
         if (bOk) {
+          newRow = await adaptadorDomicilioGrilla(newRow);
           const rowsNew = rows.map((row) =>
             row.id === newRow.id ? newRow : row,
           );

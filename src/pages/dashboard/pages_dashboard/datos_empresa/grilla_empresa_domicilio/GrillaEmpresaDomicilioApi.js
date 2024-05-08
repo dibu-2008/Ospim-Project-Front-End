@@ -26,6 +26,28 @@ const adaptadorCrearDomicilio = async (domicilio) => {
   }
 };
 
+export const adaptadorDomicilioGrilla = async (domicilio) => {
+  try {
+    const provincias = await obtenerProvincias();
+    const provincia = provincias.find(
+      (element) => element.id == domicilio.provinciaId,
+    );
+    const localidades = await obtenerLocalidades(provincia.id);
+    const localidad = localidades.find(
+      (element) => element.id == domicilio.localidadId,
+    );
+    domicilio.provincia = provincia;
+    domicilio.localidad = localidad;
+    delete domicilio.provinciaId;
+    delete domicilio.localidadId;
+    delete domicilio.isNew;
+    return domicilio;
+  } catch (error) {
+    toast.error(HTTP_MSG_ALTA_ERROR);
+    return error;
+  }
+};
+
 export const obtenerTipoDomicilio = async () => {
   const URL = '/empresa/domicilio/tipo';
   return await axiosEntity.consultar(URL);
@@ -48,14 +70,14 @@ export const obtenerDomicilios = async (empresaId) => {
 
 export const crearDomicilio = async (empresaId, domicilio) => {
   const URL = `/empresa/${empresaId}/domicilio`;
-
   const domiAdapt = await adaptadorCrearDomicilio(domicilio);
   return await axiosEntity.crear(URL, domiAdapt);
 };
 
 export const actualizarDomicilio = async (empresaId, domicilio) => {
   const URL = `/empresa/${empresaId}/domicilio`;
-  return await axiosEntity.actualizar(URL, domicilio);
+  const domiAdapt = await adaptadorCrearDomicilio(domicilio);
+  return await axiosEntity.actualizar(URL, domiAdapt);
 };
 
 export const eliminarDomicilio = async (empresaId, idDomicilio) => {
