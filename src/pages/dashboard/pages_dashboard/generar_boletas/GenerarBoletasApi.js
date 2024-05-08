@@ -4,7 +4,6 @@ import { axiosCrud } from '@/components/axios/axiosCrud';
 import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
 import { toast } from 'react-toastify';
 
-
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
 const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
@@ -92,7 +91,7 @@ export const generarBoletasPost = async (empresa_id, ddjj_id, boletas) => {
   try {
     const URL = `/empresa/${empresa_id}/ddjj/${ddjj_id}/boletas/generar`;
     const arr_boletas = ordernarBoletas(boletas);
-    console.log(arr_boletas)
+    console.log(arr_boletas);
 
     const data = await axiosCrud.crearN(URL, arr_boletas);
     if (data == true) {

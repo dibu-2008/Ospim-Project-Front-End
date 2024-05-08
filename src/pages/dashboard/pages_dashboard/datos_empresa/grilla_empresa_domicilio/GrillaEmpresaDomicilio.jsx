@@ -15,7 +15,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
-import { axiosDomicilio } from './GrillaEmpresaDomicilioApi';
+import {
+  adaptadorDomicilioGrilla,
+  axiosDomicilio,
+} from './GrillaEmpresaDomicilioApi';
 import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 import Swal from 'sweetalert2';
 
@@ -38,6 +41,7 @@ const crearNuevoRegistro = (props) => {
           descripcion: '',
         },
         calle: '',
+        calleNro: '',
         piso: '',
         depto: '',
         oficina: '',
@@ -182,7 +186,6 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
   };
   const processRowUpdate = async (newRow, oldRow) => {
     console.log('processRowUpdate - INIT - newRow:', newRow);
-
     let bOk = false;
 
     if (!newRow.id) {
@@ -195,8 +198,11 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
           newRow.id = data.id;
           bOk = true;
           //toast.success("El registro se creo correctamente")
+          newRow = await adaptadorDomicilioGrilla(newRow);
           const newRows = rows.map((row) => (!row.id ? newRow : row));
           setRows(newRows);
+
+          console.log('** processRowUpdate - ALTA - oldRow: ', oldRow);
           console.log('** processRowUpdate - ALTA - newRow: ', newRow);
         } else {
           console.log('alta sin ID generado');
@@ -212,7 +218,10 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
       try {
         bOk = await axiosDomicilio.actualizar(idEmpresa, newRow);
         console.log('4 - processRowUpdate - MODI - bOk: ' + bOk);
+        console.log('** processRowUpdate - MODI - oldRow: ', oldRow);
+        console.log('** processRowUpdate - MODI - newRow: ', newRow);
         if (bOk) {
+          newRow = await adaptadorDomicilioGrilla(newRow);
           const rowsNew = rows.map((row) =>
             row.id === newRow.id ? newRow : row,
           );
@@ -298,6 +307,15 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
     {
       field: 'calle',
       headerName: 'Calle',
+      flex: 2,
+      editable: true,
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
+    },
+    {
+      field: 'calleNro',
+      headerName: 'Altura',
       flex: 2,
       editable: true,
       headerAlign: 'center',
