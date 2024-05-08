@@ -9,6 +9,9 @@ export const axiosCrud = {
     return axiosCrear(UrlApi, oEntidad);
   },
 
+  crearN: async function (UrlApi, oEntidad) {
+    return axiosCrearN(UrlApi, oEntidad);
+  },
   actualizar: async function (UrlApi, oEntidad) {
     return axiosActualizar(UrlApi, oEntidad);
   },
@@ -33,11 +36,10 @@ export const axiosConsultar = async (UrlApi) => {
 };
 
 export const axiosCrear = async (UrlApi, oEntidad) => {
-  console.log(UrlApi)
   try {
     const response = await oAxios.post(UrlApi, oEntidad);
-    console.log(response.status)
-    console.log(response.status !== 200)
+    console.log(response.status);
+    console.log(response.status !== 200);
     if (response.status !== 201 && response.status !== 200) {
       console.log(
         `axiosCrud.crear() - ERROR 2 - UrlApi: ${UrlApi} - response.status !== 201 - response: ${JSON.stringify(
@@ -50,9 +52,7 @@ export const axiosCrear = async (UrlApi, oEntidad) => {
   } catch (error) {
     console.log('axiosCrud.crear() - catch() - ');
     if (error && error.response && error.response.data) {
-      //console.log("Este es el error response data: " + error.response.data)
-      //console.log("Este es el error response: " + error.response)
-      console.log("Este es el error : " + error)
+      console.log('Este es el error : ' + error);
       return error.response.data;
     } else {
       console.log(
@@ -63,10 +63,36 @@ export const axiosCrear = async (UrlApi, oEntidad) => {
   }
 };
 
+export const axiosCrearN = async (UrlApi, oEntidad) => {
+  try {
+    const response = await oAxios.post(UrlApi, oEntidad);
+    console.log(response.status);
+    if (response && response.status && response.status == 204) {
+      return true;
+    }
+    console.log(
+      `axiosCrud.axiosCrearN() - ERROR - UrlApi: ${UrlApi} - oEntidad: ${oEntidad} - response.status !== 204 - response: ${JSON.stringify(
+        response,
+      )}`,
+    );
+    return false;
+  } catch (error) {
+    console.log('axiosCrud.axiosCrearN() - catch() - ');
+    if (error && error.response && error.response.data) {
+      return error.response.data;
+    } else {
+      console.log(
+        'axiosCrud.axiosCrearN() - catch() - error: ' + JSON.stringify(error),
+      );
+    }
+    return false;
+  }
+};
+
 export const axiosActualizar = async (UrlApi, oEntidad) => {
   const pkId = oEntidad.id;
   const URL = `${UrlApi}/${pkId}`;
-  console.log(URL)
+  console.log(URL);
   try {
     delete oEntidad.id;
     const response = await oAxios.put(URL, oEntidad);
