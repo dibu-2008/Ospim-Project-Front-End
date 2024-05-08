@@ -27,7 +27,6 @@ const crearNuevoRegistro = (props) => {
   const altaHandleClick = () => {
     if (!isOnEditMode) {
       const newReg = {
-        id: '',
         tipo: '',
         provincia: {
           id: '',
@@ -44,8 +43,6 @@ const crearNuevoRegistro = (props) => {
         oficina: '',
         cp: '',
         planta: '',
-        valor: '',
-        isNew: true,
       };
       volverPrimerPagina();
       setRows((oldRows) => [newReg, ...oldRows]);
@@ -89,8 +86,8 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
   }, []);
 
   const getRowsDomicilio = async () => {
-    const response = await axiosDomicilio.obtenerDomicilios(idEmpresa);
-    setRows(response);
+    const data = await axiosDomicilio.obtenerDomicilios(idEmpresa);
+    setRows(data);
   };
 
   const getDatosLocalidad = async (provincia) => {
@@ -129,7 +126,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
     }
   };
   const handleDeleteClick = (row) => async () => {
-    console.log(row.id);
+    console.log('handleDeleteClick - row.id:', row.id);
     const showSwalConfirm = async () => {
       try {
         Swal.fire({
@@ -184,12 +181,15 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
     isOnEditMode = false;
   };
   const processRowUpdate = async (newRow, oldRow) => {
-    console.log('processRowUpdate - INIT');
+    console.log('processRowUpdate - INIT - newRow:', newRow);
+
     let bOk = false;
 
     if (!newRow.id) {
+      console.log('processRowUpdate - ALTA');
       try {
         const data = await axiosDomicilio.crear(idEmpresa, newRow);
+        console.log('processRowUpdate - ALTA - data:', data);
         if (data && data.id) {
           console.log(data);
           newRow.id = data.id;
@@ -197,15 +197,18 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
           //toast.success("El registro se creo correctamente")
           const newRows = rows.map((row) => (!row.id ? newRow : row));
           setRows(newRows);
+          console.log('** processRowUpdate - ALTA - newRow: ', newRow);
         } else {
           console.log('alta sin ID generado');
         }
       } catch (error) {
+        console.log('X - processRowUpdate - ALTA - ERROR: ', error);
         console.log(
           'X - processRowUpdate - ALTA - ERROR: ' + JSON.stringify(error),
         );
       }
     } else {
+      console.log('processRowUpdate - MODI');
       try {
         bOk = await axiosDomicilio.actualizar(idEmpresa, newRow);
         console.log('4 - processRowUpdate - MODI - bOk: ' + bOk);
@@ -270,7 +273,6 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
             sx={{ width: 200 }}
           >
             {provinciasValueOptions.map((item) => {
-              console.log(item);
               return (
                 <MenuItem key={item} value={item}>
                   {item}

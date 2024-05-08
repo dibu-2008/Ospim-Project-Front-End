@@ -14,8 +14,8 @@ const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
 
 export const axiosEntity = {
   init: function (url) {
-    console.log(url)
-    URL_ENTITY = url;
+    console.log(url);
+    //URL_ENTITY = url;
   },
 
   consultar: async function (UrlApi) {
@@ -23,7 +23,7 @@ export const axiosEntity = {
   },
 
   crear: async function (UrlApi, oEntidad) {
-    return crear(UrlApi,oEntidad);
+    return crear(UrlApi, oEntidad);
   },
 
   actualizar: async function (UrlApi, oEntidad) {
@@ -44,7 +44,7 @@ export const consultar = async (UrlApi) => {
       HTTP_MSG_CONSUL_ERROR + ` (${UrlApi} - status: ${error.status})`,
       error,
     );
-    toast.error(HTTP_MSG_CONSUL_ERROR)
+    toast.error(HTTP_MSG_CONSUL_ERROR);
     return [];
   }
 };
@@ -52,16 +52,17 @@ export const consultar = async (UrlApi) => {
 export const crear = async (UrlApi, registro) => {
   try {
     const data = await axiosCrud.crear(UrlApi, registro);
-    console.log(data)
+    console.log(data);
     if (data && data.id) {
-      toast.success(HTTP_MSG_ALTA)
+      toast.success(HTTP_MSG_ALTA);
+      console.log('EntityCrud.crear - data: ', data);
       return data;
     }
     throw data;
   } catch (error) {
-    console.log("Entre en el catch de crear")
+    console.log('Entre en el catch de crear');
     showErrorBackEnd(HTTP_MSG_ALTA_ERROR, error);
-    toast.error(HTTP_MSG_ALTA_ERROR)
+    toast.error(HTTP_MSG_ALTA_ERROR);
     return {};
   }
 };
