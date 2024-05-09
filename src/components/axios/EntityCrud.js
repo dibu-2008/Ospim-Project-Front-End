@@ -1,6 +1,5 @@
 import { axiosCrud } from '@components/axios/axiosCrud';
 import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
-//import swal from '@/components/swal/swal';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -13,13 +12,12 @@ const HTTP_MSG_BAJA_ERROR = import.meta.env.VITE_HTTP_MSG_BAJA_ERROR;
 const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
 
 export const axiosEntity = {
-
   consultar: async function (UrlApi) {
     return consultar(UrlApi);
   },
 
   crear: async function (UrlApi, oEntidad) {
-    return crear(UrlApi,oEntidad);
+    return crear(UrlApi, oEntidad);
   },
 
   actualizar: async function (UrlApi, oEntidad) {
@@ -40,7 +38,7 @@ export const consultar = async (UrlApi) => {
       HTTP_MSG_CONSUL_ERROR + ` (${UrlApi} - status: ${error.status})`,
       error,
     );
-    toast.error(HTTP_MSG_CONSUL_ERROR)
+    toast.error(HTTP_MSG_CONSUL_ERROR);
     return [];
   }
 };
@@ -49,13 +47,13 @@ export const crear = async (UrlApi, registro) => {
   try {
     const data = await axiosCrud.crear(UrlApi, registro);
     if (data && data.id) {
-      toast.success(HTTP_MSG_ALTA)
+      toast.success(HTTP_MSG_ALTA);
       return data;
     }
     throw data;
   } catch (error) {
     showErrorBackEnd(HTTP_MSG_ALTA_ERROR, error);
-    toast.error(HTTP_MSG_ALTA_ERROR)
+    toast.error(HTTP_MSG_ALTA_ERROR);
     return {};
   }
 };
@@ -87,5 +85,3 @@ export const eliminar = async (UrlApi, id) => {
     return false;
   }
 };
-
-
