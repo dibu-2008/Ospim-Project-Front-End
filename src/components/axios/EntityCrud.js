@@ -13,10 +13,6 @@ const HTTP_MSG_BAJA_ERROR = import.meta.env.VITE_HTTP_MSG_BAJA_ERROR;
 const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
 
 export const axiosEntity = {
-  init: function (url) {
-    console.log(url)
-    URL_ENTITY = url;
-  },
 
   consultar: async function (UrlApi) {
     return consultar(UrlApi);
@@ -52,14 +48,12 @@ export const consultar = async (UrlApi) => {
 export const crear = async (UrlApi, registro) => {
   try {
     const data = await axiosCrud.crear(UrlApi, registro);
-    console.log(data)
     if (data && data.id) {
       toast.success(HTTP_MSG_ALTA)
       return data;
     }
     throw data;
   } catch (error) {
-    console.log("Entre en el catch de crear")
     showErrorBackEnd(HTTP_MSG_ALTA_ERROR, error);
     toast.error(HTTP_MSG_ALTA_ERROR)
     return {};
@@ -70,8 +64,7 @@ export const actualizar = async (UrlApi, registro) => {
   try {
     const response = await axiosCrud.actualizar(UrlApi, registro);
     if (response == true) {
-      //swal.showSuccess(HTTP_MSG_MODI);
-      toast.info(HTTP_MSG_MODI, styles);
+      toast.success(HTTP_MSG_MODI);
       return true;
     }
     throw response;
@@ -85,8 +78,7 @@ export const eliminar = async (UrlApi, id) => {
   try {
     const response = await axiosCrud.eliminar(UrlApi, id);
     if (response == true) {
-      //swal.showSuccess(HTTP_MSG_BAJA);
-      toast.info(HTTP_MSG_BAJA, styles);
+      toast.success(HTTP_MSG_BAJA);
       return true;
     }
     throw response;
@@ -96,10 +88,4 @@ export const eliminar = async (UrlApi, id) => {
   }
 };
 
-const styles = {
-  position: 'top-right',
-  autoClose: 2000,
-  style: {
-    fontSize: '1rem',
-  },
-};
+

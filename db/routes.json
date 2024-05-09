@@ -6,8 +6,8 @@
   "/usuario/empresa/": "/usuario-empresa-alta",
   "/usuario/interno": "/usuario-interno",
   "/usuario/interno/:id": "/usuario-interno/:id",
-  "/usuario/:id/habilitar/": "/usuario-interno/:id",
-  "/usuario/:id/deshabilitar/": "/usuario-interno/:id",
+  "/usuario/:id/habilitar/": "/usuario-interno/?id=:id",
+  "/usuario/:id/deshabilitar/": "/usuario-interno/?id=:id",
 
   "/empresa/public/domicilio/tipo": "/empresaDomicilioTipo",
   "/empresa/domicilio/": "/empresaDomicilio",

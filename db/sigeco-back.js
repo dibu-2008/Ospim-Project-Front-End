@@ -286,6 +286,9 @@ module.exports = (req, res, next) => {
     if (req.url.startsWith("/error/401")){
       return "ERROR401"
     }
+    if (req.method === "PATCH" && req.url.startsWith("/usuario-interno")){
+      return "PATCH-USUARIO-ACTIVO"
+    }
 
     return "----";
   }
@@ -418,6 +421,9 @@ module.exports = (req, res, next) => {
       break;
     case "ERROR401":
       err401();
+      break;
+    case "PATCH-USUARIO-ACTIVO":
+      patchUsuarioInterno();
       break;
     case "----":
       // code block
@@ -1059,11 +1065,8 @@ module.exports = (req, res, next) => {
 
   function updateInteres(){
     const {id} = req.query
-    console.log(req.query)
-    console.log(req.body)
     const index = req.app.db.__wrapped__.intereses.findIndex(element => element.id == parseInt(id))
     req.body.id = parseInt(id)
-    
     req.app.db.__wrapped__.intereses[index] = req.body;
     req.app.db.write();
     res.status(201).send(null);
@@ -1079,5 +1082,16 @@ module.exports = (req, res, next) => {
       "descripcion": "La Declaracion Jurada ya cuenta con las Boletas de Pago generadas",
       "args": {},
   });
+  }
+
+  function patchUsuarioInterno(){
+    const { habilitado } =  req.body
+    const {id} = req.query
+    console.log(habilitado)
+    console.log(id)
+    const index = req.app.db.__wrapped__['usuario-interno'].findIndex(element => element.id == parseInt(id))
+    req.app.db.__wrapped__['usuario-interno'][index].habilitado = habilitado;
+    req.app.db.write();
+    res.status(204).send(null);
   }
 };
