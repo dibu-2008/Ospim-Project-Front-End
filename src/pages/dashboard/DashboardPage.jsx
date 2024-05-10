@@ -16,6 +16,7 @@ import DateRangeIcon from '@mui/icons-material/DateRange';
 import PreviewIcon from '@mui/icons-material/Preview';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
+import CalculateIcon from '@mui/icons-material/Calculate';
 import {
   Link,
   useNavigate,
@@ -131,267 +132,253 @@ const DashboardPage = () => {
   };
 
   return (
-    <>
-      <Box sx={{ display: 'flex' }}>
-        <Drawer variant="permanent" open={open}>
-          <DrawerHeader sx={{ marginTop: 2, marginBottom: 2 }}>
-            <IconButton
-              color="inherit"
-              aria-label="toggle drawer"
-              onClick={handleDrawerToggle}
-              edge="start"
-            >
-              {open ? (
-                <ChevronLeftIcon className="icon-toggle" />
-              ) : (
-                <ChevronRightIcon className="icon-toggle" />
-              )}
-            </IconButton>
-          </DrawerHeader>
-          <Divider />
-          <List
-            style={{
-              marginTop: -7,
-              marginBottom: -10,
-            }}
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+      }}
+    >
+      <Drawer variant="permanent" open={open}>
+        <DrawerHeader sx={{ marginTop: 2, marginBottom: 2 }}>
+          <IconButton
+            color="inherit"
+            aria-label="toggle drawer"
+            onClick={handleDrawerToggle}
+            edge="start"
           >
-            <ListItem disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: 'initial',
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    marginLeft: '-18px',
-                  }}
-                >
-                  <NavLink to="./inicio" className="icon-container">
-                    <HomeIcon className="icon-link" />{' '}
-                    {open && <span className="icon-link">Inicio</span>}
-                  </NavLink>
-                  {rolFuncionalidades.PUBLICACIONES && (
-                    <NavLink to="./publicaciones" className="icon-container">
-                      <PreviewIcon className="icon-link" />{' '}
-                      {open && <span className="icon-link">Publicaciones</span>}
-                    </NavLink>
-                  )}
-                  {rolFuncionalidades.FERIADOS && (
-                    <NavLink to="./feriados" className="icon-container">
-                      <DateRangeIcon className="icon-link" />{' '}
-                      {open && <span className="icon-link">Feriados</span>}
-                    </NavLink>
-                  )}
-                  {rolFuncionalidades.DDJJ && (
-                    <NavLink to="./ddjj" className="icon-container">
-                      <LibraryBooksIcon className="icon-link" />{' '}
-                      {open && <span className="icon-link">DDJJ</span>}
-                    </NavLink>
-                  )}
-                  {rolFuncionalidades.DDJJ_CONSULTA && (
-                    <NavLink
-                      to="./ddjjconsultaempleado"
-                      className="icon-container"
-                    >
-                      <LibraryBooksIcon className="icon-link" />{' '}
-                      {open && <span className="icon-link">DDJJ Consulta</span>}
-                    </NavLink>
-                  )}
-                  {rolFuncionalidades.BOLETAS && (
-                    <NavLink to="./boletas" className="icon-container">
-                      <StyleIcon className="icon-link" />{' '}
-                      {open && <span className="icon-link">Boletas</span>}
-                    </NavLink>
-                  )}
-                  {rolFuncionalidades.PAGOS && (
-                    <NavLink to="./pagos" className="icon-container">
-                      <AccountBalanceWalletIcon className="icon-link" />{' '}
-                      {open && <span className="icon-link">Pagos</span>}
-                    </NavLink>
-                  )}
-                  {rolFuncionalidades.DATOS_EMPRESA && (
-                    <NavLink to="./misdatos" className="icon-container">
-                      <PersonIcon className="icon-link" />{' '}
-                      {open && <span className="icon-link">Datos Empresa</span>}
-                    </NavLink>
-                  )}
-                  {rolFuncionalidades.BOLETA_BLANCA && (
-                    <NavLink
-                      to="./generarotrospagos"
-                      className="icon-container"
-                    >
-                      <ReceiptIcon className="icon-link" />{' '}
-                      {open && <span className="icon-link">Boleta Blanca</span>}
-                    </NavLink>
-                  )}
-                  {rolFuncionalidades.GESTION_ROLES && (
-                    <NavLink to="./gestion-roles" className="icon-container">
-                      <DateRangeIcon className="icon-link" />{' '}
-                      {open && <span className="icon-link">Gestion Roles</span>}
-                    </NavLink>
-                  )}
-                  {rolFuncionalidades.CUITS_RESTRINGIDOS && (
-                    <NavLink
-                      to="./cuitsrestringidos"
-                      className="icon-container"
-                    >
-                      <NetworkLockedIcon className="icon-link" />{' '}
-                      {open && (
-                        <span className="icon-link">Cuits Restringidos</span>
-                      )}
-                    </NavLink>
-                  )}
-                  {rolFuncionalidades.ROLES && (
-                    <NavLink to="./roles" className="icon-container">
-                      <CoPresentIcon className="icon-link" />{' '}
-                      {open && <span className="icon-link">Roles</span>}
-                    </NavLink>
-                  )}
-                  {rolFuncionalidades.USUARIO_INTERNO && (
-                    <NavLink
-                      to="./altausuariointerno"
-                      className="icon-container"
-                    >
-                      <PersonAddIcon className="icon-link" />{' '}
-                      {open && (
-                        <span className="icon-link">Usuario Interno</span>
-                      )}
-                    </NavLink>
-                  )}
-                  {rolFuncionalidades.AJUSTES && (
-                    <NavLink to="./ajustes" className="icon-container">
-                      <SettingsApplicationsIcon className="icon-link" />{' '}
-                      {open && <span className="icon-link">Ajustes</span>}
-                    </NavLink>
-                  )}
-                  {rolFuncionalidades.INTERESES_AFIP && (
-                    <NavLink to="./interesesafip" className="icon-container">
-                      <img src={afipIcon} alt="afip" className="icon-link" />{' '}
-                      {open && (
-                        <span className="icon-link">Intereses Afip</span>
-                      )}
-                    </NavLink>
-                  )}
-                </ListItemIcon>
-              </ListItemButton>
-            </ListItem>
-          </List>
-          <Divider />
-          <List
-            style={{
-              marginTop: -7,
-            }}
-          >
-            <ListItem disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: 'initial',
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    marginLeft: '-18px',
-                  }}
-                >
-                  <NavLink className="icon-container" onClick={onLogout}>
-                    <DisabledByDefaultIcon className="icon-link" />{' '}
-                    {open && <span className="icon-link">Salir</span>}
-                  </NavLink>
-                </ListItemIcon>
-              </ListItemButton>
-            </ListItem>
-          </List>
-        </Drawer>
-        <Box
-          component="main"
-          sx={{
-            flexGrow: 1,
+            {open ? (
+              <ChevronLeftIcon className="icon-toggle" />
+            ) : (
+              <ChevronRightIcon className="icon-toggle" />
+            )}
+          </IconButton>
+        </DrawerHeader>
+        <Divider />
+        <List
+          style={{
+            marginTop: -7,
+            marginBottom: -10,
           }}
         >
+          <ListItem disablePadding sx={{ display: 'block' }}>
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: 'initial',
+                px: 2.5,
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: open ? 3 : 'auto',
+                  justifyContent: 'center',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  marginLeft: '-18px',
+                }}
+              >
+                <NavLink to="./inicio" className="icon-container">
+                  <HomeIcon className="icon-link" />{' '}
+                  {open && <span className="icon-link">Inicio</span>}
+                </NavLink>
+                {rolFuncionalidades.PUBLICACIONES && (
+                  <NavLink to="./publicaciones" className="icon-container">
+                    <PreviewIcon className="icon-link" />{' '}
+                    {open && <span className="icon-link">Publicaciones</span>}
+                  </NavLink>
+                )}
+                {rolFuncionalidades.FERIADOS && (
+                  <NavLink to="./feriados" className="icon-container">
+                    <DateRangeIcon className="icon-link" />{' '}
+                    {open && <span className="icon-link">Feriados</span>}
+                  </NavLink>
+                )}
+                {rolFuncionalidades.DDJJ && (
+                  <NavLink to="./ddjj" className="icon-container">
+                    <LibraryBooksIcon className="icon-link" />{' '}
+                    {open && <span className="icon-link">DDJJ</span>}
+                  </NavLink>
+                )}
+                {rolFuncionalidades.DDJJ_CONSULTA && (
+                  <NavLink
+                    to="./ddjjconsultaempleado"
+                    className="icon-container"
+                  >
+                    <LibraryBooksIcon className="icon-link" />{' '}
+                    {open && <span className="icon-link">DDJJ Consulta</span>}
+                  </NavLink>
+                )}
+                {rolFuncionalidades.BOLETAS && (
+                  <NavLink to="./boletas" className="icon-container">
+                    <StyleIcon className="icon-link" />{' '}
+                    {open && <span className="icon-link">Boletas</span>}
+                  </NavLink>
+                )}
+                {rolFuncionalidades.PAGOS && (
+                  <NavLink to="./pagos" className="icon-container">
+                    <AccountBalanceWalletIcon className="icon-link" />{' '}
+                    {open && <span className="icon-link">Pagos</span>}
+                  </NavLink>
+                )}
+                {rolFuncionalidades.DATOS_EMPRESA && (
+                  <NavLink to="./misdatos" className="icon-container">
+                    <PersonIcon className="icon-link" />{' '}
+                    {open && <span className="icon-link">Datos Empresa</span>}
+                  </NavLink>
+                )}
+                {rolFuncionalidades.BOLETA_BLANCA && (
+                  <NavLink to="./generarotrospagos" className="icon-container">
+                    <ReceiptIcon className="icon-link" />{' '}
+                    {open && <span className="icon-link">Boleta Blanca</span>}
+                  </NavLink>
+                )}
+                {rolFuncionalidades.GESTION_ROLES && (
+                  <NavLink to="./gestion-roles" className="icon-container">
+                    <DateRangeIcon className="icon-link" />{' '}
+                    {open && <span className="icon-link">Gestion Roles</span>}
+                  </NavLink>
+                )}
+                {rolFuncionalidades.CUITS_RESTRINGIDOS && (
+                  <NavLink to="./cuitsrestringidos" className="icon-container">
+                    <NetworkLockedIcon className="icon-link" />{' '}
+                    {open && (
+                      <span className="icon-link">Cuits Restringidos</span>
+                    )}
+                  </NavLink>
+                )}
+                {rolFuncionalidades.ROLES && (
+                  <NavLink to="./roles" className="icon-container">
+                    <CoPresentIcon className="icon-link" />{' '}
+                    {open && <span className="icon-link">Roles</span>}
+                  </NavLink>
+                )}
+                {rolFuncionalidades.USUARIO_INTERNO && (
+                  <NavLink to="./altausuariointerno" className="icon-container">
+                    <PersonAddIcon className="icon-link" />{' '}
+                    {open && <span className="icon-link">Usuario Interno</span>}
+                  </NavLink>
+                )}
+                {rolFuncionalidades.AJUSTES && (
+                  <NavLink to="./ajustes" className="icon-container">
+                    <SettingsApplicationsIcon className="icon-link" />{' '}
+                    {open && <span className="icon-link">Ajustes</span>}
+                  </NavLink>
+                )}
+                {rolFuncionalidades.INTERESES_AFIP && (
+                  <NavLink to="./interesesafip" className="icon-container">
+                    <img src={afipIcon} alt="afip" className="icon-link" />{' '}
+                    {open && <span className="icon-link">Intereses Afip</span>}
+                  </NavLink>
+                )}
+                {rolFuncionalidades.APORTES && (
+                  <NavLink to="./aportes" className="icon-container">
+                    <CalculateIcon className="icon-link" />{' '}
+                    {open && <span className="icon-link">Aportes</span>}
+                  </NavLink>
+                )}
+              </ListItemIcon>
+            </ListItemButton>
+          </ListItem>
+        </List>
+        <Divider />
+        <List
+          style={{
+            marginTop: -7,
+          }}
+        >
+          <ListItem disablePadding sx={{ display: 'block' }}>
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: 'initial',
+                px: 2.5,
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: open ? 3 : 'auto',
+                  justifyContent: 'center',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  marginLeft: '-18px',
+                }}
+              >
+                <NavLink className="icon-container" onClick={onLogout}>
+                  <DisabledByDefaultIcon className="icon-link" />{' '}
+                  {open && <span className="icon-link">Salir</span>}
+                </NavLink>
+              </ListItemIcon>
+            </ListItemButton>
+          </ListItem>
+        </List>
+      </Drawer>
+      <Box component="main">
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            backgroundColor: '#1a76d2',
+            height: 110,
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 1000,
+            paddingLeft: 80,
+            paddingRight: 80,
+          }}
+        >
+          <img
+            style={{
+              marginLeft: 120,
+              width: 75,
+            }}
+            src={logo2}
+            alt="imglogo"
+          />
           <div
             style={{
               display: 'flex',
-              justifyContent: 'space-between',
-              backgroundColor: '#1a76d2',
-              height: 110,
-              position: 'fixed',
-              top: 0,
-              left: 0,
-              right: 0,
-              zIndex: 1000,
-              paddingLeft: 80,
-              paddingRight: 80,
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginRight: 80,
             }}
           >
-            <img
+            <h4
               style={{
-                marginLeft: 120,
-                width: 75,
-              }}
-              src={logo2}
-              alt="imglogo"
-            />
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginRight: 80,
+                marginLeft: 30,
+                color: '#fff',
+                fontSize: '2rem',
               }}
             >
-              <h4
-                style={{
-                  marginLeft: 30,
-                  color: '#fff',
-                  fontSize: '2rem',
-                }}
-              >
-                UOMA
-              </h4>
-              <h4
-                style={{
-                  marginLeft: 30,
-                  color: '#fff',
-                  fontSize: '2rem',
-                }}
-              >
-                OSPIM
-              </h4>
-              <h4
-                style={{
-                  marginLeft: 30,
-                  color: '#fff',
-                  fontSize: '2rem',
-                }}
-              >
-                AMTIMA
-              </h4>
-            </div>
+              UOMA
+            </h4>
+            <h4
+              style={{
+                marginLeft: 30,
+                color: '#fff',
+                fontSize: '2rem',
+              }}
+            >
+              OSPIM
+            </h4>
+            <h4
+              style={{
+                marginLeft: 30,
+                color: '#fff',
+                fontSize: '2rem',
+              }}
+            >
+              AMTIMA
+            </h4>
           </div>
-          <div
-            style={{
-              marginTop: '180px',
-            }}
-          >
-            <Outlet />
-          </div>
-        </Box>
+        </div>
       </Box>
-    </>
+      <Outlet />
+    </Box>
   );
 };
 

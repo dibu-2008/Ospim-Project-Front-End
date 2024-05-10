@@ -29,6 +29,8 @@
   "/public/provincia/:provinciaId/localidad": "/localidad?provinciaId=:provinciaId",
   "/provincia/:provinciaId/localidad": "/localidad?provinciaId=:provinciaId",
   "/camara/categoria": "/categoria",
+  "/categoria/camara/:camara": "/categoria/?camara=:camara",
+  "/categoria/:categoria/antiguedad": "/categoria-antiguedad/?categoria=:categoria",
   "/entidad/aporte": "/entidad-aporte",
 
   "/empresa/:empresaId/ddjj/:id/imprimir": "/DDJJ/imprimir/?empresaId=:empresaId&id=:id",
@@ -45,6 +47,10 @@
   "/funcionalidades/actualizar/:id": "/funcionalidades/id?id=:id",
   "/funcionalidad/:codigo/rol/:rolId": "/rolFuncionalidad/?rolId=:rolId&funcionalidad=:codigo",
   "/aportes/detalle/": "/aportesDetalle/",
+  "/aportes/calculo/tipo": "/calculo-tipo",
+  "/aportes/calculo/base": "/calculo-base",
+  "/aportes/calculo": "/calculo-aportes",
+  "/aportes/calculo/:id": "/calculo-aportes/:id",
   "/aportes/:codigo": "/aportes/?codigo=:codigo",
   "/aportes/:codigo/detalle/:id": "/aportesDetalle/:id",
   "/aportes/:codigo/detalle/": "/aportesDetalle/?aporte=:codigo",
@@ -66,11 +72,11 @@
   "/empresa/:empresaId/periodo/:periodo/tiene-rectificativa": "/empresa/periodo/tiene-rectificativa?empresaId=:empresaId&periodo=:periodo",
 
   "/empresa/:empresaId/generar-boleta-sin-ddjj": "/empresa/otras_boletas",
-  "/afip/intereses/:id":"/afip/intereses/?id=:id",
+  "/afip/intereses/:id": "/afip/intereses/?id=:id",
   "/afip/intereses": "/intereses",
   "/sigeco/ajustes": "/ajustes",
   "/sigeco/ajustes/:id": "/sigeco/ajustes/?id=:id",
   "/ddjj/totales": "/ddjjConsulta",
 
-  "/error/401":"/error/401"
+  "/error/401": "/error/401"
 }

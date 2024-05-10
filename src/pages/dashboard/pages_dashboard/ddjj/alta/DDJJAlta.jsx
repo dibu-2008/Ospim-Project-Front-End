@@ -13,6 +13,7 @@ import {
   Tooltip,
   Typography,
   dialogClasses,
+  Box,
 } from '@mui/material';
 import 'dayjs/locale/es';
 import './DDJJAlta.css';
@@ -646,22 +647,34 @@ export const DDJJAlta = ({
         (rowsAltaDDJJ && rowsAltaDDJJ.length > 0)) && (
         <div className="formulario_container">
           <h5 className="paso">Paso 3 - Completar el formulario</h5>
-
-          <DDJJAltaEmpleadosGrilla
-            rowsAltaDDJJ={rowsAltaDDJJ}
-            setRowsAltaDDJJ={setRowsAltaDDJJ}
-            camaras={camaras}
-            categoriasFiltradas={categoriasFiltradas}
-            setCategoriasFiltradas={setCategoriasFiltradas}
-            afiliado={afiliado}
-            setAfiliado={setAfiliado}
-            todasLasCategorias={todasLasCategorias}
-            plantas={plantas}
-            validacionResponse={validacionResponse}
-            setSomeRowInEditMode={setSomeRowInEditMode}
-            rowModesModel={rowModesModel}
-            setRowModesModel={setRowModesModel}
-          />
+          <Box
+            sx={{
+              height: '600px',
+              width: '100%',
+              '& .actions': {
+                color: 'text.secondary',
+              },
+              '& .textPrimary': {
+                color: 'text.primary',
+              },
+            }}
+          >
+            <DDJJAltaEmpleadosGrilla
+              rowsAltaDDJJ={rowsAltaDDJJ}
+              setRowsAltaDDJJ={setRowsAltaDDJJ}
+              camaras={camaras}
+              categoriasFiltradas={categoriasFiltradas}
+              setCategoriasFiltradas={setCategoriasFiltradas}
+              afiliado={afiliado}
+              setAfiliado={setAfiliado}
+              todasLasCategorias={todasLasCategorias}
+              plantas={plantas}
+              validacionResponse={validacionResponse}
+              setSomeRowInEditMode={setSomeRowInEditMode}
+              rowModesModel={rowModesModel}
+              setRowModesModel={setRowModesModel}
+            />
+          </Box>
 
           <div
             className="botones_container"
