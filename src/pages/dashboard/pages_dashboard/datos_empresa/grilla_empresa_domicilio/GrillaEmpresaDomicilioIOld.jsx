@@ -26,10 +26,26 @@ function EditToolbar(props) {
 
     volverPrimerPagina();
 
-    setRows((oldRows) => [newReg, ...oldRows]);
+    setRows((oldRows) => [
+      {
+        id,
+        tipo: '',
+        provinciaId: '',
+        localidadId: '',
+        calle: '',
+        piso: '',
+        dpto: '',
+        oficina: '',
+        cp: '',
+        planta: '',
+        valor: '',
+        isNew: true,
+      },
+      ...oldRows,
+    ]);
     setRowModesModel((oldModel) => ({
-      [0]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
       ...oldModel,
+      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
     }));
   };
 
@@ -48,7 +64,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
   const [provincias, setProvincias] = useState([]);
   const [localidades, setLocalidades] = useState([]);
   const [paginationModel, setPaginationModel] = useState({
-    pageSize: 50,
+    pageSize: 10,
     page: 0,
   });
 
@@ -139,21 +155,15 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
     }
   };
 
-  const handleEditClick = (row) => () => {
-    setRowModesModel({
-      ...rowModesModel,
-      [rows.indexOf(row)]: { mode: GridRowModes.Edit },
-    });
+  const handleEditClick = (id) => () => {
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
 
-  const handleSaveClick = (row) => () => {
-    setRowModesModel({
-      ...rowModesModel,
-      [rows.indexOf(row)]: { mode: GridRowModes.View },
-    });
+  const handleSaveClick = (id) => () => {
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
-  const handleDeleteClick = (row) => async () => {
+  const handleDeleteClick = (id) => async () => {
     const showSwalConfirm = async () => {
       try {
         Swal.fire({
@@ -166,8 +176,8 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
           confirmButtonText: 'Si, bórralo!',
         }).then(async (result) => {
           if (result.isConfirmed) {
-            const bBajaOk = await axiosDomicilio.eliminar(idEmpresa, row.id);
-            if (bBajaOk) setRows(rows.filter((rowAux) => rowAux.id !== row.id));
+            const bBajaOk = await axiosDomicilio.eliminar(idEmpresa, id);
+            if (bBajaOk) setRows(rows.filter((row) => row.id !== id));
           }
         });
       } catch (error) {
@@ -178,30 +188,30 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
     showSwalConfirm();
   };
 
-  const handleCancelClick = (row) => () => {
+  const handleCancelClick = (id) => () => {
     setRowModesModel({
       ...rowModesModel,
-      [rows.indexOf(row)]: {
-        mode: GridRowModes.View,
-        ignoreModifications: true,
-      },
+      [id]: { mode: GridRowModes.View, ignoreModifications: true },
     });
 
-    const editedRow = rows.find((reg) => reg.id === row.id);
-    if (!editedRow.id) {
-      setRows(rows.filter((reg) => reg.id !== row.id));
+    const editedRow = rows.find((row) => row.id === id);
+    if (editedRow.isNew) {
+      setRows(rows.filter((row) => row.id !== id));
     }
   };
 
   const processRowUpdate = async (newRow, oldRow) => {
     let bOk = false;
-    if (!newRow.id) {
+    if (newRow.isNew) {
       try {
+        delete newRow.id;
+        delete newRow.isNew;
         const data = await axiosDomicilio.crear(idEmpresa, newRow);
         if (data && data.id) {
           newRow.id = data.id;
+          newRow.isNew = false;
           bOk = true;
-          const newRows = rows.map((row) => (!row.id ? newRow : row));
+          const newRows = rows.map((row) => (row.isNew ? newRow : row));
           setRows(newRows);
         } else {
           console.log('alta sin ID generado');
@@ -213,13 +223,12 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
       }
     } else {
       try {
+        delete newRow.isNew;
         bOk = await axiosDomicilio.actualizar(idEmpresa, newRow);
         console.log('4 - processRowUpdate - MODI - bOk: ' + bOk);
+        newRow.isNew = false;
         if (bOk) {
-          const rowsNew = rows.map((row) =>
-            row.id === newRow.id ? newRow : row,
-          );
-          setRows(rowsNew);
+          setRows(rows.map((row) => (row.id === newRow.id ? newRow : row)));
         }
       } catch (error) {
         console.log(
@@ -227,6 +236,8 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
         );
       }
     }
+
+    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
 
     if (bOk) {
       return newRow;
@@ -258,7 +269,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
       getOptionLabel: (dato) => dato.descripcion,
       valueOptions: tipoDomicilio,
     },
-    /* {
+    {
       field: 'provinciaId',
       headerName: 'Provincia',
       flex: 2,
@@ -271,11 +282,11 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
       getOptionValue: (dato) => dato.id,
       getOptionLabel: (dato) => dato.descripcion,
       renderEditCell: (params) => {
-        //actualizarDatosLocalidad(params.value);
+        actualizarDatosLocalidad(params.value);
         return (
           <Select
             value={params.value}
-            onChange={async (e) => {
+            onChange={(e) => {
               // Limpiar el valor de la localidad
               params.api.setEditCellValue({
                 id: params.id,
@@ -320,7 +331,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
       //valueOptions: localidadesList,
       valueOptions: ({ row }) => {
         var options = localidades.filter((item) => {
-          return item?.provinciaId == row?.provinciaId;
+          return item.provinciaId == row.provinciaId;
         });
         return options;
       },
@@ -356,7 +367,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
           </Select>
         );
       },
-    }, */
+    },
     {
       field: 'calle',
       headerName: 'Calle',
@@ -419,9 +430,8 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell',
-      getActions: ({ row }) => {
-        const isInEditMode =
-          rowModesModel[rows.indexOf(row)]?.mode === GridRowModes.Edit;
+      getActions: ({ id }) => {
+        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
         if (isInEditMode) {
           return [
@@ -431,13 +441,13 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
               sx={{
                 color: 'primary.main',
               }}
-              onClick={handleSaveClick(row)}
+              onClick={handleSaveClick(id)}
             />,
             <GridActionsCellItem
               icon={<CancelIcon />}
               label="Cancel"
               className="textPrimary"
-              onClick={handleCancelClick(row)}
+              onClick={handleCancelClick(id)}
               color="inherit"
             />,
           ];
@@ -448,13 +458,13 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
             icon={<EditIcon />}
             label="Edit"
             className="textPrimary"
-            onClick={handleEditClick(row)}
+            onClick={handleEditClick(id)}
             color="inherit"
           />,
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Delete"
-            onClick={handleDeleteClick(row)}
+            onClick={handleDeleteClick(id)}
             color="inherit"
           />,
         ];
@@ -479,10 +489,6 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
       <DataGrid
         columns={columns}
         rows={rows}
-        getRowId={(row) => rows.indexOf(row)}
-        getRowClassName={(params) =>
-          rows.indexOf(params.row) % 2 === 0 ? 'even' : 'odd'
-        }
         editMode="row"
         rowModesModel={rowModesModel}
         onRowModesModelChange={handleRowModesModelChange}
@@ -517,7 +523,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
         }}
         paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}
-        pageSizeOptions={[50, 75, 100]}
+        pageSizeOptions={[10, 15, 25]}
       />
     </Box>
   );

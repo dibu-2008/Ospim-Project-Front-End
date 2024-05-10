@@ -84,6 +84,7 @@ const crearNuevoRegistro = (props) => {
         email: '',
         clave: '',
         rolId: '',
+        notificaciones: '',
         habilitado: null,
         isNew: true,
       },
@@ -164,30 +165,6 @@ export const AltaUsuarioInterno = () => {
 
   const handleSaveClick = (id) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-  };
-
-  const handleDeleteClick = (id) => async () => {
-    const showSwalConfirm = async () => {
-      try {
-        Swal.fire({
-          title: '¿Estás seguro?',
-          text: '¡No podrás revertir esto!',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#1A76D2',
-          cancelButtonColor: '#6c757d',
-          confirmButtonText: 'Si, bórralo!',
-        }).then(async (result) => {
-          if (result.isConfirmed) {
-            const bBajaOk = await axiosUsuariosInternos.eliminar(id);
-            if (bBajaOk) setRows(rows.filter((row) => row.id !== id));
-          }
-        });
-      } catch (error) {
-        console.error('Error al ejecutar eliminarRoles:', error);
-      }
-    };
-    showSwalConfirm();
   };
 
   const handleCancelClick = (id) => () => {
@@ -389,6 +366,19 @@ export const AltaUsuarioInterno = () => {
       }),
     },
     {
+      field: 'notificaciones',
+      headerName: 'Notificaciones',
+      flex: 2,
+      type: 'singleSelect',
+      editable: true,
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
+      valueOptions: ['Si','No'],
+      value: (params) => params.row.notificaciones || 'No'
+      //value:(params) => params.row.notificaciones
+    },
+    {
       field: 'habilitado',
       headerName: 'Habilitado',
       flex: 2,
@@ -535,10 +525,10 @@ export const AltaUsuarioInterno = () => {
             initialState={{
               ...rows.initialState,
               pagination: {
-                paginationModel: { pageSize: 5 },
+                paginationModel: { pageSize: 50 },
               },
             }}
-            pageSizeOptions={[5, 10, 25]}
+            pageSizeOptions={[5, 10, 25, 50]}
           />
         </ThemeProvider>
         <Modal

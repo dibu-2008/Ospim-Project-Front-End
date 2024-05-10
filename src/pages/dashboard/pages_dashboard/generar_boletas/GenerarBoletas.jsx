@@ -207,7 +207,7 @@ export const GenerarBoletas = () => {
         boletas.periodo &&
         boletas.periodo !== null &&
         boletas.periodo !== ''
-          ? formatter.periodo(boletas.periodo, '-')
+          ? formatter.periodo(boletas.periodo)
           : ''}{' '}
       </p>
       <TableContainer component={Paper}>

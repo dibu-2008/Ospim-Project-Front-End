@@ -1,10 +1,8 @@
-import { error401 } from '@/common/api/ErrorCommonApi';
 import formatter from '@/common/formatter';
 import { axiosCrud } from '@/components/axios/axiosCrud';
 import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
 import { toast } from 'react-toastify';
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
 const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
 const HTTP_MSG_ALTA_ERROR = import.meta.env.VITE_HTTP_MSG_ALTA_ERROR;
@@ -19,7 +17,6 @@ const styles = {
 
 const calcularInteres = async (url, intencion_de_pago) => {
   const body = { intencion_de_pago: intencion_de_pago };
-  //const response = await oAxios.get(url, body);
   console.log(body);
   const response = await axiosCrud.crear(url, body);
   return response;

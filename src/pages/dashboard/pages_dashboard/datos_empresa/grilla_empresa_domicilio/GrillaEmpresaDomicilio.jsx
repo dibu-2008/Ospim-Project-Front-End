@@ -21,7 +21,7 @@ import {
 } from './GrillaEmpresaDomicilioApi';
 import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 import Swal from 'sweetalert2';
-
+import { toast } from 'react-toastify';
 //const isNotNull = (value) => (value !== null && value !== '' ? value : '');
 
 let isOnEditMode = false;
@@ -60,7 +60,7 @@ const crearNuevoRegistro = (props) => {
   return (
     <GridToolbarContainer>
       <GridToolbar showQuickFilter={props.showQuickFilter} />
-      <Button color="primary" startIcon={<AddIcon />} onClick={altaHandleClick}>
+      <Button color="primary" startIcon={<AddIcon />} onClick={altaHandleClick} disabled={isOnEditMode}>
         Nuevo Registro
       </Button>
     </GridToolbarContainer>
@@ -156,11 +156,16 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
     showSwalConfirm();
   };
   const handleEditClick = (row) => () => {
-    getDatosLocalidad(row.provincia.descripcion);
-    setRowModesModel({
-      ...rowModesModel,
-      [rows.indexOf(row)]: { mode: GridRowModes.Edit },
-    });
+    if (!isOnEditMode) {
+      isOnEditMode = true;
+      getDatosLocalidad(row.provincia.descripcion);
+      setRowModesModel({
+        ...rowModesModel,
+        [rows.indexOf(row)]: { mode: GridRowModes.Edit },
+      });
+    } else {
+      toast.info('Solo se puede editar de a un registro a la vez')
+    }
   };
   const handleSaveClick = (row) => () => {
     setRowModesModel({

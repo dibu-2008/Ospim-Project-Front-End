@@ -813,6 +813,7 @@
       "nombre": "Jose",
       "apellido": "Suarez",
       "email": "prueba@gmail.com",
+      "notificaciones": true,
       "habilitado": false,
       "id": 1
     },
@@ -824,16 +825,19 @@
       "habilitado": false,
       "nombre": "Francisco",
       "apellido": "Moreno",
-      "email": "prueba2@gmail.com"
+      "email": "prueba2@gmail.com",
+      "notificaciones": true
     },
     {
-      "id": 4,
       "descripcion": "usuauro4",
       "clave": "Prueba123",
-      "rolId": 7,
+      "rolId": 2,
       "nombre": "Carlos",
       "apellido": "Fuente",
-      "email": ""
+      "email": "usuario@gmail.com",
+      "notificaciones": true,
+      "id": 4,
+      "habilitado": false
     },
     {
       "id": 5,
@@ -843,7 +847,8 @@
       "nombre": "Rocio",
       "apellido": "Gomez",
       "email": "cccc@gmail.com",
-      "habilitado": true
+      "notificaciones": true,
+      "habilitado": false
     },
     {
       "id": 6,
@@ -852,6 +857,7 @@
       "rolId": 77,
       "nombre": "Federico",
       "apellido": "Castro",
+      "notificaciones": false,
       "email": "cccc@gmail.com"
     },
     {
@@ -862,6 +868,7 @@
       "apellido": "Perez",
       "email": "usuario-2@gmail.com",
       "id": 7,
+      "notificaciones": true,
       "habilitado": false
     },
     {
@@ -872,6 +879,38 @@
       "apellido": "Salinas",
       "email": "luis@gmail.com",
       "id": 8
+    },
+    {
+      "apellido": "das",
+      "nombre": "",
+      "descripcion": "",
+      "email": "",
+      "clave": "",
+      "rolId": "",
+      "habilitado": null,
+      "id": 9
+    },
+    {
+      "apellido": "p",
+      "nombre": "z",
+      "descripcion": "pz",
+      "email": "pz@gmail.com",
+      "clave": "",
+      "rolId": 2,
+      "notificaciones": true,
+      "habilitado": null,
+      "id": 10
+    },
+    {
+      "apellido": "f",
+      "nombre": "p",
+      "descripcion": "pz",
+      "email": "dsa@gmail.com",
+      "clave": "",
+      "rolId": 2,
+      "notificaciones": true,
+      "habilitado": null,
+      "id": 11
     }
   ],
   "publicaciones": [
@@ -1037,70 +1076,6 @@
     }
   ],
   "empresaDomicilio": [
-    {
-      "tipo": "FISCAL",
-      "provincia": {
-        "id": 16,
-        "descripcion": "Neuquen"
-      },
-      "localidad": {
-        "provinciaId": 16,
-        "id": 242,
-        "descripcion": "Caminera San Martin"
-      },
-      "calle": "San Pedro",
-      "piso": "2",
-      "depto": "3",
-      "oficina": "23",
-      "cp": "1212",
-      "planta": "Planta 3",
-      "empresaId": "1",
-      "id": 7
-    },
-    {
-      "tipo": "FISCAL",
-      "provincia": {
-        "id": 16,
-        "descripcion": "Neuquen"
-      },
-      "localidad": {
-        "provinciaId": 16,
-        "id": 242,
-        "descripcion": "Caminera San Martin"
-      },
-      "calle": "2",
-      "piso": "4",
-      "depto": "4",
-      "oficina": "",
-      "cp": "",
-      "planta": "",
-      "valor": "",
-      "isNew": true,
-      "empresaId": "1",
-      "id": 8
-    },
-    {
-      "id": 9,
-      "tipo": "REAL",
-      "provincia": {
-        "id": 16,
-        "descripcion": "Neuquen"
-      },
-      "localidad": {
-        "provinciaId": 16,
-        "id": 242,
-        "descripcion": "Caminera San Martin"
-      },
-      "calle": "dsa",
-      "piso": "",
-      "depto": "",
-      "oficina": "",
-      "cp": "",
-      "planta": "",
-      "valor": "",
-      "isNew": true,
-      "empresaId": "1"
-    },
     {
       "id": 10,
       "tipo": "REAL",
@@ -4759,50 +4734,7 @@
         "forma_de_pago": "VENTANILLA",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
-        "numero_boleta": 24,
-        "id": 24
-      },
-      {
-        "codigo": "UOMACS",
-        "intencion_de_pago": "2024-05-09T03:00:00.000Z",
-        "forma_de_pago": "Ventanilla",
-        "numero_boleta": null,
-        "id": 10000
-      },
-      {
-        "codigo": "ART46",
-        "intencion_de_pago": "2024-05-09T03:00:00.000Z",
-        "forma_de_pago": "Ventanilla",
-        "numero_boleta": null,
-        "id": 10001
-      },
-      {
-        "codigo": "ANTIMACS",
-        "intencion_de_pago": "2024-05-09T03:00:00.000Z",
-        "forma_de_pago": "Ventanilla",
-        "numero_boleta": null,
-        "id": 10002
-      },
-      {
-        "codigo": "UOMACS",
-        "intencion_de_pago": "2024-05-15T03:00:00.000Z",
-        "forma_de_pago": "Ventanilla",
-        "numero_boleta": null,
-        "id": 10000
-      },
-      {
-        "codigo": "ART46",
-        "intencion_de_pago": "2024-05-15T03:00:00.000Z",
-        "forma_de_pago": "Ventanilla",
-        "numero_boleta": null,
-        "id": 10001
-      },
-      {
-        "codigo": "ANTIMACS",
-        "intencion_de_pago": "2024-05-15T03:00:00.000Z",
-        "forma_de_pago": "Ventanilla",
-        "numero_boleta": null,
-        "id": 10002
+        "numero_boleta": 24
       }
     ],
     "sin_ddjj": [
