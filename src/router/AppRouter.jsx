@@ -23,14 +23,16 @@ import { InteresesAfip } from '@/pages/dashboard/pages_dashboard/intereses_afip/
 import { Ajustes } from '@/pages/dashboard/pages_dashboard/ajustes/Ajustes';
 import { DDJJTabs } from '@/pages/dashboard/pages_dashboard/ddjj/DDJJTabs';
 import { GestionRoles } from '@/pages/dashboard/pages_dashboard/gestionRoles/GestionRoles';
+import { Aportes } from '@/pages/dashboard/pages_dashboard/aportes/Aportes';
 
-const PagosPage = () => <div>Contenido de la página de pagos</div>;
+const PagosPage = () => (
+  <div className="otros_pagos_container">Contenido de la página de pagos</div>
+);
 
 const AppRouter = () => {
   return (
     <>
       <Routes>
-        {/* <Route path="/" element={<NavBar />}> */}
         <Route path="login" element={<LoginPage />} />
         <Route path="recupero" element={<RecuperoPage />} />
         <Route
@@ -52,7 +54,6 @@ const AppRouter = () => {
           <Route path="boletas" element={<Boletas />} />
           <Route path="pagos" element={<PagosPage />} />
           <Route path="misdatos" element={<DatosEmpresa />} />
-          {/* <Route path="categorias" element={<Categorias />} /> */}
           <Route path="altausuariointerno" element={<AltaUsuarioInterno />} />
           <Route path="cuitsrestringidos" element={<CuitsRestringidos />} />
           <Route path="roles" element={<Roles />} />
@@ -69,6 +70,7 @@ const AppRouter = () => {
           <Route path="interesesafip" element={<InteresesAfip />} />
           <Route path="ajustes" element={<Ajustes />} />
           <Route path="gestion-roles" element={<GestionRoles />} />
+          <Route path="aportes" element={<Aportes />} />
         </Route>
         <Route path="registercompany" element={<RegistroEmpresa />} />
         <Route index element={<Navigate to="/login" />} />
