@@ -1,3 +1,4 @@
+import { error401 } from '@/common/api/ErrorCommonApi';
 import formatter from '@/common/formatter';
 import { axiosCrud } from '@/components/axios/axiosCrud';
 import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
@@ -90,6 +91,7 @@ export const generarBoletasPost = async (empresa_id, ddjj_id, boletas) => {
   try {
     const URL = `/empresa/${empresa_id}/ddjj/${ddjj_id}/boletas/generar`;
     const arr_boletas = ordernarBoletas(boletas);
+    console.log(arr_boletas);
 
     const data = await axiosCrud.crearN(URL, arr_boletas);
     if (data == true) {

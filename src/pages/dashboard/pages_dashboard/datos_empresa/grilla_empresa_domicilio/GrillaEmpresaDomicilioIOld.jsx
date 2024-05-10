@@ -20,11 +20,9 @@ function EditToolbar(props) {
   const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
 
   const handleClick = () => {
-    const newReg = {
-      tipo: '',
-      prefijo: '',
-      valor: '',
-    };
+    const maxId = rows ? Math.max(...rows.map((row) => row.id), 0) : 1;
+    const newId = maxId + 1;
+    const id = newId;
 
     volverPrimerPagina();
 
@@ -44,7 +42,7 @@ function EditToolbar(props) {
   );
 }
 
-export const GrillaEmpresaDomilicio = ({ idEmpresa, rows, setRows }) => {
+export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
   const [rowModesModel, setRowModesModel] = useState({});
   const [tipoDomicilio, setTipoDomicilio] = useState([]);
   const [provincias, setProvincias] = useState([]);
@@ -114,6 +112,7 @@ export const GrillaEmpresaDomilicio = ({ idEmpresa, rows, setRows }) => {
     const options = localidades.filter((item) => {
       return item.provinciaId == provinciaId;
     });
+    console.log(options);
     if (options.length == 0) {
       const localidad = await getLocalidades(provinciaId);
 
@@ -130,11 +129,7 @@ export const GrillaEmpresaDomilicio = ({ idEmpresa, rows, setRows }) => {
 
   useEffect(() => {
     getProvincias();
-  }, []);
-  useEffect(() => {
     getTipoDomicilio();
-  }, []);
-  useEffect(() => {
     getRowsDomicilio();
   }, []);
 

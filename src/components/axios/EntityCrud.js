@@ -1,6 +1,5 @@
 import { axiosCrud } from '@components/axios/axiosCrud';
 import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
-import swal from '@/components/swal/swal';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -12,13 +11,7 @@ const HTTP_MSG_MODI_ERROR = import.meta.env.VITE_HTTP_MSG_MODI_ERROR;
 const HTTP_MSG_BAJA_ERROR = import.meta.env.VITE_HTTP_MSG_BAJA_ERROR;
 const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
 
-let URL_ENTITY = '/feriados';
-
-export const axiosFeriados = {
-  init: function (url) {
-    URL_ENTITY = url;
-  },
-
+export const axiosEntity = {
   consultar: async function (UrlApi) {
     return consultar(UrlApi);
   },
@@ -36,40 +29,40 @@ export const axiosFeriados = {
   },
 };
 
-export const consultar = async () => {
+export const consultar = async (UrlApi) => {
   try {
-    const data = await axiosCrud.consultar(URL_ENTITY);
+    const data = await axiosCrud.consultar(UrlApi);
     return data || [];
   } catch (error) {
     showErrorBackEnd(
-      HTTP_MSG_CONSUL_ERROR + ` (${URL_ENTITY} - status: ${error.status})`,
+      HTTP_MSG_CONSUL_ERROR + ` (${UrlApi} - status: ${error.status})`,
       error,
     );
+    toast.error(HTTP_MSG_CONSUL_ERROR);
     return [];
   }
 };
 
-export const crear = async (registro) => {
+export const crear = async (UrlApi, registro) => {
   try {
-    const data = await axiosCrud.crear(URL_ENTITY, registro);
+    const data = await axiosCrud.crear(UrlApi, registro);
     if (data && data.id) {
-      //swal.showSuccess(HTTP_MSG_ALTA);
-      toast.info(HTTP_MSG_ALTA, styles);
+      toast.success(HTTP_MSG_ALTA);
       return data;
     }
     throw data;
   } catch (error) {
     showErrorBackEnd(HTTP_MSG_ALTA_ERROR, error);
+    toast.error(HTTP_MSG_ALTA_ERROR);
     return {};
   }
 };
 
-export const actualizar = async (registro) => {
+export const actualizar = async (UrlApi, registro) => {
   try {
-    const response = await axiosCrud.actualizar(URL_ENTITY, registro);
+    const response = await axiosCrud.actualizar(UrlApi, registro);
     if (response == true) {
-      //swal.showSuccess(HTTP_MSG_MODI);
-      toast.info(HTTP_MSG_MODI, styles);
+      toast.success(HTTP_MSG_MODI);
       return true;
     }
     throw response;
@@ -79,12 +72,11 @@ export const actualizar = async (registro) => {
   }
 };
 
-export const eliminar = async (id) => {
+export const eliminar = async (UrlApi, id) => {
   try {
-    const response = await axiosCrud.eliminar(URL_ENTITY, id);
+    const response = await axiosCrud.eliminar(UrlApi, id);
     if (response == true) {
-      //swal.showSuccess(HTTP_MSG_BAJA);
-      toast.info(HTTP_MSG_BAJA, styles);
+      toast.success(HTTP_MSG_BAJA);
       return true;
     }
     throw response;
@@ -92,12 +84,4 @@ export const eliminar = async (id) => {
     showErrorBackEnd(HTTP_MSG_BAJA_ERROR, error);
     return false;
   }
-};
-
-const styles = {
-  position: 'top-right',
-  autoClose: 2000,
-  style: {
-    fontSize: '1rem',
-  },
 };

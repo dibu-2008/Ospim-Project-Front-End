@@ -1,9 +1,8 @@
-
 import oAxios from '@components/axios/axiosInstace';
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 export const boletaPdfDownload = async (empresa_id, id) => {
-  const URL = `${BACKEND_URL}/empresa/${empresa_id}/boleta-pago/${id}/imprimir`;
+  const URL = `/empresa/${empresa_id}/boletas/${id}/imprimir`;
 
   try {
     const response = await oAxios({

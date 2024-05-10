@@ -154,7 +154,7 @@
         {
           "id": 3,
           "descripcion": "DDJJ",
-          "activo": false
+          "activo": true
         },
         {
           "id": 4,
@@ -209,7 +209,7 @@
         {
           "id": 14,
           "descripcion": "AJUSTES",
-          "activo": false
+          "activo": true
         }
       ],
       "id": 1
@@ -270,7 +270,7 @@
         {
           "id": 11,
           "descripcion": "ROLES",
-          "activo": false
+          "activo": true
         },
         {
           "id": 12,
@@ -285,7 +285,7 @@
         {
           "id": 14,
           "descripcion": "AJUSTES",
-          "activo": false
+          "activo": true
         }
       ],
       "id": 2
@@ -346,7 +346,7 @@
         {
           "id": 11,
           "descripcion": "ROLES",
-          "activo": false
+          "activo": true
         },
         {
           "id": 12,
@@ -361,7 +361,7 @@
         {
           "id": 14,
           "descripcion": "AJUSTES",
-          "activo": false
+          "activo": true
         }
       ],
       "id": 3
@@ -1044,71 +1044,199 @@
   "empresaDomicilio": [
     {
       "tipo": "FISCAL",
-      "provinciaId": 10,
-      "localidadId": 1893,
-      "calle": "Ancon",
+      "provincia": {
+        "id": 16,
+        "descripcion": "Neuquen"
+      },
+      "localidad": {
+        "provinciaId": 16,
+        "id": 242,
+        "descripcion": "Caminera San Martin"
+      },
+      "calle": "San Pedro",
       "piso": "2",
-      "depto": "A",
-      "oficina": "3",
+      "depto": "3",
+      "oficina": "23",
       "cp": "1212",
-      "planta": "Planta 44",
-      "empresaId": 1,
-      "id": 4
-    },
-    {
-      "tipo": "REAL",
-      "provinciaId": 10,
-      "localidadId": 308,
-      "calle": "Honduras",
-      "piso": "Piso",
-      "depto": "Depto",
-      "oficina": "Ofi",
-      "cp": "1212",
-      "planta": "Planta 44",
-      "empresaId": 1,
-      "id": 5
-    },
-    {
-      "tipo": "REAL",
-      "provinciaId": 1,
-      "localidadId": 1,
-      "calle": "Thomas Edison",
-      "calleNro": "1505",
-      "piso": "1",
-      "depto": "A",
-      "oficina": null,
-      "cp": "1414",
-      "planta": "Planta 1",
-      "empresaId": "2",
-      "id": 6
-    },
-    {
-      "tipo": "",
-      "provinciaId": 10,
-      "localidadId": 1893,
-      "calle": "",
-      "piso": "",
-      "dpto": "",
-      "oficina": "",
-      "cp": "",
-      "planta": "",
-      "valor": "",
+      "planta": "Planta 3",
       "empresaId": "1",
       "id": 7
     },
     {
-      "tipo": "",
-      "provinciaId": 10,
-      "localidadId": 1893,
-      "calle": "",
-      "piso": "",
-      "dpto": "",
+      "tipo": "FISCAL",
+      "provincia": {
+        "id": 16,
+        "descripcion": "Neuquen"
+      },
+      "localidad": {
+        "provinciaId": 16,
+        "id": 242,
+        "descripcion": "Caminera San Martin"
+      },
+      "calle": "2",
+      "piso": "4",
+      "depto": "4",
       "oficina": "",
       "cp": "",
       "planta": "",
       "valor": "",
+      "isNew": true,
       "empresaId": "1",
       "id": 8
+    },
+    {
+      "id": 9,
+      "tipo": "REAL",
+      "provincia": {
+        "id": 16,
+        "descripcion": "Neuquen"
+      },
+      "localidad": {
+        "provinciaId": 16,
+        "id": 242,
+        "descripcion": "Caminera San Martin"
+      },
+      "calle": "dsa",
+      "piso": "",
+      "depto": "",
+      "oficina": "",
+      "cp": "",
+      "planta": "",
+      "valor": "",
+      "isNew": true,
+      "empresaId": "1"
+    },
+    {
+      "id": 10,
+      "tipo": "REAL",
+      "provincia": {
+        "id": 16,
+        "descripcion": "Neuquen"
+      },
+      "localidad": {
+        "provinciaId": 16,
+        "id": 242,
+        "descripcion": "Caminera San Martin"
+      },
+      "calle": "sdfg",
+      "piso": "5413",
+      "depto": "",
+      "oficina": "",
+      "cp": "",
+      "planta": "",
+      "valor": "",
+      "isNew": true,
+      "empresaId": "1"
+    },
+    {
+      "id": 11,
+      "tipo": "REAL",
+      "provincia": {
+        "id": 16,
+        "descripcion": "Neuquen"
+      },
+      "localidad": {
+        "provinciaId": 16,
+        "id": 242,
+        "descripcion": "Caminera San Martin"
+      },
+      "calle": "k",
+      "piso": "k",
+      "depto": "",
+      "oficina": "k",
+      "cp": "",
+      "planta": "",
+      "valor": "",
+      "isNew": true,
+      "empresaId": "1"
+    },
+    {
+      "id": 12,
+      "tipo": "REAL",
+      "provincia": {
+        "id": 16,
+        "descripcion": "Neuquen"
+      },
+      "localidad": {
+        "provinciaId": 16,
+        "id": 242,
+        "descripcion": "Caminera San Martin"
+      },
+      "calle": "54123",
+      "piso": "f23",
+      "depto": "s",
+      "oficina": "wd",
+      "cp": "a",
+      "planta": "f",
+      "valor": "",
+      "isNew": true,
+      "empresaId": "1"
+    },
+    {
+      "id": 13,
+      "tipo": "FISCAL",
+      "provincia": {
+        "id": 16,
+        "descripcion": "Neuquen"
+      },
+      "localidad": {
+        "provinciaId": 16,
+        "id": 242,
+        "descripcion": "Caminera San Martin"
+      },
+      "calle": "",
+      "piso": "",
+      "depto": "",
+      "oficina": "",
+      "cp": "",
+      "planta": "",
+      "valor": "",
+      "isNew": true,
+      "empresaId": "1"
+    },
+    {
+      "id": 15,
+      "tipo": "REAL",
+      "provincia": {
+        "id": 16,
+        "descripcion": "Neuquen"
+      },
+      "localidad": {
+        "provinciaId": 16,
+        "id": 242,
+        "descripcion": "Caminera San Martin"
+      },
+      "calle": "2",
+      "piso": "",
+      "depto": "1",
+      "oficina": "",
+      "cp": "",
+      "planta": "",
+      "valor": "",
+      "isNew": true,
+      "empresaId": "1"
+    },
+    {
+      "id": 16,
+      "tipo": "REAL",
+      "provincia": {
+        "id": 16,
+        "descripcion": "Neuquen"
+      },
+      "localidad": {
+        "provinciaId": 16,
+        "id": 242,
+        "descripcion": "Caminera San Martin"
+      },
+      "calle": "asdas",
+      "piso": "1",
+      "depto": "2",
+      "oficina": "3",
+      "cp": "1",
+      "planta": "1",
+      "valor": "",
+      "isNew": true,
+      "empresaId": "1"
     }
   ],
   "empresaContacto": [
@@ -1312,6 +1440,48 @@
       "provinciaId": 10,
       "id": 477,
       "descripcion": "Formosa"
+    },
+    {
+      "id": 1894,
+      "tipo": "FISCAL",
+      "provincia": 3,
+      "localidad": 265,
+      "calle": "",
+      "piso": "",
+      "depto": "",
+      "oficina": "",
+      "cp": "",
+      "planta": "",
+      "valor": "",
+      "isNew": true
+    },
+    {
+      "id": 1895,
+      "tipo": "FISCAL",
+      "provincia": 3,
+      "localidad": 265,
+      "calle": "",
+      "piso": "",
+      "depto": "",
+      "oficina": "",
+      "cp": "",
+      "planta": "",
+      "valor": "",
+      "isNew": true
+    },
+    {
+      "id": 1896,
+      "tipo": "FISCAL",
+      "provincia": 10,
+      "localidad": 1893,
+      "calle": "",
+      "piso": "",
+      "depto": "",
+      "oficina": "",
+      "cp": "",
+      "planta": "",
+      "valor": "",
+      "isNew": true
     }
   ],
   "DDJJ-V2-CONSUL": [
@@ -4646,7 +4816,50 @@
         "forma_de_pago": "VENTANILLA",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
-        "numero_boleta": 24
+        "numero_boleta": 24,
+        "id": 24
+      },
+      {
+        "codigo": "UOMACS",
+        "intencion_de_pago": "2024-05-09T03:00:00.000Z",
+        "forma_de_pago": "Ventanilla",
+        "numero_boleta": null,
+        "id": 10000
+      },
+      {
+        "codigo": "ART46",
+        "intencion_de_pago": "2024-05-09T03:00:00.000Z",
+        "forma_de_pago": "Ventanilla",
+        "numero_boleta": null,
+        "id": 10001
+      },
+      {
+        "codigo": "ANTIMACS",
+        "intencion_de_pago": "2024-05-09T03:00:00.000Z",
+        "forma_de_pago": "Ventanilla",
+        "numero_boleta": null,
+        "id": 10002
+      },
+      {
+        "codigo": "UOMACS",
+        "intencion_de_pago": "2024-05-15T03:00:00.000Z",
+        "forma_de_pago": "Ventanilla",
+        "numero_boleta": null,
+        "id": 10000
+      },
+      {
+        "codigo": "ART46",
+        "intencion_de_pago": "2024-05-15T03:00:00.000Z",
+        "forma_de_pago": "Ventanilla",
+        "numero_boleta": null,
+        "id": 10001
+      },
+      {
+        "codigo": "ANTIMACS",
+        "intencion_de_pago": "2024-05-15T03:00:00.000Z",
+        "forma_de_pago": "Ventanilla",
+        "numero_boleta": null,
+        "id": 10002
       }
     ],
     "sin_ddjj": [

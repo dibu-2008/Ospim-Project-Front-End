@@ -1,12 +1,6 @@
 import * as locales from '@mui/material/locale';
 import { useState, useEffect, useMemo } from 'react';
-import { Box, Button } from '@mui/material';
-
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import SaveIcon from '@mui/icons-material/Save';
-import CancelIcon from '@mui/icons-material/Close';
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import { MenuItem, Select } from '@mui/material';
 import {
   GridRowModes,
   GridToolbar,
@@ -14,42 +8,55 @@ import {
   GridActionsCellItem,
   GridRowEditStopReasons,
 } from '@mui/x-data-grid';
-import { axiosAjustes } from './AjustesApi';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
-import './ajustes.css';
-import formatter from '@/common/formatter';
+import { Box, Button } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Close';
+import {
+  adaptadorDomicilioGrilla,
+  axiosDomicilio,
+} from './GrillaEmpresaDomicilioApi';
 import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
-import { InputPeriodo } from '@/components/InputPeriodo';
-import swal from '@/components/swal/swal';
 import Swal from 'sweetalert2';
-import { ToastContainer } from 'react-toastify';
 
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 500,
-  bgcolor: 'background.paper',
-  border: '2px solid #1A76D2',
-  boxShadow: 24,
-  p: 4,
-};
-const isNotNull = (value) => (value !== null && value !== '' ? value : '');
-// Traerme las etiquetas del dom que tengas la clase .MuiDataGrid-cell--editable
+//const isNotNull = (value) => (value !== null && value !== '' ? value : '');
+
+let isOnEditMode = false;
 const crearNuevoRegistro = (props) => {
-  const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
-
+  const { setRows, setRowModesModel, volverPrimerPagina } = props;
   const altaHandleClick = () => {
-    const newReg = {};
-    volverPrimerPagina();
-    setRows((oldRows) => [newReg, ...oldRows]);
-    setRowModesModel((oldModel) => ({
-      [0]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
-      ...oldModel,
-    }));
+    if (!isOnEditMode) {
+      const newReg = {
+        tipo: '',
+        provincia: {
+          id: '',
+          descripcion: '',
+        },
+        localidad: {
+          provinciaId: '',
+          id: '',
+          descripcion: '',
+        },
+        calle: '',
+        calleNro: '',
+        piso: '',
+        depto: '',
+        oficina: '',
+        cp: '',
+        planta: '',
+      };
+      volverPrimerPagina();
+      setRows((oldRows) => [newReg, ...oldRows]);
+      setRowModesModel((oldModel) => ({
+        [0]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
+        ...oldModel,
+      }));
+    }
+    isOnEditMode = true;
   };
-
   return (
     <GridToolbarContainer>
       <GridToolbar showQuickFilter={props.showQuickFilter} />
@@ -60,15 +67,51 @@ const crearNuevoRegistro = (props) => {
   );
 };
 
-export const Ajustes = () => {
+export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
   const [locale, setLocale] = useState('esES');
-  const [rows, setRows] = useState([]);
-  const [aportes, setAportes] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
+  const [provincias, setProvincias] = useState([]);
+  const [provinciasValueOptions, setProvinciasValueOptions] = useState([]);
+  const [tipoDomicilio, setTipoDomicilio] = useState([]);
+  const [localidades, setLocalidades] = useState([]);
   const [paginationModel, setPaginationModel] = useState({
     pageSize: 50,
     page: 0,
   });
+
+  useEffect(() => {
+    async function cargarDatos() {
+      await getRowsDomicilio();
+      await getProvincias();
+      await getTipoDomicilio();
+      console.log(rows);
+    }
+    cargarDatos();
+  }, []);
+
+  const getRowsDomicilio = async () => {
+    const data = await axiosDomicilio.obtenerDomicilios(idEmpresa);
+    setRows(data);
+  };
+
+  const getDatosLocalidad = async (provincia) => {
+    const prov = provincias.find((prov) => prov.descripcion == provincia);
+    const localidades = await axiosDomicilio.obtenerLocalidades(prov.id);
+    setLocalidades(localidades);
+  };
+
+  const getProvincias = async () => {
+    const response = await axiosDomicilio.obtenerProvincias();
+    setProvincias(response);
+    const PRO_V_O = response.map((prov) => prov.descripcion);
+    console.log(PRO_V_O);
+    setProvinciasValueOptions(PRO_V_O);
+  };
+
+  const getTipoDomicilio = async () => {
+    const response = await axiosDomicilio.obtenerTipo();
+    setTipoDomicilio(response.map((item) => item.codigo));
+  };
 
   const volverPrimerPagina = () => {
     setPaginationModel((prevPaginationModel) => ({
@@ -76,52 +119,18 @@ export const Ajustes = () => {
       page: 0,
     }));
   };
-
   const theme = useTheme();
-
   const themeWithLocale = useMemo(
     () => createTheme(theme, locales[locale]),
     [locale, theme],
   );
-
-  const ConsultarEntidad = async () => {
-    const data = await axiosAjustes.consultar();
-    setRows(data);
-  };
-
-  const ConsultarAportes = async () => {
-    const data = await axiosAjustes.consultarAportes();
-    setAportes(data);
-  };
-
-  useEffect(() => {
-    ConsultarEntidad();
-    ConsultarAportes();
-  }, []);
-
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true;
     }
   };
-
-  const handleEditClick = (row) => () => {
-    console.log('handleEditClick - row:');
-    console.log(row);
-    setRowModesModel({
-      ...rowModesModel,
-      [rows.indexOf(row)]: { mode: GridRowModes.Edit },
-    });
-  };
-
-  const handleSaveClick = (row) => () => {
-    setRowModesModel({
-      ...rowModesModel,
-      [rows.indexOf(row)]: { mode: GridRowModes.View },
-    });
-  };
-
   const handleDeleteClick = (row) => async () => {
+    console.log('handleDeleteClick - row.id:', row.id);
     const showSwalConfirm = async () => {
       try {
         Swal.fire({
@@ -133,8 +142,9 @@ export const Ajustes = () => {
           cancelButtonColor: '#6c757d',
           confirmButtonText: 'Si, bórralo!',
         }).then(async (result) => {
+          console.log(row.id);
           if (result.isConfirmed) {
-            const bBajaOk = await axiosAjustes.eliminar(row.id);
+            const bBajaOk = await axiosDomicilio.eliminar(idEmpresa, row.id);
             if (bBajaOk) setRows(rows.filter((rowAux) => rowAux.id !== row.id));
           }
         });
@@ -145,7 +155,20 @@ export const Ajustes = () => {
 
     showSwalConfirm();
   };
-
+  const handleEditClick = (row) => () => {
+    getDatosLocalidad(row.provincia.descripcion);
+    setRowModesModel({
+      ...rowModesModel,
+      [rows.indexOf(row)]: { mode: GridRowModes.Edit },
+    });
+  };
+  const handleSaveClick = (row) => () => {
+    setRowModesModel({
+      ...rowModesModel,
+      [rows.indexOf(row)]: { mode: GridRowModes.View },
+    });
+    isOnEditMode = false;
+  };
   const handleCancelClick = (row) => () => {
     setRowModesModel({
       ...rowModesModel,
@@ -159,32 +182,46 @@ export const Ajustes = () => {
     if (!editedRow.id) {
       setRows(rows.filter((reg) => reg.id !== row.id));
     }
+    isOnEditMode = false;
   };
-
   const processRowUpdate = async (newRow, oldRow) => {
-    console.log('processRowUpdate - INIT');
+    console.log('processRowUpdate - INIT - newRow:', newRow);
     let bOk = false;
 
     if (!newRow.id) {
+      console.log('processRowUpdate - ALTA');
       try {
-        const data = await axiosAjustes.crear(newRow);
+        const data = await axiosDomicilio.crear(idEmpresa, newRow);
+        console.log('processRowUpdate - ALTA - data:', data);
         if (data && data.id) {
+          console.log(data);
           newRow.id = data.id;
           bOk = true;
+          //toast.success("El registro se creo correctamente")
+          newRow = await adaptadorDomicilioGrilla(newRow);
           const newRows = rows.map((row) => (!row.id ? newRow : row));
           setRows(newRows);
+
+          console.log('** processRowUpdate - ALTA - oldRow: ', oldRow);
+          console.log('** processRowUpdate - ALTA - newRow: ', newRow);
         } else {
           console.log('alta sin ID generado');
         }
       } catch (error) {
+        console.log('X - processRowUpdate - ALTA - ERROR: ', error);
         console.log(
           'X - processRowUpdate - ALTA - ERROR: ' + JSON.stringify(error),
         );
       }
     } else {
+      console.log('processRowUpdate - MODI');
       try {
-        bOk = await axiosAjustes.actualizar(newRow.id, newRow);
+        bOk = await axiosDomicilio.actualizar(idEmpresa, newRow);
+        console.log('4 - processRowUpdate - MODI - bOk: ' + bOk);
+        console.log('** processRowUpdate - MODI - oldRow: ', oldRow);
+        console.log('** processRowUpdate - MODI - newRow: ', newRow);
         if (bOk) {
+          newRow = await adaptadorDomicilioGrilla(newRow);
           const rowsNew = rows.map((row) =>
             row.id === newRow.id ? newRow : row,
           );
@@ -203,85 +240,129 @@ export const Ajustes = () => {
       return oldRow;
     }
   };
-
   const handleRowModesModelChange = (newRowModesModel) => {
     setRowModesModel(newRowModesModel);
   };
 
   const columnas = [
     {
-      field: 'cuit',
-      headerName: 'CUIT',
-      flex: 1,
-      type: 'text',
-      editable: true,
-      headerAlign: 'center',
-      align: 'center',
-      headerClassName: 'header--cell',
-    },
-    {
-      field: 'periodo_original',
-      headerName: 'PERIODO ORIGINAL',
+      field: 'tipo',
+      headerName: 'Tipo',
       flex: 1,
       editable: true,
-      headerAlign: 'center',
-      align: 'center',
-      valueFormatter: (params) => {
-        return isNotNull(params.value) ? formatter.periodo(params.value) : '';
-      },
-      renderEditCell: (params) => <InputPeriodo {...params} />,
-      headerClassName: 'header--cell',
-    },
-    {
-      field: 'importe',
-      headerName: 'IMPORTE',
-      flex: 1,
-      type: 'number',
-      editable: true,
-      headerAlign: 'center',
-      align: 'center',
-      headerClassName: 'header--cell',
-    },
-    {
-      field: 'aporte',
-      headerName: 'TIPO APORTE',
       type: 'singleSelect',
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
+      valueOptions: tipoDomicilio,
+    },
+    {
+      field: 'provincia',
+      headerName: 'Provincia',
+      flex: 2,
       editable: true,
-      flex: 1,
-      //valueOptions: ['ART.46', 'AMTIMA', 'UOMA'],
-      valueOptions: () => {
-        console.log('aportes: ', aportes);
-        const aportesOptions = aportes.map((item) => {
-          return { value: item.codigo, label: item.descripcion };
-        });
-        return aportesOptions;
+      type: 'singleSelect',
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
+      valueOptions: provinciasValueOptions,
+      valueGetter: (params) => params.row.provincia.descripcion,
+      renderEditCell: (params) => {
+        return (
+          <Select
+            value={params.value}
+            onChange={(e) => {
+              params.api.setEditCellValue({
+                id: params.id,
+                field: 'provincia',
+                value: e.target.value,
+              });
+              getDatosLocalidad(e.target.value);
+            }}
+            sx={{ width: 200 }}
+          >
+            {provinciasValueOptions.map((item) => {
+              return (
+                <MenuItem key={item} value={item}>
+                  {item}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        );
       },
-      valueGetter: (params) => params.row.aporte || '',
+    },
+    {
+      field: 'localidad',
+      headerName: 'Localidad',
+      flex: 2,
+      editable: true,
+      type: 'singleSelect',
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
+      valueOptions: localidades.map((localidad) => localidad.descripcion),
+      valueGetter: (params) => params.row.localidad.descripcion,
+    },
+    {
+      field: 'calle',
+      headerName: 'Calle',
+      flex: 2,
+      editable: true,
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell',
     },
     {
-      field: 'vigencia',
-      headerName: 'VIGENTE DESDE',
-      width: 200,
+      field: 'calleNro',
+      headerName: 'Altura',
+      flex: 2,
+      editable: true,
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
+    },
+    {
+      field: 'piso',
+      headerName: 'Piso',
       flex: 1,
       editable: true,
       headerAlign: 'center',
       align: 'center',
-      type: 'date',
-      valueFormatter: (params) => {
-        return formatter.periodo(params.value);
-      },
-      renderEditCell: (params) => <InputPeriodo {...params} />,
       headerClassName: 'header--cell',
     },
     {
-      field: 'nro_boleta',
-      headerName: 'NRO BOLETA',
-      width: 150,
-      editable: false,
-      type: 'number',
+      field: 'depto',
+      headerName: 'Depto',
+      flex: 1,
+      editable: true,
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
+    },
+    {
+      field: 'oficina',
+      headerName: 'Oficina',
+      flex: 1,
+      editable: true,
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
+    },
+    {
+      field: 'cp',
+      headerName: 'CP',
+      flex: 1,
+      editable: true,
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
+    },
+    {
+      field: 'planta',
+      headerName: 'Planta',
+      flex: 1,
+      editable: true,
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell',
@@ -290,8 +371,7 @@ export const Ajustes = () => {
       field: 'actions',
       type: 'actions',
       headerName: 'Acciones',
-      flex: 1,
-      cellClassName: 'actions',
+      flex: 2,
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell',
@@ -338,16 +418,7 @@ export const Ajustes = () => {
   ];
 
   return (
-    <div className="ajustes_container">
-      <h1
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-        }}
-      >
-        Administración de Ajustes
-      </h1>
-      <ToastContainer style={{ marginRight: '6rem', marginTop: '3rem' }} />
+    <div>
       <Box
         sx={{
           height: '600px',

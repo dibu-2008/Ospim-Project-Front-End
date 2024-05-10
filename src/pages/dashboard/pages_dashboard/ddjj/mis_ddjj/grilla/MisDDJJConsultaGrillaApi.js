@@ -1,6 +1,7 @@
 import oAxios from '@components/axios/axiosInstace';
 import { axiosCrud } from '@components/axios/axiosCrud';
 import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
+import { consultarAportes } from '@/common/api/AportesApi';
 import swal from '@/components/swal/swal';
 
 const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
@@ -10,20 +11,6 @@ const HTTP_MSG_ALTA_ERROR = import.meta.env.VITE_HTTP_MSG_ALTA_ERROR;
 const HTTP_MSG_MODI_ERROR = import.meta.env.VITE_HTTP_MSG_MODI_ERROR;
 const HTTP_MSG_BAJA_ERROR = import.meta.env.VITE_HTTP_MSG_BAJA_ERROR;
 const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
-
-export const obtenerAportes = async () => {
-  const URL = '/aportes/';
-  try {
-    const data = await axiosCrud.consultar(URL);
-    return data || [];
-  } catch (error) {
-    showErrorBackEnd(
-      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
-      error,
-    );
-    return [];
-  }
-};
 
 export const obtenerMisDeclaracionesJuradas = async (empresaId) => {
   const URL = `/empresa/${empresaId}/ddjj/totales`;
@@ -111,7 +98,7 @@ export const eliminarDeclaracionJurada = async (empresaId, ddjjId) => {
 
 export const axiosDDJJ = {
   getAportes: async function () {
-    return obtenerAportes();
+    return consultarAportes();
   },
 
   consultar: async function (empresaId) {

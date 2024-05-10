@@ -1,8 +1,11 @@
 import { axiosCrud } from '@components/axios/axiosCrud';
+import { consultarAportesDDJJ } from '@/common/api/AportesApi';
 import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
 import formatter from '@/common/formatter';
 import swal from '@/components/swal/swal';
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
 const HTTP_MSG_MODI = import.meta.env.VITE_HTTP_MSG_MODI;
 const HTTP_MSG_BAJA = import.meta.env.VITE_HTTP_MSG_BAJA;
@@ -11,71 +14,90 @@ const HTTP_MSG_MODI_ERROR = import.meta.env.VITE_HTTP_MSG_MODI_ERROR;
 const HTTP_MSG_BAJA_ERROR = import.meta.env.VITE_HTTP_MSG_BAJA_ERROR;
 const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
 
+const URL_ENTITY = '/ajustes';
+
 export const axiosAjustes = {
-  consultar: async function () {
-    return getAjustes();
+  consultar: async function (UrlApi) {
+    return consultar(UrlApi);
   },
 
-  crear: async function (oEntidad) {
-    return crearAjuste(oEntidad);
+  crear: async function (UrlApi, oEntidad) {
+    return crear(UrlApi, oEntidad);
   },
 
-  actualizar: async function (id, oEntidad) {
-    return editAjuste(id, oEntidad);
+  actualizar: async function (UrlApi, oEntidad) {
+    return actualizar(UrlApi, oEntidad);
   },
 
   eliminar: async function (UrlApi, id) {
     return eliminar(UrlApi, id);
   },
+
+  consultarAportes: async function () {
+    return consultarAportesDDJJ();
+  },
 };
 
-export const getAjustes = async () => {
-  const URL = `${BACKEND_URL}/sigeco/ajustes`;
+export const consultar = async () => {
   try {
-    const response = await axiosCrud.consultar(URL);
-    return response;
+    const data = await axiosCrud.consultar(URL_ENTITY);
+    return data || [];
   } catch (error) {
-    const HTTP_MSG =
-      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`;
-    showErrorBackEnd(HTTP_MSG, error);
+    showErrorBackEnd(
+      HTTP_MSG_CONSUL_ERROR + ` (${URL_ENTITY} - status: ${error.status})`,
+      error,
+    );
+    return [];
   }
 };
 
-export const crearAjuste = async (body) => {
-  body.periodo_original = formatter.toFechaValida(body.periodo_original);
-  body.vigencia = formatter.toFechaValida(body.vigencia);
-
-  const URL = `${BACKEND_URL}/sigeco/ajustes`;
+export const crear = async (registro) => {
   try {
-    const response = await axiosCrud.crear(URL, body);
-    swal.showSuccess(HTTP_MSG_ALTA);
-    return response;
+    registro.periodo_original = formatter.toFechaValida(
+      registro.periodo_original,
+    );
+    registro.vigencia = formatter.toFechaValida(registro.vigencia);
+
+    const data = await axiosCrud.crear(URL_ENTITY, registro);
+    if (data && data.id) {
+      //swal.showSuccess(HTTP_MSG_ALTA);
+      toast.info(HTTP_MSG_ALTA, styles);
+      return data;
+    }
+    throw data;
   } catch (error) {
+    console.log('axiosAjustes.crear - catch (error):', error);
     showErrorBackEnd(HTTP_MSG_ALTA_ERROR, error);
+    return {};
   }
 };
 
-export const editAjuste = async (id, body) => {
-  const URL = `${BACKEND_URL}/sigeco/ajustes/${id}`;
+export const actualizar = async (registro) => {
   try {
-    const response = await axiosCrud.actualizar(URL, body);
-    swal.showSuccess(HTTP_MSG_MODI);
-    return response;
+    registro.periodo_original = formatter.toFechaValida(
+      registro.periodo_original,
+    );
+    registro.vigencia = formatter.toFechaValida(registro.vigencia);
+
+    const response = await axiosCrud.actualizar(URL_ENTITY, registro);
+    if (response == true) {
+      //swal.showSuccess(HTTP_MSG_MODI);
+      toast.info(HTTP_MSG_MODI, styles);
+      return true;
+    }
+    throw response;
   } catch (error) {
     showErrorBackEnd(HTTP_MSG_MODI_ERROR, error);
+    return false;
   }
 };
 
 export const eliminar = async (id) => {
-  const URL = `${BACKEND_URL}/sigeco/ajustes`;
   try {
-    const response = await axiosCrud.eliminar(URL, id);
+    const response = await axiosCrud.eliminar(URL_ENTITY, id);
     if (response == true) {
-      swal.showSuccess(
-        HTTP_MSG_BAJA
-          ? HTTP_MSG_BAJA
-          : 'El registro se elimino sastisfactoriamente',
-      );
+      //swal.showSuccess(HTTP_MSG_BAJA);
+      toast.info(HTTP_MSG_BAJA, styles);
       return true;
     }
     throw response;
@@ -83,4 +105,12 @@ export const eliminar = async (id) => {
     showErrorBackEnd(HTTP_MSG_BAJA_ERROR, error);
     return false;
   }
+};
+
+const styles = {
+  position: 'top-right',
+  autoClose: 2000,
+  style: {
+    fontSize: '1rem',
+  },
 };

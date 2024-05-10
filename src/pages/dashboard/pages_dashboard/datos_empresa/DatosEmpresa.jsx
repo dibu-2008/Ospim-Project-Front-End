@@ -2,7 +2,7 @@ import localStorageService from '@components/localStorage/localStorageService';
 import './DatosEmpresa.css';
 import { useEffect, useState, useMemo } from 'react';
 import { GrillaEmpresaContacto } from './grilla_empresa_contacto/GrillaEmpresaContacto';
-import { GrillaEmpresaDomilicio } from './grilla_empresa_domicilio/GrillaEmpresaDomilicio';
+import { GrillaEmpresaDomicilio } from './grilla_empresa_domicilio/GrillaEmpresaDomicilio';
 import {
   Button,
   Select,
@@ -18,6 +18,8 @@ import PropTypes from 'prop-types';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import * as locales from '@mui/material/locale';
 import axiosDatosEmpre from './DatosEmpresaApi';
+import { ToastContainer } from 'react-toastify';
+
 
 // Logica de los tabs inicio
 function CustomTabPanel(props) {
@@ -122,6 +124,7 @@ export const DatosEmpresa = () => {
 
   return (
     <div className="datos_empresa_container">
+      <ToastContainer />
       <h1>Mis datos empresas</h1>
 
       <form
@@ -204,7 +207,7 @@ export const DatosEmpresa = () => {
         </CustomTabPanel>
         <CustomTabPanel value={tabState} index={1}>
           <ThemeProvider theme={themeWithLocale}>
-            <GrillaEmpresaDomilicio
+            <GrillaEmpresaDomicilio
               idEmpresa={ID_EMPRESA}
               rows={rowsDomicilio}
               setRows={setRowsDomicilio}
