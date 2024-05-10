@@ -35,6 +35,7 @@ import { dataGridStyle } from '@/common/dataGridStyle';
 import dayjs from 'dayjs';
 import swal from '@/components/swal/swal';
 import Typography from '@mui/material/Typography';
+import CurrencyInput from 'react-currency-input-field';
 
 const style = {
   position: 'absolute',
@@ -294,17 +295,6 @@ export const DDJJAltaEmpleadosGrilla = ({
     }
 
     return cellClassName;
-  };
-
-  const formatModoEdit = (valor) => {
-    if (valor === '') return '';
-    if (valor === null) return '';
-    if (valor === undefined) return '';
-    if (valor === 0) return '';
-
-    return String(valor)
-      .replace(/\./g, '')
-      .replace(/\B(?=(\d{3})+(?!\d))/g, '.');
   };
 
   const handleDataModal = (row) => () => {
@@ -724,36 +714,24 @@ export const DDJJAltaEmpleadosGrilla = ({
         if (value === null) return '';
         return formatter.currency.format(value || 0);
       },
-      /* renderEditCell: (params) => {
+      renderEditCell: (params) => {
         return (
-          <TextField
-            fullWidth
-            value={formatModoEdit(params.value) || ''}
+          <CurrencyInput
+            id={params.row.id ? 'remunerativo' + params.row.id.toString() : ''}
+            className="input-currency"
+            prefix="$"
+            decimalScale={2}
             value={params.value || ''}
-            onChange={(event) => {
-              const newValue = event.target.value;
+            onValueChange={(value) => {
               params.api.setEditCellValue({
                 id: params.id,
                 field: 'remunerativo',
-                value: newValue.toString().replace(/\./g, ''),
+                value: value,
               });
-            }}
-            sx={{
-              '& .MuiOutlinedInput-root': {
-                '& fieldset': {
-                  borderColor: 'transparent',
-                },
-                '&:hover fieldset': {
-                  borderColor: 'transparent',
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: 'transparent',
-                },
-              },
             }}
           />
         );
-      }, */
+      },
     },
     {
       field: 'noRemunerativo',
@@ -769,43 +747,34 @@ export const DDJJAltaEmpleadosGrilla = ({
       ),
       width: 200,
       editable: true,
-      headerAlign: 'center',
-      align: 'center',
+      headerAlign: 'right',
+      align: 'right',
       headerClassName: 'header--cell',
       valueFormatter: ({ value }) => {
         if (value === '') return '';
         if (value === null) return '';
         return formatter.currency.format(value || 0);
       },
-      /* renderEditCell: (params) => {
+      renderEditCell: (params) => {
         return (
-          <TextField
-            fullWidth
-            value={formatModoEdit(params.value) || ''}
-            onChange={(event) => {
-              const newValue = event.target.value;
+          <CurrencyInput
+            id={
+              params.row.id ? 'noRemunerativo' + params.row.id.toString() : ''
+            }
+            className="input-currency"
+            prefix="$"
+            decimalScale={2}
+            value={params.value || ''}
+            onValueChange={(value) => {
               params.api.setEditCellValue({
                 id: params.id,
                 field: 'noRemunerativo',
-                value: newValue.toString().replace(/\./g, ''),
+                value: value,
               });
-            }}
-            sx={{
-              '& .MuiOutlinedInput-root': {
-                '& fieldset': {
-                  borderColor: 'transparent',
-                },
-                '&:hover fieldset': {
-                  borderColor: 'transparent',
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: 'transparent',
-                },
-              },
             }}
           />
         );
-      }, */
+      },
     },
     {
       field: 'uomaSocio',

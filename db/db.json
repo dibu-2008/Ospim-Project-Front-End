@@ -1239,32 +1239,18 @@
       "empresaId": "1"
     },
     {
-      "tipo": "REAL",
-      "calle": "",
-      "calleNro": "",
-      "piso": "",
-      "depto": "",
-      "oficina": "",
-      "cp": "",
-      "planta": "",
-      "provinciaId": 10,
-      "localidadId": 308,
-      "empresaId": "1",
-      "id": 17
-    },
-    {
-      "tipo": "REAL",
-      "calle": "",
-      "calleNro": "",
-      "piso": "",
-      "depto": "",
-      "oficina": "",
-      "cp": "",
-      "planta": "",
+      "tipo": "FISCAL",
+      "calle": "6666666",
+      "calleNro": "6666666",
+      "piso": "6666",
+      "depto": "666",
+      "oficina": "6666",
+      "cp": "66",
+      "planta": "666",
       "provinciaId": 3,
       "localidadId": 265,
       "empresaId": "1",
-      "id": 18
+      "id": 17
     }
   ],
   "empresaContacto": [
@@ -1468,48 +1454,6 @@
       "provinciaId": 10,
       "id": 477,
       "descripcion": "Formosa"
-    },
-    {
-      "id": 1894,
-      "tipo": "FISCAL",
-      "provincia": 3,
-      "localidad": 265,
-      "calle": "",
-      "piso": "",
-      "depto": "",
-      "oficina": "",
-      "cp": "",
-      "planta": "",
-      "valor": "",
-      "isNew": true
-    },
-    {
-      "id": 1895,
-      "tipo": "FISCAL",
-      "provincia": 3,
-      "localidad": 265,
-      "calle": "",
-      "piso": "",
-      "depto": "",
-      "oficina": "",
-      "cp": "",
-      "planta": "",
-      "valor": "",
-      "isNew": true
-    },
-    {
-      "id": 1896,
-      "tipo": "FISCAL",
-      "provincia": 10,
-      "localidad": 1893,
-      "calle": "",
-      "piso": "",
-      "depto": "",
-      "oficina": "",
-      "cp": "",
-      "planta": "",
-      "valor": "",
-      "isNew": true
     }
   ],
   "DDJJ-V2-CONSUL": [
@@ -3904,6 +3848,27 @@
       ],
       "empresaId": "1",
       "id": 227
+    },
+    {
+      "periodo": null,
+      "afiliados": [
+        {
+          "cuil": "20949118682",
+          "inte": 0,
+          "apellido": "Salinas",
+          "nombre": "Luis",
+          "fechaIngreso": "2024-05-02T03:00:00.000Z",
+          "empresaDomicilioId": 7,
+          "camara": "FAIM",
+          "categoria": "D",
+          "remunerativo": 222222222222.9,
+          "noRemunerativo": 22222222222.8,
+          "uomaSocio": true,
+          "amtimaSocio": true,
+          "id": 1
+        }
+      ],
+      "id": 228
     }
   ],
   "afiliado": [
@@ -5121,101 +5086,251 @@
     {
       "categoria": "A",
       "antiguedad": [
-        { "antDesde": "2" },
-        { "antDesde": "4" },
-        { "antDesde": "6" },
-        { "antDesde": "8" },
-        { "antDesde": "10" },
-        { "antDesde": "12" },
-        { "antDesde": "14" },
-        { "antDesde": "16" },
-        { "antDesde": "18" },
-        { "antDesde": "20" },
-        { "antDesde": "22" },
-        { "antDesde": "24" },
-        { "antDesde": "26" },
-        { "antDesde": "28" },
-        { "antDesde": "30" }
+        {
+          "antDesde": "2"
+        },
+        {
+          "antDesde": "4"
+        },
+        {
+          "antDesde": "6"
+        },
+        {
+          "antDesde": "8"
+        },
+        {
+          "antDesde": "10"
+        },
+        {
+          "antDesde": "12"
+        },
+        {
+          "antDesde": "14"
+        },
+        {
+          "antDesde": "16"
+        },
+        {
+          "antDesde": "18"
+        },
+        {
+          "antDesde": "20"
+        },
+        {
+          "antDesde": "22"
+        },
+        {
+          "antDesde": "24"
+        },
+        {
+          "antDesde": "26"
+        },
+        {
+          "antDesde": "28"
+        },
+        {
+          "antDesde": "30"
+        }
       ]
     },
     {
       "categoria": "B",
       "antiguedad": [
-        { "antDesde": "2" },
-        { "antDesde": "4" },
-        { "antDesde": "6" },
-        { "antDesde": "8" },
-        { "antDesde": "10" },
-        { "antDesde": "12" },
-        { "antDesde": "14" },
-        { "antDesde": "16" },
-        { "antDesde": "18" },
-        { "antDesde": "20" },
-        { "antDesde": "22" },
-        { "antDesde": "24" },
-        { "antDesde": "26" },
-        { "antDesde": "28" },
-        { "antDesde": "30" }
+        {
+          "antDesde": "2"
+        },
+        {
+          "antDesde": "4"
+        },
+        {
+          "antDesde": "6"
+        },
+        {
+          "antDesde": "8"
+        },
+        {
+          "antDesde": "10"
+        },
+        {
+          "antDesde": "12"
+        },
+        {
+          "antDesde": "14"
+        },
+        {
+          "antDesde": "16"
+        },
+        {
+          "antDesde": "18"
+        },
+        {
+          "antDesde": "20"
+        },
+        {
+          "antDesde": "22"
+        },
+        {
+          "antDesde": "24"
+        },
+        {
+          "antDesde": "26"
+        },
+        {
+          "antDesde": "28"
+        },
+        {
+          "antDesde": "30"
+        }
       ]
     },
     {
       "categoria": "C",
       "antiguedad": [
-        { "antDesde": "2" },
-        { "antDesde": "4" },
-        { "antDesde": "6" },
-        { "antDesde": "8" },
-        { "antDesde": "10" },
-        { "antDesde": "12" },
-        { "antDesde": "14" },
-        { "antDesde": "16" },
-        { "antDesde": "18" },
-        { "antDesde": "20" },
-        { "antDesde": "22" },
-        { "antDesde": "24" },
-        { "antDesde": "26" },
-        { "antDesde": "28" },
-        { "antDesde": "30" }
+        {
+          "antDesde": "2"
+        },
+        {
+          "antDesde": "4"
+        },
+        {
+          "antDesde": "6"
+        },
+        {
+          "antDesde": "8"
+        },
+        {
+          "antDesde": "10"
+        },
+        {
+          "antDesde": "12"
+        },
+        {
+          "antDesde": "14"
+        },
+        {
+          "antDesde": "16"
+        },
+        {
+          "antDesde": "18"
+        },
+        {
+          "antDesde": "20"
+        },
+        {
+          "antDesde": "22"
+        },
+        {
+          "antDesde": "24"
+        },
+        {
+          "antDesde": "26"
+        },
+        {
+          "antDesde": "28"
+        },
+        {
+          "antDesde": "30"
+        }
       ]
     },
     {
       "categoria": "D",
       "antiguedad": [
-        { "antDesde": "2" },
-        { "antDesde": "4" },
-        { "antDesde": "6" },
-        { "antDesde": "8" },
-        { "antDesde": "10" },
-        { "antDesde": "12" },
-        { "antDesde": "14" },
-        { "antDesde": "16" },
-        { "antDesde": "18" },
-        { "antDesde": "20" },
-        { "antDesde": "22" },
-        { "antDesde": "24" },
-        { "antDesde": "26" },
-        { "antDesde": "28" },
-        { "antDesde": "30" }
+        {
+          "antDesde": "2"
+        },
+        {
+          "antDesde": "4"
+        },
+        {
+          "antDesde": "6"
+        },
+        {
+          "antDesde": "8"
+        },
+        {
+          "antDesde": "10"
+        },
+        {
+          "antDesde": "12"
+        },
+        {
+          "antDesde": "14"
+        },
+        {
+          "antDesde": "16"
+        },
+        {
+          "antDesde": "18"
+        },
+        {
+          "antDesde": "20"
+        },
+        {
+          "antDesde": "22"
+        },
+        {
+          "antDesde": "24"
+        },
+        {
+          "antDesde": "26"
+        },
+        {
+          "antDesde": "28"
+        },
+        {
+          "antDesde": "30"
+        }
       ]
     },
     {
       "categoria": "E",
       "antiguedad": [
-        { "antDesde": "2" },
-        { "antDesde": "4" },
-        { "antDesde": "6" },
-        { "antDesde": "8" },
-        { "antDesde": "10" },
-        { "antDesde": "12" },
-        { "antDesde": "14" },
-        { "antDesde": "16" },
-        { "antDesde": "18" },
-        { "antDesde": "20" },
-        { "antDesde": "22" },
-        { "antDesde": "24" },
-        { "antDesde": "26" },
-        { "antDesde": "28" },
-        { "antDesde": "30" }
+        {
+          "antDesde": "2"
+        },
+        {
+          "antDesde": "4"
+        },
+        {
+          "antDesde": "6"
+        },
+        {
+          "antDesde": "8"
+        },
+        {
+          "antDesde": "10"
+        },
+        {
+          "antDesde": "12"
+        },
+        {
+          "antDesde": "14"
+        },
+        {
+          "antDesde": "16"
+        },
+        {
+          "antDesde": "18"
+        },
+        {
+          "antDesde": "20"
+        },
+        {
+          "antDesde": "22"
+        },
+        {
+          "antDesde": "24"
+        },
+        {
+          "antDesde": "26"
+        },
+        {
+          "antDesde": "28"
+        },
+        {
+          "antDesde": "30"
+        }
       ]
     }
   ]

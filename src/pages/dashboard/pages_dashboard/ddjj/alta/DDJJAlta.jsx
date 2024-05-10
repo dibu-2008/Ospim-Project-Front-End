@@ -94,6 +94,8 @@ export const DDJJAlta = ({
   useEffect(() => {
     const ObtenerPlantaEmpresas = async () => {
       const data = await axiosDDJJ.getPlantas(ID_EMPRESA);
+      console.log('PLANTAS');
+      console.log(data);
       setPlantas(data.map((item) => ({ id: item, ...item })));
     };
     ObtenerPlantaEmpresas();
@@ -302,8 +304,12 @@ export const DDJJAlta = ({
             : item.empresaDomicilioId,
           camara: !item.camara ? null : item.camara,
           categoria: !item.categoria ? null : item.categoria,
-          remunerativo: !item.remunerativo ? null : +item.remunerativo,
-          noRemunerativo: !item.noRemunerativo ? null : +item.noRemunerativo,
+          remunerativo: !item.remunerativo
+            ? null
+            : parseFloat(parseFloat(item.remunerativo).toFixed(2)),
+          noRemunerativo: !item.noRemunerativo
+            ? null
+            : parseFloat(parseFloat(item.noRemunerativo).toFixed(2)),
           uomaSocio: item.uomaSocio === '' ? null : item.uomaSocio,
           amtimaSocio: item.amtimaSocio === '' ? null : item.amtimaSocio,
         };

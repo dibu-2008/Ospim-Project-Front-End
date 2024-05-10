@@ -95,7 +95,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
   };
 
   const getDatosLocalidad = async (provincia) => {
-    const prov = provincias.find((prov) => prov.descripcion == provincia);
+    const prov = provincias.find((prov) => prov?.descripcion == provincia);
     const localidades = await axiosDomicilio.obtenerLocalidades(prov.id);
     setLocalidades(localidades);
   };
@@ -103,7 +103,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
   const getProvincias = async () => {
     const response = await axiosDomicilio.obtenerProvincias();
     setProvincias(response);
-    const PRO_V_O = response.map((prov) => prov.descripcion);
+    const PRO_V_O = response.map((prov) => prov?.descripcion);
     console.log(PRO_V_O);
     setProvinciasValueOptions(PRO_V_O);
   };
@@ -156,7 +156,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
     showSwalConfirm();
   };
   const handleEditClick = (row) => () => {
-    getDatosLocalidad(row.provincia.descripcion);
+    getDatosLocalidad(row.provincia?.descripcion);
     setRowModesModel({
       ...rowModesModel,
       [rows.indexOf(row)]: { mode: GridRowModes.Edit },
@@ -266,7 +266,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
       align: 'center',
       headerClassName: 'header--cell',
       valueOptions: provinciasValueOptions,
-      valueGetter: (params) => params.row.provincia.descripcion,
+      valueGetter: (params) => params.row.provincia?.descripcion,
       renderEditCell: (params) => {
         return (
           <Select
@@ -301,8 +301,8 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell',
-      valueOptions: localidades.map((localidad) => localidad.descripcion),
-      valueGetter: (params) => params.row.localidad.descripcion,
+      valueOptions: localidades.map((localidad) => localidad?.descripcion),
+      valueGetter: (params) => params.row.localidad?.descripcion,
     },
     {
       field: 'calle',
