@@ -149,7 +149,10 @@ export const Aportes = () => {
 
   const consultaAntiguedad = async (categoria) => {
     const response = await axiosAportes.consultarAntiguedad(categoria);
-    setAntiguedad(response);
+    console.log('Años de antiguedad');
+    console.log(response);
+    console.log(response[0].antiguedad);
+    setAntiguedad(response[0].antiguedad);
   };
 
   const editarAporte = (row) => () => {
@@ -688,8 +691,8 @@ export const Aportes = () => {
                       disabled={!dataModal.camaraCategoria}
                     >
                       {antiguedad.map((a) => (
-                        <MenuItem key={a.antiguedad} value={a.antiguedad}>
-                          {a.antiguedad}
+                        <MenuItem key={a.antDesde} value={a.antDesde}>
+                          {a.antDesde}
                         </MenuItem>
                       ))}
                     </Select>

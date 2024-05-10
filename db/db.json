@@ -1237,6 +1237,34 @@
       "valor": "",
       "isNew": true,
       "empresaId": "1"
+    },
+    {
+      "tipo": "REAL",
+      "calle": "",
+      "calleNro": "",
+      "piso": "",
+      "depto": "",
+      "oficina": "",
+      "cp": "",
+      "planta": "",
+      "provinciaId": 10,
+      "localidadId": 308,
+      "empresaId": "1",
+      "id": 17
+    },
+    {
+      "tipo": "REAL",
+      "calle": "",
+      "calleNro": "",
+      "piso": "",
+      "depto": "",
+      "oficina": "",
+      "cp": "",
+      "planta": "",
+      "provinciaId": 3,
+      "localidadId": 265,
+      "empresaId": "1",
+      "id": 18
     }
   ],
   "empresaContacto": [
@@ -4816,8 +4844,7 @@
         "forma_de_pago": "VENTANILLA",
         "declaracion_jurada_id": 120,
         "tipo_ddjj": "Original",
-        "numero_boleta": 24,
-        "id": 24
+        "numero_boleta": 24
       },
       {
         "codigo": "UOMACS",
@@ -5093,23 +5120,103 @@
   "categoria-antiguedad": [
     {
       "categoria": "A",
-      "antiguedad": "2"
+      "antiguedad": [
+        { "antDesde": "2" },
+        { "antDesde": "4" },
+        { "antDesde": "6" },
+        { "antDesde": "8" },
+        { "antDesde": "10" },
+        { "antDesde": "12" },
+        { "antDesde": "14" },
+        { "antDesde": "16" },
+        { "antDesde": "18" },
+        { "antDesde": "20" },
+        { "antDesde": "22" },
+        { "antDesde": "24" },
+        { "antDesde": "26" },
+        { "antDesde": "28" },
+        { "antDesde": "30" }
+      ]
     },
     {
       "categoria": "B",
-      "antiguedad": "4"
+      "antiguedad": [
+        { "antDesde": "2" },
+        { "antDesde": "4" },
+        { "antDesde": "6" },
+        { "antDesde": "8" },
+        { "antDesde": "10" },
+        { "antDesde": "12" },
+        { "antDesde": "14" },
+        { "antDesde": "16" },
+        { "antDesde": "18" },
+        { "antDesde": "20" },
+        { "antDesde": "22" },
+        { "antDesde": "24" },
+        { "antDesde": "26" },
+        { "antDesde": "28" },
+        { "antDesde": "30" }
+      ]
     },
     {
       "categoria": "C",
-      "antiguedad": "6"
+      "antiguedad": [
+        { "antDesde": "2" },
+        { "antDesde": "4" },
+        { "antDesde": "6" },
+        { "antDesde": "8" },
+        { "antDesde": "10" },
+        { "antDesde": "12" },
+        { "antDesde": "14" },
+        { "antDesde": "16" },
+        { "antDesde": "18" },
+        { "antDesde": "20" },
+        { "antDesde": "22" },
+        { "antDesde": "24" },
+        { "antDesde": "26" },
+        { "antDesde": "28" },
+        { "antDesde": "30" }
+      ]
     },
     {
       "categoria": "D",
-      "antiguedad": "8"
+      "antiguedad": [
+        { "antDesde": "2" },
+        { "antDesde": "4" },
+        { "antDesde": "6" },
+        { "antDesde": "8" },
+        { "antDesde": "10" },
+        { "antDesde": "12" },
+        { "antDesde": "14" },
+        { "antDesde": "16" },
+        { "antDesde": "18" },
+        { "antDesde": "20" },
+        { "antDesde": "22" },
+        { "antDesde": "24" },
+        { "antDesde": "26" },
+        { "antDesde": "28" },
+        { "antDesde": "30" }
+      ]
     },
     {
       "categoria": "E",
-      "antiguedad": "10"
+      "antiguedad": [
+        { "antDesde": "2" },
+        { "antDesde": "4" },
+        { "antDesde": "6" },
+        { "antDesde": "8" },
+        { "antDesde": "10" },
+        { "antDesde": "12" },
+        { "antDesde": "14" },
+        { "antDesde": "16" },
+        { "antDesde": "18" },
+        { "antDesde": "20" },
+        { "antDesde": "22" },
+        { "antDesde": "24" },
+        { "antDesde": "26" },
+        { "antDesde": "28" },
+        { "antDesde": "30" }
+      ]
     }
   ]
 }
