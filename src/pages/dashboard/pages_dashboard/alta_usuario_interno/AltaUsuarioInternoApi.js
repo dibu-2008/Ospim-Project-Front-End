@@ -17,14 +17,15 @@ const URL_ENTITY = '/usuario/interno';
 
 const adapterForFront = (elements) => {
   elements.forEach(element => {
-      element.notificaciones = element.notificaciones ? 'Si' : 'No'
+      element.notificaciones = element.notificaciones == true ? 'Si' : 'No'
   });
   return elements
 }
 
 const adapterForBack = (element) =>{
-  element.notificaciones = 'Si' ? true : false
-  return element
+  element.notificaciones = element.notificaciones == 'Si' ? true : false
+  const {isNew, ...newElement} =  element
+  return newElement
 }
 
 export const consultar = async () => {
@@ -39,6 +40,7 @@ export const crear = async (registro) => {
 
 export const actualizar = async (registro) => {
   const registro_fb= adapterForBack(registro)
+  console.log(registro_fb)
   return await axiosEntity.actualizar(URL_ENTITY,registro_fb)
 };
 

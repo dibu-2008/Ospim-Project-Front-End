@@ -818,7 +818,6 @@
       "id": 1
     },
     {
-      "id": 2,
       "descripcion": "usuario1",
       "clave": "Prueba123",
       "rolId": 7,
@@ -826,7 +825,8 @@
       "nombre": "Francisco",
       "apellido": "Moreno",
       "email": "prueba2@gmail.com",
-      "notificaciones": true
+      "notificaciones": false,
+      "id": 2
     },
     {
       "descripcion": "usuauro4",
@@ -836,11 +836,10 @@
       "apellido": "Fuente",
       "email": "usuario@gmail.com",
       "notificaciones": true,
-      "id": 4,
-      "habilitado": false
+      "habilitado": false,
+      "id": 4
     },
     {
-      "id": 5,
       "descripcion": "cccc",
       "clave": "cccc",
       "rolId": 7,
@@ -848,17 +847,18 @@
       "apellido": "Gomez",
       "email": "cccc@gmail.com",
       "notificaciones": true,
-      "habilitado": false
+      "habilitado": false,
+      "id": 5
     },
     {
-      "id": 6,
       "descripcion": "ccccjjj",
       "clave": "cccc jjj",
       "rolId": 77,
       "nombre": "Federico",
       "apellido": "Castro",
-      "notificaciones": false,
-      "email": "cccc@gmail.com"
+      "notificaciones": true,
+      "email": "cccc@gmail.com",
+      "id": 6
     },
     {
       "descripcion": "usuario-2",
