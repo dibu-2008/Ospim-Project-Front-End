@@ -712,8 +712,14 @@ export const DDJJAltaEmpleadosGrilla = ({
       valueFormatter: ({ value }) => {
         if (value === '') return '';
         if (value === null) return '';
-        return formatter.currency.format(value || 0);
+        try {
+          return formatter.currency.format(value || 0);
+        } catch (error) {
+          console.log('valueFormatter - CATCH - error: ', error);
+          return value;
+        }
       },
+      /*
       renderEditCell: (params) => {
         return (
           <CurrencyInput
@@ -721,6 +727,8 @@ export const DDJJAltaEmpleadosGrilla = ({
             className="input-currency"
             prefix="$"
             decimalScale={2}
+            decimalSeparator=","
+            groupSeparator="."
             value={params.value || ''}
             onValueChange={(value) => {
               params.api.setEditCellValue({
@@ -732,6 +740,7 @@ export const DDJJAltaEmpleadosGrilla = ({
           />
         );
       },
+      */
     },
     {
       field: 'noRemunerativo',
@@ -755,6 +764,7 @@ export const DDJJAltaEmpleadosGrilla = ({
         if (value === null) return '';
         return formatter.currency.format(value || 0);
       },
+      /*
       renderEditCell: (params) => {
         return (
           <CurrencyInput
@@ -775,6 +785,7 @@ export const DDJJAltaEmpleadosGrilla = ({
           />
         );
       },
+      */
     },
     {
       field: 'uomaSocio',
