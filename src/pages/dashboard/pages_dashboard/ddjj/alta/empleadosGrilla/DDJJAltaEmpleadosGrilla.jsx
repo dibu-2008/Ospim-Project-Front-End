@@ -36,6 +36,7 @@ import dayjs from 'dayjs';
 import swal from '@/components/swal/swal';
 import Typography from '@mui/material/Typography';
 import CurrencyInput from 'react-currency-input-field';
+import { formatValue } from 'react-currency-input-field';
 
 const style = {
   position: 'absolute',
@@ -315,6 +316,15 @@ export const DDJJAltaEmpleadosGrilla = ({
 
   const columns = [
     {
+      field: 'id',
+      type: 'number',
+      headerName: 'Fila',
+      width: 50,
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
+    },
+    {
       field: 'actions',
       type: 'actions',
       headerName: 'Acciones',
@@ -366,7 +376,7 @@ export const DDJJAltaEmpleadosGrilla = ({
       field: 'cuil',
       type: 'string',
       headerName: 'CUIL',
-      width: 280,
+      width: 284.4,
       editable: true,
       headerAlign: 'left',
       align: 'left',
@@ -387,6 +397,9 @@ export const DDJJAltaEmpleadosGrilla = ({
                   value: newValue,
                 });
               }}
+              onMouseLeave={(event) => {
+                obtenerAfiliados(params, params.value);
+              }}
               sx={{
                 '& .MuiOutlinedInput-root': {
                   '& fieldset': {
@@ -401,7 +414,7 @@ export const DDJJAltaEmpleadosGrilla = ({
                 },
               }}
             />
-            <SearchIcon
+            {/*<SearchIcon
               sx={{
                 fontSize: '1.8rem',
                 color: '#1A76D2',
@@ -409,23 +422,13 @@ export const DDJJAltaEmpleadosGrilla = ({
                 //margin: '0px 10px 0px -50px',
               }}
               onClick={() => obtenerAfiliados(params, params.value)}
-            />
-            {afiliado?.cuil === params.value ? (
+            />*/}
+            {afiliado?.cuil === params.value && (
               <CreateIcon
                 sx={{
                   fontSize: '1.8rem',
                   color: '#1A76D2',
                   cursor: 'pointer',
-                }}
-                onClick={handleDataModal(params.row)}
-              />
-            ) : (
-              <CreateIcon
-                sx={{
-                  fontSize: '1.8rem',
-                  color: '#1A76D2',
-                  cursor: 'pointer',
-                  visibility: 'hidden',
                 }}
                 onClick={handleDataModal(params.row)}
               />
@@ -438,7 +441,7 @@ export const DDJJAltaEmpleadosGrilla = ({
       field: 'apellido',
       type: 'string',
       headerName: 'Apellido',
-      width: 150,
+      width: 140,
       editable: true,
       headerAlign: 'left',
       align: 'left',
@@ -500,7 +503,7 @@ export const DDJJAltaEmpleadosGrilla = ({
       field: 'nombre',
       type: 'string',
       headerName: 'Nombre',
-      width: 150,
+      width: 140,
       editable: true,
       headerAlign: 'left',
       align: 'left',
@@ -614,7 +617,7 @@ export const DDJJAltaEmpleadosGrilla = ({
       field: 'categoria',
       type: 'singleSelect',
       headerName: 'Categoria',
-      width: 100,
+      width: 80,
       editable: true,
       headerAlign: 'left',
       align: 'left',
@@ -625,7 +628,7 @@ export const DDJJAltaEmpleadosGrilla = ({
         return (
           <Select
             fullWidth
-            value={params.value !== null ? params.value : ''}
+            value={categoriasFiltradas.length > 0 ? params.value : ''}
             onChange={(event) => {
               params.api.setEditCellValue({
                 id: params.id,
@@ -704,7 +707,7 @@ export const DDJJAltaEmpleadosGrilla = ({
       field: 'remunerativo',
       type: 'string',
       headerName: 'Remunerativo',
-      width: 200,
+      width: 150,
       editable: true,
       headerAlign: 'right',
       align: 'right',
@@ -712,12 +715,15 @@ export const DDJJAltaEmpleadosGrilla = ({
       valueFormatter: ({ value }) => {
         if (value === '') return '';
         if (value === null) return '';
-        try {
-          return formatter.currency.format(value || 0);
-        } catch (error) {
-          console.log('valueFormatter - CATCH - error: ', error);
-          return value;
-        }
+        //return formatter.currency.format(value || 0);
+        // Averiguar sobre el pais y la moneda
+        const formattedValue = formatValue({
+          value: value.toString(),
+          groupSeparator: '.',
+          decimalSeparator: ',',
+          decimalScale: 2,
+        });
+        return formattedValue;
       },
       /*
       renderEditCell: (params) => {
@@ -725,7 +731,7 @@ export const DDJJAltaEmpleadosGrilla = ({
           <CurrencyInput
             id={params.row.id ? 'remunerativo' + params.row.id.toString() : ''}
             className="input-currency"
-            prefix="$"
+            //prefix="$"
             decimalScale={2}
             decimalSeparator=","
             groupSeparator="."
@@ -754,7 +760,7 @@ export const DDJJAltaEmpleadosGrilla = ({
           </span>
         </div>
       ),
-      width: 200,
+      width: 150,
       editable: true,
       headerAlign: 'right',
       align: 'right',
@@ -762,7 +768,17 @@ export const DDJJAltaEmpleadosGrilla = ({
       valueFormatter: ({ value }) => {
         if (value === '') return '';
         if (value === null) return '';
-        return formatter.currency.format(value || 0);
+        //return formatter.currency.format(value || 0);
+        // Averiguar sobre el pais y la moneda
+        console.log('VALUEEE');
+        console.log(value);
+        const formattedValue = formatValue({
+          value: value.toString(),
+          groupSeparator: '.',
+          decimalSeparator: ',',
+          decimalScale: 2,
+        });
+        return formattedValue;
       },
       /*
       renderEditCell: (params) => {
@@ -772,8 +788,10 @@ export const DDJJAltaEmpleadosGrilla = ({
               params.row.id ? 'noRemunerativo' + params.row.id.toString() : ''
             }
             className="input-currency"
-            prefix="$"
+            //prefix="$"
             decimalScale={2}
+            decimalSeparator=","
+            groupSeparator="."
             value={params.value || ''}
             onValueChange={(value) => {
               params.api.setEditCellValue({
