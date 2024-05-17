@@ -1,18 +1,14 @@
 .mis_alta_declaraciones_juradas_container {
-  height: 1040px;
   width: 100%;
 }
 
 .periodo_container {
-  border-radius: 10px;
-  box-shadow: 0px 0px 10px 0px #1a76d2;
-  height: 133px;
-  margin-bottom: 20px;
+  margin-bottom: 5px;
+  border: none !important;
 }
 
 .periodo_container .paso {
-  border-top-right-radius: 10px;
-  border-top-left-radius: 10px;
+  border-radius: 3px;
   padding: 10px;
   background-color: #1a76d2;
   color: #fff;
@@ -21,7 +17,7 @@
 .periodo_container .title_periodo,
 .presentacion_container .title_subir_archivo,
 .manualmente_container .title_manualmente {
-  margin-left: 20px;
+  //margin-left: 20px;
 }
 
 h5 {
@@ -29,26 +25,19 @@ h5 {
 }
 
 .presentacion_container {
-  border-radius: 10px;
-  box-shadow: 0px 0px 10px 0px #1a76d2;
-  height: 340px;
-  margin-bottom: 20px;
+  box-shadow: 0px 0px 0px 0px #1a76d2;
+  margin-bottom: 5px;
 }
 
 .presentacion_container .paso {
-  border-top-right-radius: 10px;
-  border-top-left-radius: 10px;
+  border-radius: 3px;
   padding: 10px;
   background-color: #1a76d2;
   color: #fff;
 }
 
 .subir_archivo_container {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  width: 96%;
-  margin: 16px auto 10px auto;
+  margin-top: 16px;
 }
 
 .subir_archivo_container .span {
@@ -69,7 +58,6 @@ h5 {
 .file-select {
   position: relative;
   display: inline-block;
-  margin-left: 43px;
 }
 .file-select-label {
   position: absolute;
@@ -108,9 +96,8 @@ h5 {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  height: 145px;
   width: 96%;
-  margin: 16px auto 10px auto;
+  margin-top: 16px;
 }
 
 .copiar_periodo_container .span {
