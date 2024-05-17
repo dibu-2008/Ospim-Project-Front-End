@@ -139,7 +139,13 @@ const DashboardPage = () => {
         justifyContent: 'center',
       }}
     >
-      <Drawer variant="permanent" open={open}>
+      <Drawer
+        variant="permanent"
+        open={open}
+        onMouseLeave={(event) => {
+          setOpen(false);
+        }}
+      >
         <DrawerHeader sx={{ marginTop: 2, marginBottom: 2 }}>
           <IconButton
             color="inherit"
