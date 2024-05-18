@@ -58,7 +58,7 @@ export const GenerarOtrosPagos = () => {
   return (
     <Box p={3} className="otros_pagos_container">
       <Typography variant="h1" gutterBottom>
-        Boleta
+        Boleta Acta
       </Typography>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
