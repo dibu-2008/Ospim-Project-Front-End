@@ -4,7 +4,6 @@ import { ButtonComponent } from '../../components/ButtonComponent';
 import { useFormRegisterCompany } from '../../hooks/useFormRegisterCompany';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import { GrillaRegistroDomicilio } from './grilla_registro_domicilio/GrillaRegistroDomicilio';
 import { GrillaEmpresaDomicilio } from '../dashboard/pages_dashboard/datos_empresa/grilla_empresa_domicilio/GrillaEmpresaDomicilio';
 import { registrarEmpresa, getRamo } from './RegistroEmpresaApi';
 import TextField from '@mui/material/TextField';
