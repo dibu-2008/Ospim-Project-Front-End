@@ -18,12 +18,10 @@ import CancelIcon from '@mui/icons-material/Close';
 import {
   adaptadorDomicilioGrilla,
   axiosDomicilio,
-  adaptadorRegistroCompanyGrilla
-} from './GrillaEmpresaDomicilioApi';
+} from '../../dashboard/pages_dashboard/datos_empresa/grilla_empresa_domicilio/GrillaEmpresaDomicilioApi';
 import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
-import { width } from '@mui/system';
 //const isNotNull = (value) => (value !== null && value !== '' ? value : '');
 
 let isOnEditMode = false;
@@ -62,26 +60,20 @@ const crearNuevoRegistro = (props) => {
   return (
     <GridToolbarContainer>
       <GridToolbar showQuickFilter={props.showQuickFilter} />
-      <Button
-        color="primary"
-        startIcon={<AddIcon />}
-        onClick={altaHandleClick}
-        disabled={isOnEditMode}
-      >
+      <Button color="primary" startIcon={<AddIcon />} onClick={altaHandleClick} disabled={isOnEditMode}>
         Nuevo Registro
       </Button>
     </GridToolbarContainer>
   );
 };
 
-export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
+export const GrillaRegistroDomicilio = ({ idEmpresa, rows, setRows }) => {
   const [locale, setLocale] = useState('esES');
   const [rowModesModel, setRowModesModel] = useState({});
   const [provincias, setProvincias] = useState([]);
   const [provinciasValueOptions, setProvinciasValueOptions] = useState([]);
   const [tipoDomicilio, setTipoDomicilio] = useState([]);
   const [localidades, setLocalidades] = useState([]);
-  const [idRow, setIdRow] = useState(1);
   const [paginationModel, setPaginationModel] = useState({
     pageSize: 50,
     page: 0,
@@ -89,9 +81,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
 
   useEffect(() => {
     async function cargarDatos() {
-      if (idEmpresa !== 'PC') {
-        await getRowsDomicilio();
-      }
+      await getRowsDomicilio();
       await getProvincias();
       await getTipoDomicilio();
       console.log(rows);
@@ -153,11 +143,9 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
           confirmButtonText: 'Si, bórralo!',
         }).then(async (result) => {
           console.log(row.id);
-          if (result.isConfirmed && idEmpresa !== 'PC') {
+          if (result.isConfirmed) {
             const bBajaOk = await axiosDomicilio.eliminar(idEmpresa, row.id);
             if (bBajaOk) setRows(rows.filter((rowAux) => rowAux.id !== row.id));
-          } else {
-            setRows(rows.filter((rowAux) => rowAux.id !== row.id));
           }
         });
       } catch (error) {
@@ -176,7 +164,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
         [rows.indexOf(row)]: { mode: GridRowModes.Edit },
       });
     } else {
-      toast.info('Solo se puede editar de a un registro a la vez');
+      toast.info('Solo se puede editar de a un registro a la vez')
     }
   };
   const handleSaveClick = (row) => () => {
@@ -202,73 +190,9 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
     isOnEditMode = false;
   };
   const processRowUpdate = async (newRow, oldRow) => {
-    console.log('processRowUpdate - INIT - newRow:', newRow);
-    let bOk = false;
-    console.log(idEmpresa)
-    if (!newRow.id) {
-        try {
-          if (idEmpresa !== 'PC'){ //Condicion para la grilla de registrar empresa
-            const data = await axiosDomicilio.crear(idEmpresa, newRow);
-            if (data && data.id) {
-              newRow.id = data.id;
-              bOk = true;
-              console.log(newRow)
-              newRow = await adaptadorDomicilioGrilla(newRow);
-              console.log(newRow)
-              const newRows = rows.map((row) => (!row.id ? newRow : row));
-              setRows(newRows);
-            } else {
-              console.log('alta sin ID generado');
-            }
-          } else {
-            bOk = true;
-            console.log(newRow)
-            newRow = await adaptadorRegistroCompanyGrilla(newRow);
-            newRow.id = idRow
-            setIdRow(idRow + 1)
-            console.log(newRow)
-            const newRows = rows.map((row) => (!row.id ? newRow : row));
-            setRows(newRows);
-          }
-        } catch (error) {
-          console.log(
-            'X - processRowUpdate - ALTA - ERROR: ' + JSON.stringify(error),
-          );
-        }
-    } else {
-      if (idEmpresa !== 'PC') {
-        try {
-          bOk = await axiosDomicilio.actualizar(idEmpresa, newRow);
-          console.log('4 - processRowUpdate - MODI - bOk: ' + bOk);
-          console.log('** processRowUpdate - MODI - oldRow: ', oldRow);
-          console.log('** processRowUpdate - MODI - newRow: ', newRow);
-          if (bOk) {
-            newRow = await adaptadorDomicilioGrilla(newRow);
-            const rowsNew = rows.map((row) =>
-              row.id === newRow.id ? newRow : row,
-            );
-            setRows(rowsNew);
-          }
-        } catch (error) {
-          console.log(
-            'X - processRowUpdate - MODI - ERROR: ' + JSON.stringify(error),
-          );
-        }
-      } else {
-          bOk = true;
-          newRow = await adaptadorRegistroCompanyGrilla(newRow);
-          const rowsNew = rows.map((row) =>
-            row.id === newRow.id ? newRow : row,
-          );
-          setRows(rowsNew);
-      }
-    }
-
-    if (bOk) {
-      return newRow;
-    } else {
-      return oldRow;
-    }
+    const updatedRow = { ...newRow, isNew: false };
+    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+    return updatedRow;
   };
   const handleRowModesModelChange = (newRowModesModel) => {
     setRowModesModel(newRowModesModel);
@@ -296,7 +220,6 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
       align: 'center',
       headerClassName: 'header--cell',
       valueOptions: provinciasValueOptions,
-      //valueGetter: (params) => params.row.provincia.descripcion ? params.row.provincia.descripcion : params.row.provincia,
       valueGetter: (params) => params.row.provincia.descripcion,
       renderEditCell: (params) => {
         return (
@@ -334,8 +257,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
       align: 'center',
       headerClassName: 'header--cell',
       valueOptions: localidades.map((localidad) => localidad.descripcion),
-      valueGetter: (params) => params.row.localidad.descripcion ? params.row.localidad.descripcion : params.row.localidad,
-      //valueGetter: (params) => params.row.localidad.descripcion 
+      valueGetter: (params) => params.row.localidad.descripcion,
     },
     {
       field: 'calle',
@@ -451,7 +373,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
   ];
 
   return (
-    <div style={{ width: idEmpresa === 'PC' ? '100%' : 'auto' }}>
+    <div>
       <Box
         sx={{
           height: '600px',

@@ -68,8 +68,8 @@
   "/empresa/:empresaId/generar-boleta-sin-ddjj": "/empresa/otras_boletas",
   "/afip/intereses/:id":"/afip/intereses/?id=:id",
   "/afip/intereses": "/intereses",
-  "/sigeco/ajustes": "/ajustes",
-  "/sigeco/ajustes/:id": "/sigeco/ajustes/?id=:id",
+  "/ajustes": "/ajustes",
+  "/ajustes/:id": "/sigeco/ajustes/?id=:id",
   "/ddjj/totales": "/ddjjConsulta",
 
   "/error/401":"/error/401"
