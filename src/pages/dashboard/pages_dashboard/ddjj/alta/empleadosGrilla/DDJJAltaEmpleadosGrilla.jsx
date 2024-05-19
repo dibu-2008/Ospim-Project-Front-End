@@ -725,8 +725,9 @@ export const DDJJAltaEmpleadosGrilla = ({
         });
         return formattedValue;
       },
-      /*
+
       renderEditCell: (params) => {
+        console.log('renderEditCell-params: ', params);
         return (
           <CurrencyInput
             id={params.row.id ? 'remunerativo' + params.row.id.toString() : ''}
@@ -736,17 +737,27 @@ export const DDJJAltaEmpleadosGrilla = ({
             decimalSeparator=","
             groupSeparator="."
             value={params.value || ''}
-            onValueChange={(value) => {
+            onValueChange={(value, name, values) => {
+              let importe;
+              importe = values.float;
+              //importe = 234.0;
+              console.log(
+                'renderEditCell - CurrencyInput.onValueChange - values: ',
+                values,
+              );
+              console.log(
+                'renderEditCell - CurrencyInput.onValueChange - importe: ',
+                importe,
+              );
               params.api.setEditCellValue({
                 id: params.id,
                 field: 'remunerativo',
-                value: value,
+                value: importe,
               });
             }}
           />
         );
       },
-      */
     },
     {
       field: 'noRemunerativo',
@@ -770,8 +781,6 @@ export const DDJJAltaEmpleadosGrilla = ({
         if (value === null) return '';
         //return formatter.currency.format(value || 0);
         // Averiguar sobre el pais y la moneda
-        console.log('VALUEEE');
-        console.log(value);
         const formattedValue = formatValue({
           value: value.toString(),
           groupSeparator: '.',
@@ -780,7 +789,7 @@ export const DDJJAltaEmpleadosGrilla = ({
         });
         return formattedValue;
       },
-      /*
+      
       renderEditCell: (params) => {
         return (
           <CurrencyInput
@@ -793,17 +802,28 @@ export const DDJJAltaEmpleadosGrilla = ({
             decimalSeparator=","
             groupSeparator="."
             value={params.value || ''}
-            onValueChange={(value) => {
+            onValueChange={(value, name, values) => {
+              let importe;
+              importe = values.float;
+              //importe = 234.0;
+              console.log(
+                'renderEditCell - CurrencyInput.onValueChange - values: ',
+                values,
+              );
+              console.log(
+                'renderEditCell - CurrencyInput.onValueChange - importe: ',
+                importe,
+              );
               params.api.setEditCellValue({
                 id: params.id,
                 field: 'noRemunerativo',
-                value: value,
+                value: importe,
               });
             }}
           />
         );
       },
-      */
+      
     },
     {
       field: 'uomaSocio',
@@ -909,6 +929,8 @@ export const DDJJAltaEmpleadosGrilla = ({
     const resp = axiosDDJJ.actualizarNombreApellido(dataModal);
     console.log(resp);
   };
+
+  console.log('rowsAltaDDJJ', rowsAltaDDJJ);
 
   return (
     <div>
