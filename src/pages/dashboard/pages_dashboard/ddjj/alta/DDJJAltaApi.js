@@ -144,14 +144,14 @@ export const validaCuil = async (empresaId, cuiles) => {
   }
 };
 
-const obtenerPeriodoAnterior = async (periodo) => {
+const obtenerPeriodoAnterior = async (empresaId, periodo) => {
   let query = '';
 
   if (periodo !== null) {
     query = `?periodo=${periodo}`;
   }
 
-  const URL = `/ddjj/periodo-anterior/${query}`;
+  const URL = `/empresa/${empresaId}/ddjj/periodo-anterior/${query}`;
 
   try {
     const data = await axiosCrud.consultar(URL);
@@ -222,8 +222,8 @@ export const axiosDDJJ = {
   presentar: async function (empresaId, ddjjId) {
     return presentar(empresaId, ddjjId);
   },
-  getPeriodoAnterior: async function (periodo) {
-    return obtenerPeriodoAnterior(periodo);
+  getPeriodoAnterior: async function (empresaId, periodo) {
+    return obtenerPeriodoAnterior(empresaId, periodo);
   },
   actualizarNombreApellido: async function (registro) {
     return actualizarNombreApellido(registro);

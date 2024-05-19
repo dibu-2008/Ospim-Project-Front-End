@@ -530,30 +530,30 @@ export const DDJJAlta = ({
   const buscarPeriodoAnterior = async () => {
     if (!mostrarPeriodos) {
       console.log('Ultimo Período Presentado');
-      const ultimoPeriodoPresentadoRes =
-        await axiosDDJJ.getPeriodoAnterior(otroPeriodo);
+      const ddjjPeriodoAnterior = await axiosDDJJ.getPeriodoAnterior(
+        ID_EMPRESA,
+        otroPeriodo,
+      );
       console.log('ultimoPeriodoPresentadoRes');
-      console.log(ultimoPeriodoPresentadoRes);
-      if (ultimoPeriodoPresentadoRes.length === 0) {
+      console.log(ddjjPeriodoAnterior);
+      if (!ddjjPeriodoAnterior) {
         Swal.fire({
           icon: 'error',
           title: 'Error',
           text: 'No se encontró un período anterior',
         });
         return;
-      } else {
-        setTituloSec(getTituloSec(ultimoPeriodoPresentadoRes[0].secuencia));
-        setRowsAltaDDJJ(ultimoPeriodoPresentadoRes[0].afiliados);
-        /* setDDJJState((prevState) => ({
-          ...prevState,
-          afiliados: ultimoPeriodoPresentadoRes[0].afiliados,
-        })); */
-        setOcultarEmpleadosGrilla(!ocultarEmpleadosGrilla);
       }
+      setTituloSec(getTituloSec(ddjjPeriodoAnterior.secuencia));
+      setRowsAltaDDJJ(ddjjPeriodoAnterior.afiliados);
+      setOcultarEmpleadosGrilla(!ocultarEmpleadosGrilla);
     } else {
-      console.log('Elegir otro');
-      const otroPeriodoRes = await axiosDDJJ.getPeriodoAnterior(otroPeriodo);
-      if (otroPeriodoRes.length === 0) {
+      console.log('Elegir otro - otroPeriodo:', otroPeriodo);
+      const otroPeriodoRes = await axiosDDJJ.getPeriodoAnterior(
+        ID_EMPRESA,
+        otroPeriodo,
+      );
+      if (!otroPeriodoRes) {
         Swal.fire({
           icon: 'error',
           title: 'Error',
@@ -561,10 +561,10 @@ export const DDJJAlta = ({
         });
         return;
       } else {
-        setRowsAltaDDJJ(otroPeriodoRes[0].afiliados);
+        setRowsAltaDDJJ(otroPeriodoRes.afiliados);
         setDDJJState((prevState) => ({
           ...prevState,
-          afiliados: otroPeriodoRes[0].afiliados,
+          afiliados: otroPeriodoRes.afiliados,
         }));
         setOcultarEmpleadosGrilla(!ocultarEmpleadosGrilla);
       }
