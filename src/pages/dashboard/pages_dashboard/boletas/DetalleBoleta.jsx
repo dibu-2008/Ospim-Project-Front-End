@@ -274,6 +274,7 @@ export const DetalleBoleta = () => {
               {
                 field: 'remunerativo',
                 headerName: 'Remunerativo',
+                align: "right",
                 flex: 1,
                 valueFormatter: (params) =>
                   formatter.currency.format(params.value),
@@ -281,6 +282,7 @@ export const DetalleBoleta = () => {
               {
                 field: 'capital',
                 headerName: 'Capital',
+                align: "right",
                 flex: 1,
                 valueFormatter: (params) =>
                   formatter.currency.format(params.value),

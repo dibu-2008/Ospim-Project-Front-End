@@ -20,8 +20,6 @@ function EditToolbar(props) {
   const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
 
   const handleClick = () => {
-
-
     const maxId = rows ? Math.max(...rows.map((row) => row.id), 0) : 1;
     const newId = maxId + 1;
     const id = newId;
@@ -130,7 +128,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
     const options = localidades.filter((item) => {
       return item.provinciaId == provinciaId;
     });
-    console.log(options)
+    console.log(options);
     if (options.length == 0) {
       const localidad = await getLocalidades(provinciaId);
 
@@ -150,7 +148,6 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
     getTipoDomicilio();
     getRowsDomicilio();
   }, []);
-
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {

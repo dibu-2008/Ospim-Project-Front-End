@@ -184,6 +184,7 @@ export const Ajustes = () => {
     } else {
       try {
         bOk = await axiosAjustes.actualizar(newRow);
+        bOk = await axiosAjustes.actualizar(newRow);
         if (bOk) {
           const rowsNew = rows.map((row) =>
             row.id === newRow.id ? newRow : row,
@@ -248,7 +249,7 @@ export const Ajustes = () => {
       type: 'singleSelect',
       editable: true,
       flex: 1,
-      valueOptions: () => aportes.map(aporte => aporte.codigo),
+      valueOptions: () => aportes.map((aporte) => aporte.codigo),
       valueGetter: (params) => params.row.aporte || '',
       headerAlign: 'center',
       align: 'center',

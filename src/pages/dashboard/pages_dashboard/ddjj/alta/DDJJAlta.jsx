@@ -13,7 +13,14 @@ import {
   Tooltip,
   Typography,
   dialogClasses,
+  Box,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Tab,
+  Tabs,
 } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import 'dayjs/locale/es';
 import './DDJJAlta.css';
 import { DDJJAltaEmpleadosGrilla } from './empleadosGrilla/DDJJAltaEmpleadosGrilla';
@@ -24,6 +31,7 @@ import XLSX from 'xlsx';
 import { GridRowModes } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
 import swal from '@/components/swal/swal';
+import PropTypes from 'prop-types';
 
 const IMPORTACION_OK = import.meta.env.VITE_IMPORTACION_OK;
 
@@ -31,6 +39,39 @@ const textoIdioma =
   esES.components.MuiLocalizationProvider.defaultProps['localeText'];
 
 const adaptadorIdioma = 'es';
+
+function CustomTabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <Box
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Box>{children}</Box>
+        </Box>
+      )}
+    </Box>
+  );
+}
+
+CustomTabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
 
 export const DDJJAlta = ({
   DDJJState,
@@ -58,6 +99,11 @@ export const DDJJAlta = ({
   const [rowModesModel, setRowModesModel] = useState({});
   const ID_EMPRESA = localStorageService.getEmpresaId();
   const [tituloSec, setTituloSec] = useState('');
+  const [tab, setTab] = useState(0);
+
+  const handleChange = (event, newValue) => {
+    setTab(newValue);
+  };
 
   const handleChangePeriodo = (date) => setPeriodo(date);
 
@@ -93,6 +139,8 @@ export const DDJJAlta = ({
   useEffect(() => {
     const ObtenerPlantaEmpresas = async () => {
       const data = await axiosDDJJ.getPlantas(ID_EMPRESA);
+      console.log('PLANTAS');
+      console.log(data);
       setPlantas(data.map((item) => ({ id: item, ...item })));
     };
     ObtenerPlantaEmpresas();
@@ -130,6 +178,8 @@ export const DDJJAlta = ({
   }, [DDJJState]);
 
   const importarAfiliado = async () => {
+    console.log('afiliadoImportado');
+    console.log(afiliadoImportado);
     const cuiles = afiliadoImportado.map((item) => item.cuil);
     const cuilesString = cuiles.map((item) => item.toString());
 
@@ -137,6 +187,9 @@ export const DDJJAlta = ({
       ID_EMPRESA,
       cuilesString,
     );
+
+    console.log('cuilesResponse');
+    console.log(cuilesResponse);
 
     const afiliadoImportadoConInte = afiliadoImportado.map((item) => {
       const cuilResponse = cuilesResponse.find(
@@ -147,6 +200,9 @@ export const DDJJAlta = ({
       }
       return item;
     });
+
+    console.log('afiliadoImportadoConInte');
+    console.log(afiliadoImportadoConInte);
 
     // Si alguno de los cuiles el valor de cuilesValidados es igual a false
     if (cuilesResponse.some((item) => item.cuilValido === false)) {
@@ -301,8 +357,12 @@ export const DDJJAlta = ({
             : item.empresaDomicilioId,
           camara: !item.camara ? null : item.camara,
           categoria: !item.categoria ? null : item.categoria,
-          remunerativo: !item.remunerativo ? null : +item.remunerativo,
-          noRemunerativo: !item.noRemunerativo ? null : +item.noRemunerativo,
+          remunerativo: !item.remunerativo
+            ? null
+            : parseFloat(parseFloat(item.remunerativo).toFixed(2)),
+          noRemunerativo: !item.noRemunerativo
+            ? null
+            : parseFloat(parseFloat(item.noRemunerativo).toFixed(2)),
           uomaSocio: item.uomaSocio === '' ? null : item.uomaSocio,
           amtimaSocio: item.amtimaSocio === '' ? null : item.amtimaSocio,
         };
@@ -514,154 +574,299 @@ export const DDJJAlta = ({
   return (
     <div className="mis_alta_declaraciones_juradas_container">
       <div className="periodo_container">
-        <h5 className="paso">Paso 1 - Indique período a presentar</h5>
-        <Stack spacing={4} direction="row" alignItems="center">
-          <Typography variant="h6" className="title_periodo">
-            Período
-          </Typography>
-          <LocalizationProvider
-            dateAdapter={AdapterDayjs}
-            adapterLocale={adaptadorIdioma}
-            localeText={textoIdioma}
+        <Accordion defaultExpanded>
+          <AccordionSummary
+            className="paso"
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1-content"
+            id="panel1-header"
           >
-            <DemoContainer components={['DatePicker']}>
-              <DesktopDatePicker
-                label={'Periodo'}
-                views={['month', 'year']}
-                closeOnSelect={true}
-                onChange={handleChangePeriodo}
-                value={periodo}
-              />
-            </DemoContainer>
-          </LocalizationProvider>
-          <Typography variant="h6"> DDJJ: {tituloSec}</Typography>
-        </Stack>
+            Paso 1 - Indique período a presentar
+          </AccordionSummary>
+          <AccordionDetails>
+            <Stack spacing={4} direction="row" alignItems="center">
+              <Typography className="title_periodo">Período</Typography>
+              <LocalizationProvider
+                dateAdapter={AdapterDayjs}
+                adapterLocale={adaptadorIdioma}
+                localeText={textoIdioma}
+              >
+                <DemoContainer components={['DatePicker']}>
+                  <DesktopDatePicker
+                    label={'Periodo'}
+                    views={['month', 'year']}
+                    closeOnSelect={true}
+                    onChange={handleChangePeriodo}
+                    value={periodo}
+                  />
+                </DemoContainer>
+              </LocalizationProvider>
+              <Typography> DDJJ: {tituloSec}</Typography>
+            </Stack>
+          </AccordionDetails>
+        </Accordion>
       </div>
 
       <div className="presentacion_container">
-        <h5 className="paso">Paso 2 - Elija un modo de presentación</h5>
-        <div className="subir_archivo_container">
-          <span className="span">1</span>
-          <h5 className="title_subir_archivo">Importar archivo CSV - XLSX</h5>
-          <div className="file-select" id="src-file1">
-            <input
-              type="file"
-              name="src-file1"
-              aria-label="Archivo"
-              onChange={handleFileChange}
-              accept=".csv, .xlsx"
-              title=""
-            />
-            <div className="file-select-label" id="src-file1-label">
-              {selectedFileName || 'Nombre del archivo'}
-            </div>
-          </div>
-          <Button
-            variant="contained"
-            sx={{
-              padding: '6px 52px',
-              width: '150px',
-            }}
-            onClick={importarAfiliado}
-            disabled={!btnSubirHabilitado}
+        <Accordion>
+          <AccordionSummary
+            className="paso"
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1-content"
+            id="panel1-header"
           >
-            Importar
-          </Button>
-        </div>
-        <div className="copiar_periodo_container">
-          <span className="span">2</span>
-          <h5 className="title_subir_archivo">Copiar un período anterior</h5>
-          <RadioGroup
-            aria-labelledby="demo-radio-buttons-group-label"
-            defaultValue="ultimoPeriodoPresentado"
-            name="radio-buttons-group"
-            sx={{ marginLeft: '67px' }}
-            onChange={handleElegirOtroChange}
-          >
-            <FormControlLabel
-              value="ultimoPeriodoPresentado"
-              control={<Radio />}
-              label="Ultimo período presentado"
-            />
-            <FormControlLabel
-              value="elegirOtro"
-              control={<Radio />}
-              label="Elegir otro"
-            />
-            <div className="elegir_otro_container">
-              {mostrarPeriodos && (
-                <Stack
-                  spacing={4}
-                  direction="row"
-                  sx={{ marginLeft: '-11px', marginTop: '10px' }}
+            Paso 2 - Elija un modo de presentación
+          </AccordionSummary>
+          <AccordionDetails>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+              <Tabs
+                value={tab}
+                onChange={handleChange}
+                aria-label="basic tabs example"
+              >
+                <Tab label="Importar CSV - XLSX" {...a11yProps(0)} />
+                <Tab label="Copiar un período anterior" {...a11yProps(1)} />
+                {/*  <Tab label="Item Three" {...a11yProps(2)} /> */}
+              </Tabs>
+            </Box>
+            <CustomTabPanel value={tab} index={0}>
+              <Box className="subir_archivo_container">
+                <Box className="file-select" id="src-file1">
+                  <input
+                    type="file"
+                    name="src-file1"
+                    aria-label="Archivo"
+                    onChange={handleFileChange}
+                    accept=".csv, .xlsx"
+                    title=""
+                  />
+                  <Box className="file-select-label" id="src-file1-label">
+                    {selectedFileName || 'Nombre del archivo'}
+                  </Box>
+                </Box>
+                <Button
+                  variant="contained"
+                  sx={{
+                    padding: '6px 52px',
+                    width: '150px',
+                  }}
+                  onClick={importarAfiliado}
+                  disabled={!btnSubirHabilitado}
                 >
-                  <LocalizationProvider
-                    dateAdapter={AdapterDayjs}
-                    adapterLocale={adaptadorIdioma}
-                    localeText={textoIdioma}
-                  >
-                    <DemoContainer components={['DatePicker']}>
-                      <DesktopDatePicker
-                        label={'Otro período'}
-                        views={['month', 'year']}
-                        closeOnSelect={true}
-                        onChange={handleChangeOtroPeriodo}
-                        value={otroPeriodo}
-                      />
-                    </DemoContainer>
-                  </LocalizationProvider>
-                </Stack>
-              )}
-            </div>
-          </RadioGroup>
-          <Button
-            variant="contained"
-            sx={{
-              marginLeft: '114px',
-              padding: '6px 45px',
-            }}
-            onClick={buscarPeriodoAnterior}
-          >
-            Buscar
-          </Button>
-        </div>
-        <div className="manualmente_container">
-          <span className="span">3</span>
-          <h5 className="title_manualmente">Cargar manualmente</h5>
-          <Button
-            variant="contained"
-            sx={{
-              padding: '6px 23px',
-              width: '150px',
-              marginLeft: '467px',
-            }}
-            onClick={() => setOcultarEmpleadosGrilla(!ocultarEmpleadosGrilla)}
-          >
-            Carga
-          </Button>
-        </div>
+                  Importar
+                </Button>
+              </Box>
+            </CustomTabPanel>
+            <CustomTabPanel value={tab} index={1}>
+              <Box className="copiar_periodo_container">
+                <RadioGroup
+                  aria-labelledby="demo-radio-buttons-group-label"
+                  defaultValue="ultimoPeriodoPresentado"
+                  name="radio-buttons-group"
+                  onChange={handleElegirOtroChange}
+                >
+                  <FormControlLabel
+                    value="ultimoPeriodoPresentado"
+                    control={<Radio />}
+                    label="Ultimo período presentado"
+                  />
+                  <FormControlLabel
+                    value="elegirOtro"
+                    control={<Radio />}
+                    label="Elegir otro"
+                  />
+                  <Box className="elegir_otro_container">
+                    {mostrarPeriodos && (
+                      <Stack
+                        spacing={4}
+                        direction="row"
+                        sx={{ marginLeft: '-11px', marginTop: '10px' }}
+                      >
+                        <LocalizationProvider
+                          dateAdapter={AdapterDayjs}
+                          adapterLocale={adaptadorIdioma}
+                          localeText={textoIdioma}
+                        >
+                          <DemoContainer components={['DatePicker']}>
+                            <DesktopDatePicker
+                              label={'Otro período'}
+                              views={['month', 'year']}
+                              closeOnSelect={true}
+                              onChange={handleChangeOtroPeriodo}
+                              value={otroPeriodo}
+                            />
+                          </DemoContainer>
+                        </LocalizationProvider>
+                      </Stack>
+                    )}
+                  </Box>
+                </RadioGroup>
+                <Button
+                  variant="contained"
+                  sx={{
+                    marginLeft: '114px',
+                    padding: '6px 45px',
+                  }}
+                  onClick={buscarPeriodoAnterior}
+                >
+                  Buscar
+                </Button>
+              </Box>
+            </CustomTabPanel>
+            {/* <CustomTabPanel value={tab} index={2}>
+              <Box className="manualmente_container">
+                <Button
+                  variant="contained"
+                  sx={{
+                    padding: '6px 23px',
+                    width: '150px',
+                    marginLeft: '467px',
+                  }}
+                  onClick={() =>
+                    setOcultarEmpleadosGrilla(!ocultarEmpleadosGrilla)
+                  }
+                >
+                  Carga
+                </Button>
+              </Box>
+            </CustomTabPanel> */}
+          </AccordionDetails>
+        </Accordion>
       </div>
 
-      {(ocultarEmpleadosGrilla ||
+      <div className="presentacion_container">
+        <Accordion>
+          <AccordionSummary
+            className="paso"
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1-content"
+            id="panel1-header"
+          >
+            Paso 3 - Grilla de afiliado
+          </AccordionSummary>
+          <AccordionDetails>
+            <Box
+              sx={{
+                margin: '10px 0px -20px 0px',
+
+                width: '100%',
+                '& .actions': {
+                  color: 'text.secondary',
+                },
+                '& .textPrimary': {
+                  color: 'text.primary',
+                },
+              }}
+            >
+              <DDJJAltaEmpleadosGrilla
+                rowsAltaDDJJ={rowsAltaDDJJ}
+                setRowsAltaDDJJ={setRowsAltaDDJJ}
+                camaras={camaras}
+                categoriasFiltradas={categoriasFiltradas}
+                setCategoriasFiltradas={setCategoriasFiltradas}
+                afiliado={afiliado}
+                setAfiliado={setAfiliado}
+                todasLasCategorias={todasLasCategorias}
+                plantas={plantas}
+                validacionResponse={validacionResponse}
+                setSomeRowInEditMode={setSomeRowInEditMode}
+                rowModesModel={rowModesModel}
+                setRowModesModel={setRowModesModel}
+              />
+            </Box>
+            <div
+              className="botones_container"
+              style={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                marginTop: '30px',
+              }}
+            >
+              <Tooltip
+                title={
+                  someRowInEditMode
+                    ? 'Hay filas en edición, por favor finalice la edición antes de guardar.'
+                    : ''
+                }
+                sx={{ marginLeft: '10px', cursor: 'pointer' }}
+              >
+                <span>
+                  <Button
+                    variant="contained"
+                    sx={{ padding: '6px 52px', marginLeft: '10px' }}
+                    onClick={guardarDeclaracionJurada}
+                    disabled={someRowInEditMode || rowsAltaDDJJ?.length === 0}
+                  >
+                    Guardar
+                  </Button>
+                </span>
+              </Tooltip>
+
+              {DDJJState.estado === 'PR' ? (
+                <Button
+                  variant="contained"
+                  sx={{ padding: '6px 52px', marginLeft: '10px' }}
+                  onClick={presentarDeclaracionJurada}
+                  disabled={true}
+                >
+                  Presentar
+                </Button>
+              ) : DDJJState.estado === 'PE' ? (
+                <Button
+                  variant="contained"
+                  sx={{ padding: '6px 52px', marginLeft: '10px' }}
+                  onClick={presentarDeclaracionJurada}
+                  disabled={false}
+                >
+                  Presentar
+                </Button>
+              ) : (
+                <Button
+                  variant="contained"
+                  sx={{ padding: '6px 52px', marginLeft: '10px' }}
+                  onClick={presentarDeclaracionJurada}
+                  disabled={DDJJState.id ? false : true}
+                >
+                  Presentar
+                </Button>
+              )}
+            </div>
+          </AccordionDetails>
+        </Accordion>
+      </div>
+
+      {/* {(ocultarEmpleadosGrilla ||
         (rowsAltaDDJJ && rowsAltaDDJJ.length > 0)) && (
         <div className="formulario_container">
           <h5 className="paso">Paso 3 - Completar el formulario</h5>
-
-          <DDJJAltaEmpleadosGrilla
-            rowsAltaDDJJ={rowsAltaDDJJ}
-            setRowsAltaDDJJ={setRowsAltaDDJJ}
-            camaras={camaras}
-            categoriasFiltradas={categoriasFiltradas}
-            setCategoriasFiltradas={setCategoriasFiltradas}
-            afiliado={afiliado}
-            setAfiliado={setAfiliado}
-            todasLasCategorias={todasLasCategorias}
-            plantas={plantas}
-            validacionResponse={validacionResponse}
-            setSomeRowInEditMode={setSomeRowInEditMode}
-            rowModesModel={rowModesModel}
-            setRowModesModel={setRowModesModel}
-          />
+          <Box
+            sx={{
+              height: '600px',
+              width: '100%',
+              '& .actions': {
+                color: 'text.secondary',
+              },
+              '& .textPrimary': {
+                color: 'text.primary',
+              },
+            }}
+          >
+            <DDJJAltaEmpleadosGrilla
+              rowsAltaDDJJ={rowsAltaDDJJ}
+              setRowsAltaDDJJ={setRowsAltaDDJJ}
+              camaras={camaras}
+              categoriasFiltradas={categoriasFiltradas}
+              setCategoriasFiltradas={setCategoriasFiltradas}
+              afiliado={afiliado}
+              setAfiliado={setAfiliado}
+              todasLasCategorias={todasLasCategorias}
+              plantas={plantas}
+              validacionResponse={validacionResponse}
+              setSomeRowInEditMode={setSomeRowInEditMode}
+              rowModesModel={rowModesModel}
+              setRowModesModel={setRowModesModel}
+            />
+          </Box>
 
           <div
             className="botones_container"
@@ -721,7 +926,7 @@ export const DDJJAlta = ({
             )}
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

@@ -100,12 +100,12 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
   }, []);
 
   const getRowsDomicilio = async () => {
-    const response = await axiosDomicilio.obtenerDomicilios(idEmpresa);
-    setRows(response);
+    const data = await axiosDomicilio.obtenerDomicilios(idEmpresa);
+    setRows(data);
   };
 
   const getDatosLocalidad = async (provincia) => {
-    const prov = provincias.find((prov) => prov.descripcion == provincia);
+    const prov = provincias.find((prov) => prov?.descripcion == provincia);
     const localidades = await axiosDomicilio.obtenerLocalidades(prov.id);
     setLocalidades(localidades);
   };
@@ -113,7 +113,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
   const getProvincias = async () => {
     const response = await axiosDomicilio.obtenerProvincias();
     setProvincias(response);
-    const PRO_V_O = response.map((prov) => prov.descripcion);
+    const PRO_V_O = response.map((prov) => prov?.descripcion);
     console.log(PRO_V_O);
     setProvinciasValueOptions(PRO_V_O);
   };
@@ -140,7 +140,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
     }
   };
   const handleDeleteClick = (row) => async () => {
-    console.log(row.id);
+    console.log('handleDeleteClick - row.id:', row.id);
     const showSwalConfirm = async () => {
       try {
         Swal.fire({
@@ -170,7 +170,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
   const handleEditClick = (row) => () => {
     if (!isOnEditMode) {
       isOnEditMode = true;
-      getDatosLocalidad(row.provincia.descripcion);
+      getDatosLocalidad(row.provincia?.descripcion);
       setRowModesModel({
         ...rowModesModel,
         [rows.indexOf(row)]: { mode: GridRowModes.Edit },
@@ -296,8 +296,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
       align: 'center',
       headerClassName: 'header--cell',
       valueOptions: provinciasValueOptions,
-      //valueGetter: (params) => params.row.provincia.descripcion ? params.row.provincia.descripcion : params.row.provincia,
-      valueGetter: (params) => params.row.provincia.descripcion,
+      valueGetter: (params) => params.row.provincia?.descripcion,
       renderEditCell: (params) => {
         return (
           <Select
@@ -313,7 +312,6 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
             sx={{ width: 200 }}
           >
             {provinciasValueOptions.map((item) => {
-              console.log(item);
               return (
                 <MenuItem key={item} value={item}>
                   {item}

@@ -1,4 +1,5 @@
 import { axiosEntity } from '@/components/axios/EntityCrud';
+import { toast } from 'react-toastify';
 
 const HTTP_MSG_ALTA_ERROR = import.meta.env.VITE_HTTP_MSG_ALTA_ERROR;
 
@@ -12,12 +13,10 @@ const adaptadorCrearDomicilio = async (domicilio) => {
     const localidad = localidades.find(
       (element) => element.descripcion == domicilio.localidad,
     );
-    domicilio.provincia = provincia.id;
-    domicilio.localidad = localidad.id;
-    delete domicilio.provincia;
     domicilio.provinciaId = provincia.id;
-    delete domicilio.localidad;
     domicilio.localidadId = localidad.id;
+    delete domicilio.provincia;
+    delete domicilio.localidad;
     delete domicilio.isNew;
     return domicilio;
   } catch (error) {

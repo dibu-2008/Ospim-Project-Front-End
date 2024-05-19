@@ -10,7 +10,7 @@ export const getBoletasByDDJJid = async (empresa_id, ddjj_id) => {
   try {
     const URL = `/empresa/${empresa_id}/ddjj/${ddjj_id}/boletas/armado`;
     const response = axiosCrud.consultar(URL);
-    console.log(response)
+    console.log(response);
     return response;
   } catch (error) {
     const HTTP_MSG =
@@ -36,11 +36,10 @@ export const getBoletaById = async (empresa_id, boleta_id) => {
   try {
     const response = axiosCrud.consultar(URL);
     return response;
-  } catch (error){
-    console.log(error)
-    return false
+  } catch (error) {
+    console.log(error);
+    return false;
   }
-
 };
 
 export const modificarBoletaById = async (empresa_id, body) => {
@@ -63,10 +62,9 @@ export const modificarBoletaById = async (empresa_id, body) => {
   }
 };
 
-
 export const axiosBoletas = {
   getBoletasByDDJJid,
   getBoletasByEmpresa,
   getBoletaById,
-  modificarBoletaById, 
+  modificarBoletaById,
 };
