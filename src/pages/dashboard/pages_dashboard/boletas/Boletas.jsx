@@ -34,8 +34,6 @@ export const Boletas = () => {
     const fetchData = async () => {
       try {
         const response = await getBoletasByEmpresa(ID_EMPRESA);
-        console.log(response)
-        console.log(response['con_ddjj'])
         setBoletas(response['con_ddjj']);
         setBoletasVisibles(
           response['con_ddjj'].flatMap((boleta) => ({
@@ -44,7 +42,6 @@ export const Boletas = () => {
           }))
         );
         setBoletasSinDDJJ(response['sin_ddjj']);
-        console.log(response);
         setBoletasSinAfiliados(
           response['sin_ddjj'].flatMap((boleta) => {
             const { afiliados, ...rest } = boleta;
@@ -60,7 +57,6 @@ export const Boletas = () => {
   }, []);
 
   const handleViewClick = (boletaDetalle) => {
-    console.log(boletaDetalle.numero_boleta);
     navigate(`/dashboard/detalleboleta/${boletaDetalle.id}`);
   };
 
@@ -198,7 +194,6 @@ export const Boletas = () => {
                   <IconButton
                     size="small"
                     onClick={() => {
-                      console.log("boletaPdfDownload - params.row.id", params.row.id)
                       boletaPdfDownload(
                         ID_EMPRESA,
                         params.row.id
@@ -289,7 +284,6 @@ export const Boletas = () => {
                   <IconButton
                     size="small"
                     onClick={() => {
-                      console.log("boletaPdfDownload - params.row.id", params.row.id)
                       boletaPdfDownload(ID_EMPRESA, params.row.id)
                       }
                     }

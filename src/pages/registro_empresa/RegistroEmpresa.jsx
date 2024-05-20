@@ -4,7 +4,7 @@ import { ButtonComponent } from '../../components/ButtonComponent';
 import { useFormRegisterCompany } from '../../hooks/useFormRegisterCompany';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import { GrillaRegistroDomilicio } from './grilla_registro_domicilio/GrillaRegistroDomicilio';
+import { GrillaEmpresaDomicilio } from '../dashboard/pages_dashboard/datos_empresa/grilla_empresa_domicilio/GrillaEmpresaDomicilio';
 import { registrarEmpresa, getRamo } from './RegistroEmpresaApi';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
@@ -35,7 +35,7 @@ export const RegistroEmpresa = () => {
   const [idEmailAlternativos, setIdEmailAlternativos] = useState(2);
   const [ramoAux, setRamoAux] = useState('');
   const [ramos, setRamos] = useState([]);
-  const [rowsDomicilio, setRowsDomicilio] = useState([]);
+  const [rows, setRows] = useState([]);
   const [showPassword, setShowPassword] = useState(true);
   const [showPasswordRepeat, setShowPasswordRepeat] = useState(true);
 
@@ -166,11 +166,11 @@ export const RegistroEmpresa = () => {
       }
     }
 
-    if (rowsDomicilio && rowsDomicilio.length > 0) {
-      usuarioEmpresa['domicilios'] = rowsDomicilio.map((row) => ({
+    if (rows && rows.length > 0) {
+      usuarioEmpresa['domicilios'] = rows.map((row) => ({
         tipo: row.tipo,
-        provinciaId: row.provinciaId,
-        localidadId: row.localidadId,
+        provinciaId: row.provincia.id,
+        localidadId: row.localidad.id,
         calle: row.calle,
         numeroDomicilio: row.numeroDomicilio,
         piso: row.piso,
@@ -189,7 +189,7 @@ export const RegistroEmpresa = () => {
       setAddionalEmail([]);
       setEmailAlternativos([]);
       setAdditionalPhone([]);
-      setRowsDomicilio([]);
+      setRows([]);
       OnResetFormRegisterCompany();
     }
   };
@@ -729,9 +729,10 @@ export const RegistroEmpresa = () => {
             Domicilios declarados: (Para completar el registro, deberá agregar
             por lo menos el Domicilio Fiscal)
           </p>
-          <GrillaRegistroDomilicio
-            rows={rowsDomicilio}
-            setRows={setRowsDomicilio}
+          <GrillaEmpresaDomicilio
+            idEmpresa='PC'
+            rows={rows}
+            setRows={setRows}
           />
           <Button
             className="btn_ingresar"
@@ -742,20 +743,6 @@ export const RegistroEmpresa = () => {
               marginTop: '20px',
               padding: '15px',
             }}
-            /*
-            disabled={
-              !cuit ||
-              !razonSocial ||
-              !email_first ||
-              !password ||
-              !repeatPassword ||
-              !prefijo_first ||
-              !phone_first ||
-              !whatsapp_prefijo ||
-              !whatsapp ||
-              !ramoAux
-          }
-          */
           >
             REGISTRAR EMPRESA
           </Button>

@@ -375,8 +375,9 @@ export const AltaUsuarioInterno = () => {
       align: 'center',
       headerClassName: 'header--cell',
       valueOptions: ['Si','No'],
-      value: (params) => params.row.notificaciones || 'No'
-      //value:(params) => params.row.notificaciones
+      valueGetter: (params) => {
+        return params.row.notificaciones ? 'Si' : 'No';
+      },
     },
     {
       field: 'habilitado',

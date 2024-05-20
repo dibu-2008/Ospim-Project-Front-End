@@ -18,10 +18,12 @@ import CancelIcon from '@mui/icons-material/Close';
 import {
   adaptadorDomicilioGrilla,
   axiosDomicilio,
+  adaptadorRegistroCompanyGrilla
 } from './GrillaEmpresaDomicilioApi';
 import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
+import { width } from '@mui/system';
 //const isNotNull = (value) => (value !== null && value !== '' ? value : '');
 
 let isOnEditMode = false;
@@ -79,6 +81,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
   const [provinciasValueOptions, setProvinciasValueOptions] = useState([]);
   const [tipoDomicilio, setTipoDomicilio] = useState([]);
   const [localidades, setLocalidades] = useState([]);
+  const [idRow, setIdRow] = useState(1);
   const [paginationModel, setPaginationModel] = useState({
     pageSize: 50,
     page: 0,
@@ -86,7 +89,9 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
 
   useEffect(() => {
     async function cargarDatos() {
-      await getRowsDomicilio();
+      if (idEmpresa !== 'PC') {
+        await getRowsDomicilio();
+      }
       await getProvincias();
       await getTipoDomicilio();
       console.log(rows);
@@ -148,9 +153,11 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
           confirmButtonText: 'Si, bórralo!',
         }).then(async (result) => {
           console.log(row.id);
-          if (result.isConfirmed) {
+          if (result.isConfirmed && idEmpresa !== 'PC') {
             const bBajaOk = await axiosDomicilio.eliminar(idEmpresa, row.id);
             if (bBajaOk) setRows(rows.filter((rowAux) => rowAux.id !== row.id));
+          } else {
+            setRows(rows.filter((rowAux) => rowAux.id !== row.id));
           }
         });
       } catch (error) {
@@ -197,50 +204,63 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
   const processRowUpdate = async (newRow, oldRow) => {
     console.log('processRowUpdate - INIT - newRow:', newRow);
     let bOk = false;
-
+    console.log(idEmpresa)
     if (!newRow.id) {
-      console.log('processRowUpdate - ALTA');
-      try {
-        const data = await axiosDomicilio.crear(idEmpresa, newRow);
-        console.log('processRowUpdate - ALTA - data:', data);
-        if (data && data.id) {
-          console.log(data);
-          newRow.id = data.id;
-          bOk = true;
-          //toast.success("El registro se creo correctamente")
-          newRow = await adaptadorDomicilioGrilla(newRow);
-          const newRows = rows.map((row) => (!row.id ? newRow : row));
-          setRows(newRows);
-
-          console.log('** processRowUpdate - ALTA - oldRow: ', oldRow);
-          console.log('** processRowUpdate - ALTA - newRow: ', newRow);
-        } else {
-          console.log('alta sin ID generado');
+        try {
+          if (idEmpresa !== 'PC'){ //Condicion para la grilla de registrar empresa
+            const data = await axiosDomicilio.crear(idEmpresa, newRow);
+            if (data && data.id) {
+              newRow.id = data.id;
+              bOk = true;
+              console.log(newRow)
+              newRow = await adaptadorDomicilioGrilla(newRow);
+              console.log(newRow)
+              const newRows = rows.map((row) => (!row.id ? newRow : row));
+              setRows(newRows);
+            } else {
+              console.log('alta sin ID generado');
+            }
+          } else {
+            bOk = true;
+            console.log(newRow)
+            newRow = await adaptadorRegistroCompanyGrilla(newRow);
+            newRow.id = idRow
+            setIdRow(idRow + 1)
+            console.log(newRow)
+            const newRows = rows.map((row) => (!row.id ? newRow : row));
+            setRows(newRows);
+          }
+        } catch (error) {
+          console.log(
+            'X - processRowUpdate - ALTA - ERROR: ' + JSON.stringify(error),
+          );
         }
-      } catch (error) {
-        console.log('X - processRowUpdate - ALTA - ERROR: ', error);
-        console.log(
-          'X - processRowUpdate - ALTA - ERROR: ' + JSON.stringify(error),
-        );
-      }
     } else {
-      console.log('processRowUpdate - MODI');
-      try {
-        bOk = await axiosDomicilio.actualizar(idEmpresa, newRow);
-        console.log('4 - processRowUpdate - MODI - bOk: ' + bOk);
-        console.log('** processRowUpdate - MODI - oldRow: ', oldRow);
-        console.log('** processRowUpdate - MODI - newRow: ', newRow);
-        if (bOk) {
-          newRow = await adaptadorDomicilioGrilla(newRow);
+      if (idEmpresa !== 'PC') {
+        try {
+          bOk = await axiosDomicilio.actualizar(idEmpresa, newRow);
+          console.log('4 - processRowUpdate - MODI - bOk: ' + bOk);
+          console.log('** processRowUpdate - MODI - oldRow: ', oldRow);
+          console.log('** processRowUpdate - MODI - newRow: ', newRow);
+          if (bOk) {
+            newRow = await adaptadorDomicilioGrilla(newRow);
+            const rowsNew = rows.map((row) =>
+              row.id === newRow.id ? newRow : row,
+            );
+            setRows(rowsNew);
+          }
+        } catch (error) {
+          console.log(
+            'X - processRowUpdate - MODI - ERROR: ' + JSON.stringify(error),
+          );
+        }
+      } else {
+          bOk = true;
+          newRow = await adaptadorRegistroCompanyGrilla(newRow);
           const rowsNew = rows.map((row) =>
             row.id === newRow.id ? newRow : row,
           );
           setRows(rowsNew);
-        }
-      } catch (error) {
-        console.log(
-          'X - processRowUpdate - MODI - ERROR: ' + JSON.stringify(error),
-        );
       }
     }
 
@@ -311,8 +331,9 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell',
-      valueOptions: localidades.map((localidad) => localidad?.descripcion),
-      valueGetter: (params) => params.row.localidad?.descripcion,
+      valueOptions: localidades.map((localidad) => localidad.descripcion),
+      valueGetter: (params) => params.row.localidad.descripcion ? params.row.localidad.descripcion : params.row.localidad,
+      //valueGetter: (params) => params.row.localidad.descripcion 
     },
     {
       field: 'calle',
@@ -428,7 +449,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
   ];
 
   return (
-    <div>
+    <div style={{ width: idEmpresa === 'PC' ? '100%' : 'auto' }}>
       <Box
         sx={{
           height: '600px',

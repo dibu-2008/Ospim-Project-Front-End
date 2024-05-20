@@ -43,23 +43,23 @@ export const GenerarOtrosPagos = () => {
       await generarBoletaSinDDJJ(ID_EMPRESA, body).then(() => {
         toast.success('Boleta generada con exito', {
           onClose: () => {
-            navigate(window.location.href = '/dashboard/boletas')
+            navigate('/dashboard/boletas')
           },
         });
       });
     } catch (error) {
       console.error(error);
       toast.error('Ocurrio un problema al intentar generar la boleta');
-      navigate(window.location.href = '/dashboard/boletas')
+      navigate('/dashboard/boletas')
     }
 
   };
 
   return (
-    <Box p={3} className="otros_pagos_container">
-      <Typography variant="h1" gutterBottom>
-        Boleta
-      </Typography>
+    <div className="otros_pagos_container">
+      <h1>
+        Boleta Acta
+      </h1>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
           <TextField
@@ -124,6 +124,6 @@ export const GenerarOtrosPagos = () => {
         </Grid>
       </Grid>
       <ToastContainer />
-    </Box>
+    </div>
   );
 };

@@ -21,16 +21,16 @@ export const axiosAjustes = {
     return consultar(UrlApi);
   },
 
-  crear: async function (UrlApi, oEntidad) {
-    return crear(UrlApi, oEntidad);
+  crear: async function (oEntidad) {
+    return crear(oEntidad);
   },
 
-  actualizar: async function (UrlApi, oEntidad) {
-    return actualizar(UrlApi, oEntidad);
+  actualizar: async function (oEntidad) {
+    return actualizar(oEntidad);
   },
 
-  eliminar: async function (UrlApi, id) {
-    return eliminar(UrlApi, id);
+  eliminar: async function (id) {
+    return eliminar(id);
   },
 
   consultarAportes: async function () {
@@ -74,6 +74,8 @@ export const crear = async (registro) => {
 
 export const actualizar = async (registro) => {
   try {
+    console.log(registro)
+    console.log(registro.periodo_original)
     registro.periodo_original = formatter.toFechaValida(
       registro.periodo_original,
     );
