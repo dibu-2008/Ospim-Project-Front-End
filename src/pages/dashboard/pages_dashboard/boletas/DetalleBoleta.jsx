@@ -85,9 +85,10 @@ export const DetalleBoleta = () => {
     );
     let objetoModificado = { ...boletaDetalle };
 
-    for (let key in response.data) {
-      if (response.data.hasOwnProperty(key)) {
-        objetoModificado[key] = response.data[key];
+    for (let key in response) {
+      console.log(key);
+      if (response.hasOwnProperty(key)) {
+        objetoModificado[key] = response[key];
       }
     }
     setBoletaDetalle(objetoModificado);
@@ -274,7 +275,7 @@ export const DetalleBoleta = () => {
               {
                 field: 'remunerativo',
                 headerName: 'Remunerativo',
-                align: "right",
+                align: 'right',
                 flex: 1,
                 valueFormatter: (params) =>
                   formatter.currency.format(params.value),
@@ -282,7 +283,7 @@ export const DetalleBoleta = () => {
               {
                 field: 'capital',
                 headerName: 'Capital',
-                align: "right",
+                align: 'right',
                 flex: 1,
                 valueFormatter: (params) =>
                   formatter.currency.format(params.value),
