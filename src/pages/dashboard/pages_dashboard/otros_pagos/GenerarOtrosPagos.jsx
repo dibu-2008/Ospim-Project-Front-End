@@ -10,12 +10,30 @@ import {
   Select,
   Box,
   Grid,
+  styled
 } from '@mui/material';
 import { generarBoletaSinDDJJ } from './OtrosPagosApi';
 import { getEmpresaId } from '@/components/localStorage/localStorageService'
 import './OtrosPagos.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import CurrencyInput from 'react-currency-input-field';
+import { formatValue } from 'react-currency-input-field';
+
+const StyledCurrencyInput = styled(CurrencyInput)(({ theme }) => ({
+  ...theme.typography.body1,
+  padding: '10px 14px',
+  borderRadius: 4,
+  border: '1px solid rgba(0, 0, 0, 0.23)',
+  width: '100%',
+  '&:hover': {
+    borderColor: 'rgba(0, 0, 0, 0.87)',
+  },
+  '&:focus': {
+    borderColor: theme.palette.primary.main,
+    boxShadow: `0 0 0 2px ${theme.palette.primary.main}33`,
+  },
+}));
 
 export const GenerarOtrosPagos = () => {
   const [intencionDePago, setIntencionDePago] = useState('');
@@ -35,7 +53,7 @@ export const GenerarOtrosPagos = () => {
       entidad,
       nroActa,
       importe,
-      intencionDePago: new Date(`${intencionDePago}`).toISOString(),
+      intencion_de_pago: new Date(`${intencionDePago}`).toISOString(),
       razon_de_pago: 'Nro Acta: ' + nroActa,
     };
     try {
@@ -96,13 +114,28 @@ export const GenerarOtrosPagos = () => {
             onChange={(e) => setNroActa(e.target.value)}
           />
         </Grid>
-        <Grid item xs={12}>
-          <TextField
+
+        <Grid item xs={6}>
+        <TextField
             label="Importe"
-            type="number"
+            InputProps={{
+              inputComponent: StyledCurrencyInput,
+              inputProps: {
+                placeholder: "Importe",
+                value: importe,
+                onValueChange: (value) => {
+                  setImporte(value)
+                  console.log(importe)
+                },
+                decimalScale: 2,
+                decimalSeparator: ",",
+                groupSeparator: ".",
+                prefix: "$",
+              },
+            }}
             fullWidth
-            value={importe}
-            onChange={(e) => setImporte(e.target.value)}
+            //value={importe}
+            //onChange={(e) => setImporte(e.target.value)}
           />
         </Grid>
         <Grid item xs={12}>
