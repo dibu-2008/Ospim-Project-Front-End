@@ -62,10 +62,7 @@ export const Boletas = () => {
 
   const handleSearch = () => {
     const filteredBoletas = boletas.filter((boleta) => {
-      const fecha = boleta.periodo;
-      const [mes, anio] = fecha.split("-");
-      const timestamp = new Date(`${anio}-${mes}-01`);
-
+      const timestamp = new Date(boleta.periodo);
       return timestamp >= new Date(fromDate) && timestamp <= new Date(toDate);
     });
     setBoletasVisibles(
