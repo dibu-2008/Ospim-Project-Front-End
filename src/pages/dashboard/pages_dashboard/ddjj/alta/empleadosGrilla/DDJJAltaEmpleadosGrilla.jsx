@@ -259,6 +259,8 @@ export const DDJJAltaEmpleadosGrilla = ({
 
   const processRowUpdate = async (newRow) => {
     console.log('processRowUpdate - INIT');
+    console.log(newRow)
+    console.log(inteDataBase)
     if (newRow.isNew) {
       const fila = { ...newRow, inte: inteDataBase, errores: false };
       setRowsAltaDDJJ(
