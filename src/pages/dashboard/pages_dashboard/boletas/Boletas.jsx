@@ -62,12 +62,14 @@ export const Boletas = () => {
 
   const handleSearch = () => {
     const filteredBoletas = boletas.filter((boleta) => {
+      console.log(boleta.periodo)
       const fecha = boleta.periodo;
       const [mes, anio] = fecha.split("-");
-      const timestamp = new Date(`${anio}-${mes}-01`);
-
+      const timestamp = new Date(boleta.periodo);
+      console.log(timestamp)
       return timestamp >= new Date(fromDate) && timestamp <= new Date(toDate);
     });
+    console.log(filteredBoletas)
     setBoletasVisibles(
       filteredBoletas.flatMap((boleta) => ({
         ...boleta,
@@ -135,7 +137,7 @@ export const Boletas = () => {
               headerName: "Periodo",
               flex: 0.8,
               valueFormatter: (params) =>
-                params.value ? formatter.periodo(params.value, "-") : "",
+                params.value ? formatter.periodo(params.value) : "",
             },
             { field: "tipo_ddjj", headerName: "Tipo DDJJ", flex: 1 },
             { field: "numero_boleta", headerName: "Número", flex: 0.8 },
@@ -267,7 +269,7 @@ export const Boletas = () => {
             },
             {
               field: 'intencion_de_pago',
-              headerName: 'Intencion de Pago',              
+              headerName: 'Intencion de Pago',
               flex: 1,
               valueFormatter: (params) =>
                 params.value && isNotNull(params.value)

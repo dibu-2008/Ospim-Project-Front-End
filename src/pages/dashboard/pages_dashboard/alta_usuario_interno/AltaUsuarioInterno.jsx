@@ -561,7 +561,7 @@ export const AltaUsuarioInterno = () => {
                       marginLeft: '10px',
                     }}
                   >
-                    {nombre}
+                    Nombre: {nombre}
                   </p>
                 </Grid>
                 <Grid item xs={6}>
@@ -570,7 +570,7 @@ export const AltaUsuarioInterno = () => {
                       marginLeft: '10px',
                     }}
                   >
-                    {apellido}
+                    Apellido: {apellido}
                   </p>
                 </Grid>
               </Grid>
@@ -582,7 +582,7 @@ export const AltaUsuarioInterno = () => {
                       marginLeft: '10px',
                     }}
                   >
-                    {usuario}
+                    Usuario: {usuario}
                   </p>
                 </Grid>
                 <Grid item xs={6}>
@@ -591,7 +591,7 @@ export const AltaUsuarioInterno = () => {
                       marginLeft: '10px',
                     }}
                   >
-                    {email}
+                    Email: {email}
                   </p>
                 </Grid>
               </Grid>

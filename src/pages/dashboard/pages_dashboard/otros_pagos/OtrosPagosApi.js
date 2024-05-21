@@ -10,6 +10,10 @@ const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
 export const generarBoletaSinDDJJ = async (empresa_id, body) => {
   try {
     console.log(body);
+    //cambiar la coma por el punto en importe
+
+    body.importe = parseFloat(body.importe.replace(',','.'))
+    console.log(body)
     const URL = `${BACKEND_URL}/empresa/${empresa_id}/generar-boleta-sin-ddjj`;
 
     const response = await oAxios.request({
