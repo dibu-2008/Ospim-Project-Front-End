@@ -62,11 +62,7 @@ export const Boletas = () => {
 
   const handleSearch = () => {
     const filteredBoletas = boletas.filter((boleta) => {
-      console.log(boleta.periodo)
-      const fecha = boleta.periodo;
-      const [mes, anio] = fecha.split("-");
       const timestamp = new Date(boleta.periodo);
-      console.log(timestamp)
       return timestamp >= new Date(fromDate) && timestamp <= new Date(toDate);
     });
     console.log(filteredBoletas)
