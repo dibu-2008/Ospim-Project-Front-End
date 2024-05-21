@@ -397,7 +397,7 @@ export const DDJJAltaEmpleadosGrilla = ({
                   value: newValue,
                 });
               }}
-              onMouseLeave={(event) => {
+              onBlur={(event) => {
                 obtenerAfiliados(params, params.value);
               }}
               sx={{

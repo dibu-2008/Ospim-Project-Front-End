@@ -548,12 +548,18 @@ export const DDJJAlta = ({
       setRowsAltaDDJJ(ddjjPeriodoAnterior.afiliados);
       setOcultarEmpleadosGrilla(!ocultarEmpleadosGrilla);
     } else {
-      console.log('Elegir otro - otroPeriodo:', otroPeriodo);
-      const otroPeriodoRes = await axiosDDJJ.getPeriodoAnterior(
-        ID_EMPRESA,
-        otroPeriodo,
-      );
-      if (!otroPeriodoRes) {
+      let anio = otroPeriodo.$y;
+      let mes = otroPeriodo.$M;
+      let dia = otroPeriodo.$D;
+      const fechaDaysJs = dayjs(`${anio}-${mes + 1}-${dia}`)
+        .set('hour', 3)
+        .set('minute', 0)
+        .set('second', 0)
+        .set('millisecond', 0)
+        .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+      // te la mando en este formato 2024-05-21T03:00:00.000Z
+      const otroPeriodoRes = await axiosDDJJ.getPeriodoAnterior(fechaDaysJs);
+      if (otroPeriodoRes.length === 0) {
         Swal.fire({
           icon: 'error',
           title: 'Error',
@@ -585,7 +591,6 @@ export const DDJJAlta = ({
           </AccordionSummary>
           <AccordionDetails>
             <Stack spacing={4} direction="row" alignItems="center">
-              <Typography className="title_periodo">Período</Typography>
               <LocalizationProvider
                 dateAdapter={AdapterDayjs}
                 adapterLocale={adaptadorIdioma}
