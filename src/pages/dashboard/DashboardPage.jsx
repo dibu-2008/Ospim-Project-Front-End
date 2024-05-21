@@ -237,7 +237,7 @@ const DashboardPage = () => {
                 {rolFuncionalidades.BOLETA_BLANCA && (
                   <NavLink to="./generarotrospagos" className="icon-container">
                     <ReceiptIcon className="icon-link" />{' '}
-                    {open && <span className="icon-link">Boleta Blanca</span>}
+                    {open && <span className="icon-link">Boleta Acta</span>}
                   </NavLink>
                 )}
                 {rolFuncionalidades.GESTION_ROLES && (
