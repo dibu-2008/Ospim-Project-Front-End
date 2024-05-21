@@ -64,6 +64,7 @@ export const DetalleBoleta = () => {
         setAjustes(response.ajustes);
         setRespaldoBoleta(JSON.parse(JSON.stringify(response)));
         console.log(boletaDetalle.periodo);
+        console.log(boletaDetalle)
       } catch (error) {
         console.error('Error al obtener los datos de la boleta:', error);
       }
@@ -72,6 +73,7 @@ export const DetalleBoleta = () => {
   }, []);
 
   const guardarBoleta = () => {
+    console.log(boletaDetalle)
     modificarBoletaById(ID_EMPRESA, boletaDetalle);
   };
 
@@ -85,9 +87,10 @@ export const DetalleBoleta = () => {
     );
     let objetoModificado = { ...boletaDetalle };
 
-    for (let key in response.data) {
-      if (response.data.hasOwnProperty(key)) {
-        objetoModificado[key] = response.data[key];
+    for (let key in response) {
+      console.log(key)
+      if (response.hasOwnProperty(key)) {
+        objetoModificado[key] = response[key];
       }
     }
     setBoletaDetalle(objetoModificado);

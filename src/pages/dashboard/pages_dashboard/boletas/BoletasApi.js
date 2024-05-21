@@ -43,6 +43,7 @@ export const getBoletaById = async (empresa_id, boleta_id) => {
 };
 
 export const modificarBoletaById = async (empresa_id, body) => {
+  console.log(body)
   const URL = `/empresa/${empresa_id}/boletas`;
   try {
     body.intencion_de_pago = formatter.toFechaValida(body.intencion_de_pago);

@@ -8,3 +8,8 @@
   margin-bottom: 65px;
   text-align: left !important;
 }
+.input-currency:focus {
+  outline: none;
+  border: 1px;
+  border-color: aquamarine;
+}
