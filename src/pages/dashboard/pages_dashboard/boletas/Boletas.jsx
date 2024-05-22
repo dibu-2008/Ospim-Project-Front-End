@@ -39,13 +39,15 @@ export const Boletas = () => {
 
   const fetchData = async () => {
     try {
+      console.log(fromDate)
       let desdeDayjs = null;
       if (fromDate !== null) {
-        desdeDayjs = dayjs(fromDate.$d).format('YYYY-MM-DD');
+        desdeDayjs = dayjs(`${fromDate}-01`).format('YYYY-MM-DD');
       }
+      console.log(toDate)
       let hastaDayjs = null;
       if (toDate !== null) {
-        hastaDayjs = dayjs(toDate.$d).format('YYYY-MM-DD');
+        hastaDayjs = dayjs(`${toDate}-01`).format('YYYY-MM-DD');
       }
 
       const response = await axiosBoletas.getBoletas(
@@ -111,10 +113,7 @@ export const Boletas = () => {
             label="Desde"
             type="month"
             value={fromDate}
-            onChange={(e) => {
-              setFromDate(new Date(e.target.value + '-01'));
-              console.log('TextField.onChange() - e: ', e.target.value + '01');
-            }}
+            onChange={(e) => setFromDate(e.target.value)}
             InputLabelProps={{
               shrink: true,
             }}
@@ -123,7 +122,7 @@ export const Boletas = () => {
             label="Hasta"
             type="month"
             value={toDate}
-            onChange={(e) => setToDate(new Date(e.target.value + '-01'))}
+            onChange={(e) => setToDate(e.target.value)}
             InputLabelProps={{
               shrink: true,
             }}
