@@ -13,17 +13,20 @@ import {
   GridToolbarExport,
 } from '@mui/x-data-grid';
 import { useNavigate } from 'react-router-dom';
-import { getBoletasByEmpresa } from './BoletasApi';
+import { axiosBoletas } from './BoletasApi';
 import { boletaPdfDownload } from '@/common/api/BoletaCommonApi';
+import localStorageService from '@/components/localStorage/localStorageService';
 import { CSVLink } from 'react-csv';
 import formatter from '@/common/formatter';
+import dayjs from 'dayjs';
 import './Boletas.css';
 
 export const Boletas = () => {
-  const ID_EMPRESA = JSON.parse(localStorage.getItem('stateLogin'))
-    .usuarioLogueado.empresa.id;
-  const [fromDate, setFromDate] = useState('');
-  const [toDate, setToDate] = useState('');
+  const ID_EMPRESA = localStorageService.getEmpresaId();
+  const ahora = dayjs();
+  const ahoraMenosUnAnio = ahora.add(-11, 'month');
+  const [fromDate, setFromDate] = useState(ahoraMenosUnAnio);
+  const [toDate, setToDate] = useState(ahora);
   const [boletas, setBoletas] = useState([]);
   const [boletasVisibles, setBoletasVisibles] = useState([]);
   const [boletasSinAfiliados, setBoletasSinAfiliados] = useState([]); //Esta la necesito para generar el csv
@@ -31,30 +34,44 @@ export const Boletas = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await getBoletasByEmpresa(ID_EMPRESA);
-        setBoletas(response['con_ddjj']);
-        setBoletasVisibles(
-          response['con_ddjj'].flatMap((boleta) => ({
-            ...boleta,
-            id: `${boleta.id}`,
-          })),
-        );
-        setBoletasSinDDJJ(response['sin_ddjj']);
-        setBoletasSinAfiliados(
-          response['sin_ddjj'].flatMap((boleta) => {
-            const { afiliados, ...rest } = boleta;
-            return { ...rest };
-          }),
-        );
-      } catch (error) {
-        console.error('Error al obtener las boletas:', error);
-      }
-    };
-
     fetchData();
   }, []);
+
+  const fetchData = async () => {
+    try {
+      let desdeDayjs = null;
+      if (fromDate !== null) {
+        desdeDayjs = dayjs(fromDate.$d).format('YYYY-MM-DD');
+      }
+      let hastaDayjs = null;
+      if (toDate !== null) {
+        hastaDayjs = dayjs(toDate.$d).format('YYYY-MM-DD');
+      }
+
+      const response = await axiosBoletas.getBoletas(
+        ID_EMPRESA,
+        desdeDayjs,
+        hastaDayjs,
+      );
+      console.log('axiosBoletas.getBoletas - response:', response);
+      setBoletas(response['con_ddjj']);
+      setBoletasVisibles(
+        response['con_ddjj'].flatMap((boleta) => ({
+          ...boleta,
+          id: `${boleta.id}`,
+        })),
+      );
+      setBoletasSinDDJJ(response['sin_ddjj']);
+      setBoletasSinAfiliados(
+        response['sin_ddjj'].flatMap((boleta) => {
+          const { afiliados, ...rest } = boleta;
+          return { ...rest };
+        }),
+      );
+    } catch (error) {
+      console.error('Error al obtener las boletas:', error);
+    }
+  };
 
   const handleViewClick = (boletaDetalle) => {
     navigate(`/dashboard/detalleboleta/${boletaDetalle.id}`);
@@ -94,7 +111,10 @@ export const Boletas = () => {
             label="Desde"
             type="month"
             value={fromDate}
-            onChange={(e) => setFromDate(e.target.value)}
+            onChange={(e) => {
+              setFromDate(new Date(e.target.value + '-01'));
+              console.log('TextField.onChange() - e: ', e.target.value + '01');
+            }}
             InputLabelProps={{
               shrink: true,
             }}
@@ -103,14 +123,14 @@ export const Boletas = () => {
             label="Hasta"
             type="month"
             value={toDate}
-            onChange={(e) => setToDate(e.target.value)}
+            onChange={(e) => setToDate(new Date(e.target.value + '-01'))}
             InputLabelProps={{
               shrink: true,
             }}
           />
         </div>
         <div>
-          <Button variant="contained" onClick={handleSearch}>
+          <Button variant="contained" onClick={fetchData}>
             Buscar
           </Button>
         </div>

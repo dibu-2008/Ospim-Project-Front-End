@@ -19,9 +19,18 @@ export const getBoletasByDDJJid = async (empresa_id, ddjj_id) => {
   }
 };
 
-export const getBoletasByEmpresa = async (empresa_id) => {
+export const getBoletas = async (empresa_id, desde, hasta) => {
   try {
-    const URL = `/empresa/${empresa_id}/boletas/consulta-gral`;
+    let queryString = '';
+
+    if (desde !== null) {
+      queryString += `&desde=${desde}`;
+    }
+    if (hasta !== null) {
+      queryString += `&hasta=${hasta}`;
+    }
+
+    const URL = `/empresa/${empresa_id}/boletas/consulta-gral?${queryString}`;
     const response = axiosCrud.consultar(URL);
     return response;
   } catch (error) {
@@ -48,13 +57,6 @@ export const modificarBoletaById = async (empresa_id, body) => {
   try {
     body.intencionDePago = formatter.toFechaValida(body.intencionDePago);
     body.periodo = formatter.toFechaValida(body.intencionDePago);
-    // Descomentar en caso de querer enviar solo los datos que se modifican
-    /*
-     const bodynuevo ={
-     'intencionDePago':body.intencionDePago,
-      'formaDePago':body.formaDePago}
-      await axiosCrud.actualizar(URL, bodynuevo)
-      */
     await axiosCrud.actualizar(URL, body);
   } catch (error) {
     const HTTP_MSG =
@@ -65,7 +67,7 @@ export const modificarBoletaById = async (empresa_id, body) => {
 
 export const axiosBoletas = {
   getBoletasByDDJJid,
-  getBoletasByEmpresa,
+  getBoletas,
   getBoletaById,
   modificarBoletaById,
 };
