@@ -87,13 +87,14 @@ const CustomToolbar = (props) => {
 
 export const DDJJConsultaEmpleado = () => {
   const ahora = dayjs();
-  const ahoraMasUnMes = ahora.add(1, 'month');
+  const ahoraMenosUnAnio = ahora.add(-11, 'month');
+  const [desde, setDesde] = useState(ahoraMenosUnAnio);
+  const [hasta, setHasta] = useState(ahora);
+
   const [showCuitRazonSocial, setShowCuitRazonSocial] = useState(true);
   const [paginationModel, setPaginationModel] = useState(paginacion);
   const [rowModesModel, setRowModesModel] = useState({});
   const [locale, setLocale] = useState('esES');
-  const [desde, setDesde] = useState(ahora);
-  const [hasta, setHasta] = useState(ahoraMasUnMes);
   const [cuit, setCuit] = useState('');
   const [rows, setRows] = useState([]);
   const theme = useTheme();
@@ -127,6 +128,9 @@ export const DDJJConsultaEmpleado = () => {
     let cuitFlt = null;
     if (cuit != '') {
       cuitFlt = cuit;
+      setShowCuitRazonSocial(false);
+    } else {
+      setShowCuitRazonSocial(true);
     }
 
     const data = await axiosDDJJEmpleado.consultarFiltrado(
@@ -137,7 +141,6 @@ export const DDJJConsultaEmpleado = () => {
 
     if (data.length > 0) {
       setRows(data);
-      setShowCuitRazonSocial(false);
     }
   };
 
