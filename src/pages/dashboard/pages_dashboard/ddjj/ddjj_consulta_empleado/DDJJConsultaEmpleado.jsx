@@ -10,7 +10,6 @@ import Button from '@mui/material/Button';
 import { Box } from '@mui/system';
 import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
 import {
-  DataGrid,
   GridActionsCellItem,
   GridRowModes,
   GridToolbarContainer,
@@ -106,17 +105,7 @@ export const DDJJConsultaEmpleado = () => {
   let colAportes = [];
 
   useEffect(() => {
-    const ObtenerDDJJ = async () => {
-      let ddjjResponse = await axiosDDJJEmpleado.consultar();
-      console.log(ddjjResponse);
-
-      //Agrego las columnas deTotales de Aportes
-      ddjjResponse = await castearDDJJ(ddjjResponse);
-
-      setRows(ddjjResponse);
-    };
-
-    ObtenerDDJJ();
+    buscarDDJJ();
   }, []);
 
   const handleChangeDesde = (date) => setDesde(date);
@@ -129,35 +118,25 @@ export const DDJJConsultaEmpleado = () => {
     // Busqueda por rango de periodo
     let desdeDayjs = null;
     if (desde !== null) {
-      desdeDayjs = dayjs(desde.$d)
-        .set('hour', 3)
-        .set('minute', 0)
-        .set('second', 0)
-        .set('millisecond', 0)
-        .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+      desdeDayjs = dayjs(desde.$d).format('YYYY-MM-DD');
     }
     let hastaDayjs = null;
     if (hasta !== null) {
-      hastaDayjs = dayjs(hasta.$d)
-        .set('hour', 3)
-        .set('minute', 0)
-        .set('second', 0)
-        .set('millisecond', 0)
-        .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+      hastaDayjs = dayjs(hasta.$d).format('YYYY-MM-DD');
     }
     let cuitFlt = null;
     if (cuit != '') {
       cuitFlt = cuit;
     }
 
-    const ddjjResponse = await axiosDDJJEmpleado.consultarFiltrado(
+    const data = await axiosDDJJEmpleado.consultarFiltrado(
       desdeDayjs,
       hastaDayjs,
       cuitFlt,
     );
 
-    if (ddjjResponse.length > 0) {
-      setRows(ddjjResponse);
+    if (data.length > 0) {
+      setRows(data);
       setShowCuitRazonSocial(false);
     }
   };

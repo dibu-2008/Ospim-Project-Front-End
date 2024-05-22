@@ -56,8 +56,8 @@ export const DetalleBoleta = () => {
             id: index + 1,
           })),
         );
-        setMetodoPago(response.forma_de_pago);
-        setIntencionDePago(response.intencion_de_pago);
+        setMetodoPago(response.formaDePago);
+        setIntencionDePago(response.intencionDePago);
         setDDDJJ_id(response.declaracion_jurada_id);
         setCodigo(response.codigo);
         setIsEditable(!response.fecha_de_pago);
@@ -99,7 +99,7 @@ export const DetalleBoleta = () => {
   const handleSetMetodoPago = async (value) => {
     setMetodoPago(value);
     const nuevaBoleta = JSON.parse(JSON.stringify(boletaDetalle));
-    nuevaBoleta.forma_de_pago = value;
+    nuevaBoleta.formaDePago = value;
     setBoletaDetalle(nuevaBoleta);
   };
 
@@ -110,8 +110,8 @@ export const DetalleBoleta = () => {
 
   const handleCancelar = () => {
     setBoletaDetalle(respaldoBoleta);
-    setIntencionDePago(respaldoBoleta.intencion_de_pago);
-    setMetodoPago(respaldoBoleta.forma_de_pago);
+    setIntencionDePago(respaldoBoleta.intencionDePago);
+    setMetodoPago(respaldoBoleta.formaDePago);
     setModoEdicion(!modoEdicion);
   };
 
@@ -232,8 +232,8 @@ export const DetalleBoleta = () => {
                       handlesSetIntencionDePago(event.target.value)
                     }
                   />
-                ) : existeDato(boletaDetalle.intencion_de_pago) ? (
-                  formatter.date(boletaDetalle.intencion_de_pago)
+                ) : existeDato(boletaDetalle.intencionDePago) ? (
+                  formatter.date(boletaDetalle.intencionDePago)
                 ) : (
                   ''
                 )}
@@ -251,7 +251,7 @@ export const DetalleBoleta = () => {
                     <MenuItem value="PMCUENTAS">PagoMisCuentas</MenuItem>
                   </Select>
                 ) : (
-                  boletaDetalle.forma_de_pago
+                  boletaDetalle.formaDePago
                 )}
               </TableCell>
             </TableRow>

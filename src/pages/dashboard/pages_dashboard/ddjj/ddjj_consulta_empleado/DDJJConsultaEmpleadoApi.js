@@ -33,26 +33,19 @@ export const obtenerDDJJ = async () => {
 };
 
 export const consultaDDJJfiltrada = async (desde, hasta, cuit) => {
-  
-  let queryString ='';
+  let queryString = '';
 
   if (desde !== null) {
-    queryString +=  `&desde=${desde}`;
+    queryString += `&desde=${desde}`;
   }
   if (hasta !== null) {
-    queryString +=  `&hasta=${hasta}`;
+    queryString += `&hasta=${hasta}`;
   }
   if (cuit != null) {
-    queryString +=  `&cuit=${cuit}`;
+    queryString += `&cuit=${cuit}`;
   }
 
-  //const URL = `/ddjj/totales?cuit=${cuit}${queryStringDesde}${queryStringHasta}`;
   const URL = `/ddjj/totales?${queryString}`;
-  //const URL = "/ddjj/totales";
-  //const jsonBody = {};
-  //jsonBody.desde = desde;
-  //jsonBody.hasta = hasta;
-  //jsonBody.cuit = cuit;
 
   try {
     const data = await axiosCrud.consultar(URL);

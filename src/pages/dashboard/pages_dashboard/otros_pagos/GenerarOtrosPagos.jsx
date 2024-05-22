@@ -10,10 +10,10 @@ import {
   Select,
   Box,
   Grid,
-  styled
+  styled,
 } from '@mui/material';
 import { generarBoletaSinDDJJ } from './OtrosPagosApi';
-import { getEmpresaId } from '@/components/localStorage/localStorageService'
+import { getEmpresaId } from '@/components/localStorage/localStorageService';
 import './OtrosPagos.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -44,40 +44,36 @@ export const GenerarOtrosPagos = () => {
   const navigate = useNavigate();
 
   const ID_EMPRESA = getEmpresaId();
-  
+
   const hoy = new Date().toISOString().split('T')[0];
 
   const handleImprimir = async () => {
-
     const body = {
       entidad,
       nroActa,
       importe,
-      intencion_de_pago: new Date(`${intencionDePago}`).toISOString(),
-      razon_de_pago: 'Nro Acta: ' + nroActa,
+      intencionDePago: new Date(`${intencionDePago}`).toISOString(),
+      razonDePago: 'Nro Acta: ' + nroActa,
     };
     try {
       setDeshabilitar(true);
       await generarBoletaSinDDJJ(ID_EMPRESA, body).then(() => {
         toast.success('Boleta generada con exito', {
           onClose: () => {
-            navigate('/dashboard/boletas')
+            navigate('/dashboard/boletas');
           },
         });
       });
     } catch (error) {
       console.error(error);
       toast.error('Ocurrio un problema al intentar generar la boleta');
-      navigate('/dashboard/boletas')
+      navigate('/dashboard/boletas');
     }
-
   };
 
   return (
     <div className="otros_pagos_container">
-      <h1>
-        Boleta Acta
-      </h1>
+      <h1>Boleta Acta</h1>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
           <TextField
@@ -116,21 +112,21 @@ export const GenerarOtrosPagos = () => {
         </Grid>
 
         <Grid item xs={6}>
-        <TextField
+          <TextField
             label="Importe"
             InputProps={{
               inputComponent: StyledCurrencyInput,
               inputProps: {
-                placeholder: "Importe",
+                placeholder: 'Importe',
                 value: importe,
                 onValueChange: (value) => {
-                  setImporte(value)
-                  console.log(importe)
+                  setImporte(value);
+                  console.log(importe);
                 },
                 decimalScale: 2,
-                decimalSeparator: ",",
-                groupSeparator: ".",
-                prefix: "$",
+                decimalSeparator: ',',
+                groupSeparator: '.',
+                prefix: '$',
               },
             }}
             fullWidth
