@@ -167,7 +167,16 @@ export const DDJJAlta = ({
           setTituloSec(getTituloSec(ddjj.secuencia));
 
           setPeriodo(dayjs(ddjj.periodo));
-          setRowsAltaDDJJ(ddjj.afiliados);
+
+          const afiliadosConFilas = ddjj.afiliados.map((item, index) => ({
+            ...item,
+            fila: index + 1,
+          }));
+
+          // Luego, usa `setRowsAltaDDJJ` para actualizar los rows
+          setRowsAltaDDJJ(afiliadosConFilas);
+
+          //setRowsAltaDDJJ(ddjj.afiliados);
         } catch (error) {
           console.error('Error al obtener la DDJJ:', error);
         }
@@ -191,12 +200,12 @@ export const DDJJAlta = ({
     console.log('cuilesResponse');
     console.log(cuilesResponse);
 
-    const afiliadoImportadoConInte = afiliadoImportado.map((item) => {
+    const afiliadoImportadoConInte = afiliadoImportado.map((item, index) => {
       const cuilResponse = cuilesResponse.find(
         (cuil) => +cuil.cuil === item.cuil,
       );
       if (cuilResponse) {
-        return { ...item, inte: cuilResponse.inte };
+        return { ...item, inte: cuilResponse.inte, fila: index + 1 };
       }
       return item;
     });
@@ -467,12 +476,13 @@ export const DDJJAlta = ({
           if (DDJJState.id) {
             bOK = await axiosDDJJ.actualizar(ID_EMPRESA, DDJJ);
           } else {
-            const data = await axiosDDJJ.crear(ID_EMPRESA, DDJJ);
+            console.log(DDJJ);
+            /* const data = await axiosDDJJ.crear(ID_EMPRESA, DDJJ);
             if (data) {
               //setDDJJCreada(data);
               setDDJJState(data);
               setTituloSec(getTituloSec(data.secuencia));
-            }
+            } */
           }
         } else {
           console.log('Cancelar...se queda a corregir datos');
@@ -528,14 +538,14 @@ export const DDJJAlta = ({
   };
 
   const buscarPeriodoAnterior = async () => {
+    let periodoDayjs = null;
     if (!mostrarPeriodos) {
-      console.log('Ultimo Período Presentado');
+      // Ultimo periodo presentado
       const ddjjPeriodoAnterior = await axiosDDJJ.getPeriodoAnterior(
         ID_EMPRESA,
-        otroPeriodo,
+        periodoDayjs,
       );
-      console.log('ultimoPeriodoPresentadoRes');
-      console.log(ddjjPeriodoAnterior);
+
       if (!ddjjPeriodoAnterior) {
         Swal.fire({
           icon: 'error',
@@ -548,18 +558,12 @@ export const DDJJAlta = ({
       setRowsAltaDDJJ(ddjjPeriodoAnterior.afiliados);
       setOcultarEmpleadosGrilla(!ocultarEmpleadosGrilla);
     } else {
-      let anio = otroPeriodo.$y;
-      let mes = otroPeriodo.$M;
-      let dia = otroPeriodo.$D;
-      const fechaDaysJs = dayjs(`${anio}-${mes + 1}-${dia}`)
-        .set('hour', 3)
-        .set('minute', 0)
-        .set('second', 0)
-        .set('millisecond', 0)
-        .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
-      // te la mando en este formato 2024-05-21T03:00:00.000Z
-      const otroPeriodoRes = await axiosDDJJ.getPeriodoAnterior(fechaDaysJs);
-      if (otroPeriodoRes.length === 0) {
+      periodoDayjs = dayjs(otroPeriodo.$d).format('YYYY-MM-DD');
+      const ddjjOtroPeriodo = await axiosDDJJ.getPeriodoAnterior(
+        ID_EMPRESA,
+        periodoDayjs,
+      );
+      if (ddjjOtroPeriodo.length === 0) {
         Swal.fire({
           icon: 'error',
           title: 'Error',
@@ -567,10 +571,10 @@ export const DDJJAlta = ({
         });
         return;
       } else {
-        setRowsAltaDDJJ(otroPeriodoRes.afiliados);
+        setRowsAltaDDJJ(ddjjOtroPeriodo.afiliados);
         setDDJJState((prevState) => ({
           ...prevState,
-          afiliados: otroPeriodoRes.afiliados,
+          afiliados: ddjjOtroPeriodo.afiliados,
         }));
         setOcultarEmpleadosGrilla(!ocultarEmpleadosGrilla);
       }

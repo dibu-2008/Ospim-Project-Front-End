@@ -313,7 +313,7 @@ export const MisDDJJConsultaGrilla = ({
             onClick={() => declaracionJuradasImpresion(id)}
           />,
         ];
-      } else if (row.estado == 'PR' && row.estado !== 'BG'){
+      } else if (row.estado == 'PR' && row.estado !== 'BG') {
         return [
           <Button
             sx={{
@@ -339,7 +339,7 @@ export const MisDDJJConsultaGrilla = ({
             onClick={() => declaracionJuradasImpresion(id)}
           />,
         ];
-      }else if (row.estado === 'BG'){
+      } else if (row.estado === 'BG') {
         return [
           <GridActionsCellItem
             icon={<EditIcon />}
