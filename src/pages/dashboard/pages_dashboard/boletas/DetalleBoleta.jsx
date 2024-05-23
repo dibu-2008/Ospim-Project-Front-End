@@ -118,7 +118,14 @@ export const DetalleBoleta = () => {
   const existeDato = (value) => (value !== null && value !== '' ? value : '');
   return (
     <div className="boletas_container">
-      <h1>Detalle boleta {boletaDetalle.descripcion}</h1>
+      <h1>
+        Boleta de Pago Nro. {boletaDetalle.numero_boleta}
+        <br></br>
+        <br></br>
+        <h3 style={{ color: '#1A76D2' }}>
+          Concepto: {boletaDetalle.descripcion}
+        </h3>
+      </h1>
       <Button
         onClick={() => {
           detallePdfDownload(ID_EMPRESA, boletaDetalle.id);
@@ -166,8 +173,7 @@ export const DetalleBoleta = () => {
             <TableRow>
               <TableCell className="cw">Periodo</TableCell>
               <TableCell className="cw">Tipo DDJJ</TableCell>
-              <TableCell className="cw">N Boleta</TableCell>
-              <TableCell className="cw">Concepto</TableCell>
+
               <TableCell className="cw">Subtotal</TableCell>
               <TableCell className="cw">Intereses</TableCell>
               <TableCell className="cw">Importe Boleta</TableCell>
@@ -191,10 +197,7 @@ export const DetalleBoleta = () => {
               <TableCell>
                 {boletaDetalle.tipo_ddjj ? boletaDetalle.tipo_ddjj : 'Original'}
               </TableCell>
-              <TableCell>
-                {boletaDetalle.nro_boleta ? boletaDetalle.nro_boleta : 1}
-              </TableCell>
-              <TableCell>{existeDato(boletaDetalle.descripcion)}</TableCell>
+
               <TableCell className="importes">
                 {existeDato(
                   formatter.currency.format(boletaDetalle.total_acumulado),
