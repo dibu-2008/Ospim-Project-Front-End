@@ -69,6 +69,7 @@ function EditToolbar(props) {
     setRowsAltaDDJJ((oldRows) => [
       {
         id,
+        fila: oldRows.length + 1, // Asignamos el número de fila incremental
         cuil: '',
         apellido: '',
         nombre: '',
@@ -316,7 +317,7 @@ export const DDJJAltaEmpleadosGrilla = ({
 
   const columns = [
     {
-      field: 'id',
+      field: 'fila',
       type: 'number',
       headerName: 'Fila',
       width: 50,
@@ -789,7 +790,7 @@ export const DDJJAltaEmpleadosGrilla = ({
         });
         return formattedValue;
       },
-      
+
       renderEditCell: (params) => {
         return (
           <CurrencyInput
@@ -823,7 +824,6 @@ export const DDJJAltaEmpleadosGrilla = ({
           />
         );
       },
-      
     },
     {
       field: 'uomaSocio',
