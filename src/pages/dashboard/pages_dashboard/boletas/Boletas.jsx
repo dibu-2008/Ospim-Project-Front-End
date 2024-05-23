@@ -39,12 +39,12 @@ export const Boletas = () => {
 
   const fetchData = async () => {
     try {
-      console.log(fromDate)
+      console.log(fromDate);
       let desdeDayjs = null;
       if (fromDate !== null) {
         desdeDayjs = dayjs(`${fromDate}-01`).format('YYYY-MM-DD');
       }
-      console.log(toDate)
+      console.log(toDate);
       let hastaDayjs = null;
       if (toDate !== null) {
         hastaDayjs = dayjs(`${toDate}-01`).format('YYYY-MM-DD');
@@ -98,7 +98,7 @@ export const Boletas = () => {
   return (
     <div className="boletas_container">
       {window.location.href.split('/').slice(3).join('/') ===
-        'dashboard/ddjj' || <h1>Boletas</h1>}
+        'dashboard/ddjj' || <h1>Boletas de Pago para DDJJ</h1>}
       <div
         style={{
           display: 'flex',
@@ -257,11 +257,11 @@ export const Boletas = () => {
           },
         }}
       >
-        <h1>Boletas Sin DDJJ</h1>
+        <h1>Boletas para Pago de Actas</h1>
         <DataGrid
           rows={boletasSinDDJJ}
           columns={[
-            { field: 'secuencia', headerName: 'Nro. Boleta', flex: 0.5 },
+            { field: 'numero_boleta', headerName: 'Nro. Boleta', flex: 0.5 },
             {
               field: 'entidad',
               headerName: 'Entidad',
