@@ -368,10 +368,10 @@ export const DDJJAlta = ({
           categoria: !item.categoria ? null : item.categoria,
           remunerativo: !item.remunerativo
             ? null
-            : parseFloat(parseFloat(item.remunerativo).toFixed(2)),
+            : parseFloat(item.remunerativo.replace(',','.')),
           noRemunerativo: !item.noRemunerativo
             ? null
-            : parseFloat(parseFloat(item.noRemunerativo).toFixed(2)),
+            : parseFloat(item.noRemunerativo.replace(',','.')),
           uomaSocio: item.uomaSocio === '' ? null : item.uomaSocio,
           amtimaSocio: item.amtimaSocio === '' ? null : item.amtimaSocio,
         };
