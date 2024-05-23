@@ -25,7 +25,7 @@ import {
   NavLink,
 } from 'react-router-dom';
 import './DashboardPage.css';
-
+import LockPersonIcon from '@mui/icons-material/LockPerson';
 // Drawer
 import Box from '@mui/material/Box';
 import { styled, useTheme } from '@mui/material/styles';
@@ -51,6 +51,7 @@ import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
 import localStorageService from '@/components/localStorage/localStorageService';
 import { getFuncionalidadesByRol } from './DashboardPageApi';
 import logo2 from '../../assets/logo_2.svg';
+import { ClaveComponent } from '@/components/ClaveComponent';
 
 const drawerWidth = 200;
 
@@ -107,6 +108,7 @@ const DashboardPage = () => {
   //const isRolEmpleador = localStorageService.isRolEmpleador();
   const [rolFuncionalidades, setRolFuncionalidades] = useState({});
   const rol = localStorageService.getRol();
+  const [showModal, setShowModal] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -312,6 +314,10 @@ const DashboardPage = () => {
                   marginLeft: '-18px',
                 }}
               >
+                <NavLink className="icon-container" onClick={() => setShowModal(!showModal)}>
+                  <LockPersonIcon className="icon-link" />{' '}
+                  {open && <span className="icon-link">Cambiar Clave</span>}
+                </NavLink>
                 <NavLink className="icon-container" onClick={onLogout}>
                   <DisabledByDefaultIcon className="icon-link" />{' '}
                   {open && <span className="icon-link">Salir</span>}
@@ -320,6 +326,7 @@ const DashboardPage = () => {
             </ListItemButton>
           </ListItem>
         </List>
+        <ClaveComponent showModal={showModal} setShowModal={setShowModal}/>
       </Drawer>
       <Box component="main">
         <div
