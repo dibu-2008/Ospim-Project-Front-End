@@ -3,25 +3,13 @@ import './DatosEmpresa.css';
 import { useEffect, useState, useMemo } from 'react';
 import { GrillaEmpresaContacto } from './grilla_empresa_contacto/GrillaEmpresaContacto';
 import { GrillaEmpresaDomicilio } from './grilla_empresa_domicilio/GrillaEmpresaDomicilio';
-import {
-  Button,
-  Select,
-  FormControl,
-  MenuItem,
-  InputLabel,
-  Box,
-  TextField,
-  Tabs,
-  Tab,
-} from '@mui/material';
+import { Button, Box, TextField, Tabs, Tab } from '@mui/material';
 import PropTypes from 'prop-types';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import * as locales from '@mui/material/locale';
 import axiosDatosEmpre from './DatosEmpresaApi';
 import { ToastContainer } from 'react-toastify';
 
-
-// Logica de los tabs inicio
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -64,8 +52,6 @@ export const DatosEmpresa = () => {
   const [idEmpresa, setIdEmpresa] = useState('');
   const [cuit, setCuit] = useState('');
   const [razonSocial, setRazonSocial] = useState('');
-  const [ramo, setRamo] = useState('');
-  const [ramos, setRamos] = useState([]);
   const [tabState, setTabState] = useState(0);
 
   const theme = useTheme();
@@ -82,18 +68,8 @@ export const DatosEmpresa = () => {
       setCuit(empresa.empresa.cuit);
       setRazonSocial(empresa.empresa.razonSocial);
       setIdEmpresa(empresa.empresa.id);
-      setRamo(empresa.empresa.ramoId);
     };
     ObtenerEmpresa();
-  }, []);
-
-  useEffect(() => {
-    const ObtenerRamos = async () => {
-      const ramos = await axiosDatosEmpre.consultarRamo();
-      console.log(ramos);
-      setRamos(ramos);
-    };
-    ObtenerRamos();
   }, []);
 
   const handleChangeTabState = (event, newValue) => {
@@ -116,7 +92,7 @@ export const DatosEmpresa = () => {
     e.preventDefault();
     const empresa = {
       razonSocial: razonSocial,
-      ramoId: ramo,
+      /* ramoId: ramo, */
       id: idEmpresa,
     };
     await axiosDatosEmpre.actualizar(empresa);
@@ -153,38 +129,14 @@ export const DatosEmpresa = () => {
           onChange={OnChangeRazonSocial}
           autoComplete="off"
           label="Razón Social"
-        />
-        <Box
           sx={{
-            textAlign: 'left',
-            color: '#606060',
-            width: '200px',
+            width: '300px',
           }}
-        >
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">
-              Seleccionar ramo
-            </InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={ramo}
-              label="Seleccionar ramo"
-              onChange={OnChangeRamos}
-            >
-              {ramos.map((option, index) => (
-                <MenuItem key={index} value={option.id}>
-                  {option.descripcion}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Box>
+        />
         <Button variant="contained" sx={{}} type="submit">
           Guardar
         </Button>
       </form>
-      {/* Tabs */}
       <Box sx={{ width: '100%' }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs
