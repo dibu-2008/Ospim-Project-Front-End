@@ -86,7 +86,7 @@ const CustomToolbar = (props) => {
 };
 
 export const DDJJConsultaEmpleado = () => {
-  const ahora = dayjs();
+  const ahora = dayjs().startOf('month');
   const ahoraMenosUnAnio = ahora.add(-11, 'month');
   const [desde, setDesde] = useState(ahoraMenosUnAnio);
   const [hasta, setHasta] = useState(ahora);
@@ -97,6 +97,7 @@ export const DDJJConsultaEmpleado = () => {
   const [locale, setLocale] = useState('esES');
   const [cuit, setCuit] = useState('');
   const [rows, setRows] = useState([]);
+  const [columnas, setColumnas] = useState([]);
   const theme = useTheme();
   const themeWithLocale = useMemo(
     () => createTheme(theme, locales[locale]),
@@ -139,125 +140,131 @@ export const DDJJConsultaEmpleado = () => {
       cuitFlt,
     );
 
-    if (data.length > 0) {
-      setRows(data);
-    }
+    //if (data.length > 0) {
+    setRows(data);
+    const newColumns = getColumnas(data);
+    setColumnas(newColumns);
+    //}
   };
 
-  const columns = [
-    {
-      field: 'periodo',
-      headerName: 'Periodo',
-      flex: 1.5,
-      editable: false,
-      type: 'date',
-      headerAlign: 'center',
-      align: 'center',
-      headerClassName: 'header--cell',
-      valueFormatter: (params) => {
-        return formatter.periodo(params.value);
-      },
-    },
-  ];
-
-  if (showCuitRazonSocial) {
-    columns.push(
+  const getColumnas = (rowsGrilla) => {
+    const columns = [
       {
-        field: 'cuit',
-        headerName: 'Cuit',
+        field: 'periodo',
+        headerName: 'Periodo',
         flex: 1.5,
         editable: false,
+        type: 'date',
         headerAlign: 'center',
         align: 'center',
         headerClassName: 'header--cell',
+        valueFormatter: (params) => {
+          return formatter.periodo(params.value);
+        },
       },
-      {
-        field: 'razonSocial',
-        headerName: 'Razon Social',
-        flex: 2,
-        editable: false,
-        headerAlign: 'center',
-        align: 'center',
-        headerClassName: 'header--cell',
-      },
-    );
-  }
+    ];
 
-  columns.push({
-    field: 'secuencia',
-    headerName: 'Numero',
-    flex: 1,
-    editable: false,
-    headerAlign: 'center',
-    align: 'center',
-    headerClassName: 'header--cell',
-    valueGetter: (params) => {
-      // Si secuencia es 0 es "Original" sino es "Rectificativa"+secuencia
-      if (params.value === null) {
-        return 'Pendiente';
-      } else if (params.value === 0) {
-        return 'Original';
-      } else {
-        return 'Rectif. ' + params.value;
-      }
-    },
-  });
-
-  colAportes = DDJJColumnaAporteGet(rows);
-
-  colAportes.forEach((elem) => {
+    if (showCuitRazonSocial) {
+      columns.push(
+        {
+          field: 'cuit',
+          headerName: 'Cuit',
+          flex: 1.5,
+          editable: false,
+          headerAlign: 'center',
+          align: 'center',
+          headerClassName: 'header--cell',
+        },
+        {
+          field: 'razonSocial',
+          headerName: 'Razon Social',
+          flex: 2,
+          editable: false,
+          headerAlign: 'center',
+          align: 'center',
+          headerClassName: 'header--cell',
+        },
+      );
+    }
     columns.push({
-      field: 'total' + elem,
-      headerName: 'Total ' + elem,
+      field: 'secuencia',
+      headerName: 'Numero',
       flex: 1,
       editable: false,
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell',
-      valueFormatter: (params) => formatter.currency.format(params.value || 0),
+      valueGetter: (params) => {
+        // Si secuencia es 0 es "Original" sino es "Rectificativa"+secuencia
+        if (params.value === null) {
+          return 'Pendiente';
+        } else if (params.value === 0) {
+          return 'Original';
+        } else {
+          return 'Rectif. ' + params.value;
+        }
+      },
     });
-  });
 
-  columns.push({
-    field: 'actions',
-    headerName: 'Acciones',
-    flex: 1,
-    type: 'actions',
-    headerAlign: 'center',
-    align: 'center',
-    headerClassName: 'header--cell',
-    getActions: ({ row }) => {
-      const isInEditMode =
-        rowModesModel[rows.indexOf(row)]?.mode === GridRowModes.Edit;
+    colAportes = DDJJColumnaAporteGet(rowsGrilla);
 
-      if (isInEditMode) {
+    colAportes.forEach((elem) => {
+      columns.push({
+        field: 'total' + elem,
+        headerName: 'Total ' + elem,
+        flex: 1,
+        editable: false,
+        headerAlign: 'center',
+        align: 'center',
+        headerClassName: 'header--cell',
+        valueFormatter: (params) =>
+          formatter.currency.format(params.value || 0),
+      });
+    });
+
+    columns.push({
+      field: 'actions',
+      headerName: 'Acciones',
+      flex: 1,
+      type: 'actions',
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
+      getActions: ({ row }) => {
+        const isInEditMode =
+          rowModesModel[rows.indexOf(row)]?.mode === GridRowModes.Edit;
+
+        if (isInEditMode) {
+          return [
+            <GridActionsCellItem
+              icon={<SaveIcon />}
+              label="Save"
+              sx={{
+                color: 'primary.main',
+              }}
+            />,
+            <GridActionsCellItem
+              icon={<CancelIcon />}
+              label="Cancel"
+              className="textPrimary"
+              color="inherit"
+            />,
+          ];
+        }
+
         return [
           <GridActionsCellItem
-            icon={<SaveIcon />}
-            label="Save"
-            sx={{
-              color: 'primary.main',
-            }}
-          />,
-          <GridActionsCellItem
-            icon={<CancelIcon />}
-            label="Cancel"
-            className="textPrimary"
+            icon={<LocalPrintshopIcon />}
+            label="Print"
             color="inherit"
+            onClick={() => declaracionJuradasImpresion(row.id)}
           />,
         ];
-      }
+      },
+    });
 
-      return [
-        <GridActionsCellItem
-          icon={<LocalPrintshopIcon />}
-          label="Print"
-          color="inherit"
-          onClick={() => declaracionJuradasImpresion(row.id)}
-        />,
-      ];
-    },
-  });
+    return columns;
+  };
 
   const handleRowModesModelChange = (newRowModesModel) => {
     setRowModesModel(newRowModesModel);
@@ -364,7 +371,7 @@ export const DDJJConsultaEmpleado = () => {
           <ThemeProvider theme={themeWithLocale}>
             <StripedDataGrid
               rows={rows}
-              columns={columns}
+              columns={columnas}
               getRowId={(row) => rows.indexOf(row)}
               getRowClassName={(params) =>
                 rows.indexOf(params.row) % 2 === 0 ? 'even' : 'odd'
