@@ -124,6 +124,34 @@ export const axiosActualizar = async (UrlApi, oEntidad) => {
   }
 };
 
+export const axiosPatch = async (UrlApi, oEntidad) => {
+  try {
+    const response = await oAxios.patch(UrlApi, oEntidad);
+    if (response.status === 200) {
+      return true;
+    } else {
+      console.log(
+        `axiosCrud.patch() - ERROR 2 - UrlApi: ${UrlApi} - response.status !== 200 - response: ${JSON.stringify(
+          response,
+        )} `,
+      );
+      return false;
+    }
+  } catch (error) {
+    console.log(
+      'axiosCrud.patch() - catch() - error: ' + JSON.stringify(error),
+    );
+    if (error && error.response && error.response.data) {
+      return error.response.data;
+    } else {
+      console.log(
+        'axiosCrud.patch() - catch() - error: ' + JSON.stringify(error),
+      );
+      return false;
+    }
+  }
+};
+
 export const axiosEliminar = async (UrlApi, id) => {
   const URL = `${UrlApi}/${id}`;
   try {
