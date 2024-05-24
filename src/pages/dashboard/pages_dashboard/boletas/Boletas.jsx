@@ -23,7 +23,7 @@ import './Boletas.css';
 
 export const Boletas = () => {
   const ID_EMPRESA = localStorageService.getEmpresaId();
-  const ahora = dayjs();
+  const ahora = dayjs().startOf('month');
   const ahoraMenosUnAnio = ahora.add(-11, 'month');
   const [fromDate, setFromDate] = useState(ahoraMenosUnAnio);
   const [toDate, setToDate] = useState(ahora);
