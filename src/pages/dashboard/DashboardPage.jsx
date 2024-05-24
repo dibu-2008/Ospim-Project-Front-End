@@ -14,6 +14,16 @@ import PreviewIcon from '@mui/icons-material/Preview';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 import CalculateIcon from '@mui/icons-material/Calculate';
+import {
+  Link,
+  useNavigate,
+  useLocation,
+  Outlet,
+  NavLink,
+} from 'react-router-dom';
+import './DashboardPage.css';
+import LockPersonIcon from '@mui/icons-material/LockPerson';
+// Drawer
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -31,6 +41,7 @@ import { getFuncionalidadesByRol } from './DashboardPageApi';
 import logo2 from '../../assets/logo_2.svg';
 import { MenuListButton } from '@/components/MenuListButton';
 import { styled } from '@mui/material/styles';
+import { ClaveComponent } from '@/components/ClaveComponent';
 
 const drawerWidth = 250;
 
@@ -85,6 +96,7 @@ const DashboardPage = () => {
   const navigate = useNavigate();
   const [rolFuncionalidades, setRolFuncionalidades] = useState({});
   const rol = localStorageService.getRol();
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -241,7 +253,7 @@ const DashboardPage = () => {
                 {rolFuncionalidades.BOLETA_BLANCA && (
                   <NavLink to="./generarotrospagos" className="icon-container">
                     <ReceiptIcon className="icon-link" />{' '}
-                    {open && <span className="icon-link">Boleta Blanca</span>}
+                    {open && <span className="icon-link">Boleta Actas</span>}
                   </NavLink>
                 )}
                 {rolFuncionalidades.GESTION_ROLES && (
@@ -316,6 +328,13 @@ const DashboardPage = () => {
                   marginLeft: '-18px',
                 }}
               >
+                <NavLink
+                  className="icon-container"
+                  onClick={() => setShowModal(!showModal)}
+                >
+                  <LockPersonIcon className="icon-link" />{' '}
+                  {open && <span className="icon-link">Cambiar Clave</span>}
+                </NavLink>
                 <NavLink className="icon-container" onClick={onLogout}>
                   <DisabledByDefaultIcon className="icon-link" />{' '}
                   {open && <span className="icon-link">Salir</span>}
@@ -324,6 +343,7 @@ const DashboardPage = () => {
             </ListItemButton>
           </ListItem>
         </List>
+        <ClaveComponent showModal={showModal} setShowModal={setShowModal} />
       </Drawer>
       <Box component="main">
         <div

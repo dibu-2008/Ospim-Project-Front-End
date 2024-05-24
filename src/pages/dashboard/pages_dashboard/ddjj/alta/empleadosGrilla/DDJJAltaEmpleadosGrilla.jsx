@@ -264,6 +264,8 @@ export const DDJJAltaEmpleadosGrilla = ({
 
   const processRowUpdate = async (newRow) => {
     console.log('processRowUpdate - INIT');
+    console.log(newRow);
+    console.log(inteDataBase);
     if (newRow.isNew) {
       const fila = { ...newRow, inte: inteDataBase, errores: false };
       setRowsAltaDDJJ(
@@ -743,21 +745,10 @@ export const DDJJAltaEmpleadosGrilla = ({
             groupSeparator="."
             value={params.value || ''}
             onValueChange={(value, name, values) => {
-              let importe;
-              importe = values.float;
-              //importe = 234.0;
-              console.log(
-                'renderEditCell - CurrencyInput.onValueChange - values: ',
-                values,
-              );
-              console.log(
-                'renderEditCell - CurrencyInput.onValueChange - importe: ',
-                importe,
-              );
               params.api.setEditCellValue({
                 id: params.id,
                 field: 'remunerativo',
-                value: importe,
+                value: values.value,
               });
             }}
           />
@@ -794,7 +785,6 @@ export const DDJJAltaEmpleadosGrilla = ({
         });
         return formattedValue;
       },
-
       renderEditCell: (params) => {
         return (
           <CurrencyInput
@@ -808,21 +798,11 @@ export const DDJJAltaEmpleadosGrilla = ({
             groupSeparator="."
             value={params.value || ''}
             onValueChange={(value, name, values) => {
-              let importe;
-              importe = values.float;
-              //importe = 234.0;
-              console.log(
-                'renderEditCell - CurrencyInput.onValueChange - values: ',
-                values,
-              );
-              console.log(
-                'renderEditCell - CurrencyInput.onValueChange - importe: ',
-                importe,
-              );
+              console.log(value, name, values);
               params.api.setEditCellValue({
                 id: params.id,
                 field: 'noRemunerativo',
-                value: importe,
+                value: values.value,
               });
             }}
           />

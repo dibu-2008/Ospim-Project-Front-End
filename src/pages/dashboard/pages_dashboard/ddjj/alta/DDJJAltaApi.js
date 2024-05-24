@@ -83,6 +83,7 @@ export const obtenerMiDeclaracionJurada = async (empresaId, ddjjId) => {
 };
 
 export const crearAltaDeclaracionJurada = async (empresaId, registro) => {
+  console.log(registro)
   const URL = `/empresa/${empresaId}/ddjj`;
   try {
     const data = await axiosCrud.crear(URL, registro);
@@ -98,6 +99,7 @@ export const crearAltaDeclaracionJurada = async (empresaId, registro) => {
 };
 
 export const actualizarDeclaracionJurada = async (empresaId, registro) => {
+  console.log(registro)
   const URL = `/empresa/${empresaId}/ddjj`;
   console.log(URL);
   console.log('DENTRO DE LA FUNCION ACTUALIZAR DDJJ ', registro);
@@ -145,7 +147,7 @@ export const validaCuil = async (empresaId, cuiles) => {
 };
 
 const obtenerPeriodoAnterior = async (empresaId, periodo) => {
-  let URL = '/empresa/${empresaId}/ddjj/periodo-anterior/';
+  let URL = `/empresa/${empresaId}/ddjj/periodo-anterior/`;
 
   if (periodo !== null) {
     URL += `?periodo=${periodo}`;
@@ -164,6 +166,7 @@ const obtenerPeriodoAnterior = async (empresaId, periodo) => {
 };
 
 const actualizarNombreApellido = async (registro) => {
+  console.log(registro)
   const URL = `/ddjj-modificacion-datos`;
 
   try {

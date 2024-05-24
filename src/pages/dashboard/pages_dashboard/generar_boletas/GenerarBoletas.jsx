@@ -201,15 +201,24 @@ export const GenerarBoletas = () => {
   return (
     <div className="generador_boletas_container">
       <h1>Boleta de Pago</h1>
-      <p>
-        Periodo:{' '}
+      <h3 style={{ color: '#1A76D2' }}>
+        DDJJ:{' '}
         {boletas &&
         boletas.periodo &&
         boletas.periodo !== null &&
         boletas.periodo !== ''
           ? formatter.periodo(boletas.periodo)
           : ''}{' '}
-      </p>
+        {boletas &&
+        boletas.tipo_ddjj &&
+        boletas.tipo_ddjj !== null &&
+        boletas.tipo_ddjj !== ''
+          ? boletas.tipo_ddjj
+          : ''}{' '}
+        - Generación Boletas de Pago
+      </h3>
+      <br></br>
+
       <TableContainer component={Paper}>
         <Table>
           <TableHead>

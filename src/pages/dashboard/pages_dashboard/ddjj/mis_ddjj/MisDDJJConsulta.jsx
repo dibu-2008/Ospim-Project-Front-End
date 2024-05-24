@@ -24,7 +24,7 @@ export const MisDDJJConsulta = ({
   setRowsAltaDDJJ,
   setPeticion,
 }) => {
-  const ahora = dayjs();
+  const ahora = dayjs().startOf('month');
   const ahoraMenosUnAnio = ahora.add(-11, 'month');
   const [desde, setDesde] = useState(ahoraMenosUnAnio);
   const [hasta, setHasta] = useState(ahora);
@@ -61,49 +61,14 @@ export const MisDDJJConsulta = ({
         desdeDayjs,
         hastaDayjs,
       );
+
       setRowsMisDdjj(ddjjResponse);
       console.log('ddjjResponse', ddjjResponse);
-      if (desde && desde.$d && hasta && hasta.$d) {
-        console.log('buscarDDJJ - ENTRO !!');
-        const { $d: $desde } = desde;
-        const { $d: $hasta } = hasta;
 
-        const fechaDesde = new Date($desde);
-        fechaDesde.setDate(1);
-        fechaDesde.setUTCHours(0, 0, 0, 0);
-        const fechaIsoDesde = fechaDesde.toISOString();
+      const ddjjCasteadas = castearMisDDJJ(ddjjResponse);
+      console.log('ddjjCasteadas', ddjjCasteadas);
 
-        const fechaHasta = new Date($hasta);
-        fechaHasta.setDate(1);
-        fechaHasta.setUTCHours(0, 0, 0, 0);
-        const fechaIsoHasta = fechaHasta.toISOString();
-
-        const declaracionesFiltradas = ddjjResponse.filter((ddjj) => {
-          const fecha = new Date(ddjj.periodo);
-          return (
-            fecha >= new Date(fechaIsoDesde) && fecha <= new Date(fechaIsoHasta)
-          );
-        });
-        console.log('declaracionesFiltradas', declaracionesFiltradas);
-
-        const declaracionesFiltradasCasteadas = castearMisDDJJ(
-          declaracionesFiltradas,
-        );
-        console.log(
-          'declaracionesFiltradasCasteadas',
-          declaracionesFiltradasCasteadas,
-        );
-
-        setRowsMisDdjj(declaracionesFiltradas);
-      } else {
-        const declaracionesFiltradasCasteadas = castearMisDDJJ(ddjjResponse);
-        console.log(
-          'declaracionesFiltradasCasteadas',
-          declaracionesFiltradasCasteadas,
-        );
-
-        setRowsMisDdjj(ddjjResponse);
-      }
+      //setRowsMisDdjj(declaracionesFiltradas);
     } catch (error) {
       console.error('Error al buscar declaraciones juradas:', error);
     }

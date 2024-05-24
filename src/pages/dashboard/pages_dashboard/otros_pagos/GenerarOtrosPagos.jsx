@@ -126,7 +126,7 @@ export const GenerarOtrosPagos = () => {
                 decimalScale: 2,
                 decimalSeparator: ',',
                 groupSeparator: '.',
-                prefix: '$',
+                prefix: '',
               },
             }}
             fullWidth

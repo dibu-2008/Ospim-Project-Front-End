@@ -16,9 +16,9 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import {
-  adaptadorDomicilioGrilla,
   axiosDomicilio,
-  adaptadorRegistroCompanyGrilla
+  adaptadorDomicilioGrilla,
+  adaptadorRegistroCompanyGrilla,
 } from './GrillaEmpresaDomicilioApi';
 import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 import Swal from 'sweetalert2';
@@ -104,8 +104,8 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
     setRows(data);
   };
 
-  const getDatosLocalidad = async (provincia) => {
-    const prov = provincias.find((prov) => prov?.descripcion == provincia);
+  const getDatosLocalidad = async (provDescrip) => {
+    const prov = provincias.find((prov) => prov?.descripcion == provDescrip);
     const localidades = await axiosDomicilio.obtenerLocalidades(prov.id);
     setLocalidades(localidades);
   };
@@ -204,37 +204,38 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
   const processRowUpdate = async (newRow, oldRow) => {
     console.log('processRowUpdate - INIT - newRow:', newRow);
     let bOk = false;
-    console.log(idEmpresa)
+    console.log(idEmpresa);
     if (!newRow.id) {
-        try {
-          if (idEmpresa !== 'PC'){ //Condicion para la grilla de registrar empresa
-            const data = await axiosDomicilio.crear(idEmpresa, newRow);
-            if (data && data.id) {
-              newRow.id = data.id;
-              bOk = true;
-              console.log(newRow)
-              newRow = await adaptadorDomicilioGrilla(newRow);
-              console.log(newRow)
-              const newRows = rows.map((row) => (!row.id ? newRow : row));
-              setRows(newRows);
-            } else {
-              console.log('alta sin ID generado');
-            }
-          } else {
+      try {
+        if (idEmpresa !== 'PC') {
+          //Condicion para la grilla de registrar empresa
+          const data = await axiosDomicilio.crear(idEmpresa, newRow);
+          if (data && data.id) {
+            newRow.id = data.id;
             bOk = true;
-            console.log(newRow)
-            newRow = await adaptadorRegistroCompanyGrilla(newRow);
-            newRow.id = idRow
-            setIdRow(idRow + 1)
-            console.log(newRow)
+            console.log(newRow);
+            newRow = await adaptadorDomicilioGrilla(newRow);
+            console.log(newRow);
             const newRows = rows.map((row) => (!row.id ? newRow : row));
             setRows(newRows);
+          } else {
+            console.log('alta sin ID generado');
           }
-        } catch (error) {
-          console.log(
-            'X - processRowUpdate - ALTA - ERROR: ' + JSON.stringify(error),
-          );
+        } else {
+          bOk = true;
+          console.log(newRow);
+          newRow = await adaptadorRegistroCompanyGrilla(newRow);
+          newRow.id = idRow;
+          setIdRow(idRow + 1);
+          console.log(newRow);
+          const newRows = rows.map((row) => (!row.id ? newRow : row));
+          setRows(newRows);
         }
+      } catch (error) {
+        console.log(
+          'X - processRowUpdate - ALTA - ERROR: ' + JSON.stringify(error),
+        );
+      }
     } else {
       if (idEmpresa !== 'PC') {
         try {
@@ -255,12 +256,12 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
           );
         }
       } else {
-          bOk = true;
-          newRow = await adaptadorRegistroCompanyGrilla(newRow);
-          const rowsNew = rows.map((row) =>
-            row.id === newRow.id ? newRow : row,
-          );
-          setRows(rowsNew);
+        bOk = true;
+        newRow = await adaptadorRegistroCompanyGrilla(newRow);
+        const rowsNew = rows.map((row) =>
+          row.id === newRow.id ? newRow : row,
+        );
+        setRows(rowsNew);
       }
     }
 
@@ -332,8 +333,11 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
       align: 'center',
       headerClassName: 'header--cell',
       valueOptions: localidades.map((localidad) => localidad.descripcion),
-      valueGetter: (params) => params.row.localidad.descripcion ? params.row.localidad.descripcion : params.row.localidad,
-      //valueGetter: (params) => params.row.localidad.descripcion 
+      valueGetter: (params) =>
+        params.row.localidad.descripcion
+          ? params.row.localidad.descripcion
+          : params.row.localidad,
+      //valueGetter: (params) => params.row.localidad.descripcion
     },
     {
       field: 'calle',
