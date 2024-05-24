@@ -28,7 +28,7 @@ import './DashboardPage.css';
 import LockPersonIcon from '@mui/icons-material/LockPerson';
 // Drawer
 import Box from '@mui/material/Box';
-import { styled, useTheme } from '@mui/material/styles';
+//import { styled, useTheme } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -51,9 +51,30 @@ import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
 import localStorageService from '@/components/localStorage/localStorageService';
 import { getFuncionalidadesByRol } from './DashboardPageApi';
 import logo2 from '../../assets/logo_2.svg';
+import { MenuListButton } from '@/components/MenuListButton';
 import { ClaveComponent } from '@/components/ClaveComponent';
 
-const drawerWidth = 200;
+/////////////////////////////////////////////////////////////////////
+import { styled, alpha } from '@mui/material/styles';
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import EditIcon from '@mui/icons-material/Edit';
+//import Divider from '@mui/material/Divider';
+import ArchiveIcon from '@mui/icons-material/Archive';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+////////////////////////////////////////////////////////////////////////
+
+import Accordion from '@mui/material/Accordion';
+import AccordionActions from '@mui/material/AccordionActions';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+///////////////////
+
+const drawerWidth = 225;
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -108,7 +129,7 @@ const DashboardPage = () => {
   //const isRolEmpleador = localStorageService.isRolEmpleador();
   const [rolFuncionalidades, setRolFuncionalidades] = useState({});
   const rol = localStorageService.getRol();
-  const [showModal, setShowModal] = useState(false)
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -204,10 +225,36 @@ const DashboardPage = () => {
                   </NavLink>
                 )}
                 {rolFuncionalidades.DDJJ && (
-                  <NavLink to="./ddjj" className="icon-container">
-                    <LibraryBooksIcon className="icon-link" />{' '}
-                    {open && <span className="icon-link">DDJJ</span>}
-                  </NavLink>
+                  <Box className="icon-container-2">
+                    {!open && (
+                      <Box className="icon-container">
+                        <LibraryBooksIcon className="icon-link" />
+                      </Box>
+                    )}
+
+                    {open && (
+                      <MenuListButton
+                        nameAccordionSumary="Admin DDJJ"
+                        setOpen={setOpen}
+                        nameAndIcon={[
+                          {
+                            nombre: 'DDJJ Alta',
+                            ruta: './ddjj/alta',
+                            icon: (
+                              <LibraryBooksIcon sx={{ color: '#1a76d2' }} />
+                            ),
+                          },
+                          {
+                            nombre: 'DDJJ Consulta',
+                            ruta: './ddjj/consulta',
+                            icon: (
+                              <LibraryBooksIcon sx={{ color: '#1a76d2' }} />
+                            ),
+                          },
+                        ]}
+                      />
+                    )}
+                  </Box>
                 )}
                 {rolFuncionalidades.DDJJ_CONSULTA && (
                   <NavLink
@@ -239,7 +286,7 @@ const DashboardPage = () => {
                 {rolFuncionalidades.BOLETA_BLANCA && (
                   <NavLink to="./generarotrospagos" className="icon-container">
                     <ReceiptIcon className="icon-link" />{' '}
-                    {open && <span className="icon-link">Boleta Acta</span>}
+                    {open && <span className="icon-link">Boleta Actas</span>}
                   </NavLink>
                 )}
                 {rolFuncionalidades.GESTION_ROLES && (
@@ -314,7 +361,10 @@ const DashboardPage = () => {
                   marginLeft: '-18px',
                 }}
               >
-                <NavLink className="icon-container" onClick={() => setShowModal(!showModal)}>
+                <NavLink
+                  className="icon-container"
+                  onClick={() => setShowModal(!showModal)}
+                >
                   <LockPersonIcon className="icon-link" />{' '}
                   {open && <span className="icon-link">Cambiar Clave</span>}
                 </NavLink>
@@ -326,7 +376,7 @@ const DashboardPage = () => {
             </ListItemButton>
           </ListItem>
         </List>
-        <ClaveComponent showModal={showModal} setShowModal={setShowModal}/>
+        <ClaveComponent showModal={showModal} setShowModal={setShowModal} />
       </Drawer>
       <Box component="main">
         <div

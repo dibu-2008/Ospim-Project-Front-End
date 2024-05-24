@@ -53,39 +53,42 @@ export const adaptadorRegistroCompanyGrilla = async (domicilio) => {
     const provincia = provincias.find(
       (element) => element.descripcion == domicilio.provincia,
     );
-    console.log(domicilio.localidad)
+    console.log(domicilio.localidad);
     const localidades = await obtenerLocalidades(provincia.id);
-    console.log(localidades)
+    console.log(localidades);
     const localidad = localidades.find(
       (element) => element.descripcion == domicilio.localidad,
     );
-    console.log(localidad)
+    console.log(localidad);
 
     domicilio.provincia = provincia;
     domicilio.localidad = localidad;
     delete domicilio.provinciaId;
     delete domicilio.localidadId;
     //delete domicilio.isNew;
-    console.log(domicilio)
+    console.log(domicilio);
     return domicilio;
   } catch (error) {
     toast.error(HTTP_MSG_ALTA_ERROR);
     return error;
   }
-}
+};
 
 export const obtenerTipoDomicilio = async () => {
-  const URL = '/empresa/domicilio/tipo';
+  //const URL = '/empresa/domicilio/tipo';
+  const URL = '/empresa/public/domicilio/tipo';
   return await axiosEntity.consultar(URL);
 };
 
 export const obtenerProvincias = async () => {
-  const URL = '/provincia';
+  //const URL = '/provincia';
+  const URL = '/public/provincia';
   return await axiosEntity.consultar(URL);
 };
 
 export const obtenerLocalidades = async (idProvincia) => {
-  const URL = `/provincia/${idProvincia}/localidad`;
+  //const URL = `/provincia/${idProvincia}/localidad`;
+  const URL = `/public/provincia/${idProvincia}/localidad`;
   return await axiosEntity.consultar(URL);
 };
 

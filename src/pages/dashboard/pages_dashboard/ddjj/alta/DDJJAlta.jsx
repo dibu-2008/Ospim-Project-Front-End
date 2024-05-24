@@ -93,7 +93,6 @@ export const DDJJAlta = ({
   const [filasDoc, setFilasDoc] = useState([]);
   const [ocultarEmpleadosGrilla, setOcultarEmpleadosGrilla] = useState(false);
   const [btnSubirHabilitado, setBtnSubirHabilitado] = useState(false);
-  //const [ddjjCreada, setDDJJCreada] = useState({});
   const [someRowInEditMode, setSomeRowInEditMode] = useState(false);
   const [otroPeriodo, setOtroPeriodo] = useState(null);
   const [rowModesModel, setRowModesModel] = useState({});
@@ -172,7 +171,16 @@ export const DDJJAlta = ({
           setTituloSec(getTituloSec(ddjj.secuencia));
 
           setPeriodo(dayjs(ddjj.periodo));
-          setRowsAltaDDJJ(ddjj.afiliados);
+
+          const afiliadosConFilas = ddjj.afiliados.map((item, index) => ({
+            ...item,
+            fila: index + 1,
+          }));
+
+          // Luego, usa `setRowsAltaDDJJ` para actualizar los rows
+          setRowsAltaDDJJ(afiliadosConFilas);
+
+          //setRowsAltaDDJJ(ddjj.afiliados);
         } catch (error) {
           console.error('Error al obtener la DDJJ:', error);
         }
@@ -196,12 +204,12 @@ export const DDJJAlta = ({
     console.log('cuilesResponse');
     console.log(cuilesResponse);
 
-    const afiliadoImportadoConInte = afiliadoImportado.map((item) => {
+    const afiliadoImportadoConInte = afiliadoImportado.map((item, index) => {
       const cuilResponse = cuilesResponse.find(
         (cuil) => +cuil.cuil === item.cuil,
       );
       if (cuilResponse) {
-        return { ...item, inte: cuilResponse.inte };
+        return { ...item, inte: cuilResponse.inte, fila: index + 1 };
       }
       return item;
     });
@@ -350,6 +358,7 @@ export const DDJJAlta = ({
     let DDJJ = {
       periodo: periodo,
       afiliados: rowsAltaDDJJ.map((item) => {
+        console.log('guardarDeclaracionJurada - item: ', item);
         const registroNew = {
           errores: item.errores,
           cuil: !item.cuil ? null : item.cuil,
@@ -364,10 +373,10 @@ export const DDJJAlta = ({
           categoria: !item.categoria ? null : item.categoria,
           remunerativo: !item.remunerativo
             ? null
-            : parseFloat(item.remunerativo.replace(',','.')),
+            : parseFloat(String(item.remunerativo).replace(',', '.')),
           noRemunerativo: !item.noRemunerativo
             ? null
-            : parseFloat(item.noRemunerativo.replace(',','.')),
+            : parseFloat(String(item.noRemunerativo).replace(',', '.')),
           uomaSocio: item.uomaSocio === '' ? null : item.uomaSocio,
           amtimaSocio: item.amtimaSocio === '' ? null : item.amtimaSocio,
         };
@@ -472,6 +481,7 @@ export const DDJJAlta = ({
           if (DDJJState.id) {
             bOK = await axiosDDJJ.actualizar(ID_EMPRESA, DDJJ);
           } else {
+            console.log(DDJJ);
             const data = await axiosDDJJ.crear(ID_EMPRESA, DDJJ);
             if (data) {
               //setDDJJCreada(data);
@@ -503,7 +513,6 @@ export const DDJJAlta = ({
         console.log('Dentro de CREAR');
         const data = await axiosDDJJ.crear(ID_EMPRESA, DDJJ);
         if (data) {
-          //setDDJJCreada(data);
           setDDJJState(data);
           setTituloSec(getTituloSec(data.secuencia));
         }
@@ -533,32 +542,32 @@ export const DDJJAlta = ({
   };
 
   const buscarPeriodoAnterior = async () => {
+    let periodoDayjs = null;
     if (!mostrarPeriodos) {
-      console.log('Ultimo Período Presentado');
-      const ultimoPeriodoPresentadoRes =
-        await axiosDDJJ.getPeriodoAnterior(otroPeriodo);
-      console.log('ultimoPeriodoPresentadoRes');
-      console.log(ultimoPeriodoPresentadoRes);
-      if (ultimoPeriodoPresentadoRes.length === 0) {
+      // Ultimo periodo presentado
+      const ddjjPeriodoAnterior = await axiosDDJJ.getPeriodoAnterior(
+        ID_EMPRESA,
+        periodoDayjs,
+      );
+
+      if (!ddjjPeriodoAnterior) {
         Swal.fire({
           icon: 'error',
           title: 'Error',
           text: 'No se encontró un período anterior',
         });
         return;
-      } else {
-        setTituloSec(getTituloSec(ultimoPeriodoPresentadoRes[0].secuencia));
-        setRowsAltaDDJJ(ultimoPeriodoPresentadoRes[0].afiliados);
-        /* setDDJJState((prevState) => ({
-          ...prevState,
-          afiliados: ultimoPeriodoPresentadoRes[0].afiliados,
-        })); */
-        setOcultarEmpleadosGrilla(!ocultarEmpleadosGrilla);
       }
+      //setTituloSec(getTituloSec(ddjjPeriodoAnterior.secuencia));
+      setRowsAltaDDJJ(ddjjPeriodoAnterior.afiliados);
+      setOcultarEmpleadosGrilla(!ocultarEmpleadosGrilla);
     } else {
-      console.log('Elegir otro');
-      const otroPeriodoRes = await axiosDDJJ.getPeriodoAnterior(otroPeriodo);
-      if (otroPeriodoRes.length === 0) {
+      periodoDayjs = dayjs(otroPeriodo.$d).format('YYYY-MM-DD');
+      const ddjjOtroPeriodo = await axiosDDJJ.getPeriodoAnterior(
+        ID_EMPRESA,
+        periodoDayjs,
+      );
+      if (ddjjOtroPeriodo.length === 0) {
         Swal.fire({
           icon: 'error',
           title: 'Error',
@@ -566,10 +575,10 @@ export const DDJJAlta = ({
         });
         return;
       } else {
-        setRowsAltaDDJJ(otroPeriodoRes[0].afiliados);
+        setRowsAltaDDJJ(ddjjOtroPeriodo.afiliados);
         setDDJJState((prevState) => ({
           ...prevState,
-          afiliados: otroPeriodoRes[0].afiliados,
+          afiliados: ddjjOtroPeriodo.afiliados,
         }));
         setOcultarEmpleadosGrilla(!ocultarEmpleadosGrilla);
       }
@@ -601,7 +610,6 @@ export const DDJJAlta = ({
           </AccordionSummary>
           <AccordionDetails>
             <Stack spacing={4} direction="row" alignItems="center">
-              <Typography className="title_periodo">Período</Typography>
               <LocalizationProvider
                 dateAdapter={AdapterDayjs}
                 adapterLocale={adaptadorIdioma}

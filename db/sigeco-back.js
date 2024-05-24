@@ -184,21 +184,15 @@ module.exports = (req, res, next) => {
       return 'APORTE-DETALLE-ALTA';
     }
 
-    if (req.method === "GET" && req.url.startsWith("/empresa/ddjj/boletas")) {
-      console.log('Entre en el boleta detalle')
-        return "BOLETA-DETALLE";
+    if (req.method === 'GET' && req.url.startsWith('/empresa/ddjj/boletas')) {
+      console.log('Entre en el boleta detalle');
+      return 'BOLETA-DETALLE';
     }
-    if (
-      req.method === "POST" &&
-      req.url.startsWith("/empresa/ddjj/boletas")
-    ) {
-      return "CALCULAR-INTERESES";
+    if (req.method === 'POST' && req.url.startsWith('/empresa/ddjj/boletas')) {
+      return 'CALCULAR-INTERESES';
     }
-    if (
-      req.method === "POST" &&
-      req.url.startsWith("/empresa/ddjj/boleta")
-    ) {
-      return "CALCULAR-INTERES";
+    if (req.method === 'POST' && req.url.startsWith('/empresa/ddjj/boleta')) {
+      return 'CALCULAR-INTERES';
     }
 
     if (
@@ -240,16 +234,13 @@ module.exports = (req, res, next) => {
     ) {
       return 'GUARDAR-BOLETAS';
     }
-    if (req.method === "GET" && req.url.startsWith("/empresa/boletas")) {
-      console.log('Entre donde queria')
-      return "GET-BOLETA-BY-ID";
+    if (req.method === 'GET' && req.url.startsWith('/empresa/boletas')) {
+      console.log('Entre donde queria');
+      return 'GET-BOLETA-BY-ID';
     }
-    if (
-      req.method === "PUT" &&
-      req.url.startsWith("/empresa/boletas")
-    ) {
-      console.log('entramos por aca')
-      return "MODIFICAR-BOLETA-BY-ID";
+    if (req.method === 'PUT' && req.url.startsWith('/empresa/boletas')) {
+      console.log('entramos por aca');
+      return 'MODIFICAR-BOLETA-BY-ID';
     }
     if (req.url.startsWith('/sigeco/ajustes')) {
       if (req.method === 'PUT') {
@@ -269,28 +260,31 @@ module.exports = (req, res, next) => {
       return 'DDJJ-PRESENTAR';
     }
 
-    if(req.method === "PUT" && req.url.startsWith("/funcionalidades/id")){
-      console.log('Llegamos al coso que me manda a la funcion')
-      return "ACTUALIZAR-ROL-FUNCIONALIDAD"
+    if (req.method === 'PUT' && req.url.startsWith('/funcionalidades/id')) {
+      console.log('Llegamos al coso que me manda a la funcion');
+      return 'ACTUALIZAR-ROL-FUNCIONALIDAD';
     }
-    if (req.method === "GET" && req.url.startsWith("/rolFuncionalidades/by-rol")){
-      return "GET-FUNCIONALIDAD-BY-ROL"
-    }
-
-    if (req.method === "DELETE" && req.url.startsWith("/afip/intereses")){
-      return "DELETE-INTERES"
-    }
-    if (req.method === "PUT" && req.url.startsWith("/afip/intereses")){
-      return "UPDATE-INTERES"
-    }
-    if (req.url.startsWith("/error/401")){
-      return "ERROR401"
-    }
-    if (req.method === "PATCH" && req.url.startsWith("/usuario-interno")){
-      return "PATCH-USUARIO-ACTIVO"
+    if (
+      req.method === 'GET' &&
+      req.url.startsWith('/rolFuncionalidades/by-rol')
+    ) {
+      return 'GET-FUNCIONALIDAD-BY-ROL';
     }
 
-    return "----";
+    if (req.method === 'DELETE' && req.url.startsWith('/afip/intereses')) {
+      return 'DELETE-INTERES';
+    }
+    if (req.method === 'PUT' && req.url.startsWith('/afip/intereses')) {
+      return 'UPDATE-INTERES';
+    }
+    if (req.url.startsWith('/error/401')) {
+      return 'ERROR401';
+    }
+    if (req.method === 'PATCH' && req.url.startsWith('/usuario-interno')) {
+      return 'PATCH-USUARIO-ACTIVO';
+    }
+
+    return '----';
   }
 
   switch (getAPI(req, res)) {
@@ -407,25 +401,25 @@ module.exports = (req, res, next) => {
     case 'DDJJ-PRESENTAR':
       presentarDDJJ(req, res);
       break;
-    case "ACTUALIZAR-ROL-FUNCIONALIDAD":
+    case 'ACTUALIZAR-ROL-FUNCIONALIDAD':
       updateRolFuncionalidad();
       break;
-    case "GET-FUNCIONALIDAD-BY-ROL":
+    case 'GET-FUNCIONALIDAD-BY-ROL':
       getFuncionalidadesByRol();
       break;
-    case "DELETE-INTERES":
+    case 'DELETE-INTERES':
       deleteInteres();
       break;
-    case "UPDATE-INTERES":
+    case 'UPDATE-INTERES':
       updateInteres();
       break;
-    case "ERROR401":
+    case 'ERROR401':
       err401();
       break;
-    case "PATCH-USUARIO-ACTIVO":
+    case 'PATCH-USUARIO-ACTIVO':
       patchUsuarioInterno();
       break;
-    case "----":
+    case '----':
       // code block
       next();
       break;
@@ -862,7 +856,7 @@ module.exports = (req, res, next) => {
     console.log(req.body);
     req.body.forEach((element, index) => {
       element.numero_boleta = numero_boleta + index;
-      element.id = 10000 + index
+      element.id = 10000 + index;
       req.app.db.__wrapped__.boletas_guardadas.con_ddjj.push(element);
       req.app.db.write();
     });
@@ -870,18 +864,18 @@ module.exports = (req, res, next) => {
   }
 
   function calcularInteres() {
-    console.log('entre en calcular interes')
+    console.log('entre en calcular interes');
     const { codigoBoleta } = req.query;
-    const { intencion_de_pago } = req.body;
+    const { intencionDePago } = req.body;
     const interes_diario = 0.01;
-    console.log(req.body)
-    console.log( codigoBoleta)
+    console.log(req.body);
+    console.log(codigoBoleta);
     const boletaOrig = req.app.db.__wrapped__.boletas.detalle_boletas.find(
       (boleta) => boleta.codigo === codigoBoleta,
     );
     const boleta = JSON.parse(JSON.stringify(boletaOrig));
     const diferencia_en_dias = calcula_diferencia_de_dias(
-      intencion_de_pago,
+      intencionDePago,
       boleta.vencimiento,
     );
 
@@ -892,41 +886,45 @@ module.exports = (req, res, next) => {
       boleta.interes = parseFloat(monto_interes.toFixed(2));
     }
 
-    boleta.intencion_de_pago = intencion_de_pago;
-    const nueva_estructura = {"declaracion_jurada_id": 120,
-    "tipo_ddjj": "Original",
-    "periodo": "2024-01-01T03:00:00.000Z"}
-    nueva_estructura.detalle_boletas = [boleta]
+    boleta.intencionDePago = intencionDePago;
+    const nueva_estructura = {
+      declaracion_jurada_id: 120,
+      tipo_ddjj: 'Original',
+      periodo: '2024-01-01T03:00:00.000Z',
+    };
+    nueva_estructura.detalle_boletas = [boleta];
     res.status(200).jsonp(nueva_estructura);
   }
 
   function calcularInteresBoletas() {
     //Calcula el interes de todas las boletas de una sola vez
-    const { intencion_de_pago } = req.body;
+    const { intencionDePago } = req.body;
     const interes_diario = 0.01;
     const boletasOrig = req.app.db.__wrapped__.boletas;
     const boletas = JSON.parse(JSON.stringify(boletasOrig));
-    const nueva_estructura = {"declaracion_jurada_id": 120,
-    "tipo_ddjj": "Original",
-    "periodo": "2024-01-01T03:00:00.000Z",
-    "detalle_boletas":[]}
+    const nueva_estructura = {
+      declaracion_jurada_id: 120,
+      tipo_ddjj: 'Original',
+      periodo: '2024-01-01T03:00:00.000Z',
+      detalle_boletas: [],
+    };
     boletas.detalle_boletas.map((boleta) => {
       const diferencia_en_dias = calcula_diferencia_de_dias(
-        intencion_de_pago,
+        intencionDePago,
         boleta.vencimiento,
       );
       if (diferencia_en_dias >= 0) {
         const monto_interes =
           boleta.total_acumulado * interes_diario * diferencia_en_dias;
         boleta.total_final = boleta.total_acumulado + monto_interes;
-        boleta.intencion_de_pago = intencion_de_pago;
+        boleta.intencionDePago = intencionDePago;
         boleta.interes = parseFloat(monto_interes.toFixed(2));
       }
-      nueva_estructura.detalle_boletas.push(boleta)
-      //nueva_estructura.intencion_de_pago = intencion_de_pago
+      nueva_estructura.detalle_boletas.push(boleta);
+      //nueva_estructura.intencionDePago = intencionDePago
       //return { ...nueva_estructura};
     });
-    
+
     res.status(200).jsonp(nueva_estructura);
   }
 
@@ -978,7 +976,7 @@ module.exports = (req, res, next) => {
   function getBoletaById() {
     const { id } = req.query;
     const boleta = req.app.db.__wrapped__.boletas_guardadas.con_ddjj.find(
-      (boleta) => boleta.id == id
+      (boleta) => boleta.id == id,
     );
     res.status(200).jsonp(boleta);
   }
@@ -986,7 +984,7 @@ module.exports = (req, res, next) => {
   function modificarBoletaById() {
     const { id } = req.query;
     const index = req.app.db.__wrapped__.boletas_guardadas.con_ddjj.findIndex(
-      (element) => element.id == id
+      (element) => element.id == id,
     );
     req.app.db.__wrapped__.boletas_guardadas.con_ddjj.forEach((element) =>
       console.log(element.numero_boleta),
@@ -1029,67 +1027,75 @@ module.exports = (req, res, next) => {
     res.status(200).jsonp({ estado: 'PR', secuencia: 1 });
   }
 
-  function updateRolFuncionalidad(){
-    console.log( 'Estoy en el update' )
-    const {id} = req.query
-    const index = req.app.db.__wrapped__.rolFuncionalidades.findIndex(element => element.id == id)
-    req.body.id = parseInt(id)
+  function updateRolFuncionalidad() {
+    console.log('Estoy en el update');
+    const { id } = req.query;
+    const index = req.app.db.__wrapped__.rolFuncionalidades.findIndex(
+      (element) => element.id == id,
+    );
+    req.body.id = parseInt(id);
     req.app.db.__wrapped__.rolFuncionalidades[index] = req.body;
     req.app.db.write();
     res.status(201).send(null);
   }
 
-  function getFuncionalidadesByRol(){
-    console.log('llegue')
-    const {rol} = req.query
-    console.log(rol)
-    const rolfuncionalidad = req.app.db.__wrapped__.rolFuncionalidades.find(element => element.descripcion === rol)
+  function getFuncionalidadesByRol() {
+    console.log('llegue');
+    const { rol } = req.query;
+    console.log(rol);
+    const rolfuncionalidad = req.app.db.__wrapped__.rolFuncionalidades.find(
+      (element) => element.descripcion === rol,
+    );
 
     res.status(200).jsonp(rolfuncionalidad);
   }
 
-
-  function deleteInteres(){
-    const { id } = req.query
-    console.log(req.query)
-    console.log(req.body)
-    console.log(id)
+  function deleteInteres() {
+    const { id } = req.query;
+    console.log(req.query);
+    console.log(req.body);
+    console.log(id);
     const interes = req.app.db.__wrapped__.intereses.filter(
-      (item) => item.id != id
+      (item) => item.id != id,
     );
-    console.log(interes)
-    req.app.db.__wrapped__.intereses = interes
+    console.log(interes);
+    req.app.db.__wrapped__.intereses = interes;
     req.app.db.write();
-    res.status(204).send(null)
+    res.status(204).send(null);
   }
 
-  function updateInteres(){
-    const {id} = req.query
-    const index = req.app.db.__wrapped__.intereses.findIndex(element => element.id == parseInt(id))
-    req.body.id = parseInt(id)
+  function updateInteres() {
+    const { id } = req.query;
+    const index = req.app.db.__wrapped__.intereses.findIndex(
+      (element) => element.id == parseInt(id),
+    );
+    req.body.id = parseInt(id);
     req.app.db.__wrapped__.intereses[index] = req.body;
     req.app.db.write();
     res.status(201).send(null);
   }
 
-  function err401(){
+  function err401() {
     res.status(412).jsonp({
-      "status":412,
-      "error":"Not Found",
-      "tipo": "ERROR_APP_BUSINESS",
-      "ticket": "SGC-07168420",
-      "codigo": "DDJJ_CON_BOLETAS",
-      "descripcion": "La Declaracion Jurada ya cuenta con las Boletas de Pago generadas",
-      "args": {},
-  });
+      status: 412,
+      error: 'Not Found',
+      tipo: 'ERROR_APP_BUSINESS',
+      ticket: 'SGC-07168420',
+      codigo: 'DDJJ_CON_BOLETAS',
+      descripcion:
+        'La Declaracion Jurada ya cuenta con las Boletas de Pago generadas',
+      args: {},
+    });
   }
 
-  function patchUsuarioInterno(){
-    const { habilitado } =  req.body
-    const {id} = req.query
-    console.log(habilitado)
-    console.log(id)
-    const index = req.app.db.__wrapped__['usuario-interno'].findIndex(element => element.id == parseInt(id))
+  function patchUsuarioInterno() {
+    const { habilitado } = req.body;
+    const { id } = req.query;
+    console.log(habilitado);
+    console.log(id);
+    const index = req.app.db.__wrapped__['usuario-interno'].findIndex(
+      (element) => element.id == parseInt(id),
+    );
     req.app.db.__wrapped__['usuario-interno'][index].habilitado = habilitado;
     req.app.db.write();
     res.status(204).send(null);

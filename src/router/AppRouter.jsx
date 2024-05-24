@@ -24,6 +24,7 @@ import { Ajustes } from '@/pages/dashboard/pages_dashboard/ajustes/Ajustes';
 import { DDJJTabs } from '@/pages/dashboard/pages_dashboard/ddjj/DDJJTabs';
 import { GestionRoles } from '@/pages/dashboard/pages_dashboard/gestionRoles/GestionRoles';
 import { Aportes } from '@/pages/dashboard/pages_dashboard/aportes/Aportes';
+import { useState } from 'react';
 
 const PagosPage = () => (
   <div className="otros_pagos_container">Contenido de la página de pagos</div>
@@ -47,6 +48,8 @@ const AppRouter = () => {
           <Route path="publicaciones" element={<Publicaciones />} />
           <Route path="feriados" element={<Feriados />} />
           <Route path="ddjj" element={<DDJJTabs />} />
+          <Route path="ddjj/alta" element={<DDJJTabs />} />
+          <Route path="ddjj/consulta" element={<DDJJTabs />} />
           <Route
             path="ddjjconsultaempleado"
             element={<DDJJConsultaEmpleado />}

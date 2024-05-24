@@ -147,13 +147,11 @@ export const validaCuil = async (empresaId, cuiles) => {
 };
 
 const obtenerPeriodoAnterior = async (empresaId, periodo) => {
-  let query = '';
+  let URL = `/empresa/${empresaId}/ddjj/periodo-anterior/`;
 
   if (periodo !== null) {
-    query = `?periodo=${periodo}`;
+    URL += `?periodo=${periodo}`;
   }
-
-  const URL = `/empresa/${empresaId}/ddjj/periodo-anterior/${query}`;
 
   try {
     const data = await axiosCrud.consultar(URL);

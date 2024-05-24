@@ -12,8 +12,22 @@ const HTTP_MSG_MODI_ERROR = import.meta.env.VITE_HTTP_MSG_MODI_ERROR;
 const HTTP_MSG_BAJA_ERROR = import.meta.env.VITE_HTTP_MSG_BAJA_ERROR;
 const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
 
-export const obtenerMisDeclaracionesJuradas = async (empresaId) => {
-  const URL = `/empresa/${empresaId}/ddjj/totales`;
+export const obtenerMisDeclaracionesJuradas = async (
+  empresaId,
+  desde,
+  hasta,
+) => {
+  let queryString = '';
+
+  if (desde !== null) {
+    queryString += `&desde=${desde}`;
+  }
+  if (hasta !== null) {
+    queryString += `&hasta=${hasta}`;
+  }
+  //const URL = `/ddjj/totales?${queryString}`;
+
+  const URL = `/empresa/${empresaId}/ddjj/totales?${queryString}`;
   try {
     const data = await axiosCrud.consultar(URL);
     return data || [];
@@ -101,8 +115,8 @@ export const axiosDDJJ = {
     return consultarAportes();
   },
 
-  consultar: async function (empresaId) {
-    return obtenerMisDeclaracionesJuradas(empresaId);
+  consultar: async function (empresaId, desde, hasta) {
+    return obtenerMisDeclaracionesJuradas(empresaId, desde, hasta);
   },
 
   getDDJJ: async function (empresaId, ddjjId) {

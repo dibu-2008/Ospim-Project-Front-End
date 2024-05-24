@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -54,6 +55,7 @@ export const DDJJTabs = () => {
   const [tabState, setTabState] = useState(0);
   const [peticion, setPeticion] = useState('');
   const [idDDJJ, setIdDDJJ] = useState(null);
+  const location = useLocation();
 
   const theme = useTheme();
 
@@ -61,6 +63,14 @@ export const DDJJTabs = () => {
     () => createTheme(theme, locales[locale]),
     [locale, theme],
   );
+
+  useEffect(() => {
+    if (location.pathname.includes('alta')) {
+      setTabState(0);
+    } else if (location.pathname.includes('consulta')) {
+      setTabState(1);
+    }
+  }, [location.pathname]);
 
   const handleChangeTabState = (event, value) => setTabState(value);
 
@@ -81,11 +91,6 @@ export const DDJJTabs = () => {
               <Tab
                 label="Mis Declaraciones Juradas"
                 {...a11yProps(1)}
-                sx={{ fontSize: '1.2rem' }}
-              />
-              <Tab
-                label="Mis Pagos"
-                {...a11yProps(2)}
                 sx={{ fontSize: '1.2rem' }}
               />
             </Tabs>
@@ -116,9 +121,6 @@ export const DDJJTabs = () => {
               setPeticion={setPeticion}
               setIdDDJJ={setIdDDJJ}
             />
-          </CustomTabPanel>
-          <CustomTabPanel value={tabState} index={2}>
-            <Boletas />
           </CustomTabPanel>
         </Box>
       </ThemeProvider>

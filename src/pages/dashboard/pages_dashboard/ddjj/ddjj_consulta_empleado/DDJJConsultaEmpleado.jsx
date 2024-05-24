@@ -10,7 +10,6 @@ import Button from '@mui/material/Button';
 import { Box } from '@mui/system';
 import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
 import {
-  DataGrid,
   GridActionsCellItem,
   GridRowModes,
   GridToolbarContainer,
@@ -21,6 +20,7 @@ import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 import * as locales from '@mui/material/locale';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import { axiosDDJJEmpleado } from './DDJJConsultaEmpleadoApi';
+import { consultarAportesDDJJ } from '@/common/api/AportesApi';
 import dayjs from 'dayjs';
 
 function DDJJColumnaAporteGet(ddjjResponse) {
@@ -87,16 +87,19 @@ const CustomToolbar = (props) => {
 };
 
 export const DDJJConsultaEmpleado = () => {
-  const ahora = dayjs();
-  const ahoraMasUnMes = ahora.add(1, 'month');
+  const ahora = dayjs().startOf('month');
+  const ahoraMenosUnAnio = ahora.add(-11, 'month');
+  const [desde, setDesde] = useState(ahoraMenosUnAnio);
+  const [hasta, setHasta] = useState(ahora);
+
   const [showCuitRazonSocial, setShowCuitRazonSocial] = useState(true);
   const [paginationModel, setPaginationModel] = useState(paginacion);
   const [rowModesModel, setRowModesModel] = useState({});
   const [locale, setLocale] = useState('esES');
-  const [desde, setDesde] = useState(ahora);
-  const [hasta, setHasta] = useState(ahoraMasUnMes);
   const [cuit, setCuit] = useState('');
   const [rows, setRows] = useState([]);
+  const [columnas, setColumnas] = useState([]);
+  const [vecAportes, setVecAportes] = useState({});
   const theme = useTheme();
   const themeWithLocale = useMemo(
     () => createTheme(theme, locales[locale]),
@@ -106,18 +109,25 @@ export const DDJJConsultaEmpleado = () => {
   let colAportes = [];
 
   useEffect(() => {
-    const ObtenerDDJJ = async () => {
-      let ddjjResponse = await axiosDDJJEmpleado.consultar();
-      console.log(ddjjResponse);
-
-      //Agrego las columnas deTotales de Aportes
-      ddjjResponse = await castearDDJJ(ddjjResponse);
-
-      setRows(ddjjResponse);
-    };
-
-    ObtenerDDJJ();
+    buscarDDJJ();
   }, []);
+
+  useEffect(() => {
+    const ObtenerVecAportes = async () => {
+      const data = await consultarAportesDDJJ();
+      setVecAportes(data);
+    };
+    ObtenerVecAportes();
+  }, []);
+
+  const getAporteDescrip = (codigo) => {
+    if (vecAportes && vecAportes.find) {
+      let reg = vecAportes.find((aporte) => aporte.codigo == codigo);
+      console.log('getAporteDescrip - reg: ', reg);
+      if (!reg) return codigo;
+      return reg.descripcion;
+    }
+  };
 
   const handleChangeDesde = (date) => setDesde(date);
 
@@ -129,153 +139,151 @@ export const DDJJConsultaEmpleado = () => {
     // Busqueda por rango de periodo
     let desdeDayjs = null;
     if (desde !== null) {
-      desdeDayjs = dayjs(desde.$d)
-        .set('hour', 3)
-        .set('minute', 0)
-        .set('second', 0)
-        .set('millisecond', 0)
-        .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+      desdeDayjs = dayjs(desde.$d).format('YYYY-MM-DD');
     }
     let hastaDayjs = null;
     if (hasta !== null) {
-      hastaDayjs = dayjs(hasta.$d)
-        .set('hour', 3)
-        .set('minute', 0)
-        .set('second', 0)
-        .set('millisecond', 0)
-        .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+      hastaDayjs = dayjs(hasta.$d).format('YYYY-MM-DD');
     }
     let cuitFlt = null;
     if (cuit != '') {
       cuitFlt = cuit;
+      setShowCuitRazonSocial(false);
+    } else {
+      setShowCuitRazonSocial(true);
     }
 
-    const ddjjResponse = await axiosDDJJEmpleado.consultarFiltrado(
+    const data = await axiosDDJJEmpleado.consultarFiltrado(
       desdeDayjs,
       hastaDayjs,
       cuitFlt,
     );
 
-    if (ddjjResponse.length > 0) {
-      setRows(ddjjResponse);
-      setShowCuitRazonSocial(false);
-    }
+    //if (data.length > 0) {
+    setRows(data);
+    const newColumns = getColumnas(data);
+    setColumnas(newColumns);
+    //}
   };
 
-  const columns = [
-    {
-      field: 'periodo',
-      headerName: 'Periodo',
-      flex: 1.5,
-      editable: false,
-      type: 'date',
-      headerAlign: 'center',
-      align: 'center',
-      headerClassName: 'header--cell',
-      valueFormatter: (params) => {
-        return formatter.periodo(params.value);
-      },
-    },
-  ];
-
-  if (showCuitRazonSocial) {
-    columns.push(
+  const getColumnas = (rowsGrilla) => {
+    const columns = [
       {
-        field: 'cuit',
-        headerName: 'Cuit',
+        field: 'periodo',
+        headerName: 'Periodo',
         flex: 1.5,
         editable: false,
+        type: 'date',
         headerAlign: 'center',
         align: 'center',
         headerClassName: 'header--cell',
+        valueFormatter: (params) => {
+          return formatter.periodo(params.value);
+        },
       },
-      {
-        field: 'razonSocial',
-        headerName: 'Razon Social',
-        flex: 2,
-        editable: false,
-        headerAlign: 'center',
-        align: 'center',
-        headerClassName: 'header--cell',
-      },
-    );
-  }
+    ];
 
-  columns.push({
-    field: 'secuencia',
-    headerName: 'Numero',
-    flex: 1,
-    editable: false,
-    headerAlign: 'center',
-    align: 'center',
-    headerClassName: 'header--cell',
-    valueGetter: (params) => {
-      // Si secuencia es 0 es "Original" sino es "Rectificativa"+secuencia
-      if (params.value === null) {
-        return 'Pendiente';
-      } else if (params.value === 0) {
-        return 'Original';
-      } else {
-        return 'Rectif. ' + params.value;
-      }
-    },
-  });
-
-  colAportes = DDJJColumnaAporteGet(rows);
-
-  colAportes.forEach((elem) => {
+    if (showCuitRazonSocial) {
+      columns.push(
+        {
+          field: 'cuit',
+          headerName: 'Cuit',
+          flex: 1.5,
+          editable: false,
+          headerAlign: 'center',
+          align: 'center',
+          headerClassName: 'header--cell',
+        },
+        {
+          field: 'razonSocial',
+          headerName: 'Razon Social',
+          flex: 2,
+          editable: false,
+          headerAlign: 'center',
+          align: 'center',
+          headerClassName: 'header--cell',
+        },
+      );
+    }
     columns.push({
-      field: 'total' + elem,
-      headerName: 'Total ' + elem,
+      field: 'secuencia',
+      headerName: 'Numero',
       flex: 1,
       editable: false,
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell',
-      valueFormatter: (params) => formatter.currency.format(params.value || 0),
+      valueGetter: (params) => {
+        // Si secuencia es 0 es "Original" sino es "Rectificativa"+secuencia
+        if (params.value === null) {
+          return 'Pendiente';
+        } else if (params.value === 0) {
+          return 'Original';
+        } else {
+          return 'Rectif. ' + params.value;
+        }
+      },
     });
-  });
 
-  columns.push({
-    field: 'actions',
-    headerName: 'Acciones',
-    flex: 1,
-    type: 'actions',
-    headerAlign: 'center',
-    align: 'center',
-    headerClassName: 'header--cell',
-    getActions: ({ row }) => {
-      const isInEditMode =
-        rowModesModel[rows.indexOf(row)]?.mode === GridRowModes.Edit;
+    colAportes = DDJJColumnaAporteGet(rowsGrilla);
 
-      if (isInEditMode) {
+    colAportes.forEach((elem) => {
+      columns.push({
+        field: 'total' + elem,
+        headerName: getAporteDescrip(elem),
+        flex: 1,
+        editable: false,
+        headerAlign: 'center',
+        align: 'center',
+        headerClassName: 'header--cell',
+        valueFormatter: (params) =>
+          formatter.currency.format(params.value || 0),
+      });
+    });
+
+    columns.push({
+      field: 'actions',
+      headerName: 'Acciones',
+      flex: 1,
+      type: 'actions',
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
+      getActions: ({ row }) => {
+        const isInEditMode =
+          rowModesModel[rows.indexOf(row)]?.mode === GridRowModes.Edit;
+
+        if (isInEditMode) {
+          return [
+            <GridActionsCellItem
+              icon={<SaveIcon />}
+              label="Save"
+              sx={{
+                color: 'primary.main',
+              }}
+            />,
+            <GridActionsCellItem
+              icon={<CancelIcon />}
+              label="Cancel"
+              className="textPrimary"
+              color="inherit"
+            />,
+          ];
+        }
+
         return [
           <GridActionsCellItem
-            icon={<SaveIcon />}
-            label="Save"
-            sx={{
-              color: 'primary.main',
-            }}
-          />,
-          <GridActionsCellItem
-            icon={<CancelIcon />}
-            label="Cancel"
-            className="textPrimary"
+            icon={<LocalPrintshopIcon />}
+            label="Print"
             color="inherit"
+            onClick={() => declaracionJuradasImpresion(row.id)}
           />,
         ];
-      }
+      },
+    });
 
-      return [
-        <GridActionsCellItem
-          icon={<LocalPrintshopIcon />}
-          label="Print"
-          color="inherit"
-          onClick={() => declaracionJuradasImpresion(row.id)}
-        />,
-      ];
-    },
-  });
+    return columns;
+  };
 
   const handleRowModesModelChange = (newRowModesModel) => {
     setRowModesModel(newRowModesModel);
@@ -382,7 +390,7 @@ export const DDJJConsultaEmpleado = () => {
           <ThemeProvider theme={themeWithLocale}>
             <StripedDataGrid
               rows={rows}
-              columns={columns}
+              columns={columnas}
               getRowId={(row) => rows.indexOf(row)}
               getRowClassName={(params) =>
                 rows.indexOf(params.row) % 2 === 0 ? 'even' : 'odd'

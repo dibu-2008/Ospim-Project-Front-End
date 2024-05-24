@@ -24,7 +24,7 @@ export const boletaPdfDownload = async (empresa_id, id) => {
 };
 
 export const detallePdfDownload = async (empresa_id, id) => {
-  const URL = `${BACKEND_URL}/empresa/${empresa_id}/boleta-pago/${id}/imprimir-detalle`;
+  const URL = `${BACKEND_URL}/empresa/${empresa_id}/boletas/${id}/imprimir-detalle`;
 
   try {
     const response = await oAxios({

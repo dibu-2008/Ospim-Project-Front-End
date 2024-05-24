@@ -62,7 +62,7 @@ export const GenerarBoletas = () => {
 
   const setDefaultFDP = (data) => {
     data.detalle_boletas.forEach(
-      (element) => (element.forma_de_pago = 'VENTANILLA'),
+      (element) => (element.formaDePago = 'VENTANILLA'),
     );
     setBoletas(data);
   };
@@ -93,16 +93,16 @@ export const GenerarBoletas = () => {
 
   const setInteresInDetalleBoleta = (boletaIndex, response) => {
     const newDetalleBoletas = [...boletas.detalle_boletas];
-    const fdp = newDetalleBoletas[boletaIndex].forma_de_pago;
+    const fdp = newDetalleBoletas[boletaIndex].formaDePago;
     newDetalleBoletas[boletaIndex] = response;
     console.log(newDetalleBoletas);
-    newDetalleBoletas[boletaIndex].forma_de_pago = fdp;
+    newDetalleBoletas[boletaIndex].formaDePago = fdp;
     setBoletas({ ...boletas, detalle_boletas: newDetalleBoletas });
   };
 
   const checkFields = () => {
     boletas.detalle_boletas.forEach((boleta) => {
-      if (boleta.intencion_de_pago === '') return true;
+      if (boleta.intencionDePago === '') return true;
     });
     return false;
   };
@@ -125,7 +125,7 @@ export const GenerarBoletas = () => {
         );
         return {
           ...boleta,
-          forma_de_pago: prevBoleta ? prevBoleta.forma_de_pago : 'VENTANILLA',
+          formaDePago: prevBoleta ? prevBoleta.formaDePago : 'VENTANILLA',
         };
       });
       setBoletas((prevBoletas) => ({
@@ -149,11 +149,11 @@ export const GenerarBoletas = () => {
     }
   };
 
-  const setFormaDePagoInBoleta = (boletaIndex, forma_de_pago) => {
+  const setFormaDePagoInBoleta = (boletaIndex, formaDePago) => {
     const newDetalleBoletas = [...boletas.detalle_boletas];
     newDetalleBoletas[boletaIndex] = {
       ...newDetalleBoletas[boletaIndex],
-      forma_de_pago,
+      formaDePago,
     };
     setBoletas({ ...boletas, detalle_boletas: newDetalleBoletas });
   };
@@ -162,7 +162,7 @@ export const GenerarBoletas = () => {
     if (primeraSeleccionFDP) {
       const newDetalleBoletas = boletas.detalle_boletas.map((boleta) => ({
         ...boleta,
-        forma_de_pago: value,
+        formaDePago: value,
       }));
       setBoletas({ ...boletas, detalle_boletas: newDetalleBoletas });
       setPrimeraSeleccionFDP(false);
@@ -201,15 +201,24 @@ export const GenerarBoletas = () => {
   return (
     <div className="generador_boletas_container">
       <h1>Boleta de Pago</h1>
-      <p>
-        Periodo:{' '}
+      <h3 style={{ color: '#1A76D2' }}>
+        DDJJ:{' '}
         {boletas &&
         boletas.periodo &&
         boletas.periodo !== null &&
         boletas.periodo !== ''
           ? formatter.periodo(boletas.periodo)
           : ''}{' '}
-      </p>
+        {boletas &&
+        boletas.tipo_ddjj &&
+        boletas.tipo_ddjj !== null &&
+        boletas.tipo_ddjj !== ''
+          ? boletas.tipo_ddjj
+          : ''}{' '}
+        - Generación Boletas de Pago
+      </h3>
+      <br></br>
+
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -243,7 +252,7 @@ export const GenerarBoletas = () => {
                     <TextField
                       type="date"
                       inputProps={{ min: hoy }}
-                      value={boleta.intencion_de_pago?.split('T')[0]}
+                      value={boleta.intencionDePago?.split('T')[0]}
                       onChange={(event) =>
                         setIntencionDePago(boleta.codigo, event.target.value)
                       }
@@ -257,7 +266,7 @@ export const GenerarBoletas = () => {
                 boletas.detalle_boletas.map((boleta) => (
                   <TableCell key={boleta.codigo}>
                     <Select
-                      value={boleta.forma_de_pago || ''}
+                      value={boleta.formaDePago || ''}
                       onChange={(event) =>
                         setFormaDePago(boleta.codigo, event.target.value)
                       }

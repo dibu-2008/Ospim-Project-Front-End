@@ -15,8 +15,8 @@ const styles = {
   },
 };
 
-const calcularInteres = async (url, intencion_de_pago) => {
-  const body = { intencion_de_pago: intencion_de_pago };
+const calcularInteres = async (url, intencionDePago) => {
+  const body = { intencionDePago: intencionDePago };
   console.log(body);
   const response = await axiosCrud.crear(url, body);
   return response;
@@ -40,12 +40,12 @@ export const calcularInteresBoleta = async (
   empresa_id,
   ddjj_id,
   boleta_codigo,
-  intencion_de_pago,
+  intencionDePago,
 ) => {
   const URL = `/empresa/${empresa_id}/ddjj/${ddjj_id}/boletas/${boleta_codigo}/armar`;
   console.log(URL);
   try {
-    const response = await calcularInteres(URL, intencion_de_pago);
+    const response = await calcularInteres(URL, intencionDePago);
     console.log(response.detalle_boletas);
     return response.detalle_boletas[0];
   } catch (error) {
@@ -58,13 +58,13 @@ export const calcularInteresBoleta = async (
 export const calcularInteresBoletas = async (
   empresa_id,
   ddjj_id,
-  intencion_de_pago,
+  intencionDePago,
 ) => {
   //const URL = `/empresa/${empresa_id}/ddjj/${ddjj_id}/calcular-intereses`;
   const URL = `/empresa/${empresa_id}/ddjj/${ddjj_id}/boletas/armar`;
   try {
-    console.log(intencion_de_pago);
-    const response = await calcularInteres(URL, intencion_de_pago);
+    console.log(intencionDePago);
+    const response = await calcularInteres(URL, intencionDePago);
     console.log(response);
     return response;
   } catch (error) {
@@ -77,8 +77,8 @@ export const calcularInteresBoletas = async (
 const ordernarBoletas = (boletas) => {
   const newArray = boletas.detalle_boletas.map((detalle) => ({
     codigo: detalle.codigo,
-    intencion_de_pago: formatter.toFechaValida(detalle.intencion_de_pago),
-    forma_de_pago: detalle.forma_de_pago,
+    intencionDePago: formatter.toFechaValida(detalle.intencionDePago),
+    formaDePago: detalle.formaDePago,
   }));
 
   return newArray;

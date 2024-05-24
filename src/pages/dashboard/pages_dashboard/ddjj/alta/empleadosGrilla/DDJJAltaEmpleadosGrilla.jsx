@@ -69,6 +69,7 @@ function EditToolbar(props) {
     setRowsAltaDDJJ((oldRows) => [
       {
         id,
+        fila: oldRows.length + 1, // Asignamos el número de fila incremental
         cuil: '',
         apellido: '',
         nombre: '',
@@ -259,8 +260,8 @@ export const DDJJAltaEmpleadosGrilla = ({
 
   const processRowUpdate = async (newRow) => {
     console.log('processRowUpdate - INIT');
-    console.log(newRow)
-    console.log(inteDataBase)
+    console.log(newRow);
+    console.log(inteDataBase);
     if (newRow.isNew) {
       const fila = { ...newRow, inte: inteDataBase, errores: false };
       setRowsAltaDDJJ(
@@ -318,7 +319,7 @@ export const DDJJAltaEmpleadosGrilla = ({
 
   const columns = [
     {
-      field: 'id',
+      field: 'fila',
       type: 'number',
       headerName: 'Fila',
       width: 50,
@@ -399,7 +400,7 @@ export const DDJJAltaEmpleadosGrilla = ({
                   value: newValue,
                 });
               }}
-              onMouseLeave={(event) => {
+              onBlur={(event) => {
                 obtenerAfiliados(params, params.value);
               }}
               sx={{
@@ -743,7 +744,7 @@ export const DDJJAltaEmpleadosGrilla = ({
               params.api.setEditCellValue({
                 id: params.id,
                 field: 'remunerativo',
-                value: values.value
+                value: values.value,
               });
             }}
           />
@@ -793,17 +794,16 @@ export const DDJJAltaEmpleadosGrilla = ({
             groupSeparator="."
             value={params.value || ''}
             onValueChange={(value, name, values) => {
-              console.log(value, name, values)
+              console.log(value, name, values);
               params.api.setEditCellValue({
                 id: params.id,
                 field: 'noRemunerativo',
-                value: values.value
+                value: values.value,
               });
             }}
           />
         );
       },
-      
     },
     {
       field: 'uomaSocio',

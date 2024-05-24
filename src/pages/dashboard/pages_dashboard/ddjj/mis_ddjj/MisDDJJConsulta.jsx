@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import dayjs from 'dayjs';
 import './MisDDJJConsulta.css';
 import {
   MisDDJJConsultaGrilla,
@@ -23,8 +24,11 @@ export const MisDDJJConsulta = ({
   setRowsAltaDDJJ,
   setPeticion,
 }) => {
-  const [desde, setDesde] = useState(null);
-  const [hasta, setHasta] = useState(null);
+  const ahora = dayjs().startOf('month');
+  const ahoraMenosUnAnio = ahora.add(-11, 'month');
+  const [desde, setDesde] = useState(ahoraMenosUnAnio);
+  const [hasta, setHasta] = useState(ahora);
+
   const [fullName, setFullName] = useState('');
   const [age, setAge] = useState(0);
   const [occupation, setOccupation] = useState('');
@@ -43,54 +47,36 @@ export const MisDDJJConsulta = ({
 
   const buscarDDJJ = async () => {
     try {
-      const ddjjResponse = await axiosDDJJ.consultar(ID_EMPRESA);
+      let desdeDayjs = null;
+      if (desde !== null) {
+        desdeDayjs = dayjs(desde.$d).format('YYYY-MM-DD');
+      }
+      let hastaDayjs = null;
+      if (hasta !== null) {
+        hastaDayjs = dayjs(hasta.$d).format('YYYY-MM-DD');
+      }
+
+      const ddjjResponse = await axiosDDJJ.consultar(
+        ID_EMPRESA,
+        desdeDayjs,
+        hastaDayjs,
+      );
+
       setRowsMisDdjj(ddjjResponse);
       console.log('ddjjResponse', ddjjResponse);
-      if (desde && desde.$d && hasta && hasta.$d) {
-        console.log('buscarDDJJ - ENTRO !!');
-        const { $d: $desde } = desde;
-        const { $d: $hasta } = hasta;
 
-        const fechaDesde = new Date($desde);
-        fechaDesde.setDate(1);
-        fechaDesde.setUTCHours(0, 0, 0, 0);
-        const fechaIsoDesde = fechaDesde.toISOString();
+      const ddjjCasteadas = castearMisDDJJ(ddjjResponse);
+      console.log('ddjjCasteadas', ddjjCasteadas);
 
-        const fechaHasta = new Date($hasta);
-        fechaHasta.setDate(1);
-        fechaHasta.setUTCHours(0, 0, 0, 0);
-        const fechaIsoHasta = fechaHasta.toISOString();
-
-        const declaracionesFiltradas = ddjjResponse.filter((ddjj) => {
-          const fecha = new Date(ddjj.periodo);
-          return (
-            fecha >= new Date(fechaIsoDesde) && fecha <= new Date(fechaIsoHasta)
-          );
-        });
-        console.log('declaracionesFiltradas', declaracionesFiltradas);
-
-        const declaracionesFiltradasCasteadas = castearMisDDJJ(
-          declaracionesFiltradas,
-        );
-        console.log(
-          'declaracionesFiltradasCasteadas',
-          declaracionesFiltradasCasteadas,
-        );
-
-        setRowsMisDdjj(declaracionesFiltradas);
-      } else {
-        const declaracionesFiltradasCasteadas = castearMisDDJJ(ddjjResponse);
-        console.log(
-          'declaracionesFiltradasCasteadas',
-          declaracionesFiltradasCasteadas,
-        );
-
-        setRowsMisDdjj(ddjjResponse);
-      }
+      //setRowsMisDdjj(declaracionesFiltradas);
     } catch (error) {
       console.error('Error al buscar declaraciones juradas:', error);
     }
   };
+
+  useEffect(() => {
+    buscarDDJJ();
+  }, []);
 
   return (
     <div>

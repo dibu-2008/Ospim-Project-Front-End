@@ -16,6 +16,7 @@ import Button from '@mui/material/Button';
 import './Boletas.css';
 import { Box } from '@mui/system';
 import { getBoletaById, modificarBoletaById } from './BoletasApi';
+import localStorageService from '@/components/localStorage/localStorageService';
 import {
   boletaPdfDownload,
   detallePdfDownload,
@@ -38,8 +39,8 @@ export const DetalleBoleta = () => {
   const [ajustes, setAjustes] = useState([]);
   const navigate = useNavigate();
 
-  const ID_EMPRESA = JSON.parse(localStorage.getItem('stateLogin'))
-    .usuarioLogueado.empresa.id;
+  const ID_EMPRESA = localStorageService.getEmpresaId();
+
   const { numero_boleta } = useParams();
   console.log(numero_boleta);
   const hoy = new Date().toISOString().split('T')[0];
@@ -56,15 +57,15 @@ export const DetalleBoleta = () => {
             id: index + 1,
           })),
         );
-        setMetodoPago(response.forma_de_pago);
-        setIntencionDePago(response.intencion_de_pago);
+        setMetodoPago(response.formaDePago);
+        setIntencionDePago(response.intencionDePago);
         setDDDJJ_id(response.declaracion_jurada_id);
         setCodigo(response.codigo);
         setIsEditable(!response.fecha_de_pago);
         setAjustes(response.ajustes);
         setRespaldoBoleta(JSON.parse(JSON.stringify(response)));
         console.log(boletaDetalle.periodo);
-        console.log(boletaDetalle)
+        console.log(boletaDetalle);
       } catch (error) {
         console.error('Error al obtener los datos de la boleta:', error);
       }
@@ -73,7 +74,7 @@ export const DetalleBoleta = () => {
   }, []);
 
   const guardarBoleta = () => {
-    console.log(boletaDetalle)
+    console.log(boletaDetalle);
     modificarBoletaById(ID_EMPRESA, boletaDetalle);
   };
 
@@ -88,7 +89,7 @@ export const DetalleBoleta = () => {
     let objetoModificado = { ...boletaDetalle };
 
     for (let key in response) {
-      console.log(key)
+      console.log(key);
       if (response.hasOwnProperty(key)) {
         objetoModificado[key] = response[key];
       }
@@ -99,7 +100,7 @@ export const DetalleBoleta = () => {
   const handleSetMetodoPago = async (value) => {
     setMetodoPago(value);
     const nuevaBoleta = JSON.parse(JSON.stringify(boletaDetalle));
-    nuevaBoleta.forma_de_pago = value;
+    nuevaBoleta.formaDePago = value;
     setBoletaDetalle(nuevaBoleta);
   };
 
@@ -110,15 +111,22 @@ export const DetalleBoleta = () => {
 
   const handleCancelar = () => {
     setBoletaDetalle(respaldoBoleta);
-    setIntencionDePago(respaldoBoleta.intencion_de_pago);
-    setMetodoPago(respaldoBoleta.forma_de_pago);
+    setIntencionDePago(respaldoBoleta.intencionDePago);
+    setMetodoPago(respaldoBoleta.formaDePago);
     setModoEdicion(!modoEdicion);
   };
 
   const existeDato = (value) => (value !== null && value !== '' ? value : '');
   return (
     <div className="boletas_container">
-      <h1>Detalle boleta {boletaDetalle.descripcion}</h1>
+      <h1>
+        Boleta de Pago Nro. {boletaDetalle.numero_boleta}
+        <br></br>
+        <br></br>
+        <h3 style={{ color: '#1A76D2' }}>
+          Concepto: {boletaDetalle.descripcion}
+        </h3>
+      </h1>
       <Button
         onClick={() => {
           detallePdfDownload(ID_EMPRESA, boletaDetalle.id);
@@ -166,8 +174,7 @@ export const DetalleBoleta = () => {
             <TableRow>
               <TableCell className="cw">Periodo</TableCell>
               <TableCell className="cw">Tipo DDJJ</TableCell>
-              <TableCell className="cw">N Boleta</TableCell>
-              <TableCell className="cw">Concepto</TableCell>
+
               <TableCell className="cw">Subtotal</TableCell>
               <TableCell className="cw">Intereses</TableCell>
               <TableCell className="cw">Importe Boleta</TableCell>
@@ -191,10 +198,7 @@ export const DetalleBoleta = () => {
               <TableCell>
                 {boletaDetalle.tipo_ddjj ? boletaDetalle.tipo_ddjj : 'Original'}
               </TableCell>
-              <TableCell>
-                {boletaDetalle.nro_boleta ? boletaDetalle.nro_boleta : 1}
-              </TableCell>
-              <TableCell>{existeDato(boletaDetalle.descripcion)}</TableCell>
+
               <TableCell className="importes">
                 {existeDato(
                   formatter.currency.format(boletaDetalle.total_acumulado),
@@ -232,8 +236,8 @@ export const DetalleBoleta = () => {
                       handlesSetIntencionDePago(event.target.value)
                     }
                   />
-                ) : existeDato(boletaDetalle.intencion_de_pago) ? (
-                  formatter.date(boletaDetalle.intencion_de_pago)
+                ) : existeDato(boletaDetalle.intencionDePago) ? (
+                  formatter.date(boletaDetalle.intencionDePago)
                 ) : (
                   ''
                 )}
@@ -251,7 +255,7 @@ export const DetalleBoleta = () => {
                     <MenuItem value="PMCUENTAS">PagoMisCuentas</MenuItem>
                   </Select>
                 ) : (
-                  boletaDetalle.forma_de_pago
+                  boletaDetalle.formaDePago
                 )}
               </TableCell>
             </TableRow>
@@ -277,7 +281,7 @@ export const DetalleBoleta = () => {
               {
                 field: 'remunerativo',
                 headerName: 'Remunerativo',
-                align: "right",
+                align: 'right',
                 flex: 1,
                 valueFormatter: (params) =>
                   formatter.currency.format(params.value),
@@ -285,7 +289,7 @@ export const DetalleBoleta = () => {
               {
                 field: 'capital',
                 headerName: 'Capital',
-                align: "right",
+                align: 'right',
                 flex: 1,
                 valueFormatter: (params) =>
                   formatter.currency.format(params.value),
