@@ -85,3 +85,17 @@ export const eliminar = async (UrlApi, id) => {
     return false;
   }
 };
+
+export const patch = async (UrlApi, oEntidad) => {
+  try {
+    const response = await axiosCrud.patch(UrlApi, id);
+    if (response == true) {
+      toast.success(HTTP_MSG_MODI);
+      return true;
+    }
+    throw response;
+  } catch (error) {
+    showErrorBackEnd(HTTP_MSG_MODI_ERROR, error);
+    return false;
+  }
+};
