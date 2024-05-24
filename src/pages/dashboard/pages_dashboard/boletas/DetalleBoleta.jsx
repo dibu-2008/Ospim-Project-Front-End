@@ -16,6 +16,7 @@ import Button from '@mui/material/Button';
 import './Boletas.css';
 import { Box } from '@mui/system';
 import { getBoletaById, modificarBoletaById } from './BoletasApi';
+import localStorageService from '@/components/localStorage/localStorageService';
 import {
   boletaPdfDownload,
   detallePdfDownload,
@@ -38,8 +39,8 @@ export const DetalleBoleta = () => {
   const [ajustes, setAjustes] = useState([]);
   const navigate = useNavigate();
 
-  const ID_EMPRESA = JSON.parse(localStorage.getItem('stateLogin'))
-    .usuarioLogueado.empresa.id;
+  const ID_EMPRESA = localStorageService.getEmpresaId();
+
   const { numero_boleta } = useParams();
   console.log(numero_boleta);
   const hoy = new Date().toISOString().split('T')[0];

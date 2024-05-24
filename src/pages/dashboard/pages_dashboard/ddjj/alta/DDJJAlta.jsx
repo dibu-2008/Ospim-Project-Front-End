@@ -553,7 +553,7 @@ export const DDJJAlta = ({
         });
         return;
       }
-      setTituloSec(getTituloSec(ddjjPeriodoAnterior.secuencia));
+      //setTituloSec(getTituloSec(ddjjPeriodoAnterior.secuencia));
       setRowsAltaDDJJ(ddjjPeriodoAnterior.afiliados);
       setOcultarEmpleadosGrilla(!ocultarEmpleadosGrilla);
     } else {
