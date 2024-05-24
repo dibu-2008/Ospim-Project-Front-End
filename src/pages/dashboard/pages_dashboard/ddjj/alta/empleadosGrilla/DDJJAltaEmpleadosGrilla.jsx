@@ -127,6 +127,10 @@ export const DDJJAltaEmpleadosGrilla = ({
     apellido: '',
     nombre: '',
   });
+  const [paginationModel, setPaginationModel] = useState({
+    pageSize: 50,
+    page: 0,
+  });
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -995,13 +999,9 @@ export const DDJJAltaEmpleadosGrilla = ({
                 backgroundColor: '#ccc',
               },
             }}
-            initialState={{
-              ...rowsAltaDDJJ?.initialState,
-              pagination: {
-                paginationModel: { pageSize: 5 },
-              },
-            }}
-            pageSizeOptions={[5, 10, 25]}
+            paginationModel={paginationModel}
+            onPaginationModelChange={setPaginationModel}
+            pageSizeOptions={[50, 75, 100]}
             getCellClassName={colorErrores}
           />
         </ThemeProvider>

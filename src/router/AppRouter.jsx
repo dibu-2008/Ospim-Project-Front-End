@@ -55,6 +55,10 @@ const AppRouter = () => {
             element={<DDJJConsultaEmpleado />}
           />
           <Route path="boletas" element={<Boletas />} />
+          <Route path="boletas/periodos" element={<Boletas />} />
+          <Route path="boletas/Actas" element={<Boletas />} />
+          <Route path="boletas/nueva" element={<Boletas />} />
+
           <Route path="pagos" element={<PagosPage />} />
           <Route path="misdatos" element={<DatosEmpresa />} />
           <Route path="altausuariointerno" element={<AltaUsuarioInterno />} />

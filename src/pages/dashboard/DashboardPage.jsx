@@ -1,15 +1,12 @@
 import { useEffect, useState } from 'react';
-import logo from '../../assets/logo.svg';
+import { useNavigate, Outlet, NavLink } from 'react-router-dom';
+import './DashboardPage.css';
 import afipIcon from '../../assets/afip.svg';
-import BottomNavigation from '@mui/material/BottomNavigation';
-import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import HomeIcon from '@mui/icons-material/Home';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import StyleIcon from '@mui/icons-material/Style';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import PersonIcon from '@mui/icons-material/Person';
-import CategoryIcon from '@mui/icons-material/Category';
-import CloseIcon from '@mui/icons-material/Close';
 import CoPresentIcon from '@mui/icons-material/CoPresent';
 import NetworkLockedIcon from '@mui/icons-material/NetworkLocked';
 import DateRangeIcon from '@mui/icons-material/DateRange';
@@ -17,63 +14,25 @@ import PreviewIcon from '@mui/icons-material/Preview';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 import CalculateIcon from '@mui/icons-material/Calculate';
-import {
-  Link,
-  useNavigate,
-  useLocation,
-  Outlet,
-  NavLink,
-} from 'react-router-dom';
-import './DashboardPage.css';
-
-// Drawer
 import Box from '@mui/material/Box';
-//import { styled, useTheme } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
-import MuiAppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
-import CssBaseline from '@mui/material/CssBaseline';
-import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
 import localStorageService from '@/components/localStorage/localStorageService';
 import { getFuncionalidadesByRol } from './DashboardPageApi';
 import logo2 from '../../assets/logo_2.svg';
 import { MenuListButton } from '@/components/MenuListButton';
+import { styled } from '@mui/material/styles';
 
-/////////////////////////////////////////////////////////////////////
-import { styled, alpha } from '@mui/material/styles';
-import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import EditIcon from '@mui/icons-material/Edit';
-//import Divider from '@mui/material/Divider';
-import ArchiveIcon from '@mui/icons-material/Archive';
-import FileCopyIcon from '@mui/icons-material/FileCopy';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-////////////////////////////////////////////////////////////////////////
-
-import Accordion from '@mui/material/Accordion';
-import AccordionActions from '@mui/material/AccordionActions';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-///////////////////
-
-const drawerWidth = 225;
+const drawerWidth = 250;
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -124,8 +83,6 @@ const Drawer = styled(MuiDrawer, {
 
 const DashboardPage = () => {
   const navigate = useNavigate();
-  //const [value, setValue] = useState(0);
-  //const isRolEmpleador = localStorageService.isRolEmpleador();
   const [rolFuncionalidades, setRolFuncionalidades] = useState({});
   const rol = localStorageService.getRol();
 
@@ -232,18 +189,18 @@ const DashboardPage = () => {
 
                     {open && (
                       <MenuListButton
-                        nameAccordionSumary="Admin DDJJ"
+                        nameAccordionSumary="Declaración Jurada"
                         setOpen={setOpen}
                         nameAndIcon={[
                           {
-                            nombre: 'DDJJ Alta',
+                            nombre: 'Nueva DDJJ',
                             ruta: './ddjj/alta',
                             icon: (
                               <LibraryBooksIcon sx={{ color: '#1a76d2' }} />
                             ),
                           },
                           {
-                            nombre: 'DDJJ Consulta',
+                            nombre: 'Mis DDJJ',
                             ruta: './ddjj/consulta',
                             icon: (
                               <LibraryBooksIcon sx={{ color: '#1a76d2' }} />
