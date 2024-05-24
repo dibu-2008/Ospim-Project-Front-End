@@ -14,6 +14,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
 import { axiosDDJJ } from './MisDDJJConsultaGrillaApi';
+import { consultarAportesDDJJ } from '@/common/api/AportesApi';
 import Swal from 'sweetalert2';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
@@ -74,6 +75,7 @@ export const MisDDJJConsultaGrilla = ({
   setRowsAltaDDJJ,
   setPeticion,
 }) => {
+  const [vecAportes, setVecAportes] = useState({});
   const [rowModesModel, setRowModesModel] = useState({});
   const [paginationModel, setPaginationModel] = useState({
     pageSize: 10,
@@ -81,6 +83,25 @@ export const MisDDJJConsultaGrilla = ({
   });
 
   const ID_EMPRESA = localStorageService.getEmpresaId();
+
+  useEffect(() => {
+    const ObtenerVecAportes = async () => {
+      const data = await consultarAportesDDJJ();
+      setVecAportes(data);
+    };
+    ObtenerVecAportes();
+  }, []);
+
+  const getAporteDescrip = (codigo) => {
+    if (vecAportes && vecAportes.find) {
+      let reg = vecAportes.find((aporte) => aporte.codigo == codigo);
+      console.log('getAporteDescrip - reg: ', reg);
+      if (!reg) return codigo;
+      return reg.descripcion;
+    }
+  };
+
+  console.log('getAporteDescrip() => ', getAporteDescrip('AMTIMACS'));
 
   let colAportes = [];
 
@@ -241,7 +262,7 @@ export const MisDDJJConsultaGrilla = ({
   colAportes.forEach((elem) => {
     columns.push({
       field: 'total' + elem,
-      headerName: 'Total ' + elem,
+      headerName: getAporteDescrip(elem),
       flex: 1,
       editable: false,
       headerAlign: 'center',
@@ -313,7 +334,7 @@ export const MisDDJJConsultaGrilla = ({
             onClick={() => declaracionJuradasImpresion(id)}
           />,
         ];
-      } else if (row.estado == 'PR' && row.estado !== 'BG') {
+      } else if (row.estado == 'PR') {
         return [
           <Button
             sx={{
@@ -348,6 +369,15 @@ export const MisDDJJConsultaGrilla = ({
             onClick={handleEditClick(id)}
             color="inherit"
           />,
+          <GridActionsCellItem
+            icon={<LocalPrintshopIcon />}
+            label="Print"
+            color="inherit"
+            onClick={() => declaracionJuradasImpresion(id)}
+          />,
+        ];
+      } else {
+        return [
           <GridActionsCellItem
             icon={<LocalPrintshopIcon />}
             label="Print"

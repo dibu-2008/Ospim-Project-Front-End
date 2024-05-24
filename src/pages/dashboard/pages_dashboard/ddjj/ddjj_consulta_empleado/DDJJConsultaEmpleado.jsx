@@ -20,6 +20,7 @@ import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 import * as locales from '@mui/material/locale';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import { axiosDDJJEmpleado } from './DDJJConsultaEmpleadoApi';
+import { consultarAportesDDJJ } from '@/common/api/AportesApi';
 import dayjs from 'dayjs';
 
 function DDJJColumnaAporteGet(ddjjResponse) {
@@ -98,6 +99,7 @@ export const DDJJConsultaEmpleado = () => {
   const [cuit, setCuit] = useState('');
   const [rows, setRows] = useState([]);
   const [columnas, setColumnas] = useState([]);
+  const [vecAportes, setVecAportes] = useState({});
   const theme = useTheme();
   const themeWithLocale = useMemo(
     () => createTheme(theme, locales[locale]),
@@ -109,6 +111,23 @@ export const DDJJConsultaEmpleado = () => {
   useEffect(() => {
     buscarDDJJ();
   }, []);
+
+  useEffect(() => {
+    const ObtenerVecAportes = async () => {
+      const data = await consultarAportesDDJJ();
+      setVecAportes(data);
+    };
+    ObtenerVecAportes();
+  }, []);
+
+  const getAporteDescrip = (codigo) => {
+    if (vecAportes && vecAportes.find) {
+      let reg = vecAportes.find((aporte) => aporte.codigo == codigo);
+      console.log('getAporteDescrip - reg: ', reg);
+      if (!reg) return codigo;
+      return reg.descripcion;
+    }
+  };
 
   const handleChangeDesde = (date) => setDesde(date);
 
@@ -211,7 +230,7 @@ export const DDJJConsultaEmpleado = () => {
     colAportes.forEach((elem) => {
       columns.push({
         field: 'total' + elem,
-        headerName: 'Total ' + elem,
+        headerName: getAporteDescrip(elem),
         flex: 1,
         editable: false,
         headerAlign: 'center',

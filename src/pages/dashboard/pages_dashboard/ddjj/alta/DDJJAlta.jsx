@@ -353,6 +353,7 @@ export const DDJJAlta = ({
     let DDJJ = {
       periodo: periodo,
       afiliados: rowsAltaDDJJ.map((item) => {
+        console.log('guardarDeclaracionJurada - item: ', item);
         const registroNew = {
           errores: item.errores,
           cuil: !item.cuil ? null : item.cuil,
@@ -367,10 +368,10 @@ export const DDJJAlta = ({
           categoria: !item.categoria ? null : item.categoria,
           remunerativo: !item.remunerativo
             ? null
-            : parseFloat(item.remunerativo.replace(',', '.')),
+            : parseFloat(String(item.remunerativo).replace(',', '.')),
           noRemunerativo: !item.noRemunerativo
             ? null
-            : parseFloat(item.noRemunerativo.replace(',', '.')),
+            : parseFloat(String(item.noRemunerativo).replace(',', '.')),
           uomaSocio: item.uomaSocio === '' ? null : item.uomaSocio,
           amtimaSocio: item.amtimaSocio === '' ? null : item.amtimaSocio,
         };
