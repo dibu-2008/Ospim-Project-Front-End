@@ -93,7 +93,6 @@ export const DDJJAlta = ({
   const [filasDoc, setFilasDoc] = useState([]);
   const [ocultarEmpleadosGrilla, setOcultarEmpleadosGrilla] = useState(false);
   const [btnSubirHabilitado, setBtnSubirHabilitado] = useState(false);
-  //const [ddjjCreada, setDDJJCreada] = useState({});
   const [someRowInEditMode, setSomeRowInEditMode] = useState(false);
   const [otroPeriodo, setOtroPeriodo] = useState(null);
   const [rowModesModel, setRowModesModel] = useState({});
@@ -368,10 +367,10 @@ export const DDJJAlta = ({
           categoria: !item.categoria ? null : item.categoria,
           remunerativo: !item.remunerativo
             ? null
-            : parseFloat(item.remunerativo.replace(',','.')),
+            : parseFloat(item.remunerativo.replace(',', '.')),
           noRemunerativo: !item.noRemunerativo
             ? null
-            : parseFloat(item.noRemunerativo.replace(',','.')),
+            : parseFloat(item.noRemunerativo.replace(',', '.')),
           uomaSocio: item.uomaSocio === '' ? null : item.uomaSocio,
           amtimaSocio: item.amtimaSocio === '' ? null : item.amtimaSocio,
         };
@@ -477,12 +476,12 @@ export const DDJJAlta = ({
             bOK = await axiosDDJJ.actualizar(ID_EMPRESA, DDJJ);
           } else {
             console.log(DDJJ);
-            /* const data = await axiosDDJJ.crear(ID_EMPRESA, DDJJ);
+            const data = await axiosDDJJ.crear(ID_EMPRESA, DDJJ);
             if (data) {
               //setDDJJCreada(data);
               setDDJJState(data);
               setTituloSec(getTituloSec(data.secuencia));
-            } */
+            }
           }
         } else {
           console.log('Cancelar...se queda a corregir datos');
@@ -508,7 +507,6 @@ export const DDJJAlta = ({
         console.log('Dentro de CREAR');
         const data = await axiosDDJJ.crear(ID_EMPRESA, DDJJ);
         if (data) {
-          //setDDJJCreada(data);
           setDDJJState(data);
           setTituloSec(getTituloSec(data.secuencia));
         }
