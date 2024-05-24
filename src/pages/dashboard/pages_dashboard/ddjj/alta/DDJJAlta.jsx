@@ -100,6 +100,7 @@ export const DDJJAlta = ({
   const ID_EMPRESA = localStorageService.getEmpresaId();
   const [tituloSec, setTituloSec] = useState('');
   const [tab, setTab] = useState(0);
+  const [expanded, setExpanded] = useState(false);
 
   const handleChange = (event, newValue) => {
     setTab(newValue);
@@ -117,6 +118,10 @@ export const DDJJAlta = ({
     // Actualiza el estado con el valor de booleano
     setSomeRowInEditMode(isSomeRowInEditMode);
   }, [rowModesModel]);
+  
+  useEffect(()=> {
+    handleExpand()
+  }, [rowsAltaDDJJ])
 
   useEffect(() => {
     const ObtenerCamaras = async () => {
@@ -571,6 +576,17 @@ export const DDJJAlta = ({
     }
   };
 
+  const handleExpand = () => {
+    if (rowsAltaDDJJ?.length !== 0 && !expanded) {
+      console.log(rowsAltaDDJJ?.length !== 0);
+      setExpanded(true);
+    }
+  };
+  const handleChangeE = (event, isExpanded) => {
+    setExpanded(isExpanded);
+  };
+
+
   return (
     <div className="mis_alta_declaraciones_juradas_container">
       <div className="periodo_container">
@@ -735,7 +751,7 @@ export const DDJJAlta = ({
       </div>
 
       <div className="presentacion_container">
-        <Accordion>
+        <Accordion expanded={expanded} onChange={handleChangeE} >
           <AccordionSummary
             className="paso"
             expandIcon={<ExpandMoreIcon />}
