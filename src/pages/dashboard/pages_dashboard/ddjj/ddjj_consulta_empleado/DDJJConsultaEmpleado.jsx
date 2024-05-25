@@ -99,6 +99,8 @@ export const DDJJConsultaEmpleado = () => {
   const [cuit, setCuit] = useState('');
   const [rows, setRows] = useState([]);
   const [columnas, setColumnas] = useState([]);
+  const [rowsCols, setRowsCols] = useState({ rows: [], cols: [] });
+
   const [vecAportes, setVecAportes] = useState({});
   const theme = useTheme();
   const themeWithLocale = useMemo(
@@ -123,7 +125,6 @@ export const DDJJConsultaEmpleado = () => {
   const getAporteDescrip = (codigo) => {
     if (vecAportes && vecAportes.find) {
       let reg = vecAportes.find((aporte) => aporte.codigo == codigo);
-      console.log('getAporteDescrip - reg: ', reg);
       if (!reg) return codigo;
       return reg.descripcion;
     }
@@ -158,12 +159,11 @@ export const DDJJConsultaEmpleado = () => {
       hastaDayjs,
       cuitFlt,
     );
+    const newRows = castearDDJJ(data);
+    const newColumns = getColumnas(newRows);
 
-    //if (data.length > 0) {
-    setRows(data);
-    const newColumns = getColumnas(data);
+    setRows(newRows);
     setColumnas(newColumns);
-    //}
   };
 
   const getColumnas = (rowsGrilla) => {
