@@ -184,6 +184,7 @@ export const DetalleBoleta = () => {
               {boletaDetalle.fecha_de_pago && (
                 <TableCell className="cw">Fecha de Pago</TableCell>
               )}
+              <TableCell className="cw">Vencimiento</TableCell>
               <TableCell className="cw">Intencion de Pago</TableCell>
               <TableCell className="cw">Metodo de Pago</TableCell>
             </TableRow>
@@ -221,6 +222,9 @@ export const DetalleBoleta = () => {
                   )}
                 </TableCell>
               )}
+              <TableCell>
+                {existeDato(formatter.date(boletaDetalle.vencimiento))}
+              </TableCell>
               {boletaDetalle.fecha_de_pago && (
                 <TableCell>
                   {existeDato(formatter.date(boletaDetalle.fecha_de_pago))}
