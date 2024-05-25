@@ -271,7 +271,7 @@ export const Ajustes = () => {
       headerClassName: 'header--cell',
     },
     {
-      field: 'nro_boleta',
+      field: 'boleta',
       headerName: 'NRO BOLETA',
       width: 150,
       editable: false,
