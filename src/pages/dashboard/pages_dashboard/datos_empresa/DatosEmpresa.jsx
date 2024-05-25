@@ -130,7 +130,7 @@ export const DatosEmpresa = () => {
           autoComplete="off"
           label="Razón Social"
           sx={{
-            width: '300px',
+            width: '350px',
           }}
         />
         <Button variant="contained" sx={{}} type="submit">
