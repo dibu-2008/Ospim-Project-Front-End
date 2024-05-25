@@ -1,4 +1,5 @@
 import Swal from 'sweetalert2';
+import { erroresFormat } from '../axios/erroresFormat';
 
 const showSwallSuccess = (MESSAGE_HTTP) => {
   Swal.fire({
@@ -47,7 +48,7 @@ const showSwalErrorBusiness = (descripcion) => {
     Swal.fire({
       icon: 'error',
       title: 'Error de Validación',
-      text: descripcion,
+      html: erroresFormat(descripcion),
       showConfirmButton: true,
       confirmButtonText: 'Aceptar',
       //timer: 3000,

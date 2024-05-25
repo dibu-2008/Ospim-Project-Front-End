@@ -28,11 +28,15 @@ export const registrarEmpresa = async (registro) => {
     if (data && data.id) {
       console.log('Empresa registrada');
       swal.showSuccess(HTTP_MSG_ALTA);
-      return true;
+      return data;
     }
     throw data;
   } catch (error) {
     showErrorBackEnd(HTTP_MSG_ALTA_ERROR, error);
-    return false;
+    return error.descripcion
+      .match(/\[(.*?)\]/)[1]
+      .replace(/^\{|\}$/g, '')
+      .split(', ')
+      .map((error) => error.split('=')[0]);
   }
 };
