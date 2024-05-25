@@ -1,5 +1,5 @@
 import * as locales from '@mui/material/locale';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useContext } from 'react';
 import { Box, Button } from '@mui/material';
 
 import AddIcon from '@mui/icons-material/Add';
@@ -23,6 +23,7 @@ import { InputPeriodo } from '@/components/InputPeriodo';
 import swal from '@/components/swal/swal';
 import Swal from 'sweetalert2';
 import { ToastContainer } from 'react-toastify';
+import { UserContext } from '@/context/userContext';
 
 const style = {
   position: 'absolute',
@@ -65,10 +66,9 @@ export const Ajustes = () => {
   const [rows, setRows] = useState([]);
   const [aportes, setAportes] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
-  const [paginationModel, setPaginationModel] = useState({
-    pageSize: 50,
-    page: 0,
-  });
+
+  const { paginationModel, setPaginationModel, pageSizeOptions } =
+    useContext(UserContext);
 
   const volverPrimerPagina = () => {
     setPaginationModel((prevPaginationModel) => ({
@@ -376,7 +376,7 @@ export const Ajustes = () => {
             }}
             paginationModel={paginationModel}
             onPaginationModelChange={setPaginationModel}
-            pageSizeOptions={[50, 75, 100]}
+            pageSizeOptions={pageSizeOptions}
           />
         </ThemeProvider>
       </Box>

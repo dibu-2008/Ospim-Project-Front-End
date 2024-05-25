@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import Box from '@mui/material/Box';
 import formatter from '@/common/formatter';
 import {
@@ -20,6 +20,7 @@ import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 import localStorageService from '@/components/localStorage/localStorageService';
+import { UserContext } from '@/context/userContext';
 
 function misDDJJColumnaAporteGet(ddjjResponse) {
   //toma todas las ddjj de la consulta de "Mis DDJJ" y arma "vector de Columnas Aportes"
@@ -77,12 +78,11 @@ export const MisDDJJConsultaGrilla = ({
 }) => {
   const [vecAportes, setVecAportes] = useState({});
   const [rowModesModel, setRowModesModel] = useState({});
-  const [paginationModel, setPaginationModel] = useState({
-    pageSize: 10,
-    page: 0,
-  });
 
   const ID_EMPRESA = localStorageService.getEmpresaId();
+
+  const { paginationModel, setPaginationModel, pageSizeOptions } =
+    useContext(UserContext);
 
   useEffect(() => {
     const ObtenerVecAportes = async () => {
@@ -433,7 +433,7 @@ export const MisDDJJConsultaGrilla = ({
           }}
           paginationModel={paginationModel}
           onPaginationModelChange={setPaginationModel}
-          pageSizeOptions={[10, 15, 25]}
+          pageSizeOptions={pageSizeOptions}
         />
       </Box>
     </div>

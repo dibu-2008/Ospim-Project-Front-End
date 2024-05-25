@@ -25,6 +25,7 @@ import { DDJJTabs } from '@/pages/dashboard/pages_dashboard/ddjj/DDJJTabs';
 import { GestionRoles } from '@/pages/dashboard/pages_dashboard/gestionRoles/GestionRoles';
 import { Aportes } from '@/pages/dashboard/pages_dashboard/aportes/Aportes';
 import { useState } from 'react';
+import { UserProvider } from '@/context/UserProvider';
 
 const PagosPage = () => (
   <div className="otros_pagos_container">Contenido de la página de pagos</div>
@@ -32,7 +33,7 @@ const PagosPage = () => (
 
 const AppRouter = () => {
   return (
-    <>
+    <UserProvider>
       <Routes>
         <Route path="login" element={<LoginPage />} />
         <Route path="recupero" element={<RecuperoPage />} />
@@ -83,7 +84,7 @@ const AppRouter = () => {
         <Route index element={<Navigate to="/login" />} />
         {/* </Route> */}
       </Routes>
-    </>
+    </UserProvider>
   );
 };
 

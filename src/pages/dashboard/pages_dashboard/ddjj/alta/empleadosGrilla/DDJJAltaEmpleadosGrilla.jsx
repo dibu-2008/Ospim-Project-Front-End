@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useContext } from 'react';
 import {
   GridRowModes,
   DataGrid,
@@ -37,6 +37,7 @@ import swal from '@/components/swal/swal';
 import Typography from '@mui/material/Typography';
 import CurrencyInput from 'react-currency-input-field';
 import { formatValue } from 'react-currency-input-field';
+import { UserContext } from '@/context/userContext';
 
 const style = {
   position: 'absolute',
@@ -127,10 +128,9 @@ export const DDJJAltaEmpleadosGrilla = ({
     apellido: '',
     nombre: '',
   });
-  const [paginationModel, setPaginationModel] = useState({
-    pageSize: 50,
-    page: 0,
-  });
+
+  const { paginationModel, setPaginationModel, pageSizeOptions } =
+    useContext(UserContext);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -981,7 +981,7 @@ export const DDJJAltaEmpleadosGrilla = ({
             }}
             paginationModel={paginationModel}
             onPaginationModelChange={setPaginationModel}
-            pageSizeOptions={[50, 75, 100]}
+            pageSizeOptions={pageSizeOptions}
             getCellClassName={colorErrores}
           />
         </ThemeProvider>

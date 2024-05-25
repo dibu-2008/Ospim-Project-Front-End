@@ -1,5 +1,5 @@
 import * as locales from '@mui/material/locale';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useContext } from 'react';
 import {
   GridRowModes,
   GridToolbarContainer,
@@ -19,6 +19,7 @@ import { axiosCuitsRestringidos } from './CuitsRestringidosApi';
 import Swal from 'sweetalert2';
 import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 import './CuitsRestringidos.css';
+import { UserContext } from '@/context/userContext';
 
 function EditToolbar(props) {
   const {
@@ -54,13 +55,7 @@ function EditToolbar(props) {
   );
 }
 
-const paginacion = {
-  pageSize: 50,
-  page: 0,
-};
-
 export const CuitsRestringidos = () => {
-  const [paginationModel, setPaginationModel] = useState(paginacion);
   const [rowModesModel, setRowModesModel] = useState({});
   const [locale, setLocale] = useState('esES');
   const [rows, setRows] = useState([]);
@@ -71,6 +66,9 @@ export const CuitsRestringidos = () => {
       page: 0,
     }));
   };
+
+  const { paginationModel, setPaginationModel, pageSizeOptions } =
+    useContext(UserContext);
 
   const theme = useTheme();
 
@@ -325,7 +323,7 @@ export const CuitsRestringidos = () => {
             }}
             paginationModel={paginationModel}
             onPaginationModelChange={setPaginationModel}
-            pageSizeOptions={[50, 75, 100]}
+            pageSizeOptions={pageSizeOptions}
           />
         </ThemeProvider>
       </Box>
