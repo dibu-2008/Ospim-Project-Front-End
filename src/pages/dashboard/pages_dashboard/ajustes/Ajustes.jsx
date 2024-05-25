@@ -184,7 +184,6 @@ export const Ajustes = () => {
     } else {
       try {
         bOk = await axiosAjustes.actualizar(newRow);
-        bOk = await axiosAjustes.actualizar(newRow);
         if (bOk) {
           const rowsNew = rows.map((row) =>
             row.id === newRow.id ? newRow : row,
@@ -271,7 +270,7 @@ export const Ajustes = () => {
       headerClassName: 'header--cell',
     },
     {
-      field: 'nro_boleta',
+      field: 'boleta',
       headerName: 'NRO BOLETA',
       width: 150,
       editable: false,

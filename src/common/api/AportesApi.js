@@ -19,10 +19,9 @@ export const consultarAportes = async () => {
 
 export const consultarAportesDDJJ = async () => {
   const URL = '/aportes/ddjj';
-  
+
   try {
     const data = await axiosCrud.consultar(URL);
-    console.log(data)
     return data || [];
   } catch (error) {
     showErrorBackEnd(
