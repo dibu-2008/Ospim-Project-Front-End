@@ -179,10 +179,10 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
     }
   };
   const handleSaveClick = (row) => () => {
-    setRowModesModel({
-      ...rowModesModel,
-      [rows.indexOf(row)]: { mode: GridRowModes.View },
-    });
+      setRowModesModel({
+        ...rowModesModel,
+        [rows.indexOf(row)]: { mode: GridRowModes.View },
+      });
     isOnEditMode = false;
   };
   const handleCancelClick = (row) => () => {
@@ -333,7 +333,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
       headerClassName: 'header--cell',
       valueOptions: localidades.map((localidad) => localidad.descripcion),
       valueGetter: (params) =>
-        params.row.localidad.descripcion
+        params.row.localidad?.descripcion
           ? params.row.localidad.descripcion
           : params.row.localidad,
       //valueGetter: (params) => params.row.localidad.descripcion
