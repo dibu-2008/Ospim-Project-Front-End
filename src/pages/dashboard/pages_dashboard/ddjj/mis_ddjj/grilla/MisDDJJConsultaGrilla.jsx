@@ -69,12 +69,10 @@ export function castearMisDDJJ(ddjjResponse) {
 
 export const MisDDJJConsultaGrilla = ({
   setDDJJState,
-  setPeriodo,
   rows_mis_ddjj: rowsMisDdjj,
   setRowsMisDdjj,
   setTabState,
-  setRowsAltaDDJJ,
-  setPeticion,
+  setTituloPrimerTab
 }) => {
   const [vecAportes, setVecAportes] = useState({});
   const [rowModesModel, setRowModesModel] = useState({});
@@ -155,6 +153,7 @@ export const MisDDJJConsultaGrilla = ({
   const handleEditClick = (id) => async () => {
     setDDJJState({ id: id });
     setTabState(0);
+    setTituloPrimerTab('Modificar Declaracion Jurada')
   };
 
   const handleSaveClick = (id) => () => {

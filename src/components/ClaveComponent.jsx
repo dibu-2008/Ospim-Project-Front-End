@@ -6,6 +6,8 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
 import { Box, Button, IconButton, alpha, Grid, InputAdornment, OutlinedInput, FormControl, InputLabel } from '@mui/material';
+import { patch } from './axios/EntityCrud';
+import swal from './swal/swal';
   const style = {
     position: 'absolute',
     top: '50%',
@@ -18,22 +20,20 @@ import { Box, Button, IconButton, alpha, Grid, InputAdornment, OutlinedInput, Fo
     p: 4,
   };
 
+
 export const ClaveComponent = ({showModal, setShowModal}) => {
 
     const [clave, setClave] = useState('');
     const [claveNueva, setClaveNueva] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const theme = useTheme();
-    
+
     const handleFormSubmit = async (e) => {
-        const URL = '/usuario/clave'
-        e.preventDefault()
-        console.log(clave)
-        console.log(claveNueva)
-        console.log({clave, claveNueva})
-        const response = await oAxios.patch(URL,{clave, claveNueva})
-        console.log( response )
-    }
+        const URL = '/usuario/clave';
+        e.preventDefault();
+        await patch(URL, { clave, claveNueva })
+        setShowModal(!showModal);
+    };
 
     return(
     <Modal

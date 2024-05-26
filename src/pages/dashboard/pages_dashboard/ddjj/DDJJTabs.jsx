@@ -56,6 +56,7 @@ export const DDJJTabs = () => {
   const [peticion, setPeticion] = useState('');
   const [idDDJJ, setIdDDJJ] = useState(null);
   const location = useLocation();
+  const [tituloPrimerTab, setTituloPrimerTab] = useState('Alta Declaracion Jurada')
 
   const theme = useTheme();
 
@@ -72,6 +73,20 @@ export const DDJJTabs = () => {
     }
   }, [location.pathname]);
 
+  useEffect(() => {
+    if (tabState===1){
+      //window.location.reload();
+      setTituloPrimerTab('Alta Declaracion Jurada')
+      setDDJJState({});
+      setPeriodo(null);
+      setRowsAltaDDJJ([]);
+      setRowsAltaDDJJAux([]);
+      setRowsMisDdjj([]);
+      setPeticion('');
+      setIdDDJJ(null);
+    }
+  },[tabState])
+
   const handleChangeTabState = (event, value) => setTabState(value);
 
   return (
@@ -84,7 +99,7 @@ export const DDJJTabs = () => {
           >
             <Tabs value={tabState} onChange={handleChangeTabState}>
               <Tab
-                label="Alta Declaracion Jurada"
+                label={tituloPrimerTab}
                 {...a11yProps(0)}
                 sx={{ fontSize: '1.2rem' }}
               />
@@ -104,9 +119,9 @@ export const DDJJTabs = () => {
               rowsAltaDDJJ={rowsAltaDDJJ}
               setRowsAltaDDJJ={setRowsAltaDDJJ}
               rowsAltaDDJJAux={rowsAltaDDJJAux}
-              setRowsAltaDDJJAux={setRowsAltaDDJJAux}
               peticion={peticion}
               idDDJJ={idDDJJ}
+              tituloPrimerTab = {tituloPrimerTab}
             />
           </CustomTabPanel>
           <CustomTabPanel value={tabState} index={1}>
@@ -120,6 +135,7 @@ export const DDJJTabs = () => {
               setRowsAltaDDJJ={setRowsAltaDDJJ}
               setPeticion={setPeticion}
               setIdDDJJ={setIdDDJJ}
+              setTituloPrimerTab ={setTituloPrimerTab}
             />
           </CustomTabPanel>
         </Box>

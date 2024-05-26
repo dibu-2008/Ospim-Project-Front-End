@@ -21,23 +21,15 @@ export const MisDDJJConsulta = ({
   rows_mis_ddjj,
   setRowsMisDdjj,
   setTabState,
-  setRowsAltaDDJJ,
+  //setRowsAltaDDJJ,
   setPeticion,
+  setTituloPrimerTab,
 }) => {
   const ahora = dayjs().startOf('month');
   const ahoraMenosUnAnio = ahora.add(-11, 'month');
   const [desde, setDesde] = useState(ahoraMenosUnAnio);
   const [hasta, setHasta] = useState(ahora);
 
-  const [fullName, setFullName] = useState('');
-  const [age, setAge] = useState(0);
-  const [occupation, setOccupation] = useState('');
-  const [data, setData] = useState([
-    ['Full Name', 'Age', 'Occupation'],
-    ['Irakli Tchigladze', 32, 'writer'],
-    ['George Abuladze', 33, 'politician'],
-    ['Nick Tsereteli', 19, 'public worker'],
-  ]);
 
   const ID_EMPRESA = localStorageService.getEmpresaId();
 
@@ -141,8 +133,9 @@ export const MisDDJJConsulta = ({
           rows_mis_ddjj={rows_mis_ddjj}
           setRowsMisDdjj={setRowsMisDdjj}
           setTabState={setTabState}
-          setRowsAltaDDJJ={setRowsAltaDDJJ}
+         // setRowsAltaDDJJ={setRowsAltaDDJJ}
           setPeticion={setPeticion}
+          setTituloPrimerTab={setTituloPrimerTab}
         />
       </Stack>
     </div>
