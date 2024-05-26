@@ -29,10 +29,10 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
 import localStorageService from '@/components/localStorage/localStorageService';
 import { getFuncionalidadesByRol } from './DashboardPageApi';
 import logo2 from '../../assets/logo_2.svg';
-import { MenuListButton } from '@/components/MenuListButton';
 import { styled } from '@mui/material/styles';
 import { ClaveComponent } from '@/components/ClaveComponent';
 
@@ -172,6 +172,12 @@ const DashboardPage = () => {
                   <HomeIcon className="icon-link" />{' '}
                   {open && <span className="icon-link">Inicio</span>}
                 </NavLink>
+                {rolFuncionalidades.DATOS_EMPRESA && (
+                  <NavLink to="./misdatos" className="icon-container">
+                    <PersonIcon className="icon-link" />{' '}
+                    {open && <span className="icon-link">Datos Empresa</span>}
+                  </NavLink>
+                )}
                 {rolFuncionalidades.PUBLICACIONES && (
                   <NavLink to="./publicaciones" className="icon-container">
                     <PreviewIcon className="icon-link" />{' '}
@@ -185,36 +191,16 @@ const DashboardPage = () => {
                   </NavLink>
                 )}
                 {rolFuncionalidades.DDJJ && (
-                  <Box className="icon-container-2">
-                    {!open && (
-                      <Box className="icon-container">
-                        <LibraryBooksIcon className="icon-link" />
-                      </Box>
-                    )}
-
-                    {open && (
-                      <MenuListButton
-                        nameAccordionSumary="Declaración Jurada"
-                        setOpen={setOpen}
-                        nameAndIcon={[
-                          {
-                            nombre: 'Nueva DDJJ',
-                            ruta: './ddjj/alta',
-                            icon: (
-                              <LibraryBooksIcon sx={{ color: '#1a76d2' }} />
-                            ),
-                          },
-                          {
-                            nombre: 'Mis DDJJ',
-                            ruta: './ddjj/consulta',
-                            icon: (
-                              <LibraryBooksIcon sx={{ color: '#1a76d2' }} />
-                            ),
-                          },
-                        ]}
-                      />
-                    )}
-                  </Box>
+                  <NavLink to="./ddjj/alta" className="icon-container">
+                    <LibraryBooksIcon className="icon-link" />{' '}
+                    {open && <span className="icon-link">Nueva DDJJ</span>}
+                  </NavLink>
+                )}
+                {rolFuncionalidades.DDJJ && (
+                  <NavLink to="./ddjj/consulta" className="icon-container">
+                    <MenuBookIcon className="icon-link" />{' '}
+                    {open && <span className="icon-link">Mis DDJJ</span>}
+                  </NavLink>
                 )}
                 {rolFuncionalidades.DDJJ_CONSULTA && (
                   <NavLink
@@ -231,18 +217,7 @@ const DashboardPage = () => {
                     {open && <span className="icon-link">Boletas</span>}
                   </NavLink>
                 )}
-                {rolFuncionalidades.PAGOS && (
-                  <NavLink to="./pagos" className="icon-container">
-                    <AccountBalanceWalletIcon className="icon-link" />{' '}
-                    {open && <span className="icon-link">Pagos</span>}
-                  </NavLink>
-                )}
-                {rolFuncionalidades.DATOS_EMPRESA && (
-                  <NavLink to="./misdatos" className="icon-container">
-                    <PersonIcon className="icon-link" />{' '}
-                    {open && <span className="icon-link">Datos Empresa</span>}
-                  </NavLink>
-                )}
+
                 {rolFuncionalidades.BOLETA_BLANCA && (
                   <NavLink to="./generarotrospagos" className="icon-container">
                     <ReceiptIcon className="icon-link" />{' '}
