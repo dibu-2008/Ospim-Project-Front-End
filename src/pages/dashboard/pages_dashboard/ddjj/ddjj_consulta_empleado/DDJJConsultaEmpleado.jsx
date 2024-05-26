@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useContext } from 'react';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -22,6 +22,7 @@ import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import { axiosDDJJEmpleado } from './DDJJConsultaEmpleadoApi';
 import { consultarAportesDDJJ } from '@/common/api/AportesApi';
 import dayjs from 'dayjs';
+import { UserContext } from '@/context/userContext';
 
 function DDJJColumnaAporteGet(ddjjResponse) {
   //toma todas las ddjj de la consulta de "Mis DDJJ" y arma "vector de Columnas Aportes"
@@ -68,11 +69,6 @@ function castearDDJJ(ddjjResponse) {
   return ddjjResponse;
 }
 
-const paginacion = {
-  pageSize: 50,
-  page: 0,
-};
-
 const CustomToolbar = (props) => {
   const { showQuickFilter, themeWithLocale } = props;
   return (
@@ -91,20 +87,23 @@ export const DDJJConsultaEmpleado = () => {
   const ahoraMenosUnAnio = ahora.add(-11, 'month');
   const [desde, setDesde] = useState(ahoraMenosUnAnio);
   const [hasta, setHasta] = useState(ahora);
-
   const [showCuitRazonSocial, setShowCuitRazonSocial] = useState(true);
-  const [paginationModel, setPaginationModel] = useState(paginacion);
   const [rowModesModel, setRowModesModel] = useState({});
   const [locale, setLocale] = useState('esES');
   const [cuit, setCuit] = useState('');
   const [rows, setRows] = useState([]);
   const [columnas, setColumnas] = useState([]);
+  const [rowsCols, setRowsCols] = useState({ rows: [], cols: [] });
+
   const [vecAportes, setVecAportes] = useState({});
   const theme = useTheme();
   const themeWithLocale = useMemo(
     () => createTheme(theme, locales[locale]),
     [locale, theme],
   );
+
+  const { paginationModel, setPaginationModel, pageSizeOptions } =
+    useContext(UserContext);
 
   let colAportes = [];
 
@@ -123,7 +122,6 @@ export const DDJJConsultaEmpleado = () => {
   const getAporteDescrip = (codigo) => {
     if (vecAportes && vecAportes.find) {
       let reg = vecAportes.find((aporte) => aporte.codigo == codigo);
-      console.log('getAporteDescrip - reg: ', reg);
       if (!reg) return codigo;
       return reg.descripcion;
     }
@@ -158,12 +156,11 @@ export const DDJJConsultaEmpleado = () => {
       hastaDayjs,
       cuitFlt,
     );
+    const newRows = castearDDJJ(data);
+    const newColumns = getColumnas(newRows);
 
-    //if (data.length > 0) {
-    setRows(data);
-    const newColumns = getColumnas(data);
+    setRows(newRows);
     setColumnas(newColumns);
-    //}
   };
 
   const getColumnas = (rowsGrilla) => {
@@ -409,7 +406,7 @@ export const DDJJConsultaEmpleado = () => {
               }}
               paginationModel={paginationModel}
               onPaginationModelChange={setPaginationModel}
-              pageSizeOptions={[50, 75, 100]}
+              pageSizeOptions={pageSizeOptions}
             />
           </ThemeProvider>
         </Box>

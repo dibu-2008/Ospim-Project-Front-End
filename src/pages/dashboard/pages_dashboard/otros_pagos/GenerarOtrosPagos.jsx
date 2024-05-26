@@ -13,7 +13,7 @@ import {
   styled,
 } from '@mui/material';
 import { generarBoletaSinDDJJ } from './OtrosPagosApi';
-import { getEmpresaId } from '@/components/localStorage/localStorageService';
+import localStorageService from '@/components/localStorage/localStorageService';
 import './OtrosPagos.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -43,7 +43,7 @@ export const GenerarOtrosPagos = () => {
   const [deshabilitar, setDeshabilitar] = useState(false);
   const navigate = useNavigate();
 
-  const ID_EMPRESA = getEmpresaId();
+  const ID_EMPRESA = localStorageService.getEmpresaId();
 
   const hoy = new Date().toISOString().split('T')[0];
 
@@ -57,13 +57,14 @@ export const GenerarOtrosPagos = () => {
     };
     try {
       setDeshabilitar(true);
-      await generarBoletaSinDDJJ(ID_EMPRESA, body).then(() => {
-        toast.success('Boleta generada con exito', {
-          onClose: () => {
-            navigate('/dashboard/boletas');
-          },
-        });
-      });
+      const data = await generarBoletaSinDDJJ(ID_EMPRESA, body);
+      if (data && data.id) {
+        setTimeout(function () {
+          navigate('/dashboard/boletas');
+        }, 4000);
+      } else {
+        setDeshabilitar(false);
+      }
     } catch (error) {
       console.error(error);
       toast.error('Ocurrio un problema al intentar generar la boleta');

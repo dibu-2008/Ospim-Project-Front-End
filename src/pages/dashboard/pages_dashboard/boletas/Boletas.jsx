@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { TextField, Button, IconButton, Box } from '@mui/material';
 import {
   Visibility as VisibilityIcon,
@@ -20,6 +20,7 @@ import { CSVLink } from 'react-csv';
 import formatter from '@/common/formatter';
 import dayjs from 'dayjs';
 import './Boletas.css';
+import { UserContext } from '@/context/userContext';
 
 export const Boletas = () => {
   const ID_EMPRESA = localStorageService.getEmpresaId();
@@ -31,6 +32,8 @@ export const Boletas = () => {
   const [boletasVisibles, setBoletasVisibles] = useState([]);
   const [boletasSinAfiliados, setBoletasSinAfiliados] = useState([]); //Esta la necesito para generar el csv
   const [boletasSinDDJJ, setBoletasSinDDJJ] = useState([]);
+  const { paginationModel, setPaginationModel, pageSizeOptions } =
+    useContext(UserContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -230,7 +233,9 @@ export const Boletas = () => {
           getRowClassName={(params) =>
             boletasVisibles.indexOf(params.row) % 2 === 0 ? 'even' : ''
           }
-          pageSize={50}
+          paginationModel={paginationModel}
+          onPaginationModelChange={setPaginationModel}
+          pageSizeOptions={pageSizeOptions}
           components={{
             Toolbar: () => (
               <GridToolbarContainer>
@@ -306,7 +311,9 @@ export const Boletas = () => {
               ),
             },
           ]}
-          pageSize={50}
+          paginationModel={paginationModel}
+          onPaginationModelChange={setPaginationModel}
+          pageSizeOptions={pageSizeOptions}
           components={{
             Toolbar: () => (
               <GridToolbarContainer>

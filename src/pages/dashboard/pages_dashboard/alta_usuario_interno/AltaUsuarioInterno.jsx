@@ -1,5 +1,5 @@
 import * as locales from '@mui/material/locale';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useContext } from 'react';
 import {
   Box,
   Button,
@@ -46,6 +46,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { dataGridStyle } from '@/common/dataGridStyle';
 import { margin } from '@mui/system';
+import { UserContext } from '@/context/userContext';
 
 const style = {
   position: 'absolute',
@@ -114,10 +115,8 @@ export const AltaUsuarioInterno = () => {
   const [rowModesModel, setRowModesModel] = useState({});
   const [rows, setRows] = useState([]);
   const [roles, setRoles] = useState([]);
-  const [paginationModel, setPaginationModel] = useState({
-    pageSize: 10,
-    page: 0,
-  });
+  const { paginationModel, setPaginationModel, pageSizeOptions } =
+    useContext(UserContext);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -374,7 +373,7 @@ export const AltaUsuarioInterno = () => {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell',
-      valueOptions: ['Si','No'],
+      valueOptions: ['Si', 'No'],
       valueGetter: (params) => {
         return params.row.notificaciones ? 'Si' : 'No';
       },
@@ -523,13 +522,9 @@ export const AltaUsuarioInterno = () => {
                 backgroundColor: '#1A76D2 !important',
               },
             }}
-            initialState={{
-              ...rows.initialState,
-              pagination: {
-                paginationModel: { pageSize: 50 },
-              },
-            }}
-            pageSizeOptions={[5, 10, 25, 50]}
+            paginationModel={paginationModel}
+            onPaginationModelChange={setPaginationModel}
+            pageSizeOptions={pageSizeOptions}
           />
         </ThemeProvider>
         <Modal

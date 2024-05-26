@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useContext } from 'react';
 import {
   GridRowModes,
   DataGrid,
@@ -37,6 +37,7 @@ import swal from '@/components/swal/swal';
 import Typography from '@mui/material/Typography';
 import CurrencyInput from 'react-currency-input-field';
 import { formatValue } from 'react-currency-input-field';
+import { UserContext } from '@/context/userContext';
 
 const style = {
   position: 'absolute',
@@ -69,7 +70,7 @@ function EditToolbar(props) {
     setRowsAltaDDJJ((oldRows) => [
       {
         id,
-        fila: oldRows.length + 1, // Asignamos el número de fila incremental
+        //fila: oldRows.length + 1, // Asignamos el número de fila incremental
         cuil: '',
         apellido: '',
         nombre: '',
@@ -127,6 +128,9 @@ export const DDJJAltaEmpleadosGrilla = ({
     apellido: '',
     nombre: '',
   });
+
+  const { paginationModel, setPaginationModel, pageSizeOptions } =
+    useContext(UserContext);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -319,13 +323,14 @@ export const DDJJAltaEmpleadosGrilla = ({
 
   const columns = [
     {
-      field: 'fila',
+      field: 'filaNew',
       type: 'number',
       headerName: 'Fila',
       width: 50,
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell',
+      renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
     },
     {
       field: 'actions',
@@ -966,13 +971,9 @@ export const DDJJAltaEmpleadosGrilla = ({
                 backgroundColor: '#ccc',
               },
             }}
-            initialState={{
-              ...rowsAltaDDJJ?.initialState,
-              pagination: {
-                paginationModel: { pageSize: 5 },
-              },
-            }}
-            pageSizeOptions={[5, 10, 25]}
+            paginationModel={paginationModel}
+            onPaginationModelChange={setPaginationModel}
+            pageSizeOptions={pageSizeOptions}
             getCellClassName={colorErrores}
           />
         </ThemeProvider>

@@ -55,10 +55,10 @@ export const MisDDJJConsulta = ({
       );
 
       setRowsMisDdjj(ddjjResponse);
-      console.log('ddjjResponse', ddjjResponse);
+      //console.log('ddjjResponse', ddjjResponse);
 
       const ddjjCasteadas = castearMisDDJJ(ddjjResponse);
-      console.log('ddjjCasteadas', ddjjCasteadas);
+      //console.log('ddjjCasteadas', ddjjCasteadas);
 
       //setRowsMisDdjj(declaracionesFiltradas);
     } catch (error) {

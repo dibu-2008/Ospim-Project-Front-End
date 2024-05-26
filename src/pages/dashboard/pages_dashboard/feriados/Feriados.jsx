@@ -1,5 +1,5 @@
 import * as locales from '@mui/material/locale';
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useContext } from 'react';
 import {
   Box,
   Button,
@@ -43,6 +43,7 @@ import formatter from '@/common/formatter';
 import swal from '@/components/swal/swal';
 import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 import { ToastContainer } from 'react-toastify';
+import { UserContext } from '@/context/userContext';
 
 const style = {
   position: 'absolute',
@@ -93,10 +94,9 @@ export const Feriados = () => {
   const [locale, setLocale] = useState('esES');
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
-  const [paginationModel, setPaginationModel] = useState({
-    pageSize: 50,
-    page: 0,
-  });
+
+  const { paginationModel, setPaginationModel, pageSizeOptions } =
+    useContext(UserContext);
 
   const volverPrimerPagina = () => {
     setPaginationModel((prevPaginationModel) => ({
@@ -112,14 +112,12 @@ export const Feriados = () => {
     [locale, theme],
   );
 
-  // State del modal *************************************************
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [fecha, setFecha] = useState(null);
 
   const handleChangeFecha = (date) => setFecha(date);
-  // State del modal *************************************************
 
   const ConsultarEntidad = async () => {
     const response = await axiosFeriados.consultar();
@@ -239,11 +237,9 @@ export const Feriados = () => {
     setRowModesModel(newRowModesModel);
   };
 
-  //Metodo para Duplicar Feriados de 1 a;o Particular
   const obSubmitAnio = async (e) => {
     e.preventDefault();
     const anio = fecha.$y;
-    console.log('anio: ' + anio);
     const response = await axiosFeriados.duplicar(anio);
 
     if (response) {
@@ -386,11 +382,10 @@ export const Feriados = () => {
             }}
             paginationModel={paginationModel}
             onPaginationModelChange={setPaginationModel}
-            pageSizeOptions={[50, 75, 100]}
+            pageSizeOptions={pageSizeOptions}
           />
         </ThemeProvider>
       </Box>
-      {/* MODAL *********************************************************************************** */}
       <Modal
         open={open}
         onClose={handleClose}

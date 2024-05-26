@@ -10,7 +10,7 @@ const HTTP_MSG_MODI_ERROR = import.meta.env.VITE_HTTP_MSG_MODI_ERROR;
 const HTTP_MSG_BAJA_ERROR = import.meta.env.VITE_HTTP_MSG_BAJA_ERROR;
 const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
 
-export const consultarRamo = async () => {
+/* export const consultarRamo = async () => {
   const URL = `/empresa/ramo`;
   try {
     const data = await axiosCrud.consultar(URL);
@@ -22,7 +22,7 @@ export const consultarRamo = async () => {
     );
     return [];
   }
-};
+}; */
 
 export const consultarEmpresa = async () => {
   const URL = '/auth/login/usuario';

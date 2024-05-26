@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   DataGrid,
   GridToolbarContainer,
@@ -11,12 +11,17 @@ import { Box } from '@mui/system';
 import AddIcon from '@mui/icons-material/Add';
 import './ajustes.css';
 import { getAjustes } from './AjustesApi';
+import { UserContext } from '@/context/userContext';
 
 export const Ajustes = () => {
   const [ajustes, setAjustes] = useState([]);
   const [editando, setEditando] = useState(null);
   const [ajustesAux, setAjustesAux] = useState([]);
   const [nuevoAjuste, setNuevoAjuste] = useState(null);
+
+  const { paginationModel, setPaginationModel, pageSizeOptions } =
+    useContext(UserContext);
+
   const columns = [
     {
       field: 'cuit',
@@ -215,8 +220,9 @@ export const Ajustes = () => {
         <DataGrid
           rows={ajustes}
           columns={columns}
-          pageSize={10}
-          rowsPerPageOptions={[5, 10, 20]}
+          paginationModel={paginationModel}
+          onPaginationModelChange={setPaginationModel}
+          pageSizeOptions={pageSizeOptions}
           onEditCellChangeCommitted={onChangeValue}
           components={{
             Toolbar: () => (

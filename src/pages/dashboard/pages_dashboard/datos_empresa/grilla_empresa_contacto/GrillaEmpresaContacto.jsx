@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import {
   GridRowModes,
   DataGrid,
@@ -14,6 +14,7 @@ import CancelIcon from '@mui/icons-material/Close';
 import SaveIcon from '@mui/icons-material/Save';
 import { axiosContacto } from './GrillaEmpresaContactoApi';
 import Swal from 'sweetalert2';
+import { UserContext } from '@/context/userContext';
 
 function EditToolbar(props) {
   const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
@@ -46,10 +47,8 @@ function EditToolbar(props) {
 export const GrillaEmpresaContacto = ({ idEmpresa, rows, setRows }) => {
   const [rowModesModel, setRowModesModel] = useState({});
   const [tipoContacto, setTipoContacto] = useState([]);
-  const [paginationModel, setPaginationModel] = useState({
-    pageSize: 50,
-    page: 0,
-  });
+  const { paginationModel, setPaginationModel, pageSizeOptions } =
+    useContext(UserContext);
 
   const volverPrimerPagina = () => {
     setPaginationModel((prevPaginationModel) => ({
@@ -317,7 +316,7 @@ export const GrillaEmpresaContacto = ({ idEmpresa, rows, setRows }) => {
         }}
         paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}
-        pageSizeOptions={[50, 75, 100]}
+        pageSizeOptions={pageSizeOptions}
       />
     </Box>
   );

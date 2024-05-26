@@ -1,5 +1,5 @@
 import * as locales from '@mui/material/locale';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useContext } from 'react';
 import { Box, Button } from '@mui/material';
 
 import { Add, Edit, DeleteOutlined, Save, Close } from '@mui/icons-material';
@@ -23,6 +23,7 @@ import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 
 import Swal from 'sweetalert2';
 import './Roles.css';
+import { UserContext } from '@/context/userContext';
 
 const crearNuevoRegistro = (props) => {
   const {
@@ -65,10 +66,8 @@ export const Roles = () => {
   const [locale, setLocale] = useState('esES');
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
-  const [paginationModel, setPaginationModel] = useState({
-    pageSize: 10,
-    page: 0,
-  });
+  const { paginationModel, setPaginationModel, pageSizeOptions } =
+    useContext(UserContext);
 
   const volverPrimerPagina = () => {
     setPaginationModel((prevPaginationModel) => ({
@@ -305,7 +304,7 @@ export const Roles = () => {
             }}
             paginationModel={paginationModel}
             onPaginationModelChange={setPaginationModel}
-            pageSizeOptions={[10, 15, 25]}
+            pageSizeOptions={pageSizeOptions}
           />
         </ThemeProvider>
       </Box>

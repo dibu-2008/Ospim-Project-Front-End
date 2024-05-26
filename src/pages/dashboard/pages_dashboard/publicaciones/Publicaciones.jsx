@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useContext } from 'react';
 import { axiosPublicaciones } from './PublicacionesApi';
 import { EditarNuevaFila } from './PublicacionNueva';
 import {
@@ -20,18 +20,16 @@ import { ThreeCircles } from 'react-loader-spinner';
 import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 import formatter from '@/common/formatter';
 import { handleServerError } from '@/helpers/handleServerError';
-
-const paginacion = {
-  pageSize: 50,
-  page: 0,
-};
+import { UserContext } from '@/context/userContext';
 
 export const Publicaciones = () => {
   const [locale, setLocale] = useState('esES');
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
   const [showDataGrid, setShowDataGrid] = useState(false);
-  const [paginationModel, setPaginationModel] = useState(paginacion);
+
+  const { paginationModel, setPaginationModel, pageSizeOptions } =
+    useContext(UserContext);
 
   const gridApiRef = useGridApiRef();
 
@@ -400,7 +398,7 @@ export const Publicaciones = () => {
               }}
               paginationModel={paginationModel}
               onPaginationModelChange={setPaginationModel}
-              pageSizeOptions={[50, 75, 100]}
+              pageSizeOptions={pageSizeOptions}
             />
           </ThemeProvider>
         )}

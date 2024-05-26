@@ -1,9 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { InputComponent } from '../../components/InputComponent';
-import { ButtonComponent } from '../../components/ButtonComponent';
 import { useFormRegisterCompany } from '../../hooks/useFormRegisterCompany';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
 import { GrillaEmpresaDomicilio } from '../dashboard/pages_dashboard/datos_empresa/grilla_empresa_domicilio/GrillaEmpresaDomicilio';
 import { registrarEmpresa, getRamo } from './RegistroEmpresaApi';
 import TextField from '@mui/material/TextField';
@@ -17,7 +14,6 @@ import './RegistroEmpresa.css';
 import NavBar from '@/components/navbar/NavBar';
 import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
 import {
-  Autocomplete,
   Button,
   IconButton,
   InputAdornment,
@@ -33,20 +29,20 @@ export const RegistroEmpresa = () => {
   const [phoneAlternativos, setPhoneAlternativos] = useState([]);
   const [idPhoneAlternativos, setIdPhoneAlternativos] = useState(2);
   const [idEmailAlternativos, setIdEmailAlternativos] = useState(2);
-  const [ramoAux, setRamoAux] = useState('');
-  const [ramos, setRamos] = useState([]);
   const [rows, setRows] = useState([]);
   const [showPassword, setShowPassword] = useState(true);
   const [showPasswordRepeat, setShowPasswordRepeat] = useState(true);
 
-  useEffect(() => {
-    const getRamos = async () => {
-      const ramosResponse = await getRamo();
-      setRamos(ramosResponse);
-    };
-
-    getRamos();
-  }, []);
+  // Estados de tratamiento de errores
+  const [errorCuit, setErrorCuit] = useState(false);
+  const [errorRazonSocial, setErrorRazonSocial] = useState(false);
+  const [errorEmail, setErrorEmail] = useState(false);
+  const [errorPrefijoFirst, setErrorPrefijoFirst] = useState(false);
+  const [errorPhoneFirst, setErrorPhoneFirst] = useState(false);
+  const [errorPrefijoSecond, setErrorPrefijoSecond] = useState(false);
+  const [errorPhoneSecond, setErrorPhoneSecond] = useState(false);
+  const [errorWhatsapp, setErrorWhatsapp] = useState(false);
+  const [errorWhatsappPrefijo, setErrorWhatsappPrefijo] = useState(false);
 
   const {
     cuit,
@@ -61,7 +57,6 @@ export const RegistroEmpresa = () => {
     phone_second,
     whatsapp,
     whatsapp_prefijo,
-    ramo,
     OnInputChangeRegisterCompany,
     OnResetFormRegisterCompany,
   } = useFormRegisterCompany({
@@ -77,7 +72,6 @@ export const RegistroEmpresa = () => {
     phone_second: '',
     whatsapp: '',
     whatsapp_prefijo: '',
-    ramo: '',
   });
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -112,7 +106,6 @@ export const RegistroEmpresa = () => {
       telefono_prefijo: prefijo_first,
       whatsapp: whatsapp,
       whatsapp_prefijo: whatsapp_prefijo,
-      ramoId: ramoAux,
     };
 
     if (
@@ -181,27 +174,27 @@ export const RegistroEmpresa = () => {
       }));
     }
 
-    console.log(usuarioEmpresa);
-
     const rta = await registrarEmpresa(usuarioEmpresa);
+    console.log('RESPUESTAAAAAAAA');
+    console.log(rta);
 
-    if (rta) {
+    if (rta && rta.id) {
       setAddionalEmail([]);
       setEmailAlternativos([]);
       setAdditionalPhone([]);
       setRows([]);
       OnResetFormRegisterCompany();
+    } else {
+      if (rta.includes('cuit')) setErrorCuit(true);
+      if (rta.includes('razonSocial')) setErrorRazonSocial(true);
+      if (rta.includes('email')) setErrorEmail(true);
+      if (rta.includes('telefono_prefijo')) setErrorPrefijoFirst(true);
+      if (rta.includes('telefono')) setErrorPhoneFirst(true);
+      if (rta.includes('telefono_prefijo')) setErrorPrefijoSecond(true);
+      if (rta.includes('telefono')) setErrorPhoneSecond(true);
+      if (rta.includes('whatsapp_prefijo')) setErrorWhatsappPrefijo(true);
+      if (rta.includes('whatsapp')) setErrorWhatsapp(true);
     }
-  };
-
-  const OnChangeRamos = (e) => {
-    OnInputChangeRegisterCompany({
-      target: {
-        name: 'ramos',
-        value: e.target.value,
-      },
-    });
-    setRamoAux(e.target.value);
   };
 
   const handleAddEmail = () => {
@@ -248,6 +241,7 @@ export const RegistroEmpresa = () => {
           <h3>Formulario de registro</h3>
           <div className="input-group">
             <TextField
+              error={errorCuit}
               type="text"
               name="cuit"
               value={cuit}
@@ -270,6 +264,7 @@ export const RegistroEmpresa = () => {
           </div>
           <div className="input-group">
             <TextField
+              error={errorRazonSocial}
               type="text"
               name="razonSocial"
               value={razonSocial}
@@ -292,6 +287,7 @@ export const RegistroEmpresa = () => {
           </div>
           <div className="input-group">
             <TextField
+              error={errorEmail}
               type="email"
               id="email_first"
               name="email_first"
@@ -322,6 +318,7 @@ export const RegistroEmpresa = () => {
             className="input-group"
           >
             <TextField
+              error={errorEmail}
               type="email"
               id="email_second"
               name="email_second"
@@ -463,6 +460,7 @@ export const RegistroEmpresa = () => {
                 }}
               >
                 <TextField
+                  error={errorPrefijoFirst}
                   type="number"
                   name="prefijo_first"
                   value={prefijo_first}
@@ -488,6 +486,7 @@ export const RegistroEmpresa = () => {
                 }}
               >
                 <TextField
+                  error={errorPhoneFirst}
                   type="number"
                   name="phone_first"
                   value={phone_first}
@@ -515,6 +514,7 @@ export const RegistroEmpresa = () => {
                 }}
               >
                 <TextField
+                  error={errorPrefijoSecond}
                   type="number"
                   name="prefijo_second"
                   value={prefijo_second}
@@ -529,6 +529,7 @@ export const RegistroEmpresa = () => {
                 }}
               >
                 <TextField
+                  error={errorPhoneSecond}
                   type="phone"
                   name="phone_second"
                   value={phone_second}
@@ -631,13 +632,13 @@ export const RegistroEmpresa = () => {
                   width: '20%',
                 }}
               >
-                <InputComponent
+                <TextField
+                  error={errorWhatsappPrefijo}
                   type="number"
                   name="whatsapp_prefijo"
                   value={whatsapp_prefijo}
                   onChange={OnInputChangeRegisterCompany}
                   autoComplete="off"
-                  variant="filled"
                   label="Prefijo"
                 />
               </div>
@@ -647,6 +648,7 @@ export const RegistroEmpresa = () => {
                 }}
               >
                 <TextField
+                  error={errorWhatsapp}
                   type="number"
                   name="whatsapp"
                   value={whatsapp}
@@ -672,51 +674,6 @@ export const RegistroEmpresa = () => {
               </span>
             </div>
           </div>
-          <div className="input-group">
-            <Box
-              sx={{
-                textAlign: 'left',
-                color: '#606060',
-                width: '100%',
-              }}
-            >
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">
-                  Seleccionar ramo
-                </InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={ramoAux}
-                  label="Seleccionar ramo"
-                  onChange={OnChangeRamos}
-                >
-                  {ramos.map((option, index) => (
-                    <MenuItem key={index} value={option.id}>
-                      {option.descripcion}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box>
-            <span
-              style={{
-                position: 'absolute',
-                marginTop: '18px',
-                marginLeft: '515px',
-                fontSize: '20px',
-                color: 'rgb(255, 0, 0)',
-              }}
-            >
-              *
-            </span>
-          </div>
-          <div
-            className="input-group"
-            style={{
-              position: 'relative',
-            }}
-          ></div>
           <p
             style={{
               marginTop: '20px',
@@ -730,7 +687,7 @@ export const RegistroEmpresa = () => {
             por lo menos el Domicilio Fiscal)
           </p>
           <GrillaEmpresaDomicilio
-            idEmpresa='PC'
+            idEmpresa="PC"
             rows={rows}
             setRows={setRows}
           />

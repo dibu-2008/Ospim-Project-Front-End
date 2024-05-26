@@ -1,5 +1,5 @@
 import * as locales from '@mui/material/locale';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useContext } from 'react';
 import { MenuItem, Select } from '@mui/material';
 import {
   GridRowModes,
@@ -24,6 +24,7 @@ import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
 import { width } from '@mui/system';
+import { UserContext } from '@/context/userContext';
 //const isNotNull = (value) => (value !== null && value !== '' ? value : '');
 
 let isOnEditMode = false;
@@ -82,10 +83,8 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
   const [tipoDomicilio, setTipoDomicilio] = useState([]);
   const [localidades, setLocalidades] = useState([]);
   const [idRow, setIdRow] = useState(1);
-  const [paginationModel, setPaginationModel] = useState({
-    pageSize: 50,
-    page: 0,
-  });
+  const { paginationModel, setPaginationModel, pageSizeOptions } =
+    useContext(UserContext);
 
   useEffect(() => {
     async function cargarDatos() {
@@ -488,7 +487,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
             }}
             paginationModel={paginationModel}
             onPaginationModelChange={setPaginationModel}
-            pageSizeOptions={[50, 75, 100]}
+            pageSizeOptions={pageSizeOptions}
           />
         </ThemeProvider>
       </Box>
