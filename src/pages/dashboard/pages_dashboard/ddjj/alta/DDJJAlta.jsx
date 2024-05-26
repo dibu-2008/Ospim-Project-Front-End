@@ -562,6 +562,7 @@ export const DDJJAlta = ({
       setRowsAltaDDJJ(ddjjPeriodoAnterior.afiliados);
       setOcultarEmpleadosGrilla(!ocultarEmpleadosGrilla);
     } else {
+      
       periodoDayjs = dayjs(otroPeriodo.$d).format('YYYY-MM-DD');
       const ddjjOtroPeriodo = await axiosDDJJ.getPeriodoAnterior(
         ID_EMPRESA,

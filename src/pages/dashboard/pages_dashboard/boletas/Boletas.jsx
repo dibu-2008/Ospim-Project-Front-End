@@ -21,7 +21,12 @@ import formatter from '@/common/formatter';
 import dayjs from 'dayjs';
 import './Boletas.css';
 import { UserContext } from '@/context/userContext';
-
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import Stack from '@mui/material/Stack';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { esES } from '@mui/x-date-pickers/locales';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { DesktopDatePicker } from '@mui/x-date-pickers';
 export const Boletas = () => {
   const ID_EMPRESA = localStorageService.getEmpresaId();
   const ahora = dayjs().startOf('month');
@@ -105,34 +110,57 @@ export const Boletas = () => {
       <div
         style={{
           display: 'flex',
-          justifyContent: 'space-between',
+          justifyContent: 'initial',
           alignItems: 'center',
         }}
         className="mb-4em"
       >
         <div>
-          <p>Periodo</p>
-          <TextField
-            label="Desde"
-            type="month"
-            value={fromDate}
-            onChange={(e) => setFromDate(e.target.value)}
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-          <TextField
-            label="Hasta"
-            type="month"
-            value={toDate}
-            onChange={(e) => setToDate(e.target.value)}
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
+        <Stack
+          spacing={4}
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <LocalizationProvider
+            dateAdapter={AdapterDayjs}
+            adapterLocale={'es'}
+            localeText={
+              esES.components.MuiLocalizationProvider.defaultProps.localeText
+            }
+          >
+            <DemoContainer components={['DatePicker']}>
+              <DesktopDatePicker
+                label={'Periodo desde'}
+                views={['month', 'year']}
+                closeOnSelect={true}
+                onChange={(e) => setFromDate(e.target.value)}
+                value={fromDate}
+              />
+            </DemoContainer>
+          </LocalizationProvider>
+          <LocalizationProvider
+            dateAdapter={AdapterDayjs}
+            adapterLocale={'es'}
+            localeText={
+              esES.components.MuiLocalizationProvider.defaultProps.localeText
+            }
+          >
+            <DemoContainer components={['DatePicker']}>
+              <DesktopDatePicker
+                label={'Periodo hasta'}
+                views={['month', 'year']}
+                closeOnSelect={true}
+                onChange={(e) => setToDate(e.target.value)}
+                value={toDate}
+              />
+            </DemoContainer>
+          </LocalizationProvider>
+        </Stack>
+
         </div>
         <div>
-          <Button variant="contained" onClick={fetchData}>
+          <Button variant="contained" onClick={fetchData} style={{marginLeft: '2em'}}>
             Buscar
           </Button>
         </div>

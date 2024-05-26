@@ -148,9 +148,11 @@ export const validaCuil = async (empresaId, cuiles) => {
 
 const obtenerPeriodoAnterior = async (empresaId, periodo) => {
   let URL = `/empresa/${empresaId}/ddjj/periodo-anterior/`;
-
   if (periodo !== null) {
-    URL += `?periodo=${periodo}`;
+    let dateParts = periodo.split('-');
+    dateParts[2] = '01';
+    const periodoDiaUno = dateParts.join('-');
+    URL += `?periodo=${periodoDiaUno}`;
   }
 
   try {
