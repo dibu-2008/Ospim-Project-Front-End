@@ -95,7 +95,7 @@ export const MisDDJJConsultaGrilla = ({
   const getAporteDescrip = (codigo) => {
     if (vecAportes && vecAportes.find) {
       let reg = vecAportes.find((aporte) => aporte.codigo == codigo);
-      console.log('getAporteDescrip - reg: ', reg);
+      //console.log('getAporteDescrip - reg: ', reg);
       if (!reg) return codigo;
       return reg.descripcion;
     }
