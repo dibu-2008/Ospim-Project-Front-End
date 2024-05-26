@@ -70,7 +70,7 @@ function EditToolbar(props) {
     setRowsAltaDDJJ((oldRows) => [
       {
         id,
-        fila: oldRows.length + 1, // Asignamos el número de fila incremental
+        //fila: oldRows.length + 1, // Asignamos el número de fila incremental
         cuil: '',
         apellido: '',
         nombre: '',
@@ -323,13 +323,14 @@ export const DDJJAltaEmpleadosGrilla = ({
 
   const columns = [
     {
-      field: 'fila',
+      field: 'filaNew',
       type: 'number',
       headerName: 'Fila',
       width: 50,
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell',
+      renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
     },
     {
       field: 'actions',

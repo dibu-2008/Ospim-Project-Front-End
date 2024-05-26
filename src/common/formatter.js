@@ -62,7 +62,8 @@ const formatFechaGrilla = (value) => {
 };
 
 const sumaTresHoras = (value) => {
-  const fecha = value;
+  //const fecha = value;
+  const fecha = new Date(value.toISOString().split('T')[0]);
   const nuevaFecha = new Date(fecha.getTime() + 3 * 60 * 60 * 1000);
   return nuevaFecha;
 };
