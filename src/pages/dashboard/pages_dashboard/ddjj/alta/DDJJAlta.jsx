@@ -80,6 +80,7 @@ export const DDJJAlta = ({
   setPeriodo,
   rowsAltaDDJJ,
   setRowsAltaDDJJ,
+  tituloPrimerTab
 }) => {
   const [camaras, setCamaras] = useState([]);
   const [todasLasCategorias, setTodasLasCategorias] = useState([]);
@@ -186,7 +187,6 @@ export const DDJJAlta = ({
         }
       }
     };
-
     obtenerDDJJ(DDJJState, DDJJState.id, ID_EMPRESA);
   }, [DDJJState]);
 
@@ -244,7 +244,7 @@ export const DDJJAlta = ({
 
       setRowsAltaDDJJ(afiliadoImportadoConInte);
     }
-    // setRowsAltaDDJJAux(afiliadoImportadoConInte);
+    
     setOcultarEmpleadosGrilla(true);
   };
 

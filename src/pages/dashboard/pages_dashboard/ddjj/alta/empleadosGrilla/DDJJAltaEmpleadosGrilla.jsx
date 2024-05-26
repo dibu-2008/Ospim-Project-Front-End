@@ -307,7 +307,7 @@ export const DDJJAltaEmpleadosGrilla = ({
       apellido: row.apellido,
       nombre: row.nombre,
     });
-    handleOpen();
+    setOpen(true);
   };
 
   const handleChangeDataModal = (event, field) => {
@@ -417,15 +417,6 @@ export const DDJJAltaEmpleadosGrilla = ({
                 },
               }}
             />
-            {/*<SearchIcon
-              sx={{
-                fontSize: '1.8rem',
-                color: '#1A76D2',
-                cursor: 'pointer',
-                //margin: '0px 10px 0px -50px',
-              }}
-              onClick={() => obtenerAfiliados(params, params.value)}
-            />*/}
             {afiliado?.cuil === params.value && (
               <CreateIcon
                 sx={{
