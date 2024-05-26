@@ -44,7 +44,6 @@ const showSwalWarning = (descripcion) => {
 
 const showSwalErrorBusiness = (descripcion) => {
   try {
-    console.log('showSwalError - descripcion:' + descripcion);
     Swal.fire({
       icon: 'error',
       title: 'Error de Validación',

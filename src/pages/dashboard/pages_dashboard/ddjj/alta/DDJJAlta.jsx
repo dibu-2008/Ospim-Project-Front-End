@@ -80,7 +80,7 @@ export const DDJJAlta = ({
   setPeriodo,
   rowsAltaDDJJ,
   setRowsAltaDDJJ,
-  tituloPrimerTab
+  tituloPrimerTab,
 }) => {
   const [camaras, setCamaras] = useState([]);
   const [todasLasCategorias, setTodasLasCategorias] = useState([]);
@@ -118,10 +118,10 @@ export const DDJJAlta = ({
     // Actualiza el estado con el valor de booleano
     setSomeRowInEditMode(isSomeRowInEditMode);
   }, [rowModesModel]);
-  
-  useEffect(()=> {
-    handleExpand()
-  }, [rowsAltaDDJJ])
+
+  useEffect(() => {
+    handleExpand();
+  }, [rowsAltaDDJJ]);
 
   useEffect(() => {
     const ObtenerCamaras = async () => {
@@ -244,7 +244,7 @@ export const DDJJAlta = ({
 
       setRowsAltaDDJJ(afiliadoImportadoConInte);
     }
-    
+
     setOcultarEmpleadosGrilla(true);
   };
 
@@ -550,31 +550,20 @@ export const DDJJAlta = ({
         periodoDayjs,
       );
 
-      if (!ddjjPeriodoAnterior) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'No se encontró un período anterior',
-        });
-        return;
+      if (ddjjPeriodoAnterior) {
+        //setTituloSec(getTituloSec(ddjjPeriodoAnterior.secuencia));
+        setRowsAltaDDJJ(ddjjPeriodoAnterior.afiliados);
+        setOcultarEmpleadosGrilla(!ocultarEmpleadosGrilla);
       }
-      //setTituloSec(getTituloSec(ddjjPeriodoAnterior.secuencia));
-      setRowsAltaDDJJ(ddjjPeriodoAnterior.afiliados);
-      setOcultarEmpleadosGrilla(!ocultarEmpleadosGrilla);
     } else {
-      periodoDayjs = dayjs(otroPeriodo.$d).format('YYYY-MM-DD');
+      periodoDayjs = dayjs(otroPeriodo.$d)
+        .startOf('month')
+        .format('YYYY-MM-DD');
       const ddjjOtroPeriodo = await axiosDDJJ.getPeriodoAnterior(
         ID_EMPRESA,
         periodoDayjs,
       );
-      if (ddjjOtroPeriodo.length === 0) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'No se encontró la DDJJ para el período seleccionado.',
-        });
-        return;
-      } else {
+      if (ddjjOtroPeriodo.length !== 0) {
         setRowsAltaDDJJ(ddjjOtroPeriodo.afiliados);
         setDDJJState((prevState) => ({
           ...prevState,
@@ -594,7 +583,6 @@ export const DDJJAlta = ({
   const handleChangeE = (event, isExpanded) => {
     setExpanded(isExpanded);
   };
-
 
   return (
     <div className="mis_alta_declaraciones_juradas_container">
@@ -759,7 +747,7 @@ export const DDJJAlta = ({
       </div>
 
       <div className="presentacion_container">
-        <Accordion expanded={expanded} onChange={handleChangeE} >
+        <Accordion expanded={expanded} onChange={handleChangeE}>
           <AccordionSummary
             className="paso"
             expandIcon={<ExpandMoreIcon />}
