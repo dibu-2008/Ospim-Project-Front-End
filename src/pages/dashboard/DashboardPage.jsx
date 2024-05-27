@@ -108,7 +108,7 @@ const DashboardPage = () => {
     localStorage.removeItem('stateLogin');
   };
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   const handleDrawerToggle = () => {
     setOpen(!open);
@@ -126,7 +126,7 @@ const DashboardPage = () => {
         variant="permanent"
         open={open}
         onMouseLeave={(event) => {
-          setOpen(false);
+          //setOpen(false);
         }}
       >
         <DrawerHeader sx={{ marginTop: 2, marginBottom: 2 }}>
@@ -257,8 +257,15 @@ const DashboardPage = () => {
                   </NavLink>
                 )}
                 {rolFuncionalidades.INTERESES_AFIP && (
-                  <NavLink to="./interesesafip" className="icon-container">
-                    <img src={afipIcon} alt="afip" className="icon-link" />{' '}
+                  <NavLink
+                    to="./interesesafip"
+                    className="icon-container icon-container-afip"
+                  >
+                    <img
+                      src={afipIcon}
+                      alt="afip"
+                      className="icon-link icono-afip"
+                    />{' '}
                     {open && <span className="icon-link">Intereses Afip</span>}
                   </NavLink>
                 )}

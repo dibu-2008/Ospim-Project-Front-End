@@ -19,6 +19,14 @@
   text-decoration: none;
 }
 
+.icon-container-afip {
+  margin-left: 3px;
+}
+
+.icono-afip {
+  width: 20px;
+  height: 20px;
+}
 .accordion {
   margin-left: -6px;
 }
