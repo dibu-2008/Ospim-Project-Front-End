@@ -76,7 +76,8 @@ export const MisDDJJConsulta = ({
         <Stack
           spacing={4}
           direction="row"
-          justifyContent="center"
+          display='flex'
+          justifyContent="initial"
           alignItems="center"
         >
           <LocalizationProvider
@@ -121,7 +122,7 @@ export const MisDDJJConsulta = ({
           justifyContent="center"
           alignItems="center"
         >
-          <Button onClick={buscarDDJJ} variant="contained">
+          <Button onClick={buscarDDJJ} variant="contained" style={{marginLeft: '2em'}}>
             Buscar
           </Button>
         </Stack>
