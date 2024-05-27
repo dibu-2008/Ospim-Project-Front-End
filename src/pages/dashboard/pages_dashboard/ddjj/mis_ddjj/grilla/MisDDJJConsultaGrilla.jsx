@@ -434,10 +434,10 @@ export const MisDDJJConsultaGrilla = ({
           <StripedDataGrid
             rows={rowsMisDdjj}
             columns={columns}
-            getRowId={(row) => rowsMisDdjj.indexOf(row)}
+            /* getRowId={(row) => rowsMisDdjj.indexOf(row)}
             getRowClassName={(params) =>
               rowsMisDdjj.indexOf(params.row) % 2 === 0 ? 'even' : 'odd'
-            }
+            } */
             editMode="row"
             rowModesModel={rowModesModel}
             onRowModesModelChange={handleRowModesModelChange}

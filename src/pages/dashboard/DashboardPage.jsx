@@ -108,7 +108,7 @@ const DashboardPage = () => {
     localStorage.removeItem('stateLogin');
   };
 
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   const handleDrawerToggle = () => {
     setOpen(!open);
@@ -126,7 +126,7 @@ const DashboardPage = () => {
         variant="permanent"
         open={open}
         onMouseLeave={(event) => {
-          //setOpen(false);
+          setOpen(false);
         }}
       >
         <DrawerHeader sx={{ marginTop: 2, marginBottom: 2 }}>
