@@ -1,11 +1,13 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useMemo } from 'react';
 import {
   GridRowModes,
-  DataGrid,
+  GridToolbar,
   GridToolbarContainer,
   GridActionsCellItem,
   GridRowEditStopReasons,
 } from '@mui/x-data-grid';
+import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
+import * as locales from '@mui/material/locale';
 import { Button, Box } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
@@ -15,9 +17,16 @@ import SaveIcon from '@mui/icons-material/Save';
 import { axiosContacto } from './GrillaEmpresaContactoApi';
 import Swal from 'sweetalert2';
 import { UserContext } from '@/context/userContext';
+import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 
 function EditToolbar(props) {
-  const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
+  const {
+    setRows,
+    setRowModesModel,
+    volverPrimerPagina,
+    showQuickFilter,
+    themeWithLocale,
+  } = props;
 
   const handleClick = () => {
     const newReg = {
@@ -36,15 +45,20 @@ function EditToolbar(props) {
   };
 
   return (
-    <GridToolbarContainer>
+    <GridToolbarContainer
+      theme={themeWithLocale}
+      style={{ display: 'flex', justifyContent: 'space-between' }}
+    >
       <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
         Nuevo Registro
       </Button>
+      <GridToolbar showQuickFilter={showQuickFilter} />
     </GridToolbarContainer>
   );
 }
 
 export const GrillaEmpresaContacto = ({ idEmpresa, rows, setRows }) => {
+  const [locale, setLocale] = useState('esES');
   const [rowModesModel, setRowModesModel] = useState({});
   const [tipoContacto, setTipoContacto] = useState([]);
   const { paginationModel, setPaginationModel, pageSizeOptions } =
@@ -56,6 +70,13 @@ export const GrillaEmpresaContacto = ({ idEmpresa, rows, setRows }) => {
       page: 0,
     }));
   };
+
+  const theme = useTheme();
+
+  const themeWithLocale = useMemo(
+    () => createTheme(theme, locales[locale]),
+    [locale, theme],
+  );
 
   useEffect(() => {
     const getTipoContacto = async () => {
@@ -282,42 +303,51 @@ export const GrillaEmpresaContacto = ({ idEmpresa, rows, setRows }) => {
         },
       }}
     >
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        getRowId={(row) => rows.indexOf(row)}
-        getRowClassName={(params) =>
-          rows.indexOf(params.row) % 2 === 0 ? 'even' : 'odd'
-        }
-        editMode="row"
-        rowModesModel={rowModesModel}
-        onRowModesModelChange={handleRowModesModelChange}
-        onRowEditStop={handleRowEditStop}
-        processRowUpdate={(updatedRow, originalRow) =>
-          processRowUpdate(updatedRow, originalRow)
-        }
-        slots={{
-          toolbar: EditToolbar,
-        }}
-        slotProps={{
-          toolbar: { setRows, rows, setRowModesModel, volverPrimerPagina },
-        }}
-        sx={{
-          '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
-            width: '8px',
-            visibility: 'visible',
-          },
-          '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
-            backgroundColor: '#ccc',
-          },
-          '& .css-1iyq7zh-MuiDataGrid-columnHeaders': {
-            backgroundColor: '#1A76D2 !important',
-          },
-        }}
-        paginationModel={paginationModel}
-        onPaginationModelChange={setPaginationModel}
-        pageSizeOptions={pageSizeOptions}
-      />
+      <ThemeProvider theme={themeWithLocale}>
+        <StripedDataGrid
+          rows={rows}
+          columns={columns}
+          getRowId={(row) => rows.indexOf(row)}
+          getRowClassName={(params) =>
+            rows.indexOf(params.row) % 2 === 0 ? 'even' : 'odd'
+          }
+          editMode="row"
+          rowModesModel={rowModesModel}
+          onRowModesModelChange={handleRowModesModelChange}
+          onRowEditStop={handleRowEditStop}
+          processRowUpdate={(updatedRow, originalRow) =>
+            processRowUpdate(updatedRow, originalRow)
+          }
+          localeText={dataGridStyle.toolbarText}
+          slots={{
+            toolbar: EditToolbar,
+          }}
+          slotProps={{
+            toolbar: {
+              setRows,
+              setRowModesModel,
+              volverPrimerPagina,
+              showQuickFilter: true,
+              themeWithLocale,
+            },
+          }}
+          sx={{
+            '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
+              width: '8px',
+              visibility: 'visible',
+            },
+            '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
+              backgroundColor: '#ccc',
+            },
+            '& .css-1iyq7zh-MuiDataGrid-columnHeaders': {
+              backgroundColor: '#1A76D2 !important',
+            },
+          }}
+          paginationModel={paginationModel}
+          onPaginationModelChange={setPaginationModel}
+          pageSizeOptions={pageSizeOptions}
+        />
+      </ThemeProvider>
     </Box>
   );
 };

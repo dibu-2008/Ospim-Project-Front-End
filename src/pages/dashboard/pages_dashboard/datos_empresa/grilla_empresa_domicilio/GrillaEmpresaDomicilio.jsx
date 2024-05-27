@@ -23,13 +23,18 @@ import {
 import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
-import { width } from '@mui/system';
 import { UserContext } from '@/context/userContext';
 //const isNotNull = (value) => (value !== null && value !== '' ? value : '');
 
 let isOnEditMode = false;
 const crearNuevoRegistro = (props) => {
-  const { setRows, setRowModesModel, volverPrimerPagina } = props;
+  const {
+    setRows,
+    setRowModesModel,
+    volverPrimerPagina,
+    showQuickFilter,
+    themeWithLocale,
+  } = props;
   const altaHandleClick = () => {
     if (!isOnEditMode) {
       const newReg = {
@@ -61,16 +66,14 @@ const crearNuevoRegistro = (props) => {
     isOnEditMode = true;
   };
   return (
-    <GridToolbarContainer>
-      <GridToolbar showQuickFilter={props.showQuickFilter} />
-      <Button
-        color="primary"
-        startIcon={<AddIcon />}
-        onClick={altaHandleClick}
-        disabled={isOnEditMode}
-      >
+    <GridToolbarContainer
+      theme={themeWithLocale}
+      style={{ display: 'flex', justifyContent: 'space-between' }}
+    >
+      <Button color="primary" startIcon={<AddIcon />} onClick={altaHandleClick}>
         Nuevo Registro
       </Button>
+      <GridToolbar showQuickFilter={showQuickFilter} />
     </GridToolbarContainer>
   );
 };
@@ -483,7 +486,13 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
             localeText={dataGridStyle.toolbarText}
             slots={{ toolbar: crearNuevoRegistro }}
             slotProps={{
-              toolbar: { setRows, rows, setRowModesModel, volverPrimerPagina },
+              toolbar: {
+                setRows,
+                setRowModesModel,
+                volverPrimerPagina,
+                showQuickFilter: true,
+                themeWithLocale,
+              },
             }}
             paginationModel={paginationModel}
             onPaginationModelChange={setPaginationModel}

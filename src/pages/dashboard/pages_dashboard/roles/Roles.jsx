@@ -17,7 +17,7 @@ import {
   GridRowEditStopReasons,
   GridToolbar,
 } from '@mui/x-data-grid';
-
+import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 import { axiosRoles } from './RolesApi';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 
@@ -269,9 +269,13 @@ export const Roles = () => {
         }}
       >
         <ThemeProvider theme={themeWithLocale}>
-          <DataGrid
+          <StripedDataGrid
             rows={rows}
             columns={columnas}
+            getRowId={(row) => rows.indexOf(row)}
+            getRowClassName={(params) =>
+              rows.indexOf(params.row) % 2 === 0 ? 'even' : 'odd'
+            }
             editMode="row"
             rowModesModel={rowModesModel}
             onRowModesModelChange={handleRowModesModelChange}
@@ -279,6 +283,7 @@ export const Roles = () => {
             processRowUpdate={(updatedRow, originalRow) =>
               processRowUpdate(updatedRow, originalRow)
             }
+            localeText={dataGridStyle.toolbarText}
             slots={{ toolbar: crearNuevoRegistro }}
             slotProps={{
               toolbar: {
