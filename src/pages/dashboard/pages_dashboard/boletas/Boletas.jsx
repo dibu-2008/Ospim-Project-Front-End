@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useMemo } from 'react';
 import { TextField, Button, IconButton, Box } from '@mui/material';
 import {
   Visibility as VisibilityIcon,
@@ -19,6 +19,7 @@ import localStorageService from '@/components/localStorage/localStorageService';
 import { CSVLink } from 'react-csv';
 import formatter from '@/common/formatter';
 import dayjs from 'dayjs';
+import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import './Boletas.css';
 import { UserContext } from '@/context/userContext';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -27,6 +28,45 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { esES } from '@mui/x-date-pickers/locales';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import * as locales from '@mui/material/locale';
+import PropTypes from 'prop-types';
+
+function CustomTabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <span>{children}</span>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+CustomTabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
+
+
 export const Boletas = () => {
   const ID_EMPRESA = localStorageService.getEmpresaId();
   const ahora = dayjs().startOf('month');
@@ -37,14 +77,21 @@ export const Boletas = () => {
   const [boletasVisibles, setBoletasVisibles] = useState([]);
   const [boletasSinAfiliados, setBoletasSinAfiliados] = useState([]); //Esta la necesito para generar el csv
   const [boletasSinDDJJ, setBoletasSinDDJJ] = useState([]);
+  const [tabState, setTabState] = useState(0);
+  const theme = useTheme();
+  const [locale, setLocale] = useState('esES');
   const { paginationModel, setPaginationModel, pageSizeOptions } =
     useContext(UserContext);
   const navigate = useNavigate();
-
+  const themeWithLocale = useMemo(
+    () => createTheme(theme, locales[locale]),
+    [locale, theme],
+  );
+  
   useEffect(() => {
     fetchData();
   }, []);
-
+  const handleChangeTabState = (event, value) => setTabState(value);
   const fetchData = async () => {
     try {
       console.log(fromDate);
@@ -106,7 +153,7 @@ export const Boletas = () => {
   return (
     <div className="boletas_container">
       {window.location.href.split('/').slice(3).join('/') ===
-        'dashboard/ddjj' || <h1>Boletas de Pago para DDJJ</h1>}
+        'dashboard/ddjj' || <h1>Boletas</h1>}
       <div
         style={{
           display: 'flex',
@@ -116,248 +163,288 @@ export const Boletas = () => {
         className="mb-4em"
       >
         <div>
-        <Stack
-          spacing={4}
-          direction="row"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <LocalizationProvider
-            dateAdapter={AdapterDayjs}
-            adapterLocale={'es'}
-            localeText={
-              esES.components.MuiLocalizationProvider.defaultProps.localeText
-            }
+          <Stack
+            spacing={4}
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
           >
-            <DemoContainer components={['DatePicker']}>
-              <DesktopDatePicker
-                label={'Periodo desde'}
-                views={['month', 'year']}
-                closeOnSelect={true}
-                onChange={(e) => setFromDate(e.target.value)}
-                value={fromDate}
-              />
-            </DemoContainer>
-          </LocalizationProvider>
-          <LocalizationProvider
-            dateAdapter={AdapterDayjs}
-            adapterLocale={'es'}
-            localeText={
-              esES.components.MuiLocalizationProvider.defaultProps.localeText
-            }
-          >
-            <DemoContainer components={['DatePicker']}>
-              <DesktopDatePicker
-                label={'Periodo hasta'}
-                views={['month', 'year']}
-                closeOnSelect={true}
-                onChange={(e) => setToDate(e.target.value)}
-                value={toDate}
-              />
-            </DemoContainer>
-          </LocalizationProvider>
-        </Stack>
-
+            <LocalizationProvider
+              dateAdapter={AdapterDayjs}
+              adapterLocale={'es'}
+              localeText={
+                esES.components.MuiLocalizationProvider.defaultProps.localeText
+              }
+            >
+              <DemoContainer components={['DatePicker']}>
+                <DesktopDatePicker
+                  label={'Periodo desde'}
+                  views={['month', 'year']}
+                  closeOnSelect={true}
+                  onChange={(e) => setFromDate(e.target.value)}
+                  value={fromDate}
+                />
+              </DemoContainer>
+            </LocalizationProvider>
+            <LocalizationProvider
+              dateAdapter={AdapterDayjs}
+              adapterLocale={'es'}
+              localeText={
+                esES.components.MuiLocalizationProvider.defaultProps.localeText
+              }
+            >
+              <DemoContainer components={['DatePicker']}>
+                <DesktopDatePicker
+                  label={'Periodo hasta'}
+                  views={['month', 'year']}
+                  closeOnSelect={true}
+                  onChange={(e) => setToDate(e.target.value)}
+                  value={toDate}
+                />
+              </DemoContainer>
+            </LocalizationProvider>
+          </Stack>
         </div>
         <div>
-          <Button variant="contained" onClick={fetchData} style={{marginLeft: '2em'}}>
+          <Button
+            variant="contained"
+            onClick={fetchData}
+            style={{ marginLeft: '2em' }}
+          >
             Buscar
           </Button>
         </div>
       </div>
-      <Box
-        style={{ height: 400, width: '100%' }}
-        sx={{
-          width: '100%',
-          '& .MuiDataGrid-columnHeaders': {
-            backgroundColor: '#1A76D2',
-            color: 'white',
-          },
-        }}
-      >
-        <DataGrid
-          rows={boletasVisibles}
-          columns={[
-            {
-              field: 'periodo',
-              headerName: 'Periodo',
-              flex: 0.8,
-              valueFormatter: (params) =>
-                params.value ? formatter.periodo(params.value) : '',
-            },
-            { field: 'tipo_ddjj', headerName: 'Tipo DDJJ', flex: 1 },
-            { field: 'numero_boleta', headerName: 'Número', flex: 0.8 },
-            { field: 'descripcion', headerName: 'Concepto', flex: 1 },
-            {
-              field: 'total_final',
-              headerName: 'Importe Boleta',
-              flex: 1,
-              align: 'right',
-              valueFormatter: (params) =>
-                params.value && isNotNull(params.value)
-                  ? formatter.currency.format(params.value)
-                  : '',
-            },
-            {
-              field: 'importe_recibido',
-              headerName: 'Importe Recibido',
-              flex: 1,
-              align: 'right',
-              valueFormatter: (params) =>
-                params.value && isNotNull(params.value)
-                  ? formatter.currency.format(params.value)
-                  : '',
-            },
-            {
-              field: 'fecha_de_pago',
-              headerName: 'Fecha de Pago',
-              flex: 1,
-              valueFormatter: (params) =>
-                params.value && isNotNull(params.value)
-                  ? formatter.date(params.value)
-                  : '',
-            },
-            {
-              field: 'intencionDePago',
-              headerName: 'Intencion de Pago',
-              flex: 1,
-              valueFormatter: (params) =>
-                params.value && isNotNull(params.value)
-                  ? formatter.date(params.value)
-                  : '',
-            },
-            { field: 'formaDePago', headerName: 'Metodo de Pago', flex: 0.8 },
-            {
-              field: 'acciones',
-              headerName: 'Acciones',
-              flex: 1,
-              renderCell: (params) => (
-                <>
-                  <IconButton
-                    size="small"
-                    onClick={() => handleViewClick(params.row)}
-                  >
-                    <VisibilityIcon />
-                  </IconButton>
-                  <IconButton
-                    size="small"
-                    onClick={() => {
-                      boletaPdfDownload(ID_EMPRESA, params.row.id);
-                    }}
-                  >
-                    <PrintIcon />
-                  </IconButton>
-                  <IconButton
-                    size="small"
-                    onClick={() => handleViewClick(params.row)}
-                    disabled={!!params.row.fecha_de_pago}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                </>
-              ),
-            },
-          ]}
-          getRowClassName={(params) =>
-            boletasVisibles.indexOf(params.row) % 2 === 0 ? 'even' : ''
-          }
-          paginationModel={paginationModel}
-          onPaginationModelChange={setPaginationModel}
-          pageSizeOptions={pageSizeOptions}
-          components={{
-            Toolbar: () => (
-              <GridToolbarContainer>
-                <GridToolbarColumnsButton />
-                <GridToolbarFilterButton />
-                <GridToolbarExport />
-              </GridToolbarContainer>
-            ),
-          }}
-          localeText={{
-            toolbarColumns: 'Columnas',
-            toolbarFilters: 'Filtros',
-            toolbarExport: 'Exportar',
-          }}
-        />
-      </Box>
-      <Box
-        style={{ height: 400, width: '100%' }}
-        sx={{
-          width: '100%',
-          '& .MuiDataGrid-columnHeaders': {
-            backgroundColor: '#1A76D2',
-            color: 'white',
-          },
-        }}
-      >
-        <h1>Boletas para Pago de Actas</h1>
-        <DataGrid
-          rows={boletasSinDDJJ}
-          columns={[
-            { field: 'numero_boleta', headerName: 'Nro. Boleta', flex: 0.5 },
-            {
-              field: 'entidad',
-              headerName: 'Entidad',
-              flex: 0.8,
-              valueFormatter: (params) =>
-                params.value ? params.value.replace('-', '/') : '',
-            },
-            { field: 'nroActa', headerName: 'Nro. Acta', flex: 1 },
-            {
-              field: 'importe',
-              headerName: 'Importe',
-              align: 'right',
-              flex: 1,
-              valueFormatter: (params) =>
-                params.value ? formatter.currency.format(params.value) : '',
-            },
-            {
-              field: 'intencionDePago',
-              headerName: 'Intencion de Pago',
-              flex: 1,
-              valueFormatter: (params) =>
-                params.value && isNotNull(params.value)
-                  ? formatter.date(params.value)
-                  : '',
-            },
-            { field: 'razonDePago', headerName: 'Razon de pago', flex: 1 },
-            {
-              field: 'acciones',
-              headerName: 'Acciones',
-              flex: 0.5,
-              renderCell: (params) => (
-                <>
-                  <IconButton
-                    size="small"
-                    onClick={() => {
-                      boletaPdfDownload(ID_EMPRESA, params.row.id);
-                    }}
-                  >
-                    <PrintIcon />
-                  </IconButton>
-                </>
-              ),
-            },
-          ]}
-          paginationModel={paginationModel}
-          onPaginationModelChange={setPaginationModel}
-          pageSizeOptions={pageSizeOptions}
-          components={{
-            Toolbar: () => (
-              <GridToolbarContainer>
-                <GridToolbarColumnsButton />
-                <GridToolbarFilterButton />
-                <GridToolbarExport />
-              </GridToolbarContainer>
-            ),
-          }}
-          localeText={{
-            toolbarColumns: 'Columnas',
-            toolbarFilters: 'Filtros',
-            toolbarExport: 'Exportar',
-          }}
-        />
-      </Box>
+      <ThemeProvider theme={themeWithLocale}>
+        <Box sx={{ width: '100%' }}>
+          <Box
+            sx={{ borderBottom: 1, borderColor: 'divider', marginTop: '50px' }}
+          >
+            <Tabs value={tabState} onChange={handleChangeTabState}>
+              <Tab
+                label={'Boletas Con Periodo'}
+                {...a11yProps(0)}
+                sx={{ fontSize: '1.2rem' }}
+              />
+              <Tab
+                label="Boletas Actas"
+                {...a11yProps(1)}
+                sx={{ fontSize: '1.2rem' }}
+              />
+            </Tabs>
+          </Box>
+          <CustomTabPanel value={tabState} index={0}>
+            <Box
+              style={{ height: 400, width: '100%' }}
+              sx={{
+                width: '100%',
+                '& .MuiDataGrid-columnHeaders': {
+                  backgroundColor: '#1A76D2',
+                  color: 'white',
+                },
+              }}
+            >
+              <DataGrid
+                rows={boletasVisibles}
+                columns={[
+                  {
+                    field: 'periodo',
+                    headerName: 'Periodo',
+                    flex: 0.8,
+                    valueFormatter: (params) =>
+                      params.value ? formatter.periodo(params.value) : '',
+                  },
+                  { field: 'tipo_ddjj', headerName: 'Tipo DDJJ', flex: 1 },
+                  { field: 'numero_boleta', headerName: 'Número', flex: 0.8 },
+                  { field: 'descripcion', headerName: 'Concepto', flex: 1 },
+                  {
+                    field: 'total_final',
+                    headerName: 'Importe Boleta',
+                    flex: 1,
+                    align: 'right',
+                    valueFormatter: (params) =>
+                      params.value && isNotNull(params.value)
+                        ? formatter.currency.format(params.value)
+                        : '',
+                  },
+                  {
+                    field: 'importe_recibido',
+                    headerName: 'Importe Recibido',
+                    flex: 1,
+                    align: 'right',
+                    valueFormatter: (params) =>
+                      params.value && isNotNull(params.value)
+                        ? formatter.currency.format(params.value)
+                        : '',
+                  },
+                  {
+                    field: 'fecha_de_pago',
+                    headerName: 'Fecha de Pago',
+                    flex: 1,
+                    valueFormatter: (params) =>
+                      params.value && isNotNull(params.value)
+                        ? formatter.date(params.value)
+                        : '',
+                  },
+                  {
+                    field: 'intencionDePago',
+                    headerName: 'Intencion de Pago',
+                    flex: 1,
+                    valueFormatter: (params) =>
+                      params.value && isNotNull(params.value)
+                        ? formatter.date(params.value)
+                        : '',
+                  },
+                  {
+                    field: 'formaDePago',
+                    headerName: 'Metodo de Pago',
+                    flex: 0.8,
+                  },
+                  {
+                    field: 'acciones',
+                    headerName: 'Acciones',
+                    flex: 1,
+                    renderCell: (params) => (
+                      <>
+                        <IconButton
+                          size="small"
+                          onClick={() => handleViewClick(params.row)}
+                        >
+                          <VisibilityIcon />
+                        </IconButton>
+                        <IconButton
+                          size="small"
+                          onClick={() => {
+                            boletaPdfDownload(ID_EMPRESA, params.row.id);
+                          }}
+                        >
+                          <PrintIcon />
+                        </IconButton>
+                        <IconButton
+                          size="small"
+                          onClick={() => handleViewClick(params.row)}
+                          disabled={!!params.row.fecha_de_pago}
+                        >
+                          <EditIcon />
+                        </IconButton>
+                      </>
+                    ),
+                  },
+                ]}
+                getRowClassName={(params) =>
+                  boletasVisibles.indexOf(params.row) % 2 === 0 ? 'even' : ''
+                }
+                paginationModel={paginationModel}
+                onPaginationModelChange={setPaginationModel}
+                pageSizeOptions={pageSizeOptions}
+                components={{
+                  Toolbar: () => (
+                    <GridToolbarContainer>
+                      <GridToolbarColumnsButton />
+                      <GridToolbarFilterButton />
+                      <GridToolbarExport />
+                    </GridToolbarContainer>
+                  ),
+                }}
+                localeText={{
+                  toolbarColumns: 'Columnas',
+                  toolbarFilters: 'Filtros',
+                  toolbarExport: 'Exportar',
+                }}
+              />
+            </Box>
+          </CustomTabPanel>
+          <CustomTabPanel value={tabState} index={1}>
+            <Box
+              style={{ height: 400, width: '100%' }}
+              sx={{
+                width: '100%',
+                '& .MuiDataGrid-columnHeaders': {
+                  backgroundColor: '#1A76D2',
+                  color: 'white',
+                },
+              }}
+            >
+              <DataGrid
+                rows={boletasSinDDJJ}
+                columns={[
+                  {
+                    field: 'numero_boleta',
+                    headerName: 'Nro. Boleta',
+                    flex: 0.5,
+                  },
+                  {
+                    field: 'entidad',
+                    headerName: 'Entidad',
+                    flex: 0.8,
+                    valueFormatter: (params) =>
+                      params.value ? params.value.replace('-', '/') : '',
+                  },
+                  { field: 'nroActa', headerName: 'Nro. Acta', flex: 1 },
+                  {
+                    field: 'importe',
+                    headerName: 'Importe',
+                    align: 'right',
+                    flex: 1,
+                    valueFormatter: (params) =>
+                      params.value
+                        ? formatter.currency.format(params.value)
+                        : '',
+                  },
+                  {
+                    field: 'intencionDePago',
+                    headerName: 'Intencion de Pago',
+                    flex: 1,
+                    valueFormatter: (params) =>
+                      params.value && isNotNull(params.value)
+                        ? formatter.date(params.value)
+                        : '',
+                  },
+                  {
+                    field: 'razonDePago',
+                    headerName: 'Razon de pago',
+                    flex: 1,
+                  },
+                  {
+                    field: 'acciones',
+                    headerName: 'Acciones',
+                    flex: 0.5,
+                    renderCell: (params) => (
+                      <>
+                        <IconButton
+                          size="small"
+                          onClick={() => {
+                            boletaPdfDownload(ID_EMPRESA, params.row.id);
+                          }}
+                        >
+                          <PrintIcon />
+                        </IconButton>
+                      </>
+                    ),
+                  },
+                ]}
+                paginationModel={paginationModel}
+                onPaginationModelChange={setPaginationModel}
+                pageSizeOptions={pageSizeOptions}
+                components={{
+                  Toolbar: () => (
+                    <GridToolbarContainer>
+                      <GridToolbarColumnsButton />
+                      <GridToolbarFilterButton />
+                      <GridToolbarExport />
+                    </GridToolbarContainer>
+                  ),
+                }}
+                localeText={{
+                  toolbarColumns: 'Columnas',
+                  toolbarFilters: 'Filtros',
+                  toolbarExport: 'Exportar',
+                }}
+              />
+            </Box>
+          </CustomTabPanel>
+        </Box>
+      </ThemeProvider>
     </div>
   );
 };
