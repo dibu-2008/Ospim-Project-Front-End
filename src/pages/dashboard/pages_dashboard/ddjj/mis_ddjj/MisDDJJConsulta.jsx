@@ -30,7 +30,6 @@ export const MisDDJJConsulta = ({
   const [desde, setDesde] = useState(ahoraMenosUnAnio);
   const [hasta, setHasta] = useState(ahora);
 
-
   const ID_EMPRESA = localStorageService.getEmpresaId();
 
   const handleChangeDesde = (date) => setDesde(date);
@@ -76,7 +75,7 @@ export const MisDDJJConsulta = ({
         <Stack
           spacing={4}
           direction="row"
-          display='flex'
+          display="flex"
           justifyContent="initial"
           alignItems="center"
         >
@@ -122,7 +121,11 @@ export const MisDDJJConsulta = ({
           justifyContent="center"
           alignItems="center"
         >
-          <Button onClick={buscarDDJJ} variant="contained" style={{marginLeft: '2em'}}>
+          <Button
+            onClick={buscarDDJJ}
+            variant="contained"
+            style={{ marginLeft: '2em' }}
+          >
             Buscar
           </Button>
         </Stack>
@@ -134,7 +137,7 @@ export const MisDDJJConsulta = ({
           rows_mis_ddjj={rows_mis_ddjj}
           setRowsMisDdjj={setRowsMisDdjj}
           setTabState={setTabState}
-         // setRowsAltaDDJJ={setRowsAltaDDJJ}
+          // setRowsAltaDDJJ={setRowsAltaDDJJ}
           setPeticion={setPeticion}
           setTituloPrimerTab={setTituloPrimerTab}
         />
