@@ -1,11 +1,10 @@
-import { useState, useEffect, useContext, useMemo } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import Box from '@mui/material/Box';
 import formatter from '@/common/formatter';
 import {
   GridRowModes,
   GridActionsCellItem,
   GridRowEditStopReasons,
-  GridToolbarContainer,
   GridToolbar,
 } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
@@ -19,8 +18,6 @@ import { consultarAportesDDJJ } from '@/common/api/AportesApi';
 import Swal from 'sweetalert2';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
-import * as locales from '@mui/material/locale';
-import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 import localStorageService from '@/components/localStorage/localStorageService';
 import { UserContext } from '@/context/userContext';
@@ -70,19 +67,6 @@ export function castearMisDDJJ(ddjjResponse) {
   return ddjjResponse;
 }
 
-const CustomToolbar = (props) => {
-  const { showQuickFilter, themeWithLocale } = props;
-  return (
-    <GridToolbarContainer
-      theme={themeWithLocale}
-      style={{ display: 'flex', justifyContent: 'space-between' }}
-    >
-      <Button color="primary"></Button>
-      <GridToolbar showQuickFilter={showQuickFilter} />
-    </GridToolbarContainer>
-  );
-};
-
 export const MisDDJJConsultaGrilla = ({
   setDDJJState,
   rows_mis_ddjj: rowsMisDdjj,
@@ -90,17 +74,10 @@ export const MisDDJJConsultaGrilla = ({
   setTabState,
   setTituloPrimerTab,
 }) => {
-  const [locale, setLocale] = useState('esES');
   const [vecAportes, setVecAportes] = useState({});
   const [rowModesModel, setRowModesModel] = useState({});
 
   const ID_EMPRESA = localStorageService.getEmpresaId();
-
-  const theme = useTheme();
-  const themeWithLocale = useMemo(
-    () => createTheme(theme, locales[locale]),
-    [locale, theme],
-  );
 
   const { paginationModel, setPaginationModel, pageSizeOptions } =
     useContext(UserContext);
@@ -121,8 +98,6 @@ export const MisDDJJConsultaGrilla = ({
       return reg.descripcion;
     }
   };
-
-  console.log('getAporteDescrip() => ', getAporteDescrip('AMTIMACS'));
 
   let colAportes = [];
 
@@ -432,42 +407,31 @@ export const MisDDJJConsultaGrilla = ({
           },
         }}
       >
-        <ThemeProvider theme={themeWithLocale}>
-          <StripedDataGrid
-            rows={rowsMisDdjj}
-            columns={columns}
-            getRowId={(row) => rowsMisDdjj.indexOf(row)}
-            getRowClassName={(params) =>
-              rowsMisDdjj.indexOf(params.row) % 2 === 0 ? 'even' : 'odd'
-            }
-            editMode="row"
-            rowModesModel={rowModesModel}
-            onRowModesModelChange={handleRowModesModelChange}
-            onRowEditStop={handleRowEditStop}
-            processRowUpdate={processRowUpdate}
-            localeText={dataGridStyle.toolbarText}
-            slots={{ toolbar: CustomToolbar }}
-            slotProps={{
-              toolbar: {
-                showQuickFilter: true,
-                showColumnMenu: true,
-                themeWithLocale,
-              },
-            }}
-            sx={{
-              '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
-                width: '8px',
-                visibility: 'visible',
-              },
-              '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
-                backgroundColor: '#ccc',
-              },
-            }}
-            paginationModel={paginationModel}
-            onPaginationModelChange={setPaginationModel}
-            pageSizeOptions={pageSizeOptions}
-          />
-        </ThemeProvider>
+        <StripedDataGrid
+          rows={rowsMisDdjj}
+          columns={columns}
+          editMode="row"
+          rowModesModel={rowModesModel}
+          onRowModesModelChange={handleRowModesModelChange}
+          onRowEditStop={handleRowEditStop}
+          processRowUpdate={processRowUpdate}
+          localeText={dataGridStyle.toolbarText}
+          slots={{
+            toolbar: GridToolbar,
+          }}
+          sx={{
+            '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
+              width: '8px',
+              visibility: 'visible',
+            },
+            '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
+              backgroundColor: '#ccc',
+            },
+          }}
+          paginationModel={paginationModel}
+          onPaginationModelChange={setPaginationModel}
+          pageSizeOptions={pageSizeOptions}
+        />
       </Box>
     </div>
   );
