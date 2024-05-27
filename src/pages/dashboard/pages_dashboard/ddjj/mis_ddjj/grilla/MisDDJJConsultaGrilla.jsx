@@ -72,7 +72,7 @@ export const MisDDJJConsultaGrilla = ({
   rows_mis_ddjj: rowsMisDdjj,
   setRowsMisDdjj,
   setTabState,
-  setTituloPrimerTab,
+  setTituloPrimerTab
 }) => {
   const [vecAportes, setVecAportes] = useState({});
   const [rowModesModel, setRowModesModel] = useState({});
@@ -98,6 +98,8 @@ export const MisDDJJConsultaGrilla = ({
       return reg.descripcion;
     }
   };
+
+  console.log('getAporteDescrip() => ', getAporteDescrip('AMTIMACS'));
 
   let colAportes = [];
 
@@ -151,7 +153,7 @@ export const MisDDJJConsultaGrilla = ({
   const handleEditClick = (id) => async () => {
     setDDJJState({ id: id });
     setTabState(0);
-    setTituloPrimerTab('Modificar Declaracion Jurada');
+    setTituloPrimerTab('Modificar Declaracion Jurada')
   };
 
   const handleSaveClick = (id) => () => {
