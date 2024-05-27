@@ -118,21 +118,27 @@ export const GenerarBoletas = () => {
         DDJJ_ID,
         fechaToISO,
       );
-      console.log(response);
-      const updatedDetalleBoletas = response.detalle_boletas.map((boleta) => {
-        const prevBoleta = boletas.detalle_boletas.find(
-          (prevBoleta) => prevBoleta.codigo === boleta.codigo,
-        );
-        return {
-          ...boleta,
-          formaDePago: prevBoleta ? prevBoleta.formaDePago : 'VENTANILLA',
-        };
-      });
-      setBoletas((prevBoletas) => ({
-        ...prevBoletas,
-        detalle_boletas: updatedDetalleBoletas,
-      }));
-      sethabilitaBoton(checkFields());
+      console.log(
+        'setIntencionDePago - axiosGenerarBoletas.calcularInteresBoletas - response:',
+        response,
+      );
+
+      if (response && response.detalle_boletas) {
+        const updatedDetalleBoletas = response.detalle_boletas.map((boleta) => {
+          const prevBoleta = boletas.detalle_boletas.find(
+            (prevBoleta) => prevBoleta.codigo === boleta.codigo,
+          );
+          return {
+            ...boleta,
+            formaDePago: prevBoleta ? prevBoleta.formaDePago : 'VENTANILLA',
+          };
+        });
+        setBoletas((prevBoletas) => ({
+          ...prevBoletas,
+          detalle_boletas: updatedDetalleBoletas,
+        }));
+        sethabilitaBoton(checkFields());
+      }
     } else {
       const boletaIndex = boletas.detalle_boletas.findIndex(
         (element) => element.codigo === codigo,

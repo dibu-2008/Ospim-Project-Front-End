@@ -52,7 +52,7 @@ export const axiosCrear = async (UrlApi, oEntidad) => {
   } catch (error) {
     console.log('axiosCrud.crear() - catch() - ');
     if (error && error.response && error.response.data) {
-      console.log('Este es el error : ' + error);
+      console.log('Este es el error : ', error);
       return error.response.data;
     } else {
       console.log(
