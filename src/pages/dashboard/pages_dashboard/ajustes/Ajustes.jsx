@@ -39,7 +39,14 @@ const style = {
 const isNotNull = (value) => (value !== null && value !== '' ? value : '');
 // Traerme las etiquetas del dom que tengas la clase .MuiDataGrid-cell--editable
 const crearNuevoRegistro = (props) => {
-  const { setRows, rows, setRowModesModel, volverPrimerPagina } = props;
+  const {
+    setRows,
+    rows,
+    setRowModesModel,
+    volverPrimerPagina,
+    showQuickFilter,
+    themeWithLocale,
+  } = props;
 
   const altaHandleClick = () => {
     const newReg = {};
@@ -52,11 +59,14 @@ const crearNuevoRegistro = (props) => {
   };
 
   return (
-    <GridToolbarContainer>
-      <GridToolbar showQuickFilter={props.showQuickFilter} />
+    <GridToolbarContainer
+      theme={themeWithLocale}
+      style={{ display: 'flex', justifyContent: 'space-between' }}
+    >
       <Button color="primary" startIcon={<AddIcon />} onClick={altaHandleClick}>
         Nuevo Registro
       </Button>
+      <GridToolbar showQuickFilter={showQuickFilter} />
     </GridToolbarContainer>
   );
 };
@@ -371,7 +381,14 @@ export const Ajustes = () => {
             localeText={dataGridStyle.toolbarText}
             slots={{ toolbar: crearNuevoRegistro }}
             slotProps={{
-              toolbar: { setRows, rows, setRowModesModel, volverPrimerPagina },
+              toolbar: {
+                setRows,
+                setRowModesModel,
+                volverPrimerPagina,
+                showQuickFilter: true,
+                showColumnMenu: true,
+                themeWithLocale,
+              },
             }}
             paginationModel={paginationModel}
             onPaginationModelChange={setPaginationModel}
