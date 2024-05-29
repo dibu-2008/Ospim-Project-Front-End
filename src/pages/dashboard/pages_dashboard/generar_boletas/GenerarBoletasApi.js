@@ -49,18 +49,19 @@ export const calcularInteresBoleta = async (
     const body = { intencionDePago: intencionDePago };
     console.log(body);
     const data = await axiosCrud.crear(URL, body);
-    console.log('calcularInteresBoleta - response: ', response);
+    console.log('calcularInteresBoleta - response: ', data);
 
     if (!data.detalle_boletas) {
       throw data;
     }
 
-    console.log(response.detalle_boletas);
-    return response.detalle_boletas[0];
+    console.log(data.detalle_boletas);
+    return data.detalle_boletas[0];
   } catch (error) {
     const HTTP_MSG =
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`;
     showErrorBackEnd(HTTP_MSG, error);
+    return {};
   }
 };
 

@@ -95,7 +95,11 @@ export const GenerarBoletas = () => {
     const newDetalleBoletas = [...boletas.detalle_boletas];
     const fdp = newDetalleBoletas[boletaIndex].formaDePago;
     newDetalleBoletas[boletaIndex] = response;
-    console.log(newDetalleBoletas);
+    console.log(
+      'setInteresInDetalleBoleta - newDetalleBoletas:',
+      newDetalleBoletas,
+    );
+    console.log('setInteresInDetalleBoleta - response:', response);
     newDetalleBoletas[boletaIndex].formaDePago = fdp;
     setBoletas({ ...boletas, detalle_boletas: newDetalleBoletas });
   };
@@ -150,8 +154,10 @@ export const GenerarBoletas = () => {
         fechaToISO,
       );
       console.log(response);
-      setInteresInDetalleBoleta(boletaIndex, response);
-      sethabilitaBoton(false);
+      if (response && response.ajustes && response.codigo) {
+        setInteresInDetalleBoleta(boletaIndex, response);
+        sethabilitaBoton(false);
+      }
     }
   };
 
