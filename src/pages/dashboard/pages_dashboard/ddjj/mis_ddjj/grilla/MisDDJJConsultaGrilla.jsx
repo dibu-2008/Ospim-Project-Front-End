@@ -10,6 +10,7 @@ import {
 import Button from '@mui/material/Button';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import { Visibility as VisibilityIcon } from '@mui/icons-material';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
@@ -72,7 +73,7 @@ export const MisDDJJConsultaGrilla = ({
   rows_mis_ddjj: rowsMisDdjj,
   setRowsMisDdjj,
   setTabState,
-  setTituloPrimerTab
+  setTituloPrimerTab,
 }) => {
   const [vecAportes, setVecAportes] = useState({});
   const [rowModesModel, setRowModesModel] = useState({});
@@ -126,22 +127,39 @@ export const MisDDJJConsultaGrilla = ({
     ObtenerMisDeclaracionesJuradas();
   }, []);
 
-  const PresentarDeclaracionesJuradas = async (id) => {
-    const updatedRow = { ...rowsMisDdjj.find((row) => row.id === id) };
-    const data = await axiosDDJJ.presentar(ID_EMPRESA, id);
+  const PresentarDeclaracionesJuradas = async (rowGrilla) => {
+    Swal.fire({
+      title: 'Presentación de DDJJ en OSPIM',
+      html:
+        'Confirma la Presentación de la Declaración Jurada para el Período <b>' +
+        formatter.periodo(rowGrilla.periodo) +
+        '</b>?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#1A76D2',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Si, bórralo!',
+    }).then(async (result) => {
+      const updatedRow = {
+        ...rowsMisDdjj.find((row) => row.id === rowGrilla.id),
+      };
+      const data = await axiosDDJJ.presentar(ID_EMPRESA, id);
 
-    console.log('data: ', data);
+      console.log('data: ', data);
 
-    if (data) {
-      updatedRow.estado = data.estado || null;
-      updatedRow.secuencia = data.secuencia || null;
+      if (data) {
+        updatedRow.estado = data.estado || null;
+        updatedRow.secuencia = data.secuencia || null;
 
-      setRowsMisDdjj(
-        rowsMisDdjj.map((row) => (row.id === id ? updatedRow : row)),
-      );
-    }
+        setRowsMisDdjj(
+          rowsMisDdjj.map((row) =>
+            row.id === rowGrilla.id ? updatedRow : row,
+          ),
+        );
+      }
 
-    return updatedRow;
+      return updatedRow;
+    });
   };
 
   const handleRowEditStop = (params, event) => {
@@ -153,7 +171,7 @@ export const MisDDJJConsultaGrilla = ({
   const handleEditClick = (id) => async () => {
     setDDJJState({ id: id });
     setTabState(0);
-    setTituloPrimerTab('Modificar Declaracion Jurada')
+    setTituloPrimerTab('Modificar Declaracion Jurada');
   };
 
   const handleSaveClick = (id) => () => {
@@ -254,6 +272,19 @@ export const MisDDJJConsultaGrilla = ({
         }
       },
     },
+    {
+      field: 'presentada',
+      headerName: 'Presentación',
+      flex: 1,
+      editable: false,
+      type: 'date',
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
+      valueFormatter: (params) => {
+        return formatter.date(params.value);
+      },
+    },
   ];
 
   colAportes = misDDJJColumnaAporteGet(rowsMisDdjj);
@@ -304,15 +335,6 @@ export const MisDDJJConsultaGrilla = ({
 
       if (row.estado === 'PE') {
         return [
-          <Button
-            sx={{
-              width: '160px',
-            }}
-            onClick={() => PresentarDeclaracionesJuradas(id)}
-            variant="contained"
-          >
-            Presentar
-          </Button>,
           <GridActionsCellItem
             icon={<EditIcon />}
             label="Edit"
@@ -321,9 +343,34 @@ export const MisDDJJConsultaGrilla = ({
             color="inherit"
           />,
           <GridActionsCellItem
+            icon={<LocalPrintshopIcon />}
+            label="Print"
+            color="inherit"
+            onClick={() => declaracionJuradasImpresion(id)}
+          />,
+          <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Delete"
             onClick={handleDeleteClick(id)}
+            color="inherit"
+          />,
+          <Button
+            sx={{
+              width: '160px',
+            }}
+            onClick={() => PresentarDeclaracionesJuradas(row)}
+            variant="contained"
+          >
+            Presentar
+          </Button>,
+        ];
+      } else if (row.estado == 'PR') {
+        return [
+          <GridActionsCellItem
+            icon={<VisibilityIcon />}
+            label="Edit"
+            className="textPrimary"
+            onClick={handleEditClick(id)}
             color="inherit"
           />,
           <GridActionsCellItem
@@ -332,9 +379,6 @@ export const MisDDJJConsultaGrilla = ({
             color="inherit"
             onClick={() => declaracionJuradasImpresion(id)}
           />,
-        ];
-      } else if (row.estado == 'PR') {
-        return [
           <Button
             sx={{
               width: '160px',
@@ -345,38 +389,16 @@ export const MisDDJJConsultaGrilla = ({
           >
             Generar Boleta
           </Button>,
-          <GridActionsCellItem
-            icon={<EditIcon />}
-            label="Edit"
-            className="textPrimary"
-            onClick={handleEditClick(id)}
-            color="inherit"
-          />,
-          <GridActionsCellItem
-            icon={<LocalPrintshopIcon />}
-            label="Print"
-            color="inherit"
-            onClick={() => declaracionJuradasImpresion(id)}
-          />,
-        ];
-      } else if (row.estado === 'BG') {
-        return [
-          <GridActionsCellItem
-            icon={<EditIcon />}
-            label="Edit"
-            className="textPrimary"
-            onClick={handleEditClick(id)}
-            color="inherit"
-          />,
-          <GridActionsCellItem
-            icon={<LocalPrintshopIcon />}
-            label="Print"
-            color="inherit"
-            onClick={() => declaracionJuradasImpresion(id)}
-          />,
         ];
       } else {
         return [
+          <GridActionsCellItem
+            icon={<VisibilityIcon />}
+            label="Edit"
+            className="textPrimary"
+            onClick={handleEditClick(id)}
+            color="inherit"
+          />,
           <GridActionsCellItem
             icon={<LocalPrintshopIcon />}
             label="Print"

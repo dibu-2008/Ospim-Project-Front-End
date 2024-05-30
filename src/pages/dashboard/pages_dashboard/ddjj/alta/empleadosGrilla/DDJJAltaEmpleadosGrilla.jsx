@@ -119,6 +119,7 @@ export const DDJJAltaEmpleadosGrilla = ({
   validacionResponse,
   rowModesModel,
   setRowModesModel,
+  actualizacionHabilitada,
 }) => {
   const [locale, setLocale] = useState('esES');
   const [inteDataBase, setInteDataBase] = useState(null);
@@ -352,6 +353,7 @@ export const DDJJAltaEmpleadosGrilla = ({
                 color: 'primary.main',
               }}
               onClick={handleSaveClick(id)}
+              disabled={!actualizacionHabilitada}
             />,
             <GridActionsCellItem
               icon={<CancelIcon />}
@@ -370,12 +372,14 @@ export const DDJJAltaEmpleadosGrilla = ({
             className="textPrimary"
             onClick={handleEditClick(id)}
             color="inherit"
+            disabled={!actualizacionHabilitada}
           />,
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Delete"
             onClick={handleDeleteClick(id)}
             color="inherit"
+            disabled={!actualizacionHabilitada}
           />,
         ];
       },

@@ -80,7 +80,7 @@ export const DDJJAlta = ({
   setPeriodo,
   rowsAltaDDJJ,
   setRowsAltaDDJJ,
-  tituloPrimerTab
+  tituloPrimerTab,
 }) => {
   const [camaras, setCamaras] = useState([]);
   const [todasLasCategorias, setTodasLasCategorias] = useState([]);
@@ -101,6 +101,7 @@ export const DDJJAlta = ({
   const [tituloSec, setTituloSec] = useState('');
   const [tab, setTab] = useState(0);
   const [expanded, setExpanded] = useState(false);
+  const [actualizacionHabilitada, setActualizacionHabilitada] = useState(true);
 
   const handleChange = (event, newValue) => {
     setTab(newValue);
@@ -118,10 +119,10 @@ export const DDJJAlta = ({
     // Actualiza el estado con el valor de booleano
     setSomeRowInEditMode(isSomeRowInEditMode);
   }, [rowModesModel]);
-  
-  useEffect(()=> {
-    handleExpand()
-  }, [rowsAltaDDJJ])
+
+  useEffect(() => {
+    handleExpand();
+  }, [rowsAltaDDJJ]);
 
   useEffect(() => {
     const ObtenerCamaras = async () => {
@@ -173,6 +174,12 @@ export const DDJJAlta = ({
 
           setPeriodo(dayjs(ddjj.periodo));
 
+          if (ddjj.estado) {
+            setActualizacionHabilitada(ddjj.estado == 'PE');
+          } else {
+            console.log('obtenerDDJJ - ddjj.estado. undefined !!!');
+          }
+
           const afiliadosConFilas = ddjj.afiliados.map((item, index) => ({
             ...item,
             fila: index + 1,
@@ -187,6 +194,7 @@ export const DDJJAlta = ({
         }
       }
     };
+    console.log('DDJJAlta - DDJJState:', DDJJState);
     obtenerDDJJ(DDJJState, DDJJState.id, ID_EMPRESA);
   }, [DDJJState]);
 
@@ -244,7 +252,7 @@ export const DDJJAlta = ({
 
       setRowsAltaDDJJ(afiliadoImportadoConInte);
     }
-    
+
     setOcultarEmpleadosGrilla(true);
   };
 
@@ -562,7 +570,6 @@ export const DDJJAlta = ({
       setRowsAltaDDJJ(ddjjPeriodoAnterior.afiliados);
       setOcultarEmpleadosGrilla(!ocultarEmpleadosGrilla);
     } else {
-      
       periodoDayjs = dayjs(otroPeriodo.$d).format('YYYY-MM-DD');
       const ddjjOtroPeriodo = await axiosDDJJ.getPeriodoAnterior(
         ID_EMPRESA,
@@ -596,7 +603,6 @@ export const DDJJAlta = ({
     setExpanded(isExpanded);
   };
 
-
   return (
     <div className="mis_alta_declaraciones_juradas_container">
       <div className="periodo_container">
@@ -623,6 +629,7 @@ export const DDJJAlta = ({
                     closeOnSelect={true}
                     onChange={handleChangePeriodo}
                     value={periodo}
+                    disabled={!actualizacionHabilitada}
                   />
                 </DemoContainer>
               </LocalizationProvider>
@@ -664,6 +671,7 @@ export const DDJJAlta = ({
                     onChange={handleFileChange}
                     accept=".csv, .xlsx"
                     title=""
+                    disabled={!actualizacionHabilitada}
                   />
                   <Box className="file-select-label" id="src-file1-label">
                     {selectedFileName || 'Nombre del archivo'}
@@ -676,7 +684,7 @@ export const DDJJAlta = ({
                     width: '150px',
                   }}
                   onClick={importarAfiliado}
-                  disabled={!btnSubirHabilitado}
+                  disabled={!actualizacionHabilitada}
                 >
                   Importar
                 </Button>
@@ -689,6 +697,7 @@ export const DDJJAlta = ({
                   defaultValue="ultimoPeriodoPresentado"
                   name="radio-buttons-group"
                   onChange={handleElegirOtroChange}
+                  disabled={!actualizacionHabilitada}
                 >
                   <FormControlLabel
                     value="ultimoPeriodoPresentado"
@@ -699,9 +708,10 @@ export const DDJJAlta = ({
                     value="elegirOtro"
                     control={<Radio />}
                     label="Elegir otro"
+                    disabled={!actualizacionHabilitada}
                   />
                   <Box className="elegir_otro_container">
-                    {mostrarPeriodos && (
+                    {mostrarPeriodos && actualizacionHabilitada && (
                       <Stack
                         spacing={4}
                         direction="row"
@@ -719,6 +729,7 @@ export const DDJJAlta = ({
                               closeOnSelect={true}
                               onChange={handleChangeOtroPeriodo}
                               value={otroPeriodo}
+                              disabled={!actualizacionHabilitada}
                             />
                           </DemoContainer>
                         </LocalizationProvider>
@@ -733,34 +744,18 @@ export const DDJJAlta = ({
                     padding: '6px 45px',
                   }}
                   onClick={buscarPeriodoAnterior}
+                  disabled={!actualizacionHabilitada}
                 >
                   Buscar
                 </Button>
               </Box>
             </CustomTabPanel>
-            {/* <CustomTabPanel value={tab} index={2}>
-              <Box className="manualmente_container">
-                <Button
-                  variant="contained"
-                  sx={{
-                    padding: '6px 23px',
-                    width: '150px',
-                    marginLeft: '467px',
-                  }}
-                  onClick={() =>
-                    setOcultarEmpleadosGrilla(!ocultarEmpleadosGrilla)
-                  }
-                >
-                  Carga
-                </Button>
-              </Box>
-            </CustomTabPanel> */}
           </AccordionDetails>
         </Accordion>
       </div>
 
       <div className="presentacion_container">
-        <Accordion expanded={expanded} onChange={handleChangeE} >
+        <Accordion expanded={expanded} onChange={handleChangeE}>
           <AccordionSummary
             className="paso"
             expandIcon={<ExpandMoreIcon />}
@@ -797,6 +792,7 @@ export const DDJJAlta = ({
                 setSomeRowInEditMode={setSomeRowInEditMode}
                 rowModesModel={rowModesModel}
                 setRowModesModel={setRowModesModel}
+                actualizacionHabilitada={actualizacionHabilitada}
               />
             </Box>
             <div
@@ -820,138 +816,29 @@ export const DDJJAlta = ({
                     variant="contained"
                     sx={{ padding: '6px 52px', marginLeft: '10px' }}
                     onClick={guardarDeclaracionJurada}
-                    disabled={someRowInEditMode || rowsAltaDDJJ?.length === 0}
+                    disabled={
+                      someRowInEditMode ||
+                      rowsAltaDDJJ?.length === 0 ||
+                      !actualizacionHabilitada
+                    }
                   >
                     Guardar
                   </Button>
                 </span>
               </Tooltip>
 
-              {DDJJState.estado === 'PR' ? (
-                <Button
-                  variant="contained"
-                  sx={{ padding: '6px 52px', marginLeft: '10px' }}
-                  onClick={presentarDeclaracionJurada}
-                  disabled={true}
-                >
-                  Presentar
-                </Button>
-              ) : DDJJState.estado === 'PE' ? (
-                <Button
-                  variant="contained"
-                  sx={{ padding: '6px 52px', marginLeft: '10px' }}
-                  onClick={presentarDeclaracionJurada}
-                  disabled={false}
-                >
-                  Presentar
-                </Button>
-              ) : (
-                <Button
-                  variant="contained"
-                  sx={{ padding: '6px 52px', marginLeft: '10px' }}
-                  onClick={presentarDeclaracionJurada}
-                  disabled={DDJJState.id ? false : true}
-                >
-                  Presentar
-                </Button>
-              )}
+              <Button
+                variant="contained"
+                sx={{ padding: '6px 52px', marginLeft: '10px' }}
+                onClick={presentarDeclaracionJurada}
+                disabled={!actualizacionHabilitada || !DDJJState.id}
+              >
+                Presentar
+              </Button>
             </div>
           </AccordionDetails>
         </Accordion>
       </div>
-
-      {/* {(ocultarEmpleadosGrilla ||
-        (rowsAltaDDJJ && rowsAltaDDJJ.length > 0)) && (
-        <div className="formulario_container">
-          <h5 className="paso">Paso 3 - Completar el formulario</h5>
-          <Box
-            sx={{
-              height: '600px',
-              width: '100%',
-              '& .actions': {
-                color: 'text.secondary',
-              },
-              '& .textPrimary': {
-                color: 'text.primary',
-              },
-            }}
-          >
-            <DDJJAltaEmpleadosGrilla
-              rowsAltaDDJJ={rowsAltaDDJJ}
-              setRowsAltaDDJJ={setRowsAltaDDJJ}
-              camaras={camaras}
-              categoriasFiltradas={categoriasFiltradas}
-              setCategoriasFiltradas={setCategoriasFiltradas}
-              afiliado={afiliado}
-              setAfiliado={setAfiliado}
-              todasLasCategorias={todasLasCategorias}
-              plantas={plantas}
-              validacionResponse={validacionResponse}
-              setSomeRowInEditMode={setSomeRowInEditMode}
-              rowModesModel={rowModesModel}
-              setRowModesModel={setRowModesModel}
-            />
-          </Box>
-
-          <div
-            className="botones_container"
-            style={{
-              display: 'flex',
-              justifyContent: 'flex-end',
-              marginTop: '20px',
-            }}
-          >
-            <Tooltip
-              title={
-                someRowInEditMode
-                  ? 'Hay filas en edición, por favor finalice la edición antes de guardar.'
-                  : ''
-              }
-              sx={{ marginLeft: '10px', cursor: 'pointer' }}
-            >
-              <span>
-                <Button
-                  variant="contained"
-                  sx={{ padding: '6px 52px', marginLeft: '10px' }}
-                  onClick={guardarDeclaracionJurada}
-                  disabled={someRowInEditMode || rowsAltaDDJJ?.length === 0}
-                >
-                  Guardar
-                </Button>
-              </span>
-            </Tooltip>
-
-            {DDJJState.estado === 'PR' ? (
-              <Button
-                variant="contained"
-                sx={{ padding: '6px 52px', marginLeft: '10px' }}
-                onClick={presentarDeclaracionJurada}
-                disabled={true}
-              >
-                Presentar
-              </Button>
-            ) : DDJJState.estado === 'PE' ? (
-              <Button
-                variant="contained"
-                sx={{ padding: '6px 52px', marginLeft: '10px' }}
-                onClick={presentarDeclaracionJurada}
-                disabled={false}
-              >
-                Presentar
-              </Button>
-            ) : (
-              <Button
-                variant="contained"
-                sx={{ padding: '6px 52px', marginLeft: '10px' }}
-                onClick={presentarDeclaracionJurada}
-                disabled={DDJJState.id ? false : true}
-              >
-                Presentar
-              </Button>
-            )}
-          </div>
-        </div>
-      )} */}
     </div>
   );
 };
