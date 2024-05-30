@@ -138,27 +138,29 @@ export const MisDDJJConsultaGrilla = ({
       showCancelButton: true,
       confirmButtonColor: '#1A76D2',
       cancelButtonColor: '#6c757d',
-      confirmButtonText: 'Si, bórralo!',
+      confirmButtonText: 'Si, Presentar !',
     }).then(async (result) => {
-      const updatedRow = {
-        ...rowsMisDdjj.find((row) => row.id === rowGrilla.id),
-      };
-      const data = await axiosDDJJ.presentar(ID_EMPRESA, id);
+      if (result.isConfirmed) {
+        const updatedRow = {
+          ...rowsMisDdjj.find((row) => row.id === rowGrilla.id),
+        };
+        const data = await axiosDDJJ.presentar(ID_EMPRESA, rowGrilla.id);
 
-      console.log('data: ', data);
+        console.log('data: ', data);
 
-      if (data) {
-        updatedRow.estado = data.estado || null;
-        updatedRow.secuencia = data.secuencia || null;
+        if (data) {
+          updatedRow.estado = data.estado || null;
+          updatedRow.secuencia = data.secuencia || null;
 
-        setRowsMisDdjj(
-          rowsMisDdjj.map((row) =>
-            row.id === rowGrilla.id ? updatedRow : row,
-          ),
-        );
+          setRowsMisDdjj(
+            rowsMisDdjj.map((row) =>
+              row.id === rowGrilla.id ? updatedRow : row,
+            ),
+          );
+        }
+
+        return updatedRow;
       }
-
-      return updatedRow;
     });
   };
 
