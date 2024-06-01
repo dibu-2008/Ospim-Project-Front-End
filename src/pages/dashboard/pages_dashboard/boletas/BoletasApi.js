@@ -55,9 +55,11 @@ export const modificarBoletaById = async (empresa_id, body) => {
   console.log(body);
   const URL = `/empresa/${empresa_id}/boletas`;
   try {
-    body.intencionDePago = formatter.toFechaValida(body.intencionDePago);
-    body.periodo = formatter.toFechaValida(body.intencionDePago);
-    await axiosCrud.actualizar(URL, body);
+    const bodyNew = [...body.id, body.intencionDePago, body.formaDePago];
+    bodyNew.intencionDePago = formatter.toFechaValida(bodyNew.intencionDePago);
+    console.log('bodyNew: ', bodyNew);
+
+    await axiosCrud.actualizar(URL, bodyNew);
   } catch (error) {
     const HTTP_MSG =
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`;

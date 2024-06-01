@@ -199,11 +199,18 @@ export const Feriados = () => {
         const data = await axiosFeriados.crear(newRow);
         if (data && data.id) {
           newRow.id = data.id;
-          bOk = true;
-          const newRows = rows.map((row) => (!row.id ? newRow : row));
-          setRows(newRows);
-        } else {
-          console.log('alta sin ID generado');
+        }
+        bOk = true;
+        const newRows = rows.map((row) => (!row.id ? newRow : row));
+        setRows(newRows);
+
+        if (!(data && data.id)) {
+          setTimeout(() => {
+            setRowModesModel((oldModel) => ({
+              [0]: { mode: GridRowModes.Edit, fieldToFocus: 'fecha' },
+              ...oldModel,
+            }));
+          }, 100);
         }
       } catch (error) {
         console.log(
@@ -227,8 +234,10 @@ export const Feriados = () => {
     }
 
     if (bOk) {
+      console.log('newRow: ', newRow);
       return newRow;
     } else {
+      console.log('oldRow: ', oldRow);
       return oldRow;
     }
   };
