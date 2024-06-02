@@ -66,7 +66,6 @@ function a11yProps(index) {
   };
 }
 
-
 export const Boletas = () => {
   const ID_EMPRESA = localStorageService.getEmpresaId();
   const ahora = dayjs().startOf('month');
@@ -87,7 +86,7 @@ export const Boletas = () => {
     () => createTheme(theme, locales[locale]),
     [locale, theme],
   );
-  
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -104,6 +103,7 @@ export const Boletas = () => {
       if (toDate !== null) {
         hastaDayjs = dayjs(`${toDate}-01`).format('YYYY-MM-DD');
       }
+      console.log('axiosBoletas.fetchData - hastaDayjs:', hastaDayjs);
 
       const response = await axiosBoletas.getBoletas(
         ID_EMPRESA,
@@ -181,7 +181,7 @@ export const Boletas = () => {
                   label={'Periodo desde'}
                   views={['month', 'year']}
                   closeOnSelect={true}
-                  onChange={(e) => setFromDate(e.target.value)}
+                  onChange={(oValue) => setFromDate(oValue)}
                   value={fromDate}
                 />
               </DemoContainer>
@@ -198,7 +198,7 @@ export const Boletas = () => {
                   label={'Periodo hasta'}
                   views={['month', 'year']}
                   closeOnSelect={true}
-                  onChange={(e) => setToDate(e.target.value)}
+                  onChange={(oValue) => setToDate(oValue)}
                   value={toDate}
                 />
               </DemoContainer>

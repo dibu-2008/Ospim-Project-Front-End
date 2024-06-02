@@ -30,12 +30,7 @@ export const MisDDJJConsulta = ({
   const [desde, setDesde] = useState(ahoraMenosUnAnio);
   const [hasta, setHasta] = useState(ahora);
 
-
   const ID_EMPRESA = localStorageService.getEmpresaId();
-
-  const handleChangeDesde = (date) => setDesde(date);
-
-  const handleChangeHasta = (date) => setHasta(date);
 
   const buscarDDJJ = async () => {
     try {
@@ -76,7 +71,7 @@ export const MisDDJJConsulta = ({
         <Stack
           spacing={4}
           direction="row"
-          display='flex'
+          display="flex"
           justifyContent="initial"
           alignItems="center"
         >
@@ -92,7 +87,7 @@ export const MisDDJJConsulta = ({
                 label={'Periodo desde'}
                 views={['month', 'year']}
                 closeOnSelect={true}
-                onChange={handleChangeDesde}
+                onChange={(oValue) => setDesde(oValue)}
                 value={desde}
               />
             </DemoContainer>
@@ -109,7 +104,7 @@ export const MisDDJJConsulta = ({
                 label={'Periodo hasta'}
                 views={['month', 'year']}
                 closeOnSelect={true}
-                onChange={handleChangeHasta}
+                onChange={(oValue) => setHasta(oValue)}
                 value={hasta}
               />
             </DemoContainer>
@@ -122,7 +117,11 @@ export const MisDDJJConsulta = ({
           justifyContent="center"
           alignItems="center"
         >
-          <Button onClick={buscarDDJJ} variant="contained" style={{marginLeft: '2em'}}>
+          <Button
+            onClick={buscarDDJJ}
+            variant="contained"
+            style={{ marginLeft: '2em' }}
+          >
             Buscar
           </Button>
         </Stack>
@@ -134,7 +133,7 @@ export const MisDDJJConsulta = ({
           rows_mis_ddjj={rows_mis_ddjj}
           setRowsMisDdjj={setRowsMisDdjj}
           setTabState={setTabState}
-         // setRowsAltaDDJJ={setRowsAltaDDJJ}
+          // setRowsAltaDDJJ={setRowsAltaDDJJ}
           setPeticion={setPeticion}
           setTituloPrimerTab={setTituloPrimerTab}
         />

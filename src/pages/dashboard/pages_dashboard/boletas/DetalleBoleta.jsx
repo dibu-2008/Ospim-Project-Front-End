@@ -74,7 +74,7 @@ export const DetalleBoleta = () => {
   }, []);
 
   const guardarBoleta = () => {
-    console.log(boletaDetalle);
+    console.log('guardarBoleta - guardarBoleta: ', boletaDetalle);
     modificarBoletaById(ID_EMPRESA, boletaDetalle);
   };
 
@@ -89,7 +89,7 @@ export const DetalleBoleta = () => {
     let objetoModificado = { ...boletaDetalle };
 
     for (let key in response) {
-      console.log(key);
+      //console.log(key);
       if (response.hasOwnProperty(key)) {
         objetoModificado[key] = response[key];
       }

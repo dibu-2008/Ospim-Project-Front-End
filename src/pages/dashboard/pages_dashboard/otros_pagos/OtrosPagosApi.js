@@ -12,7 +12,7 @@ const HTTP_MSG_ALTA_ERROR = import.meta.env.VITE_HTTP_MSG_ALTA_ERROR;
 
 export const crearBoleta = async (empresa_id, nuevoReg) => {
   try {
-    const URL = `/empresa/${empresa_id}/boletas/sin-ddjj/`;
+    const URL = `/empresa/${empresa_id}/boletas/pago-acta/`;
 
     const data = await axiosCrud.crear(URL, nuevoReg);
     if (data && data.id) {
@@ -41,8 +41,9 @@ export const generarBoletaSinDDJJ = async (empresa_id, body) => {
     console.log(body);
 
     const data = await crearBoleta(empresa_id, body);
-
-    boletaPdfDownload(empresa_id, data.id);
+    if (data && data.id) {
+      boletaPdfDownload(empresa_id, data.id);
+    }
     return data;
     /*
     const URL = `${BACKEND_URL}/empresa/${empresa_id}/boletas/${data.id}/imprimir`;

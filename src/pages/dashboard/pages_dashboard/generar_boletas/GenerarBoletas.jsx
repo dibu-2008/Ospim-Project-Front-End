@@ -265,9 +265,10 @@ export const GenerarBoletas = () => {
                       type="date"
                       inputProps={{ min: hoy }}
                       value={boleta.intencionDePago?.split('T')[0]}
-                      onChange={(event) =>
-                        setIntencionDePago(boleta.codigo, event.target.value)
-                      }
+                      onBlur={(event) => {
+                        console.log('onBlur - event: ', event);
+                        setIntencionDePago(boleta.codigo, event.target.value);
+                      }}
                     />
                   </TableCell>
                 ))}
