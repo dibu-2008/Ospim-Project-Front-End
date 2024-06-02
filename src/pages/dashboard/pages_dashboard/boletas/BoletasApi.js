@@ -52,10 +52,15 @@ export const getBoletaById = async (empresa_id, boleta_id) => {
 };
 
 export const modificarBoletaById = async (empresa_id, body) => {
-  console.log(body);
+  console.log('modificarBoletaById - body:', body);
   const URL = `/empresa/${empresa_id}/boletas`;
   try {
-    const bodyNew = [...body.id, body.intencionDePago, body.formaDePago];
+    //const bodyNew = [...body.intencionDePago, body.id, body.formaDePago];
+    const bodyNew = {
+      id: body.id,
+      intencionDePago: body.intencionDePago,
+      formaDePago: body.formaDePago,
+    };
     bodyNew.intencionDePago = formatter.toFechaValida(bodyNew.intencionDePago);
     console.log('bodyNew: ', bodyNew);
 
