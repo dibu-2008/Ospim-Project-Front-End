@@ -5,7 +5,11 @@ const ERROR_MESSAGE = import.meta.env.VITE_ERROR_MESSAGE;
 
 export const showErrorBackEnd = (HTTP_MSG, rta) => {
   try {
+    console.log('showErrorBackEnd - rta:', rta);
     if (rta.response && rta.response.data) {
+      console.log(
+        'showErrorBackEnd - VA A EJECUTAR: rta = rta.response.data; ???',
+      );
       rta = rta.response.data;
     }
     if (rta && rta.tipo && rta.descripcion && rta.ticket) {

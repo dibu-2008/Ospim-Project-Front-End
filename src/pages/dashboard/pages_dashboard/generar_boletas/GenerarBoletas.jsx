@@ -95,7 +95,11 @@ export const GenerarBoletas = () => {
     const newDetalleBoletas = [...boletas.detalle_boletas];
     const fdp = newDetalleBoletas[boletaIndex].formaDePago;
     newDetalleBoletas[boletaIndex] = response;
-    console.log(newDetalleBoletas);
+    console.log(
+      'setInteresInDetalleBoleta - newDetalleBoletas:',
+      newDetalleBoletas,
+    );
+    console.log('setInteresInDetalleBoleta - response:', response);
     newDetalleBoletas[boletaIndex].formaDePago = fdp;
     setBoletas({ ...boletas, detalle_boletas: newDetalleBoletas });
   };
@@ -118,21 +122,27 @@ export const GenerarBoletas = () => {
         DDJJ_ID,
         fechaToISO,
       );
-      console.log(response);
-      const updatedDetalleBoletas = response.detalle_boletas.map((boleta) => {
-        const prevBoleta = boletas.detalle_boletas.find(
-          (prevBoleta) => prevBoleta.codigo === boleta.codigo,
-        );
-        return {
-          ...boleta,
-          formaDePago: prevBoleta ? prevBoleta.formaDePago : 'VENTANILLA',
-        };
-      });
-      setBoletas((prevBoletas) => ({
-        ...prevBoletas,
-        detalle_boletas: updatedDetalleBoletas,
-      }));
-      sethabilitaBoton(checkFields());
+      console.log(
+        'setIntencionDePago - axiosGenerarBoletas.calcularInteresBoletas - response:',
+        response,
+      );
+
+      if (response && response.detalle_boletas) {
+        const updatedDetalleBoletas = response.detalle_boletas.map((boleta) => {
+          const prevBoleta = boletas.detalle_boletas.find(
+            (prevBoleta) => prevBoleta.codigo === boleta.codigo,
+          );
+          return {
+            ...boleta,
+            formaDePago: prevBoleta ? prevBoleta.formaDePago : 'VENTANILLA',
+          };
+        });
+        setBoletas((prevBoletas) => ({
+          ...prevBoletas,
+          detalle_boletas: updatedDetalleBoletas,
+        }));
+        sethabilitaBoton(checkFields());
+      }
     } else {
       const boletaIndex = boletas.detalle_boletas.findIndex(
         (element) => element.codigo === codigo,
@@ -144,8 +154,10 @@ export const GenerarBoletas = () => {
         fechaToISO,
       );
       console.log(response);
-      setInteresInDetalleBoleta(boletaIndex, response);
-      sethabilitaBoton(false);
+      if (response && response.ajustes && response.codigo) {
+        setInteresInDetalleBoleta(boletaIndex, response);
+        sethabilitaBoton(false);
+      }
     }
   };
 

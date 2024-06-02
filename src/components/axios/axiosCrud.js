@@ -40,6 +40,7 @@ export const axiosCrear = async (UrlApi, oEntidad) => {
     const response = await oAxios.post(UrlApi, oEntidad);
     console.log(response.status);
     console.log(response.status !== 200);
+    console.log(response);
     if (response.status !== 201 && response.status !== 200) {
       console.log(
         `axiosCrud.crear() - ERROR 2 - UrlApi: ${UrlApi} - response.status !== 201 - response: ${JSON.stringify(
@@ -52,7 +53,7 @@ export const axiosCrear = async (UrlApi, oEntidad) => {
   } catch (error) {
     console.log('axiosCrud.crear() - catch() - ');
     if (error && error.response && error.response.data) {
-      console.log('Este es el error : ' + error);
+      console.log('Este es el error : ', error);
       return error.response.data;
     } else {
       console.log(

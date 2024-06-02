@@ -45,13 +45,23 @@ export const calcularInteresBoleta = async (
   const URL = `/empresa/${empresa_id}/ddjj/${ddjj_id}/boletas/${boleta_codigo}/armar`;
   console.log(URL);
   try {
-    const response = await calcularInteres(URL, intencionDePago);
-    console.log(response.detalle_boletas);
-    return response.detalle_boletas[0];
+    //const response = await calcularInteres(URL, intencionDePago);
+    const body = { intencionDePago: intencionDePago };
+    console.log(body);
+    const data = await axiosCrud.crear(URL, body);
+    console.log('calcularInteresBoleta - response: ', data);
+
+    if (!data.detalle_boletas) {
+      throw data;
+    }
+
+    console.log(data.detalle_boletas);
+    return data.detalle_boletas[0];
   } catch (error) {
     const HTTP_MSG =
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`;
     showErrorBackEnd(HTTP_MSG, error);
+    return {};
   }
 };
 
@@ -63,14 +73,20 @@ export const calcularInteresBoletas = async (
   //const URL = `/empresa/${empresa_id}/ddjj/${ddjj_id}/calcular-intereses`;
   const URL = `/empresa/${empresa_id}/ddjj/${ddjj_id}/boletas/armar`;
   try {
-    console.log(intencionDePago);
-    const response = await calcularInteres(URL, intencionDePago);
-    console.log(response);
-    return response;
+    //const data = await calcularInteres(URL, intencionDePago);
+    const body = { intencionDePago: intencionDePago };
+    const data = await axiosCrud.crear(URL, body);
+
+    console.log('calcularInteresBoletas - calcularInteres() - data:', data);
+    if (!data.detalle_boletas) {
+      throw data;
+    }
+    return data;
   } catch (error) {
     const HTTP_MSG =
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`;
     showErrorBackEnd(HTTP_MSG, error);
+    return {};
   }
 };
 
