@@ -226,6 +226,17 @@ export const Feriados = () => {
           );
           setRows(rowsNew);
         }
+
+        if (!bOk) {
+          const indice = rows.indexOf(oldRow);
+          setTimeout(() => {
+            setRowModesModel((oldModel) => ({
+              [indice]: { mode: GridRowModes.Edit, fieldToFocus: 'fecha' },
+              ...oldModel,
+            }));
+          }, 100);
+        }
+        bOk = true;
       } catch (error) {
         console.log(
           'X - processRowUpdate - MODI - ERROR: ' + JSON.stringify(error),
