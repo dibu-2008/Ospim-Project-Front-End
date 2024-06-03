@@ -111,9 +111,9 @@ export const GenerarBoletas = () => {
     return false;
   };
 
-  const setIntencionDePago = async (codigo, fecha) => {
+  const setIntencionDePago = async (codigo, fecha, lanzar) => {
     const fechaToISO = new Date(`${fecha}`).toISOString();
-    if (primeraSeleccion) {
+    if (primeraSeleccion && lanzar) {
       setPrimeraSeleccion(false);
       console.log(ID_EMPRESA);
       console.log(DDJJ_ID);
@@ -270,10 +270,14 @@ export const GenerarBoletas = () => {
                     <TextField
                       type="date"
                       inputProps={{ min: hoy }}
-                      value={boleta.intencionDePago?.split('T')[0]}
+                      value={boleta.intencionDePago?.split('T')[0] ||''}
                       onChange={(event) =>
-                        setIntencionDePago(boleta.codigo, event.target.value)
+                        setIntencionDePago(boleta.codigo, event.target.value, false)
                       }
+                      onBlur={event =>{
+                        console.log(event.target.value)
+                        setIntencionDePago(boleta.codigo, event.target.value, true)}
+                      } 
                     />
                   </TableCell>
                 ))}
