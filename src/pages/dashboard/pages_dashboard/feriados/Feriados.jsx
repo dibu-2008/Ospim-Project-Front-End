@@ -191,7 +191,6 @@ export const Feriados = () => {
   };
 
   const processRowUpdate = async (newRow, oldRow) => {
-    console.log('processRowUpdate - INIT');
     let bOk = false;
 
     if (!newRow.id) {
@@ -235,6 +234,7 @@ export const Feriados = () => {
               ...oldModel,
             }));
           }, 100);
+          return null;
         }
         bOk = true;
       } catch (error) {
@@ -245,10 +245,8 @@ export const Feriados = () => {
     }
 
     if (bOk) {
-      console.log('newRow: ', newRow);
       return newRow;
     } else {
-      console.log('oldRow: ', oldRow);
       return oldRow;
     }
   };

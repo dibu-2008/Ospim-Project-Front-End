@@ -124,31 +124,25 @@ export const Publicaciones = () => {
     if (!newRow.id) {
       try {
         const data = await axiosPublicaciones.crear(newRow);
-
         if (data && data.id) {
           newRow.id = data.id;
-          bOk = true;
-          const newRows = rows.map((row) => (!row.id ? newRow : row));
-          setRows(newRows);
-          setRowModesModel({
-            ...rowModesModel,
-            [rows.indexOf(newRow)]: { mode: GridRowModes.View },
-          });
-        } else {
-          handleServerError(
-            rows,
-            newRow,
-            setRows,
-            setRowModesModel,
-            GridRowModes,
-            false,
-          );
+        }
+        bOk = true;
+        const newRows = rows.map((row) => (!row.id ? newRow : row));
+        setRows(newRows);
+
+        if (!(data && data.id)) {
+          setTimeout(() => {
+            setRowModesModel((oldModel) => ({
+              [0]: { mode: GridRowModes.Edit, fieldToFocus: 'fecha' },
+              ...oldModel,
+            }));
+          }, 100);
         }
       } catch (error) {
         console.log(
           'X - processRowUpdate - MODI - ERROR: ' + JSON.stringify(error),
         );
-        setRows(rows.filter((reg) => reg.id !== newRow.id));
       }
     } else {
       try {
@@ -158,21 +152,24 @@ export const Publicaciones = () => {
             row.id === newRow.id ? newRow : row,
           );
           setRows(rowsNew);
-        } else {
-          handleServerError(
-            rows,
-            oldRow,
-            setRows,
-            setRowModesModel,
-            GridRowModes,
-            true,
-          );
         }
+
+        if (!bOk) {
+          const indice = rows.indexOf(oldRow);
+          console.log('rows.indexOf(oldRow) => indice: ', indice);
+          setTimeout(() => {
+            setRowModesModel((oldModel) => ({
+              [indice]: { mode: GridRowModes.Edit, fieldToFocus: 'titulo' },
+              ...oldModel,
+            }));
+          }, 100);
+          return null;
+        }
+        bOk = true;
       } catch (error) {
         console.log(
           'X - processRowUpdate - MODI - ERROR: ' + JSON.stringify(error),
         );
-        setRows(rows.filter((reg) => reg.id !== newRow.id));
       }
     }
 
