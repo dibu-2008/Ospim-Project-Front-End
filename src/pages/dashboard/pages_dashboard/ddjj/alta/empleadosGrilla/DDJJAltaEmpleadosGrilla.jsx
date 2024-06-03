@@ -721,7 +721,7 @@ export const DDJJAltaEmpleadosGrilla = ({
         //return formatter.currency.format(value || 0);
         // Averiguar sobre el pais y la moneda
         const formattedValue = formatValue({
-          value: value.toString(),
+          value: value?.toString(),
           groupSeparator: '.',
           decimalSeparator: ',',
           decimalScale: 2,
@@ -774,7 +774,7 @@ export const DDJJAltaEmpleadosGrilla = ({
         //return formatter.currency.format(value || 0);
         // Averiguar sobre el pais y la moneda
         const formattedValue = formatValue({
-          value: value.toString(),
+          value: value?.toString(),
           groupSeparator: '.',
           decimalSeparator: ',',
           decimalScale: 2,

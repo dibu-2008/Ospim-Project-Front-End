@@ -172,10 +172,16 @@ export const GenerarBoletas = () => {
 
   const setFormaDePago = (codigo, value) => {
     if (primeraSeleccionFDP) {
-      const newDetalleBoletas = boletas.detalle_boletas.map((boleta) => ({
-        ...boleta,
-        formaDePago: value,
-      }));
+      const newDetalleBoletas = boletas.detalle_boletas.map((boleta) => {
+        //Condicion puesta hasta que se habilite el banelco en amtimacs
+        if (boleta.codigo === 'AMTIMACS' && value == 'PMCUENTAS') {
+          return boleta;
+        }
+        return {
+          ...boleta,
+          formaDePago: value,
+        };
+      });
       setBoletas({ ...boletas, detalle_boletas: newDetalleBoletas });
       setPrimeraSeleccionFDP(false);
     } else {
@@ -286,7 +292,9 @@ export const GenerarBoletas = () => {
                     >
                       <MenuItem value="VENTANILLA">Ventanilla</MenuItem>
                       <MenuItem value="REDLINK">Red Link</MenuItem>
-                      <MenuItem value="PMCUENTAS">PagoMisCuentas</MenuItem>
+                      {boleta.codigo !== 'AMTIMACS' && (
+                        <MenuItem value="PMCUENTAS">Banelco</MenuItem>
+                      )}
                     </Select>
                   </TableCell>
                 ))}

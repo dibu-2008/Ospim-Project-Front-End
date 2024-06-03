@@ -145,8 +145,6 @@ export const DDJJAlta = ({
   useEffect(() => {
     const ObtenerPlantaEmpresas = async () => {
       const data = await axiosDDJJ.getPlantas(ID_EMPRESA);
-      console.log('PLANTAS');
-      console.log(data);
       setPlantas(data.map((item) => ({ id: item, ...item })));
     };
     ObtenerPlantaEmpresas();
@@ -168,16 +166,10 @@ export const DDJJAlta = ({
       if (ddjj && idDDJJ) {
         try {
           const ddjj = await axiosDDJJ.getDDJJ(idEmpresa, idDDJJ);
-          console.log(ddjj.periodo);
-
           setTituloSec(getTituloSec(ddjj.secuencia));
-
           setPeriodo(dayjs(ddjj.periodo));
-
           if (ddjj.estado) {
             setActualizacionHabilitada(ddjj.estado == 'PE');
-          } else {
-            console.log('obtenerDDJJ - ddjj.estado. undefined !!!');
           }
 
           const afiliadosConFilas = ddjj.afiliados.map((item, index) => ({
@@ -194,23 +186,19 @@ export const DDJJAlta = ({
         }
       }
     };
-    console.log('DDJJAlta - DDJJState:', DDJJState);
     obtenerDDJJ(DDJJState, DDJJState.id, ID_EMPRESA);
   }, [DDJJState]);
 
   const importarAfiliado = async () => {
-    console.log('afiliadoImportado');
-    console.log(afiliadoImportado);
+    console.log(afiliadoImportado)
     const cuiles = afiliadoImportado.map((item) => item.cuil);
-    const cuilesString = cuiles.map((item) => item.toString());
-
+    cuiles.map((item) => console.log(item));
+    const cuilesString = cuiles.map((item) => item?.toString());
+    console.log(cuilesString);
     const cuilesResponse = await axiosDDJJ.validarCuiles(
       ID_EMPRESA,
       cuilesString,
     );
-
-    console.log('cuilesResponse');
-    console.log(cuilesResponse);
 
     const afiliadoImportadoConInte = afiliadoImportado.map((item, index) => {
       const cuilResponse = cuilesResponse.find(
@@ -222,9 +210,6 @@ export const DDJJAlta = ({
       return item;
     });
 
-    console.log('afiliadoImportadoConInte');
-    console.log(afiliadoImportadoConInte);
-
     // Si alguno de los cuiles el valor de cuilesValidados es igual a false
     if (cuilesResponse.some((item) => item.cuilValido === false)) {
       const mensajesFormateados2 = filasDoc
@@ -233,8 +218,6 @@ export const DDJJAlta = ({
         Linea ${item.indice}: cuil ${item.cuil} con formato inválido.</p>`;
         })
         .join('');
-
-      console.log(mensajesFormateados2);
 
       Swal.fire({
         icon: 'error',
@@ -311,46 +294,59 @@ export const DDJJAlta = ({
         if (rows[0].length === 11) {
           const arraySinEncabezado = rows.slice(1);
 
-          rows.forEach((item, index) => {
-            const fila = {
-              indice: index + 1,
-              cuil: item[0],
-            };
-
-            setFilasDoc([...filasDoc, fila]);
+          arraySinEncabezado.forEach((item, index) => {
+            //console.log(item)
+            //console.log(item[0])
+            //console.log(index);
+            if (item.length === 11) {
+              //console.log(item.length);
+              //console.log(item[0]);
+              const fila = {
+                //indice: index + 1,
+                indice: index,
+                cuil: item[0],
+              };
+              console.log(filasDoc)
+              console.log(fila)
+              setFilasDoc([...filasDoc, fila]);
+            }
           });
 
           const arrayTransformado = arraySinEncabezado.map((item, index) => {
-            return {
-              id: index + 1,
-              cuil: item[0],
-              apellido: item[1],
-              nombre: item[2],
-              camara: item[3],
-              categoria: item[4],
-              fechaIngreso: formatearFecha(item[5]),
-              empresaDomicilioId: plantas.find(
-                (plantas) => plantas.planta === item[6],
-              )?.id,
-              remunerativo: item[7],
-              noRemunerativo: item[8],
-              uomaSocio: item[9] === 'Si',
-              amtimaSocio: item[10] === 'Si',
-              esImportado: true,
-            };
-          });
+            //console.log(item);
+            
+            if (item.length === 11 && item[0] !== undefined) {
+              console.log(item)
+              return {
+                //id: index + 1,
+                id: index,
+                cuil: item[0],
+                apellido: item[1],
+                nombre: item[2],
+                camara: item[3],
+                categoria: item[4],
+                fechaIngreso: formatearFecha(item[5]),
+                empresaDomicilioId: plantas.find(
+                  (plantas) => plantas.planta === item[6],
+                )?.id,
+                remunerativo: item[7],
+                noRemunerativo: item[8],
+                uomaSocio: item[9] === 'Si',
+                amtimaSocio: item[10] === 'Si',
+                esImportado: true,
+              };
+            }
+          }).filter(item => item !== undefined);
 
           // Antes de llenar las grillas debo de validar los cuiles
-
+          console.log(arrayTransformado)
           setAfiliadoImportado(arrayTransformado);
           setBtnSubirHabilitado(true);
-          console.log(DDJJState);
           if (DDJJState.id) {
             confirm(
               'Recorda que si subis un archivo, se perderan los datos de la ddjj actual',
             );
           }
-        } else {
         }
       };
 
@@ -366,7 +362,6 @@ export const DDJJAlta = ({
     let DDJJ = {
       periodo: periodo,
       afiliados: rowsAltaDDJJ.map((item) => {
-        console.log('guardarDeclaracionJurada - item: ', item);
         const registroNew = {
           errores: item.errores,
           cuil: !item.cuil ? null : item.cuil,
@@ -389,8 +384,6 @@ export const DDJJAlta = ({
           amtimaSocio: item.amtimaSocio === '' ? null : item.amtimaSocio,
         };
 
-        console.log('REGISTRO NEW');
-        console.log(registroNew);
         if (item.id) registroNew.id = item.id;
         return registroNew;
       }),
@@ -400,37 +393,24 @@ export const DDJJAlta = ({
       DDJJ.id = DDJJState.id;
     }
 
-    console.log('DDJJJJJJJJJJJJJJJJJJ FINALLLL');
-    console.log(DDJJ);
-
     // Borrar la propiedad errores de cada afiliado
     // por que no se envia al backend
     DDJJ.afiliados.forEach((afiliado) => {
       delete afiliado.errores;
     });
 
-    console.log('borro afiliado.errores - DDJJ:');
-    console.log(DDJJ);
-
     const validacionResponse = await axiosDDJJ.validar(ID_EMPRESA, DDJJ);
-    console.log('validacionResponse: ');
-    console.log(validacionResponse);
 
     // array de cuiles del array validacionResponse.errores
     let cuilesConErrores = [];
     if (validacionResponse.errores) {
       cuilesConErrores = validacionResponse.errores.map((error) => error.cuil);
     }
-    console.log('cuilesConErrores: ');
-    console.log(cuilesConErrores);
 
     // Agregar la propiedad errores="No"
     DDJJ.afiliados.forEach((afiliado) => {
-      console.log('afiliado.cuil: ');
-      console.log(afiliado.cuil);
       afiliado.errores = false;
       if (cuilesConErrores.includes(afiliado.cuil)) {
-        console.log('afiliado.errores:false');
         afiliado.errores = true;
       }
     });
@@ -477,19 +457,15 @@ export const DDJJAlta = ({
         cancelButtonText: 'Cancelar',
       }).then(async (result) => {
         if (result.isConfirmed) {
-          console.log('Aceptar...');
           let bOK = false;
 
           DDJJ.afiliados.forEach((afiliado) => {
             delete afiliado.errores;
           });
 
-          console.log('Estoy dentro de los errores');
-
           if (DDJJState.id) {
             bOK = await axiosDDJJ.actualizar(ID_EMPRESA, DDJJ);
           } else {
-            console.log(DDJJ);
             const data = await axiosDDJJ.crear(ID_EMPRESA, DDJJ);
             if (data) {
               //setDDJJCreada(data);
@@ -497,55 +473,55 @@ export const DDJJAlta = ({
               setTituloSec(getTituloSec(data.secuencia));
             }
           }
+          return false;
         } else {
-          console.log('Cancelar...se queda a corregir datos');
           // NO limpiar la grilla.
           // El usuario decidio corregir los errores antes de GRABAR.
           // pero no hay que PERDER los datos.-
         }
       });
     } else {
-      console.log('no tiene errores...grabo directamente.');
       let bOK = false;
 
       DDJJ.afiliados.forEach((afiliado) => {
         delete afiliado.errores;
       });
 
-      console.log('Estoy fuera de los errores');
-
       if (DDJJState.id) {
-        console.log('Dentro de ACTUALIZAR');
         bOK = await axiosDDJJ.actualizar(ID_EMPRESA, DDJJ);
       } else {
-        console.log('Dentro de CREAR');
         const data = await axiosDDJJ.crear(ID_EMPRESA, DDJJ);
         if (data) {
           setDDJJState(data);
           setTituloSec(getTituloSec(data.secuencia));
         }
       }
+      return true;
     }
   };
 
   const presentarDeclaracionJurada = async () => {
-    if (DDJJState.id) {
-      // Esto deberia de ser un post para poder cambiar ambos datos
-
-      const data = await axiosDDJJ.presentar(ID_EMPRESA, DDJJState.id);
-      DDJJState.estado = data.estado;
-      DDJJState.secuencia = data.secuencia;
-      if (data) {
-        const newDDJJState = {
-          ...DDJJState,
-          estado: data.estado || null,
-          secuencia: data.secuencia,
-        };
-        console.log('newDDJJState - pre SET: ');
-        console.log(newDDJJState);
-        setDDJJState(newDDJJState);
-        setTituloSec(getTituloSec(newDDJJState.secuencia));
+    const seguir = await guardarDeclaracionJurada();
+    if (seguir) {
+      if (DDJJState.id) {
+        // Esto deberia de ser un post para poder cambiar ambos datos
+        const data = await axiosDDJJ.presentar(ID_EMPRESA, DDJJState.id);
+        DDJJState.estado = data.estado;
+        DDJJState.secuencia = data.secuencia;
+        if (data) {
+          const newDDJJState = {
+            ...DDJJState,
+            estado: data.estado || null,
+            secuencia: data.secuencia,
+          };
+          setDDJJState(newDDJJState);
+          setTituloSec(getTituloSec(newDDJJState.secuencia));
+        }
       }
+    } else {
+      swal.showError(
+        'La declaracion jurada no se pudo presentar. Existen campos invalidos',
+      );
     }
   };
 
@@ -595,7 +571,6 @@ export const DDJJAlta = ({
 
   const handleExpand = () => {
     if (rowsAltaDDJJ?.length !== 0 && !expanded) {
-      console.log(rowsAltaDDJJ?.length !== 0);
       setExpanded(true);
     }
   };
