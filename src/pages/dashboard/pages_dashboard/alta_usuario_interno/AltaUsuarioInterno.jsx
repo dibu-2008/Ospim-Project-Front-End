@@ -71,28 +71,21 @@ const crearNuevoRegistro = (props) => {
   } = props;
 
   const altaHandleClick = () => {
-    const maxId = rows ? Math.max(...rows.map((row) => row.id), 0) : 1;
-    const newId = maxId + 1;
-    const id = newId;
+    const newReg = {
+      apellido: '',
+      nombre: '',
+      descripcion: '',
+      email: '',
+      clave: '',
+      rolId: '',
+      notificaciones: '',
+      habilitado: null,
+    };
     volverPrimerPagina();
+    setRows((oldRows) => [newReg, ...oldRows]);
 
-    setRows((oldRows) => [
-      {
-        id,
-        apellido: '',
-        nombre: '',
-        descripcion: '',
-        email: '',
-        clave: '',
-        rolId: '',
-        notificaciones: '',
-        habilitado: null,
-        isNew: true,
-      },
-      ...oldRows,
-    ]);
     setRowModesModel((oldModel) => ({
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
+      [0]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
       ...oldModel,
     }));
   };
@@ -158,34 +151,43 @@ export const AltaUsuarioInterno = () => {
     }
   };
 
-  const handleEditClick = (id) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
-  };
-
-  const handleSaveClick = (id) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-  };
-
-  const handleCancelClick = (id) => () => {
+  const handleEditClick = (row) => () => {
     setRowModesModel({
       ...rowModesModel,
-      [id]: { mode: GridRowModes.View, ignoreModifications: true },
+      [rows.indexOf(row)]: { mode: GridRowModes.Edit },
+    });
+  };
+
+  const handleSaveClick = (row) => () => {
+    setRowModesModel({
+      ...rowModesModel,
+      [rows.indexOf(row)]: { mode: GridRowModes.View },
+    });
+  };
+
+  const handleCancelClick = (row) => () => {
+    setRowModesModel({
+      ...rowModesModel,
+      [rows.indexOf(row)]: {
+        mode: GridRowModes.View,
+        ignoreModifications: true,
+      },
     });
 
-    const editedRow = rows.find((row) => row.id === id);
-    if (editedRow.isNew) {
-      setRows(rows.filter((row) => row.id !== id));
+    const editedRow = rows.find((reg) => reg.id === row.id);
+    if (!editedRow.id) {
+      setRows(rows.filter((reg) => reg.id !== row.id));
     }
   };
 
-  const handleGestionClave = (id, row) => () => {
+  const handleGestionClave = (row) => () => {
     setNombre(row.nombre);
     setApellido(row.apellido);
     setUsuario(row.descripcion);
     setEmail(row.email);
     setClave(row.clave);
     setRepetirClave(row.clave);
-    setIdUsuario(id);
+    setIdUsuario(row.id);
     handleOpen();
   };
 
@@ -193,21 +195,25 @@ export const AltaUsuarioInterno = () => {
     console.log('processRowUpdate - INIT');
     let bOk = false;
 
-    if (newRow.isNew) {
+    if (!newRow.id) {
       console.log('processRowUpdate - ALTA');
       try {
-        delete newRow.id;
         delete newRow.repetirClave;
-        delete newRow.isNew;
         const data = await axiosUsuariosInternos.crear(newRow);
         if (data && data.id) {
           newRow.id = data.id;
-          newRow.isNew = false;
-          bOk = true;
-          const newRows = rows.map((row) => (row.isNew ? newRow : row));
-          setRows(newRows);
-        } else {
-          console.log('alta sin ID generado');
+        }
+        bOk = true;
+        const newRows = rows.map((row) => (!row.id ? newRow : row));
+        setRows(newRows);
+
+        if (!(data && data.id)) {
+          setTimeout(() => {
+            setRowModesModel((oldModel) => ({
+              [0]: { mode: GridRowModes.Edit, fieldToFocus: 'fecha' },
+              ...oldModel,
+            }));
+          }, 100);
         }
       } catch (error) {
         console.log(
@@ -217,14 +223,24 @@ export const AltaUsuarioInterno = () => {
     } else {
       console.log('3 - processRowUpdate - MODI ');
       try {
-        delete newRow.isNew;
         delete newRow.repetirClave;
         bOk = await axiosUsuariosInternos.actualizar(newRow);
         console.log('4 - processRowUpdate - MODI - bOk: ' + bOk);
-        newRow.isNew = false;
         if (bOk) {
           setRows(rows.map((row) => (row.id === newRow.id ? newRow : row)));
         }
+
+        if (!bOk) {
+          const indice = rows.indexOf(oldRow);
+          setTimeout(() => {
+            setRowModesModel((oldModel) => ({
+              [indice]: { mode: GridRowModes.Edit, fieldToFocus: 'fecha' },
+              ...oldModel,
+            }));
+          }, 100);
+          return null;
+        }
+        bOk = true;
       } catch (error) {
         console.log(
           'X - processRowUpdate - MODI - ERROR: ' + JSON.stringify(error),
@@ -403,8 +419,9 @@ export const AltaUsuarioInterno = () => {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell',
-      getActions: ({ id, row }) => {
-        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+      getActions: ({ row }) => {
+        const isInEditMode =
+          rowModesModel[rows.indexOf(row)]?.mode === GridRowModes.Edit;
 
         if (isInEditMode) {
           return [
@@ -414,13 +431,13 @@ export const AltaUsuarioInterno = () => {
               sx={{
                 color: 'primary.main',
               }}
-              onClick={handleSaveClick(id)}
+              onClick={handleSaveClick(row)}
             />,
             <GridActionsCellItem
               icon={<CancelIcon />}
               label="Cancel"
               className="textPrimary"
-              onClick={handleCancelClick(id)}
+              onClick={handleCancelClick(row)}
               color="inherit"
             />,
           ];
@@ -431,7 +448,7 @@ export const AltaUsuarioInterno = () => {
             icon={<EditIcon />}
             label="Edit"
             className="textPrimary"
-            onClick={handleEditClick(id)}
+            onClick={handleEditClick(row)}
             color="inherit"
           />,
           <GridActionsCellItem
@@ -443,7 +460,7 @@ export const AltaUsuarioInterno = () => {
               )
             }
             label={row.habilitado ? 'Cerrar' : 'Abrir'}
-            onClick={handleHabilitar(id)}
+            onClick={handleHabilitar(row)}
             color="inherit"
           />,
         ];
@@ -454,7 +471,7 @@ export const AltaUsuarioInterno = () => {
               icon={<LockPersonIcon />}
               label="Gestionar Clave"
               sx={{ color: 'primary.main' }}
-              onClick={handleGestionClave(id, row)}
+              onClick={handleGestionClave(row)}
             />
           </Tooltip>,
         );
@@ -491,6 +508,7 @@ export const AltaUsuarioInterno = () => {
           <DataGrid
             rows={rows}
             columns={columns}
+            getRowId={(row) => rows.indexOf(row)}
             editMode="row"
             rowModesModel={rowModesModel}
             onRowModesModelChange={handleRowModesModelChange}

@@ -135,8 +135,6 @@ export const Feriados = () => {
   };
 
   const handleEditClick = (row) => () => {
-    console.log('handleEditClick - row:');
-    console.log(row);
     setRowModesModel({
       ...rowModesModel,
       [rows.indexOf(row)]: { mode: GridRowModes.Edit },
