@@ -460,7 +460,7 @@ export const AltaUsuarioInterno = () => {
               )
             }
             label={row.habilitado ? 'Cerrar' : 'Abrir'}
-            onClick={handleHabilitar(row)}
+            onClick={handleHabilitar(row.id)}
             color="inherit"
           />,
         ];
