@@ -98,10 +98,12 @@ export const DetalleBoleta = () => {
   };
 
   const handleSetMetodoPago = async (value) => {
+    console.log('handleSetMetodoPago - value:', value);
     setMetodoPago(value);
     const nuevaBoleta = JSON.parse(JSON.stringify(boletaDetalle));
     nuevaBoleta.formaDePago = value;
     setBoletaDetalle(nuevaBoleta);
+    console.log('handleSetMetodoPago - nuevaBoleta:', nuevaBoleta);
   };
 
   const handleGuardar = () => {

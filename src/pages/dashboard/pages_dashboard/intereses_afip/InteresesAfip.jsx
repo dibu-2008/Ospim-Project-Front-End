@@ -149,7 +149,6 @@ export const InteresesAfip = () => {
   };
 
   const processRowUpdate = async (newRow, oldRow) => {
-    console.log('processRowUpdate - INIT');
     let bOk = false;
 
     if (!newRow.id) {
@@ -157,11 +156,18 @@ export const InteresesAfip = () => {
         const data = await axiosIntereses.crear(newRow);
         if (data && data.id) {
           newRow.id = data.id;
-          bOk = true;
-          const newRows = rows.map((row) => (!row.id ? newRow : row));
-          setRows(newRows);
-        } else {
-          console.log('alta sin ID generado');
+        }
+        bOk = true;
+        const newRows = rows.map((row) => (!row.id ? newRow : row));
+        setRows(newRows);
+
+        if (!(data && data.id)) {
+          setTimeout(() => {
+            setRowModesModel((oldModel) => ({
+              [0]: { mode: GridRowModes.Edit, fieldToFocus: 'fecha' },
+              ...oldModel,
+            }));
+          }, 100);
         }
       } catch (error) {
         console.log(
@@ -177,6 +183,18 @@ export const InteresesAfip = () => {
           );
           setRows(rowsNew);
         }
+
+        if (!bOk) {
+          const indice = rows.indexOf(oldRow);
+          setTimeout(() => {
+            setRowModesModel((oldModel) => ({
+              [indice]: { mode: GridRowModes.Edit, fieldToFocus: 'fecha' },
+              ...oldModel,
+            }));
+          }, 100);
+          return null;
+        }
+        bOk = true;
       } catch (error) {
         console.log(
           'X - processRowUpdate - MODI - ERROR: ' + JSON.stringify(error),

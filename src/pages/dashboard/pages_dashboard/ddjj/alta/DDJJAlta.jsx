@@ -4,6 +4,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { esES } from '@mui/x-date-pickers/locales';
+import formatter from '@/common/formatter';
 import {
   Button,
   Radio,
@@ -190,7 +191,7 @@ export const DDJJAlta = ({
   }, [DDJJState]);
 
   const importarAfiliado = async () => {
-    console.log(afiliadoImportado)
+    console.log(afiliadoImportado);
     const cuiles = afiliadoImportado.map((item) => item.cuil);
     cuiles.map((item) => console.log(item));
     const cuilesString = cuiles.map((item) => item?.toString());
@@ -306,40 +307,42 @@ export const DDJJAlta = ({
                 indice: index,
                 cuil: item[0],
               };
-              console.log(filasDoc)
-              console.log(fila)
+              console.log(filasDoc);
+              console.log(fila);
               setFilasDoc([...filasDoc, fila]);
             }
           });
 
-          const arrayTransformado = arraySinEncabezado.map((item, index) => {
-            //console.log(item);
-            
-            if (item.length === 11 && item[0] !== undefined) {
-              console.log(item)
-              return {
-                //id: index + 1,
-                id: index,
-                cuil: item[0],
-                apellido: item[1],
-                nombre: item[2],
-                camara: item[3],
-                categoria: item[4],
-                fechaIngreso: formatearFecha(item[5]),
-                empresaDomicilioId: plantas.find(
-                  (plantas) => plantas.planta === item[6],
-                )?.id,
-                remunerativo: item[7],
-                noRemunerativo: item[8],
-                uomaSocio: item[9] === 'Si',
-                amtimaSocio: item[10] === 'Si',
-                esImportado: true,
-              };
-            }
-          }).filter(item => item !== undefined);
+          const arrayTransformado = arraySinEncabezado
+            .map((item, index) => {
+              //console.log(item);
+
+              if (item.length === 11 && item[0] !== undefined) {
+                console.log(item);
+                return {
+                  //id: index + 1,
+                  id: index,
+                  cuil: item[0],
+                  apellido: item[1],
+                  nombre: item[2],
+                  camara: item[3],
+                  categoria: item[4],
+                  fechaIngreso: formatearFecha(item[5]),
+                  empresaDomicilioId: plantas.find(
+                    (plantas) => plantas.planta === item[6],
+                  )?.id,
+                  remunerativo: item[7],
+                  noRemunerativo: item[8],
+                  uomaSocio: item[9] === 'Si',
+                  amtimaSocio: item[10] === 'Si',
+                  esImportado: true,
+                };
+              }
+            })
+            .filter((item) => item !== undefined);
 
           // Antes de llenar las grillas debo de validar los cuiles
-          console.log(arrayTransformado)
+          console.log(arrayTransformado);
           setAfiliadoImportado(arrayTransformado);
           setBtnSubirHabilitado(true);
           if (DDJJState.id) {
@@ -504,19 +507,33 @@ export const DDJJAlta = ({
     const seguir = await guardarDeclaracionJurada();
     if (seguir) {
       if (DDJJState.id) {
-        // Esto deberia de ser un post para poder cambiar ambos datos
-        const data = await axiosDDJJ.presentar(ID_EMPRESA, DDJJState.id);
-        DDJJState.estado = data.estado;
-        DDJJState.secuencia = data.secuencia;
-        if (data) {
-          const newDDJJState = {
-            ...DDJJState,
-            estado: data.estado || null,
-            secuencia: data.secuencia,
-          };
-          setDDJJState(newDDJJState);
-          setTituloSec(getTituloSec(newDDJJState.secuencia));
-        }
+        Swal.fire({
+          title: 'Presentación de DDJJ en OSPIM',
+          html:
+            'Confirma la Presentación de la Declaración Jurada para el Período <b>' +
+            formatter.periodo(periodo) +
+            '</b>?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#1A76D2',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: 'Si, Presentar !',
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            const data = await axiosDDJJ.presentar(ID_EMPRESA, DDJJState.id);
+            DDJJState.estado = data.estado;
+            DDJJState.secuencia = data.secuencia;
+            if (data) {
+              const newDDJJState = {
+                ...DDJJState,
+                estado: data.estado || null,
+                secuencia: data.secuencia,
+              };
+              setDDJJState(newDDJJState);
+              setTituloSec(getTituloSec(newDDJJState.secuencia));
+            }
+          }
+        });
       }
     } else {
       swal.showError(

@@ -172,7 +172,6 @@ export const Ajustes = () => {
   };
 
   const processRowUpdate = async (newRow, oldRow) => {
-    console.log('processRowUpdate - INIT');
     let bOk = false;
 
     if (!newRow.id) {
@@ -180,11 +179,18 @@ export const Ajustes = () => {
         const data = await axiosAjustes.crear(newRow);
         if (data && data.id) {
           newRow.id = data.id;
-          bOk = true;
-          const newRows = rows.map((row) => (!row.id ? newRow : row));
-          setRows(newRows);
-        } else {
-          console.log('alta sin ID generado');
+        }
+        bOk = true;
+        const newRows = rows.map((row) => (!row.id ? newRow : row));
+        setRows(newRows);
+
+        if (!(data && data.id)) {
+          setTimeout(() => {
+            setRowModesModel((oldModel) => ({
+              [0]: { mode: GridRowModes.Edit, fieldToFocus: 'fecha' },
+              ...oldModel,
+            }));
+          }, 100);
         }
       } catch (error) {
         console.log(
@@ -200,6 +206,18 @@ export const Ajustes = () => {
           );
           setRows(rowsNew);
         }
+
+        if (!bOk) {
+          const indice = rows.indexOf(oldRow);
+          setTimeout(() => {
+            setRowModesModel((oldModel) => ({
+              [indice]: { mode: GridRowModes.Edit, fieldToFocus: 'fecha' },
+              ...oldModel,
+            }));
+          }, 100);
+          return null;
+        }
+        bOk = true;
       } catch (error) {
         console.log(
           'X - processRowUpdate - MODI - ERROR: ' + JSON.stringify(error),
@@ -258,7 +276,10 @@ export const Ajustes = () => {
       type: 'singleSelect',
       editable: true,
       flex: 1,
-      valueOptions: () => aportes.map((aporte) => aporte.codigo),
+      //valueOptions: () => aportes.map((aporte) => aporte.codigo),
+      valueOptions: aportes.map((item) => {
+        return { value: item.codigo, label: item.descripcion };
+      }),
       valueGetter: (params) => params.row.aporte || '',
       headerAlign: 'center',
       align: 'center',
