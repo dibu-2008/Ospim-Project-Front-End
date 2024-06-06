@@ -38,6 +38,13 @@ const style = {
 };
 const isNotNull = (value) => (value !== null && value !== '' ? value : '');
 // Traerme las etiquetas del dom que tengas la clase .MuiDataGrid-cell--editable
+
+const MOTIVOS = [
+  { codigo: 'DI', descripcion: 'Devolución de Intereses' },
+  { codigo: 'DPD', descripcion: 'Devolución por pago duplicado' },
+  { codigo: 'O', descripcion: 'Otros' },
+];
+
 const crearNuevoRegistro = (props) => {
   const {
     setRows,
@@ -180,11 +187,17 @@ export const Ajustes = () => {
         const data = await axiosAjustes.crear(newRow);
         if (data && data.id) {
           newRow.id = data.id;
-          bOk = true;
-          const newRows = rows.map((row) => (!row.id ? newRow : row));
-          setRows(newRows);
-        } else {
-          console.log('alta sin ID generado');
+        }
+        bOk = true;
+        const newRows = rows.map((row) => (!row.id ? newRow : row));
+        setRows(newRows);
+        if (!(data && data.id)) {
+          setTimeout(() => {
+            setRowModesModel((oldModel) => ({
+              [0]: { mode: GridRowModes.Edit },
+              ...oldModel,
+            }));
+          }, 100);
         }
       } catch (error) {
         console.log(
@@ -199,6 +212,15 @@ export const Ajustes = () => {
             row.id === newRow.id ? newRow : row,
           );
           setRows(rowsNew);
+        }
+        if (!bOk) {
+          const indice = rows.indexOf(oldRow);
+          setTimeout(() => {
+            setRowModesModel((oldModel) => ({
+              [indice]: { mode: GridRowModes.Edit },
+              ...oldModel,
+            }));
+          }, 100);
         }
       } catch (error) {
         console.log(
@@ -248,6 +270,22 @@ export const Ajustes = () => {
       flex: 1,
       type: 'number',
       editable: true,
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
+    },
+    {
+      field: 'motivo',
+      headerName: 'MOTIVO',
+      flex: 1,
+      type: 'singleSelect',
+      editable: true,
+      valueOptions:  MOTIVOS.map(motivo => ({ label: motivo.descripcion, value: motivo.codigo })),
+      valueGetter: (params) => params.row.motivo || '',
+      valueFormatter: (params) => {
+        const motivo = MOTIVOS.find(motivo => motivo.codigo === params.value);
+        return motivo ? motivo.descripcion : '';
+      },
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell',

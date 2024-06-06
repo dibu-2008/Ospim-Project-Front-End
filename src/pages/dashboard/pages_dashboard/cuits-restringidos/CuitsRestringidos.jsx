@@ -274,7 +274,7 @@ export const CuitsRestringidos = () => {
 
   return (
     <div className="cuits_restringidos_container">
-      <h1>Administracion de Cuits restringidos</h1>
+      <h1>Administración de Cuits restringidos</h1>
       <Box
         sx={{
           height: '600px',

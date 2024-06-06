@@ -1,7 +1,7 @@
 .registro_empresa_container {
   margin: 20px auto;
   width: 90%;
-  margin-bottom: 10px;
+  
 }
 
 .registro_empresa_container h1 {
@@ -18,8 +18,20 @@
 
 .form_register_company {
   width: 100%;
-  margin: 40px 0px;
-  padding-bottom: 90px;
+  margin: 40px 0px 5px 0px;
   padding-inline: 64px;
   align-items: flex-start;
+}
+
+.box{
+  display: flex!important;
+  align-items: flex-end!important;
+  justify-content: flex-end!important;
+  padding-bottom: 90px;
+  margin-bottom: 10px;
+}
+
+.form{
+  display: flex;
+  align-items: flex-end;
 }
