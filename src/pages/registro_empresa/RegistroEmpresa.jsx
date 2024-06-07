@@ -19,8 +19,10 @@ import {
   InputAdornment,
   OutlinedInput,
   Tooltip,
+  Grid,
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { textAlign } from '@mui/system';
 
 export const RegistroEmpresa = () => {
   const [additionalEmail, setAddionalEmail] = useState([]);
@@ -235,8 +237,9 @@ export const RegistroEmpresa = () => {
       <div className="registro_empresa_container">
         <form
           onSubmit={OnSubmitRegisterCompany}
-          className="form_register_company"
+          className='form'
         >
+          <div className="form_register_company">
           <h1>Bienvenidos a OSPIM</h1>
           <h3>Formulario de registro</h3>
           <div className="input-group">
@@ -691,20 +694,27 @@ export const RegistroEmpresa = () => {
             rows={rows}
             setRows={setRows}
           />
-          <Button
-            className="btn_ingresar"
-            variant="contained"
-            type="submit"
-            sx={{
-              width: 'auto',
-              marginTop: '20px',
-              padding: '15px',
-            }}
-          >
-            REGISTRAR EMPRESA
-          </Button>
+           <Grid item xs={12}>
+            <div className="box">
+              <Button
+                //className="btn_ingresar"
+                variant="contained"
+                type="submit"
+                sx={{
+                  width: 'auto',
+                  marginTop: '20px',
+                  padding: '15px',
+                }}
+              >
+                REGISTRAR EMPRESA
+              </Button>
+            </div>
+          </Grid>
+          </div>
+         
         </form>
       </div>
+
     </main>
   );
 };

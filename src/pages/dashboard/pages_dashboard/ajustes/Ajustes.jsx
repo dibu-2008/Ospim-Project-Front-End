@@ -38,6 +38,13 @@ const style = {
 };
 const isNotNull = (value) => (value !== null && value !== '' ? value : '');
 // Traerme las etiquetas del dom que tengas la clase .MuiDataGrid-cell--editable
+
+const MOTIVOS = [
+  { codigo: 'DI', descripcion: 'Devolución de Intereses' },
+  { codigo: 'DPD', descripcion: 'Devolución por pago duplicado' },
+  { codigo: 'O', descripcion: 'Otros' },
+];
+
 const crearNuevoRegistro = (props) => {
   const {
     setRows,
@@ -183,11 +190,10 @@ export const Ajustes = () => {
         bOk = true;
         const newRows = rows.map((row) => (!row.id ? newRow : row));
         setRows(newRows);
-
         if (!(data && data.id)) {
           setTimeout(() => {
             setRowModesModel((oldModel) => ({
-              [0]: { mode: GridRowModes.Edit, fieldToFocus: 'fecha' },
+              [0]: { mode: GridRowModes.Edit },
               ...oldModel,
             }));
           }, 100);
@@ -206,18 +212,15 @@ export const Ajustes = () => {
           );
           setRows(rowsNew);
         }
-
         if (!bOk) {
           const indice = rows.indexOf(oldRow);
           setTimeout(() => {
             setRowModesModel((oldModel) => ({
-              [indice]: { mode: GridRowModes.Edit, fieldToFocus: 'fecha' },
+              [indice]: { mode: GridRowModes.Edit },
               ...oldModel,
             }));
           }, 100);
-          return null;
         }
-        bOk = true;
       } catch (error) {
         console.log(
           'X - processRowUpdate - MODI - ERROR: ' + JSON.stringify(error),
@@ -266,6 +269,25 @@ export const Ajustes = () => {
       flex: 1,
       type: 'number',
       editable: true,
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
+    },
+    {
+      field: 'motivo',
+      headerName: 'MOTIVO',
+      flex: 1,
+      type: 'singleSelect',
+      editable: true,
+      valueOptions: MOTIVOS.map((motivo) => ({
+        label: motivo.descripcion,
+        value: motivo.codigo,
+      })),
+      valueGetter: (params) => params.row.motivo || '',
+      valueFormatter: (params) => {
+        const motivo = MOTIVOS.find((motivo) => motivo.codigo === params.value);
+        return motivo ? motivo.descripcion : '';
+      },
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell',
