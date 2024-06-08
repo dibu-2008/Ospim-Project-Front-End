@@ -8,16 +8,21 @@ import {
   ObtenerPublicacionesVigentes,
 } from './InicioApi';
 import { useState, useEffect } from 'react';
+import Link from '@mui/material/Link';
 
 export const Inicio = () => {
   const [datosContacto, setDatosContacto] = useState([]);
   const [contenido, setContenido] = useState([]);
+  const [telefonoWsp, setTelefonoWsp] = useState([]);
+  const [telefonoLlamada, setTelefonoLlamada] = useState([]);
 
   useEffect(() => {
     const getDatosContacto = async () => {
       const datosContacto = await ObtenerDatosDeContacto();
       console.log('getDatosContacto() - ', datosContacto);
       setDatosContacto(datosContacto);
+      setTelefonoWsp(datosContacto.whasap.replace(/-/g, ''));
+      setTelefonoLlamada(datosContacto.telefono.replace(/-/g, ''))
     };
     getDatosContacto();
   }, []);
@@ -51,22 +56,34 @@ export const Inicio = () => {
 
           <div className="medios">
             <div>
-              <span>
+              <Link
+                href={`mailto:${datosContacto?.email}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <EmailIcon />
-              </span>
-              {datosContacto ? datosContacto[0]?.email : ''}
+              </Link>
+              {datosContacto ? datosContacto?.email : ''}
             </div>
             <div>
-              <span>
+              <Link
+                href={`tel:${telefonoLlamada}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <LocalPhoneIcon />
-              </span>
-              {datosContacto ? datosContacto[0]?.telefono : ''}
+              </Link>
+              {datosContacto ? datosContacto?.telefono : ''}
             </div>
             <div>
-              <span>
+              <Link
+                href={`https://wa.me/${telefonoWsp}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <WhatsAppIcon />
-              </span>
-              {datosContacto ? datosContacto[0]?.whasap : ''}
+              </Link>
+              {datosContacto ? datosContacto?.whasap : ''}
             </div>
           </div>
 
