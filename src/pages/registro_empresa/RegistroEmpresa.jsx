@@ -250,7 +250,7 @@ export const RegistroEmpresa = () => {
               value={cuit}
               onChange={OnInputChangeRegisterCompany}
               autoComplete="off"
-              label="CUIT"
+              label="CUIT / CUIL"
             />
             <span style={styContToolAst}>
               <Tooltip

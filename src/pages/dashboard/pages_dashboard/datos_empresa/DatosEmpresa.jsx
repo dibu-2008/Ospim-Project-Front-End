@@ -101,7 +101,7 @@ export const DatosEmpresa = () => {
   return (
     <div className="datos_empresa_container">
       <ToastContainer />
-      <h1>Mis datos empresas</h1>
+      <h1>Mis Datos de Perfil</h1>
 
       <form
         style={{
