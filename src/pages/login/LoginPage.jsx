@@ -238,7 +238,7 @@ export const LoginPage = () => {
                 <div className="input-group">
                   <FormControl variant="outlined">
                     <InputLabel htmlFor="outlined-adornment-password">
-                      Password
+                      Contraseña
                     </InputLabel>
                     <OutlinedInput
                       type={showPassword ? 'text' : 'password'}
@@ -255,7 +255,7 @@ export const LoginPage = () => {
                             onMouseDown={handleMouseDownPassword}
                             edge="end"
                           >
-                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                            {showPassword ? <Visibility /> : <VisibilityOff />  }
                           </IconButton>
                         </InputAdornment>
                       }

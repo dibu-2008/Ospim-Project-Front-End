@@ -175,7 +175,7 @@ const DashboardPage = () => {
                 {rolFuncionalidades.DATOS_EMPRESA && (
                   <NavLink to="./misdatos" className="icon-container">
                     <PersonIcon className="icon-link" />{' '}
-                    {open && <span className="icon-link">Datos Empresa</span>}
+                    {open && <span className="icon-link">Datos de Perfil</span>}
                   </NavLink>
                 )}
                 {rolFuncionalidades.PUBLICACIONES && (

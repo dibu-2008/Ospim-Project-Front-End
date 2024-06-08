@@ -650,6 +650,7 @@ export const DDJJAlta = ({
               >
                 <Tab label="Importar CSV - XLSX" {...a11yProps(0)} />
                 <Tab label="Copiar un período anterior" {...a11yProps(1)} />
+                <Tab label="Carga Manual"  onClick={(e)=>handleChangeE(e,true)}/>
                 {/*  <Tab label="Item Three" {...a11yProps(2)} /> */}
               </Tabs>
             </Box>

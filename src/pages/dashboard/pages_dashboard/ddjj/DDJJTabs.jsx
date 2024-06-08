@@ -56,7 +56,7 @@ export const DDJJTabs = () => {
   const [peticion, setPeticion] = useState('');
   const [idDDJJ, setIdDDJJ] = useState(null);
   const location = useLocation();
-  const [tituloPrimerTab, setTituloPrimerTab] = useState('Alta Declaracion Jurada')
+  const [tituloPrimerTab, setTituloPrimerTab] = useState('Alta Declaración Jurada')
 
   const theme = useTheme();
 
@@ -76,7 +76,7 @@ export const DDJJTabs = () => {
   useEffect(() => {
     if (tabState===1){
       //window.location.reload();
-      setTituloPrimerTab('Alta Declaracion Jurada')
+      setTituloPrimerTab('Alta Declaración Jurada')
       setDDJJState({});
       setPeriodo(null);
       setRowsAltaDDJJ([]);
@@ -91,7 +91,7 @@ export const DDJJTabs = () => {
 
   return (
     <div className="declaraciones_juradas_container">
-      <h1>Administracion declaraciones juradas</h1>
+      <h1>Administración de Declaraciones Juradas</h1>
       <ThemeProvider theme={themeWithLocale}>
         <Box sx={{ width: '100%' }}>
           <Box
