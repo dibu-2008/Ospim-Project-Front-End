@@ -565,7 +565,7 @@ export const DDJJAltaEmpleadosGrilla = ({
     },
     {
       field: 'camara',
-      headerName: 'Camara',
+      headerName: 'Cámara',
       width: 100,
       editable: true,
       headerAlign: 'left',
@@ -619,7 +619,7 @@ export const DDJJAltaEmpleadosGrilla = ({
     {
       field: 'categoria',
       type: 'singleSelect',
-      headerName: 'Categoria',
+      headerName: 'Categoría',
       width: 80,
       editable: true,
       headerAlign: 'left',
