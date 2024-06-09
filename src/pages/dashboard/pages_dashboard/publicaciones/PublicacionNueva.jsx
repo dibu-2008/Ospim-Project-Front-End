@@ -19,21 +19,24 @@ export const EditarNuevaFila = (props) => {
   } = props;
 
   const handleClick = () => {
-    const newReg = {
-      titulo: '',
-      cuerpo: '',
-      vigenciaDesde: '',
-      vigenciaHasta: '',
-    };
+    if (rows) {
+      const editRow = rows.find((row) => !row.id);
+      if (typeof editRow === 'undefined' || editRow.id) {
+        const newReg = {
+          titulo: '',
+          cuerpo: '',
+          vigenciaDesde: '',
+          vigenciaHasta: '',
+        };
 
-    volverPrimerPagina();
-
-    setRows((oldRows) => [newReg, ...oldRows]);
-
-    setRowModesModel((oldModel) => ({
-      [0]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
-      ...oldModel,
-    }));
+        volverPrimerPagina();
+        setRows((oldRows) => [newReg, ...oldRows]);
+        setRowModesModel((oldModel) => ({
+          [0]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
+          ...oldModel,
+        }));
+      }
+    }
   };
 
   return (

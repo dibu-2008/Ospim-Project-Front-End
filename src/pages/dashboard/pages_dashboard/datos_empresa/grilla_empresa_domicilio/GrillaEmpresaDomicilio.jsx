@@ -34,6 +34,7 @@ const crearNuevoRegistro = (props) => {
     volverPrimerPagina,
     showQuickFilter,
     themeWithLocale,
+    idEmpresa,
   } = props;
   const altaHandleClick = () => {
     if (!isOnEditMode) {
@@ -182,10 +183,10 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
     }
   };
   const handleSaveClick = (row) => () => {
-      setRowModesModel({
-        ...rowModesModel,
-        [rows.indexOf(row)]: { mode: GridRowModes.View },
-      });
+    setRowModesModel({
+      ...rowModesModel,
+      [rows.indexOf(row)]: { mode: GridRowModes.View },
+    });
     isOnEditMode = false;
   };
   const handleCancelClick = (row) => () => {
@@ -206,7 +207,6 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
   const processRowUpdate = async (newRow, oldRow) => {
     console.log('processRowUpdate - INIT - newRow:', newRow);
     let bOk = false;
-    console.log(idEmpresa);
     if (!newRow.id) {
       try {
         if (idEmpresa !== 'PC') {
@@ -214,14 +214,19 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
           const data = await axiosDomicilio.crear(idEmpresa, newRow);
           if (data && data.id) {
             newRow.id = data.id;
-            bOk = true;
-            console.log(newRow);
-            newRow = await adaptadorDomicilioGrilla(newRow);
-            console.log(newRow);
-            const newRows = rows.map((row) => (!row.id ? newRow : row));
-            setRows(newRows);
-          } else {
-            console.log('alta sin ID generado');
+          }
+          bOk = true;
+          newRow = await adaptadorDomicilioGrilla(newRow);
+          const newRows = rows.map((row) => (!row.id ? newRow : row));
+          setRows(newRows);
+
+          if (!(data && data.id)) {
+            setTimeout(() => {
+              setRowModesModel((oldModel) => ({
+                [0]: { mode: GridRowModes.Edit, fieldToFocus: 'fecha' },
+                ...oldModel,
+              }));
+            }, 100);
           }
         } else {
           bOk = true;
@@ -242,9 +247,6 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
       if (idEmpresa !== 'PC') {
         try {
           bOk = await axiosDomicilio.actualizar(idEmpresa, newRow);
-          console.log('4 - processRowUpdate - MODI - bOk: ' + bOk);
-          console.log('** processRowUpdate - MODI - oldRow: ', oldRow);
-          console.log('** processRowUpdate - MODI - newRow: ', newRow);
           if (bOk) {
             newRow = await adaptadorDomicilioGrilla(newRow);
             const rowsNew = rows.map((row) =>
@@ -252,6 +254,18 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
             );
             setRows(rowsNew);
           }
+
+          if (!bOk) {
+            const indice = rows.indexOf(oldRow);
+            setTimeout(() => {
+              setRowModesModel((oldModel) => ({
+                [indice]: { mode: GridRowModes.Edit, fieldToFocus: 'fecha' },
+                ...oldModel,
+              }));
+            }, 100);
+            return null;
+          }
+          bOk = true;
         } catch (error) {
           console.log(
             'X - processRowUpdate - MODI - ERROR: ' + JSON.stringify(error),
@@ -273,6 +287,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
       return oldRow;
     }
   };
+
   const handleRowModesModelChange = (newRowModesModel) => {
     setRowModesModel(newRowModesModel);
   };
@@ -492,6 +507,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
                 volverPrimerPagina,
                 showQuickFilter: true,
                 themeWithLocale,
+                idEmpresa,
               },
             }}
             paginationModel={paginationModel}

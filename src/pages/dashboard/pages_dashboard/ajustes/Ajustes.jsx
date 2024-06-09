@@ -56,13 +56,19 @@ const crearNuevoRegistro = (props) => {
   } = props;
 
   const altaHandleClick = () => {
-    const newReg = {};
-    volverPrimerPagina();
-    setRows((oldRows) => [newReg, ...oldRows]);
-    setRowModesModel((oldModel) => ({
-      [0]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
-      ...oldModel,
-    }));
+    //Validar si hay un registro en Edicion
+    if (rows) {
+      const editRow = rows.find((row) => !row.id);
+      if (typeof editRow === 'undefined' || editRow.id) {
+        const newReg = {};
+        volverPrimerPagina();
+        setRows((oldRows) => [newReg, ...oldRows]);
+        setRowModesModel((oldModel) => ({
+          [0]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
+          ...oldModel,
+        }));
+      }
+    }
   };
 
   return (
@@ -220,6 +226,7 @@ export const Ajustes = () => {
               ...oldModel,
             }));
           }, 100);
+          return null;
         }
       } catch (error) {
         console.log(
@@ -426,6 +433,7 @@ export const Ajustes = () => {
             slotProps={{
               toolbar: {
                 setRows,
+                rows,
                 setRowModesModel,
                 volverPrimerPagina,
                 showQuickFilter: true,

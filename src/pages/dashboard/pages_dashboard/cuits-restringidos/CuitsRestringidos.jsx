@@ -24,6 +24,7 @@ import { UserContext } from '@/context/userContext';
 function EditToolbar(props) {
   const {
     setRows,
+    rows,
     setRowModesModel,
     volverPrimerPagina,
     showQuickFilter,
@@ -31,15 +32,18 @@ function EditToolbar(props) {
   } = props;
 
   const altaHandleClick = () => {
-    const newReg = { cuit: '', observacion: '' };
-
-    volverPrimerPagina();
-
-    setRows((oldRows) => [newReg, ...oldRows]);
-    setRowModesModel((oldModel) => ({
-      [0]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
-      ...oldModel,
-    }));
+    if (rows) {
+      const editRow = rows.find((row) => !row.id);
+      if (typeof editRow === 'undefined' || editRow.id) {
+        const newReg = { cuit: '', observacion: '' };
+        volverPrimerPagina();
+        setRows((oldRows) => [newReg, ...oldRows]);
+        setRowModesModel((oldModel) => ({
+          [0]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
+          ...oldModel,
+        }));
+      }
+    }
   };
 
   return (
@@ -147,23 +151,23 @@ export const CuitsRestringidos = () => {
 
   const processRowUpdate = async (newRow, oldRow) => {
     let bOk = false;
-    console.log('1 - processRowUpdate - newRow: ' + JSON.stringify(newRow));
     if (!newRow.id) {
-      console.log('2 - processRowUpdate - ALTA ');
       try {
         const data = await axiosCuitsRestringidos.crear(newRow);
-        console.log('data: ' + JSON.stringify(data));
         if (data && data.id) {
           newRow.id = data.id;
-          bOk = true;
+        }
+        bOk = true;
+        const newRows = rows.map((row) => (!row.id ? newRow : row));
+        setRows(newRows);
 
-          console.log('ALTA - rows: ');
-          console.log(rows);
-          const newRows = rows.map((row) => (!row.id ? newRow : row));
-          console.log(newRows);
-          setRows(newRows);
-        } else {
-          console.log('alta sin ID generado');
+        if (!(data && data.id)) {
+          setTimeout(() => {
+            setRowModesModel((oldModel) => ({
+              [0]: { mode: GridRowModes.Edit, fieldToFocus: 'fecha' },
+              ...oldModel,
+            }));
+          }, 100);
         }
       } catch (error) {
         console.log(
@@ -171,10 +175,8 @@ export const CuitsRestringidos = () => {
         );
       }
     } else {
-      console.log('3 - processRowUpdate - MODI ');
       try {
         bOk = await axiosCuitsRestringidos.actualizar(newRow);
-        console.log('4 - processRowUpdate - MODI - bOk: ' + bOk);
 
         if (bOk) {
           const rowsNew = rows.map((row) =>
@@ -182,14 +184,24 @@ export const CuitsRestringidos = () => {
           );
           setRows(rowsNew);
         }
+
+        if (!bOk) {
+          const indice = rows.indexOf(oldRow);
+          setTimeout(() => {
+            setRowModesModel((oldModel) => ({
+              [indice]: { mode: GridRowModes.Edit, fieldToFocus: 'cuit' },
+              ...oldModel,
+            }));
+          }, 100);
+          return null;
+        }
+        bOk = true;
       } catch (error) {
         console.log(
           'X - processRowUpdate - MODI - ERROR: ' + JSON.stringify(error),
         );
       }
     }
-
-    console.log('5 -processRowUpdate-FIN-newRow: ' + JSON.stringify(newRow));
 
     if (bOk) {
       return newRow;
@@ -303,6 +315,7 @@ export const CuitsRestringidos = () => {
             slotProps={{
               toolbar: {
                 setRows,
+                rows,
                 setRowModesModel,
                 volverPrimerPagina,
                 showQuickFilter: true,

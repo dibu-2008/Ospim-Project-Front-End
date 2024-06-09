@@ -71,23 +71,29 @@ const crearNuevoRegistro = (props) => {
   } = props;
 
   const altaHandleClick = () => {
-    const newReg = {
-      apellido: '',
-      nombre: '',
-      descripcion: '',
-      email: '',
-      clave: '',
-      rolId: '',
-      notificaciones: '',
-      habilitado: null,
-    };
-    volverPrimerPagina();
-    setRows((oldRows) => [newReg, ...oldRows]);
+    if (rows) {
+      const editRow = rows.find((row) => !row.id);
+      if (typeof editRow === 'undefined' || editRow.id) {
+        const newReg = {
+          apellido: '',
+          nombre: '',
+          descripcion: '',
+          email: '',
+          clave: '',
+          rolId: '',
+          notificaciones: '',
+          habilitado: null,
+        };
 
-    setRowModesModel((oldModel) => ({
-      [0]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
-      ...oldModel,
-    }));
+        volverPrimerPagina();
+        setRows((oldRows) => [newReg, ...oldRows]);
+
+        setRowModesModel((oldModel) => ({
+          [0]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
+          ...oldModel,
+        }));
+      }
+    }
   };
 
   return (

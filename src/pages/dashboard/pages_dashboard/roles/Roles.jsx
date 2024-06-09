@@ -36,17 +36,18 @@ const crearNuevoRegistro = (props) => {
   } = props;
 
   const altaHandleClick = () => {
-    const maxId = rows ? Math.max(...rows.map((row) => row.id), 0) : 1;
-
-    const newId = maxId + 1;
-    const id = newId;
-    volverPrimerPagina();
-
-    setRows((oldRows) => [{ id, descripcion: '', isNew: true }, ...oldRows]);
-    setRowModesModel((oldModel) => ({
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
-      ...oldModel,
-    }));
+    if (rows) {
+      const editRow = rows.find((row) => !row.id);
+      if (typeof editRow === 'undefined' || editRow.id) {
+        const newReg = { descripcion: '' };
+        volverPrimerPagina();
+        setRows((oldRows) => [newReg, ...oldRows]);
+        setRowModesModel((oldModel) => ({
+          [0]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
+          ...oldModel,
+        }));
+      }
+    }
   };
 
   return (
@@ -96,16 +97,21 @@ export const Roles = () => {
       event.defaultMuiPrevented = true;
     }
   };
-
-  const handleEditClick = (id) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+  const handleEditClick = (row) => () => {
+    setRowModesModel({
+      ...rowModesModel,
+      [rows.indexOf(row)]: { mode: GridRowModes.Edit },
+    });
   };
 
-  const handleSaveClick = (id) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+  const handleSaveClick = (row) => () => {
+    setRowModesModel({
+      ...rowModesModel,
+      [rows.indexOf(row)]: { mode: GridRowModes.View },
+    });
   };
 
-  const handleDeleteClick = (id) => async () => {
+  const handleDeleteClick = (row) => async () => {
     const showSwalConfirm = async () => {
       try {
         Swal.fire({
@@ -118,8 +124,8 @@ export const Roles = () => {
           confirmButtonText: 'Si, bórralo!',
         }).then(async (result) => {
           if (result.isConfirmed) {
-            const bBajaOk = await axiosRoles.eliminar(id);
-            if (bBajaOk) setRows(rows.filter((row) => row.id !== id));
+            const bBajaOk = await axiosRoles.eliminar(row.id);
+            if (bBajaOk) setRows(rows.filter((rowAux) => rowAux.id !== row.id));
           }
         });
       } catch (error) {
@@ -130,15 +136,18 @@ export const Roles = () => {
     showSwalConfirm();
   };
 
-  const handleCancelClick = (id) => () => {
+  const handleCancelClick = (row) => () => {
     setRowModesModel({
       ...rowModesModel,
-      [id]: { mode: GridRowModes.View, ignoreModifications: true },
+      [rows.indexOf(row)]: {
+        mode: GridRowModes.View,
+        ignoreModifications: true,
+      },
     });
 
-    const editedRow = rows.find((row) => row.id === id);
-    if (editedRow.isNew) {
-      setRows(rows.filter((row) => row.id !== id));
+    const editedRow = rows.find((reg) => reg.id === row.id);
+    if (!editedRow.id) {
+      setRows(rows.filter((reg) => reg.id !== row.id));
     }
   };
 
@@ -146,20 +155,24 @@ export const Roles = () => {
     console.log('processRowUpdate - INIT');
     let bOk = false;
 
-    if (newRow.isNew) {
+    if (!newRow.id) {
       console.log('processRowUpdate - ALTA');
       try {
-        delete newRow.id;
-        delete newRow.isNew;
         const data = await axiosRoles.crear(newRow);
         if (data && data.id) {
           newRow.id = data.id;
-          newRow.isNew = false;
-          bOk = true;
-          const newRows = rows.map((row) => (row.isNew ? newRow : row));
-          setRows(newRows);
-        } else {
-          console.log('alta sin ID generado');
+        }
+        bOk = true;
+        const newRows = rows.map((row) => (!row.id ? newRow : row));
+        setRows(newRows);
+
+        if (!(data && data.id)) {
+          setTimeout(() => {
+            setRowModesModel((oldModel) => ({
+              [0]: { mode: GridRowModes.Edit, fieldToFocus: 'descripcion' },
+              ...oldModel,
+            }));
+          }, 100);
         }
       } catch (error) {
         console.log(
@@ -167,15 +180,26 @@ export const Roles = () => {
         );
       }
     } else {
-      console.log('3 - processRowUpdate - MODI ');
       try {
-        delete newRow.isNew;
         bOk = await axiosRoles.actualizar(newRow);
-        console.log('4 - processRowUpdate - MODI - bOk: ' + bOk);
-        newRow.isNew = false;
         if (bOk) {
-          setRows(rows.map((row) => (row.id === newRow.id ? newRow : row)));
+          const rowsNew = rows.map((row) =>
+            row.id === newRow.id ? newRow : row,
+          );
+          setRows(rowsNew);
         }
+
+        if (!bOk) {
+          const indice = rows.indexOf(oldRow);
+          setTimeout(() => {
+            setRowModesModel((oldModel) => ({
+              [indice]: { mode: GridRowModes.Edit, fieldToFocus: 'fecha' },
+              ...oldModel,
+            }));
+          }, 100);
+          return null;
+        }
+        bOk = true;
       } catch (error) {
         console.log(
           'X - processRowUpdate - MODI - ERROR: ' + JSON.stringify(error),
@@ -214,8 +238,9 @@ export const Roles = () => {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell',
-      getActions: ({ id }) => {
-        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+      getActions: ({ row }) => {
+        const isInEditMode =
+          rowModesModel[rows.indexOf(row)]?.mode === GridRowModes.Edit;
 
         if (isInEditMode) {
           return [
@@ -223,13 +248,13 @@ export const Roles = () => {
               icon={<SaveIcon />}
               label="Guardar"
               sx={{ color: 'primary.main' }}
-              onClick={handleSaveClick(id)}
+              onClick={handleSaveClick(row)}
             />,
             <GridActionsCellItem
               icon={<CancelIcon />}
               label="Cancelar"
               className="textPrimary"
-              onClick={handleCancelClick(id)}
+              onClick={handleCancelClick(row)}
               color="inherit"
             />,
           ];
@@ -240,13 +265,13 @@ export const Roles = () => {
             icon={<EditIcon />}
             label="Editar"
             className="textPrimary"
-            onClick={handleEditClick(id)}
+            onClick={handleEditClick(row)}
           />,
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Eliminar"
             className="textPrimary"
-            onClick={handleDeleteClick(id)}
+            onClick={handleDeleteClick(row)}
           />,
         ];
       },

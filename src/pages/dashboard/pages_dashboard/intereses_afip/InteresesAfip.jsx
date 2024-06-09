@@ -31,15 +31,18 @@ const crearNuevoRegistro = (props) => {
   } = props;
 
   const altaHandleClick = () => {
-    const newReg = { vigenciaDesde: '', vigenciaHasta: '', indice: '' };
-
-    volverPrimerPagina();
-
-    setRows((oldRows) => [newReg, ...oldRows]);
-    setRowModesModel((oldModel) => ({
-      [0]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
-      ...oldModel,
-    }));
+    if (rows) {
+      const editRow = rows.find((row) => !row.id);
+      if (typeof editRow === 'undefined' || editRow.id) {
+        const newReg = { vigenciaDesde: '', vigenciaHasta: '', indice: '' };
+        volverPrimerPagina();
+        setRows((oldRows) => [newReg, ...oldRows]);
+        setRowModesModel((oldModel) => ({
+          [0]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
+          ...oldModel,
+        }));
+      }
+    }
   };
 
   return (

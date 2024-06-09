@@ -22,6 +22,7 @@ import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 function EditToolbar(props) {
   const {
     setRows,
+    rows,
     setRowModesModel,
     volverPrimerPagina,
     showQuickFilter,
@@ -29,19 +30,23 @@ function EditToolbar(props) {
   } = props;
 
   const handleClick = () => {
-    const newReg = {
-      tipo: '',
-      prefijo: '',
-      valor: '',
-    };
+    if (rows) {
+      const editRow = rows.find((row) => !row.id);
+      if (typeof editRow === 'undefined' || editRow.id) {
+        const newReg = {
+          tipo: '',
+          prefijo: '',
+          valor: '',
+        };
 
-    volverPrimerPagina();
-
-    setRows((oldRows) => [newReg, ...oldRows]);
-    setRowModesModel((oldModel) => ({
-      [0]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
-      ...oldModel,
-    }));
+        volverPrimerPagina();
+        setRows((oldRows) => [newReg, ...oldRows]);
+        setRowModesModel((oldModel) => ({
+          [0]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
+          ...oldModel,
+        }));
+      }
+    }
   };
 
   return (
@@ -162,11 +167,18 @@ export const GrillaEmpresaContacto = ({ idEmpresa, rows, setRows }) => {
         const data = await axiosContacto.crear(idEmpresa, newRow);
         if (data && data.id) {
           newRow.id = data.id;
-          bOk = true;
-          const newRows = rows.map((row) => (!row.id ? newRow : row));
-          setRows(newRows);
-        } else {
-          console.log('alta sin ID generado');
+        }
+        bOk = true;
+        const newRows = rows.map((row) => (!row.id ? newRow : row));
+        setRows(newRows);
+
+        if (!(data && data.id)) {
+          setTimeout(() => {
+            setRowModesModel((oldModel) => ({
+              [0]: { mode: GridRowModes.Edit, fieldToFocus: 'fecha' },
+              ...oldModel,
+            }));
+          }, 100);
         }
       } catch (error) {
         console.log(
@@ -183,6 +195,18 @@ export const GrillaEmpresaContacto = ({ idEmpresa, rows, setRows }) => {
           );
           setRows(rowsNew);
         }
+
+        if (!bOk) {
+          const indice = rows.indexOf(oldRow);
+          setTimeout(() => {
+            setRowModesModel((oldModel) => ({
+              [indice]: { mode: GridRowModes.Edit, fieldToFocus: 'fecha' },
+              ...oldModel,
+            }));
+          }, 100);
+          return null;
+        }
+        bOk = true;
       } catch (error) {
         console.log(
           'X - processRowUpdate - MODI - ERROR: ' + JSON.stringify(error),
@@ -325,6 +349,7 @@ export const GrillaEmpresaContacto = ({ idEmpresa, rows, setRows }) => {
           slotProps={{
             toolbar: {
               setRows,
+              rows,
               setRowModesModel,
               volverPrimerPagina,
               showQuickFilter: true,

@@ -61,6 +61,7 @@ const style = {
 const crearNuevoRegistro = (props) => {
   const {
     setRows,
+    rows,
     setRowModesModel,
     volverPrimerPagina,
     showQuickFilter,
@@ -68,13 +69,18 @@ const crearNuevoRegistro = (props) => {
   } = props;
 
   const altaHandleClick = () => {
-    const newReg = { fecha: '' };
-    volverPrimerPagina();
-    setRows((oldRows) => [newReg, ...oldRows]);
-    setRowModesModel((oldModel) => ({
-      [0]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
-      ...oldModel,
-    }));
+    if (rows) {
+      const editRow = rows.find((row) => !row.id);
+      if (typeof editRow === 'undefined' || editRow.id) {
+        const newReg = { fecha: '' };
+        volverPrimerPagina();
+        setRows((oldRows) => [newReg, ...oldRows]);
+        setRowModesModel((oldModel) => ({
+          [0]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
+          ...oldModel,
+        }));
+      }
+    }
   };
 
   return (
@@ -190,7 +196,6 @@ export const Feriados = () => {
 
   const processRowUpdate = async (newRow, oldRow) => {
     let bOk = false;
-
     if (!newRow.id) {
       try {
         const data = await axiosFeriados.crear(newRow);
@@ -389,6 +394,7 @@ export const Feriados = () => {
             slotProps={{
               toolbar: {
                 setRows,
+                rows,
                 setRowModesModel,
                 volverPrimerPagina,
                 showQuickFilter: true,
