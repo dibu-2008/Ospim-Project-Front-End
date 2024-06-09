@@ -12,6 +12,37 @@ export const getToken = () => {
   return {};
 };
 
+export const getTokenRefresh = () => {
+  try {
+    let auxStateLogin = localStorage.getItem('stateLogin');
+    let tokenRefresh = null;
+
+    if (auxStateLogin != null) {
+      auxStateLogin = JSON.parse(localStorage.getItem('stateLogin'));
+      if (auxStateLogin.hasOwnProperty('usuarioLogueado')) {
+        tokenRefresh = auxStateLogin.usuarioLogueado.usuario.tokenRefresco;
+        return tokenRefresh;
+      }
+    }
+  } catch (error) {
+    console.log('localStorageService - getTokenRefresh - error:', error);
+  }
+  return null;
+};
+
+export const setLoguinRefresh = (token, tokenRefresh) => {
+  try {
+    let auxStateLogin = localStorage.getItem('stateLogin');
+    if (auxStateLogin != null) {
+      auxStateLogin = JSON.parse(auxStateLogin);
+      auxStateLogin.usuarioLogueado.usuario.token = token;
+      auxStateLogin.usuarioLogueado.usuario.tokenRefresco = tokenRefresh;
+
+      localStorage.setItem('stateLogin', JSON.stringify(auxStateLogin));
+    }
+  } catch (error) {}
+};
+
 export const getEmpresaId = () => {
   let auxStateLogin = localStorage.getItem('stateLogin');
   if (auxStateLogin != null) {
@@ -61,6 +92,12 @@ const localStorageService = {
   },
   isRolEmpleador: function () {
     return isRolEmpleador();
+  },
+  getTokenRefresh: function () {
+    return getTokenRefresh();
+  },
+  setLoguinRefresh: function (token, tokenRefresh) {
+    setLoguinRefresh(token, tokenRefresh);
   },
 };
 
