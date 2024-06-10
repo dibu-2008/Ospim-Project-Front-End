@@ -23,6 +23,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import dayjs from 'dayjs';
 
 export const GenerarBoletas = () => {
   const { id } = useParams();
@@ -36,6 +37,9 @@ export const GenerarBoletas = () => {
   const [primeraSeleccion, setPrimeraSeleccion] = useState(true);
   const [primeraSeleccionFDP, setPrimeraSeleccionFDP] = useState(true);
   const [habilitaBoton, sethabilitaBoton] = useState(true);
+  const [isUseEffect, setIsUseEffect] = useState(true);
+  const [hasFetchedData, setHasFetchedData] = useState(false); // Nuevo estado para controlar la ejecución única
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,6 +56,21 @@ export const GenerarBoletas = () => {
         setPrimeraSeleccion(true);
         setPrimeraSeleccionFDP(true);
         sethabilitaBoton(true);
+        console.log(data);
+        // Convertir la fecha del JSON a un objeto Date
+        //const vencimiento = dayjs(data.detalle_boletas[0].vencimiento);
+
+        //// Obtener la fecha actual
+        //const currentDate = dayjs();
+        //console.log(vencimiento)
+        //console.log(currentDate)
+        //// Comparar ambas fechas
+        //if (vencimiento < currentDate) {
+        //  setIntencionDePago(data.detalle_boletas[0].codigo,currentDate,true)
+        //} else {
+        //  console.log("La fecha del JSON no es menor a la fecha actual.");
+        //}
+        setHasFetchedData(true); // Indicar que los datos han sido obtenidos
       } catch (error) {
         console.error('Error al obtener las boletas:', error);
         navigate(`/dashboard/ddjj`);
@@ -59,6 +78,31 @@ export const GenerarBoletas = () => {
     };
     fetchData();
   }, []);
+
+  //Este useEffect se utiliza para poner un valor por defecto dependiendo la fecha de vencimiento
+  useEffect(() => {
+    if (boletas.detalle_boletas) {
+      if (boletas.detalle_boletas.length != 0) {
+        const vencimiento = dayjs(
+          boletas.detalle_boletas[0].vencimiento,
+        ).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+        const currentDate = dayjs().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+        if (vencimiento < currentDate) {
+          setIntencionDePago(
+            boletas.detalle_boletas[0].codigo,
+            currentDate,
+            true,
+          );
+        } else {
+          setIntencionDePago(
+            boletas.detalle_boletas[0].codigo,
+            vencimiento,
+            true,
+          );
+        }
+      }
+    }
+  }, [hasFetchedData]);
 
   const setDefaultFDP = (data) => {
     data.detalle_boletas.forEach(
@@ -114,7 +158,13 @@ export const GenerarBoletas = () => {
   const setIntencionDePago = async (codigo, fecha, lanzar) => {
     const fechaToISO = new Date(`${fecha}`).toISOString();
     if (primeraSeleccion && lanzar) {
-      setPrimeraSeleccion(false);
+      if (!isUseEffect) {
+        setPrimeraSeleccion(false);
+      }
+      if (isUseEffect) {
+        setIsUseEffect(false);
+      }
+
       console.log(ID_EMPRESA);
       console.log(DDJJ_ID);
       const response = await axiosGenerarBoletas.calcularInteresBoletas(
