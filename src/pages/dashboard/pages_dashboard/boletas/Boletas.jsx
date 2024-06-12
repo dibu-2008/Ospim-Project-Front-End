@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState, useMemo } from 'react';
 import { TextField, Button, IconButton, Box } from '@mui/material';
+import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import {
   Visibility as VisibilityIcon,
   Print as PrintIcon,
@@ -132,6 +133,20 @@ export const Boletas = () => {
 
   const handleViewClick = (boletaDetalle) => {
     navigate(`/dashboard/detalleboleta/${boletaDetalle.id}`);
+  };
+
+  const handleGenerarBepClick = async (row) => {
+    console.log('handleGenerarBepClick - row: ', row);
+    const data = await axiosBoletas.generarBep(ID_EMPRESA, row.id);
+    console.log('handleGenerarBepClick - data: ', data);
+    if (data != null && data.bep && data.bep != null) {
+      row.formaDePago = row.formaDePago + ' (BEP)';
+      row.requiereBep = false;
+      const newRows = boletasVisibles.map((reg) =>
+        row.id == reg.id ? row : reg,
+      );
+      setBoletasVisibles(newRows);
+    }
   };
 
   const handleSearch = () => {
@@ -304,31 +319,62 @@ export const Boletas = () => {
                     field: 'acciones',
                     headerName: 'Acciones',
                     flex: 1,
-                    renderCell: (params) => (
-                      <>
-                        <IconButton
-                          size="small"
-                          onClick={() => handleViewClick(params.row)}
-                        >
-                          <VisibilityIcon />
-                        </IconButton>
-                        <IconButton
-                          size="small"
-                          onClick={() => {
-                            boletaPdfDownload(ID_EMPRESA, params.row.id);
-                          }}
-                        >
-                          <PrintIcon />
-                        </IconButton>
-                        <IconButton
-                          size="small"
-                          onClick={() => handleViewClick(params.row)}
-                          disabled={!!params.row.fecha_de_pago}
-                        >
-                          <EditIcon />
-                        </IconButton>
-                      </>
-                    ),
+                    renderCell: (params) =>
+                      params.row.requiereBep ? (
+                        <>
+                          <IconButton
+                            size="small"
+                            onClick={() => handleViewClick(params.row)}
+                          >
+                            <VisibilityIcon />
+                          </IconButton>
+                          <IconButton
+                            size="small"
+                            onClick={() => {
+                              boletaPdfDownload(ID_EMPRESA, params.row.id);
+                            }}
+                          >
+                            <PrintIcon />
+                          </IconButton>
+                          <IconButton
+                            size="small"
+                            onClick={() => handleViewClick(params.row)}
+                            disabled={!!params.row.fecha_de_pago}
+                          >
+                            <EditIcon />
+                          </IconButton>
+                          <IconButton
+                            size="small"
+                            onClick={() => handleGenerarBepClick(params.row)}
+                          >
+                            <RequestQuoteIcon />
+                          </IconButton>
+                        </>
+                      ) : (
+                        <>
+                          <IconButton
+                            size="small"
+                            onClick={() => handleViewClick(params.row)}
+                          >
+                            <VisibilityIcon />
+                          </IconButton>
+                          <IconButton
+                            size="small"
+                            onClick={() => {
+                              boletaPdfDownload(ID_EMPRESA, params.row.id);
+                            }}
+                          >
+                            <PrintIcon />
+                          </IconButton>
+                          <IconButton
+                            size="small"
+                            onClick={() => handleViewClick(params.row)}
+                            disabled={!!params.row.fecha_de_pago}
+                          >
+                            <EditIcon />
+                          </IconButton>
+                        </>
+                      ),
                   },
                 ]}
                 getRowClassName={(params) =>
