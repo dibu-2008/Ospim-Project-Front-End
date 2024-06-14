@@ -21,8 +21,7 @@ import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 //import { Boletas } from '../boletas/Boletas';
 
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import swal from '@/components/swal/swal';
 
 export const GenerarBoletas = () => {
   const { id } = useParams();
@@ -207,7 +206,7 @@ export const GenerarBoletas = () => {
       }
     } catch (error) {
       console.error(error);
-      toast.error(
+      swal.showError(
         '!Ocurrio un problema. No se pudieron generar las Boletas de Pago',
       );
       navigate('/dashboard/boletas');
@@ -440,7 +439,6 @@ export const GenerarBoletas = () => {
           Generar
         </Button>
       </Box>
-      <ToastContainer />
 
       {boletas.detalle_boletas &&
         boletas.detalle_boletas

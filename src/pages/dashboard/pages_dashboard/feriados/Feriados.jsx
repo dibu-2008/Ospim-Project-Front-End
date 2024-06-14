@@ -42,7 +42,6 @@ import { DatePicker } from '@mui/x-date-pickers';
 import formatter from '@/common/formatter';
 import swal from '@/components/swal/swal';
 import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
-import { ToastContainer } from 'react-toastify';
 import { UserContext } from '@/context/userContext';
 
 const style = {
@@ -361,7 +360,7 @@ export const Feriados = () => {
           </IconButton>
         </Tooltip>
       </h1>
-      <ToastContainer style={{ marginRight: '6rem', marginTop: '3rem' }} />
+
       <Box
         sx={{
           height: '600px',

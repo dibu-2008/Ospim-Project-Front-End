@@ -1,19 +1,10 @@
 import formatter from '@/common/formatter';
 import { axiosCrud } from '@/components/axios/axiosCrud';
-import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
-import { toast } from 'react-toastify';
+import swal from '@/components/swal/swal';
 
 const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
 const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
 const HTTP_MSG_ALTA_ERROR = import.meta.env.VITE_HTTP_MSG_ALTA_ERROR;
-
-const styles = {
-  position: 'top-right',
-  autoClose: 2000,
-  style: {
-    fontSize: '1rem',
-  },
-};
 
 const calcularInteres = async (url, intencionDePago) => {
   const body = { intencionDePago: intencionDePago };
@@ -32,7 +23,7 @@ export const getBoletasByDDJJid = async (empresa_id, ddjj_id) => {
   } catch (error) {
     const HTTP_MSG =
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`;
-    showErrorBackEnd(HTTP_MSG, error);
+    swal.showErrorBackEnd(HTTP_MSG, error);
   }
 };
 
@@ -60,7 +51,7 @@ export const calcularInteresBoleta = async (
   } catch (error) {
     const HTTP_MSG =
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`;
-    showErrorBackEnd(HTTP_MSG, error);
+    swal.showErrorBackEnd(HTTP_MSG, error);
     return {};
   }
 };
@@ -85,7 +76,7 @@ export const calcularInteresBoletas = async (
   } catch (error) {
     const HTTP_MSG =
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`;
-    showErrorBackEnd(HTTP_MSG, error);
+    swal.showErrorBackEnd(HTTP_MSG, error);
     return {};
   }
 };
@@ -108,13 +99,13 @@ export const generarBoletasPost = async (empresa_id, ddjj_id, boletas) => {
 
     const data = await axiosCrud.crearN(URL, arr_boletas);
     if (data == true) {
-      toast.info(HTTP_MSG_ALTA, styles);
+      swal.showSuccess(HTTP_MSG_ALTA);
       return data;
     }
     throw data;
   } catch (error) {
     console.log('generarBoletasPost - catch ...');
-    showErrorBackEnd(HTTP_MSG_ALTA_ERROR, error);
+    swal.showErrorBackEnd(HTTP_MSG_ALTA_ERROR, error);
     return false;
   }
 };

@@ -1,5 +1,4 @@
 import { axiosCrud } from '@components/axios/axiosCrud';
-import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
 import swal from '@components/swal/swal';
 
 const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
@@ -16,7 +15,7 @@ export const obtenerTipo = async () => {
     const data = await axiosCrud.consultar(URL);
     return data || [];
   } catch (error) {
-    showErrorBackEnd(
+    swal.showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
       error,
     );
@@ -30,7 +29,7 @@ export const obtenerDatosEmpresa = async (id) => {
     const data = await axiosCrud.consultar(URL);
     return data || [];
   } catch (error) {
-    showErrorBackEnd(
+    swal.showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
       error,
     );
@@ -48,7 +47,7 @@ export const crearContacto = async (idEmpresa, contacto) => {
     }
     throw data;
   } catch (error) {
-    showErrorBackEnd(HTTP_MSG_ALTA_ERROR, error);
+    swal.showErrorBackEnd(HTTP_MSG_ALTA_ERROR, error);
     return {};
   }
 };
@@ -63,7 +62,7 @@ export const actualizarContacto = async (idEmpresa, contacto) => {
     }
     throw response;
   } catch (error) {
-    showErrorBackEnd(HTTP_MSG_MODI_ERROR, error);
+    swal.showErrorBackEnd(HTTP_MSG_MODI_ERROR, error);
     return false;
   }
 };
@@ -78,7 +77,7 @@ export const eliminarContacto = async (idEmpresa, idContacto) => {
     }
     throw response;
   } catch (error) {
-    showErrorBackEnd(HTTP_MSG_BAJA_ERROR, error);
+    swal.showErrorBackEnd(HTTP_MSG_BAJA_ERROR, error);
     return false;
   }
 };

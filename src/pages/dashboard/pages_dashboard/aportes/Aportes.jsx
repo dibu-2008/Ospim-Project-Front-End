@@ -40,7 +40,6 @@ import CurrencyInput from 'react-currency-input-field';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { ToastContainer } from 'react-toastify';
 import formatter from '@/common/formatter';
 
 const crearNuevoRegistro = ({
@@ -443,7 +442,7 @@ export const Aportes = () => {
   return (
     <Box className="aportes_container">
       <Typography variant="h2">Aportes</Typography>
-      <ToastContainer style={{ marginRight: '6rem', marginTop: '3rem' }} />
+
       <Box
         sx={{
           height: '600px',

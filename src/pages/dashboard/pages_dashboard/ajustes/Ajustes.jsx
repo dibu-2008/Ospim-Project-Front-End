@@ -22,7 +22,7 @@ import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 import { InputPeriodo } from '@/components/InputPeriodo';
 import swal from '@/components/swal/swal';
 import Swal from 'sweetalert2';
-import { ToastContainer } from 'react-toastify';
+
 import { UserContext } from '@/context/userContext';
 
 const style = {
@@ -400,7 +400,7 @@ export const Ajustes = () => {
       >
         Administración de Ajustes
       </h1>
-      <ToastContainer style={{ marginRight: '6rem', marginTop: '3rem' }} />
+
       <Box
         sx={{
           height: '600px',

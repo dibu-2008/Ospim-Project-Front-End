@@ -15,10 +15,9 @@ import {
 import { generarBoletaSinDDJJ } from './OtrosPagosApi';
 import localStorageService from '@/components/localStorage/localStorageService';
 import './OtrosPagos.css';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import swal from '@/components/swal/swal';
+
 import CurrencyInput from 'react-currency-input-field';
-import { formatValue } from 'react-currency-input-field';
 
 const StyledCurrencyInput = styled(CurrencyInput)(({ theme }) => ({
   ...theme.typography.body1,
@@ -67,7 +66,7 @@ export const GenerarOtrosPagos = () => {
       }
     } catch (error) {
       console.error(error);
-      toast.error('Ocurrio un problema al intentar generar la boleta');
+      swal.showError('Ocurrio un problema al intentar generar la boleta');
       navigate('/dashboard/boletas');
     }
   };
@@ -153,7 +152,6 @@ export const GenerarOtrosPagos = () => {
           </Box>
         </Grid>
       </Grid>
-      <ToastContainer />
     </div>
   );
 };

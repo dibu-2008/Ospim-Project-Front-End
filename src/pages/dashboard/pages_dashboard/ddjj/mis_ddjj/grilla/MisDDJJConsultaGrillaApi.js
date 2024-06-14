@@ -1,6 +1,5 @@
 import oAxios from '@components/axios/axiosInstace';
 import { axiosCrud } from '@components/axios/axiosCrud';
-import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
 import { consultarAportes } from '@/common/api/AportesApi';
 import swal from '@/components/swal/swal';
 
@@ -39,7 +38,7 @@ export const obtenerMisDeclaracionesJuradas = async (
         error.status,
     );
 
-    showErrorBackEnd(
+    swal.showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
       error,
     );
@@ -53,7 +52,7 @@ export const obtenerMiDeclaracionJurada = async (empresaId, ddjjId) => {
     const data = await axiosCrud.consultar(URL);
     return data || {};
   } catch (error) {
-    showErrorBackEnd(
+    swal.showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
       error,
     );
@@ -76,7 +75,7 @@ export const imprimirDeclaracionJurada = async (empresaId, ddjjId) => {
     document.body.appendChild(link);
     link.click();
   } catch (error) {
-    showErrorBackEnd('Error de Impresion', error);
+    swal.showErrorBackEnd('Error de Impresion', error);
   }
 };
 
@@ -90,7 +89,7 @@ export const presentarDeclaracionJurada = async (empresaId, ddjjId) => {
     }
     throw response;
   } catch (error) {
-    showErrorBackEnd(HTTP_MSG_MODI_ERROR, error);
+    swal.showErrorBackEnd(HTTP_MSG_MODI_ERROR, error);
   }
   return false;
 };
@@ -105,7 +104,7 @@ export const eliminarDeclaracionJurada = async (empresaId, ddjjId) => {
     }
     throw response;
   } catch (error) {
-    showErrorBackEnd(HTTP_MSG_BAJA_ERROR, error);
+    swal.showErrorBackEnd(HTTP_MSG_BAJA_ERROR, error);
     return false;
   }
 };

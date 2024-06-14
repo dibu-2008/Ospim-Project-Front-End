@@ -1,6 +1,5 @@
 import oAxios from '@components/axios/axiosInstace';
 import { axiosCrud } from '@components/axios/axiosCrud';
-import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
 import { presentar } from '@/pages/dashboard/pages_dashboard/ddjj/DDJJCommonApi';
 import swal from '@/components/swal/swal';
 
@@ -18,7 +17,7 @@ export const obtenerAfiliados = async (cuil) => {
     const data = await axiosCrud.consultar(URL);
     return data || [];
   } catch (error) {
-    showErrorBackEnd(
+    swal.showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
       error,
     );
@@ -32,7 +31,7 @@ export const obtenerCamaras = async () => {
     const data = await axiosCrud.consultar(URL);
     return data || [];
   } catch (error) {
-    showErrorBackEnd(
+    swal.showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
       error,
     );
@@ -46,7 +45,7 @@ export const obtenerCategorias = async () => {
     const data = await axiosCrud.consultar(URL);
     return data || [];
   } catch (error) {
-    showErrorBackEnd(
+    swal.showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
       error,
     );
@@ -60,7 +59,7 @@ export const obtenerPlantaEmpresas = async (empresaId) => {
     const data = await axiosCrud.consultar(URL);
     return data || [];
   } catch (error) {
-    showErrorBackEnd(
+    swal.showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
       error,
     );
@@ -74,7 +73,7 @@ export const obtenerMiDeclaracionJurada = async (empresaId, ddjjId) => {
     const data = await axiosCrud.consultar(URL);
     return data || {};
   } catch (error) {
-    showErrorBackEnd(
+    swal.showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
       error,
     );
@@ -83,7 +82,7 @@ export const obtenerMiDeclaracionJurada = async (empresaId, ddjjId) => {
 };
 
 export const crearAltaDeclaracionJurada = async (empresaId, registro) => {
-  console.log(registro)
+  console.log(registro);
   const URL = `/empresa/${empresaId}/ddjj`;
   try {
     const data = await axiosCrud.crear(URL, registro);
@@ -93,13 +92,13 @@ export const crearAltaDeclaracionJurada = async (empresaId, registro) => {
     }
     throw data;
   } catch (error) {
-    showErrorBackEnd(HTTP_MSG_ALTA_ERROR, error);
+    swal.showErrorBackEnd(HTTP_MSG_ALTA_ERROR, error);
     return {};
   }
 };
 
 export const actualizarDeclaracionJurada = async (empresaId, registro) => {
-  console.log(registro)
+  console.log(registro);
   const URL = `/empresa/${empresaId}/ddjj`;
   console.log(URL);
   console.log('DENTRO DE LA FUNCION ACTUALIZAR DDJJ ', registro);
@@ -111,7 +110,7 @@ export const actualizarDeclaracionJurada = async (empresaId, registro) => {
     }
     throw response;
   } catch (error) {
-    showErrorBackEnd(HTTP_MSG_MODI_ERROR, error);
+    swal.showErrorBackEnd(HTTP_MSG_MODI_ERROR, error);
     return false;
   }
 };
@@ -159,7 +158,7 @@ const obtenerPeriodoAnterior = async (empresaId, periodo) => {
     const data = await axiosCrud.consultar(URL);
     return data || [];
   } catch (error) {
-    showErrorBackEnd(
+    swal.showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
       error,
     );
@@ -168,7 +167,7 @@ const obtenerPeriodoAnterior = async (empresaId, periodo) => {
 };
 
 const actualizarNombreApellido = async (registro) => {
-  console.log(registro)
+  console.log(registro);
   const URL = `/ddjj-modificacion-datos`;
 
   try {
@@ -182,7 +181,7 @@ const actualizarNombreApellido = async (registro) => {
     }
     throw response;
   } catch (error) {
-    showErrorBackEnd(HTTP_MSG_MODI_ERROR, error);
+    swal.showErrorBackEnd(HTTP_MSG_MODI_ERROR, error);
     return false;
   }
 };
