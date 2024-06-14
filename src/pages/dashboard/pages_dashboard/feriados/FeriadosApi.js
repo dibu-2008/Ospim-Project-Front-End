@@ -1,3 +1,4 @@
+import oAxios from '@components/axios/axiosInstace';
 import { axiosCrud } from '@components/axios/axiosCrud';
 import swal from '@/components/swal/swal';
 
@@ -8,7 +9,8 @@ const HTTP_MSG_ALTA_ERROR = import.meta.env.VITE_HTTP_MSG_ALTA_ERROR;
 const HTTP_MSG_MODI_ERROR = import.meta.env.VITE_HTTP_MSG_MODI_ERROR;
 const HTTP_MSG_BAJA_ERROR = import.meta.env.VITE_HTTP_MSG_BAJA_ERROR;
 const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
-
+const VITE_HTTP_MSG_PROCESO_ERROR = import.meta.env.VITE_HTTP_MSG_PROCESO_ERROR;
+const VITE_HTTP_MSG_PROCESO = import.meta.env.VITE_HTTP_MSG_PROCESO;
 const URL_ENTITY = '/feriados';
 
 export const axiosFeriados = {
@@ -92,16 +94,19 @@ export const duplicarFeriados = async (anio) => {
   const URL = `${URL_ENTITY}/duplicar/${anio}`;
 
   try {
-    const response = await axiosCrud.consultar(URL);
-    if (response == true) {
-      swal.showSuccess(HTTP_MSG_MODI);
+    const response = await oAxios.post(URL);
+    if (response && response.status && response.status == 201) {
+      swal.showSuccess(VITE_HTTP_MSG_PROCESO);
       return true;
     }
+    swal.showError(VITE_HTTP_MSG_PROCESO_ERROR);
+    return false;
   } catch (error) {
     swal.showErrorBackEnd(
-      HTTP_MSG_CONSUL_ERROR + ` (${URL_ENTITY} - status: ${error.status})`,
+      VITE_HTTP_MSG_PROCESO_ERROR +
+        ` (${URL_ENTITY} - status: ${error.status})`,
       error,
     );
-    return [];
+    return false;
   }
 };
