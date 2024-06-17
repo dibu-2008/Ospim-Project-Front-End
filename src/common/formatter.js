@@ -7,14 +7,12 @@ const formatCurrency = new Intl.NumberFormat('es-CL', {
 
 const currencyString = (value) => {
   try {
-    if ((value = 0)) {
-      console.log('formateando cero !!! ');
-      console.log('formateando cero !!! ');
+    if (value == 0) {
+      return formatCurrency.format(0);
     }
     if (value && value !== '' && value !== null) {
       return formatCurrency.format(value);
     }
-    console.log('currencyString - return VACIO !! value:', value);
     return '';
   } catch (error) {
     console.log('currencyString - error: ', error);
@@ -138,11 +136,11 @@ const toFechaValida = (value) => {
 
 const formatter = {
   currency: formatCurrency,
+  currencyString: currencyString,
   dateObject: dateObject,
   dateString: dateString,
   periodoString: periodoString,
   periodoISOString: periodoISOString,
-  currencyString: currencyString,
 
   date: formatDate,
   periodo: formatPeriodo,

@@ -15,6 +15,7 @@ import {
 } from '@mui/material';
 import { axiosGenerarBoletas } from './GenerarBoletasApi';
 import './GenerarBoletas.css';
+import { consultarFormasPago } from '@/common/api/FormaPagoApi';
 import formatter from '@/common/formatter';
 import { getEmpresaId } from '@/components/localStorage/localStorageService';
 import { useParams } from 'react-router-dom';
@@ -32,6 +33,7 @@ export const GenerarBoletas = () => {
   const [boletas, setBoletas] = useState({});
   const [showDetail, setShowDetail] = useState(false);
   const [afiliados, setAfiliados] = useState([]);
+  const [formasPago, setFormasPago] = useState([]);
   const [primeraSeleccion, setPrimeraSeleccion] = useState(true);
   const [primeraSeleccionFDP, setPrimeraSeleccionFDP] = useState(true);
   const [habilitaBoton, sethabilitaBoton] = useState(true);
@@ -57,6 +59,14 @@ export const GenerarBoletas = () => {
       }
     };
     fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchFormaPago = async () => {
+      const fp = await consultarFormasPago();
+      setFormasPago(fp);
+    };
+    fetchFormaPago();
   }, []);
 
   const setDefaultFDP = (data) => {
@@ -300,11 +310,18 @@ export const GenerarBoletas = () => {
                         setFormaDePago(boleta.codigo, event.target.value)
                       }
                     >
-                      <MenuItem value="VENTANILLA">Ventanilla</MenuItem>
-                      <MenuItem value="REDLINK">Red Link</MenuItem>
-                      {boleta.codigo !== 'AMTIMACS' && (
-                        <MenuItem value="PMCUENTAS">Banelco</MenuItem>
-                      )}
+                      {formasPago.map((reg) => {
+                        if (
+                          boleta.codigo !== 'AMTIMACS' ||
+                          reg.codigo != 'PMCUENTAS'
+                        ) {
+                          return (
+                            <MenuItem value={reg.codigo}>
+                              {reg.descripcion}
+                            </MenuItem>
+                          );
+                        }
+                      })}
                     </Select>
                   </TableCell>
                 ))}

@@ -104,12 +104,14 @@ export const Boletas = () => {
       const response = await axiosBoletas.getBoletas(ID_EMPRESA, desde, hasta);
       console.log('axiosBoletas.getBoletas - response:', response);
       setBoletas(response['con_ddjj']);
-      setBoletasVisibles(
-        response['con_ddjj'].flatMap((boleta) => ({
-          ...boleta,
-          id: `${boleta.id}`,
-        })),
-      );
+
+      //console.log('response.con_ddjj: ', response['con_ddjj']);
+      const auxBoletasVisibles = response['con_ddjj'].flatMap((boleta) => ({
+        ...boleta,
+      }));
+      //console.log('auxBoletasVisibles: ', auxBoletasVisibles);
+
+      setBoletasVisibles(auxBoletasVisibles);
       setBoletasSinDDJJ(response['sin_ddjj']);
       setBoletasSinAfiliados(
         response['sin_ddjj'].flatMap((boleta) => {
@@ -239,20 +241,18 @@ export const Boletas = () => {
                     headerName: 'Importe Boleta',
                     flex: 1,
                     align: 'right',
-                    valueFormatter: (params) =>
-                      params.value
-                        ? formatter.currencyString(params.value)
-                        : '',
+                    valueFormatter: (params) => {
+                      return formatter.currencyString(params?.value);
+                    },
                   },
                   {
                     field: 'importe_recibido',
                     headerName: 'Importe Recibido',
                     flex: 1,
                     align: 'right',
-                    valueFormatter: (params) =>
-                      params.value
-                        ? formatter.currencyString(params.value)
-                        : '',
+                    valueFormatter: (params) => {
+                      return formatter.currencyString(params?.value);
+                    },
                   },
                   {
                     field: 'fecha_de_pago',

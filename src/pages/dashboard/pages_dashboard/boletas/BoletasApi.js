@@ -63,7 +63,8 @@ export const modificarBoletaById = async (empresa_id, body) => {
       intencionDePago: body.intencionDePago,
       formaDePago: body.formaDePago,
     };
-    bodyNew.intencionDePago = formatter.toFechaValida(bodyNew.intencionDePago);
+
+    //bodyNew.intencionDePago = formatter.toFechaValida(bodyNew.intencionDePago);
     console.log('bodyNew: ', bodyNew);
 
     const rta = await axiosCrud.actualizar(URL, bodyNew);
@@ -72,10 +73,12 @@ export const modificarBoletaById = async (empresa_id, body) => {
     } else {
       swal.showError(HTTP_MSG_MODI_ERROR);
     }
+    return rta;
   } catch (error) {
     const HTTP_MSG =
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`;
     swal.showErrorBackEnd(HTTP_MSG, error);
+    return false;
   }
 };
 
