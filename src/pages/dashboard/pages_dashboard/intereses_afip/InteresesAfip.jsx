@@ -226,8 +226,8 @@ export const InteresesAfip = () => {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell',
-      valueGetter: (row) => {
-        return formatter.dateObject(row.value);
+      valueGetter: ({ value }) => {
+        return formatter.dateObject(value);
       },
       valueFormatter: ({ value }) => {
         return formatter.dateString(value);
@@ -242,8 +242,8 @@ export const InteresesAfip = () => {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell',
-      valueGetter: (row) => {
-        return formatter.dateObject(row.value);
+      valueGetter: ({ value }) => {
+        return formatter.dateObject(value);
       },
       valueFormatter: ({ value }) => {
         return formatter.dateString(value);

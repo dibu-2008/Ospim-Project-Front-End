@@ -226,7 +226,7 @@ export const Publicaciones = () => {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell header--cell--left',
-      valueGetter: (row) => {
+      valueGetter: ({ value }) => {
         return formatter.dateObject(row.value);
       },
       valueFormatter: ({ value }) => {
