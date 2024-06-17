@@ -1,4 +1,7 @@
 import * as locales from '@mui/material/locale';
+
+import dayjs from 'dayjs';
+
 import { useState, useEffect, useMemo, useRef, useContext } from 'react';
 import {
   Box,
@@ -276,8 +279,11 @@ export const Feriados = () => {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell',
+      valueGetter: (row) => {
+        return formatter.dateObject(row.value);
+      },
       valueFormatter: ({ value }) => {
-        return formatter.date(value);
+        return formatter.dateString(value);
       },
     },
     {

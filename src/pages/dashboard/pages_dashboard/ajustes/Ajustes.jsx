@@ -290,7 +290,7 @@ export const Ajustes = () => {
         label: motivo.descripcion,
         value: motivo.codigo,
       })),
-      valueGetter: (params) => params.row.motivo || '',
+      valueGetter: (params) => params.row.motivo || null,
       valueFormatter: (params) => {
         const motivo = MOTIVOS.find((motivo) => motivo.codigo === params.value);
         return motivo ? motivo.descripcion : '';
@@ -309,7 +309,7 @@ export const Ajustes = () => {
       valueOptions: aportes.map((item) => {
         return { value: item.codigo, label: item.descripcion };
       }),
-      valueGetter: (params) => params.row.aporte || '',
+      valueGetter: (params) => params.row.aporte || null,
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell',
@@ -324,7 +324,7 @@ export const Ajustes = () => {
       align: 'center',
       type: 'date',
       valueFormatter: (params) => {
-        return formatter.periodo(params.value);
+        return formatter.periodoString(params.value);
       },
       renderEditCell: (params) => <InputPeriodo {...params} />,
       headerClassName: 'header--cell',

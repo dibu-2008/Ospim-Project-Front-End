@@ -17,7 +17,6 @@ import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
 import { axiosDDJJ } from './MisDDJJConsultaGrillaApi';
 import { consultarAportesDDJJ } from '@/common/api/AportesApi';
 import Swal from 'sweetalert2';
-import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 import localStorageService from '@/components/localStorage/localStorageService';
@@ -252,7 +251,7 @@ export const MisDDJJConsultaGrilla = ({
       align: 'center',
       headerClassName: 'header--cell',
       valueFormatter: (params) => {
-        return formatter.periodo(params.value);
+        return formatter.periodoString(params.value);
       },
     },
     {
@@ -284,7 +283,7 @@ export const MisDDJJConsultaGrilla = ({
       align: 'center',
       headerClassName: 'header--cell',
       valueFormatter: (params) => {
-        return formatter.date(params.value);
+        return formatter.dateString(params.value);
       },
     },
   ];

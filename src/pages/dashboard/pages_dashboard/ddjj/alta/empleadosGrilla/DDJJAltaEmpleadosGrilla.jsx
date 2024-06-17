@@ -660,11 +660,12 @@ export const DDJJAltaEmpleadosGrilla = ({
       headerAlign: 'left',
       align: 'left',
       headerClassName: 'header--cell',
+
+      valueGetter: (row) => {
+        return formatter.dateObject(row.value);
+      },
       valueFormatter: ({ value }) => {
-        if (!value) return '';
-        //return formatter.date(value);
-        //return dayjs(value).format("MM/YYYY");
-        return dayjs(value).format('DD/MM/YYYY');
+        return formatter.dateString(value);
       },
     },
     {
@@ -716,10 +717,9 @@ export const DDJJAltaEmpleadosGrilla = ({
       align: 'right',
       headerClassName: 'header--cell',
       valueFormatter: ({ value }) => {
-        if (value === '') return '';
-        if (value === null) return '';
-        //return formatter.currency.format(value || 0);
+        //return formatter.currencyString(value || 0);
         // Averiguar sobre el pais y la moneda
+
         const formattedValue = formatValue({
           value: value?.toString(),
           groupSeparator: '.',

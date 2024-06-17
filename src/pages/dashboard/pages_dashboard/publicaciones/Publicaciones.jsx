@@ -226,8 +226,11 @@ export const Publicaciones = () => {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell header--cell--left',
+      valueGetter: (row) => {
+        return formatter.dateObject(row.value);
+      },
       valueFormatter: ({ value }) => {
-        return formatter.date(value);
+        return formatter.dateString(value);
       },
     },
     {
@@ -239,8 +242,11 @@ export const Publicaciones = () => {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell header--cell--left',
+      valueGetter: (row) => {
+        return formatter.dateObject(row.value);
+      },
       valueFormatter: ({ value }) => {
-        return formatter.date(value);
+        return formatter.dateString(value);
       },
     },
     {

@@ -1,10 +1,6 @@
 import { useEffect, useState, useMemo, useContext } from 'react';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { esES } from '@mui/x-date-pickers/locales';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
-import { CSVLink, CSVDownload } from 'react-csv';
 import { Stack, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import { Box } from '@mui/system';
@@ -23,6 +19,7 @@ import { axiosDDJJEmpleado } from './DDJJConsultaEmpleadoApi';
 import { consultarAportesDDJJ } from '@/common/api/AportesApi';
 import dayjs from 'dayjs';
 import { UserContext } from '@/context/userContext';
+import { axiosDDJJ } from '../mis_ddjj/grilla/MisDDJJConsultaGrillaApi';
 
 function DDJJColumnaAporteGet(ddjjResponse) {
   //toma todas las ddjj de la consulta de "Mis DDJJ" y arma "vector de Columnas Aportes"
@@ -85,15 +82,15 @@ const CustomToolbar = (props) => {
 export const DDJJConsultaEmpleado = () => {
   const ahora = dayjs().startOf('month');
   const ahoraMenosUnAnio = ahora.add(-11, 'month');
-  const [desde, setDesde] = useState(ahoraMenosUnAnio);
-  const [hasta, setHasta] = useState(ahora);
+  const [fromDate, setFromDate] = useState(ahoraMenosUnAnio);
+  const [toDate, setToDate] = useState(ahora);
+
   const [showCuitRazonSocial, setShowCuitRazonSocial] = useState(true);
   const [rowModesModel, setRowModesModel] = useState({});
   const [locale, setLocale] = useState('esES');
   const [cuit, setCuit] = useState('');
   const [rows, setRows] = useState([]);
   const [columnas, setColumnas] = useState([]);
-  const [rowsCols, setRowsCols] = useState({ rows: [], cols: [] });
 
   const [vecAportes, setVecAportes] = useState({});
   const theme = useTheme();
@@ -127,22 +124,21 @@ export const DDJJConsultaEmpleado = () => {
     }
   };
 
-  const handleChangeDesde = (date) => setDesde(date);
-
-  const handleChangeHasta = (date) => setHasta(date);
-
-  const handleChangeCuil = (e) => setCuit(e.target.value);
+  const declaracionJuradasImpresion = async (empresaId, idDDJJ) => {
+    await axiosDDJJ.imprimir(empresaId, idDDJJ);
+  };
 
   const buscarDDJJ = async () => {
     // Busqueda por rango de periodo
-    let desdeDayjs = null;
-    if (desde !== null) {
-      desdeDayjs = dayjs(desde.$d).format('YYYY-MM-DD');
+    let desde = null;
+    if (fromDate !== null) {
+      desde = fromDate.startOf('month').format('YYYY-MM-DD');
     }
-    let hastaDayjs = null;
-    if (hasta !== null) {
-      hastaDayjs = dayjs(hasta.$d).format('YYYY-MM-DD');
+    let hasta = null;
+    if (toDate !== null) {
+      hasta = toDate.startOf('month').format('YYYY-MM-DD');
     }
+
     let cuitFlt = null;
     if (cuit != '') {
       cuitFlt = cuit;
@@ -152,8 +148,8 @@ export const DDJJConsultaEmpleado = () => {
     }
 
     const data = await axiosDDJJEmpleado.consultarFiltrado(
-      desdeDayjs,
-      hastaDayjs,
+      desde,
+      hasta,
       cuitFlt,
     );
     const newRows = castearDDJJ(data);
@@ -273,7 +269,10 @@ export const DDJJConsultaEmpleado = () => {
             icon={<LocalPrintshopIcon />}
             label="Print"
             color="inherit"
-            onClick={() => declaracionJuradasImpresion(row.id)}
+            onClick={() => {
+              console.log(' **** row: ', row);
+              return declaracionJuradasImpresion(row.empresaId, row.id);
+            }}
           />,
         ];
       },
@@ -307,38 +306,23 @@ export const DDJJConsultaEmpleado = () => {
           justifyContent="center"
           alignItems="center"
         >
-          <LocalizationProvider
-            dateAdapter={AdapterDayjs}
-            adapterLocale={'es'}
-            localeText={
-              esES.components.MuiLocalizationProvider.defaultProps.localeText
-            }
-          >
-            <DemoContainer components={['DatePicker']}>
-              <DesktopDatePicker
-                label={'Periodo desde'}
-                views={['month', 'year']}
-                onChange={handleChangeDesde}
-                value={desde}
-              />
-            </DemoContainer>
-          </LocalizationProvider>
-          <LocalizationProvider
-            dateAdapter={AdapterDayjs}
-            adapterLocale={'es'}
-            localeText={
-              esES.components.MuiLocalizationProvider.defaultProps.localeText
-            }
-          >
-            <DemoContainer components={['DatePicker']}>
-              <DesktopDatePicker
-                label={'Periodo hasta'}
-                views={['month', 'year']}
-                onChange={handleChangeHasta}
-                value={hasta}
-              />
-            </DemoContainer>
-          </LocalizationProvider>
+          <DemoContainer components={['DatePicker']}>
+            <DesktopDatePicker
+              label={'Periodo desde'}
+              views={['month', 'year']}
+              onChange={(oValue) => setFromDate(oValue)}
+              value={fromDate}
+            />
+          </DemoContainer>
+
+          <DemoContainer components={['DatePicker']}>
+            <DesktopDatePicker
+              label={'Periodo hasta'}
+              views={['month', 'year']}
+              onChange={(oValue) => setToDate(oValue)}
+              value={toDate}
+            />
+          </DemoContainer>
           <div
             style={{
               height: '100px',
@@ -354,7 +338,8 @@ export const DDJJConsultaEmpleado = () => {
               label="Cuit"
               variant="outlined"
               value={cuit}
-              onChange={handleChangeCuil}
+              //onChange={handleChangeCuil}
+              onChange={(oValue) => setCuit(oValue.target.value)}
             />
           </div>
         </Stack>

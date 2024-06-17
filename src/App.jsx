@@ -14,6 +14,7 @@ function App() {
         localeText={
           esES.components.MuiLocalizationProvider.defaultProps.localeText
         }
+        //
       >
         <AppTheme>
           <AppRouter />

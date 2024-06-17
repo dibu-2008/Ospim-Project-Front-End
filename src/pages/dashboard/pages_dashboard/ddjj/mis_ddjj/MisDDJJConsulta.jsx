@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import dayjs from 'dayjs';
@@ -11,9 +9,7 @@ import {
   castearMisDDJJ,
 } from './grilla/MisDDJJConsultaGrilla';
 import { axiosDDJJ } from './grilla/MisDDJJConsultaGrillaApi';
-import { esES } from '@mui/x-date-pickers/locales';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
-import { CSVLink, CSVDownload } from 'react-csv';
 import localStorageService from '@/components/localStorage/localStorageService';
 export const MisDDJJConsulta = ({
   setDDJJState,
@@ -21,33 +17,31 @@ export const MisDDJJConsulta = ({
   rows_mis_ddjj,
   setRowsMisDdjj,
   setTabState,
-  //setRowsAltaDDJJ,
   setPeticion,
   setTituloPrimerTab,
 }) => {
   const ahora = dayjs().startOf('month');
   const ahoraMenosUnAnio = ahora.add(-11, 'month');
-  const [desde, setDesde] = useState(ahoraMenosUnAnio);
-  const [hasta, setHasta] = useState(ahora);
+  const [fromDate, setFromDate] = useState(ahoraMenosUnAnio);
+  const [toDate, setToDate] = useState(ahora);
 
   const ID_EMPRESA = localStorageService.getEmpresaId();
 
   const buscarDDJJ = async () => {
+    console.log('dayjs(): ', dayjs());
+    console.log('dayjs() - typeof : ', typeof dayjs());
+
     try {
-      let desdeDayjs = null;
-      if (desde !== null) {
-        desdeDayjs = dayjs(desde.$d).format('YYYY-MM-DD');
+      let desde = null;
+      if (fromDate !== null) {
+        desde = fromDate.startOf('month').format('YYYY-MM-DD');
       }
-      let hastaDayjs = null;
-      if (hasta !== null) {
-        hastaDayjs = dayjs(hasta.$d).format('YYYY-MM-DD');
+      let hasta = null;
+      if (toDate !== null) {
+        hasta = toDate.startOf('month').format('YYYY-MM-DD');
       }
 
-      const ddjjResponse = await axiosDDJJ.consultar(
-        ID_EMPRESA,
-        desdeDayjs,
-        hastaDayjs,
-      );
+      const ddjjResponse = await axiosDDJJ.consultar(ID_EMPRESA, desde, hasta);
 
       setRowsMisDdjj(ddjjResponse);
       //console.log('ddjjResponse', ddjjResponse);
@@ -75,40 +69,25 @@ export const MisDDJJConsulta = ({
           justifyContent="initial"
           alignItems="center"
         >
-          <LocalizationProvider
-            dateAdapter={AdapterDayjs}
-            adapterLocale={'es'}
-            localeText={
-              esES.components.MuiLocalizationProvider.defaultProps.localeText
-            }
-          >
-            <DemoContainer components={['DatePicker']}>
-              <DesktopDatePicker
-                label={'Periodo desde'}
-                views={['month', 'year']}
-                closeOnSelect={true}
-                onChange={(oValue) => setDesde(oValue)}
-                value={desde}
-              />
-            </DemoContainer>
-          </LocalizationProvider>
-          <LocalizationProvider
-            dateAdapter={AdapterDayjs}
-            adapterLocale={'es'}
-            localeText={
-              esES.components.MuiLocalizationProvider.defaultProps.localeText
-            }
-          >
-            <DemoContainer components={['DatePicker']}>
-              <DesktopDatePicker
-                label={'Periodo hasta'}
-                views={['month', 'year']}
-                closeOnSelect={true}
-                onChange={(oValue) => setHasta(oValue)}
-                value={hasta}
-              />
-            </DemoContainer>
-          </LocalizationProvider>
+          <DemoContainer components={['DatePicker']}>
+            <DesktopDatePicker
+              label={'Periodo desde'}
+              views={['month', 'year']}
+              closeOnSelect={true}
+              onChange={(oValue) => setFromDate(oValue)}
+              value={fromDate}
+            />
+          </DemoContainer>
+
+          <DemoContainer components={['DatePicker']}>
+            <DesktopDatePicker
+              label={'Periodo hasta'}
+              views={['month', 'year']}
+              closeOnSelect={true}
+              onChange={(oValue) => setToDate(oValue)}
+              value={toDate}
+            />
+          </DemoContainer>
         </Stack>
 
         <Stack

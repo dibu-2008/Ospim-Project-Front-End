@@ -22,11 +22,7 @@ export const InputPeriodo = (props) => {
       ref={ref}
       type="month"
       className="MuiInputBase-input css-yz9k0d-MuiInputBase-input"
-      defaultValue={
-        formatter.periodo(value).split('/')[1] +
-        '-' +
-        formatter.periodo(value).split('/')[0]
-      }
+      defaultValue={formatter.periodoISOString(value)}
       onChange={handleValue}
     />
   );
