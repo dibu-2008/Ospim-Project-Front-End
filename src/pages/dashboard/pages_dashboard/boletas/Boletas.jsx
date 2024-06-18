@@ -360,7 +360,7 @@ export const Boletas = () => {
           </CustomTabPanel>
           <CustomTabPanel value={tabState} index={1}>
             <Box
-              style={{ height: 400, width: '100%' }}
+              style={{ height: 400 }}
               sx={{
                 width: '100%',
                 '& .MuiDataGrid-columnHeaders': {
@@ -402,11 +402,7 @@ export const Boletas = () => {
                     valueFormatter: (params) =>
                       params.value ? formatter.dateString(params.value) : '',
                   },
-                  {
-                    field: 'razonDePago',
-                    headerName: 'Razon de pago',
-                    flex: 1,
-                  },
+
                   {
                     field: 'acciones',
                     headerName: 'Acciones',
