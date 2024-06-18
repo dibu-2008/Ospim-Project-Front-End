@@ -123,6 +123,7 @@ export const DDJJAlta = ({
 
   useEffect(() => {
     handleExpand();
+    validarDDJJ();
   }, [rowsAltaDDJJ]);
 
   useEffect(() => {
@@ -190,17 +191,22 @@ export const DDJJAlta = ({
     obtenerDDJJ(DDJJState, DDJJState.id, ID_EMPRESA);
   }, [DDJJState]);
 
-  const importarAfiliado = async () => {
-    console.log(afiliadoImportado);
+  const getCuilesValidados = async () => {
     const cuiles = afiliadoImportado.map((item) => item.cuil);
     cuiles.map((item) => console.log(item));
     const cuilesString = cuiles.map((item) => item?.toString());
-    console.log(cuilesString);
     const cuilesResponse = await axiosDDJJ.validarCuiles(
       ID_EMPRESA,
       cuilesString,
     );
 
+    console.log(cuilesResponse);
+
+    return cuilesResponse;
+  };
+
+  const importarAfiliado = async () => {
+    const cuilesResponse = await getCuilesValidados()
     const afiliadoImportadoConInte = afiliadoImportado.map((item, index) => {
       const cuilResponse = cuilesResponse.find(
         (cuil) => +cuil.cuil === item.cuil,
@@ -213,10 +219,12 @@ export const DDJJAlta = ({
 
     // Si alguno de los cuiles el valor de cuilesValidados es igual a false
     if (cuilesResponse.some((item) => item.cuilValido === false)) {
-      const mensajesFormateados2 = filasDoc
-        .map((item) => {
-          return `<p style="margin-top:20px;">
-        Linea ${item.indice}: cuil ${item.cuil} con formato inválido.</p>`;
+        const mensajesFormateados2 = cuilesResponse
+        .map((cuil) => {
+          if (!cuil.cuilValido){
+            return `<p style="margin-top:20px;">
+            CUIL ${cuil.cuil} con formato inválido.</p>`;
+          }
         })
         .join('');
 
@@ -277,92 +285,8 @@ export const DDJJAlta = ({
     }
   };
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-
-    setSelectedFileName(file ? file.name : '');
-
-    if (file) {
-      const reader = new FileReader();
-
-      reader.onload = (e) => {
-        const data = new Uint8Array(e.target.result);
-        const workbook = XLSX.read(data, { type: 'array' });
-        const sheetName = workbook.SheetNames[0];
-        const sheet = workbook.Sheets[sheetName];
-        const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-
-        if (rows[0].length === 11) {
-          const arraySinEncabezado = rows.slice(1);
-
-          arraySinEncabezado.forEach((item, index) => {
-            //console.log(item)
-            //console.log(item[0])
-            //console.log(index);
-            if (item.length === 11) {
-              //console.log(item.length);
-              //console.log(item[0]);
-              const fila = {
-                //indice: index + 1,
-                indice: index,
-                cuil: item[0],
-              };
-              console.log(filasDoc);
-              console.log(fila);
-              setFilasDoc([...filasDoc, fila]);
-            }
-          });
-
-          const arrayTransformado = arraySinEncabezado
-            .map((item, index) => {
-              //console.log(item);
-
-              if (item.length === 11 && item[0] !== undefined) {
-                console.log(item);
-                return {
-                  //id: index + 1,
-                  id: index,
-                  cuil: item[0],
-                  apellido: item[1],
-                  nombre: item[2],
-                  camara: item[3],
-                  categoria: item[4],
-                  fechaIngreso: formatearFecha(item[5]),
-                  empresaDomicilioId: plantas.find(
-                    (plantas) => plantas.planta === item[6],
-                  )?.id,
-                  remunerativo: item[7],
-                  noRemunerativo: item[8],
-                  uomaSocio: item[9] === 'Si',
-                  amtimaSocio: item[10] === 'Si',
-                  esImportado: true,
-                };
-              }
-            })
-            .filter((item) => item !== undefined);
-
-          // Antes de llenar las grillas debo de validar los cuiles
-          console.log(arrayTransformado);
-          setAfiliadoImportado(arrayTransformado);
-          setBtnSubirHabilitado(true);
-          if (DDJJState.id) {
-            confirm(
-              'Recorda que si subis un archivo, se perderan los datos de la ddjj actual',
-            );
-          }
-        }
-      };
-
-      reader.readAsArrayBuffer(file);
-    }
-  };
-
-  const handleElegirOtroChange = (event) => {
-    setMostrarPeriodos(event.target.value === 'elegirOtro');
-  };
-
-  const guardarDeclaracionJurada = async () => {
-    let DDJJ = {
+  const setDDJJ = () => {
+    const DDJJ = {
       periodo: periodo,
       afiliados: rowsAltaDDJJ.map((item) => {
         const registroNew = {
@@ -386,57 +310,162 @@ export const DDJJAlta = ({
           uomaSocio: item.uomaSocio === '' ? null : item.uomaSocio,
           amtimaSocio: item.amtimaSocio === '' ? null : item.amtimaSocio,
         };
-
         if (item.id) registroNew.id = item.id;
         return registroNew;
       }),
     };
+    return DDJJ;
+  };
 
-    if (DDJJState.id) {
-      DDJJ.id = DDJJState.id;
-    }
-
-    // Borrar la propiedad errores de cada afiliado
+  const deleteErroresAfiliados = (DDJJ) => {
+     // Borrar la propiedad errores de cada afiliado
     // por que no se envia al backend
     DDJJ.afiliados.forEach((afiliado) => {
       delete afiliado.errores;
     });
+    return DDJJ;
+  };
 
-    const validacionResponse = await axiosDDJJ.validar(ID_EMPRESA, DDJJ);
-
-    // array de cuiles del array validacionResponse.errores
+  const setCuilesConErrores = () => {
     let cuilesConErrores = [];
     if (validacionResponse.errores) {
       cuilesConErrores = validacionResponse.errores.map((error) => error.cuil);
     }
+    return cuilesConErrores;
+  };
 
-    // Agregar la propiedad errores="No"
+  const setErroresAfiliados = async (DDJJ, cuilesConErrores) => {
     DDJJ.afiliados.forEach((afiliado) => {
       afiliado.errores = false;
-      if (cuilesConErrores.includes(afiliado.cuil)) {
+      if (cuilesConErrores.includes(afiliado.cuil.toString())) {
         afiliado.errores = true;
       }
     });
-
     // Buscar todos estos cuiles en el rowsAltaDDJJ, y marcarlos con errores="Si"
     rowsAltaDDJJ.forEach((afiliado) => {
-      if (cuilesConErrores.includes(afiliado.cuil)) {
+      if (cuilesConErrores.includes(afiliado.cuil.toString())) {
         afiliado.errores = true;
       } else {
         afiliado.errores = false;
       }
     });
+    return DDJJ
+  };
 
-    // Borro la propiedad errores de ddjj
-    DDJJ.afiliados.forEach((afiliado) => {
-      delete afiliado.errores;
+  const validarDDJJ = async () => {
+    let DDJJ = setDDJJ();
+    if (DDJJState.id) DDJJ.id = DDJJState.id;
+    DDJJ = deleteErroresAfiliados(DDJJ);
+    const validacionResponse = await axiosDDJJ.validar(ID_EMPRESA, DDJJ);
+    const cuilesConERR = await getCuilesValidados();
+    cuilesConERR.forEach((element) => {
+      if (!element.cuilValido) {
+        if(validacionResponse && validacionResponse.errores)
+        validacionResponse.errores.push({
+          cuil: element.cuil.toString(),
+          codigo: 'cuil',
+          descripcion: 'CUIL INVALIDO',
+          indice: null,
+        });
+      }
     });
 
+    let cuilesConErrores = setCuilesConErrores();
+    DDJJ = await setErroresAfiliados(DDJJ, cuilesConErrores);
+    console.log(DDJJ)
     setValidacionResponse(validacionResponse); // Sirve para pintar en rojo los campos con errores
 
     if (validacionResponse.errores && validacionResponse.errores.length > 0) {
       const mensajesUnicos = new Set();
+      console.log(validacionResponse)
+      validacionResponse.errores.forEach((error) => {
+        if (!mensajesUnicos.has(error.descripcion)) {
+          mensajesUnicos.add(error.descripcion);
+        }
+      });
+    }
+    return DDJJ
+  };
 
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+
+    setSelectedFileName(file ? file.name : '');
+
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+        const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+        if (rows[0].length === 11) {
+          const arraySinEncabezado = rows.slice(1);
+          const elementos = [];
+          arraySinEncabezado.forEach((item, index) => {
+            if (item.length === 11) {
+              const fila = {
+                //indice: index + 1,
+                indice: index,
+                cuil: item[0],
+              };
+              elementos.push(fila);
+            }
+          });
+          setFilasDoc(elementos);
+
+          const arrayTransformado = arraySinEncabezado
+            .map((item, index) => {
+              if (item.length === 11 && item[0] !== undefined) {
+                return {
+                  //id: index + 1,
+                  id: index,
+                  cuil: item[0],
+                  apellido: item[1],
+                  nombre: item[2],
+                  camara: item[3],
+                  categoria: item[4],
+                  fechaIngreso: formatearFecha(item[5]),
+                  empresaDomicilioId: plantas.find(
+                    (plantas) => plantas.planta === item[6],
+                  )?.id,
+                  remunerativo: item[7],
+                  noRemunerativo: item[8],
+                  uomaSocio: item[9] === 'Si',
+                  amtimaSocio: item[10] === 'Si',
+                  esImportado: true,
+                };
+              }
+            })
+            .filter((item) => item !== undefined);
+
+          setAfiliadoImportado(arrayTransformado);
+          setBtnSubirHabilitado(true);
+          if (DDJJState.id) {
+            confirm(
+              'Recorda que si subis un archivo, se perderan los datos de la ddjj actual',
+            );
+          }
+        }
+      };
+
+      reader.readAsArrayBuffer(file);
+    }
+  };
+
+  const handleElegirOtroChange = (event) => {
+    setMostrarPeriodos(event.target.value === 'elegirOtro');
+  };
+
+  const guardarDeclaracionJurada = async () => {
+    const DDJJ = await validarDDJJ()
+    console.log(DDJJ)
+    if (validacionResponse.errores && validacionResponse.errores.length > 0) {
+      const mensajesUnicos = new Set();
+      console.log(validacionResponse.errores)
       validacionResponse.errores.forEach((error) => {
         if (!mensajesUnicos.has(error.descripcion)) {
           mensajesUnicos.add(error.descripcion);
@@ -650,7 +679,10 @@ export const DDJJAlta = ({
               >
                 <Tab label="Importar CSV - XLSX" {...a11yProps(0)} />
                 <Tab label="Copiar un período anterior" {...a11yProps(1)} />
-                <Tab label="Carga Manual"  onClick={(e)=>handleChangeE(e,true)}/>
+                <Tab
+                  label="Carga Manual"
+                  onClick={(e) => handleChangeE(e, true)}
+                />
                 {/*  <Tab label="Item Three" {...a11yProps(2)} /> */}
               </Tabs>
             </Box>

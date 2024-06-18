@@ -293,7 +293,7 @@ export const DDJJAltaEmpleadosGrilla = ({
     let cellClassName = '';
 
     validacionResponse?.errores?.forEach((error) => {
-      if (params.row.cuil === error.cuil && params.field === error.codigo) {
+      if (params.row.cuil?.toString() === error.cuil && params.field === error.codigo) {
         cellClassName = 'hot';
       }
     });

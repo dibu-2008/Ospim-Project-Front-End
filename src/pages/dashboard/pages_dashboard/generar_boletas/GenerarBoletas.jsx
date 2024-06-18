@@ -50,27 +50,12 @@ export const GenerarBoletas = () => {
           DDJJ_ID,
         );
 
-        console.log(data);
         setDefaultFDP(data);
         setAfiliados(ordenarAfiliadosBoletas(data));
         setPrimeraSeleccion(true);
         setPrimeraSeleccionFDP(true);
         sethabilitaBoton(true);
-        console.log(data);
-        // Convertir la fecha del JSON a un objeto Date
-        //const vencimiento = dayjs(data.detalle_boletas[0].vencimiento);
-
-        //// Obtener la fecha actual
-        //const currentDate = dayjs();
-        //console.log(vencimiento)
-        //console.log(currentDate)
-        //// Comparar ambas fechas
-        //if (vencimiento < currentDate) {
-        //  setIntencionDePago(data.detalle_boletas[0].codigo,currentDate,true)
-        //} else {
-        //  console.log("La fecha del JSON no es menor a la fecha actual.");
-        //}
-        setHasFetchedData(true); // Indicar que los datos han sido obtenidos
+        setHasFetchedData(true);
       } catch (error) {
         console.error('Error al obtener las boletas:', error);
         navigate(`/dashboard/ddjj`);
