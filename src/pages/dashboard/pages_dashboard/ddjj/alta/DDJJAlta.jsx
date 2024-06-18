@@ -194,46 +194,54 @@ export const DDJJAlta = ({
   };
 
   const importarAfiliado = async () => {
-    const cuilesResponse = await getCuilesValidados();
-    const afiliadoImportadoConInte = afiliadoImportado.map((item, index) => {
-      const cuilResponse = cuilesResponse.find(
-        (cuil) => +cuil.cuil === item.cuil,
-      );
-      if (cuilResponse) {
-        return { ...item, inte: cuilResponse.inte, fila: index + 1 };
-      }
-      return item;
-    });
-
-    // Si alguno de los cuiles el valor de cuilesValidados es igual a false
-    if (cuilesResponse.some((item) => item.cuilValido === false)) {
-      const mensajesFormateados2 = cuilesResponse
-        .map((cuil) => {
-          if (!cuil.cuilValido) {
-            return `<p style="margin-top:20px;">
-            CUIL ${cuil.cuil} con formato inválido.</p>`;
-          }
-        })
-        .join('');
-
-      Swal.fire({
-        icon: 'error',
-        title: 'Error de validacion',
-        html: `Cuiles con errores:<br>${mensajesFormateados2}<br>`,
-        showConfirmButton: true,
-        confirmButtonText: 'Aceptar',
-        showCancelButton: true,
-        cancelButtonText: 'Cancelar',
+    if (
+      selectedFileName &&
+      selectedFileName != '' &&
+      selectedFileName != undefined
+    ) {
+      const cuilesResponse = await getCuilesValidados();
+      const afiliadoImportadoConInte = afiliadoImportado.map((item, index) => {
+        const cuilResponse = cuilesResponse.find(
+          (cuil) => +cuil.cuil === item.cuil,
+        );
+        if (cuilResponse) {
+          return { ...item, inte: cuilResponse.inte, fila: index + 1 };
+        }
+        return item;
       });
 
-      setRowsAltaDDJJ(afiliadoImportadoConInte);
+      // Si alguno de los cuiles el valor de cuilesValidados es igual a false
+      if (cuilesResponse.some((item) => item.cuilValido === false)) {
+        const mensajesFormateados2 = cuilesResponse
+          .map((cuil) => {
+            if (!cuil.cuilValido) {
+              return `<p style="margin-top:20px;">
+            CUIL ${cuil.cuil} con formato inválido.</p>`;
+            }
+          })
+          .join('');
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Error de validacion',
+          html: `Cuiles con errores:<br>${mensajesFormateados2}<br>`,
+          showConfirmButton: true,
+          confirmButtonText: 'Aceptar',
+          showCancelButton: true,
+          cancelButtonText: 'Cancelar',
+        });
+
+        setRowsAltaDDJJ(afiliadoImportadoConInte);
+      } else {
+        swal.showSuccess(IMPORTACION_OK);
+
+        setRowsAltaDDJJ(afiliadoImportadoConInte);
+      }
+
+      setOcultarEmpleadosGrilla(true);
     } else {
-      swal.showSuccess(IMPORTACION_OK);
-
-      setRowsAltaDDJJ(afiliadoImportadoConInte);
+      swal.showWarning('Debe seleccionar un archivo válido.');
     }
-
-    setOcultarEmpleadosGrilla(true);
   };
 
   const formatearFecha = (fechaExcel) => {
@@ -378,12 +386,49 @@ export const DDJJAlta = ({
     return DDJJ;
   };
 
+  const fileReset = () => {
+    setFilasDoc([]); //No se para que sirve
+    setAfiliadoImportado([]);
+    setBtnSubirHabilitado(false);
+    setSelectedFileName('');
+  };
+
+  const findCodigo = (vector, codigo) => {
+    try {
+      if (vector && vector.find) {
+        let reg = vector.find((reg) => reg.codigo == codigo);
+        if (reg != null && reg != undefined) {
+          return reg.codigo;
+        }
+      }
+      return null;
+    } catch (error) {
+      return null;
+    }
+  };
+  const findCodigoCategoria = (camara, categoria) => {
+    try {
+      if (todasLasCategorias && todasLasCategorias.find) {
+        let reg = todasLasCategorias.find(
+          (reg) => reg.camara == camara && reg.categoria == categoria,
+        );
+        if (reg != null && reg != undefined) {
+          return reg.categoria;
+        }
+      }
+      return null;
+    } catch (error) {
+      return null;
+    }
+  };
+
   const handleFileChange = (event) => {
     const file = event.target.files[0];
 
     setSelectedFileName(file ? file.name : '');
 
     if (file) {
+      console.log('VA a leer el file  !!!!');
       const reader = new FileReader();
 
       reader.onload = (e) => {
@@ -411,14 +456,17 @@ export const DDJJAlta = ({
           const arrayTransformado = arraySinEncabezado
             .map((item, index) => {
               if (item.length === 11 && item[0] !== undefined) {
+                const camaraCodigo = findCodigo(camaras, item[3]);
+                const categoriaCodigo = findCodigoCategoria(item[3], item[4]);
                 return {
                   //id: index + 1,
                   id: index,
                   cuil: item[0],
                   apellido: item[1],
                   nombre: item[2],
-                  camara: item[3],
-                  categoria: item[4],
+                  //camara: item[3],
+                  camara: camaraCodigo || '',
+                  categoria: categoriaCodigo || '',
                   fechaIngreso: formatearFecha(item[5]),
                   empresaDomicilioId: plantas.find(
                     (plantas) => plantas.planta === item[6],
@@ -440,10 +488,23 @@ export const DDJJAlta = ({
               'Recorda que si subis un archivo, se perderan los datos de la ddjj actual',
             );
           }
+        } else {
+          swal.showWarning(
+            '<div><p>Formato de archivo incorrecto.<br>La primera fila debe incluir titulos de las <b>11 columnas</b>:<br><br> 1-CUIL<br>2-Apellido<br>3-Nombre<br>4-Cámara<br>5-Categoría<br>6-Ingreso<br>7-Planta<br>8-Remunerativo<br>9-No Remunerativo<br>10-Adherido Sindicato<br>11-Paga Mutual</p></div>',
+            true,
+          );
+          fileReset();
+          console.log('HACE: event.target.value = null;');
+          event.target.value = null;
+          console.log('HACE: event.target.value = null; => OK');
         }
       };
 
       reader.readAsArrayBuffer(file);
+    } else {
+      fileReset();
+      event.target.value = null;
+      console.log('file es NULO !!!!');
     }
   };
 

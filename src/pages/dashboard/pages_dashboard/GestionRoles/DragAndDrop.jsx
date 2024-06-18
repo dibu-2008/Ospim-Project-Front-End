@@ -69,8 +69,11 @@ export const DragAndDrop = ({ tareas }) => {
   };
 
   const handleClick = () => {
-    console.log({ id, descripcion, funcionalidades });
-    axiosGestionRoles.putFuncionalidades({ id, descripcion, funcionalidades });
+    axiosGestionRoles.putFuncionalidades({
+      id,
+      descripcion,
+      funcionalidades,
+    });
   };
 
   return (

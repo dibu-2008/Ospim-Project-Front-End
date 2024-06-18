@@ -26,16 +26,23 @@ const showSwalError = (descripcion) => {
   }
 };
 
-const showSwalWarning = (descripcion) => {
+const showSwalWarning = (descripcion, esHtml) => {
   try {
     console.log('showSwalWarning - descripcion:' + descripcion);
-    Swal.fire({
+    let conf = {
       icon: 'warning',
       title: 'Advertencia',
-      text: descripcion,
       showConfirmButton: true,
       confirmButtonText: 'Aceptar',
-    });
+    };
+    console.log('esHtml:', esHtml);
+    if (esHtml) {
+      conf.html = descripcion;
+    } else {
+      conf.text = descripcion;
+    }
+    console.log('conf:', conf);
+    Swal.fire(conf);
   } catch (error) {
     console.log('showSwalWarning-ERROR:');
     console.log(error);
@@ -107,8 +114,8 @@ const swal = {
   showSuccess: async function (descripcion) {
     return showSwallSuccess(descripcion);
   },
-  showWarning: async function (descripcion) {
-    return showSwalWarning(descripcion);
+  showWarning: async function (descripcion, esHtml) {
+    return showSwalWarning(descripcion, esHtml);
   },
   showErrorBackEnd: async function (HTTP_MSG, rta) {
     return showErrorBackEnd(HTTP_MSG, rta);

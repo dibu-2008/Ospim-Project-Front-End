@@ -3,6 +3,7 @@ import { axiosCrud } from '@components/axios/axiosCrud';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
+const HTTP_MSG_MODI = import.meta.env.VITE_HTTP_MSG_MODI;
 
 const getRoles = async () => {
   try {
@@ -44,13 +45,17 @@ const getFuncionalidadesByRol = async () => {
 const putFuncionalidades = async (body) => {
   try {
     const URL = `/funcionalidades/actualizar`;
-    //const URL = `/roles/${body.id}/funcionalidades`;
     const response = await axiosCrud.actualizar(URL, body); // esto me tiene que devolver funcionales_activas, funcionalidades_inactivas
+    if (response) {
+      swal.showSuccess(HTTP_MSG_MODI);
+    }
     return response;
   } catch (error) {
+    console.log('putFuncionalidades - error: ', error);
     const HTTP_MSG =
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`;
     swal.showErrorBackEnd(HTTP_MSG, error);
+    return false;
   }
 };
 

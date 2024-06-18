@@ -737,12 +737,11 @@ export const DDJJAltaEmpleadosGrilla = ({
       },
 
       renderEditCell: (params) => {
-        console.log('renderEditCell-params: ', params);
+        //console.log('renderEditCell-params: ', params);
         return (
           <CurrencyInput
             id={params.row.id ? 'remunerativo' + params.row.id.toString() : ''}
             className="input-currency"
-            //prefix="$"
             decimalScale={2}
             decimalSeparator=","
             groupSeparator="."

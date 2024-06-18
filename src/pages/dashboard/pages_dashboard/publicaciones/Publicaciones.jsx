@@ -227,7 +227,7 @@ export const Publicaciones = () => {
       align: 'center',
       headerClassName: 'header--cell header--cell--left',
       valueGetter: ({ value }) => {
-        return formatter.dateObject(row.value);
+        return formatter.dateObject(value);
       },
       valueFormatter: ({ value }) => {
         return formatter.dateString(value);
@@ -242,8 +242,8 @@ export const Publicaciones = () => {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell header--cell--left',
-      valueGetter: (row) => {
-        return formatter.dateObject(row.value);
+      valueGetter: ({ value }) => {
+        return formatter.dateObject(value);
       },
       valueFormatter: ({ value }) => {
         return formatter.dateString(value);
