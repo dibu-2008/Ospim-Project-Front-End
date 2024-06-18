@@ -1,9 +1,6 @@
 import { useEffect, useState } from 'react';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import { esES } from '@mui/x-date-pickers/locales';
 import formatter from '@/common/formatter';
 import {
   Button,
@@ -35,11 +32,6 @@ import swal from '@/components/swal/swal';
 import PropTypes from 'prop-types';
 
 const IMPORTACION_OK = import.meta.env.VITE_IMPORTACION_OK;
-
-const textoIdioma =
-  esES.components.MuiLocalizationProvider.defaultProps['localeText'];
-
-const adaptadorIdioma = 'es';
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -108,10 +100,6 @@ export const DDJJAlta = ({
     setTab(newValue);
   };
 
-  const handleChangePeriodo = (date) => setPeriodo(date);
-
-  const handleChangeOtroPeriodo = (date) => setOtroPeriodo(date);
-
   useEffect(() => {
     // Comprueba si hay alguna fila en modo edición
     const isSomeRowInEditMode = Object.values(rowModesModel).some(
@@ -169,7 +157,7 @@ export const DDJJAlta = ({
         try {
           const ddjj = await axiosDDJJ.getDDJJ(idEmpresa, idDDJJ);
           setTituloSec(getTituloSec(ddjj.secuencia));
-          setPeriodo(dayjs(ddjj.periodo));
+          setPeriodo(formatter.dateObject(ddjj.periodo));
           if (ddjj.estado) {
             setActualizacionHabilitada(ddjj.estado == 'PE');
           }
@@ -638,22 +626,18 @@ export const DDJJAlta = ({
           </AccordionSummary>
           <AccordionDetails>
             <Stack spacing={4} direction="row" alignItems="center">
-              <LocalizationProvider
-                dateAdapter={AdapterDayjs}
-                adapterLocale={adaptadorIdioma}
-                localeText={textoIdioma}
-              >
-                <DemoContainer components={['DatePicker']}>
-                  <DesktopDatePicker
-                    label={'Periodo'}
-                    views={['month', 'year']}
-                    closeOnSelect={true}
-                    onChange={handleChangePeriodo}
-                    value={periodo}
-                    disabled={!actualizacionHabilitada}
-                  />
-                </DemoContainer>
-              </LocalizationProvider>
+              <DemoContainer components={['DatePicker']}>
+                <DesktopDatePicker
+                  label={'Periodo'}
+                  views={['month', 'year']}
+                  closeOnSelect={true}
+                  //onChange={handleChangePeriodo}
+                  onChange={(date) => setPeriodo(date)}
+                  value={periodo}
+                  disabled={!actualizacionHabilitada}
+                />
+              </DemoContainer>
+
               <Typography> DDJJ: {tituloSec}</Typography>
             </Stack>
           </AccordionDetails>
@@ -742,22 +726,16 @@ export const DDJJAlta = ({
                         direction="row"
                         sx={{ marginLeft: '-11px', marginTop: '10px' }}
                       >
-                        <LocalizationProvider
-                          dateAdapter={AdapterDayjs}
-                          adapterLocale={adaptadorIdioma}
-                          localeText={textoIdioma}
-                        >
-                          <DemoContainer components={['DatePicker']}>
-                            <DesktopDatePicker
-                              label={'Otro período'}
-                              views={['month', 'year']}
-                              closeOnSelect={true}
-                              onChange={handleChangeOtroPeriodo}
-                              value={otroPeriodo}
-                              disabled={!actualizacionHabilitada}
-                            />
-                          </DemoContainer>
-                        </LocalizationProvider>
+                        <DemoContainer components={['DatePicker']}>
+                          <DesktopDatePicker
+                            label={'Otro período'}
+                            views={['month', 'year']}
+                            closeOnSelect={true}
+                            onChange={(date) => setOtroPeriodo(date)}
+                            value={otroPeriodo}
+                            disabled={!actualizacionHabilitada}
+                          />
+                        </DemoContainer>
                       </Stack>
                     )}
                   </Box>

@@ -1,5 +1,4 @@
 import { axiosCrud } from '@components/axios/axiosCrud';
-import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
 import swal from '@/components/swal/swal';
 
 const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
@@ -12,7 +11,7 @@ export const getRamo = async () => {
     const data = await axiosCrud.consultar(URL);
     return data || [];
   } catch (error) {
-    showErrorBackEnd(
+    swal.showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
       error,
     );
@@ -32,7 +31,7 @@ export const registrarEmpresa = async (registro) => {
     }
     throw data;
   } catch (error) {
-    showErrorBackEnd(HTTP_MSG_ALTA_ERROR, error);
+    swal.showErrorBackEnd(HTTP_MSG_ALTA_ERROR, error);
     return error.descripcion
       .match(/\[(.*?)\]/)[1]
       .replace(/^\{|\}$/g, '')

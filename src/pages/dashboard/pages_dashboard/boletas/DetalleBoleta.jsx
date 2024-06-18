@@ -24,8 +24,16 @@ import {
 import formatter from '@/common/formatter';
 import { useParams } from 'react-router-dom';
 import { calcularInteresBoleta } from '../generar_boletas/GenerarBoletasApi';
+import { consultarFormasPago } from '@/common/api/FormaPagoApi';
 import { useNavigate } from 'react-router-dom';
 
+const getDescripcion = (vector, codigo) => {
+  if (vector && vector.find) {
+    let reg = vector.find((reg) => reg.codigo == codigo);
+    if (!reg) return codigo;
+    return reg.descripcion;
+  }
+};
 export const DetalleBoleta = () => {
   const [boletaDetalle, setBoletaDetalle] = useState([]);
   const [afiliadosRows, setAfiliadosRows] = useState([]);
@@ -37,13 +45,29 @@ export const DetalleBoleta = () => {
   const [modoEdicion, setModoEdicion] = useState(false);
   const [respaldoBoleta, setRespaldoBoleta] = useState([]);
   const [ajustes, setAjustes] = useState([]);
+  const [formasPago, setFormasPago] = useState([]);
   const navigate = useNavigate();
 
   const ID_EMPRESA = localStorageService.getEmpresaId();
+  //const formasPago = [
+  //    { codigo: 'VENTANILLA', descripcion: 'Ventanilla' },
+  //  { codigo: 'REDLINK', descripcion: 'Red Link' },
+  //{ codigo: 'PMCUENTAS', descripcion: 'Pago Mis Cuentas' },
+  //];
+
+  useEffect(() => {
+    const fetchFormaPago = async () => {
+      const fp = await consultarFormasPago();
+      setFormasPago(fp);
+    };
+    fetchFormaPago();
+  }, []);
 
   const { numero_boleta } = useParams();
+
   console.log(numero_boleta);
   const hoy = new Date().toISOString().split('T')[0];
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -75,11 +99,21 @@ export const DetalleBoleta = () => {
 
   const guardarBoleta = () => {
     console.log('guardarBoleta - guardarBoleta: ', boletaDetalle);
-    modificarBoletaById(ID_EMPRESA, boletaDetalle);
+    const rta = modificarBoletaById(ID_EMPRESA, boletaDetalle);
+    if (rta) {
+      respaldoBoleta.intencionDePago = boletaDetalle.intencionDePago;
+      respaldoBoleta.formaDePago = boletaDetalle.formaDePago;
+      console.log(
+        'guardarBoleta - respaldoBoleta ACTUALIZADA: ',
+        respaldoBoleta,
+      );
+      setMetodoPago(boletaDetalle.formaDePago);
+    }
   };
 
   const handlesSetIntencionDePago = async (value) => {
     setIntencionDePago(value);
+
     const response = await calcularInteresBoleta(
       ID_EMPRESA,
       ddjj_id,
@@ -119,6 +153,9 @@ export const DetalleBoleta = () => {
   };
 
   const existeDato = (value) => (value !== null && value !== '' ? value : '');
+
+  console.log('DetalleBoleta - metodoPago: ', metodoPago);
+
   return (
     <div className="boletas_container">
       <h1>
@@ -256,12 +293,14 @@ export const DetalleBoleta = () => {
                       handleSetMetodoPago(event.target.value)
                     }
                   >
-                    <MenuItem value="VENTANILLA">Ventanilla</MenuItem>
-                    <MenuItem value="REDLINK">Red Link</MenuItem>
-                    <MenuItem value="PMCUENTAS">PagoMisCuentas</MenuItem>
+                    {formasPago.map((reg) => (
+                      <MenuItem value={reg.codigo} key={reg.codigo}>
+                        {reg.descripcion}
+                      </MenuItem>
+                    ))}
                   </Select>
                 ) : (
-                  boletaDetalle.formaDePago
+                  getDescripcion(formasPago, boletaDetalle.formaDePago)
                 )}
               </TableCell>
             </TableRow>

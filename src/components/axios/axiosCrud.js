@@ -38,9 +38,6 @@ export const axiosConsultar = async (UrlApi) => {
 export const axiosCrear = async (UrlApi, oEntidad) => {
   try {
     const response = await oAxios.post(UrlApi, oEntidad);
-    console.log(response.status);
-    console.log(response.status !== 200);
-    console.log(response);
     if (response.status !== 201 && response.status !== 200) {
       console.log(
         `axiosCrud.crear() - ERROR 2 - UrlApi: ${UrlApi} - response.status !== 201 - response: ${JSON.stringify(
@@ -67,7 +64,7 @@ export const axiosCrear = async (UrlApi, oEntidad) => {
 export const axiosCrearN = async (UrlApi, oEntidad) => {
   try {
     const response = await oAxios.post(UrlApi, oEntidad);
-    console.log(response.status);
+    //console.log(response.status);
     if (response && response.status && response.status == 204) {
       return true;
     }
@@ -93,7 +90,7 @@ export const axiosCrearN = async (UrlApi, oEntidad) => {
 export const axiosActualizar = async (UrlApi, oEntidad) => {
   const pkId = oEntidad.id;
   const URL = `${UrlApi}/${pkId}`;
-  console.log(URL);
+  //console.log(URL);
   try {
     delete oEntidad.id;
     const response = await oAxios.put(URL, oEntidad);
@@ -157,7 +154,7 @@ export const axiosEliminar = async (UrlApi, id) => {
   const URL = `${UrlApi}/${id}`;
   try {
     const response = await oAxios.delete(URL);
-    console.log(response);
+    //console.log(response);
     if (response.status !== 204 && response.status !== 200) {
       //JsonServer devuelve 200
       console.log(

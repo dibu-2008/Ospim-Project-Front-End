@@ -1,8 +1,6 @@
 import axios from 'axios';
-import oAxios from '@components/axios/axiosInstace';
 import { axiosCrud } from '@components/axios/axiosCrud';
 import swal from '@/components/swal/swal';
-import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
 import { boletaPdfDownload } from '@/common/api/BoletaCommonApi';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -19,7 +17,7 @@ export const crearBoleta = async (empresa_id, nuevoReg) => {
       swal.showSuccess(HTTP_MSG_ALTA);
       return data;
     } else {
-      showErrorBackEnd(HTTP_MSG_ALTA_ERROR, data);
+      swal.showErrorBackEnd(HTTP_MSG_ALTA_ERROR, data);
       return {};
     }
   } catch (error) {
@@ -45,37 +43,12 @@ export const generarBoletaSinDDJJ = async (empresa_id, body) => {
       boletaPdfDownload(empresa_id, data.id);
     }
     return data;
-    /*
-    const URL = `${BACKEND_URL}/empresa/${empresa_id}/boletas/${data.id}/imprimir`;
-
-    const response = await oAxios.request({
-      url: URL,
-      method: 'post',
-      responseType: 'blob',
-      data: body,
-    });
-    //const response = await axiosCrud.crear(URL, { ...body });
-    console.log('generarBoletaSinDDJJ - response: ', response);
-
-    if (response) {
-      //Ojo que response.data => NO EXISTE
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', 'boleta.pdf');
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-    } else {
-      console.error('Error al generar boletas');
-    }
-    */
   } catch (error) {
     console.log('generarBoletaSinDDJJ - error: ', error);
 
     const HTTP_MSG =
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`;
-    showErrorBackEnd(HTTP_MSG, error);
+    swal.showErrorBackEnd(HTTP_MSG, error);
   }
 };
 
@@ -87,7 +60,7 @@ export const tieneRectificativa = async (empresa_id, periodo) => {
   } catch (error) {
     const HTTP_MSG =
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`;
-    showErrorBackEnd(HTTP_MSG, error);
+    swal.showErrorBackEnd(HTTP_MSG, error);
   }
 };
 

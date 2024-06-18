@@ -1,10 +1,12 @@
 import oAxios from '@components/axios/axiosInstace';
 import { axiosCrud } from '@/components/axios/axiosCrud';
-import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
+import swal from '@/components/swal/swal';
 
 import formatter from '@/common/formatter';
 
 const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
+const HTTP_MSG_MODI = import.meta.env.VITE_HTTP_MSG_MODI;
+const HTTP_MSG_MODI_ERROR = import.meta.env.VITE_HTTP_MSG_MODI_ERROR;
 
 export const getBoletasByDDJJid = async (empresa_id, ddjj_id) => {
   try {
@@ -15,7 +17,7 @@ export const getBoletasByDDJJid = async (empresa_id, ddjj_id) => {
   } catch (error) {
     const HTTP_MSG =
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`;
-    showErrorBackEnd(HTTP_MSG, error);
+    swal.showErrorBackEnd(HTTP_MSG, error);
   }
 };
 
@@ -36,7 +38,7 @@ export const getBoletas = async (empresa_id, desde, hasta) => {
   } catch (error) {
     const HTTP_MSG =
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`;
-    showErrorBackEnd(HTTP_MSG, error);
+    swal.showErrorBackEnd(HTTP_MSG, error);
   }
 };
 
@@ -61,14 +63,51 @@ export const modificarBoletaById = async (empresa_id, body) => {
       intencionDePago: body.intencionDePago,
       formaDePago: body.formaDePago,
     };
-    bodyNew.intencionDePago = formatter.toFechaValida(bodyNew.intencionDePago);
+
+    //bodyNew.intencionDePago = formatter.toFechaValida(bodyNew.intencionDePago);
     console.log('bodyNew: ', bodyNew);
 
-    await axiosCrud.actualizar(URL, bodyNew);
+    const rta = await axiosCrud.actualizar(URL, bodyNew);
+    if (rta) {
+      swal.showSuccess(HTTP_MSG_MODI);
+    } else {
+      swal.showError(HTTP_MSG_MODI_ERROR);
+    }
+    return rta;
   } catch (error) {
     const HTTP_MSG =
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`;
-    showErrorBackEnd(HTTP_MSG, error);
+    swal.showErrorBackEnd(HTTP_MSG, error);
+    return false;
+  }
+};
+
+export const generarBep = async (empresa_id, boletaId) => {
+  try {
+    const URL = `/empresa/${empresa_id}/boletas/${boletaId}/generar-bep`;
+    const response = await oAxios.post(URL);
+    //console.log('response:', response);
+    if (response.status == 200) {
+      if (response.data.bep && response.data.bep != null) {
+        swal.showSuccess('El BEP fue generado con exito');
+      } else {
+        //Mensaje ERROR Generico
+        swal.showError(
+          'El BEP no pudo ser generado. Por favor intente mas tarde.',
+        );
+      }
+      return response.data;
+    } else {
+      swal.showError(
+        'El BEP no pudo ser generado. Por favor intente mas tarde.',
+      );
+      return null;
+    }
+  } catch (error) {
+    const HTTP_MSG =
+      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`;
+    swal.showErrorBackEnd(HTTP_MSG, error);
+    return null;
   }
 };
 
@@ -77,4 +116,5 @@ export const axiosBoletas = {
   getBoletas,
   getBoletaById,
   modificarBoletaById,
+  generarBep,
 };

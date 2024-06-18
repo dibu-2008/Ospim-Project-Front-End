@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { InputComponent } from '../../components/InputComponent';
 import { useFormRegisterCompany } from '../../hooks/useFormRegisterCompany';
 import { GrillaEmpresaDomicilio } from '../dashboard/pages_dashboard/datos_empresa/grilla_empresa_domicilio/GrillaEmpresaDomicilio';
 import { registrarEmpresa, getRamo } from './RegistroEmpresaApi';
@@ -14,7 +13,7 @@ import AddIcon from '@mui/icons-material/Add';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import './RegistroEmpresa.css';
 import NavBar from '@/components/navbar/NavBar';
-import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
+import swal from '@/components/swal/swal';
 import {
   Button,
   IconButton,
@@ -111,7 +110,7 @@ export const RegistroEmpresa = () => {
 
     // Validar de que password y repeatPassword sean iguales
     if (password !== repeatPassword) {
-      showErrorBackEnd('Las contraseñas no coinciden', {});
+      swal.showErrorBackEnd('Las contraseñas no coinciden', {});
       return;
     }
 

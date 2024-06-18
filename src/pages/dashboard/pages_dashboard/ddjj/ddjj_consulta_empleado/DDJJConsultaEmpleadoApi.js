@@ -1,6 +1,5 @@
 import oAxios from '@components/axios/axiosInstace';
 import { axiosCrud } from '@components/axios/axiosCrud';
-import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
 import swal from '@/components/swal/swal';
 
 const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
@@ -24,7 +23,7 @@ export const obtenerDDJJ = async () => {
         error.status,
     );
 
-    showErrorBackEnd(
+    swal.showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
       error,
     );
@@ -60,7 +59,7 @@ export const consultaDDJJfiltrada = async (desde, hasta, cuit) => {
         error.status,
     );
 
-    showErrorBackEnd(
+    swal.showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
       error,
     );

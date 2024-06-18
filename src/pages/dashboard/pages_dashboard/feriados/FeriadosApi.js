@@ -1,8 +1,6 @@
+import oAxios from '@components/axios/axiosInstace';
 import { axiosCrud } from '@components/axios/axiosCrud';
-import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
 import swal from '@/components/swal/swal';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
 const HTTP_MSG_MODI = import.meta.env.VITE_HTTP_MSG_MODI;
@@ -11,7 +9,8 @@ const HTTP_MSG_ALTA_ERROR = import.meta.env.VITE_HTTP_MSG_ALTA_ERROR;
 const HTTP_MSG_MODI_ERROR = import.meta.env.VITE_HTTP_MSG_MODI_ERROR;
 const HTTP_MSG_BAJA_ERROR = import.meta.env.VITE_HTTP_MSG_BAJA_ERROR;
 const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
-
+const VITE_HTTP_MSG_PROCESO_ERROR = import.meta.env.VITE_HTTP_MSG_PROCESO_ERROR;
+const VITE_HTTP_MSG_PROCESO = import.meta.env.VITE_HTTP_MSG_PROCESO;
 const URL_ENTITY = '/feriados';
 
 export const axiosFeriados = {
@@ -41,7 +40,7 @@ export const consultar = async () => {
     const data = await axiosCrud.consultar(URL_ENTITY);
     return data || [];
   } catch (error) {
-    showErrorBackEnd(
+    swal.showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL_ENTITY} - status: ${error.status})`,
       error,
     );
@@ -53,13 +52,12 @@ export const crear = async (registro) => {
   try {
     const data = await axiosCrud.crear(URL_ENTITY, registro);
     if (data && data.id) {
-      //swal.showSuccess(HTTP_MSG_ALTA);
-      toast.info(HTTP_MSG_ALTA, styles);
+      swal.showSuccess(HTTP_MSG_ALTA);
       return data;
     }
     throw data;
   } catch (error) {
-    showErrorBackEnd(HTTP_MSG_ALTA_ERROR, error);
+    swal.showErrorBackEnd(HTTP_MSG_ALTA_ERROR, error);
     return {};
   }
 };
@@ -68,13 +66,12 @@ export const actualizar = async (registro) => {
   try {
     const response = await axiosCrud.actualizar(URL_ENTITY, registro);
     if (response == true) {
-      //swal.showSuccess(HTTP_MSG_MODI);
-      toast.info(HTTP_MSG_MODI, styles);
+      swal.showSuccess(HTTP_MSG_MODI);
       return true;
     }
     throw response;
   } catch (error) {
-    showErrorBackEnd(HTTP_MSG_MODI_ERROR, error);
+    swal.showErrorBackEnd(HTTP_MSG_MODI_ERROR, error);
     return false;
   }
 };
@@ -83,13 +80,12 @@ export const eliminar = async (id) => {
   try {
     const response = await axiosCrud.eliminar(URL_ENTITY, id);
     if (response == true) {
-      //swal.showSuccess(HTTP_MSG_BAJA);
-      toast.info(HTTP_MSG_BAJA, styles);
+      swal.showSuccess(HTTP_MSG_BAJA);
       return true;
     }
     throw response;
   } catch (error) {
-    showErrorBackEnd(HTTP_MSG_BAJA_ERROR, error);
+    swal.showErrorBackEnd(HTTP_MSG_BAJA_ERROR, error);
     return false;
   }
 };
@@ -98,25 +94,19 @@ export const duplicarFeriados = async (anio) => {
   const URL = `${URL_ENTITY}/duplicar/${anio}`;
 
   try {
-    const response = await axiosCrud.consultar(URL);
-    if (response == true) {
-      // swal.showSuccess(HTTP_MSG_MODI);
-      toast.info(HTTP_MSG_MODI, styles);
+    const response = await oAxios.post(URL);
+    if (response && response.status && response.status == 201) {
+      swal.showSuccess(VITE_HTTP_MSG_PROCESO);
       return true;
     }
+    swal.showError(VITE_HTTP_MSG_PROCESO_ERROR);
+    return false;
   } catch (error) {
-    showErrorBackEnd(
-      HTTP_MSG_CONSUL_ERROR + ` (${URL_ENTITY} - status: ${error.status})`,
+    swal.showErrorBackEnd(
+      VITE_HTTP_MSG_PROCESO_ERROR +
+        ` (${URL_ENTITY} - status: ${error.status})`,
       error,
     );
-    return [];
+    return false;
   }
-};
-
-const styles = {
-  position: 'top-right',
-  autoClose: 2000,
-  style: {
-    fontSize: '1rem',
-  },
 };

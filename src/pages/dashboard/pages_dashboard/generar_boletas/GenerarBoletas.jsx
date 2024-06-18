@@ -15,15 +15,14 @@ import {
 } from '@mui/material';
 import { axiosGenerarBoletas } from './GenerarBoletasApi';
 import './GenerarBoletas.css';
+import { consultarFormasPago } from '@/common/api/FormaPagoApi';
 import formatter from '@/common/formatter';
 import { getEmpresaId } from '@/components/localStorage/localStorageService';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 //import { Boletas } from '../boletas/Boletas';
 
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import dayjs from 'dayjs';
+import swal from '@/components/swal/swal';
 
 export const GenerarBoletas = () => {
   const { id } = useParams();
@@ -34,6 +33,7 @@ export const GenerarBoletas = () => {
   const [boletas, setBoletas] = useState({});
   const [showDetail, setShowDetail] = useState(false);
   const [afiliados, setAfiliados] = useState([]);
+  const [formasPago, setFormasPago] = useState([]);
   const [primeraSeleccion, setPrimeraSeleccion] = useState(true);
   const [primeraSeleccionFDP, setPrimeraSeleccionFDP] = useState(true);
   const [habilitaBoton, sethabilitaBoton] = useState(true);
@@ -88,6 +88,14 @@ export const GenerarBoletas = () => {
       }
     }
   }, [hasFetchedData]);
+
+  useEffect(() => {
+    const fetchFormaPago = async () => {
+      const fp = await consultarFormasPago();
+      setFormasPago(fp);
+    };
+    fetchFormaPago();
+  }, []);
 
   const setDefaultFDP = (data) => {
     data.detalle_boletas.forEach(
@@ -242,7 +250,7 @@ export const GenerarBoletas = () => {
       }
     } catch (error) {
       console.error(error);
-      toast.error(
+      swal.showError(
         '!Ocurrio un problema. No se pudieron generar las Boletas de Pago',
       );
       navigate('/dashboard/boletas');
@@ -336,11 +344,18 @@ export const GenerarBoletas = () => {
                         setFormaDePago(boleta.codigo, event.target.value)
                       }
                     >
-                      <MenuItem value="VENTANILLA">Ventanilla</MenuItem>
-                      <MenuItem value="REDLINK">Red Link</MenuItem>
-                      {boleta.codigo !== 'AMTIMACS' && (
-                        <MenuItem value="PMCUENTAS">Banelco</MenuItem>
-                      )}
+                      {formasPago.map((reg) => {
+                        if (
+                          boleta.codigo !== 'AMTIMACS' ||
+                          reg.codigo != 'PMCUENTAS'
+                        ) {
+                          return (
+                            <MenuItem value={reg.codigo}>
+                              {reg.descripcion}
+                            </MenuItem>
+                          );
+                        }
+                      })}
                     </Select>
                   </TableCell>
                 ))}
@@ -475,7 +490,6 @@ export const GenerarBoletas = () => {
           Generar
         </Button>
       </Box>
-      <ToastContainer />
 
       {boletas.detalle_boletas &&
         boletas.detalle_boletas

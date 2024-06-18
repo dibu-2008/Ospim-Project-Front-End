@@ -39,11 +39,9 @@ import { axiosRoles } from '@pages/dashboard/pages_dashboard/roles/RolesApi';
 
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 
-import Swal from 'sweetalert2';
+import swal from '@/components/swal/swal';
 import './AltaUsuarioInterno.css';
 
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { dataGridStyle } from '@/common/dataGridStyle';
 import { margin } from '@mui/system';
 import { UserContext } from '@/context/userContext';
@@ -301,13 +299,7 @@ export const AltaUsuarioInterno = () => {
 
     e.preventDefault();
     if (clave !== repetirClave) {
-      toast.error('Las claves no coinciden !', {
-        position: 'top-right',
-        autoClose: 2000,
-        style: {
-          fontSize: '1rem',
-        },
-      });
+      swal.ShowError('Las claves no coinciden !');
       return; // Para salir de la función sin continuar
     }
 
@@ -321,13 +313,7 @@ export const AltaUsuarioInterno = () => {
 
     const resp = await axiosUsuariosInternos.actualizar(usuario);
     if (resp) {
-      toast.success('Clave actualizada correctamente !', {
-        position: 'top-right',
-        autoClose: 2000,
-        style: {
-          fontSize: '1rem',
-        },
-      });
+      swal.showSuccess('Clave actualizada correctamente !');
       handleClose();
     }
   };
@@ -493,9 +479,7 @@ export const AltaUsuarioInterno = () => {
         <Grid item xs={6}>
           <h1>Alta Usuario Interno</h1>
         </Grid>
-        <Grid item xs={6}>
-          <ToastContainer />
-        </Grid>
+        <Grid item xs={6}></Grid>
       </Grid>
       <Box
         sx={{

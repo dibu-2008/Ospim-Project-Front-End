@@ -21,8 +21,8 @@ import {
   adaptadorRegistroCompanyGrilla,
 } from './GrillaEmpresaDomicilioApi';
 import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
+import swal from '@/components/swal/swal';
 import Swal from 'sweetalert2';
-import { toast } from 'react-toastify';
 import { UserContext } from '@/context/userContext';
 //const isNotNull = (value) => (value !== null && value !== '' ? value : '');
 
@@ -179,7 +179,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
         [rows.indexOf(row)]: { mode: GridRowModes.Edit },
       });
     } else {
-      toast.info('Solo se puede editar de a un registro a la vez');
+      swal.showSuccess('Solo se puede editar de a un registro a la vez');
     }
   };
   const handleSaveClick = (row) => () => {

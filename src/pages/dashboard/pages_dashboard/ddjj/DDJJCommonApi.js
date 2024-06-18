@@ -1,5 +1,4 @@
 import oAxios from '@components/axios/axiosInstace';
-import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
 import swal from '@/components/swal/swal';
 
 const HTTP_MSG_MODI = import.meta.env.VITE_HTTP_MSG_MODI;
@@ -15,7 +14,7 @@ export const presentar = async (empresaId, ddjjId) => {
     }
     throw response;
   } catch (error) {
-    showErrorBackEnd(HTTP_MSG_MODI_ERROR, error);
+    swal.showErrorBackEnd(HTTP_MSG_MODI_ERROR, error);
   }
   return {};
 };

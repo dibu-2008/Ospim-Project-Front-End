@@ -1,9 +1,7 @@
 import oAxios from '@components/axios/axiosInstace';
-import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
 import swal from '@/components/swal/swal';
-import { axiosEntity } from '@/components/axios/EntityCrud';
-import { toast } from 'react-toastify';
 
+import { axiosEntity } from '@/components/axios/EntityCrud';
 
 const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
 const HTTP_MSG_MODI = import.meta.env.VITE_HTTP_MSG_MODI;
@@ -16,32 +14,32 @@ const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
 const URL_ENTITY = '/usuario/interno';
 
 const adapterForFront = (elements) => {
-  elements.forEach(element => {
-      element.notificaciones = element.notificaciones == true ? 'Si' : 'No'
+  elements.forEach((element) => {
+    element.notificaciones = element.notificaciones == true ? 'Si' : 'No';
   });
-  return elements
-}
+  return elements;
+};
 
-const adapterForBack = (element) =>{
-  element.notificaciones = element.notificaciones == 'Si' ? true : false
-  const {isNew, ...newElement} =  element
-  return newElement
-}
+const adapterForBack = (element) => {
+  element.notificaciones = element.notificaciones == 'Si' ? true : false;
+  const { isNew, ...newElement } = element;
+  return newElement;
+};
 
 export const consultar = async () => {
-  const data = await axiosEntity.consultar(URL_ENTITY)
-  return adapterForFront(data)
+  const data = await axiosEntity.consultar(URL_ENTITY);
+  return adapterForFront(data);
 };
 
 export const crear = async (registro) => {
-  const registro_fb = adapterForBack(registro)
-  return await axiosEntity.crear(URL_ENTITY,registro_fb)
+  const registro_fb = adapterForBack(registro);
+  return await axiosEntity.crear(URL_ENTITY, registro_fb);
 };
 
 export const actualizar = async (registro) => {
-  const registro_fb= adapterForBack(registro)
-  console.log(registro_fb)
-  return await axiosEntity.actualizar(URL_ENTITY,registro_fb)
+  const registro_fb = adapterForBack(registro);
+  console.log(registro_fb);
+  return await axiosEntity.actualizar(URL_ENTITY, registro_fb);
 };
 
 export const habilitar = async (id, habilitar) => {
@@ -53,14 +51,14 @@ export const habilitar = async (id, habilitar) => {
   }
 
   try {
-    const response = await oAxios.patch(URL, {'habilitado':habilitar});
+    const response = await oAxios.patch(URL, { habilitado: habilitar });
     if (response.status === 200 || response.status === 204) {
-      toast.success(HTTP_MSG_MODI)
+      swal.showSuccess(HTTP_MSG_MODI);
     } else {
-      toast.error(HTTP_MSG_MODI_ERROR,response)
+      swal.showError(HTTP_MSG_MODI_ERROR);
     }
   } catch (error) {
-    toast.error(HTTP_MSG_MODI_ERROR)
+    swal.showErrorBackEnd(HTTP_MSG_MODI_ERROR, error);
   }
 };
 

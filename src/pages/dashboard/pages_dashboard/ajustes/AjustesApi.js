@@ -1,10 +1,7 @@
 import { axiosCrud } from '@components/axios/axiosCrud';
 import { consultarAportesDDJJ } from '@/common/api/AportesApi';
-import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
 import formatter from '@/common/formatter';
 import swal from '@/components/swal/swal';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
 const HTTP_MSG_MODI = import.meta.env.VITE_HTTP_MSG_MODI;
@@ -43,7 +40,7 @@ export const consultar = async () => {
     const data = await axiosCrud.consultar(URL_ENTITY);
     return data || [];
   } catch (error) {
-    showErrorBackEnd(
+    swal.showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL_ENTITY} - status: ${error.status})`,
       error,
     );
@@ -60,22 +57,21 @@ export const crear = async (registro) => {
 
     const data = await axiosCrud.crear(URL_ENTITY, registro);
     if (data && data.id) {
-      //swal.showSuccess(HTTP_MSG_ALTA);
-      toast.info(HTTP_MSG_ALTA, styles);
+      swal.showSuccess(HTTP_MSG_ALTA);
       return data;
     }
     throw data;
   } catch (error) {
     console.log('axiosAjustes.crear - catch (error):', error);
-    showErrorBackEnd(HTTP_MSG_ALTA_ERROR, error);
+    swal.showErrorBackEnd(HTTP_MSG_ALTA_ERROR, error);
     return {};
   }
 };
 
 export const actualizar = async (registro) => {
   try {
-    console.log(registro)
-    console.log(registro.periodo_original)
+    console.log(registro);
+    console.log(registro.periodo_original);
     registro.periodo_original = formatter.toFechaValida(
       registro.periodo_original,
     );
@@ -83,13 +79,12 @@ export const actualizar = async (registro) => {
 
     const response = await axiosCrud.actualizar(URL_ENTITY, registro);
     if (response == true) {
-      //swal.showSuccess(HTTP_MSG_MODI);
-      toast.info(HTTP_MSG_MODI, styles);
+      swal.showSuccess(HTTP_MSG_MODI);
       return true;
     }
     throw response;
   } catch (error) {
-    showErrorBackEnd(HTTP_MSG_MODI_ERROR, error);
+    swal.showErrorBackEnd(HTTP_MSG_MODI_ERROR, error);
     return false;
   }
 };
@@ -98,21 +93,12 @@ export const eliminar = async (id) => {
   try {
     const response = await axiosCrud.eliminar(URL_ENTITY, id);
     if (response == true) {
-      //swal.showSuccess(HTTP_MSG_BAJA);
-      toast.info(HTTP_MSG_BAJA, styles);
+      swal.showSuccess(HTTP_MSG_BAJA);
       return true;
     }
     throw response;
   } catch (error) {
-    showErrorBackEnd(HTTP_MSG_BAJA_ERROR, error);
+    swal.showErrorBackEnd(HTTP_MSG_BAJA_ERROR, error);
     return false;
   }
-};
-
-const styles = {
-  position: 'top-right',
-  autoClose: 2000,
-  style: {
-    fontSize: '1rem',
-  },
 };

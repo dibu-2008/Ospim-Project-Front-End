@@ -1,5 +1,5 @@
 import { axiosEntity } from '@/components/axios/EntityCrud';
-import { toast } from 'react-toastify';
+import swal from '@/components/swal/swal';
 
 const HTTP_MSG_ALTA_ERROR = import.meta.env.VITE_HTTP_MSG_ALTA_ERROR;
 
@@ -20,7 +20,7 @@ const adaptadorCrearDomicilio = async (domicilio) => {
     delete domicilio.isNew;
     return domicilio;
   } catch (error) {
-    toast.error(HTTP_MSG_ALTA_ERROR);
+    swal.showError(HTTP_MSG_ALTA_ERROR);
     return error;
   }
 };
@@ -42,7 +42,7 @@ export const adaptadorDomicilioGrilla = async (domicilio) => {
     delete domicilio.isNew;
     return domicilio;
   } catch (error) {
-    toast.error(HTTP_MSG_ALTA_ERROR);
+    swal.showError(HTTP_MSG_ALTA_ERROR);
     return error;
   }
 };
@@ -69,7 +69,7 @@ export const adaptadorRegistroCompanyGrilla = async (domicilio) => {
     console.log(domicilio);
     return domicilio;
   } catch (error) {
-    toast.error(HTTP_MSG_ALTA_ERROR);
+    swal.showError(HTTP_MSG_ALTA_ERROR);
     return error;
   }
 };

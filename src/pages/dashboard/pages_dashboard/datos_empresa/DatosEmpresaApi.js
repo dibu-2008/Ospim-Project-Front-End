@@ -1,5 +1,4 @@
 import { axiosCrud } from '@components/axios/axiosCrud';
-import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
 import swal from '@components/swal/swal';
 
 const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
@@ -10,27 +9,13 @@ const HTTP_MSG_MODI_ERROR = import.meta.env.VITE_HTTP_MSG_MODI_ERROR;
 const HTTP_MSG_BAJA_ERROR = import.meta.env.VITE_HTTP_MSG_BAJA_ERROR;
 const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
 
-/* export const consultarRamo = async () => {
-  const URL = `/empresa/ramo`;
-  try {
-    const data = await axiosCrud.consultar(URL);
-    return data || [];
-  } catch (error) {
-    showErrorBackEnd(
-      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
-      error,
-    );
-    return [];
-  }
-}; */
-
 export const consultarEmpresa = async () => {
   const URL = '/auth/login/usuario';
   try {
     const data = await axiosCrud.consultar(URL);
     return data || [];
   } catch (error) {
-    showErrorBackEnd(
+    swal.showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
       error,
     );
@@ -50,7 +35,7 @@ export const actualizar = async (registro) => {
     }
     throw response;
   } catch (error) {
-    showErrorBackEnd(HTTP_MSG_MODI_ERROR, error);
+    swal.showErrorBackEnd(HTTP_MSG_MODI_ERROR, error);
     return false;
   }
 };

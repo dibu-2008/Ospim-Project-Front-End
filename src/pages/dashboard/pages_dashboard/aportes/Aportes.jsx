@@ -18,8 +18,6 @@ import {
 import { Typography } from '@mui/material';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import * as locales from '@mui/material/locale';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { esES } from '@mui/x-date-pickers/locales';
 import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 import './Aportes.css';
 import { axiosAportes } from './AportesApi';
@@ -33,14 +31,10 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import SaveIcon from '@mui/icons-material/Save';
-import CancelIcon from '@mui/icons-material/Close';
 import dayjs from 'dayjs';
 import CurrencyInput from 'react-currency-input-field';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { ToastContainer } from 'react-toastify';
 import formatter from '@/common/formatter';
 
 const crearNuevoRegistro = ({
@@ -443,7 +437,7 @@ export const Aportes = () => {
   return (
     <Box className="aportes_container">
       <Typography variant="h2">Aportes</Typography>
-      <ToastContainer style={{ marginRight: '6rem', marginTop: '3rem' }} />
+
       <Box
         sx={{
           height: '600px',
@@ -702,64 +696,46 @@ export const Aportes = () => {
             </Grid>
             <Grid container spacing={2} sx={{ marginBottom: '20px' }}>
               <Grid item xs={6}>
-                <LocalizationProvider
-                  dateAdapter={AdapterDayjs}
-                  adapterLocale={'es'}
-                  localeText={
-                    esES.components.MuiLocalizationProvider.defaultProps
-                      .localeText
-                  }
+                <DemoContainer
+                  components={['DatePicker']}
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'end',
+                  }}
                 >
-                  <DemoContainer
-                    components={['DatePicker']}
+                  <DesktopDatePicker
+                    label={'Desde'}
+                    views={['day', 'month', 'year']}
+                    closeOnSelect={true}
+                    onChange={(date) => handleChangeDataModal(date, 'desde')}
+                    value={dataModal.desde || null}
                     sx={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'end',
+                      width: '60%',
                     }}
-                  >
-                    <DesktopDatePicker
-                      label={'Desde'}
-                      views={['day', 'month', 'year']}
-                      closeOnSelect={true}
-                      onChange={(date) => handleChangeDataModal(date, 'desde')}
-                      value={dataModal.desde || null}
-                      sx={{
-                        width: '60%',
-                      }}
-                    />
-                  </DemoContainer>
-                </LocalizationProvider>
+                  />
+                </DemoContainer>
               </Grid>
               <Grid item xs={6}>
-                <LocalizationProvider
-                  dateAdapter={AdapterDayjs}
-                  adapterLocale={'es'}
-                  localeText={
-                    esES.components.MuiLocalizationProvider.defaultProps
-                      .localeText
-                  }
+                <DemoContainer
+                  components={['DatePicker']}
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'start',
+                  }}
                 >
-                  <DemoContainer
-                    components={['DatePicker']}
+                  <DesktopDatePicker
+                    label={'Hasta'}
+                    views={['day', 'month', 'year']}
+                    closeOnSelect={true}
+                    onChange={(date) => handleChangeDataModal(date, 'hasta')}
+                    value={dataModal.hasta || null}
                     sx={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'start',
+                      width: '60%',
                     }}
-                  >
-                    <DesktopDatePicker
-                      label={'Hasta'}
-                      views={['day', 'month', 'year']}
-                      closeOnSelect={true}
-                      onChange={(date) => handleChangeDataModal(date, 'hasta')}
-                      value={dataModal.hasta || null}
-                      sx={{
-                        width: '60%',
-                      }}
-                    />
-                  </DemoContainer>
-                </LocalizationProvider>
+                  />
+                </DemoContainer>
               </Grid>
             </Grid>
             <Grid

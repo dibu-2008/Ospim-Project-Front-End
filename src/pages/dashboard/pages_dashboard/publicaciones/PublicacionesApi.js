@@ -1,5 +1,4 @@
 import { axiosCrud } from '@components/axios/axiosCrud';
-import { showErrorBackEnd } from '@/components/axios/showErrorBackEnd';
 import swal from '@/components/swal/swal';
 
 const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
@@ -35,7 +34,7 @@ export const consultar = async () => {
     const data = await axiosCrud.consultar(URL_ENTITY);
     return data || [];
   } catch (error) {
-    showErrorBackEnd(
+    swal.showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL_ENTITY} - status: ${error.status})`,
       error,
     );
@@ -50,7 +49,7 @@ export const crear = async (nuevoReg) => {
       swal.showSuccess(HTTP_MSG_ALTA);
       return data;
     } else {
-      showErrorBackEnd(HTTP_MSG_ALTA_ERROR, data);
+      swal.showErrorBackEnd(HTTP_MSG_ALTA_ERROR, data);
       return {};
     }
   } catch (error) {
@@ -71,7 +70,7 @@ export const actualizar = async (reg) => {
       swal.showSuccess(HTTP_MSG_MODI);
       return true;
     } else {
-      showErrorBackEnd(HTTP_MSG_MODI_ERROR, response);
+      swal.showErrorBackEnd(HTTP_MSG_MODI_ERROR, response);
       return false;
     }
   } catch (error) {
@@ -90,7 +89,7 @@ export const eliminar = async (id) => {
       swal.showSuccess(HTTP_MSG_BAJA);
       return true;
     } else {
-      showErrorBackEnd(HTTP_MSG_BAJA_ERROR, response);
+      swal.showErrorBackEnd(HTTP_MSG_BAJA_ERROR, response);
       return false;
     }
   } catch (error) {

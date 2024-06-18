@@ -1,4 +1,7 @@
 import * as locales from '@mui/material/locale';
+
+import dayjs from 'dayjs';
+
 import { useState, useEffect, useMemo, useRef, useContext } from 'react';
 import {
   Box,
@@ -34,15 +37,11 @@ import DateRangeIcon from '@mui/icons-material/DateRange';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { esES } from '@mui/x-date-pickers/locales';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers';
 import formatter from '@/common/formatter';
 import swal from '@/components/swal/swal';
 import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
-import { ToastContainer } from 'react-toastify';
 import { UserContext } from '@/context/userContext';
 
 const style = {
@@ -125,13 +124,13 @@ export const Feriados = () => {
 
   const handleChangeFecha = (date) => setFecha(date);
 
-  const ConsultarEntidad = async () => {
+  const consultar = async () => {
     const response = await axiosFeriados.consultar();
     setRows(response);
   };
 
   useEffect(() => {
-    ConsultarEntidad();
+    consultar();
   }, []);
 
   const handleRowEditStop = (params, event) => {
@@ -264,10 +263,7 @@ export const Feriados = () => {
     const response = await axiosFeriados.duplicar(anio);
 
     if (response) {
-      swal.showSuccess('Año duplicado correctamente');
-      ObtenerFeriados();
-    } else {
-      swal.showError('Error al duplicar el año');
+      consultar();
     }
 
     handleClose();
@@ -283,8 +279,11 @@ export const Feriados = () => {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell',
+      valueGetter: ({ value }) => {
+        return formatter.dateObject(value);
+      },
       valueFormatter: ({ value }) => {
-        return formatter.date(value);
+        return formatter.dateString(value);
       },
     },
     {
@@ -361,7 +360,7 @@ export const Feriados = () => {
           </IconButton>
         </Tooltip>
       </h1>
-      <ToastContainer style={{ marginRight: '6rem', marginTop: '3rem' }} />
+
       <Box
         sx={{
           height: '600px',
@@ -430,22 +429,14 @@ export const Feriados = () => {
             >
               Duplicar feriados
             </Typography>
-            <LocalizationProvider
-              dateAdapter={AdapterDayjs}
-              adapterLocale={'es'}
-              localeText={
-                esES.components.MuiLocalizationProvider.defaultProps.localeText
-              }
-            >
-              <DemoContainer components={['DatePicker']}>
-                <DatePicker
-                  label={'Año'}
-                  views={['year']}
-                  onChange={handleChangeFecha}
-                  value={fecha}
-                />
-              </DemoContainer>
-            </LocalizationProvider>
+            <DemoContainer components={['DatePicker']}>
+              <DatePicker
+                label={'Año'}
+                views={['year']}
+                onChange={handleChangeFecha}
+                value={fecha}
+              />
+            </DemoContainer>
             <Box
               display="flex"
               justifyContent="space-between"

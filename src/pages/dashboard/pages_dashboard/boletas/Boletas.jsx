@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useState, useMemo } from 'react';
 import { TextField, Button, IconButton, Box } from '@mui/material';
+import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
+
 import {
   Visibility as VisibilityIcon,
   Print as PrintIcon,
@@ -16,16 +18,12 @@ import { useNavigate } from 'react-router-dom';
 import { axiosBoletas } from './BoletasApi';
 import { boletaPdfDownload } from '@/common/api/BoletaCommonApi';
 import localStorageService from '@/components/localStorage/localStorageService';
-import { CSVLink } from 'react-csv';
 import formatter from '@/common/formatter';
 import dayjs from 'dayjs';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import './Boletas.css';
 import { UserContext } from '@/context/userContext';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Stack from '@mui/material/Stack';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { esES } from '@mui/x-date-pickers/locales';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
 import Tabs from '@mui/material/Tabs';
@@ -91,33 +89,29 @@ export const Boletas = () => {
     fetchData();
   }, []);
   const handleChangeTabState = (event, value) => setTabState(value);
+
   const fetchData = async () => {
     try {
-      console.log(fromDate);
-      let desdeDayjs = null;
+      let desde = null;
       if (fromDate !== null) {
-        desdeDayjs = dayjs(`${fromDate}-01`).format('YYYY-MM-DD');
+        desde = fromDate.startOf('month').format('YYYY-MM-DD');
       }
-      console.log(toDate);
-      let hastaDayjs = null;
+      let hasta = null;
       if (toDate !== null) {
-        hastaDayjs = dayjs(`${toDate}-01`).format('YYYY-MM-DD');
+        hasta = toDate.startOf('month').format('YYYY-MM-DD');
       }
-      console.log('axiosBoletas.fetchData - hastaDayjs:', hastaDayjs);
 
-      const response = await axiosBoletas.getBoletas(
-        ID_EMPRESA,
-        desdeDayjs,
-        hastaDayjs,
-      );
+      const response = await axiosBoletas.getBoletas(ID_EMPRESA, desde, hasta);
       console.log('axiosBoletas.getBoletas - response:', response);
       setBoletas(response['con_ddjj']);
-      setBoletasVisibles(
-        response['con_ddjj'].flatMap((boleta) => ({
-          ...boleta,
-          id: `${boleta.id}`,
-        })),
-      );
+
+      //console.log('response.con_ddjj: ', response['con_ddjj']);
+      const auxBoletasVisibles = response['con_ddjj'].flatMap((boleta) => ({
+        ...boleta,
+      }));
+      //console.log('auxBoletasVisibles: ', auxBoletasVisibles);
+
+      setBoletasVisibles(auxBoletasVisibles);
       setBoletasSinDDJJ(response['sin_ddjj']);
       setBoletasSinAfiliados(
         response['sin_ddjj'].flatMap((boleta) => {
@@ -134,21 +128,19 @@ export const Boletas = () => {
     navigate(`/dashboard/detalleboleta/${boletaDetalle.id}`);
   };
 
-  const handleSearch = () => {
-    const filteredBoletas = boletas.filter((boleta) => {
-      const timestamp = new Date(boleta.periodo);
-      return timestamp >= new Date(fromDate) && timestamp <= new Date(toDate);
-    });
-    console.log(filteredBoletas);
-    setBoletasVisibles(
-      filteredBoletas.flatMap((boleta) => ({
-        ...boleta,
-        id: `${boleta.numero_boleta}`,
-      })),
-    );
+  const handleGenerarBepClick = async (row) => {
+    console.log('handleGenerarBepClick - row: ', row);
+    const data = await axiosBoletas.generarBep(ID_EMPRESA, row.id);
+    console.log('handleGenerarBepClick - data: ', data);
+    if (data != null && data.bep && data.bep != null) {
+      row.formaDePago = row.formaDePago + ' (BEP)';
+      row.requiereBep = false;
+      const newRows = boletasVisibles.map((reg) =>
+        row.id == reg.id ? row : reg,
+      );
+      setBoletasVisibles(newRows);
+    }
   };
-
-  const isNotNull = (value) => (value !== null && value !== '' ? value : '');
 
   return (
     <div className="boletas_container">
@@ -169,40 +161,27 @@ export const Boletas = () => {
             justifyContent="center"
             alignItems="center"
           >
-            <LocalizationProvider
-              dateAdapter={AdapterDayjs}
-              adapterLocale={'es'}
-              localeText={
-                esES.components.MuiLocalizationProvider.defaultProps.localeText
-              }
-            >
-              <DemoContainer components={['DatePicker']}>
-                <DesktopDatePicker
-                  label={'Periodo desde'}
-                  views={['month', 'year']}
-                  closeOnSelect={true}
-                  onChange={(oValue) => setFromDate(oValue)}
-                  value={fromDate}
-                />
-              </DemoContainer>
-            </LocalizationProvider>
-            <LocalizationProvider
-              dateAdapter={AdapterDayjs}
-              adapterLocale={'es'}
-              localeText={
-                esES.components.MuiLocalizationProvider.defaultProps.localeText
-              }
-            >
-              <DemoContainer components={['DatePicker']}>
-                <DesktopDatePicker
-                  label={'Periodo hasta'}
-                  views={['month', 'year']}
-                  closeOnSelect={true}
-                  onChange={(oValue) => setToDate(oValue)}
-                  value={toDate}
-                />
-              </DemoContainer>
-            </LocalizationProvider>
+            <DemoContainer components={['DatePicker']}>
+              <DesktopDatePicker
+                label={'Periodo desde'}
+                views={['month', 'year']}
+                closeOnSelect={true}
+                onChange={(oValue) => {
+                  setFromDate(oValue);
+                }}
+                value={fromDate}
+              />
+            </DemoContainer>
+
+            <DemoContainer components={['DatePicker']}>
+              <DesktopDatePicker
+                label={'Periodo hasta'}
+                views={['month', 'year']}
+                closeOnSelect={true}
+                onChange={(oValue) => setToDate(oValue)}
+                value={toDate}
+              />
+            </DemoContainer>
           </Stack>
         </div>
         <div>
@@ -252,7 +231,7 @@ export const Boletas = () => {
                     headerName: 'Periodo',
                     flex: 0.8,
                     valueFormatter: (params) =>
-                      params.value ? formatter.periodo(params.value) : '',
+                      formatter.periodoString(params.value),
                   },
                   { field: 'tipo_ddjj', headerName: 'Tipo DDJJ', flex: 1 },
                   { field: 'numero_boleta', headerName: 'Número', flex: 0.8 },
@@ -262,38 +241,32 @@ export const Boletas = () => {
                     headerName: 'Importe Boleta',
                     flex: 1,
                     align: 'right',
-                    valueFormatter: (params) =>
-                      params.value && isNotNull(params.value)
-                        ? formatter.currency.format(params.value)
-                        : '',
+                    valueFormatter: (params) => {
+                      return formatter.currencyString(params?.value);
+                    },
                   },
                   {
                     field: 'importe_recibido',
                     headerName: 'Importe Recibido',
                     flex: 1,
                     align: 'right',
-                    valueFormatter: (params) =>
-                      params.value && isNotNull(params.value)
-                        ? formatter.currency.format(params.value)
-                        : '',
+                    valueFormatter: (params) => {
+                      return formatter.currencyString(params?.value);
+                    },
                   },
                   {
                     field: 'fecha_de_pago',
                     headerName: 'Fecha de Pago',
                     flex: 1,
                     valueFormatter: (params) =>
-                      params.value && isNotNull(params.value)
-                        ? formatter.date(params.value)
-                        : '',
+                      params.value ? formatter.dateString(params.value) : '',
                   },
                   {
                     field: 'intencionDePago',
                     headerName: 'Intencion de Pago',
                     flex: 1,
                     valueFormatter: (params) =>
-                      params.value && isNotNull(params.value)
-                        ? formatter.date(params.value)
-                        : '',
+                      params.value ? formatter.dateString(params.value) : '',
                   },
                   {
                     field: 'formaDePago',
@@ -304,31 +277,62 @@ export const Boletas = () => {
                     field: 'acciones',
                     headerName: 'Acciones',
                     flex: 1,
-                    renderCell: (params) => (
-                      <>
-                        <IconButton
-                          size="small"
-                          onClick={() => handleViewClick(params.row)}
-                        >
-                          <VisibilityIcon />
-                        </IconButton>
-                        <IconButton
-                          size="small"
-                          onClick={() => {
-                            boletaPdfDownload(ID_EMPRESA, params.row.id);
-                          }}
-                        >
-                          <PrintIcon />
-                        </IconButton>
-                        <IconButton
-                          size="small"
-                          onClick={() => handleViewClick(params.row)}
-                          disabled={!!params.row.fecha_de_pago}
-                        >
-                          <EditIcon />
-                        </IconButton>
-                      </>
-                    ),
+                    renderCell: (params) =>
+                      params.row.requiereBep ? (
+                        <>
+                          <IconButton
+                            size="small"
+                            onClick={() => handleViewClick(params.row)}
+                          >
+                            <VisibilityIcon />
+                          </IconButton>
+                          <IconButton
+                            size="small"
+                            onClick={() => {
+                              boletaPdfDownload(ID_EMPRESA, params.row.id);
+                            }}
+                          >
+                            <PrintIcon />
+                          </IconButton>
+                          <IconButton
+                            size="small"
+                            onClick={() => handleViewClick(params.row)}
+                            disabled={!!params.row.fecha_de_pago}
+                          >
+                            <EditIcon />
+                          </IconButton>
+                          <IconButton
+                            size="small"
+                            onClick={() => handleGenerarBepClick(params.row)}
+                          >
+                            <RequestQuoteIcon />
+                          </IconButton>
+                        </>
+                      ) : (
+                        <>
+                          <IconButton
+                            size="small"
+                            onClick={() => handleViewClick(params.row)}
+                          >
+                            <VisibilityIcon />
+                          </IconButton>
+                          <IconButton
+                            size="small"
+                            onClick={() => {
+                              boletaPdfDownload(ID_EMPRESA, params.row.id);
+                            }}
+                          >
+                            <PrintIcon />
+                          </IconButton>
+                          <IconButton
+                            size="small"
+                            onClick={() => handleViewClick(params.row)}
+                            disabled={!!params.row.fecha_de_pago}
+                          >
+                            <EditIcon />
+                          </IconButton>
+                        </>
+                      ),
                   },
                 ]}
                 getRowClassName={(params) =>
@@ -388,7 +392,7 @@ export const Boletas = () => {
                     flex: 1,
                     valueFormatter: (params) =>
                       params.value
-                        ? formatter.currency.format(params.value)
+                        ? formatter.currencyString(params.value)
                         : '',
                   },
                   {
@@ -396,9 +400,7 @@ export const Boletas = () => {
                     headerName: 'Intencion de Pago',
                     flex: 1,
                     valueFormatter: (params) =>
-                      params.value && isNotNull(params.value)
-                        ? formatter.date(params.value)
-                        : '',
+                      params.value ? formatter.dateString(params.value) : '',
                   },
                   {
                     field: 'razonDePago',

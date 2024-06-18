@@ -8,7 +8,6 @@ import PropTypes from 'prop-types';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import * as locales from '@mui/material/locale';
 import axiosDatosEmpre from './DatosEmpresaApi';
-import { ToastContainer } from 'react-toastify';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
@@ -68,7 +67,7 @@ export const DatosEmpresa = () => {
   const [cuit, setCuit] = useState('');
   const [razonSocial, setRazonSocial] = useState('');
   const [tabState, setTabState] = useState(0);
-  const [actividadMolinera, setActividadMolinera] = useState(false)
+  const [actividadMolinera, setActividadMolinera] = useState(false);
 
   const theme = useTheme();
 
@@ -84,7 +83,11 @@ export const DatosEmpresa = () => {
       setCuit(empresa.empresa.cuit);
       setRazonSocial(empresa.empresa.razonSocial);
       setIdEmpresa(empresa.empresa.id);
-      setActividadMolinera(empresa.empresa.actividad_molinera?empresa.empresa.actividad_molinera:false)
+      setActividadMolinera(
+        empresa.empresa.actividad_molinera
+          ? empresa.empresa.actividad_molinera
+          : false,
+      );
     };
     ObtenerEmpresa();
   }, []);
@@ -117,7 +120,6 @@ export const DatosEmpresa = () => {
 
   return (
     <div className="datos_empresa_container">
-      <ToastContainer />
       <h1>Mis Datos de Perfil</h1>
 
       <form
@@ -150,28 +152,29 @@ export const DatosEmpresa = () => {
             width: '350px',
           }}
         />
-         <FormControl className='formC'>
-                <InputLabel>Pertenece a actividad Molinera</InputLabel>
-                <CustomSelect width='350px'
-                  name="actividadMolinera"
-                  value={actividadMolinera}
-                  label="Pertenece a actividad Molinera"
-                  onChange={e => setActividadMolinera(e.target.value)}
-                  MenuProps={{
-                    anchorOrigin: {
-                      vertical: 'bottom',
-                      horizontal: 'left',
-                    },
-                    transformOrigin: {
-                      vertical: 'top',
-                      horizontal: 'left',
-                    },
-                  }}
-                >
-                  <CustomMenuItem value={true}>Si</CustomMenuItem>
-                  <CustomMenuItem value={false}>No</CustomMenuItem>
-                </CustomSelect>
-              </FormControl>
+        <FormControl className="formC">
+          <InputLabel>Pertenece a actividad Molinera</InputLabel>
+          <CustomSelect
+            width="350px"
+            name="actividadMolinera"
+            value={actividadMolinera}
+            label="Pertenece a actividad Molinera"
+            onChange={(e) => setActividadMolinera(e.target.value)}
+            MenuProps={{
+              anchorOrigin: {
+                vertical: 'bottom',
+                horizontal: 'left',
+              },
+              transformOrigin: {
+                vertical: 'top',
+                horizontal: 'left',
+              },
+            }}
+          >
+            <CustomMenuItem value={true}>Si</CustomMenuItem>
+            <CustomMenuItem value={false}>No</CustomMenuItem>
+          </CustomSelect>
+        </FormControl>
         <Button variant="contained" sx={{}} type="submit">
           Guardar
         </Button>
