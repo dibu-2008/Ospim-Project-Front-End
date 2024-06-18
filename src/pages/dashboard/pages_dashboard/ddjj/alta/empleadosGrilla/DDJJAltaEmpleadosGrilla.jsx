@@ -31,7 +31,6 @@ import {
 import { axiosDDJJ } from '../DDJJAltaApi';
 import './DDJJAltaEmpleadosGrilla.css';
 import { dataGridStyle } from '@/common/dataGridStyle';
-import dayjs from 'dayjs';
 import swal from '@/components/swal/swal';
 import Typography from '@mui/material/Typography';
 import CurrencyInput from 'react-currency-input-field';

@@ -20,6 +20,8 @@ import formatter from '@/common/formatter';
 import { getEmpresaId } from '@/components/localStorage/localStorageService';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
+
 //import { Boletas } from '../boletas/Boletas';
 
 import swal from '@/components/swal/swal';
@@ -350,7 +352,7 @@ export const GenerarBoletas = () => {
                           reg.codigo != 'PMCUENTAS'
                         ) {
                           return (
-                            <MenuItem value={reg.codigo}>
+                            <MenuItem key={reg.codigo} value={reg.codigo}>
                               {reg.descripcion}
                             </MenuItem>
                           );
