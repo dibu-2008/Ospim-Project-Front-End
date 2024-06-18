@@ -759,7 +759,7 @@ export const RegistroEmpresa = () => {
                     padding: '15px',
                   }}
                 >
-                  REGISTRAR EMPRESA
+                  REGISTRARSE
                 </Button>
               </div>
             </Grid>

@@ -28,9 +28,6 @@ export const MisDDJJConsulta = ({
   const ID_EMPRESA = localStorageService.getEmpresaId();
 
   const buscarDDJJ = async () => {
-    console.log('dayjs(): ', dayjs());
-    console.log('dayjs() - typeof : ', typeof dayjs());
-
     try {
       let desde = null;
       if (fromDate !== null) {

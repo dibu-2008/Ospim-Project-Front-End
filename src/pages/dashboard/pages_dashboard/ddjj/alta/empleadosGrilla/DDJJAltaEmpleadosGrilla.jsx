@@ -14,7 +14,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
-import SearchIcon from '@mui/icons-material/Search';
 import CreateIcon from '@mui/icons-material/Create';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import * as locales from '@mui/material/locale';
@@ -293,7 +292,10 @@ export const DDJJAltaEmpleadosGrilla = ({
     let cellClassName = '';
 
     validacionResponse?.errores?.forEach((error) => {
-      if (params.row.cuil?.toString() === error.cuil && params.field === error.codigo) {
+      if (
+        params.row.cuil?.toString() === error.cuil &&
+        params.field === error.codigo
+      ) {
         cellClassName = 'hot';
       }
     });
@@ -449,6 +451,9 @@ export const DDJJAltaEmpleadosGrilla = ({
       headerAlign: 'left',
       align: 'left',
       headerClassName: 'header--cell',
+      valueParser: (value, row, column, apiRef) => {
+        return value?.toUpperCase();
+      },
       renderEditCell: (params) => {
         return afiliado?.apellido ? (
           <TextField
@@ -511,6 +516,9 @@ export const DDJJAltaEmpleadosGrilla = ({
       headerAlign: 'left',
       align: 'left',
       headerClassName: 'header--cell',
+      valueParser: (value, row, column, apiRef) => {
+        return value?.toUpperCase();
+      },
       renderEditCell: (params) => {
         return afiliado?.nombre ? (
           <TextField

@@ -99,7 +99,7 @@ export const MisDDJJConsultaGrilla = ({
     }
   };
 
-  console.log('getAporteDescrip() => ', getAporteDescrip('AMTIMACS'));
+  //console.log('getAporteDescrip() => ', getAporteDescrip('AMTIMACS'));
 
   let colAportes = [];
 

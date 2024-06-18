@@ -194,7 +194,7 @@ export const DDJJAlta = ({
   };
 
   const importarAfiliado = async () => {
-    const cuilesResponse = await getCuilesValidados()
+    const cuilesResponse = await getCuilesValidados();
     const afiliadoImportadoConInte = afiliadoImportado.map((item, index) => {
       const cuilResponse = cuilesResponse.find(
         (cuil) => +cuil.cuil === item.cuil,
@@ -207,9 +207,9 @@ export const DDJJAlta = ({
 
     // Si alguno de los cuiles el valor de cuilesValidados es igual a false
     if (cuilesResponse.some((item) => item.cuilValido === false)) {
-        const mensajesFormateados2 = cuilesResponse
+      const mensajesFormateados2 = cuilesResponse
         .map((cuil) => {
-          if (!cuil.cuilValido){
+          if (!cuil.cuilValido) {
             return `<p style="margin-top:20px;">
             CUIL ${cuil.cuil} con formato inválido.</p>`;
           }
@@ -274,7 +274,7 @@ export const DDJJAlta = ({
   };
 
   const setDDJJ = () => {
-    console.log('este es el periodo ', periodo)
+    console.log('este es el periodo ', periodo);
     const DDJJ = {
       periodo: periodo,
       afiliados: rowsAltaDDJJ.map((item) => {
@@ -307,7 +307,7 @@ export const DDJJAlta = ({
   };
 
   const deleteErroresAfiliados = (DDJJ) => {
-     // Borrar la propiedad errores de cada afiliado
+    // Borrar la propiedad errores de cada afiliado
     // por que no se envia al backend
     DDJJ.afiliados.forEach((afiliado) => {
       delete afiliado.errores;
@@ -325,9 +325,11 @@ export const DDJJAlta = ({
 
   const setErroresAfiliados = async (DDJJ, cuilesConErrores) => {
     DDJJ.afiliados.forEach((afiliado) => {
-      afiliado.errores = false;
-      if (cuilesConErrores.includes(afiliado.cuil.toString())) {
-        afiliado.errores = true;
+      if (afiliado.cuil) {
+        afiliado.errores = false;
+        if (cuilesConErrores.includes(afiliado.cuil.toString())) {
+          afiliado.errores = true;
+        }
       }
     });
     // Buscar todos estos cuiles en el rowsAltaDDJJ, y marcarlos con errores="Si"
@@ -338,7 +340,7 @@ export const DDJJAlta = ({
         afiliado.errores = false;
       }
     });
-    return DDJJ
+    return DDJJ;
   };
 
   const validarDDJJ = async () => {
@@ -349,31 +351,31 @@ export const DDJJAlta = ({
     const cuilesConERR = await getCuilesValidados();
     cuilesConERR.forEach((element) => {
       if (!element.cuilValido) {
-        if(validacionResponse && validacionResponse.errores)
-        validacionResponse.errores.push({
-          cuil: element.cuil.toString(),
-          codigo: 'cuil',
-          descripcion: 'CUIL INVALIDO',
-          indice: null,
-        });
+        if (validacionResponse && validacionResponse.errores)
+          validacionResponse.errores.push({
+            cuil: element.cuil.toString(),
+            codigo: 'cuil',
+            descripcion: 'CUIL INVALIDO',
+            indice: null,
+          });
       }
     });
 
     let cuilesConErrores = setCuilesConErrores();
     DDJJ = await setErroresAfiliados(DDJJ, cuilesConErrores);
-    console.log(DDJJ)
+    console.log(DDJJ);
     setValidacionResponse(validacionResponse); // Sirve para pintar en rojo los campos con errores
 
     if (validacionResponse.errores && validacionResponse.errores.length > 0) {
       const mensajesUnicos = new Set();
-      console.log(validacionResponse)
+      console.log(validacionResponse);
       validacionResponse.errores.forEach((error) => {
         if (!mensajesUnicos.has(error.descripcion)) {
           mensajesUnicos.add(error.descripcion);
         }
       });
     }
-    return DDJJ
+    return DDJJ;
   };
 
   const handleFileChange = (event) => {
@@ -450,11 +452,11 @@ export const DDJJAlta = ({
   };
 
   const guardarDeclaracionJurada = async () => {
-    const DDJJ = await validarDDJJ()
-    console.log(DDJJ)
+    const DDJJ = await validarDDJJ();
+    console.log(DDJJ);
     if (validacionResponse.errores && validacionResponse.errores.length > 0) {
       const mensajesUnicos = new Set();
-      console.log(validacionResponse.errores)
+      console.log(validacionResponse.errores);
       validacionResponse.errores.forEach((error) => {
         if (!mensajesUnicos.has(error.descripcion)) {
           mensajesUnicos.add(error.descripcion);
