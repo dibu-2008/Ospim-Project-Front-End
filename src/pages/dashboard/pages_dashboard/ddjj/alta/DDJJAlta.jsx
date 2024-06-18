@@ -274,6 +274,7 @@ export const DDJJAlta = ({
   };
 
   const setDDJJ = () => {
+    console.log('este es el periodo ', periodo)
     const DDJJ = {
       periodo: periodo,
       afiliados: rowsAltaDDJJ.map((item) => {
