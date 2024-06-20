@@ -142,77 +142,108 @@ export const DDJJAltaEmpleadosGrilla = ({
 
   const gridApiRef = useGridApiRef();
 
-  const obtenerAfiliados = async (params, cuilElegido) => {
-    if (cuilElegido === '') {
-      swal.showWarning('Debe ingresar un CUIL y presionar la lupa');
-    }
+  const setAfiliadoGrilla = (params, cuil, apellido, nombre) => {
+    console.log('setAfiliadoGrilla - params:', params);
+    params.api.setEditCellValue({
+      id: params.id,
+      field: 'cuil',
+      value: cuil,
+    });
 
-    if (cuilElegido.length < 11) {
-      swal.showWarning(
-        'El CUIL ingresado es incorrecto, debe tener 11 dígitos.',
-      );
+    // Apellido
+    params.api.setEditCellValue({
+      id: params.id,
+      field: 'apellido',
+      value: apellido,
+    });
+
+    const textFieldApellido = document.getElementById('apellido' + params.id);
+    const abueloApellido = textFieldApellido.parentNode.parentNode;
+    console.log('setAfiliadoGrilla - abueloApellido: ', abueloApellido);
+    if (apellido != '') {
+      abueloApellido.style.display = 'block';
     } else {
-      const afiliados = await axiosDDJJ.getAfiliado(cuilElegido);
-
-      const afiliadoEncontrado = afiliados.find(
-        (afiliado) => afiliado.cuil === cuilElegido,
-      );
-
-      if (afiliado) {
-        setAfiliado(afiliadoEncontrado);
-      }
-
-      // TODO : Mirar el tema de la logica de busqueda por que tambien podria poder escribir sin buscar el cuil
-      if (afiliadoEncontrado) {
-        if (afiliadoEncontrado.inte !== null) {
-          setInteDataBase(afiliadoEncontrado.inte);
-        }
-
-        setAfiliado(afiliadoEncontrado);
-
-        // Apellido
-        params.api.setEditCellValue({
-          id: params.id,
-          field: 'apellido',
-          value: afiliadoEncontrado.apellido,
-        });
-
-        const textFieldApellido = document.getElementById(
-          'apellido' + params.row.id,
-        );
-        const abueloApellido = textFieldApellido.parentNode.parentNode;
-        abueloApellido.style.display = 'block';
-
-        // Nombre
-        params.api.setEditCellValue({
-          id: params.id,
-          field: 'nombre',
-          value: afiliadoEncontrado.nombre,
-        });
-
-        const textFieldNombre = document.getElementById(
-          'nombre' + params.row.id,
-        );
-        const abueloNombre = textFieldNombre.parentNode.parentNode;
-        abueloNombre.style.display = 'block';
-      } else {
-        swal.showWarning(
-          'CUIL inexistente, al presentarse la DDJJ, el mismo, será incorporado a la lista de la nómina del CUIT correspondiente.',
-        );
-
-        const textFieldApellido = document.getElementById(
-          'apellido' + params.row.id,
-        );
-        const abueloApellido = textFieldApellido.parentNode.parentNode;
-        abueloApellido.style.display = 'block';
-
-        const textFieldNombre = document.getElementById(
-          'nombre' + params.row.id,
-        );
-        const abueloNombre = textFieldNombre.parentNode.parentNode;
-        abueloNombre.style.display = 'block';
-      }
+      abueloApellido.style.display = '';
     }
+
+    // Nombre
+    params.api.setEditCellValue({
+      id: params.id,
+      field: 'nombre',
+      value: nombre,
+    });
+    const textFieldNombre = document.getElementById('nombre' + params.id);
+    const abueloNombre = textFieldNombre.parentNode.parentNode;
+    console.log('setAfiliadoGrilla - abueloNombre: ', abueloNombre);
+    if (nombre != '') {
+      abueloNombre.style.display = 'block';
+      //abueloNombre.off('click');
+    } else {
+      abueloNombre.style.display = '';
+      //abueloNombre.on('click');
+    }
+  };
+
+  const validarAfiliado = async (cuil) => {
+    const rta = {};
+    if (cuil === '') {
+      rta.error = 'Debe ingresar un CUIL y presionar la lupa';
+      return rta;
+    }
+
+    if (cuil.length != 11) {
+      rta.error = 'El CUIL ingresado es incorrecto, debe tener 11 dígitos.';
+      return rta;
+    }
+
+    const validoCuil = await axiosDDJJ.validarCuil(cuil);
+    if (!validoCuil || !validoCuil.resultado) {
+      rta.error = 'El CUIL ingresado no es válido.';
+      return rta;
+    }
+
+    //const afiliados = await axiosDDJJ.getAfiliado(cuil);
+    rta.error = 'OK';
+    rta.afiliados = await axiosDDJJ.getAfiliado(cuil);
+    console.log('validarAfiliado - OK !!!!');
+
+    return rta;
+  };
+
+  const obtenerAfiliados = async (params) => {
+    console.log('obtenerAfiliados - params:', params);
+    const cuilElegido = params.value;
+    let afiliados = null;
+
+    const rta = await validarAfiliado(cuilElegido);
+    console.log('obtenerAfiliados - rta:', rta);
+    if (rta.error != 'OK') {
+      swal.showWarning(rta.error);
+      setAfiliadoGrilla(params, cuilElegido, '', '');
+      return;
+    }
+
+    console.log('obtenerAfiliados - (2)');
+    const afiliadoDB = rta.afiliados?.find(
+      (afiliado) => afiliado.cuil === cuilElegido,
+    );
+
+    console.log('obtenerAfiliados - (3)');
+    if (!afiliadoDB) {
+      swal.showWarning(
+        'CUIL inexistente en la nómina de Afiliados. El mismo sera dado de alta cuando registre la DDJJ.',
+      );
+      setAfiliadoGrilla(params, cuilElegido, '', '');
+    } else {
+      setAfiliadoGrilla(
+        params,
+        cuilElegido,
+        afiliadoDB.apellido,
+        afiliadoDB.nombre,
+      );
+      setAfiliado(afiliadoDB);
+    }
+    console.log('obtenerAfiliados - FIN');
   };
 
   const filtroDeCategoria = (codigoCamara) => {
@@ -262,9 +293,6 @@ export const DDJJAltaEmpleadosGrilla = ({
   };
 
   const processRowUpdate = async (newRow) => {
-    console.log('processRowUpdate - INIT');
-    console.log(newRow);
-    console.log(inteDataBase);
     if (newRow.isNew) {
       const fila = { ...newRow, inte: inteDataBase, errores: false };
       setRowsAltaDDJJ(
@@ -411,7 +439,11 @@ export const DDJJAltaEmpleadosGrilla = ({
                 });
               }}
               onBlur={(event) => {
-                obtenerAfiliados(params, params.value);
+                obtenerAfiliados(params);
+              }}
+              onFocus={(event) => {
+                const cuilActual = params.api.getCellValue(params.id, 'cuil');
+                console.log('onFocus - cuilActual:', cuilActual);
               }}
               sx={{
                 '& .MuiOutlinedInput-root': {
@@ -427,16 +459,15 @@ export const DDJJAltaEmpleadosGrilla = ({
                 },
               }}
             />
-            {afiliado?.cuil === params.value && (
-              <CreateIcon
-                sx={{
-                  fontSize: '1.8rem',
-                  color: '#1A76D2',
-                  cursor: 'pointer',
-                }}
-                onClick={handleDataModal(params.row)}
-              />
-            )}
+
+            <CreateIcon
+              sx={{
+                fontSize: '1.8rem',
+                color: '#1A76D2',
+                cursor: 'pointer',
+              }}
+              onClick={handleDataModal(params.row)}
+            />
           </div>
         );
       },
@@ -454,7 +485,7 @@ export const DDJJAltaEmpleadosGrilla = ({
         return value?.toUpperCase();
       },
       renderEditCell: (params) => {
-        return afiliado?.apellido ? (
+        return (
           <TextField
             id={params.row.id ? 'apellido' + params.row.id.toString() : ''}
             fullWidth
@@ -462,6 +493,8 @@ export const DDJJAltaEmpleadosGrilla = ({
             sx={{
               '& .MuiOutlinedInput-root': {
                 '& fieldset': {
+                  backgroundColor:
+                    params.row?.cuil === '' ? 'white' : 'transparent',
                   borderColor: 'transparent',
                 },
                 '&:hover fieldset': {
@@ -472,35 +505,42 @@ export const DDJJAltaEmpleadosGrilla = ({
                 },
               },
             }}
-          />
-        ) : (
-          <TextField
-            id={params.row.id ? 'apellido' + params.row.id.toString() : ''}
-            fullWidth
-            value={params.value || ''}
             onChange={(event) => {
               const newValue = event.target.value;
-
               params.api.setEditCellValue({
                 id: params.id,
                 field: 'apellido',
                 value: newValue,
               });
             }}
-            sx={{
-              '& .MuiOutlinedInput-root': {
-                '& fieldset': {
-                  backgroundColor:
-                    params.row.cuil === '' ? 'white' : 'transparent',
-                  borderColor: 'transparent',
-                },
-                '&:hover fieldset': {
-                  borderColor: 'transparent',
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: 'transparent',
-                },
-              },
+            onBlur={async (event) => {
+              const newValue = event.target.value;
+              //console.log('onChange async - newValue:', newValue);
+              //console.log('onChange async - event:', event);
+              //console.log('onChange - event.target:', event.target);
+
+              const cuilActual = params.api.getCellValue(params.id, 'cuil');
+              console.log('onBlur - cuilActual:', cuilActual);
+              const rtaValidacion = await validarAfiliado(cuilActual);
+              console.log('onBlur - strValidacion:', rtaValidacion);
+              if (rtaValidacion.error == 'OK') {
+                if (rtaValidacion.afiliados.length > 0) {
+                  console.log(
+                    'onBlur - rtaValidacion.afiliados[0].apellido:',
+                    rtaValidacion.afiliados[0].apellido,
+                  );
+                  if (rtaValidacion.afiliados[0].apellido != newValue) {
+                    params.api.setEditCellValue({
+                      id: params.id,
+                      field: 'apellido',
+                      value: rtaValidacion.afiliados[0].apellido,
+                    });
+                    swal.showWarning(
+                      'onBlur - Para editar los datos del CUIL, debe utilizar el icono de Edición de la columna CUIL ',
+                    );
+                  }
+                }
+              }
             }}
           />
         );
@@ -800,7 +840,6 @@ export const DDJJAltaEmpleadosGrilla = ({
             groupSeparator="."
             value={params.value || ''}
             onValueChange={(value, name, values) => {
-              console.log(value, name, values);
               params.api.setEditCellValue({
                 id: params.id,
                 field: 'noRemunerativo',
@@ -915,8 +954,6 @@ export const DDJJAltaEmpleadosGrilla = ({
     const resp = axiosDDJJ.actualizarNombreApellido(dataModal);
     console.log(resp);
   };
-
-  console.log('rowsAltaDDJJ', rowsAltaDDJJ);
 
   return (
     <div>

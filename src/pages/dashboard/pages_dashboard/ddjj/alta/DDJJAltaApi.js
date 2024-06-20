@@ -117,7 +117,6 @@ export const actualizarDeclaracionJurada = async (empresaId, registro) => {
 
 export const validarAltaDeclaracionJurada = async (empresaId, registro) => {
   const URL = `/empresa/${empresaId}/ddjj/validar`;
-  console.log(URL);
   try {
     const validarDDJJResponse = await oAxios.post(URL, registro);
     return validarDDJJResponse.data || [];
@@ -130,9 +129,8 @@ export const validarAltaDeclaracionJurada = async (empresaId, registro) => {
   }
 };
 
-export const validaCuil = async (empresaId, cuiles) => {
+export const validarCuiles = async (empresaId, cuiles) => {
   const URL = `/empresa/${empresaId}/ddjj/upload/nomina/validaCuil`;
-  console.log(cuiles);
   try {
     const validarCuilesResponse = await oAxios.post(URL, cuiles);
     return validarCuilesResponse.data || [];
@@ -142,6 +140,20 @@ export const validaCuil = async (empresaId, cuiles) => {
         error.response.data;
       return errores || [];
     }
+  }
+};
+
+export const validarCuil = async (cuil) => {
+  const URL = `/comun/cui/${cuil}/validar`;
+  try {
+    const response = await oAxios.get(URL);
+    return response.data || false;
+  } catch (error) {
+    swal.showErrorBackEnd(
+      HTTP_MSG_CONSUL_ERROR + ` (${URL_ENTITY} - status: ${error.status})`,
+      error,
+    );
+    return false;
   }
 };
 
@@ -219,7 +231,10 @@ export const axiosDDJJ = {
     return validarAltaDeclaracionJurada(empresaId, registro);
   },
   validarCuiles: async function (empresaId, cuiles) {
-    return validaCuil(empresaId, cuiles);
+    return validarCuiles(empresaId, cuiles);
+  },
+  validarCuil: async function (cuil) {
+    return validarCuil(cuil);
   },
   presentar: async function (empresaId, ddjjId) {
     return presentar(empresaId, ddjjId);

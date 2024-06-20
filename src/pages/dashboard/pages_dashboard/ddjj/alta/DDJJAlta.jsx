@@ -188,8 +188,6 @@ export const DDJJAlta = ({
       cuilesString,
     );
 
-    console.log(cuilesResponse);
-
     return cuilesResponse;
   };
 
@@ -282,7 +280,6 @@ export const DDJJAlta = ({
   };
 
   const setDDJJ = () => {
-    console.log('este es el periodo ', periodo);
     const DDJJ = {
       periodo: periodo,
       afiliados: rowsAltaDDJJ.map((item) => {
@@ -371,12 +368,10 @@ export const DDJJAlta = ({
 
     let cuilesConErrores = setCuilesConErrores();
     DDJJ = await setErroresAfiliados(DDJJ, cuilesConErrores);
-    console.log(DDJJ);
     setValidacionResponse(validacionResponse); // Sirve para pintar en rojo los campos con errores
 
     if (validacionResponse.errores && validacionResponse.errores.length > 0) {
       const mensajesUnicos = new Set();
-      console.log(validacionResponse);
       validacionResponse.errores.forEach((error) => {
         if (!mensajesUnicos.has(error.descripcion)) {
           mensajesUnicos.add(error.descripcion);
