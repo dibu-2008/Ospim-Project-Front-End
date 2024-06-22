@@ -209,27 +209,7 @@ export const RegistroEmpresa = () => {
       if (rta.includes('whatsapp_prefijo')) setErrorWhatsappPrefijo(true);
       if (rta.includes('whatsapp')) setErrorWhatsapp(true);
     }
-/*
-    if (rta && rta.id) {
-      setAddionalEmail([]);
-      setEmailAlternativos([]);
-      setAdditionalPhone([]);
-      setRows([]);
-      OnResetFormRegisterCompany();
-      
-    } else {
-      if (rta.includes('cuit')) setErrorCuit(true);
-      if (rta.includes('razonSocial')) setErrorRazonSocial(true);
-      if (rta.includes('email')) setErrorEmail(true);
-      if (rta.includes('telefono_prefijo')) setErrorPrefijoFirst(true);
-      if (rta.includes('telefono')) setErrorPhoneFirst(true);
-      if (rta.includes('telefono_prefijo')) setErrorPrefijoSecond(true);
-      if (rta.includes('telefono')) setErrorPhoneSecond(true);
-      if (rta.includes('whatsapp_prefijo')) setErrorWhatsappPrefijo(true);
-      if (rta.includes('whatsapp')) setErrorWhatsapp(true);
-    }
 
-*/
   };
 
   const handleAddEmail = () => {
