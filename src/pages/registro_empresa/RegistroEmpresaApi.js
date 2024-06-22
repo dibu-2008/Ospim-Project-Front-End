@@ -19,14 +19,15 @@ export const getRamo = async () => {
   }
 };
 
-export const registrarEmpresa = async (registro) => {
+export const registrarEmpresa = async (registro,redirectFunction) => {
   const URL = '/usuario/empresa/public/';
 
   try {
     const data = await axiosCrud.crear(URL, registro);
     if (data && data.id) {
       console.log('Empresa registrada');
-      swal.showSuccess(HTTP_MSG_ALTA);
+      swal.showSuccesConfirmButton(`${HTTP_MSG_ALTA} Será redireccionado al login.`, redirectFunction);
+
       return data;
     }
     throw data;
