@@ -25,6 +25,7 @@ import {
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { textAlign } from '@mui/system';
 import { styled } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
 
 const CustomSelect = styled(Select)({
   textAlign: 'left',
@@ -47,7 +48,7 @@ export const RegistroEmpresa = () => {
   const [rows, setRows] = useState([]);
   const [showPassword, setShowPassword] = useState(true);
   const [showPasswordRepeat, setShowPasswordRepeat] = useState(true);
-
+  
   // Estados de tratamiento de errores
   const [errorCuit, setErrorCuit] = useState(false);
   const [errorRazonSocial, setErrorRazonSocial] = useState(false);
@@ -58,6 +59,8 @@ export const RegistroEmpresa = () => {
   const [errorPhoneSecond, setErrorPhoneSecond] = useState(false);
   const [errorWhatsapp, setErrorWhatsapp] = useState(false);
   const [errorWhatsappPrefijo, setErrorWhatsappPrefijo] = useState(false);
+
+  const navigate = useNavigate();
 
   const {
     cuit,
@@ -192,17 +195,10 @@ export const RegistroEmpresa = () => {
       }));
     }
 
-    const rta = await registrarEmpresa(usuarioEmpresa);
-    console.log('RESPUESTAAAAAAAA');
-    console.log(rta);
+    const rta = await registrarEmpresa(usuarioEmpresa,navigate);
 
-    if (rta && rta.id) {
-      setAddionalEmail([]);
-      setEmailAlternativos([]);
-      setAdditionalPhone([]);
-      setRows([]);
-      OnResetFormRegisterCompany();
-    } else {
+
+    if (!rta && !rta.id) {
       if (rta.includes('cuit')) setErrorCuit(true);
       if (rta.includes('razonSocial')) setErrorRazonSocial(true);
       if (rta.includes('email')) setErrorEmail(true);
@@ -213,6 +209,7 @@ export const RegistroEmpresa = () => {
       if (rta.includes('whatsapp_prefijo')) setErrorWhatsappPrefijo(true);
       if (rta.includes('whatsapp')) setErrorWhatsapp(true);
     }
+
   };
 
   const handleAddEmail = () => {

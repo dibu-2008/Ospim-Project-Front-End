@@ -10,6 +10,18 @@ const showSwallSuccess = (MESSAGE_HTTP) => {
   });
 };
 
+const showSwallSuccessWithConfirmButton = (MESSAGE_HTTP,redirectFunction) =>{
+  Swal.fire({
+    icon: 'success',
+    title: MESSAGE_HTTP,
+    showConfirmButton: true
+  }).then((result) => {
+    if (result.isConfirmed || result.isDismissed) {
+      redirectFunction('/login'); // Llama a la función de redirección pasada como argumento
+    }
+  });;
+}
+
 const showSwalError = (descripcion) => {
   try {
     console.log('showSwalError - descripcion:' + descripcion);
@@ -114,6 +126,11 @@ const swal = {
   showSuccess: async function (descripcion) {
     return showSwallSuccess(descripcion);
   },
+
+  showSuccesConfirmButton: async function (descripcion,redirectFunction){
+    return showSwallSuccessWithConfirmButton(descripcion,redirectFunction)
+  },
+
   showWarning: async function (descripcion, esHtml) {
     return showSwalWarning(descripcion, esHtml);
   },
