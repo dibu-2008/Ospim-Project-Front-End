@@ -121,7 +121,7 @@ export const DDJJAltaEmpleadosGrilla = ({
 }) => {
   const [locale, setLocale] = useState('esES');
   const [inteDataBase, setInteDataBase] = useState(null);
-  const [open, setOpen] = useState(false);
+  const [cuilModiModalOpen, setCuilModiModalOpen] = useState(false);
   const [dataModal, setDataModal] = useState({
     cuil: '',
     apellido: '',
@@ -130,9 +130,8 @@ export const DDJJAltaEmpleadosGrilla = ({
 
   const { paginationModel, setPaginationModel, pageSizeOptions } =
     useContext(UserContext);
-
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleOpen = () => setCuilModiModalOpen(true);
+  const handleClose = () => setCuilModiModalOpen(false);
 
   const theme = useTheme();
   const themeWithLocale = useMemo(
@@ -205,7 +204,7 @@ export const DDJJAltaEmpleadosGrilla = ({
     //const afiliados = await axiosDDJJ.getAfiliado(cuil);
     rta.error = 'OK';
     rta.afiliados = await axiosDDJJ.getAfiliado(cuil);
-    console.log('validarAfiliado - OK !!!!');
+    //console.log('validarAfiliado - OK !!!!');
 
     return rta;
   };
@@ -294,14 +293,14 @@ export const DDJJAltaEmpleadosGrilla = ({
 
   const processRowUpdate = async (newRow) => {
     if (newRow.isNew) {
-      const fila = { ...newRow, inte: inteDataBase, errores: false };
+      const fila = { ...newRow, inte: 0, errores: false };
       setRowsAltaDDJJ(
         rowsAltaDDJJ.map((row) => (row.id === newRow.id ? fila : row)),
       );
 
       return { ...fila, isNew: false };
     } else {
-      const fila = { ...newRow, inte: inteDataBase };
+      const fila = { ...newRow, inte: 0 };
 
       setRowsAltaDDJJ(
         rowsAltaDDJJ.map((row) => (row.id === newRow.id ? fila : row)),
@@ -341,7 +340,7 @@ export const DDJJAltaEmpleadosGrilla = ({
       apellido: row.apellido,
       nombre: row.nombre,
     });
-    setOpen(true);
+    setCuilModiModalOpen(true);
   };
 
   const handleChangeDataModal = (event, field) => {
@@ -515,10 +514,6 @@ export const DDJJAltaEmpleadosGrilla = ({
             }}
             onBlur={async (event) => {
               const newValue = event.target.value;
-              //console.log('onChange async - newValue:', newValue);
-              //console.log('onChange async - event:', event);
-              //console.log('onChange - event.target:', event.target);
-
               const cuilActual = params.api.getCellValue(params.id, 'cuil');
               console.log('onBlur - cuilActual:', cuilActual);
               const rtaValidacion = await validarAfiliado(cuilActual);
@@ -536,7 +531,7 @@ export const DDJJAltaEmpleadosGrilla = ({
                       value: rtaValidacion.afiliados[0].apellido,
                     });
                     swal.showWarning(
-                      'onBlur - Para editar los datos del CUIL, debe utilizar el icono de Edición de la columna CUIL ',
+                      'Para editar los datos del CUIL, debe utilizar el icono de Edición de la columna CUIL ',
                     );
                   }
                 }
@@ -559,7 +554,7 @@ export const DDJJAltaEmpleadosGrilla = ({
         return value?.toUpperCase();
       },
       renderEditCell: (params) => {
-        return afiliado?.nombre ? (
+        return (
           <TextField
             id={params.row.id ? 'nombre' + params.row.id.toString() : ''}
             fullWidth
@@ -567,6 +562,8 @@ export const DDJJAltaEmpleadosGrilla = ({
             sx={{
               '& .MuiOutlinedInput-root': {
                 '& fieldset': {
+                  backgroundColor:
+                    params.row?.cuil === '' ? 'white' : 'transparent',
                   borderColor: 'transparent',
                 },
                 '&:hover fieldset': {
@@ -577,12 +574,6 @@ export const DDJJAltaEmpleadosGrilla = ({
                 },
               },
             }}
-          />
-        ) : (
-          <TextField
-            id={params.row.id ? 'nombre' + params.row.id.toString() : ''}
-            fullWidth
-            value={params.value || ''}
             onChange={(event) => {
               const newValue = event.target.value;
               params.api.setEditCellValue({
@@ -591,20 +582,30 @@ export const DDJJAltaEmpleadosGrilla = ({
                 value: newValue,
               });
             }}
-            sx={{
-              '& .MuiOutlinedInput-root': {
-                '& fieldset': {
-                  backgroundColor:
-                    params.row.cuil === '' ? 'white' : 'transparent',
-                  borderColor: 'transparent',
-                },
-                '&:hover fieldset': {
-                  borderColor: 'transparent',
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: 'transparent',
-                },
-              },
+            onBlur={async (event) => {
+              const newValue = event.target.value;
+              const cuilActual = params.api.getCellValue(params.id, 'cuil');
+              console.log('onBlur - cuilActual:', cuilActual);
+              const rtaValidacion = await validarAfiliado(cuilActual);
+              console.log('onBlur - strValidacion:', rtaValidacion);
+              if (rtaValidacion.error == 'OK') {
+                if (rtaValidacion.afiliados.length > 0) {
+                  console.log(
+                    'onBlur - rtaValidacion.afiliados[0].nombre:',
+                    rtaValidacion.afiliados[0].nombre,
+                  );
+                  if (rtaValidacion.afiliados[0].nombre != newValue) {
+                    params.api.setEditCellValue({
+                      id: params.id,
+                      field: 'nombre',
+                      value: rtaValidacion.afiliados[0].nombre,
+                    });
+                    swal.showWarning(
+                      'Para editar los datos del CUIL, debe utilizar el icono de Edición de la columna CUIL ',
+                    );
+                  }
+                }
+              }
             }}
           />
         );
@@ -948,11 +949,11 @@ export const DDJJAltaEmpleadosGrilla = ({
     },
   ];
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-
-    const resp = axiosDDJJ.actualizarNombreApellido(dataModal);
-    console.log(resp);
+    const resp = await axiosDDJJ.actualizarNombreApellido(dataModal);
+    handleClose();
+    console.log('handleFormSubmit - resp: ', resp);
   };
 
   return (
@@ -1031,7 +1032,7 @@ export const DDJJAltaEmpleadosGrilla = ({
         ></div>
       </Box>
       <Modal
-        open={open}
+        open={cuilModiModalOpen}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"

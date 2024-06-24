@@ -179,15 +179,16 @@ const obtenerPeriodoAnterior = async (empresaId, periodo) => {
 };
 
 const actualizarNombreApellido = async (registro) => {
-  console.log(registro);
-  const URL = `/ddjj-modificacion-datos`;
+  console.log('actualizarNombreApellido - registro:', registro);
+
+  const URL = `/afiliados`;
 
   try {
     const response = await axiosCrud.crear(URL, registro);
 
-    console.log(response);
+    console.log('actualizarNombreApellido - response:', response);
 
-    if (response == true) {
+    if (response && response.id) {
       swal.showSuccess(HTTP_MSG_MODI);
       return true;
     }

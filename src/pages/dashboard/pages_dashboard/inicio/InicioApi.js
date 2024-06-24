@@ -11,8 +11,8 @@ export const ObtenerDatosDeContacto = async () => {
   return contacto;
   */
   const URL = `/ospim/contacto`;
-  console.log('ObtenerDatosDeContacto - URL: ');
-  console.log(URL);
+  //console.log('ObtenerDatosDeContacto - URL: ');
+  //console.log(URL);
 
   try {
     const response = await oAxios.get(URL);

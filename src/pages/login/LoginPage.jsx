@@ -103,8 +103,8 @@ export const LoginPage = () => {
     }
 
     const loginDto = await logon(user, passwordLoginInternalUser);
-    console.log('ESTOY EN LA LINEA 90 RESPUESTA DE LOGINDTO');
-    console.log(loginDto); // AQUI ES DONDE SE OBTIENE EL TOKEN Y EL TOKEN DE REFRESCO
+    //console.log('ESTOY EN LA LINEA 90 RESPUESTA DE LOGINDTO');
+    //console.log(loginDto); // AQUI ES DONDE SE OBTIENE EL TOKEN Y EL TOKEN DE REFRESCO
 
     if (loginDto && loginDto.token) {
       console.log('EXISTE loginDto.token');
@@ -255,7 +255,7 @@ export const LoginPage = () => {
                             onMouseDown={handleMouseDownPassword}
                             edge="end"
                           >
-                            {showPassword ? <Visibility /> : <VisibilityOff />  }
+                            {showPassword ? <Visibility /> : <VisibilityOff />}
                           </IconButton>
                         </InputAdornment>
                       }

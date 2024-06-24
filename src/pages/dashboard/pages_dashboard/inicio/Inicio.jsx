@@ -19,10 +19,10 @@ export const Inicio = () => {
   useEffect(() => {
     const getDatosContacto = async () => {
       const datosContacto = await ObtenerDatosDeContacto();
-      console.log('getDatosContacto() - ', datosContacto);
+      //console.log('getDatosContacto() - ', datosContacto);
       setDatosContacto(datosContacto);
       setTelefonoWsp(datosContacto.whasap.replace(/-/g, ''));
-      setTelefonoLlamada(datosContacto.telefono.replace(/-/g, ''))
+      setTelefonoLlamada(datosContacto.telefono.replace(/-/g, ''));
     };
     getDatosContacto();
   }, []);
@@ -30,8 +30,8 @@ export const Inicio = () => {
   useEffect(() => {
     const getPublicacionesVigentes = async () => {
       const consContenidos = await ObtenerPublicacionesVigentes();
-      console.log('getPublicacionesVigentes() - consContenidos');
-      console.log(consContenidos);
+      //console.log('getPublicacionesVigentes() - consContenidos');
+      //console.log(consContenidos);
       setContenido(consContenidos);
     };
     getPublicacionesVigentes();
