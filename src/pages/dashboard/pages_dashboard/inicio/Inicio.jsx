@@ -88,7 +88,7 @@ export const Inicio = () => {
           </div>
 
           <h5>Días y horarios:</h5>
-          <p>Lunes a Viernes de 10 a 12 y de 14 a 17hs.</p>
+          <p>{datosContacto.diasHorarios}</p>
         </div>
       </div>
       <div className="novedades">

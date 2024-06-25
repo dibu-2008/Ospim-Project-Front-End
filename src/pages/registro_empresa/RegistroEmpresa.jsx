@@ -48,7 +48,7 @@ export const RegistroEmpresa = () => {
   const [rows, setRows] = useState([]);
   const [showPassword, setShowPassword] = useState(true);
   const [showPasswordRepeat, setShowPasswordRepeat] = useState(true);
-  
+
   // Estados de tratamiento de errores
   const [errorCuit, setErrorCuit] = useState(false);
   const [errorRazonSocial, setErrorRazonSocial] = useState(false);
@@ -195,8 +195,7 @@ export const RegistroEmpresa = () => {
       }));
     }
 
-    const rta = await registrarEmpresa(usuarioEmpresa,navigate);
-
+    const rta = await registrarEmpresa(usuarioEmpresa, navigate);
 
     if (!rta && !rta.id) {
       if (rta.includes('cuit')) setErrorCuit(true);
@@ -209,7 +208,6 @@ export const RegistroEmpresa = () => {
       if (rta.includes('whatsapp_prefijo')) setErrorWhatsappPrefijo(true);
       if (rta.includes('whatsapp')) setErrorWhatsapp(true);
     }
-
   };
 
   const handleAddEmail = () => {
@@ -345,12 +343,12 @@ export const RegistroEmpresa = () => {
                 inputProps={{
                   autoComplete: 'new-password',
                 }}
-                label="E-mail principal N° 1"
+                label="E-mail Institucional N° 1"
               />
               <span style={styContToolAst}>
                 <Tooltip
                   followCursor
-                  title="Ingrese el E-mail principal de la empresa. Ejemplo: ejemplo@empresa.com"
+                  title="Ingrese el E-mail Institucional de la empresa. Ejemplo: ejemplo@empresa.com"
                   sx={{ cursor: 'pointer' }}
                 >
                   <IconButton>

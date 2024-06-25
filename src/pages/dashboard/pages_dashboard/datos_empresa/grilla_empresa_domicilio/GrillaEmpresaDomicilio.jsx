@@ -123,7 +123,9 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
 
   const getTipoDomicilio = async () => {
     const response = await axiosDomicilio.obtenerTipo();
-    setTipoDomicilio(response.map((item) => item.codigo));
+    console.log('getTipoDomicilio - response: ', response);
+    //setTipoDomicilio(response.map((item) => item.codigo));
+    setTipoDomicilio(response);
   };
 
   const volverPrimerPagina = () => {
@@ -302,7 +304,10 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell',
-      valueOptions: tipoDomicilio,
+      //valueOptions: tipoDomicilio,
+      valueOptions: tipoDomicilio.map(({ codigo, descripcion }) => {
+        return { value: codigo, label: descripcion };
+      }),
     },
     {
       field: 'provincia',
