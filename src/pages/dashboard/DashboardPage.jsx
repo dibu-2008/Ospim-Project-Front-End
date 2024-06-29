@@ -125,7 +125,9 @@ const DashboardPage = () => {
       <Drawer
         variant="permanent"
         open={open}
-        onMouseEnter={()=>{setOpen(true)}}
+        onMouseEnter={() => {
+          setOpen(true);
+        }}
         onMouseLeave={() => {
           setOpen(false);
         }}
@@ -267,7 +269,7 @@ const DashboardPage = () => {
                       alt="afip"
                       className="icon-link icono-afip"
                     />{' '}
-                    {open && <span className="icon-link">Intereses Afip</span>}
+                    {open && <span className="icon-link">Intereses</span>}
                   </NavLink>
                 )}
                 {rolFuncionalidades.APORTES && (
