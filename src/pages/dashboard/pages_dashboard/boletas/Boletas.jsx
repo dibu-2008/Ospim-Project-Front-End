@@ -443,6 +443,7 @@ export const Boletas = () => {
           </CustomTabPanel>
         </Box>
       </ThemeProvider>
+      <p className="leyenda">La visualización de los pagos efectuados puede tener una demora</p>
     </div>
   );
 };

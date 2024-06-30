@@ -51,3 +51,7 @@
   align-items: center;
   flex-direction: row;
 }
+
+.leyenda {
+  margin-left: 2rem;
+}
