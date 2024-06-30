@@ -309,7 +309,7 @@ export const MisDDJJConsultaGrilla = ({
     flex: 2,
     type: 'actions',
     headerAlign: 'center',
-    align: 'center',
+    align: 'right',
     headerClassName: 'header--cell',
     getActions: ({ id, row }) => {
       const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
@@ -354,7 +354,7 @@ export const MisDDJJConsultaGrilla = ({
             label="Delete"
             onClick={handleDeleteClick(id)}
             color="inherit"
-          />,
+          />,/*
           <Button
             sx={{
               width: '160px',
@@ -363,7 +363,7 @@ export const MisDDJJConsultaGrilla = ({
             variant="contained"
           >
             Presentar
-          </Button>,
+          </Button>,*/
         ];
       } else if (row.estado == 'PR') {
         return [
@@ -380,7 +380,7 @@ export const MisDDJJConsultaGrilla = ({
             color="inherit"
             onClick={() => declaracionJuradasImpresion(id)}
           />,
-          <Button
+          /*<Button
             sx={{
               width: '160px',
               marginLeft: '-40px',
@@ -389,7 +389,7 @@ export const MisDDJJConsultaGrilla = ({
             onClick={handleGenerarBoletaClick(id)}
           >
             Generar Boleta
-          </Button>,
+          </Button>,*/
         ];
       } else {
         return [
@@ -410,6 +410,49 @@ export const MisDDJJConsultaGrilla = ({
       }
     },
   });
+
+  columns.push({
+    field: 'Decision',
+    headerName: 'Decisión',
+    flex: 2,
+    type: 'actions',
+    headerAlign: 'center',
+    align: 'right',
+    headerClassName: 'header--cell',
+    getActions: ({ id, row }) => {
+//      const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+
+      if (row.estado === 'PE') {
+        return [
+          <Button
+            sx={{
+              width: '160px',
+            }}
+            onClick={() => PresentarDeclaracionesJuradas(row)}
+            variant="contained"
+          >
+            Presentar
+          </Button>
+        ];
+      } else if (row.estado == 'PR') {
+        return [
+          <Button
+            sx={{
+              width: '160px',
+              marginLeft: '-40px',
+            }}
+            variant="contained"
+            onClick={handleGenerarBoletaClick(id)}
+          >
+            Generar Boleta
+          </Button>
+        ];
+      }
+      else {
+        return []
+      }
+    },
+})
 
   return (
     <div
