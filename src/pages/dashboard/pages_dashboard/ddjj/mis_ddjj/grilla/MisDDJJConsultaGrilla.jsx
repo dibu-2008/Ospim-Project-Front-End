@@ -440,6 +440,9 @@ export const MisDDJJConsultaGrilla = ({
           onRowModesModelChange={handleRowModesModelChange}
           onRowEditStop={handleRowEditStop}
           processRowUpdate={processRowUpdate}
+          getRowClassName={(params) =>
+            rowsMisDdjj.indexOf(params.row) % 2 === 0 ? 'even' : 'odd'
+          }
           localeText={dataGridStyle.toolbarText}
           slots={{
             toolbar: GridToolbar,

@@ -14,20 +14,20 @@ const VITE_HTTP_MSG_PROCESO = import.meta.env.VITE_HTTP_MSG_PROCESO;
 const URL_ENTITY = '/feriados';
 
 export const axiosFeriados = {
-  consultar: async function (UrlApi) {
-    return consultar(UrlApi);
+  consultar: async function (anio) {
+    return consultar(anio);
   },
 
-  crear: async function (UrlApi, oEntidad) {
-    return crear(UrlApi, oEntidad);
+  crear: async function (oEntidad) {
+    return crear(oEntidad);
   },
 
-  actualizar: async function (UrlApi, oEntidad) {
-    return actualizar(UrlApi, oEntidad);
+  actualizar: async function (oEntidad) {
+    return actualizar(oEntidad);
   },
 
-  eliminar: async function (UrlApi, id) {
-    return eliminar(UrlApi, id);
+  eliminar: async function (id) {
+    return eliminar(id);
   },
 
   duplicar: async function (anio) {
@@ -35,9 +35,15 @@ export const axiosFeriados = {
   },
 };
 
-export const consultar = async () => {
+export const consultar = async (anio) => {
   try {
-    const data = await axiosCrud.consultar(URL_ENTITY);
+    let URL_FLT = '';
+    if (anio && anio.year()) {
+      URL_FLT = '/' + anio.year();
+    } else {
+      console.log('NO EXISTE anio.year() ');
+    }
+    const data = await axiosCrud.consultar(URL_ENTITY + URL_FLT);
     return data || [];
   } catch (error) {
     swal.showErrorBackEnd(

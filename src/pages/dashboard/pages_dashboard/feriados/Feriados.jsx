@@ -1,7 +1,6 @@
 import * as locales from '@mui/material/locale';
-
 import dayjs from 'dayjs';
-
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { useState, useEffect, useMemo, useRef, useContext } from 'react';
 import {
   Box,
@@ -37,10 +36,10 @@ import DateRangeIcon from '@mui/icons-material/DateRange';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { DatePicker } from '@mui/x-date-pickers';
+import { DesktopDatePicker } from '@mui/x-date-pickers';
+import Stack from '@mui/material/Stack';
 import formatter from '@/common/formatter';
-import swal from '@/components/swal/swal';
 import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 import { UserContext } from '@/context/userContext';
 
@@ -122,16 +121,19 @@ export const Feriados = () => {
   const handleClose = () => setOpen(false);
   const [fecha, setFecha] = useState(null);
 
+  const ahora = dayjs().startOf('year');
+  const [filtroAnio, setFiltroAnio] = useState(ahora);
+
   const handleChangeFecha = (date) => setFecha(date);
 
-  const consultar = async () => {
-    const response = await axiosFeriados.consultar();
+  const consultar = async (anio) => {
+    const response = await axiosFeriados.consultar(anio);
     setRows(response);
   };
 
   useEffect(() => {
-    consultar();
-  }, []);
+    consultar(filtroAnio);
+  }, [filtroAnio]);
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -360,6 +362,26 @@ export const Feriados = () => {
           </IconButton>
         </Tooltip>
       </h1>
+      <div>
+        <Stack
+          spacing={4}
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <DemoContainer components={['DatePicker']}>
+            <DesktopDatePicker
+              label={'Filtro Año'}
+              views={['year']}
+              closeOnSelect={true}
+              onChange={(oValue) => {
+                setFiltroAnio(oValue);
+              }}
+              value={filtroAnio}
+            />
+          </DemoContainer>
+        </Stack>
+      </div>
 
       <Box
         sx={{
@@ -377,16 +399,16 @@ export const Feriados = () => {
           <StripedDataGrid
             rows={rows}
             columns={columnas}
-            getRowId={(row) => rows.indexOf(row)}
-            getRowClassName={(params) =>
-              rows.indexOf(params.row) % 2 === 0 ? 'even' : 'odd'
-            }
             editMode="row"
             rowModesModel={rowModesModel}
             onRowModesModelChange={handleRowModesModelChange}
             onRowEditStop={handleRowEditStop}
             processRowUpdate={(updatedRow, originalRow) =>
               processRowUpdate(updatedRow, originalRow)
+            }
+            getRowId={(row) => rows.indexOf(row)}
+            getRowClassName={(params) =>
+              rows.indexOf(params.row) % 2 === 0 ? 'even' : 'odd'
             }
             localeText={dataGridStyle.toolbarText}
             slots={{ toolbar: crearNuevoRegistro }}

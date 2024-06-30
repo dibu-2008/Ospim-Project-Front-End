@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect, useContext } from 'react';
 import {
   GridRowModes,
   DataGrid,
+  StripedDataGrid,
   GridToolbar,
   GridToolbarContainer,
   GridActionsCellItem,
@@ -979,19 +980,18 @@ export const DDJJAltaEmpleadosGrilla = ({
         }}
       >
         <ThemeProvider theme={themeWithLocale}>
-          <DataGrid
-            apiRef={gridApiRef}
-            className="afiliados"
+          <StripedDataGrid
             rows={rowsAltaDDJJ || []}
             columns={columns}
-            columnVisibilityModel={{ errores: false }}
             editMode="row"
             rowModesModel={rowModesModel}
             onRowModesModelChange={handleRowModesModelChange}
             onRowEditStop={handleRowEditStop}
             processRowUpdate={processRowUpdate}
+            getRowClassName={(params) =>
+              rowsAltaDDJJ.indexOf(params.row) % 2 === 0 ? 'even' : 'odd'
+            }
             localeText={dataGridStyle.toolbarText}
-            timezoneOffset={null}
             slots={{
               toolbar: EditToolbar,
             }}
@@ -1004,6 +1004,13 @@ export const DDJJAltaEmpleadosGrilla = ({
                 themeWithLocale,
               },
             }}
+            paginationModel={paginationModel}
+            onPaginationModelChange={setPaginationModel}
+            pageSizeOptions={pageSizeOptions}
+            apiRef={gridApiRef}
+            className="afiliados"
+            columnVisibilityModel={{ errores: false }}
+            timezoneOffset={null}
             sx={{
               '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
                 width: '8px',
@@ -1019,9 +1026,6 @@ export const DDJJAltaEmpleadosGrilla = ({
                 backgroundColor: '#ccc',
               },
             }}
-            paginationModel={paginationModel}
-            onPaginationModelChange={setPaginationModel}
-            pageSizeOptions={pageSizeOptions}
             getCellClassName={colorErrores}
           />
         </ThemeProvider>
