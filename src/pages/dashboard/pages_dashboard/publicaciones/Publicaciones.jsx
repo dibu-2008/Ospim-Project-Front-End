@@ -16,17 +16,15 @@ import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import * as locales from '@mui/material/locale';
 import Swal from 'sweetalert2';
 import './Publicaciones.css';
-import { ThreeCircles } from 'react-loader-spinner';
+
 import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 import formatter from '@/common/formatter';
-import { handleServerError } from '@/helpers/handleServerError';
 import { UserContext } from '@/context/userContext';
 
 export const Publicaciones = () => {
   const [locale, setLocale] = useState('esES');
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
-  const [showDataGrid, setShowDataGrid] = useState(false);
 
   const { paginationModel, setPaginationModel, pageSizeOptions } =
     useContext(UserContext);
@@ -188,14 +186,6 @@ export const Publicaciones = () => {
     console.error('Error al actualizar la fila:', error);
   };
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowDataGrid(true);
-    }, 500);
-
-    return () => clearTimeout(timer);
-  });
-
   const columns = [
     {
       field: 'titulo',
@@ -314,45 +304,7 @@ export const Publicaciones = () => {
           },
         }}
       >
-        {!showDataGrid && (
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '100%',
-            }}
-          >
-            <ThreeCircles
-              visible={true}
-              height="100"
-              width="100"
-              color="#1A76D2"
-              ariaLabel="three-circles-loading"
-              wrapperStyle={{}}
-              wrapperClass=""
-            />
-            <ThreeCircles
-              visible={true}
-              height="100"
-              width="100"
-              color="#1A76D2"
-              ariaLabel="three-circles-loading"
-              wrapperStyle={{}}
-              wrapperClass=""
-            />
-            <ThreeCircles
-              visible={true}
-              height="100"
-              width="100"
-              color="#1A76D2"
-              ariaLabel="three-circles-loading"
-              wrapperStyle={{}}
-              wrapperClass=""
-            />
-          </div>
-        )}
-        {showDataGrid && (
+
           <ThemeProvider theme={themeWithLocale}>
             <StripedDataGrid
               apiRef={gridApiRef}
@@ -404,7 +356,7 @@ export const Publicaciones = () => {
               pageSizeOptions={pageSizeOptions}
             />
           </ThemeProvider>
-        )}
+        
       </Box>
     </div>
   );
