@@ -199,6 +199,21 @@ const actualizarNombreApellido = async (registro) => {
   }
 };
 
+export const infoPeriodoConsulta = async (empresaId, periodo) => {
+  const URL = `/empresa/${empresaId}/ddjj/periodo/${periodo}/info`;
+  try {
+    const data = await axiosCrud.consultar(URL);
+    if (data && data.estado) return data;
+    return null;
+  } catch (error) {
+    swal.showErrorBackEnd(
+      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
+      error,
+    );
+    return null;
+  }
+};
+
 export const axiosDDJJ = {
   getCamaras: async function () {
     return obtenerCamaras();
@@ -245,5 +260,8 @@ export const axiosDDJJ = {
   },
   actualizarNombreApellido: async function (registro) {
     return actualizarNombreApellido(registro);
+  },
+  infoPeriodoConsulta: async function (empresaId, periodo) {
+    return infoPeriodoConsulta(empresaId, periodo);
   },
 };

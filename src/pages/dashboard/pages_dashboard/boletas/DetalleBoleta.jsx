@@ -185,28 +185,6 @@ export const DetalleBoleta = () => {
           Editar
         </Button>
       )}
-      {isEditable && modoEdicion && (
-        <Button
-          variant="contained"
-          onClick={() => {
-            handleGuardar();
-          }}
-          color="primary"
-        >
-          Guardar
-        </Button>
-      )}
-      {isEditable && modoEdicion && (
-        <Button
-          variant="contained"
-          onClick={() => {
-            handleCancelar();
-          }}
-          color="primary"
-        >
-          Canclear
-        </Button>
-      )}
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead className="titulos">
@@ -345,6 +323,36 @@ export const DetalleBoleta = () => {
             disableSelectionOnClick
           />
         </div>
+
+        {isEditable && modoEdicion && (
+          <Box
+            sx={{
+              mt: 2,
+              mr: 2,
+              display: 'flex',
+              flexDirection: 'row-reverse',
+            }}
+          >
+            <Button
+              variant="contained"
+              onClick={() => {
+                handleGuardar();
+              }}
+              color="primary"
+            >
+              Guardar
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => {
+                handleCancelar();
+              }}
+              color="primary"
+            >
+              Canclear
+            </Button>
+          </Box>
+        )}
       </Box>
       <div className="space-between">
         <TableContainer className="w30">

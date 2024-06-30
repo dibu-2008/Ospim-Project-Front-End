@@ -10,17 +10,17 @@ const showSwallSuccess = (MESSAGE_HTTP) => {
   });
 };
 
-const showSwallSuccessWithConfirmButton = (MESSAGE_HTTP,redirectFunction) =>{
+const showSwallSuccessWithConfirmButton = (MESSAGE_HTTP, redirectFunction) => {
   Swal.fire({
     icon: 'success',
     title: MESSAGE_HTTP,
-    showConfirmButton: true
+    showConfirmButton: true,
   }).then((result) => {
     if (result.isConfirmed || result.isDismissed) {
       redirectFunction('/login'); // Llama a la función de redirección pasada como argumento
     }
-  });;
-}
+  });
+};
 
 const showSwalError = (descripcion) => {
   try {
@@ -77,6 +77,21 @@ const showSwalErrorBusiness = (descripcion) => {
   }
 };
 
+const getSettingConfirm = (seteos) => {
+  let settings = {
+    title: seteos.titulo,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#1A76D2',
+    cancelButtonColor: '#6c757d',
+    confirmButtonText: seteos.textoBtnOK,
+  };
+  if (seteos.esHtml) settings.html = seteos.texto;
+  if (!seteos.esHtml) settings.text = seteos.texto;
+
+  return settings;
+};
+
 const showErrorBackEnd = (HTTP_MSG, rta) => {
   const ERROR_BUSINESS = import.meta.env.VITE_ERROR_BUSINESS;
   const ERROR_MESSAGE = import.meta.env.VITE_ERROR_MESSAGE;
@@ -127,8 +142,8 @@ const swal = {
     return showSwallSuccess(descripcion);
   },
 
-  showSuccesConfirmButton: async function (descripcion,redirectFunction){
-    return showSwallSuccessWithConfirmButton(descripcion,redirectFunction)
+  showSuccesConfirmButton: async function (descripcion, redirectFunction) {
+    return showSwallSuccessWithConfirmButton(descripcion, redirectFunction);
   },
 
   showWarning: async function (descripcion, esHtml) {
@@ -136,6 +151,10 @@ const swal = {
   },
   showErrorBackEnd: async function (HTTP_MSG, rta) {
     return showErrorBackEnd(HTTP_MSG, rta);
+  },
+
+  getSettingConfirm: function (seteos) {
+    return getSettingConfirm(seteos);
   },
 };
 

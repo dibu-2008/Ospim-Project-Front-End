@@ -17,6 +17,7 @@ import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
 import { axiosDDJJ } from './MisDDJJConsultaGrillaApi';
 import { consultarAportesDDJJ } from '@/common/api/AportesApi';
 import Swal from 'sweetalert2';
+import swal from '@/components/swal/swal';
 import { useNavigate } from 'react-router-dom';
 import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 import localStorageService from '@/components/localStorage/localStorageService';
@@ -127,18 +128,17 @@ export const MisDDJJConsultaGrilla = ({
   }, []);
 
   const PresentarDeclaracionesJuradas = async (rowGrilla) => {
-    Swal.fire({
-      title: 'Presentación de DDJJ en OSPIM',
-      html:
+    const confirm = {
+      titulo: 'Presentación de DDJJ en OSPIM',
+      texto:
         'Confirma la Presentación de la Declaración Jurada para el Período <b>' +
         formatter.periodo(rowGrilla.periodo) +
         '</b>?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#1A76D2',
-      cancelButtonColor: '#6c757d',
-      confirmButtonText: 'Si, Presentar !',
-    }).then(async (result) => {
+      esHtml: true,
+      textoBtnOK: 'Si, Presentar !',
+    };
+
+    Swal.fire(swal.getSettingConfirm(confirm)).then(async (result) => {
       if (result.isConfirmed) {
         const updatedRow = {
           ...rowsMisDdjj.find((row) => row.id === rowGrilla.id),

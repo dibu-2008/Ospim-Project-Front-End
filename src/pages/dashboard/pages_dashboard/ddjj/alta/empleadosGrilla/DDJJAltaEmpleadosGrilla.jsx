@@ -2,13 +2,13 @@ import { useState, useMemo, useEffect, useContext } from 'react';
 import {
   GridRowModes,
   DataGrid,
-  StripedDataGrid,
   GridToolbar,
   GridToolbarContainer,
   GridActionsCellItem,
   GridRowEditStopReasons,
   useGridApiRef,
 } from '@mui/x-data-grid';
+import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
@@ -31,7 +31,6 @@ import {
 } from '@mui/material';
 import { axiosDDJJ } from '../DDJJAltaApi';
 import './DDJJAltaEmpleadosGrilla.css';
-import { dataGridStyle } from '@/common/dataGridStyle';
 import swal from '@/components/swal/swal';
 import Typography from '@mui/material/Typography';
 import CurrencyInput from 'react-currency-input-field';

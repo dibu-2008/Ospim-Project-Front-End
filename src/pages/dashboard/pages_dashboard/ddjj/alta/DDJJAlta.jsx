@@ -24,10 +24,10 @@ import './DDJJAlta.css';
 import { DDJJAltaEmpleadosGrilla } from './empleadosGrilla/DDJJAltaEmpleadosGrilla';
 import { axiosDDJJ } from './DDJJAltaApi';
 import localStorageService from '@/components/localStorage/localStorageService';
-import Swal from 'sweetalert2';
 import XLSX from 'xlsx';
 import { GridRowModes } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
+import Swal from 'sweetalert2';
 import swal from '@/components/swal/swal';
 import PropTypes from 'prop-types';
 
@@ -583,18 +583,16 @@ export const DDJJAlta = ({
     const seguir = await guardarDeclaracionJurada();
     if (seguir) {
       if (DDJJState.id) {
-        Swal.fire({
-          title: 'Presentación de DDJJ en OSPIM',
-          html:
+        const confirm = {
+          titulo: 'Presentación de DDJJ en OSPIM',
+          texto:
             'Confirma la Presentación de la Declaración Jurada para el Período <b>' +
             formatter.periodo(periodo) +
             '</b>?',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#1A76D2',
-          cancelButtonColor: '#6c757d',
-          confirmButtonText: 'Si, Presentar !',
-        }).then(async (result) => {
+          esHtml: true,
+          textoBtnOK: 'Si, Presentar !',
+        };
+        Swal.fire(swal.getSettingConfirm(confirm)).then(async (result) => {
           if (result.isConfirmed) {
             const data = await axiosDDJJ.presentar(ID_EMPRESA, DDJJState.id);
             DDJJState.estado = data.estado;
@@ -671,6 +669,50 @@ export const DDJJAlta = ({
     setExpanded(isExpanded);
   };
 
+  const validarPeriodo = async (date) => {
+    if (DDJJState && DDJJState.id) {
+      return false;
+    }
+    if (!date || !date.isValid()) return false;
+
+    const periodo = date.startOf('month').format('YYYY-MM-DD');
+    const info = await axiosDDJJ.infoPeriodoConsulta(ID_EMPRESA, periodo);
+
+    if (info) {
+      let msg =
+        '<div>EL Periodo <b>' +
+        formatter.periodoString(date) +
+        '</b> ya cuenta con una DDJJ en estado <b>' +
+        (info.estado === 'PE' ? 'Pendiente' : 'Presentada') +
+        '</b> con fecha <b>' +
+        (info.estado === 'PE'
+          ? formatter.dateString(info.fechaCreacion)
+          : formatter.dateString(info.fechaPresentacion)) +
+        '</b>.';
+
+      if (info.estado === 'PE') {
+        msg +=
+          '<br><br>Debe completarla y Presentarla para poder dar de alta una nueva DDJJ.</div>';
+        swal.showWarning(msg, true);
+        setPeriodo(null);
+      } else {
+        msg += '.<br><br> Desea ingresar una nueva DDJJ ?<br><br>';
+
+        const confirm = {
+          titulo: 'Alta de DDJJ',
+          texto: msg,
+          esHtml: true,
+          textoBtnOK: 'Continuar',
+        };
+        Swal.fire(swal.getSettingConfirm(confirm)).then(async (result) => {
+          if (result.isDismissed) {
+            setPeriodo(null);
+          }
+        });
+      }
+    }
+  };
+
   return (
     <div className="mis_alta_declaraciones_juradas_container">
       <div className="periodo_container">
@@ -691,7 +733,10 @@ export const DDJJAlta = ({
                   views={['month', 'year']}
                   closeOnSelect={true}
                   //onChange={handleChangePeriodo}
-                  onChange={(date) => setPeriodo(date)}
+                  onChange={(date) => {
+                    validarPeriodo(date);
+                    setPeriodo(date);
+                  }}
                   value={periodo}
                   disabled={!actualizacionHabilitada}
                 />
