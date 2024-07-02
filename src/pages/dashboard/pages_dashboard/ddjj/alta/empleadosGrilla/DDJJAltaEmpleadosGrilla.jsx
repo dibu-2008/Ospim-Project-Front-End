@@ -158,17 +158,17 @@ export const DDJJAltaEmpleadosGrilla = ({
     if (filterModel.items.length == 0) {
       newFilterModel = {
         items: [
-          /*
+          
           {
             field: 'errores',
             operator: 'is',
             value: 'true',
-          },*/
-          {
+          }
+          /*{
             field: 'apellido',
             operator: 'contains',
             value: 'P',
-          },
+          },*/
         ],
       };
     } else {
@@ -357,7 +357,16 @@ export const DDJJAltaEmpleadosGrilla = ({
   const colorErrores = (params) => {
     let cellClassName = '';
 
-    console.log('colorErrores - validacionResponse: ', validacionResponse);
+    rowsAltaDDJJ.forEach( element => {
+      element.errores = false
+      validacionResponse?.errores?.forEach(error =>{
+        if(element.cuil === error.cuil)
+          element.errores = true
+      })
+    })
+
+    setRowsAltaDDJJ(rowsAltaDDJJ)
+
     validacionResponse?.errores?.forEach((error) => {
       if (
         params.row.cuil?.toString() === error.cuil &&
