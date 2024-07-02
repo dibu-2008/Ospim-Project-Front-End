@@ -345,6 +345,9 @@ export const DDJJAlta = ({
         afiliado.errores = false;
       }
     });
+    console.log('setErroresAfiliados - rowsAltaDDJJ', rowsAltaDDJJ);
+    if (rowsAltaDDJJ && rowsAltaDDJJ.length > 0) setRowsAltaDDJJ(rowsAltaDDJJ);
+
     return DDJJ;
   };
 
@@ -378,6 +381,7 @@ export const DDJJAlta = ({
         }
       });
     }
+    console.log('validarDDJJ - DDJJ:', DDJJ);
     return DDJJ;
   };
 
@@ -665,6 +669,7 @@ export const DDJJAlta = ({
       setExpanded(true);
     }
   };
+
   const handleChangeE = (event, isExpanded) => {
     setExpanded(isExpanded);
   };

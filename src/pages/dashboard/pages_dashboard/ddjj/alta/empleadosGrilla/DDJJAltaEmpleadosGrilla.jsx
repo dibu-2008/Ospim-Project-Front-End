@@ -16,6 +16,8 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import CreateIcon from '@mui/icons-material/Create';
+import { FormControlLabel } from '@mui/material';
+import Switch from '@mui/material/Switch';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import * as locales from '@mui/material/locale';
 import formatter from '@/common/formatter';
@@ -56,6 +58,7 @@ function EditToolbar(props) {
     setRowModesModel,
     showQuickFilter,
     themeWithLocale,
+    filtrarGrilla,
   } = props;
 
   const handleClick = () => {
@@ -99,6 +102,12 @@ function EditToolbar(props) {
       <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
         Nuevo Registro
       </Button>
+      <FormControlLabel
+        control={<Switch color="primary" />}
+        label="Cuiles con Errores"
+        labelPlacement="start"
+        onChange={filtrarGrilla}
+      ></FormControlLabel>
       <GridToolbar showQuickFilter={showQuickFilter} />
     </GridToolbarContainer>
   );
@@ -121,6 +130,8 @@ export const DDJJAltaEmpleadosGrilla = ({
 }) => {
   const [locale, setLocale] = useState('esES');
   const [inteDataBase, setInteDataBase] = useState(null);
+  const [filterModel, setFilterModel] = useState({ items: [] });
+
   const [cuilModiModalOpen, setCuilModiModalOpen] = useState(false);
   const [dataModal, setDataModal] = useState({
     cuil: '',
@@ -140,6 +151,35 @@ export const DDJJAltaEmpleadosGrilla = ({
   );
 
   const gridApiRef = useGridApiRef();
+
+  const filtrarGrilla = () => {
+    console.log('filtrarGrilla - rowsAltaDDJJ:', rowsAltaDDJJ);
+    let newFilterModel = null;
+    if (filterModel.items.length == 0) {
+      newFilterModel = {
+        items: [
+          /*
+          {
+            field: 'errores',
+            operator: 'is',
+            value: 'true',
+          },*/
+          {
+            field: 'apellido',
+            operator: 'contains',
+            value: 'P',
+          },
+        ],
+      };
+    } else {
+      newFilterModel = {
+        items: [],
+      };
+    }
+
+    setFilterModel(newFilterModel);
+    console.log('filtrarGrilla - FINAL');
+  };
 
   const setAfiliadoGrilla = (params, cuil, apellido, nombre) => {
     console.log('setAfiliadoGrilla - params:', params);
@@ -317,6 +357,7 @@ export const DDJJAltaEmpleadosGrilla = ({
   const colorErrores = (params) => {
     let cellClassName = '';
 
+    console.log('colorErrores - validacionResponse: ', validacionResponse);
     validacionResponse?.errores?.forEach((error) => {
       if (
         params.row.cuil?.toString() === error.cuil &&
@@ -983,6 +1024,7 @@ export const DDJJAltaEmpleadosGrilla = ({
             rows={rowsAltaDDJJ || []}
             columns={columns}
             editMode="row"
+            filterModel={filterModel}
             rowModesModel={rowModesModel}
             onRowModesModelChange={handleRowModesModelChange}
             onRowEditStop={handleRowEditStop}
@@ -1001,6 +1043,7 @@ export const DDJJAltaEmpleadosGrilla = ({
                 setRowModesModel,
                 showQuickFilter: true,
                 themeWithLocale,
+                filtrarGrilla,
               },
             }}
             paginationModel={paginationModel}
