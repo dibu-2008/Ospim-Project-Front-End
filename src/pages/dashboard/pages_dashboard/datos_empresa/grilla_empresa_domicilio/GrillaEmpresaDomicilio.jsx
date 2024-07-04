@@ -298,7 +298,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
     {
       field: 'tipo',
       headerName: 'Tipo',
-      flex: 1,
+      flex: 1.4,
       editable: true,
       type: 'singleSelect',
       headerAlign: 'center',
@@ -373,7 +373,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
     {
       field: 'calleNro',
       headerName: 'Altura',
-      flex: 2,
+      flex: 1,
       editable: true,
       headerAlign: 'center',
       align: 'center',
@@ -382,7 +382,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
     {
       field: 'piso',
       headerName: 'Piso',
-      flex: 1,
+      flex: 0.4,
       editable: true,
       headerAlign: 'center',
       align: 'center',
@@ -391,7 +391,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
     {
       field: 'depto',
       headerName: 'Depto',
-      flex: 1,
+      flex: 0.4,
       editable: true,
       headerAlign: 'center',
       align: 'center',
@@ -400,7 +400,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
     {
       field: 'oficina',
       headerName: 'Oficina',
-      flex: 1,
+      flex: 0.9,
       editable: true,
       headerAlign: 'center',
       align: 'center',
@@ -409,7 +409,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
     {
       field: 'cp',
       headerName: 'CP',
-      flex: 1,
+      flex: 1.2,
       editable: true,
       headerAlign: 'center',
       align: 'center',
@@ -418,7 +418,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
     {
       field: 'planta',
       headerName: 'Planta',
-      flex: 1,
+      flex: 2,
       editable: true,
       headerAlign: 'center',
       align: 'center',
@@ -428,7 +428,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
       field: 'actions',
       type: 'actions',
       headerName: 'Acciones',
-      flex: 2,
+      flex: 1.5,
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell',
