@@ -960,7 +960,7 @@ export const DDJJAltaEmpleadosGrilla = ({
     <div>
       <Box
         sx={{
-          height: 'auto',
+          height: '600px',
           width: '100%',
           '& .actions': {
             color: 'text.secondary',

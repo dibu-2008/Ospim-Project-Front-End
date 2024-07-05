@@ -875,7 +875,6 @@ export const DDJJAlta = ({
             <Box
               sx={{
                 margin: '10px 0px -20px 0px',
-
                 width: '100%',
                 '& .actions': {
                   color: 'text.secondary',
