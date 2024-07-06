@@ -68,16 +68,14 @@ export const modificarBoletaById = async (empresa_id, body) => {
     console.log('bodyNew: ', bodyNew);
 
     const rta = await axiosCrud.actualizar(URL, bodyNew);
-    if (rta) {
+    console.log('modificarBoletaById - axiosCrud.actualizar() - rta: ', rta);
+    if (rta && rta == true) {
       swal.showSuccess(HTTP_MSG_MODI);
-    } else {
-      swal.showError(HTTP_MSG_MODI_ERROR);
+      return true;
     }
-    return rta;
+    throw rta;
   } catch (error) {
-    const HTTP_MSG =
-      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`;
-    swal.showErrorBackEnd(HTTP_MSG, error);
+    swal.showErrorBackEnd(HTTP_MSG_MODI_ERROR, error);
     return false;
   }
 };

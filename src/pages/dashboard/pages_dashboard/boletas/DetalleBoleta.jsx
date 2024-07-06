@@ -85,7 +85,7 @@ export const DetalleBoleta = () => {
         setIntencionDePago(response.intencionDePago);
         setDDDJJ_id(response.declaracion_jurada_id);
         setCodigo(response.codigo);
-        setIsEditable(!response.fecha_de_pago);
+        setIsEditable(!response.fecha_de_pago && response.baja == null);
         setAjustes(response.ajustes);
         setRespaldoBoleta(JSON.parse(JSON.stringify(response)));
         console.log(boletaDetalle.periodo);
@@ -100,7 +100,7 @@ export const DetalleBoleta = () => {
   const guardarBoleta = () => {
     console.log('guardarBoleta - guardarBoleta: ', boletaDetalle);
     const rta = modificarBoletaById(ID_EMPRESA, boletaDetalle);
-    if (rta) {
+    if (rta == true) {
       respaldoBoleta.intencionDePago = boletaDetalle.intencionDePago;
       respaldoBoleta.formaDePago = boletaDetalle.formaDePago;
       console.log(
@@ -155,6 +155,7 @@ export const DetalleBoleta = () => {
   const existeDato = (value) => (value !== null && value !== '' ? value : '');
 
   console.log('DetalleBoleta - metodoPago: ', metodoPago);
+  console.error();
 
   return (
     <div className="boletas_container">
@@ -165,17 +166,27 @@ export const DetalleBoleta = () => {
         <h3 style={{ color: '#1A76D2' }}>
           Concepto: {boletaDetalle.descripcion}
         </h3>
+        {boletaDetalle.baja != null && (
+          <h3 style={{ color: '#1A76D2' }}>
+            Fecha Baja: {formatter.date(boletaDetalle.baja)}
+          </h3>
+        )}
       </h1>
-      <Button
-        onClick={() => {
-          detallePdfDownload(ID_EMPRESA, boletaDetalle.id);
-        }}
-      >
-        Descargar Detalle
-      </Button>
-      <Button onClick={() => boletaPdfDownload(ID_EMPRESA, boletaDetalle.id)}>
-        Descargar Boleta
-      </Button>
+
+      {boletaDetalle.baja == null && (
+        <Button
+          onClick={() => detallePdfDownload(ID_EMPRESA, boletaDetalle.id)}
+        >
+          Descargar Detalle
+        </Button>
+      )}
+
+      {boletaDetalle.baja == null && (
+        <Button onClick={() => boletaPdfDownload(ID_EMPRESA, boletaDetalle.id)}>
+          Descargar Boleta
+        </Button>
+      )}
+
       {isEditable && !modoEdicion && (
         <Button
           variant="contained"

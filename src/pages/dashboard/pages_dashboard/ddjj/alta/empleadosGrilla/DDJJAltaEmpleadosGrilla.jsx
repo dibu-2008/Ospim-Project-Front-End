@@ -141,6 +141,7 @@ export const DDJJAltaEmpleadosGrilla = ({
 
   const { paginationModel, setPaginationModel, pageSizeOptions } =
     useContext(UserContext);
+
   const handleOpen = () => setCuilModiModalOpen(true);
   const handleClose = () => setCuilModiModalOpen(false);
 
@@ -158,12 +159,11 @@ export const DDJJAltaEmpleadosGrilla = ({
     if (filterModel.items.length == 0) {
       newFilterModel = {
         items: [
-          
           {
             field: 'errores',
             operator: 'is',
             value: 'true',
-          }
+          },
           /*{
             field: 'apellido',
             operator: 'contains',
@@ -357,15 +357,14 @@ export const DDJJAltaEmpleadosGrilla = ({
   const colorErrores = (params) => {
     let cellClassName = '';
 
-    rowsAltaDDJJ.forEach( element => {
-      element.errores = false
-      validacionResponse?.errores?.forEach(error =>{
-        if(element.cuil === error.cuil)
-          element.errores = true
-      })
-    })
+    rowsAltaDDJJ.forEach((element) => {
+      element.errores = false;
+      validacionResponse?.errores?.forEach((error) => {
+        if (element.cuil === error.cuil) element.errores = true;
+      });
+    });
 
-    setRowsAltaDDJJ(rowsAltaDDJJ)
+    setRowsAltaDDJJ(rowsAltaDDJJ);
 
     validacionResponse?.errores?.forEach((error) => {
       if (

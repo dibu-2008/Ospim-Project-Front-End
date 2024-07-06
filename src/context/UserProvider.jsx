@@ -4,7 +4,7 @@ import { UserContext } from './userContext';
 export const UserProvider = ({ children }) => {
   const pageSizeOptions = [10, 20, 50, 75, 100];
   const [paginationModel, setPaginationModel] = useState({
-    pageSize: 10,
+    pageSize: 50,
     page: 0,
   });
   return (

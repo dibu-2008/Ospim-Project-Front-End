@@ -277,8 +277,54 @@ export const Boletas = () => {
                     field: 'acciones',
                     headerName: 'Acciones',
                     flex: 1,
-                    renderCell: (params) =>
-                      params.row.requiereBep ? (
+                    renderCell: (params) => {
+                      if (params.row.baja !== null) {
+                        return (
+                          <>
+                            <IconButton
+                              size="small"
+                              onClick={() => handleViewClick(params.row)}
+                            >
+                              <VisibilityIcon />
+                            </IconButton>
+                          </>
+                        );
+                      }
+
+                      if (params.row.requiereBep) {
+                        return (
+                          <>
+                            <IconButton
+                              size="small"
+                              onClick={() => handleViewClick(params.row)}
+                            >
+                              <VisibilityIcon />
+                            </IconButton>
+                            <IconButton
+                              size="small"
+                              onClick={() => {
+                                boletaPdfDownload(ID_EMPRESA, params.row.id);
+                              }}
+                            >
+                              <PrintIcon />
+                            </IconButton>
+                            <IconButton
+                              size="small"
+                              onClick={() => handleViewClick(params.row)}
+                              disabled={!!params.row.fecha_de_pago}
+                            >
+                              <EditIcon />
+                            </IconButton>
+                            <IconButton
+                              size="small"
+                              onClick={() => handleGenerarBepClick(params.row)}
+                            >
+                              <RequestQuoteIcon />
+                            </IconButton>
+                          </>
+                        );
+                      }
+                      return (
                         <>
                           <IconButton
                             size="small"
@@ -301,38 +347,9 @@ export const Boletas = () => {
                           >
                             <EditIcon />
                           </IconButton>
-                          <IconButton
-                            size="small"
-                            onClick={() => handleGenerarBepClick(params.row)}
-                          >
-                            <RequestQuoteIcon />
-                          </IconButton>
                         </>
-                      ) : (
-                        <>
-                          <IconButton
-                            size="small"
-                            onClick={() => handleViewClick(params.row)}
-                          >
-                            <VisibilityIcon />
-                          </IconButton>
-                          <IconButton
-                            size="small"
-                            onClick={() => {
-                              boletaPdfDownload(ID_EMPRESA, params.row.id);
-                            }}
-                          >
-                            <PrintIcon />
-                          </IconButton>
-                          <IconButton
-                            size="small"
-                            onClick={() => handleViewClick(params.row)}
-                            disabled={!!params.row.fecha_de_pago}
-                          >
-                            <EditIcon />
-                          </IconButton>
-                        </>
-                      ),
+                      );
+                    },
                   },
                 ]}
                 getRowClassName={(params) =>
@@ -443,7 +460,9 @@ export const Boletas = () => {
           </CustomTabPanel>
         </Box>
       </ThemeProvider>
-      <p className="leyenda">La visualización de los pagos efectuados puede tener una demora</p>
+      <p className="leyenda">
+        La visualización de los pagos efectuados puede tener una demora
+      </p>
     </div>
   );
 };
