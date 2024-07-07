@@ -15,7 +15,7 @@ import {
 import Button from '@mui/material/Button';
 import './Boletas.css';
 import { Box } from '@mui/system';
-import { getBoletaById, modificarBoletaById } from './BoletasApi';
+import { axiosBoletas } from './BoletasApi';
 import localStorageService from '@/components/localStorage/localStorageService';
 import {
   boletaPdfDownload,
@@ -26,6 +26,7 @@ import { useParams } from 'react-router-dom';
 import { calcularInteresBoleta } from '../generar_boletas/GenerarBoletasApi';
 import { consultarFormasPago } from '@/common/api/FormaPagoApi';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const getDescripcion = (vector, codigo) => {
   if (vector && vector.find) {
@@ -34,6 +35,7 @@ const getDescripcion = (vector, codigo) => {
     return reg.descripcion;
   }
 };
+
 export const DetalleBoleta = () => {
   const [boletaDetalle, setBoletaDetalle] = useState([]);
   const [afiliadosRows, setAfiliadosRows] = useState([]);
@@ -71,7 +73,10 @@ export const DetalleBoleta = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getBoletaById(ID_EMPRESA, numero_boleta);
+        const response = await axiosBoletas.getBoletaById(
+          ID_EMPRESA,
+          numero_boleta,
+        );
 
         console.log(response);
         setBoletaDetalle(response);
@@ -97,9 +102,41 @@ export const DetalleBoleta = () => {
     fetchData();
   }, []);
 
+  const guardarBoletaValidar = async () => {
+    console.log(`guardarBoletaValidar - id: ${boletaDetalle.id}`);
+    const val = await axiosBoletas.validarModificacion(
+      ID_EMPRESA,
+      boletaDetalle.id,
+    );
+    console.log('guardarBoletaValidar - val: ', val);
+
+    if (val && val.hasOwnProperty('reemplazar')) {
+      if (val.reemplazar == false) {
+        guardarBoleta();
+        return true;
+      }
+
+      Swal.fire({
+        title: 'Confirmación',
+        text: 'Esta modificación reemplazará la actual Boleta de Pago por una "Nueva". Confirma la acción?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#1A76D2',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Reemplazar',
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          guardarBoleta();
+          return true;
+        }
+      });
+    }
+    return false;
+  };
+
   const guardarBoleta = () => {
     console.log('guardarBoleta - guardarBoleta: ', boletaDetalle);
-    const rta = modificarBoletaById(ID_EMPRESA, boletaDetalle);
+    const rta = axiosBoletas.modificarBoletaById(ID_EMPRESA, boletaDetalle);
     if (rta == true) {
       respaldoBoleta.intencionDePago = boletaDetalle.intencionDePago;
       respaldoBoleta.formaDePago = boletaDetalle.formaDePago;
@@ -141,7 +178,9 @@ export const DetalleBoleta = () => {
   };
 
   const handleGuardar = () => {
-    guardarBoleta();
+    guardarBoletaValidar();
+    //guardarBoleta();
+    console.log('handleGuardar - setModoEdicion() ..');
     setModoEdicion(!modoEdicion);
   };
 

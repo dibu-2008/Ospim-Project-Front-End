@@ -92,18 +92,35 @@ const getSettingConfirm = (seteos) => {
   return settings;
 };
 
-const showErrorBackEnd = (HTTP_MSG, rta) => {
+const showErrorBackEnd = async (HTTP_MSG, rta) => {
   const ERROR_BUSINESS = import.meta.env.VITE_ERROR_BUSINESS;
   const ERROR_MESSAGE = import.meta.env.VITE_ERROR_MESSAGE;
 
   try {
     console.log('showErrorBackEnd - rta:', rta);
-    if (rta.response && rta.response.data) {
-      console.log(
-        'showErrorBackEnd - VA A EJECUTAR: rta = rta.response.data; ???',
-      );
-      rta = rta.response.data;
+
+    if (
+      rta.request.responseType === 'blob' &&
+      rta.response.data instanceof Blob &&
+      rta.response.data.type &&
+      rta.response.data.type.toLowerCase().indexOf('json') != -1
+    ) {
+      console.log('JSON.parse(await rta.response.data.text());.... ');
+      let errorResponse = await rta.response.data.text();
+      console.log('errorResponse: ', errorResponse);
+      rta = JSON.parse(errorResponse);
+    } else {
+      if (rta.response && rta.response.data) {
+        console.log(
+          'showErrorBackEnd - VA A EJECUTAR: rta = rta.response.data; ???',
+        );
+        rta = rta.response.data;
+      }
     }
+
+    console.log('showErrorBackEnd - rta: ', rta);
+    console.log('showErrorBackEnd - rta.data: ', rta.data);
+
     if (rta && rta.tipo && rta.descripcion && rta.ticket) {
       console.log('* showErrorBackEnd - con ticket');
       if (rta.tipo === ERROR_BUSINESS) {
@@ -119,12 +136,7 @@ const showErrorBackEnd = (HTTP_MSG, rta) => {
       showSwalError(HTTP_MSG);
     }
   } catch (error) {
-    console.log('* showErrorBackEnd - CATCH !!! ');
-    console.log('showErrorBackEnd - catch() - rta:' + JSON.stringify(rta));
-    console.log(
-      'showErrorBackEnd - catch() -  - error: ' + JSON.stringify(error),
-    );
-
+    console.log('showErrorBackEnd - catch() - error: ', error);
     showSwalError(HTTP_MSG);
   }
 };
