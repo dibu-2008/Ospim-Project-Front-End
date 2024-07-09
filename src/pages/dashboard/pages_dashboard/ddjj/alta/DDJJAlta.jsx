@@ -533,9 +533,9 @@ export const DDJJAlta = ({
         icon: 'error',
         title: 'Valiacion de Declaracion Jurada',
         html: `${mensajesFormateados}<br>
-                      <label for="guardarErrores">¿Deseas guardar la declaración jurada y corregir mas tardes los errores?</label>`,
+                      <label for="guardarErrores">Puede guardar la DDJJ y corregir los errores en otro momento antes de presentar</label>`,
         showConfirmButton: true,
-        confirmButtonText: 'Aceptar',
+        confirmButtonText: 'OK',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
       }).then(async (result) => {
@@ -588,7 +588,7 @@ export const DDJJAlta = ({
     if (seguir) {
       if (DDJJState.id) {
         const confirm = {
-          titulo: 'Presentación de DDJJ en OSPIM',
+          titulo: 'Presentación de DDJJ',
           texto:
             'Confirma la Presentación de la Declaración Jurada para el Período <b>' +
             formatter.periodo(periodo) +

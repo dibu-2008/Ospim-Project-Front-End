@@ -135,10 +135,15 @@ export const MisDDJJConsultaGrilla = ({
         formatter.periodo(rowGrilla.periodo) +
         '</b>?',
       esHtml: true,
+      reverseButtons: true,
       textoBtnOK: 'Si, Presentar !',
     };
+    //textoBtnOK: 'Si, Presentar !',
+    //reverseButtons: true,
+    let minSettings = swal.getSettingConfirm(confirm);
+    minSettings.reverseButtons = true;
 
-    Swal.fire(swal.getSettingConfirm(confirm)).then(async (result) => {
+    Swal.fire(minSettings).then(async (result) => {
       if (result.isConfirmed) {
         const updatedRow = {
           ...rowsMisDdjj.find((row) => row.id === rowGrilla.id),
@@ -354,7 +359,7 @@ export const MisDDJJConsultaGrilla = ({
             label="Delete"
             onClick={handleDeleteClick(id)}
             color="inherit"
-          />,/*
+          /> /*
           <Button
             sx={{
               width: '160px',
@@ -363,7 +368,7 @@ export const MisDDJJConsultaGrilla = ({
             variant="contained"
           >
             Presentar
-          </Button>,*/
+          </Button>,*/,
         ];
       } else if (row.estado == 'PR') {
         return [
@@ -420,7 +425,7 @@ export const MisDDJJConsultaGrilla = ({
     align: 'right',
     headerClassName: 'header--cell',
     getActions: ({ id, row }) => {
-//      const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+      //      const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
       if (row.estado === 'PE') {
         return [
@@ -432,7 +437,7 @@ export const MisDDJJConsultaGrilla = ({
             variant="contained"
           >
             Presentar
-          </Button>
+          </Button>,
         ];
       } else if (row.estado == 'PR') {
         return [
@@ -445,14 +450,13 @@ export const MisDDJJConsultaGrilla = ({
             onClick={handleGenerarBoletaClick(id)}
           >
             Generar Boleta
-          </Button>
+          </Button>,
         ];
-      }
-      else {
-        return []
+      } else {
+        return [];
       }
     },
-})
+  });
 
   return (
     <div

@@ -1,13 +1,16 @@
 import Swal from 'sweetalert2';
 import { erroresFormat } from '../axios/erroresFormat';
 
-const showSwallSuccess = (MESSAGE_HTTP) => {
-  Swal.fire({
-    icon: 'success',
-    title: MESSAGE_HTTP,
-    showConfirmButton: false,
-    timer: 2000,
-  });
+const showSwallSuccess = (MESSAGE_HTTP, texto) => {
+  let minSetting = {
+    titulo: MESSAGE_HTTP,
+  };
+  if (texto) {
+    minSetting.texto = texto;
+  }
+
+  let settings = getSettingSuccess(minSetting);
+  Swal.fire(settings);
 };
 
 const showSwallSuccessWithConfirmButton = (MESSAGE_HTTP, redirectFunction) => {
@@ -92,6 +95,29 @@ const getSettingConfirm = (seteos) => {
   return settings;
 };
 
+const getSettingSuccess = (seteos) => {
+  console.log('getSettingSuccess - seteos: ', seteos);
+  let settings = null;
+  if (seteos && seteos.hasOwnProperty('titulo')) {
+    settings = {
+      icon: 'success',
+      showConfirmButton: false,
+      timer: 2000,
+      title: seteos.titulo,
+    };
+
+    if (seteos.hasOwnProperty('texto')) {
+      if (seteos.hasOwnProperty('esHtml') && seteos.esHtml == true) {
+        settings.html = seteos.texto;
+      } else {
+        settings.text = seteos.texto;
+      }
+    }
+  }
+  console.log('getSettingSuccess - settings: ', settings);
+  return settings;
+};
+
 const showErrorBackEnd = async (HTTP_MSG, rta) => {
   const ERROR_BUSINESS = import.meta.env.VITE_ERROR_BUSINESS;
   const ERROR_MESSAGE = import.meta.env.VITE_ERROR_MESSAGE;
@@ -150,8 +176,8 @@ const swal = {
     return showSwalErrorBusiness(descripcion);
   },
 
-  showSuccess: async function (descripcion) {
-    return showSwallSuccess(descripcion);
+  showSuccess: async function (descripcion, texto) {
+    return showSwallSuccess(descripcion, texto);
   },
 
   showSuccesConfirmButton: async function (descripcion, redirectFunction) {
@@ -167,6 +193,9 @@ const swal = {
 
   getSettingConfirm: function (seteos) {
     return getSettingConfirm(seteos);
+  },
+  getSettingSuccess: function (seteos) {
+    return getSettingSuccess(seteos);
   },
 };
 

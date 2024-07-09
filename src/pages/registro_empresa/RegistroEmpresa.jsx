@@ -248,7 +248,6 @@ export const RegistroEmpresa = () => {
       <div className="registro_empresa_container">
         <form onSubmit={OnSubmitRegisterCompany} className="form">
           <div className="form_register_company">
-            <h1>Bienvenidos a OSPIM</h1>
             <h3>Formulario de registro</h3>
             <div className="input-group">
               <TextField

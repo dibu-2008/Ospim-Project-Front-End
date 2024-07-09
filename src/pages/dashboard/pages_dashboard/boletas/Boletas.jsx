@@ -214,7 +214,7 @@ export const Boletas = () => {
           </Box>
           <CustomTabPanel value={tabState} index={0}>
             <Box
-              style={{ height: 400, width: '100%' }}
+              style={{ height: 650, width: '100%' }}
               sx={{
                 width: '100%',
                 '& .MuiDataGrid-columnHeaders': {
@@ -377,7 +377,7 @@ export const Boletas = () => {
           </CustomTabPanel>
           <CustomTabPanel value={tabState} index={1}>
             <Box
-              style={{ height: 400 }}
+              style={{ height: 650 }}
               sx={{
                 width: '100%',
                 '& .MuiDataGrid-columnHeaders': {

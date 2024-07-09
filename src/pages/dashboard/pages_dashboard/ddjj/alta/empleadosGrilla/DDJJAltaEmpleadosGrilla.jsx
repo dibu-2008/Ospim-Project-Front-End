@@ -1105,7 +1105,7 @@ export const DDJJAltaEmpleadosGrilla = ({
                 color: theme.palette.primary.main,
               }}
             >
-              Gestion Datos DDJJ
+              Gestión Datos DDJJ
             </Typography>
             <TextField
               fullWidth
