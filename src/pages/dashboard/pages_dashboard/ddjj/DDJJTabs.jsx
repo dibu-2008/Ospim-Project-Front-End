@@ -10,7 +10,6 @@ import { MisDDJJConsulta } from './mis_ddjj/MisDDJJConsulta';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import * as locales from '@mui/material/locale';
 import { DDJJAlta } from './alta/DDJJAlta';
-import { Boletas } from '../boletas/Boletas';
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -56,7 +55,9 @@ export const DDJJTabs = () => {
   const [peticion, setPeticion] = useState('');
   const [idDDJJ, setIdDDJJ] = useState(null);
   const location = useLocation();
-  const [tituloPrimerTab, setTituloPrimerTab] = useState('Alta Declaración Jurada')
+  const [tituloPrimerTab, setTituloPrimerTab] = useState(
+    'Alta Declaración Jurada',
+  );
 
   const theme = useTheme();
 
@@ -74,9 +75,9 @@ export const DDJJTabs = () => {
   }, [location.pathname]);
 
   useEffect(() => {
-    if (tabState===1){
+    if (tabState === 1) {
       //window.location.reload();
-      setTituloPrimerTab('Alta Declaración Jurada')
+      setTituloPrimerTab('Alta Declaración Jurada');
       setDDJJState({});
       setPeriodo(null);
       setRowsAltaDDJJ([]);
@@ -85,7 +86,7 @@ export const DDJJTabs = () => {
       setPeticion('');
       setIdDDJJ(null);
     }
-  },[tabState])
+  }, [tabState]);
 
   const handleChangeTabState = (event, value) => setTabState(value);
 
@@ -121,7 +122,7 @@ export const DDJJTabs = () => {
               rowsAltaDDJJAux={rowsAltaDDJJAux}
               peticion={peticion}
               idDDJJ={idDDJJ}
-              tituloPrimerTab = {tituloPrimerTab}
+              tituloPrimerTab={tituloPrimerTab}
             />
           </CustomTabPanel>
           <CustomTabPanel value={tabState} index={1}>
@@ -135,7 +136,7 @@ export const DDJJTabs = () => {
               setRowsAltaDDJJ={setRowsAltaDDJJ}
               setPeticion={setPeticion}
               setIdDDJJ={setIdDDJJ}
-              setTituloPrimerTab ={setTituloPrimerTab}
+              setTituloPrimerTab={setTituloPrimerTab}
             />
           </CustomTabPanel>
         </Box>

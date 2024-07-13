@@ -451,36 +451,43 @@ export const DDJJAlta = ({
             }
           });
           setFilasDoc(elementos);
+          console.log('handleFileChange - elementos', elementos);
 
           const arrayTransformado = arraySinEncabezado
             .map((item, index) => {
-              if (item.length === 11 && item[0] !== undefined) {
-                const camaraCodigo = findCodigo(camaras, item[3]);
-                const categoriaCodigo = findCodigoCategoria(item[3], item[4]);
-                return {
-                  //id: index + 1,
-                  id: index,
-                  cuil: item[0],
-                  apellido: item[1],
-                  nombre: item[2],
-                  //camara: item[3],
-                  camara: camaraCodigo || '',
-                  categoria: categoriaCodigo || '',
-                  fechaIngreso: formatearFecha(item[5]),
-                  empresaDomicilioId: plantas.find(
-                    (plantas) => plantas.planta === item[6],
-                  )?.id,
-                  remunerativo: item[7],
-                  noRemunerativo: item[8],
-                  uomaSocio: item[9] === 'Si',
-                  amtimaSocio: item[10] === 'Si',
-                  esImportado: true,
-                };
-              }
+              //if (item.length === 11 && item[0] !== undefined) {
+              const camaraCodigo = findCodigo(camaras, item[3]);
+              const categoriaCodigo = findCodigoCategoria(item[3], item[4]);
+              return {
+                //id: index + 1,
+                id: index,
+                cuil: item[0],
+                apellido: item[1],
+                nombre: item[2],
+                //camara: item[3],
+                camara: camaraCodigo || '',
+                categoria: categoriaCodigo || '',
+                fechaIngreso: formatearFecha(item[5]),
+                empresaDomicilioId: plantas.find(
+                  (plantas) => plantas.planta === item[6],
+                )?.id,
+                remunerativo: item[7],
+                noRemunerativo: item[8],
+                uomaSocio: item[9] === 'Si',
+                amtimaSocio: item[10] === 'Si',
+                esImportado: true,
+              };
+              //} else {
+              //console.log('arrayTransformado - Descarte: index'+index+ ' - item:', item);
+              //}
             })
             .filter((item) => item !== undefined);
 
           setAfiliadoImportado(arrayTransformado);
+          console.log(
+            'handleFileChange - arrayTransformado',
+            arrayTransformado,
+          );
           setBtnSubirHabilitado(true);
           if (DDJJState.id) {
             confirm(

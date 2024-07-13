@@ -412,11 +412,11 @@ export const GenerarBoletas = () => {
                   <TableCell>{afiliado.cuil}</TableCell>
                   <TableCell>{afiliado.apellido}</TableCell>
                   <TableCell className="importes">
-                    {afiliado.remunerativo}
+                    {formatter.currency.format(afiliado.remunerativo)}
                   </TableCell>
                   {afiliado.boletas.map((boleta, boletaIndex) => (
                     <TableCell className="importes" key={boletaIndex}>
-                      {boleta}
+                      {formatter.currency.format(boleta)}
                     </TableCell>
                   ))}
                 </TableRow>

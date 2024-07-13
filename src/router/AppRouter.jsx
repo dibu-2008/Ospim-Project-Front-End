@@ -24,6 +24,8 @@ import { Ajustes } from '@/pages/dashboard/pages_dashboard/ajustes/Ajustes';
 import { DDJJTabs } from '@/pages/dashboard/pages_dashboard/ddjj/DDJJTabs';
 import { GestionRoles } from '@/pages/dashboard/pages_dashboard/gestionRoles/GestionRoles';
 import { Aportes } from '@/pages/dashboard/pages_dashboard/aportes/Aportes';
+import { DDJJGrillaPrueba } from '@/pages/dashboard/pages_dashboard/ddjjPrueba/DDJJGrillaPrueba';
+
 import { useState } from 'react';
 import { UserProvider } from '@/context/UserProvider';
 
@@ -45,6 +47,7 @@ const AppRouter = () => {
             </PrivateRoute>
           }
         >
+          <Route path="prueba" element={<DDJJGrillaPrueba />} />
           <Route path="inicio" index element={<Inicio />} />
           <Route path="publicaciones" element={<Publicaciones />} />
           <Route path="feriados" element={<Feriados />} />

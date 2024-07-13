@@ -1,4 +1,44 @@
-import { useState, useMemo, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { ThemeProvider } from '@mui/material/styles';
+import CurrencyInput from 'react-currency-input-field';
+import { formatValue } from 'react-currency-input-field';
+import { UserContext } from '@/context/userContext';
+import formatter from '@/common/formatter';
+import swal from '@/components/swal/swal';
+import { axiosDDJJ } from '../ddjj/alta/DDJJAltaApi';
+import localStorageService from '@/components/localStorage/localStorageService';
+import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import SaveIcon from '@mui/icons-material/Save';
+import AddIcon from '@mui/icons-material/Add';
+import CancelIcon from '@mui/icons-material/Close';
+import CreateIcon from '@mui/icons-material/Create';
+import Switch from '@mui/material/Switch';
+import { DDJJCuilForm } from '@pages/dashboard/pages_dashboard/ddjjPrueba/DDJJCuilForm';
+import {
+  Button,
+  Radio,
+  RadioGroup,
+  TextField,
+  Select,
+  MenuItem,
+  IconButton,
+  alpha,
+  Modal,
+  FormControlLabel,
+  Stack,
+  Tooltip,
+  Typography,
+  dialogClasses,
+  Box,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Tab,
+  Tabs,
+} from '@mui/material';
+
 import {
   GridRowModes,
   DataGrid,
@@ -8,90 +48,122 @@ import {
   GridRowEditStopReasons,
   useGridApiRef,
 } from '@mui/x-data-grid';
-import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import SaveIcon from '@mui/icons-material/Save';
-import CancelIcon from '@mui/icons-material/Close';
-import CreateIcon from '@mui/icons-material/Create';
-import { FormControlLabel } from '@mui/material';
-import Switch from '@mui/material/Switch';
-import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
-import * as locales from '@mui/material/locale';
-import formatter from '@/common/formatter';
-import {
-  Box,
-  Button,
-  TextField,
-  Select,
-  MenuItem,
-  IconButton,
-  alpha,
-  Modal,
-} from '@mui/material';
-import { axiosDDJJ } from '../DDJJAltaApi';
-import './DDJJAltaEmpleadosGrilla.css';
-import swal from '@/components/swal/swal';
-import Typography from '@mui/material/Typography';
-import CurrencyInput from 'react-currency-input-field';
-import { formatValue } from 'react-currency-input-field';
-import { UserContext } from '@/context/userContext';
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//        MOCK: carga de 3000 registros.-
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 500,
-  bgcolor: 'background.paper',
-  border: '2px solid #1A76D2',
-  boxShadow: 24,
-  p: 4,
+let rowsNew = [];
+const regNew = {
+  id: 1,
+  gErrores: false,
+
+  regId: null,
+  cuil: '23279737229',
+  apellido: 'VÁZQUEZ',
+  nombre: 'LOT',
+  fechaIngreso: '2021-01-01',
+  empresaDomicilioId: 41,
+  camara: 'FAIM',
+  categoria: 'B',
+  remunerativo: 100580500,
+  noRemunerativo: 100,
+  uomaSocio: false,
+  amtimaSocio: false,
+  aportes: [
+    {
+      codigo: 'ART46',
+      importe: 482.66,
+    },
+    {
+      codigo: 'UOMACU',
+      importe: 1005805,
+    },
+  ],
 };
+for (let i = 1; i < 30; i++) {
+  const regNewN = { ...regNew };
 
+  regNewN.regId = i;
+
+  regNewN.id = i;
+  regNewN.gErrores = false;
+  if (i % 2 == 0) {
+    regNewN.gErrores = true;
+  }
+
+  regNewN.apellido =
+    regNewN.apellido + ' ' + regNewN.regId + '-' + regNewN.gErrores;
+  //console.log('regNewN.errores:', regNewN.errores);
+  rowsNew.push(regNewN);
+}
+
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 function EditToolbar(props) {
   const {
-    setRowsAltaDDJJ,
-    rowsAltaDDJJ,
+    setRows,
+    rows,
     setRowModesModel,
     showQuickFilter,
     themeWithLocale,
     filtrarGrilla,
+    gridApiRef,
+    setSortModel,
   } = props;
 
-  const handleClick = () => {
-    const maxId = rowsAltaDDJJ
-      ? Math.max(...rowsAltaDDJJ.map((row) => row.id), 0)
-      : 1;
-    const newId = maxId + 1;
-    const id = newId;
+  const getNewReg = () => {
+    let vecId = gridApiRef.current.getAllRowIds();
+    console.log('getNewReg - vecId.length:', vecId.length);
+    console.log('getNewReg - vecId:', vecId);
 
-    setRowsAltaDDJJ((oldRows) => [
-      {
-        id,
-        //fila: oldRows.length + 1, // Asignamos el número de fila incremental
-        cuil: '',
-        apellido: '',
-        nombre: '',
-        camara: '',
-        fechaIngreso: '',
-        empresaDomicilioId: '',
-        categoria: '',
-        remunerativo: '',
-        noRemunerativo: '',
-        uomaSocio: '',
-        amtimaSocio: '',
-        isNew: '',
-      },
-      ...oldRows,
-    ]);
+    console.log('getNewReg - getRowModels:', gridApiRef.current.getRowModels());
+
+    let maxId = 1;
+
+    if (vecId.length > 0) maxId = Math.max(...vecId, 0);
+    console.log('getNewReg - maxId:', maxId);
+
+    const newId = maxId + 1;
+    const newReg = {
+      id: newId,
+      gErrores: false,
+
+      regId: null,
+      cuil: '',
+      apellido: '',
+      nombre: '',
+      camara: '',
+      fechaIngreso: '',
+      empresaDomicilioId: '',
+      categoria: '',
+      remunerativo: '',
+      noRemunerativo: '',
+      uomaSocio: '',
+      amtimaSocio: '',
+    };
+    return newReg;
+  };
+
+  const toolbarHandleClickAlta = () => {
+    console.log('toolbarHandleClickAlta - rows:', rows);
+
+    setSortModel([]);
+    const newReg = getNewReg();
+    console.log('toolbarHandleClickAlta - newReg:', newReg);
+    gridApiRef.current.updateRows([newReg]);
 
     setRowModesModel((oldModel) => ({
       ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
+      [newReg.id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
     }));
+
+    setSortModel([
+      {
+        field: 'id',
+        sort: 'desc',
+      },
+    ]);
+    gridApiRef.current.setPage(0);
   };
 
   return (
@@ -99,7 +171,11 @@ function EditToolbar(props) {
       theme={themeWithLocale}
       style={{ display: 'flex', justifyContent: 'space-between' }}
     >
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
+      <Button
+        color="primary"
+        startIcon={<AddIcon />}
+        onClick={toolbarHandleClickAlta}
+      >
         Nuevo Registro
       </Button>
       <FormControlLabel
@@ -112,118 +188,182 @@ function EditToolbar(props) {
     </GridToolbarContainer>
   );
 }
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-export const DDJJAltaEmpleadosGrilla = ({
-  rowsAltaDDJJ,
-  setRowsAltaDDJJ,
-  camaras,
-  categoriasFiltradas,
-  setCategoriasFiltradas,
-  afiliado,
-  setAfiliado,
-  todasLasCategorias,
-  plantas,
-  validacionResponse,
-  rowModesModel,
-  setRowModesModel,
-  actualizacionHabilitada,
-}) => {
-  const [locale, setLocale] = useState('esES');
-  const [inteDataBase, setInteDataBase] = useState(null);
-  const [filterModel, setFilterModel] = useState({ items: [] });
-
-  const [cuilModiModalOpen, setCuilModiModalOpen] = useState(false);
-  const [dataModal, setDataModal] = useState({
-    cuil: '',
-    apellido: '',
-    nombre: '',
+export const DDJJGrillaPrueba = () => {
+  const ID_EMPRESA = localStorageService.getEmpresaId();
+  const [ddjjCabe, setDdjjCabe] = useState({
+    id: null,
+    periodo: null,
+    empresaId: ID_EMPRESA,
   });
 
-  const { paginationModel, setPaginationModel, pageSizeOptions } =
-    useContext(UserContext);
-
-  const handleOpen = () => setCuilModiModalOpen(true);
-  const handleClose = () => setCuilModiModalOpen(false);
-
-  const theme = useTheme();
-  const themeWithLocale = useMemo(
-    () => createTheme(theme, locales[locale]),
-    [locale, theme],
-  );
-
   const gridApiRef = useGridApiRef();
+  const [rows, setRows] = useState([]); //Con esto lleno la grilla
+  //rowsNew => es el vector que viene de Archivo o de Backend antes de cargar la grilla.-
+  const [rowsValidaciones, setRowsValidaciones] = useState([]); //Usado para "Pintar" errores en la grilla.-
+  const [filterModel, setFilterModel] = useState({ items: [] });
+  const [sortModel, setSortModel] = useState([
+    {
+      field: 'id',
+      sort: 'asc',
+    },
+  ]);
+  const [rowModesModel, setRowModesModel] = useState({});
+  const {
+    paginationModel,
+    setPaginationModel,
+    pageSizeOptions,
+    themeWithLocale,
+  } = useContext(UserContext);
 
-  const filtrarGrilla = () => {
-    console.log('filtrarGrilla - rowsAltaDDJJ:', rowsAltaDDJJ);
-    let newFilterModel = null;
-    if (filterModel.items.length == 0) {
-      newFilterModel = {
-        items: [
-          {
-            field: 'errores',
-            operator: 'is',
-            value: 'true',
-          },
-          /*{
-            field: 'apellido',
-            operator: 'contains',
-            value: 'P',
-          },*/
-        ],
-      };
-    } else {
-      newFilterModel = {
-        items: [],
-      };
-    }
+  const [actualizacionHabilitada, setActualizacionHabilitada] = useState(true);
 
-    setFilterModel(newFilterModel);
-    console.log('filtrarGrilla - FINAL');
+  const [formCuilReg, setFormCuilReg] = useState({});
+  const [formCuilShow, setFormCuilShow] = useState(false);
+  const [camaras, setCamaras] = useState([]);
+  const [categorias, setCategorias] = useState([]);
+  const [plantas, setPlantas] = useState([]);
+
+  //Grilla - Eventos
+  const handleRowModesModelChange = (newRowModesModel) => {
+    setRowModesModel(newRowModesModel);
   };
-
-  const setAfiliadoGrilla = (params, cuil, apellido, nombre) => {
-    console.log('setAfiliadoGrilla - params:', params);
-    params.api.setEditCellValue({
-      id: params.id,
-      field: 'cuil',
-      value: cuil,
-    });
-
-    // Apellido
-    params.api.setEditCellValue({
-      id: params.id,
-      field: 'apellido',
-      value: apellido,
-    });
-
-    const textFieldApellido = document.getElementById('apellido' + params.id);
-    const abueloApellido = textFieldApellido.parentNode.parentNode;
-    console.log('setAfiliadoGrilla - abueloApellido: ', abueloApellido);
-    if (apellido != '') {
-      abueloApellido.style.display = 'block';
-    } else {
-      abueloApellido.style.display = '';
-    }
-
-    // Nombre
-    params.api.setEditCellValue({
-      id: params.id,
-      field: 'nombre',
-      value: nombre,
-    });
-    const textFieldNombre = document.getElementById('nombre' + params.id);
-    const abueloNombre = textFieldNombre.parentNode.parentNode;
-    console.log('setAfiliadoGrilla - abueloNombre: ', abueloNombre);
-    if (nombre != '') {
-      abueloNombre.style.display = 'block';
-      //abueloNombre.off('click');
-    } else {
-      abueloNombre.style.display = '';
-      //abueloNombre.on('click');
+  const handleRowEditStop = (params) => {
+    console.log('handleRowEditStop - RUN');
+    if (params.reason === GridRowEditStopReasons.rowFocusOut) {
+      gridApiRef.current?.stopRowEditMode({
+        id: params.id,
+        ignoreModifications: false,
+      });
     }
   };
+  const handleEditClick = (id) => () => {
+    console.log('handleEditClick - id: ' + id);
+    //const editedRow = rows.find((row) => row.id === id);
+    //getCategoriasCamara(editedRow.camara);
+    setRowModesModel({
+      ...rowModesModel,
+      [id]: { mode: GridRowModes.Edit },
+    });
+  };
+  const handleDeleteClick = (row) => async () => {
+    gridApiRef.current.updateRows([{ id: row.id, _action: 'delete' }]);
 
-  const validarAfiliado = async (cuil) => {
+    const newRowsValidaciones = { ...rowsValidaciones };
+    newRowsValidaciones.errores = newRowsValidaciones.errores.filter((item) => {
+      if (row.cuil !== item.cuil) {
+        return item;
+      }
+    });
+    setRowsValidaciones(newRowsValidaciones);
+  };
+  const handleSaveClick = (id) => () => {
+    setRowModesModel({
+      ...rowModesModel,
+      [id]: { mode: GridRowModes.View },
+    });
+  };
+  const handleCancelClick = (row) => () => {
+    setRowModesModel({
+      ...rowModesModel,
+      [row.id]: { mode: GridRowModes.View, ignoreModifications: true },
+    });
+
+    //const editedRow = rows.find((row) => row.id === id);
+    if (row.regId || row.regId == null) {
+      gridApiRef.current.updateRows([{ id: row.id, _action: 'delete' }]);
+      //setRows(rows.filter((row) => row.id !== id));
+    }
+  };
+  const processRowUpdate = async (newRow) => {
+    try {
+      //console.log('processRowUpdate - newRow:', newRow);
+      //Actualizar newRow.gErrores
+      const DDJJ = getDDJJDtoCabecera();
+      const DDJJAfiliadoDto = castRowToBackendDto(newRow);
+      DDJJ.afiliados.push(DDJJAfiliadoDto);
+      //console.log('processRowUpdate - DDJJ:', DDJJ);
+
+      const valDDJJResponse = await axiosDDJJ.validar(ID_EMPRESA, DDJJ);
+      //console.log('processRowUpdate - valDDJJResponse:', valDDJJResponse);
+
+      if (
+        valDDJJResponse &&
+        valDDJJResponse.errores &&
+        valDDJJResponse.errores.length > 0
+      ) {
+        //console.log('rowsValidaciones: ', rowsValidaciones);
+        const newRowsValidaciones = { ...rowsValidaciones };
+        //console.log('newRowsValidaciones: ', newRowsValidaciones);
+        valDDJJResponse.errores.map((item) => {
+          newRowsValidaciones.errores.push(item);
+        });
+        //console.log('newRowsValidaciones: ', rowsValidaciones);
+
+        setRowsValidaciones(newRowsValidaciones);
+        newRow.gErrores = true;
+      }
+      //console.log('processRowUpdate - newRow:', newRow);
+      return newRow;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleFormCuilOpen = (row) => () => {
+    //EX handleDataModal
+    console.log('handleFormCuilOpen - INIT');
+    setFormCuilReg({
+      cuil: row.cuil,
+      apellido: row.apellido,
+      nombre: row.nombre,
+    });
+    let auxx = true;
+    if (formCuilShow) {
+      auxx = false;
+    } else {
+      auxx = true;
+    }
+
+    console.log('handleFormCuilOpen - formCuilShow:', formCuilShow);
+    console.log('-------------------------------------');
+    console.log('handleFormCuilOpen - auxx:', auxx);
+    setFormCuilShow(auxx);
+    console.log('-------------------------------------');
+    console.log('handleFormCuilOpen - FIN ');
+  };
+  const obtenerAfiliados = async (id, cuilNew) => {
+    console.log('obtenerAfiliados - cuilNew:', cuilNew);
+    console.log('obtenerAfiliados - id:', id);
+
+    let afiliados = null;
+
+    const rta = await getAfiliadoEnNomina(cuilNew);
+    console.log('obtenerAfiliados - rta:', rta);
+    if (rta.error != 'OK') {
+      swal.showWarning(rta.error);
+      setAfiliadoGrilla(id, cuilNew, '', '');
+      return;
+    }
+
+    console.log('obtenerAfiliados - (2)');
+    const afiliadoDB = rta.afiliados?.find(
+      (afiliado) => afiliado.cuil === cuilNew,
+    );
+
+    console.log('obtenerAfiliados - (3)');
+    if (!afiliadoDB) {
+      swal.showWarning(
+        'CUIL inexistente en la nómina de Afiliados. El mismo sera dado de alta cuando registre la DDJJ.',
+      );
+      setAfiliadoGrilla(id, cuilNew, '', '');
+    } else {
+      setAfiliadoGrilla(id, cuilNew, afiliadoDB.apellido, afiliadoDB.nombre);
+      //setAfiliado(afiliadoDB); //TODO: En codigo Original=> viene del padre !!!
+    }
+    console.log('obtenerAfiliados - FIN');
+  };
+  const getAfiliadoEnNomina = async (cuil) => {
     const rta = {};
     if (cuil === '') {
       rta.error = 'Debe ingresar un CUIL y presionar la lupa';
@@ -248,125 +388,56 @@ export const DDJJAltaEmpleadosGrilla = ({
 
     return rta;
   };
-
-  const obtenerAfiliados = async (params) => {
-    console.log('obtenerAfiliados - params:', params);
-    const cuilElegido = params.value;
-    let afiliados = null;
-
-    const rta = await validarAfiliado(cuilElegido);
-    console.log('obtenerAfiliados - rta:', rta);
-    if (rta.error != 'OK') {
-      swal.showWarning(rta.error);
-      setAfiliadoGrilla(params, cuilElegido, '', '');
-      return;
-    }
-
-    console.log('obtenerAfiliados - (2)');
-    const afiliadoDB = rta.afiliados?.find(
-      (afiliado) => afiliado.cuil === cuilElegido,
-    );
-
-    console.log('obtenerAfiliados - (3)');
-    if (!afiliadoDB) {
-      swal.showWarning(
-        'CUIL inexistente en la nómina de Afiliados. El mismo sera dado de alta cuando registre la DDJJ.',
-      );
-      setAfiliadoGrilla(params, cuilElegido, '', '');
-    } else {
-      setAfiliadoGrilla(
-        params,
-        cuilElegido,
-        afiliadoDB.apellido,
-        afiliadoDB.nombre,
-      );
-      setAfiliado(afiliadoDB);
-    }
-    console.log('obtenerAfiliados - FIN');
-  };
-
-  const filtroDeCategoria = (codigoCamara) => {
-    const filtroCategorias = todasLasCategorias.filter(
-      (categoria) => categoria.camara === codigoCamara,
-    );
-    const soloCategorias = filtroCategorias.map((item) => item.categoria);
-    setCategoriasFiltradas(soloCategorias);
-    return soloCategorias;
-  };
-
-  const handleRowEditStop = (params) => {
-    if (params.reason === GridRowEditStopReasons.rowFocusOut) {
-      gridApiRef.current?.stopRowEditMode({
-        id: params.id,
-        ignoreModifications: false,
-      });
-    }
-  };
-
-  const handleEditClick = (id) => () => {
-    console.log('handleEditClick - id: ' + id);
-    const editedRow = rowsAltaDDJJ.find((row) => row.id === id);
-
-    filtroDeCategoria(editedRow.camara);
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
-  };
-
-  const handleSaveClick = (id) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-  };
-
-  const handleDeleteClick = (id) => async () => {
-    setRowsAltaDDJJ(rowsAltaDDJJ.filter((row) => row.id !== id));
-  };
-
-  const handleCancelClick = (id) => () => {
-    setRowModesModel({
-      ...rowModesModel,
-      [id]: { mode: GridRowModes.View, ignoreModifications: true },
+  const setAfiliadoGrilla = (id, cuil, apellido, nombre) => {
+    console.log('setAfiliadoGrilla - id:', id);
+    gridApiRef.current.setEditCellValue({
+      id: id,
+      field: 'cuil',
+      value: cuil,
     });
 
-    const editedRow = rowsAltaDDJJ.find((row) => row.id === id);
-    if (editedRow.isNew) {
-      setRowsAltaDDJJ(rowsAltaDDJJ.filter((row) => row.id !== id));
-    }
+    // Apellido
+    gridApiRef.current.setEditCellValue({
+      id: id,
+      field: 'apellido',
+      value: apellido,
+    });
+
+    // Nombre
+    gridApiRef.current.setEditCellValue({
+      id: id,
+      field: 'nombre',
+      value: nombre,
+    });
+    const textFieldNombre = document.getElementById('nombre' + id);
   };
-
-  const processRowUpdate = async (newRow) => {
-    if (newRow.isNew) {
-      const fila = { ...newRow, inte: 0, errores: false };
-      setRowsAltaDDJJ(
-        rowsAltaDDJJ.map((row) => (row.id === newRow.id ? fila : row)),
-      );
-
-      return { ...fila, isNew: false };
+  const filtrarGrilla = () => {
+    console.log('filtrarGrilla - rowsAltaDDJJ:', rows);
+    let newFilterModel = null;
+    if (filterModel.items.length == 0) {
+      newFilterModel = {
+        items: [
+          {
+            field: 'gErrores',
+            operator: 'is',
+            value: 'true',
+          },
+          /*{field: 'apellido',operator: 'contains',value: 'P',},*/
+        ],
+      };
     } else {
-      const fila = { ...newRow, inte: 0 };
-
-      setRowsAltaDDJJ(
-        rowsAltaDDJJ.map((row) => (row.id === newRow.id ? fila : row)),
-      );
-
-      return fila;
+      newFilterModel = {
+        items: [],
+      };
     }
-  };
 
-  const handleRowModesModelChange = (newRowModesModel) => {
-    setRowModesModel(newRowModesModel);
+    setFilterModel(newFilterModel);
+    console.log('filtrarGrilla - FINAL');
   };
-
-  const colorErrores = (params) => {
+  const getCellClassName = (params) => {
     let cellClassName = '';
 
-    rowsAltaDDJJ.forEach((element) => {
-      element.errores = false;
-      validacionResponse?.errores?.forEach((error) => {
-        if (element.cuil === error.cuil) element.errores = true;
-      });
-    });
-
-    setRowsAltaDDJJ(rowsAltaDDJJ);
-
-    validacionResponse?.errores?.forEach((error) => {
+    rowsValidaciones?.errores?.forEach((error) => {
       if (
         params.row.cuil?.toString() === error.cuil &&
         params.field === error.codigo
@@ -383,28 +454,162 @@ export const DDJJAltaEmpleadosGrilla = ({
     return cellClassName;
   };
 
-  const handleDataModal = (row) => () => {
-    setDataModal({
-      cuil: row.cuil,
-      apellido: row.apellido,
-      nombre: row.nombre,
+  const getDDJJ = () => {
+    //Castea "rowsNew" a BackendDto
+    console.log(
+      'getDDJJ - gridApiRef.current.getRowModels(): ',
+      gridApiRef.current.getRowModels(),
+    );
+    const DDJJ = getDDJJDtoCabecera();
+
+    //rowsNew: viene de Archivo o Backend
+    rowsNew.map(function (item) {
+      const registroNew = castRowToBackendDto(item);
+      DDJJ.afiliados.push(registroNew);
     });
-    setCuilModiModalOpen(true);
+
+    return DDJJ;
+  };
+  const getDDJJDtoCabecera = () => {
+    const DDJJ = {
+      periodo: ddjjCabe.periodo,
+      id: ddjjCabe.id,
+      afiliados: [],
+    };
+    return DDJJ;
+  };
+  const castRowToBackendDto = (item) => {
+    const registroNew = {
+      //errores: item.gErrores,
+      cuil: !item.cuil ? null : item.cuil,
+      //inte: item.inte,
+      apellido: !item.apellido ? null : item.apellido,
+      nombre: !item.nombre ? null : item.nombre,
+      fechaIngreso: !item.fechaIngreso ? null : item.fechaIngreso,
+      empresaDomicilioId: !item.empresaDomicilioId
+        ? null
+        : item.empresaDomicilioId,
+      camara: !item.camara ? null : item.camara,
+      categoria: !item.categoria ? null : item.categoria,
+      remunerativo: !item.remunerativo
+        ? null
+        : parseFloat(String(item.remunerativo).replace(',', '.')),
+      noRemunerativo: !item.noRemunerativo
+        ? null
+        : parseFloat(String(item.noRemunerativo).replace(',', '.')),
+      uomaSocio: item.uomaSocio === '' ? null : item.uomaSocio,
+      amtimaSocio: item.amtimaSocio === '' ? null : item.amtimaSocio,
+    };
+    if (item.id) registroNew.id = item.id;
+    if (item.regId) registroNew.id = item.regId;
+
+    return registroNew;
+  };
+  const validarDDJJ = async () => {
+    let DDJJ = getDDJJ();
+    console.log('validarDDJJ - DDJJ:', DDJJ);
+    const valDDJJResponse = await axiosDDJJ.validar(ID_EMPRESA, DDJJ);
+    console.log('validarDDJJ - 1 - valDDJJResponse:', valDDJJResponse);
+    const valCUILESResponse = await validarDDJJCuiles(DDJJ);
+    console.log('validarDDJJ - valCUILESResponse:', valCUILESResponse);
+
+    //Unifico Errores CUIL y Errores Atributos CUIL
+    valCUILESResponse.forEach((element) => {
+      if (!element.cuilValido) {
+        if (valDDJJResponse && valDDJJResponse.errores)
+          valDDJJResponse.errores.push({
+            cuil: element.cuil.toString(),
+            codigo: 'cuil',
+            descripcion: 'CUIL INVALIDO',
+            indice: null,
+          });
+      }
+    });
+    console.log('validarDDJJ - 2 - valDDJJResponse:', valDDJJResponse);
+
+    //Dejo en sesion los errores para "Pintar" errores en la grilla.-
+    setRowsValidaciones(valDDJJResponse);
+
+    //rowsNew: viene de Archivo o Backend
+    //Seteo propiedad "rowsNew.gErrores" para que al cargar la grilla se la pueda "Filtrar".-
+    validarDDJJRowNewErroresSet(valCUILESResponse);
+  };
+  const validarDDJJCuiles = async (DDJJ) => {
+    const cuiles = [];
+    DDJJ.afiliados.map(function (item) {
+      cuiles.push(item.cuil);
+    });
+
+    const cuilesString = cuiles.map((item) => item?.toString());
+    const cuilesResponse = await axiosDDJJ.validarCuiles(
+      ID_EMPRESA,
+      cuilesString,
+    );
+
+    return cuilesResponse;
+  };
+  const validarDDJJRowNewErroresSet = (valCUILES) => {
+    console.log('validarDDJJGrillaErroresRefresh - valCUILES:', valCUILES);
+
+    rowsNew.map((row) => {
+      //console.log('validarDDJJGrillaErroresRefresh - updateRows - gridData.forEach - row:',row);
+      valCUILES.forEach((reg) => {
+        if (reg.cuil == row.cuil) {
+          //pongo en true el row
+          row.gErrores = true;
+        }
+      });
+    });
   };
 
-  const handleChangeDataModal = (event, field) => {
-    setDataModal((prevDataModal) => ({
-      ...prevDataModal,
-      [field]: event.target.value,
-    }));
+  const getCategoriasCamara = (codigoCamara) => {
+    const filtroCategorias = categorias.filter(
+      (categoria) => categoria.camara === codigoCamara,
+    );
+    const soloCategorias = filtroCategorias.map((item) => item.categoria);
+    return soloCategorias;
   };
+
+  //DataLoad del Componente
+  useEffect(() => {
+    const ObtenerCamaras = async () => {
+      const data = await axiosDDJJ.getCamaras();
+      setCamaras(data.map((item, index) => ({ id: index + 1, ...item })));
+    };
+    const ObtenerCategorias = async () => {
+      const data = await axiosDDJJ.getCategorias();
+      setCategorias(data.map((item, index) => ({ id: index + 1, ...item })));
+    };
+    const ObtenerPlantaEmpresas = async () => {
+      const data = await axiosDDJJ.getPlantas(ID_EMPRESA);
+      setPlantas(data.map((item) => ({ id: item, ...item })));
+    };
+
+    ObtenerCamaras();
+    ObtenerCategorias();
+    ObtenerPlantaEmpresas();
+    //MOCK:...
+    validarDDJJ();
+    console.log('** rowsNew: ', rowsNew);
+    setRows(rowsNew);
+  }, []);
+
+  useEffect(() => {
+    validarDDJJ();
+  }, [rows]);
+
+  //TEST
+  useEffect(() => {
+    //MOCK:...
+    console.log('** formCuilShow: ', formCuilShow);
+  }, [formCuilShow]);
 
   const columns = [
     {
-      field: 'filaNew',
+      field: 'id',
       type: 'number',
       headerName: 'Fila',
-      width: 50,
+      width: 150,
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell',
@@ -418,8 +623,8 @@ export const DDJJAltaEmpleadosGrilla = ({
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell',
-      getActions: ({ id }) => {
-        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+      getActions: ({ row }) => {
+        const isInEditMode = rowModesModel[row.id]?.mode === GridRowModes.Edit;
 
         if (isInEditMode) {
           return [
@@ -429,14 +634,14 @@ export const DDJJAltaEmpleadosGrilla = ({
               sx={{
                 color: 'primary.main',
               }}
-              onClick={handleSaveClick(id)}
+              onClick={handleSaveClick(row.id)}
               disabled={!actualizacionHabilitada}
             />,
             <GridActionsCellItem
               icon={<CancelIcon />}
               label="Cancel"
               className="textPrimary"
-              onClick={handleCancelClick(id)}
+              onClick={handleCancelClick(row)}
               color="inherit"
             />,
           ];
@@ -447,14 +652,14 @@ export const DDJJAltaEmpleadosGrilla = ({
             icon={<EditIcon />}
             label="Edit"
             className="textPrimary"
-            onClick={handleEditClick(id)}
+            onClick={handleEditClick(row.id)}
             color="inherit"
             disabled={!actualizacionHabilitada}
           />,
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Delete"
-            onClick={handleDeleteClick(id)}
+            onClick={handleDeleteClick(row)}
             color="inherit"
             disabled={!actualizacionHabilitada}
           />,
@@ -487,7 +692,7 @@ export const DDJJAltaEmpleadosGrilla = ({
                 });
               }}
               onBlur={(event) => {
-                obtenerAfiliados(params);
+                obtenerAfiliados(params.id, params.value);
               }}
               onFocus={(event) => {
                 const cuilActual = params.api.getCellValue(params.id, 'cuil');
@@ -514,7 +719,7 @@ export const DDJJAltaEmpleadosGrilla = ({
                 color: '#1A76D2',
                 cursor: 'pointer',
               }}
-              onClick={handleDataModal(params.row)}
+              onClick={handleFormCuilOpen(params.row)}
             />
           </div>
         );
@@ -565,7 +770,7 @@ export const DDJJAltaEmpleadosGrilla = ({
               const newValue = event.target.value;
               const cuilActual = params.api.getCellValue(params.id, 'cuil');
               console.log('onBlur - cuilActual:', cuilActual);
-              const rtaValidacion = await validarAfiliado(cuilActual);
+              const rtaValidacion = await getAfiliadoEnNomina(cuilActual);
               console.log('onBlur - strValidacion:', rtaValidacion);
               if (rtaValidacion.error == 'OK') {
                 if (rtaValidacion.afiliados.length > 0) {
@@ -635,7 +840,7 @@ export const DDJJAltaEmpleadosGrilla = ({
               const newValue = event.target.value;
               const cuilActual = params.api.getCellValue(params.id, 'cuil');
               console.log('onBlur - cuilActual:', cuilActual);
-              const rtaValidacion = await validarAfiliado(cuilActual);
+              const rtaValidacion = await getAfiliadoEnNomina(cuilActual);
               console.log('onBlur - strValidacion:', rtaValidacion);
               if (rtaValidacion.error == 'OK') {
                 if (rtaValidacion.afiliados.length > 0) {
@@ -697,7 +902,7 @@ export const DDJJAltaEmpleadosGrilla = ({
                   key={camara.codigo}
                   value={camara.codigo}
                   onClick={() => {
-                    const vec = filtroDeCategoria(camara.codigo);
+                    const vec = getCategoriasCamara(camara.codigo);
                     params.api.setEditCellValue({
                       id: params.id,
                       field: 'categoria',
@@ -722,13 +927,14 @@ export const DDJJAltaEmpleadosGrilla = ({
       headerAlign: 'left',
       align: 'left',
       headerClassName: 'header--cell',
-      valueOptions: categoriasFiltradas,
       valueFormatter: ({ value }) => value || '',
       renderEditCell: (params) => {
+        console.log(params.row.camara);
+        const categoriasCamara = getCategoriasCamara(params.row.camara);
         return (
           <Select
             fullWidth
-            value={categoriasFiltradas.length > 0 ? params.value : ''}
+            value={categoriasCamara.length > 0 ? params.value : ''}
             onChange={(event) => {
               params.api.setEditCellValue({
                 id: params.id,
@@ -737,7 +943,7 @@ export const DDJJAltaEmpleadosGrilla = ({
               });
             }}
           >
-            {categoriasFiltradas.map((categoria) => {
+            {categoriasCamara.map((categoria) => {
               return (
                 <MenuItem key={categoria} value={categoria}>
                   {categoria}
@@ -814,9 +1020,6 @@ export const DDJJAltaEmpleadosGrilla = ({
       align: 'right',
       headerClassName: 'header--cell',
       valueFormatter: ({ value }) => {
-        //return formatter.currencyString(value || 0);
-        // Averiguar sobre el pais y la moneda
-
         const formattedValue = formatValue({
           value: value?.toString(),
           groupSeparator: '.',
@@ -825,7 +1028,6 @@ export const DDJJAltaEmpleadosGrilla = ({
         });
         return formattedValue;
       },
-
       renderEditCell: (params) => {
         //console.log('renderEditCell-params: ', params);
         return (
@@ -867,8 +1069,6 @@ export const DDJJAltaEmpleadosGrilla = ({
       valueFormatter: ({ value }) => {
         if (value === '') return '';
         if (value === null) return '';
-        //return formatter.currency.format(value || 0);
-        // Averiguar sobre el pais y la moneda
         const formattedValue = formatValue({
           value: value?.toString(),
           groupSeparator: '.',
@@ -998,18 +1198,13 @@ export const DDJJAltaEmpleadosGrilla = ({
     },
   ];
 
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
-    const resp = await axiosDDJJ.actualizarNombreApellido(dataModal);
-    handleClose();
-    console.log('handleFormSubmit - resp: ', resp);
-  };
-
   return (
     <div>
       <Box
         sx={{
-          height: 'auto',
+          mt: 15,
+          ml: 10,
+          height: '80%',
           width: '100%',
           '& .actions': {
             color: 'text.secondary',
@@ -1029,16 +1224,17 @@ export const DDJJAltaEmpleadosGrilla = ({
       >
         <ThemeProvider theme={themeWithLocale}>
           <StripedDataGrid
-            rows={rowsAltaDDJJ || []}
+            rows={rows || []}
             columns={columns}
             editMode="row"
             filterModel={filterModel}
+            sortModel={sortModel}
             rowModesModel={rowModesModel}
             onRowModesModelChange={handleRowModesModelChange}
             onRowEditStop={handleRowEditStop}
             processRowUpdate={processRowUpdate}
             getRowClassName={(params) =>
-              rowsAltaDDJJ.indexOf(params.row) % 2 === 0 ? 'even' : 'odd'
+              rows.indexOf(params.row) % 2 === 0 ? 'even' : 'odd'
             }
             localeText={dataGridStyle.toolbarText}
             slots={{
@@ -1046,12 +1242,14 @@ export const DDJJAltaEmpleadosGrilla = ({
             }}
             slotProps={{
               toolbar: {
-                setRowsAltaDDJJ,
-                rowsAltaDDJJ,
+                setRows,
+                rows,
                 setRowModesModel,
                 showQuickFilter: true,
                 themeWithLocale,
                 filtrarGrilla,
+                gridApiRef,
+                setSortModel,
               },
             }}
             paginationModel={paginationModel}
@@ -1076,7 +1274,7 @@ export const DDJJAltaEmpleadosGrilla = ({
                 backgroundColor: '#ccc',
               },
             }}
-            getCellClassName={colorErrores}
+            getCellClassName={getCellClassName}
           />
         </ThemeProvider>
         <div
@@ -1085,74 +1283,11 @@ export const DDJJAltaEmpleadosGrilla = ({
           }}
         ></div>
       </Box>
-      <Modal
-        open={cuilModiModalOpen}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <form onSubmit={handleFormSubmit}>
-            <Typography
-              variant="h4"
-              component="h2"
-              sx={{
-                textAlign: 'center',
-                backgroundColor: alpha(theme.palette.primary.main, 0.1),
-                borderRadius: '5px',
-                width: '400px',
-                marginBottom: '20px',
-                color: theme.palette.primary.main,
-              }}
-            >
-              Gestión Datos DDJJ
-            </Typography>
-            <TextField
-              fullWidth
-              label="CUIL"
-              value={dataModal.cuil}
-              variant="outlined"
-              sx={{ marginBottom: '20px' }}
-            />
-            <TextField
-              fullWidth
-              label="Apellido"
-              value={dataModal.apellido}
-              variant="outlined"
-              sx={{ marginBottom: '20px' }}
-              onChange={(e) => handleChangeDataModal(e, 'apellido')}
-            />
-            <TextField
-              fullWidth
-              label="Nombre"
-              value={dataModal.nombre}
-              variant="outlined"
-              sx={{ marginBottom: '20px' }}
-              onChange={(e) => handleChangeDataModal(e, 'nombre')}
-            />
-            <Box
-              display="flex"
-              justifyContent="space-between"
-              sx={{ width: '76%' }}
-            >
-              <Button
-                variant="contained"
-                sx={{ marginTop: '20px' }}
-                type="submit"
-              >
-                Enviar
-              </Button>
-              <Button
-                variant="contained"
-                sx={{ marginTop: '20px' }}
-                onClick={handleClose}
-              >
-                Cancelar
-              </Button>
-            </Box>
-          </form>
-        </Box>
-      </Modal>
+      <DDJJCuilForm
+        regCuil={formCuilReg}
+        formShow={formCuilShow}
+        setFormShow={setFormCuilShow}
+      ></DDJJCuilForm>
     </div>
   );
 };
