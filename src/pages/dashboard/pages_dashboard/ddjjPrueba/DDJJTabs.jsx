@@ -9,7 +9,6 @@ import './DDJJTabs.css';
 import { MisDDJJConsulta } from './mis_ddjj/MisDDJJConsulta';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import * as locales from '@mui/material/locale';
-import { DDJJAlta } from './alta/DDJJAlta';
 import { DDJJGrillaPrueba } from '@pages/dashboard/pages_dashboard/ddjjPrueba/DDJJGrillaPrueba';
 
 function CustomTabPanel(props) {

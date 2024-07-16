@@ -94,7 +94,7 @@ export const DDJJAlta = ({
   const [tituloSec, setTituloSec] = useState('');
   const [tab, setTab] = useState(0);
   const [expanded, setExpanded] = useState(false);
-  const [actualizacionHabilitada, setActualizacionHabilitada] = useState(true);
+  const [actualizacionHabilitada, setActualizacionHabilitada] = useState(false);
 
   const handleChange = (event, newValue) => {
     setTab(newValue);

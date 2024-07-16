@@ -19,6 +19,7 @@ import CancelIcon from '@mui/icons-material/Close';
 import CreateIcon from '@mui/icons-material/Create';
 import Switch from '@mui/material/Switch';
 import { DDJJArchivoImport } from '@pages/dashboard/pages_dashboard/ddjjPrueba/DDJJArchivoImport';
+import { DDJJPeriodoAnterior } from '@pages/dashboard/pages_dashboard/ddjjPrueba/DDJJPeriodoAnterior';
 import { DDJJCuilForm } from '@pages/dashboard/pages_dashboard/ddjjPrueba/DDJJCuilForm';
 import { useGridValidaciones } from './useGridValidaciones';
 import { useGridCrud } from './useGridCrud';
@@ -197,21 +198,16 @@ function EditToolbar(props) {
 }
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-export const DDJJGrillaPrueba = (idDDJJ) => {
+export const DDJJGrillaPrueba = ({ id }) => {
   const ID_EMPRESA = localStorageService.getEmpresaId();
   const [ddjjCabe, setDdjjCabe] = useState({
     id: null,
     periodo: null,
+    estado: null,
     empresaId: ID_EMPRESA,
   });
-  console.log('DDJJGrillaPrueba - idDDJJ:', idDDJJ);
-  /*
-  if (idDDJJ && ) {
-    const ddjjCabeNew = { ...ddjjCabe, id: idDDJJ };
-    setDdjjCabe(ddjjCabeNew);
-  }
-*/
   const gridApiRef = useGridApiRef();
+  const [idDDJJ, setIdDDJJ] = useState(null); //id de la DDJJ que se va a editar.-
   const [rows, setRows] = useState([]); //Con esto lleno la grilla
   //rowsNew => es el vector que viene de Archivo o de Backend antes de cargar la grilla.-
   const [rowsValidaciones, setRowsValidaciones] = useState([]); //Usado para "Pintar" errores en la grilla.-
@@ -236,7 +232,7 @@ export const DDJJGrillaPrueba = (idDDJJ) => {
     themeWithLocale,
   } = useContext(UserContext);
 
-  const [actualizacionHabilitada, setActualizacionHabilitada] = useState(true);
+  const [habiModif, setHabiModif] = useState(false); //EX actualizacionHabilitada - SI estdo "PE" o ddjjCabe.id=null => puedo modificar.-
 
   const [formCuilReg, setFormCuilReg] = useState({});
   const [formCuilShow, setFormCuilShow] = useState(false);
@@ -289,52 +285,6 @@ export const DDJJGrillaPrueba = (idDDJJ) => {
     value: PropTypes.number.isRequired,
   };
 
-  const handleElegirOtroChange = (event) => {
-    setMostrarPeriodos(event.target.value === 'elegirOtro');
-  };
-  const buscarPeriodoAnterior = async () => {
-    let periodoDayjs = null;
-    if (!mostrarPeriodos) {
-      // Ultimo periodo presentado
-      const ddjjPeriodoAnterior = await axiosDDJJ.getPeriodoAnterior(
-        ID_EMPRESA,
-        periodoDayjs,
-      );
-
-      if (!ddjjPeriodoAnterior) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'No se encontró un período anterior',
-        });
-        return;
-      }
-      //setTituloSec(getTituloSec(ddjjPeriodoAnterior.secuencia));
-      setRowsAltaDDJJ(ddjjPeriodoAnterior.afiliados);
-      setOcultarEmpleadosGrilla(!ocultarEmpleadosGrilla);
-    } else {
-      periodoDayjs = dayjs(otroPeriodo.$d).format('YYYY-MM-DD');
-      const ddjjOtroPeriodo = await axiosDDJJ.getPeriodoAnterior(
-        ID_EMPRESA,
-        periodoDayjs,
-      );
-      if (ddjjOtroPeriodo.length === 0) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'No se encontró la DDJJ para el período seleccionado.',
-        });
-        return;
-      } else {
-        setRowsAltaDDJJ(ddjjOtroPeriodo.afiliados);
-        setDDJJState((prevState) => ({
-          ...prevState,
-          afiliados: ddjjOtroPeriodo.afiliados,
-        }));
-        setOcultarEmpleadosGrilla(!ocultarEmpleadosGrilla);
-      }
-    }
-  };
   const handleChangeE = (event, isExpanded) => {
     setExpanded(isExpanded);
   };
@@ -619,6 +569,45 @@ export const DDJJGrillaPrueba = (idDDJJ) => {
     setRows(rowsNew);
   };
 
+  const handlerGrillaActualizarPeriodoAnterior = (vecDatos) => {
+    //como son datos del Backend, solo cargo
+    console.log(
+      'handlerGrillaActualizarPeriodoAnterior() - vecDatos:',
+      vecDatos,
+    );
+    setRows(vecDatos);
+  };
+  const habiModifRefresh = () => {
+    console.log('habiModifRefresh - INIT - id:', id);
+    if (!id) {
+      console.log('habiModifRefresh - !id');
+      //Si no edito DDJJ, se habilita todo
+      setHabiModif(true);
+      return true;
+    } else {
+      console.log('habiModifRefresh - ddjjCabe:', ddjjCabe);
+      //Si la DDJJ esta pendiente, se habilita todo.-
+      if (ddjjCabe && ddjjCabe.estado && ddjjCabe.estado == 'PE') {
+        console.log('habiModifRefresh - ddjjCabe.estado == PE');
+        setHabiModif(true);
+        return true;
+      }
+    }
+    console.log('habiModifRefresh - false!!!');
+    setHabiModif(false);
+    return false;
+  };
+
+  // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+  //            Hooks y Load de Datos
+  // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+  console.log('DDJJGrillaPrueba - idDDJJ:', idDDJJ);
+  /*
+  if (id && ) {
+    setIdDdjj(id);
+  }
+  */
+
   //DataLoad del Componente
   useEffect(() => {
     const ObtenerCamaras = async () => {
@@ -643,6 +632,7 @@ export const DDJJGrillaPrueba = (idDDJJ) => {
     useGridValidaciones.validarDDJJ(ddjjCabe, rowsNew);
     console.log('** 1) useEffect - validarDDJJ() - rowsNew: ', rowsNew);
     setRows(rowsNew);
+    habiModifRefresh();
   }, []);
 
   /*
@@ -656,6 +646,8 @@ export const DDJJGrillaPrueba = (idDDJJ) => {
     //MOCK:...
     console.log('** formCuilShow: ', formCuilShow);
   }, [formCuilShow]);
+  // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+  // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
   const columns = [
     {
@@ -690,7 +682,7 @@ export const DDJJGrillaPrueba = (idDDJJ) => {
               onClick={() => {
                 useGridCrud.handleSaveClick(row.id);
               }}
-              disabled={!actualizacionHabilitada}
+              disabled={!habiModif}
             />,
             <GridActionsCellItem
               icon={<CancelIcon />}
@@ -713,7 +705,7 @@ export const DDJJGrillaPrueba = (idDDJJ) => {
               useGridCrud.handleEditClick(row.id);
             }}
             color="inherit"
-            disabled={!actualizacionHabilitada}
+            disabled={!habiModif}
           />,
           <GridActionsCellItem
             icon={<DeleteIcon />}
@@ -722,7 +714,7 @@ export const DDJJGrillaPrueba = (idDDJJ) => {
               useGridCrud.handleDeleteClick(gridApiRef, row);
             }}
             color="inherit"
-            disabled={!actualizacionHabilitada}
+            disabled={!habiModif}
           />,
         ];
       },
@@ -1284,7 +1276,7 @@ export const DDJJGrillaPrueba = (idDDJJ) => {
                     setPeriodo(date);
                   }}
                   //value={periodo}
-                  disabled={!actualizacionHabilitada}
+                  disabled={!habiModif}
                 />
               </DemoContainer>
 
@@ -1332,58 +1324,10 @@ export const DDJJGrillaPrueba = (idDDJJ) => {
               </Box>
             </CustomTabPanel>
             <CustomTabPanel value={tab} index={1}>
-              <Box className="copiar_periodo_container">
-                <RadioGroup
-                  aria-labelledby="demo-radio-buttons-group-label"
-                  defaultValue="ultimoPeriodoPresentado"
-                  name="radio-buttons-group"
-                  onChange={handleElegirOtroChange}
-                  disabled={!actualizacionHabilitada}
-                >
-                  <FormControlLabel
-                    value="ultimoPeriodoPresentado"
-                    control={<Radio />}
-                    label="Ultimo período presentado"
-                  />
-                  <FormControlLabel
-                    value="elegirOtro"
-                    control={<Radio />}
-                    label="Elegir otro"
-                    disabled={!actualizacionHabilitada}
-                  />
-                  <Box className="elegir_otro_container">
-                    {mostrarPeriodos && actualizacionHabilitada && (
-                      <Stack
-                        spacing={4}
-                        direction="row"
-                        sx={{ marginLeft: '-11px', marginTop: '10px' }}
-                      >
-                        <DemoContainer components={['DatePicker']}>
-                          <DesktopDatePicker
-                            label={'Otro período'}
-                            views={['month', 'year']}
-                            closeOnSelect={true}
-                            onChange={(date) => setOtroPeriodo(date)}
-                            value={otroPeriodo}
-                            disabled={!actualizacionHabilitada}
-                          />
-                        </DemoContainer>
-                      </Stack>
-                    )}
-                  </Box>
-                </RadioGroup>
-                <Button
-                  variant="contained"
-                  sx={{
-                    marginLeft: '114px',
-                    padding: '6px 45px',
-                  }}
-                  onClick={buscarPeriodoAnterior}
-                  disabled={!actualizacionHabilitada}
-                >
-                  Buscar
-                </Button>
-              </Box>
+              <DDJJPeriodoAnterior
+                habiModif={habiModif}
+                handlerGrillaActualizar={handlerGrillaActualizarPeriodoAnterior}
+              ></DDJJPeriodoAnterior>
             </CustomTabPanel>
           </AccordionDetails>
         </Accordion>
@@ -1522,7 +1466,7 @@ export const DDJJGrillaPrueba = (idDDJJ) => {
                     disabled={
                       someRowInEditMode ||
                       rowsAltaDDJJ?.length === 0 ||
-                      !actualizacionHabilitada
+                      !habiModif
                     }
                   >
                     Guardar
@@ -1534,7 +1478,7 @@ export const DDJJGrillaPrueba = (idDDJJ) => {
                 variant="contained"
                 sx={{ padding: '6px 52px', marginLeft: '10px' }}
                 onClick={presentarDeclaracionJurada}
-                disabled={!actualizacionHabilitada || !DDJJState.id}
+                disabled={!habiModif || !DDJJState.id}
               >
                 Presentar
               </Button>
