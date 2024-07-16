@@ -25,7 +25,7 @@ import { DDJJTabs } from '@/pages/dashboard/pages_dashboard/ddjj/DDJJTabs';
 import { GestionRoles } from '@/pages/dashboard/pages_dashboard/gestionRoles/GestionRoles';
 import { Aportes } from '@/pages/dashboard/pages_dashboard/aportes/Aportes';
 import { DDJJGrillaPrueba } from '@/pages/dashboard/pages_dashboard/ddjjPrueba/DDJJGrillaPrueba';
-
+import { DDJJTabsPrueba } from '@/pages/dashboard/pages_dashboard/ddjjPrueba/DDJJTabs';
 import { useState } from 'react';
 import { UserProvider } from '@/context/UserProvider';
 
@@ -48,6 +48,8 @@ const AppRouter = () => {
           }
         >
           <Route path="prueba" element={<DDJJGrillaPrueba />} />
+          <Route path="pruebaTab" element={<DDJJTabsPrueba />} />
+
           <Route path="inicio" index element={<Inicio />} />
           <Route path="publicaciones" element={<Publicaciones />} />
           <Route path="feriados" element={<Feriados />} />
@@ -62,7 +64,6 @@ const AppRouter = () => {
           <Route path="boletas/periodos" element={<Boletas />} />
           <Route path="boletas/Actas" element={<Boletas />} />
           <Route path="boletas/nueva" element={<Boletas />} />
-
           <Route path="pagos" element={<PagosPage />} />
           <Route path="misdatos" element={<DatosEmpresa />} />
           <Route path="altausuariointerno" element={<AltaUsuarioInterno />} />

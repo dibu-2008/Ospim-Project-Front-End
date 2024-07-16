@@ -109,6 +109,43 @@ const formatFechaGrilla = (value) => {
   }
 };
 
+const formatFechaImport = (fechaExcel) => {
+  // xlsx
+  if (typeof fechaExcel === 'number') {
+    const horas = Math.floor((fechaExcel % 1) * 24);
+    const minutos = Math.floor(((fechaExcel % 1) * 24 - horas) * 60);
+    const fechaFinal = new Date(
+      Date.UTC(0, 0, fechaExcel, horas - 17, minutos),
+    );
+
+    const fechaDaysJs = dayjs(fechaFinal)
+      .set('hour', 3)
+      .set('minute', 0)
+      .set('second', 0)
+      .set('millisecond', 0)
+      .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+
+    return fechaDaysJs;
+  }
+
+  // cvs
+  if (typeof fechaExcel === 'string') {
+    const partes = fechaExcel?.split('/');
+    const anio = partes[2]?.length === 2 ? '20' + partes[2] : partes[2];
+    const mes = partes[1].padStart(2, '0');
+    const dia = partes[0];
+
+    const fechaDaysJs = dayjs(`${anio}-${mes}-${dia}`)
+      .set('hour', 3)
+      .set('minute', 0)
+      .set('second', 0)
+      .set('millisecond', 0)
+      .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+
+    return fechaDaysJs;
+  }
+};
+
 const sumaTresHoras = (value) => {
   //const fecha = value;
   const fecha = new Date(value.toISOString().split('T')[0]);
@@ -145,6 +182,7 @@ const formatter = {
   date: formatDate,
   periodo: formatPeriodo,
   fechaGrilla: formatFechaGrilla,
+  fechaImport: formatFechaImport,
   toFechaValida,
 };
 
