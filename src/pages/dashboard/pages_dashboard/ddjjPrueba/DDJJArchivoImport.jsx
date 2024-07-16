@@ -3,6 +3,7 @@ import { Button, Box } from '@mui/material';
 import XLSX from 'xlsx';
 import formatter from '@/common/formatter';
 import swal from '@/components/swal/swal';
+import { axiosDDJJ } from '../ddjj/alta/DDJJAltaApi';
 import localStorageService from '@/components/localStorage/localStorageService';
 
 export const DDJJArchivoImport = ({
@@ -13,6 +14,7 @@ export const DDJJArchivoImport = ({
   handlerGrillaActualizar, //devolver los rows del archivo.-
 }) => {
   const ID_EMPRESA = localStorageService.getEmpresaId();
+  const IMPORTACION_OK = import.meta.env.VITE_IMPORTACION_OK;
 
   const [fileNameSelected, setFileNameSelected] = useState(''); // validar si eligieron un archivo
   const [fileVecCuiles, setFileVecCuiles] = useState([]);
@@ -121,10 +123,11 @@ export const DDJJArchivoImport = ({
   };
   const importarAfiliado = async () => {
     //fileVecCuiles: valida los cuiles y  actualiza  nombre y apellido del arcivo con lo que hay en "Afiliados"
+    console.log('importarAfiliado - fileNameSelected:', fileNameSelected);
     if (
-      fileNameSelected &&
-      fileNameSelected != '' &&
-      fileNameSelected != undefined
+      !fileNameSelected ||
+      fileNameSelected == '' ||
+      fileNameSelected == undefined
     ) {
       swal.showWarning('Debe seleccionar un archivo válido.');
       return false;
@@ -136,10 +139,12 @@ export const DDJJArchivoImport = ({
       return false;
     }
 
+    console.log('importarAfiliado - 1 -  getCuilesValidados() ');
     const cuilesValidados = await getCuilesValidados();
     //1) Si existe cuil y no tiene errores, piso nombre y apellido.-
     //2) Si no existe cuil y tiene error de cuil, seteo gError=true
 
+    console.log('importarAfiliado - 2 -  fileVecCuilesNew');
     const fileVecCuilesNew = fileVecCuiles.map((item, index) => {
       const val = cuilesValidados.find(
         (regValidado) => regValidado.cuil === item.cuil,
@@ -156,6 +161,7 @@ export const DDJJArchivoImport = ({
       return item;
     });
 
+    console.log('importarAfiliado - 3 -  fileVecCuilesNew - some() ');
     // Si alguno de los cuiles tiene ERROR
     if (fileVecCuilesNew.some((item) => item.gErrores === true)) {
       const mensajesFormateados2 = fileVecCuilesNew
@@ -178,15 +184,19 @@ export const DDJJArchivoImport = ({
       });
 
       setFileVecCuiles(fileVecCuilesNew);
+      handlerGrillaActualizar(fileVecCuilesNew);
     } else {
+      console.log('importarAfiliado - 4 -   ');
       swal.showSuccess(IMPORTACION_OK);
       setFileVecCuiles(fileVecCuilesNew);
+      handlerGrillaActualizar(fileVecCuilesNew);
     }
+    console.log('importarAfiliado - 5 -  FIN ');
   };
   const getCuilesValidados = async () => {
     const vecCuiles = fileVecCuiles.map((item) => item.cuil);
     const vecCuilesString = vecCuiles.map((item) => item?.toString());
-    //console.log('getCuilesValidados() - vecCuilesString:', vecCuilesString);
+    console.log('getCuilesValidados() - vecCuilesString:', vecCuilesString);
     const validacionResponse = await axiosDDJJ.validarCuiles(
       ID_EMPRESA,
       vecCuilesString,
@@ -258,7 +268,7 @@ export const DDJJArchivoImport = ({
           width: '150px',
         }}
         onClick={importarAfiliado}
-        disabled={!actualizacionHabilitada}
+        //disabled={!actualizacionHabilitada}
       >
         Importar
       </Button>

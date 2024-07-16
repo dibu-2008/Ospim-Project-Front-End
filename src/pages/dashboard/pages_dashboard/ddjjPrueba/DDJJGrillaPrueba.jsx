@@ -605,6 +605,20 @@ export const DDJJGrillaPrueba = (idDDJJ) => {
     return soloCategorias;
   };
 
+  const handlerGrillaActualizarImportArchivo = async (vecDatos) => {
+    //recibe vecDatos de Archivo para actualizar Grilla.-
+    console.log(
+      '** handlerGrillaActualizarImportArchivo - vecDatos: ',
+      vecDatos,
+    );
+    const rowsNew = await useGridValidaciones.validarDDJJ(ddjjCabe, vecDatos);
+    console.log(
+      '** handlerGrillaActualizarImportArchivo - validarDDJJ() - rowsNew: ',
+      rowsNew,
+    );
+    setRows(rowsNew);
+  };
+
   //DataLoad del Componente
   useEffect(() => {
     const ObtenerCamaras = async () => {
@@ -1310,10 +1324,10 @@ export const DDJJGrillaPrueba = (idDDJJ) => {
               <Box>
                 <DDJJArchivoImport
                   ddjjCabe={ddjjCabe}
+                  handlerGrillaActualizar={handlerGrillaActualizarImportArchivo}
                   plantas={plantas}
                   camaras={camaras}
                   categoriasPorCamara={categorias}
-                  handlerGrillaActualizar
                 ></DDJJArchivoImport>
               </Box>
             </CustomTabPanel>
@@ -1427,9 +1441,10 @@ export const DDJJGrillaPrueba = (idDDJJ) => {
                   onProcessRowUpdateError={(error) => {
                     useGridCrud.onProcessRowUpdateError(error);
                   }}
-                  getRowClassName={(params) =>
-                    rows.indexOf(params.row) % 2 === 0 ? 'even' : 'odd'
-                  }
+                  getRowClassName={(params) => {
+                    if (rows && rows.indexOf)
+                      rows.indexOf(params.row) % 2 === 0 ? 'even' : 'odd';
+                  }}
                   localeText={dataGridStyle.toolbarText}
                   slots={{
                     toolbar: EditToolbar,
