@@ -243,7 +243,6 @@ export const DDJJGrillaPrueba = ({ id }) => {
   // xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
   // xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
   const tituloSec = 'PRUEBA tituloSec';
-  const [mostrarPeriodos, setMostrarPeriodos] = useState(false);
   const [tab, setTab] = useState(0);
   const [expanded, setExpanded] = useState(false);
   const [someRowInEditMode, setSomeRowInEditMode] = useState(false);
@@ -399,6 +398,50 @@ export const DDJJGrillaPrueba = ({ id }) => {
   // xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
   // Eventos
+
+  const validarPeriodo = async (date) => {
+    if (DDJJState && DDJJState.id) {
+      return false;
+    }
+    if (!date || !date.isValid()) return false;
+
+    const periodo = date.startOf('month').format('YYYY-MM-DD');
+    const info = await axiosDDJJ.infoPeriodoConsulta(ID_EMPRESA, periodo);
+
+    if (info) {
+      let msg =
+        '<div>EL Periodo <b>' +
+        formatter.periodoString(date) +
+        '</b> ya cuenta con una DDJJ en estado <b>' +
+        (info.estado === 'PE' ? 'Pendiente' : 'Presentada') +
+        '</b> con fecha <b>' +
+        (info.estado === 'PE'
+          ? formatter.dateString(info.fechaCreacion)
+          : formatter.dateString(info.fechaPresentacion)) +
+        '</b>.';
+
+      if (info.estado === 'PE') {
+        msg +=
+          '<br><br>Debe completarla y Presentarla para poder dar de alta una nueva DDJJ.</div>';
+        swal.showWarning(msg, true);
+        setPeriodo(null);
+      } else {
+        msg += '.<br><br> Desea ingresar una nueva DDJJ ?<br><br>';
+
+        const confirm = {
+          titulo: 'Alta de DDJJ',
+          texto: msg,
+          esHtml: true,
+          textoBtnOK: 'Continuar',
+        };
+        Swal.fire(swal.getSettingConfirm(confirm)).then(async (result) => {
+          if (result.isDismissed) {
+            setPeriodo(null);
+          }
+        });
+      }
+    }
+  };
 
   const handleFormCuilOpen = (row) => () => {
     //EX handleDataModal
