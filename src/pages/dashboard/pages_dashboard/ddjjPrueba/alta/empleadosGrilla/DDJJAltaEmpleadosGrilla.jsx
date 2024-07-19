@@ -31,7 +31,7 @@ import {
   alpha,
   Modal,
 } from '@mui/material';
-import { axiosDDJJ } from '../DDJJAltaApi';
+import { axiosDDJJ } from '../../DDJJApi';
 import './DDJJAltaEmpleadosGrilla.css';
 import swal from '@/components/swal/swal';
 import Typography from '@mui/material/Typography';

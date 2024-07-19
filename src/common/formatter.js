@@ -46,6 +46,21 @@ const dateObject = (strValue) => {
   }
 };
 
+const toBackendStr = (strValue) => {
+  //castea "YYYY-MM-DD" => Date object
+  try {
+    if (strValue) {
+      if (dayjs.isDayjs(strValue)) return strValue.format('YYYY-MM-DD');
+
+      return new dayjs(strValue).format('YYYY-MM-DD');
+    }
+    return null;
+  } catch (error) {
+    console.log('castDateString - error:', error);
+    return null;
+  }
+};
+
 const dateString = (strValue) => {
   //castea "YYYY-MM-DD" => "DD/MM/YYYY"
   try {
@@ -99,6 +114,12 @@ const formatPeriodo = (value, separador) => {
   } catch (error) {
     return '';
   }
+};
+
+const getPeriodoActual = () => {
+  const ahora = dayjs().startOf('month');
+  const ahoraMenosUnAnio = ahora.add(-1, 'month');
+  return ahoraMenosUnAnio;
 };
 
 const formatFechaGrilla = (value) => {
@@ -176,8 +197,10 @@ const formatter = {
   currencyString: currencyString,
   dateObject: dateObject,
   dateString: dateString,
+  dateToStringBackend: toBackendStr,
   periodoString: periodoString,
   periodoISOString: periodoISOString,
+  getPeriodoActual: getPeriodoActual,
 
   date: formatDate,
   periodo: formatPeriodo,

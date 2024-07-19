@@ -22,7 +22,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import 'dayjs/locale/es';
 import './DDJJAlta.css';
 import { DDJJAltaEmpleadosGrilla } from './empleadosGrilla/DDJJAltaEmpleadosGrilla';
-import { axiosDDJJ } from './DDJJAltaApi';
+import { axiosDDJJ } from '../DDJJApi';
 import localStorageService from '@/components/localStorage/localStorageService';
 import XLSX from 'xlsx';
 import { GridRowModes } from '@mui/x-data-grid';

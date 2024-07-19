@@ -3,15 +3,14 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import dayjs from 'dayjs';
-import './MisDDJJConsulta.css';
-import {
-  MisDDJJConsultaGrilla,
-  castearMisDDJJ,
-} from './grilla/MisDDJJConsultaGrilla';
-import { axiosDDJJ } from './grilla/MisDDJJConsultaGrillaApi';
+import './MisDDJJFiltro.css';
+import { MisDDJJGrilla, castearMisDDJJ } from './MisDDJJGrilla';
+import { axiosDDJJ } from './MisDDJJGrillaApi';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
 import localStorageService from '@/components/localStorage/localStorageService';
-export const MisDDJJConsulta = ({
+export const MisDDJJFiltro = ({
+  handlerDDJJEditar,
+
   setDDJJState,
   setPeriodo,
   rows_mis_ddjj,
@@ -103,7 +102,8 @@ export const MisDDJJConsulta = ({
         </Stack>
       </div>
       <Stack direction="row" justifyContent="center" alignItems="center">
-        <MisDDJJConsultaGrilla
+        <MisDDJJGrilla
+          handlerDDJJEditar={handlerDDJJEditar}
           setDDJJState={setDDJJState}
           setPeriodo={setPeriodo}
           rows_mis_ddjj={rows_mis_ddjj}

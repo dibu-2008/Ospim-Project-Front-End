@@ -1,5 +1,5 @@
 import { GridRowModes, GridRowEditStopReasons } from '@mui/x-data-grid';
-import { axiosDDJJ } from '../ddjj/alta/DDJJAltaApi';
+import { axiosDDJJ } from '../ddjjPrueba/DDJJApi';
 import { useGridValidaciones } from './useGridValidaciones';
 import { DDJJMapper } from './DDJJMapper';
 
@@ -25,6 +25,10 @@ const processRowUpdate = async (ddjjCabe, newRow) => {
       useGridValidaciones.add(val.errores);
       console.log('useGridCrud - processRowUpdate - 5');
       newRow.gErrores = true;
+    } else {
+      console.log('useGridCrud - processRowUpdate - 5.. REMOVE()');
+      useGridValidaciones.remove(newRow.cuil);
+      newRow.gErrores = false;
     }
     console.log('useGridCrud - processRowUpdate - 6 - newRow:', newRow);
     return newRow;

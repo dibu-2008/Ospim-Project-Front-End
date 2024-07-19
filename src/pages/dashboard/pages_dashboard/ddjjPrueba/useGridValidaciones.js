@@ -1,4 +1,4 @@
-import { axiosDDJJ } from '../ddjj/alta/DDJJAltaApi';
+import { axiosDDJJ } from '../ddjjPrueba/DDJJApi';
 import { DDJJMapper } from './DDJJMapper';
 
 //rowsValidaciones, setRowsValidaciones;
@@ -33,13 +33,48 @@ const deleteValidacionesCuil = (cuil) => {
 };
 
 const validarDDJJ = async (cabecera, rows) => {
-  //Armar vector "RowsValidaciones" con los errores de CUIL y de Atributos del CUIL
-  console.log('validarDDJJ - rows:', rows);
-  console.log('validarDDJJ - typeof rows: ', typeof rows);
+  //1) Armar vector "RowsValidaciones" con los errores de CUIL y de Atributos del CUIL
+  //y actualiza el useState.-
+
+  //console.log('validarDDJJ - rows:', rows);
+  //console.log('validarDDJJ - typeof rows: ', typeof rows);
+  const newRowsValidaciones = await getValidacionesBackend(cabecera, rows);
+  //console.log('validarDDJJ - newRowsValidaciones: ', newRowsValidaciones);
+
+  //Actualizo estado para "Pintar" la grilla donde hay error
+  useGridValidaciones.setRowsValidaciones(newRowsValidaciones);
+  return newRowsValidaciones;
+};
+
+const actualizarFiltroErrores = (rows, newRowsValidaciones) => {
+  //Agrego Atributo "gErrores" para "Filtrado de Grilla"
+
+  console.log('actualizarFiltroErrores - rows: ', rows);
+  console.log(
+    'actualizarFiltroErrores - newRowsValidaciones: ',
+    newRowsValidaciones,
+  );
+  const newRows = rows.slice();
+  //console.log('actualizarFiltroErrores - newRows: ', newRows);
+  //console.log('actualizarFiltroErrores - typeof newRows: ', typeof newRows);
+  newRows.map((regCuil) => {
+    //console.log('validarDDJJGrillaErroresRefresh - updateRows - gridData.forEach - row:',row);
+    regCuil.gErrores = false;
+    newRowsValidaciones.errores.forEach((regVal) => {
+      if (regVal.cuil == regCuil.cuil) {
+        //pongo en true el row
+        regCuil.gErrores = true;
+      }
+    });
+  });
+  //console.log('actualizarFiltroErrores - newRows: ', newRows);
+  return newRows;
+};
+
+const getValidacionesBackend = async (cabecera, rows) => {
   const DDJJ = DDJJMapper.rowsToDDJJValDto(cabecera, rows);
   const newRowsValidaciones = await axiosDDJJ.validar(cabecera.empresaId, DDJJ); //errores de "Atributos del CUIL"
   const CuilesValidaciones = await validarDDJJCuiles(DDJJ); //errores de "CUIL"
-  console.log('validarDDJJ - newRowsValidaciones: ', newRowsValidaciones);
   //Unifico Errores
   CuilesValidaciones.forEach((element) => {
     if (!element.cuilValido) {
@@ -52,27 +87,7 @@ const validarDDJJ = async (cabecera, rows) => {
         });
     }
   });
-
-  //Actualizo estado para "Pintar" la grilla donde hay error
-  useGridValidaciones.setRowsValidaciones(newRowsValidaciones);
-
-  //Agrego Atributo "gErrores" para "Filtrado de Grilla"
-  console.log('validarDDJJ - rows: ', rows);
-  const newRows = rows.slice();
-  console.log('validarDDJJ - newRows: ', newRows);
-  console.log('validarDDJJ - typeof newRows: ', typeof newRows);
-  newRows.map((regCuil) => {
-    //console.log('validarDDJJGrillaErroresRefresh - updateRows - gridData.forEach - row:',row);
-    newRowsValidaciones.errores.forEach((regVal) => {
-      if (regVal.cuil == regCuil.cuil) {
-        //pongo en true el row
-        regCuil.gErrores = true;
-      }
-    });
-  });
-
-  //retorno "rows" para cargar Grilla
-  return newRows;
+  return newRowsValidaciones;
 };
 
 const validarDDJJCuiles = async (DDJJ) => {
@@ -90,10 +105,21 @@ const validarDDJJCuiles = async (DDJJ) => {
   return cuilesResponse;
 };
 
+const tieneErrores = () => {
+  if (
+    useGridValidaciones.getRowsValidaciones &&
+    useGridValidaciones.getRowsValidaciones.errores.length > 0
+  ) {
+    return true;
+  }
+  return false;
+};
 export const useGridValidaciones = {
   getRowsValidaciones: null,
   setRowsValidaciones: null,
   add: addValidaciones,
   remove: deleteValidacionesCuil,
   validarDDJJ: validarDDJJ,
+  actualizarFiltroErrores: actualizarFiltroErrores,
+  tieneErrores: tieneErrores,
 };

@@ -14,7 +14,7 @@ import { Visibility as VisibilityIcon } from '@mui/icons-material';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
-import { axiosDDJJ } from './MisDDJJConsultaGrillaApi';
+import { axiosDDJJ } from './MisDDJJGrillaApi';
 import { consultarAportesDDJJ } from '@/common/api/AportesApi';
 import Swal from 'sweetalert2';
 import swal from '@/components/swal/swal';
@@ -68,13 +68,16 @@ export function castearMisDDJJ(ddjjResponse) {
   return ddjjResponse;
 }
 
-export const MisDDJJConsultaGrilla = ({
+export const MisDDJJGrilla = ({
+  handlerDDJJEditar,
+
   setDDJJState,
   rows_mis_ddjj: rowsMisDdjj,
   setRowsMisDdjj,
   setTabState,
   setTituloPrimerTab,
 }) => {
+  // console.log('handlerDDJJEditar', handlerDDJJEditar);
   const [vecAportes, setVecAportes] = useState({});
   const [rowModesModel, setRowModesModel] = useState({});
 
@@ -175,9 +178,12 @@ export const MisDDJJConsultaGrilla = ({
   };
 
   const handleEditClick = (id) => async () => {
-    setDDJJState({ id: id });
-    setTabState(0);
-    setTituloPrimerTab('Modificar Declaracion Jurada');
+    console.log('MisDDJJGrilla - handleEditClick - id:', id);
+    handlerDDJJEditar(id);
+    //setDDJJState({ id: id });
+    //setIdDDJJ();
+    //setTabState(0);
+    //setTituloPrimerTab('Modificar Declaracion Jurada');
   };
 
   const handleSaveClick = (id) => () => {

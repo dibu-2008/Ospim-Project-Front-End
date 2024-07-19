@@ -46,20 +46,6 @@ export const obtenerMisDeclaracionesJuradas = async (
   }
 };
 
-export const obtenerMiDeclaracionJurada = async (empresaId, ddjjId) => {
-  const URL = `/empresa/${empresaId}/ddjj/${ddjjId}`;
-  try {
-    const data = await axiosCrud.consultar(URL);
-    return data || {};
-  } catch (error) {
-    swal.showErrorBackEnd(
-      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
-      error,
-    );
-    return [];
-  }
-};
-
 export const imprimirDeclaracionJurada = async (empresaId, ddjjId) => {
   const URL = `/empresa/${empresaId}/ddjj/${ddjjId}/imprimir`;
 
@@ -109,6 +95,22 @@ export const eliminarDeclaracionJurada = async (empresaId, ddjjId) => {
   }
 };
 
+/*
+export const obtenerMiDeclaracionJurada = async (empresaId, ddjjId) => {
+  const URL = `/empresa/${empresaId}/ddjj/${ddjjId}`;
+  try {
+    const data = await axiosCrud.consultar(URL);
+    return data || {};
+  } catch (error) {
+    swal.showErrorBackEnd(
+      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
+      error,
+    );
+    return [];
+  }
+};
+*/
+
 export const axiosDDJJ = {
   getAportes: async function () {
     return consultarAportes();
@@ -118,9 +120,9 @@ export const axiosDDJJ = {
     return obtenerMisDeclaracionesJuradas(empresaId, desde, hasta);
   },
 
-  getDDJJ: async function (empresaId, ddjjId) {
-    return obtenerMiDeclaracionJurada(empresaId, ddjjId);
-  },
+  //getDDJJ: async function (empresaId, ddjjId) {
+  //return obtenerMiDeclaracionJurada(empresaId, ddjjId);
+  //},
 
   imprimir: async function (empresaId, ddjjId) {
     return imprimirDeclaracionJurada(empresaId, ddjjId);

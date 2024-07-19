@@ -3,7 +3,8 @@ import { Button, Box } from '@mui/material';
 import XLSX from 'xlsx';
 import formatter from '@/common/formatter';
 import swal from '@/components/swal/swal';
-import { axiosDDJJ } from '../ddjj/alta/DDJJAltaApi';
+import { axiosDDJJ } from '../ddjjPrueba/DDJJApi';
+
 import localStorageService from '@/components/localStorage/localStorageService';
 
 export const DDJJArchivoImport = ({
@@ -243,7 +244,7 @@ export const DDJJArchivoImport = ({
     //setFilasDoc([]); //No se para que sirve
     setBtnSubirHabilitado(false);
   };
-  console.log('DDJJArchivoImport -INIT');
+  //console.log('DDJJArchivoImport -INIT');
 
   return (
     <Box className="subir_archivo_container">

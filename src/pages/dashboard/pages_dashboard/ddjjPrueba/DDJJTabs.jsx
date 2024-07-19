@@ -6,10 +6,10 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import './DDJJTabs.css';
 
-import { MisDDJJConsulta } from './mis_ddjj/MisDDJJConsulta';
+import { MisDDJJFiltro } from './mis_ddjj/MisDDJJFiltro';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import * as locales from '@mui/material/locale';
-import { DDJJGrillaPrueba } from '@pages/dashboard/pages_dashboard/ddjjPrueba/DDJJGrillaPrueba';
+import { DDJJForm } from '@/pages/dashboard/pages_dashboard/ddjjPrueba/DDJJForm';
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -45,15 +45,16 @@ function a11yProps(index) {
 }
 
 export const DDJJTabsPrueba = () => {
+  const [idDDJJ, setIdDDJJ] = useState(null);
+  const [tabSelected, setTabSelected] = useState(0);
+
   const [DDJJState, setDDJJState] = useState({});
   const [periodo, setPeriodo] = useState(null);
   const [rowsAltaDDJJ, setRowsAltaDDJJ] = useState([]);
   const [rowsAltaDDJJAux, setRowsAltaDDJJAux] = useState([]);
   const [rows_mis_ddjj, setRowsMisDdjj] = useState([]);
   const [locale, setLocale] = useState('esES');
-  const [tabState, setTabState] = useState(0);
   const [peticion, setPeticion] = useState('');
-  const [idDDJJ, setIdDDJJ] = useState(null);
   const location = useLocation();
   const [tituloPrimerTab, setTituloPrimerTab] = useState(
     'Alta Declaración Jurada',
@@ -66,16 +67,23 @@ export const DDJJTabsPrueba = () => {
     [locale, theme],
   );
 
+  const handlerDDJJEditar = (idDDJJNew) => {
+    console.log('DDJJTabsPrueba - handlerDDJJEditar - idDDJJNew:', idDDJJNew);
+    setIdDDJJ(idDDJJNew);
+    setTabSelected(0);
+    setTituloPrimerTab('Modificar Declaracion Jurada');
+  };
+
   useEffect(() => {
     if (location.pathname.includes('alta')) {
-      setTabState(0);
+      setTabSelected(0);
     } else if (location.pathname.includes('consulta')) {
-      setTabState(1);
+      setTabSelected(1);
     }
   }, [location.pathname]);
 
   useEffect(() => {
-    if (tabState === 1) {
+    if (tabSelected === 1) {
       //window.location.reload();
       setTituloPrimerTab('Alta Declaración Jurada');
       setDDJJState({});
@@ -86,10 +94,10 @@ export const DDJJTabsPrueba = () => {
       setPeticion('');
       setIdDDJJ(null);
     }
-  }, [tabState]);
+  }, [tabSelected]);
 
-  const handleChangeTabState = (event, value) => setTabState(value);
-  console.log('DDJJTabs - idDDJJ:', idDDJJ);
+  const handleChangeTabState = (event, value) => setTabSelected(value);
+
   return (
     <div className="declaraciones_juradas_container">
       <h1>Administración de Declaraciones Juradas</h1>
@@ -98,7 +106,7 @@ export const DDJJTabsPrueba = () => {
           <Box
             sx={{ borderBottom: 1, borderColor: 'divider', marginTop: '50px' }}
           >
-            <Tabs value={tabState} onChange={handleChangeTabState}>
+            <Tabs value={tabSelected} onChange={handleChangeTabState}>
               <Tab
                 label={tituloPrimerTab}
                 {...a11yProps(0)}
@@ -111,20 +119,20 @@ export const DDJJTabsPrueba = () => {
               />
             </Tabs>
           </Box>
-          <CustomTabPanel value={tabState} index={0}>
-            <DDJJGrillaPrueba idDDJJ={idDDJJ}></DDJJGrillaPrueba>
+          <CustomTabPanel value={tabSelected} index={0}>
+            <DDJJForm id={idDDJJ}></DDJJForm>
           </CustomTabPanel>
-          <CustomTabPanel value={tabState} index={1}>
-            <MisDDJJConsulta
+          <CustomTabPanel value={tabSelected} index={1}>
+            <MisDDJJFiltro
+              handlerDDJJEditar={handlerDDJJEditar}
               setDDJJState={setDDJJState}
               setPeriodo={setPeriodo}
               rows_mis_ddjj={rows_mis_ddjj}
               setRowsMisDdjj={setRowsMisDdjj}
-              setTabState={setTabState}
+              setTabState={setTabSelected}
               rowsAltaDDJJ={rowsAltaDDJJ}
               setRowsAltaDDJJ={setRowsAltaDDJJ}
               setPeticion={setPeticion}
-              setIdDDJJ={setIdDDJJ}
               setTituloPrimerTab={setTituloPrimerTab}
             />
           </CustomTabPanel>

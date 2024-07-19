@@ -24,7 +24,7 @@ import { Ajustes } from '@/pages/dashboard/pages_dashboard/ajustes/Ajustes';
 import { DDJJTabs } from '@/pages/dashboard/pages_dashboard/ddjj/DDJJTabs';
 import { GestionRoles } from '@/pages/dashboard/pages_dashboard/gestionRoles/GestionRoles';
 import { Aportes } from '@/pages/dashboard/pages_dashboard/aportes/Aportes';
-import { DDJJGrillaPrueba } from '@/pages/dashboard/pages_dashboard/ddjjPrueba/DDJJGrillaPrueba';
+import { DDJJForm } from '@/pages/dashboard/pages_dashboard/ddjjPrueba/DDJJForm';
 import { DDJJTabsPrueba } from '@/pages/dashboard/pages_dashboard/ddjjPrueba/DDJJTabs';
 import { useState } from 'react';
 import { UserProvider } from '@/context/UserProvider';
@@ -47,7 +47,7 @@ const AppRouter = () => {
             </PrivateRoute>
           }
         >
-          <Route path="prueba" element={<DDJJGrillaPrueba />} />
+          <Route path="prueba" element={<DDJJForm />} />
           <Route path="pruebaTab" element={<DDJJTabsPrueba />} />
 
           <Route path="inicio" index element={<Inicio />} />

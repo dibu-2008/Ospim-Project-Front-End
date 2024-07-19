@@ -1,10 +1,16 @@
+import formatter from '@/common/formatter';
+
 const getDDJJDtoCabecera = (cabecera) => {
   const DDJJ = {
     empresaId: cabecera.empresaId,
-    periodo: cabecera.periodo,
     id: cabecera.id,
     afiliados: [],
   };
+
+  if (cabecera.periodo) {
+    DDJJ.periodo = formatter.dateToStringBackend(cabecera.periodo);
+  }
+
   return DDJJ;
 };
 const castRowToBackendDto = (item) => {
@@ -44,7 +50,7 @@ const regToDDJJValDto = (cabecera, row) => {
 
 const rowsToDDJJValDto = (cabecera, rows) => {
   const DDJJ = getDDJJDtoCabecera(cabecera);
-  console.log('rowsToDDJJValDto - rows:', rows);
+  //console.log('rowsToDDJJValDto - rows:', rows);
   rows.map(function (item) {
     const registroNew = castRowToBackendDto(item);
     DDJJ.afiliados.push(registroNew);
