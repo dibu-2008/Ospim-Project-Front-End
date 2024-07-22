@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
@@ -6,10 +6,11 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import './DDJJTabs.css';
 
-import { MisDDJJConsulta } from './mis_ddjj/MisDDJJConsulta';
-import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
-import * as locales from '@mui/material/locale';
-import { DDJJAlta } from './alta/DDJJAlta';
+import { UserContext } from '@/context/userContext';
+import { MisDDJJFiltro } from './consultas/empresa/MisDDJJFiltro';
+import { ThemeProvider } from '@mui/material/styles';
+
+import { DDJJForm } from '@/pages/dashboard/pages_dashboard/ddjj/formulario/DDJJForm';
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -45,50 +46,40 @@ function a11yProps(index) {
 }
 
 export const DDJJTabs = () => {
-  const [DDJJState, setDDJJState] = useState({});
-  const [periodo, setPeriodo] = useState(null);
-  const [rowsAltaDDJJ, setRowsAltaDDJJ] = useState([]);
-  const [rowsAltaDDJJAux, setRowsAltaDDJJAux] = useState([]);
-  const [rows_mis_ddjj, setRowsMisDdjj] = useState([]);
-  const [locale, setLocale] = useState('esES');
-  const [tabState, setTabState] = useState(0);
-  const [peticion, setPeticion] = useState('');
   const [idDDJJ, setIdDDJJ] = useState(null);
-  const location = useLocation();
+  const [tabSelected, setTabSelected] = useState(0);
   const [tituloPrimerTab, setTituloPrimerTab] = useState(
     'Alta Declaración Jurada',
   );
 
-  const theme = useTheme();
+  const location = useLocation();
 
-  const themeWithLocale = useMemo(
-    () => createTheme(theme, locales[locale]),
-    [locale, theme],
-  );
+  const { themeWithLocale } = useContext(UserContext);
+
+  const handleChangeTabState = (event, value) => setTabSelected(value);
+
+  const handlerDDJJEditar = (idDDJJNew) => {
+    console.log('DDJJTabsPrueba - handlerDDJJEditar - idDDJJNew:', idDDJJNew);
+    setIdDDJJ(idDDJJNew);
+    setTabSelected(0);
+    setTituloPrimerTab('Modificar Declaracion Jurada');
+  };
 
   useEffect(() => {
     if (location.pathname.includes('alta')) {
-      setTabState(0);
+      setTabSelected(0);
     } else if (location.pathname.includes('consulta')) {
-      setTabState(1);
+      setTabSelected(1);
     }
   }, [location.pathname]);
 
   useEffect(() => {
-    if (tabState === 1) {
+    if (tabSelected === 1) {
       //window.location.reload();
       setTituloPrimerTab('Alta Declaración Jurada');
-      setDDJJState({});
-      setPeriodo(null);
-      setRowsAltaDDJJ([]);
-      setRowsAltaDDJJAux([]);
-      setRowsMisDdjj([]);
-      setPeticion('');
       setIdDDJJ(null);
     }
-  }, [tabState]);
-
-  const handleChangeTabState = (event, value) => setTabState(value);
+  }, [tabSelected]);
 
   return (
     <div className="declaraciones_juradas_container">
@@ -98,7 +89,7 @@ export const DDJJTabs = () => {
           <Box
             sx={{ borderBottom: 1, borderColor: 'divider', marginTop: '50px' }}
           >
-            <Tabs value={tabState} onChange={handleChangeTabState}>
+            <Tabs value={tabSelected} onChange={handleChangeTabState}>
               <Tab
                 label={tituloPrimerTab}
                 {...a11yProps(0)}
@@ -111,33 +102,11 @@ export const DDJJTabs = () => {
               />
             </Tabs>
           </Box>
-          <CustomTabPanel value={tabState} index={0}>
-            <DDJJAlta
-              DDJJState={DDJJState}
-              setDDJJState={setDDJJState}
-              periodo={periodo}
-              setPeriodo={setPeriodo} /*  */
-              rowsAltaDDJJ={rowsAltaDDJJ}
-              setRowsAltaDDJJ={setRowsAltaDDJJ}
-              rowsAltaDDJJAux={rowsAltaDDJJAux}
-              peticion={peticion}
-              idDDJJ={idDDJJ}
-              tituloPrimerTab={tituloPrimerTab}
-            />
+          <CustomTabPanel value={tabSelected} index={0}>
+            <DDJJForm id={idDDJJ}></DDJJForm>
           </CustomTabPanel>
-          <CustomTabPanel value={tabState} index={1}>
-            <MisDDJJConsulta
-              setDDJJState={setDDJJState}
-              setPeriodo={setPeriodo}
-              rows_mis_ddjj={rows_mis_ddjj}
-              setRowsMisDdjj={setRowsMisDdjj}
-              setTabState={setTabState}
-              rowsAltaDDJJ={rowsAltaDDJJ}
-              setRowsAltaDDJJ={setRowsAltaDDJJ}
-              setPeticion={setPeticion}
-              setIdDDJJ={setIdDDJJ}
-              setTituloPrimerTab={setTituloPrimerTab}
-            />
+          <CustomTabPanel value={tabSelected} index={1}>
+            <MisDDJJFiltro handlerDDJJEditar={handlerDDJJEditar} />
           </CustomTabPanel>
         </Box>
       </ThemeProvider>

@@ -2,15 +2,16 @@ import { useEffect, useState } from 'react';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import { Box } from '@mui/system';
+import TextField from '@mui/material/TextField';
 import dayjs from 'dayjs';
-import './MisDDJJFiltro.css';
-import { MisDDJJGrilla } from './MisDDJJGrilla';
-import { axiosDDJJ } from './MisDDJJGrillaApi';
-import { DesktopDatePicker } from '@mui/x-date-pickers';
-import localStorageService from '@/components/localStorage/localStorageService';
+import './DDJJFiltro.css';
+import { axiosDDJJEmpleado } from './DDJJConsultaEmpleadoApi';
 
-export const MisDDJJFiltro = ({ handlerDDJJEditar }) => {
-  const ID_EMPRESA = localStorageService.getEmpresaId();
+import { DDJJGrilla } from './DDJJGrilla';
+import { DesktopDatePicker } from '@mui/x-date-pickers';
+
+export const DDJJFiltro = () => {
   const ahora = dayjs().startOf('month');
   const ahoraMenosUnAnio = ahora.add(-11, 'month');
   const [filtro, setFiltro] = useState({
@@ -30,8 +31,16 @@ export const MisDDJJFiltro = ({ handlerDDJJEditar }) => {
       if (filtro.hasta !== null) {
         hasta = filtro.hasta.startOf('month').format('YYYY-MM-DD');
       }
-
-      const ddjjResponse = await axiosDDJJ.consultar(ID_EMPRESA, desde, hasta);
+      let cuit = null;
+      if (filtro.cuit !== null) {
+        cuit = filtro.cuit;
+      }
+      //const ddjjResponse = await axiosDDJJ.consultar(ID_EMPRESA, desde, hasta);
+      const ddjjResponse = await axiosDDJJEmpleado.consultarFiltrado(
+        desde,
+        hasta,
+        cuit,
+      );
       console.log('handlerConsultar - ddjjResponse: ', ddjjResponse);
       setRows(ddjjResponse);
     } catch (error) {
@@ -44,8 +53,20 @@ export const MisDDJJFiltro = ({ handlerDDJJEditar }) => {
   }, []);
 
   return (
-    <div>
-      <div className="mis_declaraciones_juradas_container">
+    <div className="declaraciones_juradas_container">
+      <h1
+        style={{
+          marginBottom: '50px',
+        }}
+      >
+        Consulta de Declaraciones Juradas
+      </h1>
+      <div
+        className="mis_declaraciones_juradas_container"
+        style={{
+          marginBottom: '50px',
+        }}
+      >
         <Stack
           spacing={4}
           direction="row"
@@ -93,7 +114,6 @@ export const MisDDJJFiltro = ({ handlerDDJJEditar }) => {
             />
           </div>
         </Stack>
-
         <Stack
           spacing={4}
           direction="row"
@@ -110,7 +130,24 @@ export const MisDDJJFiltro = ({ handlerDDJJEditar }) => {
         </Stack>
       </div>
       <Stack direction="row" justifyContent="center" alignItems="center">
-        <MisDDJJGrilla rows={rows} handlerDDJJEditar={handlerDDJJEditar} />
+        <Box
+          sx={{
+            margin: '0 auto',
+            height: '600px',
+            width: '100%',
+            '& .actions': {
+              color: 'text.secondary',
+            },
+            '& .textPrimary': {
+              color: 'text.primary',
+            },
+          }}
+        >
+          <DDJJGrilla
+            rows={rows}
+            showCuit={filtro.cuit == null || filtro.cuit == ''}
+          />
+        </Box>
       </Stack>
     </div>
   );

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Box, Modal, alpha, TextField, Button } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
-import { axiosDDJJ } from '../ddjjPrueba/DDJJApi';
+import { axiosDDJJ } from './DDJJApi';
 
 export const DDJJCuilForm = ({ regCuil, formShow, setFormShow }) => {
   const theme = useTheme();

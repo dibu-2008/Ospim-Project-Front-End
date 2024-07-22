@@ -1,5 +1,5 @@
 import { GridRowModes, GridRowEditStopReasons } from '@mui/x-data-grid';
-import { axiosDDJJ } from '../ddjjPrueba/DDJJApi';
+import { axiosDDJJ } from './DDJJApi';
 import { useGridValidaciones } from './useGridValidaciones';
 import { DDJJMapper } from './DDJJMapper';
 

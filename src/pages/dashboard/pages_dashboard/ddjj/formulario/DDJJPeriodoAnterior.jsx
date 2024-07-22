@@ -13,7 +13,7 @@ import Swal from 'sweetalert2';
 import swal from '@/components/swal/swal';
 import formatter from '@/common/formatter';
 import dayjs from 'dayjs';
-import { axiosDDJJ } from '../ddjj/alta/DDJJAltaApi';
+import { axiosDDJJ } from './DDJJApi';
 import localStorageService from '@/components/localStorage/localStorageService';
 
 export const DDJJPeriodoAnterior = ({ habiModif, handlerGrillaActualizar }) => {

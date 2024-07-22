@@ -9,7 +9,7 @@ import { UserContext } from '@/context/userContext';
 import formatter from '@/common/formatter';
 import Swal from 'sweetalert2';
 import swal from '@/components/swal/swal';
-import { axiosDDJJ } from '../ddjj/alta/DDJJAltaApi';
+import { axiosDDJJ } from './DDJJApi';
 import localStorageService from '@/components/localStorage/localStorageService';
 import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 import EditIcon from '@mui/icons-material/Edit';
@@ -19,12 +19,13 @@ import AddIcon from '@mui/icons-material/Add';
 import CancelIcon from '@mui/icons-material/Close';
 import CreateIcon from '@mui/icons-material/Create';
 import Switch from '@mui/material/Switch';
-import { DDJJArchivoImport } from '@pages/dashboard/pages_dashboard/ddjjPrueba/DDJJArchivoImport';
-import { DDJJPeriodoAnterior } from '@pages/dashboard/pages_dashboard/ddjjPrueba/DDJJPeriodoAnterior';
-import { DDJJCuilForm } from '@pages/dashboard/pages_dashboard/ddjjPrueba/DDJJCuilForm';
+import { DDJJArchivoImport } from '@/pages/dashboard/pages_dashboard/ddjj/formulario/DDJJArchivoImport';
+import { DDJJPeriodoAnterior } from '@/pages/dashboard/pages_dashboard/ddjj/formulario/DDJJPeriodoAnterior';
+import { DDJJCuilForm } from '@/pages/dashboard/pages_dashboard/ddjj/formulario/DDJJCuilForm';
 import { useGridValidaciones } from './useGridValidaciones';
 import { useGridCrud } from './useGridCrud';
 import { DDJJMapper } from './DDJJMapper';
+import './DDJJForm.css';
 
 import {
   Stack,

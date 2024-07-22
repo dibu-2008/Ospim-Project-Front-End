@@ -1,4 +1,4 @@
-import { axiosDDJJ } from '../ddjjPrueba/DDJJApi';
+import { axiosDDJJ } from './DDJJApi';
 import { DDJJMapper } from './DDJJMapper';
 
 //rowsValidaciones, setRowsValidaciones;

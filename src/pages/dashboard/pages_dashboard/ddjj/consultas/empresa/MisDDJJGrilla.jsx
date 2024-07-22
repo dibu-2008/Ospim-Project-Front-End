@@ -18,7 +18,7 @@ import Swal from 'sweetalert2';
 import swal from '@/components/swal/swal';
 import formatter from '@/common/formatter';
 import { axiosDDJJ } from './MisDDJJGrillaApi';
-import { DDJJCrossTbl } from './DDJJCrossTbl';
+import { DDJJCrossTbl } from '../DDJJCrossTbl';
 import { consultarAportesDDJJ } from '@/common/api/AportesApi';
 import localStorageService from '@/components/localStorage/localStorageService';
 

@@ -18,14 +18,13 @@ import { Roles } from '@/pages/dashboard/pages_dashboard/roles/Roles';
 import { GenerarBoletas } from '@/pages/dashboard/pages_dashboard/generar_boletas/GenerarBoletas';
 import { GenerarOtrosPagos } from '@/pages/dashboard/pages_dashboard/otros_pagos/GenerarOtrosPagos';
 import { DetalleOtrosPagos } from '@/pages/dashboard/pages_dashboard/otros_pagos/DetalleOtrosPagos';
-import { DDJJConsultaEmpleado } from '@/pages/dashboard/pages_dashboard/ddjj/ddjj_consulta_empleado/DDJJConsultaEmpleado';
+import { DDJJFiltro } from '@/pages/dashboard/pages_dashboard/ddjj/consultas/empleado/DDJJFiltro';
 import { InteresesAfip } from '@/pages/dashboard/pages_dashboard/intereses_afip/InteresesAfip';
 import { Ajustes } from '@/pages/dashboard/pages_dashboard/ajustes/Ajustes';
-import { DDJJTabs } from '@/pages/dashboard/pages_dashboard/ddjj/DDJJTabs';
 import { GestionRoles } from '@/pages/dashboard/pages_dashboard/gestionRoles/GestionRoles';
 import { Aportes } from '@/pages/dashboard/pages_dashboard/aportes/Aportes';
-import { DDJJForm } from '@/pages/dashboard/pages_dashboard/ddjjPrueba/DDJJForm';
-import { DDJJTabsPrueba } from '@/pages/dashboard/pages_dashboard/ddjjPrueba/DDJJTabs';
+import { DDJJForm } from '@/pages/dashboard/pages_dashboard/ddjj/formulario/DDJJForm';
+import { DDJJTabs } from '@/pages/dashboard/pages_dashboard/ddjj/DDJJTabs';
 import { useState } from 'react';
 import { UserProvider } from '@/context/UserProvider';
 
@@ -47,19 +46,13 @@ const AppRouter = () => {
             </PrivateRoute>
           }
         >
-          <Route path="prueba" element={<DDJJForm />} />
-          <Route path="pruebaTab" element={<DDJJTabsPrueba />} />
-
           <Route path="inicio" index element={<Inicio />} />
           <Route path="publicaciones" element={<Publicaciones />} />
           <Route path="feriados" element={<Feriados />} />
           <Route path="ddjj" element={<DDJJTabs />} />
           <Route path="ddjj/alta" element={<DDJJTabs />} />
           <Route path="ddjj/consulta" element={<DDJJTabs />} />
-          <Route
-            path="ddjjconsultaempleado"
-            element={<DDJJConsultaEmpleado />}
-          />
+          <Route path="ddjjconsultaempleado" element={<DDJJFiltro />} />
           <Route path="boletas" element={<Boletas />} />
           <Route path="boletas/periodos" element={<Boletas />} />
           <Route path="boletas/Actas" element={<Boletas />} />

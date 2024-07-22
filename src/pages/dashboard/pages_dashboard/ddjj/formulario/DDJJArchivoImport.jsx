@@ -3,7 +3,7 @@ import { Button, Box } from '@mui/material';
 import XLSX from 'xlsx';
 import formatter from '@/common/formatter';
 import swal from '@/components/swal/swal';
-import { axiosDDJJ } from '../ddjjPrueba/DDJJApi';
+import { axiosDDJJ } from './DDJJApi';
 
 import localStorageService from '@/components/localStorage/localStorageService';
 
