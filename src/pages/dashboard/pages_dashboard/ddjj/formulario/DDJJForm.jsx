@@ -57,8 +57,8 @@ import {
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 //        MOCK: carga de 3000 registros.-
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-
 let rowsNew = [];
+/*
 const regNew = {
   id: 1,
   gErrores: false,
@@ -109,7 +109,7 @@ for (let i = 2; i < 30; i++) {
 }
 
 console.log('INIT - rowsNew:', rowsNew);
-
+*/
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 function EditToolbar(props) {
   const {
@@ -614,7 +614,7 @@ export const DDJJForm = ({ id }) => {
       'guardarDeclaracionJurada - rowsValidaciones:',
       rowsValidaciones,
     );
-    if (useGridValidaciones.tieneErrores) {
+    if (useGridValidaciones.tieneErrores == true) {
       const mensajesUnicos = new Set();
       console.log(rowsValidaciones.errores);
       rowsValidaciones.errores.forEach((error) => {
@@ -683,7 +683,7 @@ export const DDJJForm = ({ id }) => {
         //setDDJJCreada(data);
         //setDDJJState(data);
         setDdjjCabe({
-          ...DdjjCabe,
+          ...ddjjCabe,
           id: data.id,
           secuencia: null,
           estado: 'PE',
@@ -776,7 +776,6 @@ export const DDJJForm = ({ id }) => {
     } else {
       console.log('** NO HIZO getDDJJ() !!!');
       const rowsNew2 = refresh(rowsNew);
-
       setRows(rowsNew2);
     }
     console.log('** ddjjCabe:', ddjjCabe);

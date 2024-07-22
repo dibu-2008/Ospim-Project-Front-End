@@ -14,7 +14,7 @@ function getColsAporte(rowsMisDDJJ) {
   //    rows: recordset consulta "Mis DDJJ"
   //OUTPUT: vector con los diferentes "codigos de Aporte" de la consulta. Ej.: ['UOMACU', 'ART46', 'UOMASC']
 
-  console.log('misDDJJColumnaAporteGet - ddjjResponse:', rowsMisDDJJ);
+  //console.log('misDDJJColumnaAporteGet - ddjjResponse:', rowsMisDDJJ);
   if (!rowsMisDDJJ || !rowsMisDDJJ.map) {
     return [];
   }
@@ -61,10 +61,7 @@ const addColumnsAportes = (rowsMisDDJJ, columns, vecAportes) => {
   //OUTPUT: agrega en "columns" las columnas "Aporte" de la DDJJ
 
   const colAportes = getColsAporte(rowsMisDDJJ);
-  console.log(
-    'MisDDJJGrilla - 1 - misDDJJColumnaAporteGet - colAportes:',
-    colAportes,
-  );
+  //console.log('MisDDJJGrilla - 1 - misDDJJColumnaAporteGet - colAportes:', colAportes);
 
   //Agrego Columna a la grilla.-
   colAportes.forEach((elem) => {
@@ -84,7 +81,7 @@ const addColumnsAportes = (rowsMisDDJJ, columns, vecAportes) => {
 };
 
 const castRows = (rowsMisDDJJ) => {
-  console.log('castRows - rows:', rowsMisDDJJ);
+  //console.log('castRows - rows:', rowsMisDDJJ);
 
   if (!rowsMisDDJJ || !rowsMisDDJJ.length) {
     console.log('castRows - DEVUKELVE [] !!!');
@@ -92,7 +89,7 @@ const castRows = (rowsMisDDJJ) => {
   }
 
   let colAportes = getColsAporte(rowsMisDDJJ);
-  console.log('castRows - colAportes:', colAportes);
+  //console.log('castRows - colAportes:', colAportes);
   rowsMisDDJJ.forEach((rowMisDDJJ) => {
     let vecRowColsAportesConTotales = getVecRowAportesConTotales(
       rowMisDDJJ,
@@ -104,7 +101,7 @@ const castRows = (rowsMisDDJJ) => {
       rowMisDDJJ['total' + regTot.codigo] = regTot.importe;
     });
   });
-  console.log('castRows - FIN - rows:', rowsMisDDJJ);
+  //console.log('castRows - FIN - rows:', rowsMisDDJJ);
   return rowsMisDDJJ;
 };
 

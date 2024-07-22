@@ -80,7 +80,7 @@ export const DDJJFiltro = () => {
               views={['month', 'year']}
               closeOnSelect={true}
               onChange={(oValue) => setFiltro({ ...filtro, desde: oValue })}
-              value={filtro.desde}
+              value={filtro.desde || ''}
             />
           </DemoContainer>
 
@@ -90,7 +90,7 @@ export const DDJJFiltro = () => {
               views={['month', 'year']}
               closeOnSelect={true}
               onChange={(oValue) => setFiltro({ ...filtro, hasta: oValue })}
-              value={filtro.hasta}
+              value={filtro.hasta || ''}
             />
           </DemoContainer>
           <div
@@ -107,7 +107,7 @@ export const DDJJFiltro = () => {
               id="outlined-basic"
               label="Cuit"
               variant="outlined"
-              value={filtro.cuit}
+              value={filtro.cuit || ''}
               onChange={(oValue) =>
                 setFiltro({ ...filtro, cuit: oValue.target.value })
               }

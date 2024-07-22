@@ -126,6 +126,8 @@ const showErrorBackEnd = async (HTTP_MSG, rta) => {
     console.log('showErrorBackEnd - rta:', rta);
 
     if (
+      rta.request &&
+      rta.request.responseType &&
       rta.request.responseType === 'blob' &&
       rta.response.data instanceof Blob &&
       rta.response.data.type &&

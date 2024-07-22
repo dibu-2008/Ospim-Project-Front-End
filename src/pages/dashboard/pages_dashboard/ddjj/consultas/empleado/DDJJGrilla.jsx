@@ -133,15 +133,15 @@ export const DDJJGrilla = ({ rows, showCuit }) => {
       return columnas;
     };
     const castConsulta = () => {
-      console.log('castConsulta - rows:', rows);
+      //console.log('castConsulta - rows:', rows);
       const rowsCrossTbl = DDJJCrossTbl.castRows(rows);
-      console.log('castConsulta - rowsCrossTbl:', rowsCrossTbl);
+      //console.log('castConsulta - rowsCrossTbl:', rowsCrossTbl);
       const rowsCTblId = rowsCrossTbl.map((item) => ({
         id: item.id,
         ...item,
       }));
       return rowsCTblId;
-      console.log('castConsulta - rowsCTblId:', rowsCTblId);
+      //console.log('castConsulta - rowsCTblId:', rowsCTblId);
     };
 
     console.log('MisDDJJGrilla - useEffect ------------------');
