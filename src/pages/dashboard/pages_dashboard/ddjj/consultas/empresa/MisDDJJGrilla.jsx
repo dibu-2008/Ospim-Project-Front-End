@@ -44,43 +44,35 @@ export const MisDDJJGrilla = ({ rows, handlerDDJJEditar }) => {
     }
   };
 
-  const handlePresentarDDJJ = async (rowGrilla) => {
+  const handlePresentarDDJJ = async (rowNew) => {
     const confirm = {
       titulo: 'Presentación de DDJJ en OSPIM',
       texto:
         'Confirma la Presentación de la Declaración Jurada para el Período <b>' +
-        formatter.periodo(rowGrilla.periodo) +
+        formatter.periodo(rowNew.periodo) +
         '</b>?',
       esHtml: true,
       reverseButtons: true,
       textoBtnOK: 'Si, Presentar !',
     };
-    //textoBtnOK: 'Si, Presentar !',
-    //reverseButtons: true,
     let minSettings = swal.getSettingConfirm(confirm);
     minSettings.reverseButtons = true;
 
     Swal.fire(minSettings).then(async (result) => {
       if (result.isConfirmed) {
-        const updatedRow = {
-          ...rowsMisDdjj.find((row) => row.id === rowGrilla.id),
-        };
-        const data = await axiosDDJJ.presentar(ID_EMPRESA, rowGrilla.id);
-
+        const data = await axiosDDJJ.presentar(ID_EMPRESA, rowNew.id);
         console.log('data: ', data);
-
         if (data) {
-          updatedRow.estado = data.estado || null;
-          updatedRow.secuencia = data.secuencia || null;
-
+          rowNew.estado = data.estado || null;
+          rowNew.secuencia = data.secuencia || null;
           setRowsGrilla(
-            rows.map((row) => (row.id === rowGrilla.id ? updatedRow : row)),
+            rowsGrilla.map((row) => (row.id === rowNew.id ? rowNew : row)),
           );
         }
-
-        return updatedRow;
+        return rowNew;
       }
     });
+    return rowNew;
   };
 
   const handlerDDJJEditarClick = (id) => async () => {
@@ -110,7 +102,9 @@ export const MisDDJJGrilla = ({ rows, handlerDDJJEditar }) => {
           if (result.isConfirmed) {
             const bRta = await axiosDDJJ.eliminar(ID_EMPRESA, id);
             console.log('bRta: ' + bRta);
-            if (bRta) setRowsGrilla(rowsGrilla.filter((row) => row.id !== id));
+            if (bRta) {
+              setRowsGrilla(rowsGrilla.filter((row) => row.id !== id));
+            }
           }
         });
       } catch (error) {

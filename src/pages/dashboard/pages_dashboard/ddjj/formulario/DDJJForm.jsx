@@ -35,8 +35,6 @@ import {
   Button,
   TextField,
   Select,
-  Radio,
-  RadioGroup,
   MenuItem,
   FormControlLabel,
   Box,
@@ -57,7 +55,7 @@ import {
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 //        MOCK: carga de 3000 registros.-
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-let rowsNew = [];
+//let rowsNew = [];
 /*
 const regNew = {
   id: 1,
@@ -130,7 +128,7 @@ function EditToolbar(props) {
 
     console.log('getNewReg - getRowModels:', gridApiRef.current.getRowModels());
 
-    let maxId = 1;
+    let maxId = 0;
 
     if (vecId.length > 0) maxId = Math.max(...vecId, 0);
     console.log('getNewReg - maxId:', maxId);
@@ -202,19 +200,18 @@ function EditToolbar(props) {
 }
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-export const DDJJForm = ({ id }) => {
+export const DDJJForm = ({ idDDJJ }) => {
   const ID_EMPRESA = localStorageService.getEmpresaId();
   const [ddjjCabe, setDdjjCabe] = useState({
-    id: id || null,
+    id: idDDJJ || null,
     secuencia: null,
     periodo: null,
     estado: null,
     empresaId: ID_EMPRESA,
   });
-  console.log('** DDJJForm - id: ', id);
+  console.log('** DDJJForm - idDDJJ: ', idDDJJ);
   const gridApiRef = useGridApiRef();
-  const [idDDJJ, setIdDDJJ] = useState(id || null); //id de la DDJJ que se va a editar.-
-  const [rows, setRows] = useState([]); //Con esto lleno la grilla
+  const [rows, setRows] = useState([]); //Con esto lleno la grilla. NO Representa lo que tiene la grilla en todo momento!!!
   const [ddjjModi, setDdjjModi] = useState(false); //Bandera para saber si se actualizo algun dato
   //rowsNew => es el vector que viene de Archivo o de Backend antes de cargar la grilla.-
   const [rowsValidaciones, setRowsValidaciones] = useState([]); //Usado para "Pintar" errores en la grilla.-
@@ -253,7 +250,6 @@ export const DDJJForm = ({ id }) => {
   const [tab, setTab] = useState(0);
   const [expanded, setExpanded] = useState(false);
   const [someRowInEditMode, setSomeRowInEditMode] = useState(false);
-  const [rowsAltaDDJJ, setRowsAltaDDJJ] = useState([]);
   const handleChange = (event, newValue) => {
     setTab(newValue);
   };
@@ -367,6 +363,7 @@ export const DDJJForm = ({ id }) => {
     console.log('-------------------------------------');
     console.log('handleFormCuilOpen - FIN ');
   };
+
   const obtenerAfiliados = async (id, cuilNew) => {
     console.log('obtenerAfiliados - cuilNew:', cuilNew);
     console.log('obtenerAfiliados - id:', id);
@@ -398,6 +395,7 @@ export const DDJJForm = ({ id }) => {
     }
     console.log('obtenerAfiliados - FIN');
   };
+
   const getAfiliadoEnNomina = async (cuil) => {
     const rta = {};
     if (cuil === '') {
@@ -423,6 +421,7 @@ export const DDJJForm = ({ id }) => {
 
     return rta;
   };
+
   const setAfiliadoGrilla = (id, cuil, apellido, nombre) => {
     console.log('setAfiliadoGrilla - id:', id);
     gridApiRef.current.setEditCellValue({
@@ -446,6 +445,7 @@ export const DDJJForm = ({ id }) => {
     });
     const textFieldNombre = document.getElementById('nombre' + id);
   };
+
   const filtrarGrilla = () => {
     console.log(
       'filtrarGrilla - gridApiRef.current.getRowModels(): ',
@@ -472,6 +472,7 @@ export const DDJJForm = ({ id }) => {
     console.log('2 filtrarGrilla - newFilterModel:', newFilterModel);
     console.log('filtrarGrilla - FINAL');
   };
+
   const getCellClassName = (params) => {
     let cellClassName = '';
 
@@ -520,26 +521,29 @@ export const DDJJForm = ({ id }) => {
       rowsNew,
     );
     setRows(rowsNew);
+
     if (ddjjCabe.periodo == null)
       setDdjjCabe({ ...ddjjCabe, periodo: formatter.getPeriodoActual() });
     setDdjjModi(true);
   };
 
   const handlerGrillaActualizarPeriodoAnterior = (vecDatos) => {
-    //como son datos del Backend, solo cargo
+    //No valido, solo cargo. Solo se copian DDJJ Presentadas (sin errores)
     console.log(
       'handlerGrillaActualizarPeriodoAnterior() - vecDatos:',
       vecDatos,
     );
+    limpiarEstadoDetalleForm();
     setRows(vecDatos);
     if (ddjjCabe.periodo == null)
       setDdjjCabe({ ...ddjjCabe, periodo: formatter.getPeriodoActual() });
     setDdjjModi(true);
   };
+
   const habiModifRefresh = () => {
-    console.log('habiModifRefresh - INIT - id:', id);
-    if (!id) {
-      console.log('habiModifRefresh - !id');
+    console.log('habiModifRefresh - INIT - idDDJJ:', idDDJJ);
+    if (!idDDJJ) {
+      console.log('habiModifRefresh - !idDDJJ');
       //Si no edito DDJJ, se habilita todo
       setHabiModif(true);
       return true;
@@ -556,6 +560,7 @@ export const DDJJForm = ({ id }) => {
     setHabiModif(false);
     return false;
   };
+
   const getTituloSec = () => {
     console.log('getTituloSec - ddjjCabe:', ddjjCabe);
     if (ddjjCabe) {
@@ -572,7 +577,7 @@ export const DDJJForm = ({ id }) => {
     return '...';
   };
 
-  const getDDJJ = async () => {
+  const getDDJJ = async (idDDJJ) => {
     const ddjjCabeNew = { ...ddjjCabe, id: idDDJJ };
     console.log('DDJJForm - getDDJJ() - ddjjCabeNew: ', ddjjCabeNew);
     const ddjjResponse = await axiosDDJJ.getDDJJ(
@@ -614,7 +619,7 @@ export const DDJJForm = ({ id }) => {
       'guardarDeclaracionJurada - rowsValidaciones:',
       rowsValidaciones,
     );
-    if (useGridValidaciones.tieneErrores == true) {
+    if (useGridValidaciones.tieneErrores()) {
       const mensajesUnicos = new Set();
       console.log(rowsValidaciones.errores);
       rowsValidaciones.errores.forEach((error) => {
@@ -654,14 +659,13 @@ export const DDJJForm = ({ id }) => {
     //Tomo los reg de la Grilla y los valido.-
     const mapDatos = gridApiRef.current.getRowModels();
     console.log('guardarDDJJ - mapDatos:', mapDatos);
+    console.log('guardarDDJJ - mapDatos.size:', mapDatos.size);
     const vecDatos = [];
     mapDatos.forEach((value, name) => vecDatos.push({ ...value }));
 
     console.log('guardarDDJJ - vecDatos:', vecDatos);
 
-    vecDatos.forEach((afiliado) => {
-      delete afiliado.gErrores;
-    });
+    //vecDatos.forEach((afiliado) => { delete afiliado.gErrores; });
 
     const DDJJ = DDJJMapper.rowsToDDJJValDto(ddjjCabe, vecDatos);
 
@@ -672,6 +676,7 @@ export const DDJJForm = ({ id }) => {
         'guardarDeclaracionJurada - axiosDDJJ.actualizar(ID_EMPRESA, DDJJ); ',
       );
       const bOK = await axiosDDJJ.actualizar(ID_EMPRESA, DDJJ);
+      setDdjjModi(false);
       return ddjjCabe.id;
     } else {
       console.log(
@@ -680,29 +685,69 @@ export const DDJJForm = ({ id }) => {
       const data = await axiosDDJJ.crear(ID_EMPRESA, DDJJ);
       console.log('guardarDeclaracionJurada - axiosDDJJ.crear - data:', data);
       if (data) {
-        //setDDJJCreada(data);
-        //setDDJJState(data);
         setDdjjCabe({
           ...ddjjCabe,
           id: data.id,
           secuencia: null,
           estado: 'PE',
         });
+
+        altaDDJJUpdateGrillaAfiliadosId(data);
         setTituloSec(getTituloSec(data.secuencia));
+        setDdjjModi(false);
         return data.id;
       }
     }
     return false;
   };
 
-  const presentarDeclaracionJurada = async () => {
+  const altaDDJJUpdateGrillaAfiliadosId = (ddjjNew) => {
+    console.log('----------------------------------------');
+    console.log('altaDDJJUpdateGrillaAfiliadosId - INIT');
+    //recorrer Map de Grilla
+    if (
+      ddjjNew.empleados &&
+      ddjjNew.empleados.length &&
+      ddjjNew.empleados.length > 0
+    ) {
+      const vecEmpleados = ddjjNew.empleados;
+      const mapDatos = gridApiRef.current.getRowModels();
+      console.log('mapDatos:', mapDatos);
+      console.log('vecEmpleados:', vecEmpleados);
+
+      for (var [key, value] of mapDatos) {
+        //alert(key + ' = ' + value);
+        vecEmpleados.forEach((element) => {
+          if (element.cuil == value.cuil) {
+            value.regId = element.id;
+            gridApiRef.current.updateRows([value]);
+          }
+        });
+      }
+
+      console.log(
+        'gridApiRef.current.getRowModels():',
+        gridApiRef.current.getRowModels(),
+      );
+    }
+
+    //buscar CUIL en "vecDatosNew"
+    //pegarle el vecDatosNew.afiliados.id en Grilla.idReg
+    //actualizar registro en grilla
+    //gridApiRef.current.updateRows([{ id: row.id }]);
+    console.log('----------------------------------------');
+  };
+
+  const presentarDDJJ = async () => {
     //const seguir = await guardarDDJJConfirm();
-    if (!useGridValidaciones.tieneErrores) {
+    console.log('presentarDDJJ - INIT');
+
+    if (!useGridValidaciones.tieneErrores()) {
       const confirm = {
         titulo: 'Presentación de DDJJ',
         texto:
           'Confirma la Presentación de la Declaración Jurada para el Período <b>' +
-          formatter.periodo(periodo) +
+          formatter.periodo(ddjjCabe.periodo) +
           '</b>?',
         esHtml: true,
         textoBtnOK: 'Si, Presentar !',
@@ -722,7 +767,7 @@ export const DDJJForm = ({ id }) => {
               secuencia: data.secuencia,
             };
             setDdjjCabe(ddjjCabeNew);
-            setTituloSec(getTituloSec(newDDJJState.secuencia));
+            setTituloSec(getTituloSec(data.secuencia));
           }
         }
       });
@@ -733,12 +778,30 @@ export const DDJJForm = ({ id }) => {
     }
   };
 
+  const limpiarEstadoForm = () => {
+    setDdjjModi(false); //Bandera para saber si se actualizo algun dato
+    const ddjjCabeNew = {
+      ...ddjjCabe,
+      id: null,
+      periodo: null,
+      estado: null,
+    };
+    setDdjjCabe(ddjjCabeNew);
+
+    limpiarEstadoDetalleForm();
+  };
+
+  const limpiarEstadoDetalleForm = () => {
+    setRows([]); //Con esto lleno la grilla
+    setRowsValidaciones([]); //Usado para "Pintar" errores en la grilla.-
+  };
   // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
   //            Hooks y Load de Datos
   // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
   //DataLoad del Componente
-  const refresh = async () => {
+  /*
+  const rowsNewValidar = async () => {
     console.log('** NO HIZO getDDJJ() !!!');
     const newRowsValidaciones = await useGridValidaciones.validarDDJJ(
       ddjjCabe,
@@ -750,6 +813,15 @@ export const DDJJForm = ({ id }) => {
     );
     return rowsNew2;
   };
+  */
+  useEffect(() => {
+    // Comprueba si hay alguna fila en modo edición
+    const isSomeRowInEditMode = Object.values(rowModesModel).some(
+      (row) => row.mode === GridRowModes.Edit,
+    );
+    // Actualiza el estado con el valor de booleano
+    setSomeRowInEditMode(isSomeRowInEditMode);
+  }, [rowModesModel]);
 
   useEffect(() => {
     const ObtenerCamaras = async () => {
@@ -770,39 +842,26 @@ export const DDJJForm = ({ id }) => {
     ObtenerPlantaEmpresas();
 
     console.log('** idDDJJ:', idDDJJ);
-    console.log('** rowsNew:', rowsNew);
+    //console.log('** rowsNew:', rowsNew);
     if (idDDJJ) {
       getDDJJ(idDDJJ);
     } else {
+      limpiarEstadoForm();
       console.log('** NO HIZO getDDJJ() !!!');
-      const rowsNew2 = refresh(rowsNew);
-      setRows(rowsNew2);
+      //const rowsNew2 = rowsNewValidar(rowsNew);
+      //setRows(rowsNew2);
     }
     console.log('** ddjjCabe:', ddjjCabe);
   }, []);
 
   useEffect(() => {
-    if (idDDJJ) {
-      getDDJJ();
-    } else {
-      //TESTING
-      const ddjjCabeNew = {
-        ...ddjjCabe,
-        id: null,
-        periodo: null,
-        estado: null,
-      };
-      //setddjjCabe(ddjjCabeNew);
-      if (rowsNew) {
-        const rowsNew2 = refresh(rowsNew);
-        setRows(rowsNew2);
-      }
-    }
-  }, [idDDJJ]);
-
-  useEffect(() => {
     setTituloSec(getTituloSec());
     habiModifRefresh();
+    console.log('useEffect - ddjjCabe:', ddjjCabe);
+    if (ddjjCabe.estado != 'PE' && ddjjCabe.estado != null) {
+      console.log('useEffect - OK - setHabiModif(false); .....');
+      setHabiModif(false);
+    }
   }, [ddjjCabe]);
 
   /*
@@ -850,6 +909,7 @@ export const DDJJForm = ({ id }) => {
                 color: 'primary.main',
               }}
               onClick={() => {
+                console.log('useGridCrud.handleSaveClick(row.id) - row:', row);
                 useGridCrud.handleSaveClick(row.id);
               }}
               disabled={!habiModif}
@@ -1421,6 +1481,7 @@ export const DDJJForm = ({ id }) => {
     },
   ];
 
+  console.log('DDJJForm - habiModif: ', habiModif);
   return (
     <div className="mis_alta_declaraciones_juradas_container">
       <div className="periodo_container">
@@ -1493,6 +1554,7 @@ export const DDJJForm = ({ id }) => {
                   plantas={plantas}
                   camaras={camaras}
                   categoriasPorCamara={categorias}
+                  habiModif={habiModif}
                 ></DDJJArchivoImport>
               </Box>
             </CustomTabPanel>
@@ -1639,7 +1701,9 @@ export const DDJJForm = ({ id }) => {
                     sx={{ padding: '6px 52px', marginLeft: '10px' }}
                     onClick={guardarDDJJConfirm}
                     disabled={
-                      someRowInEditMode || rows?.length === 0 || !habiModif
+                      someRowInEditMode ||
+                      !habiModif ||
+                      gridApiRef.current.getRowModels().size == 0
                     }
                   >
                     Guardar
@@ -1650,7 +1714,7 @@ export const DDJJForm = ({ id }) => {
               <Button
                 variant="contained"
                 sx={{ padding: '6px 52px', marginLeft: '10px' }}
-                onClick={presentarDeclaracionJurada}
+                onClick={presentarDDJJ}
                 disabled={!habiModif || !ddjjCabe.id}
               >
                 Presentar

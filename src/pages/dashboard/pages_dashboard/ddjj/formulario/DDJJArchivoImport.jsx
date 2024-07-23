@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Button, Box } from '@mui/material';
 import XLSX from 'xlsx';
 import formatter from '@/common/formatter';
+import Swal from 'sweetalert2';
 import swal from '@/components/swal/swal';
 import { axiosDDJJ } from './DDJJApi';
 
@@ -13,7 +14,9 @@ export const DDJJArchivoImport = ({
   camaras,
   categoriasPorCamara, //(ex todasLasCategorias)
   handlerGrillaActualizar, //devolver los rows del archivo.-
+  habiModif, //habilitacion de controles
 }) => {
+  console.log('DDJJArchivoImport - habiModif:', habiModif);
   const ID_EMPRESA = localStorageService.getEmpresaId();
   const IMPORTACION_OK = import.meta.env.VITE_IMPORTACION_OK;
 
@@ -256,7 +259,7 @@ export const DDJJArchivoImport = ({
           onChange={handleFileChange}
           accept=".csv, .xlsx"
           title=""
-          //disabled={!actualizacionHabilitada}
+          //disabled={!habiModif}
         />
         <Box className="file-select-label" id="src-file1-label">
           {fileNameSelected || 'Nombre del archivo'}
@@ -269,7 +272,7 @@ export const DDJJArchivoImport = ({
           width: '150px',
         }}
         onClick={importarAfiliado}
-        //disabled={!actualizacionHabilitada}
+        disabled={!habiModif}
       >
         Importar
       </Button>

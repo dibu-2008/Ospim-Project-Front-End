@@ -103,7 +103,7 @@ export const DDJJTabs = () => {
             </Tabs>
           </Box>
           <CustomTabPanel value={tabSelected} index={0}>
-            <DDJJForm id={idDDJJ}></DDJJForm>
+            <DDJJForm idDDJJ={idDDJJ}></DDJJForm>
           </CustomTabPanel>
           <CustomTabPanel value={tabSelected} index={1}>
             <MisDDJJFiltro handlerDDJJEditar={handlerDDJJEditar} />

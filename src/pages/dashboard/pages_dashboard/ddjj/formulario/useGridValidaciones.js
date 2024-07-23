@@ -4,32 +4,63 @@ import { DDJJMapper } from './DDJJMapper';
 //rowsValidaciones, setRowsValidaciones;
 //const [rowsValidaciones, setRowsValidaciones] = useState([]); //Usado para "Pintar" errores en la grilla.-
 
-const addValidaciones = (errores) => {
-  const newRowsValidaciones = { ...useGridValidaciones.getRowsValidaciones };
+const addValidaciones = (cuil, errores) => {
+  if (!errores || !errores.push) {
+    console.log('addValidaciones - FALSE - errores:', errores);
+    return false;
+  }
+
+  let newRowsValidaciones = { ...useGridValidaciones.getRowsValidaciones };
+  if (!newRowsValidaciones.errores || !newRowsValidaciones.errores.push) {
+    console.log(
+      'addValidaciones - HAGO new [] - newRowsValidaciones.errores:',
+      newRowsValidaciones.errores,
+    );
+    newRowsValidaciones.errores = [];
+  } else {
+    newRowsValidaciones = useGridValidaciones.remove(cuil, newRowsValidaciones);
+  }
+
   //console.log('newRowsValidaciones: ', newRowsValidaciones);
   errores.map((item) => {
     newRowsValidaciones.errores.push(item);
   });
   //console.log('newRowsValidaciones: ', rowsValidaciones);
-  useGridValidaciones.setRowsValidaciones(newRowsValidaciones);
+
+  return newRowsValidaciones;
 };
+
 const deleteValidacionesCuil = (cuil) => {
   console.log('deleteValidacionesCuil - cuil', cuil);
-  const newRowsValidaciones = { ...useGridValidaciones.getRowsValidaciones };
+
+  //Si mando Vector , lo usa, sino lo toma del estado.-
+  const newRowsValidaciones = {
+    ...useGridValidaciones.getRowsValidaciones,
+  };
   console.log(
     'deleteValidacionesCuil - newRowsValidaciones1:',
     newRowsValidaciones,
   );
-  newRowsValidaciones.errores = newRowsValidaciones.errores.filter((item) => {
-    if (item.cuil !== cuil) {
-      return item;
-    }
-  });
+  if (newRowsValidaciones.errores && newRowsValidaciones.errores.filter) {
+    newRowsValidaciones.errores = newRowsValidaciones.errores.filter((item) => {
+      if (item.cuil !== cuil) {
+        return item;
+      }
+    });
+  }
   console.log(
     'deleteValidacionesCuil - newRowsValidaciones2:',
     newRowsValidaciones,
   );
-  useGridValidaciones.setRowsValidaciones(newRowsValidaciones);
+
+  console.log(
+    'deleteValidacionesCuil - Actualiza ESTADO - newRowsValidaciones:',
+    newRowsValidaciones,
+  );
+
+  //useGridValidaciones.setRowsValidaciones(newRowsValidaciones);
+
+  return newRowsValidaciones;
 };
 
 const validarDDJJ = async (cabecera, rows) => {
@@ -49,11 +80,8 @@ const validarDDJJ = async (cabecera, rows) => {
 const actualizarFiltroErrores = (rows, newRowsValidaciones) => {
   //Agrego Atributo "gErrores" para "Filtrado de Grilla"
 
-  console.log('actualizarFiltroErrores - rows: ', rows);
-  console.log(
-    'actualizarFiltroErrores - newRowsValidaciones: ',
-    newRowsValidaciones,
-  );
+  //console.log('actualizarFiltroErrores - rows: ', rows);
+  //console.log( 'actualizarFiltroErrores - newRowsValidaciones: ', newRowsValidaciones, );
   const newRows = rows.slice();
   //console.log('actualizarFiltroErrores - newRows: ', newRows);
   //console.log('actualizarFiltroErrores - typeof newRows: ', typeof newRows);

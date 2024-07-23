@@ -14,7 +14,7 @@ const getDDJJDtoCabecera = (cabecera) => {
   return DDJJ;
 };
 const castRowToBackendDto = (item) => {
-  const registroNew = {
+  const backendDto = {
     //errores: item.gErrores,
     cuil: !item.cuil ? null : item.cuil,
     //inte: item.inte,
@@ -35,10 +35,10 @@ const castRowToBackendDto = (item) => {
     uomaSocio: item.uomaSocio === '' ? null : item.uomaSocio,
     amtimaSocio: item.amtimaSocio === '' ? null : item.amtimaSocio,
   };
-  if (item.id) registroNew.id = item.id;
-  if (item.regId) registroNew.id = item.regId;
+  //if (item.id) registroNew.id = item.id;
+  if (item.regId) backendDto.id = item.regId;
 
-  return registroNew;
+  return backendDto;
 };
 
 const regToDDJJValDto = (cabecera, row) => {

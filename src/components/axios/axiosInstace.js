@@ -47,7 +47,7 @@ oAxios.interceptors.response.use(
 
     console.log('originalRequest:', originalRequest);
 
-    if (error.response.status == 401) {
+    if (error.response.status && error.response.status == 401) {
       console.log(
         '** oAxios.interceptors.response - HTTP-ERROR 401 - ERROR AUTH ',
       );

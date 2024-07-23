@@ -25,14 +25,19 @@ const processRowUpdate = async (ddjjCabe, newRow) => {
       //saco los viejos errores
       console.log('remuevo errores y despues pongo nuevos ');
 
-      useGridValidaciones.remove(newRow.cuil);
       //Agrego errores NUEVOS
-      useGridValidaciones.add(val.errores);
+      console.log('useGridCrud - processRowUpdate - val.errores:', val.errores);
+      const newRowsValidaciones = useGridValidaciones.add(
+        newRow.cuil,
+        val.errores,
+      );
+      useGridValidaciones.setRowsValidaciones(newRowsValidaciones);
       console.log('useGridCrud - processRowUpdate - 5');
       newRow.gErrores = true;
     } else {
       console.log('useGridCrud - processRowUpdate - 5.. REMOVE()');
-      useGridValidaciones.remove(newRow.cuil);
+      const newRowsValidaciones = useGridValidaciones.remove(newRow.cuil);
+      useGridValidaciones.setRowsValidaciones(newRowsValidaciones);
       newRow.gErrores = false;
     }
     console.log('useGridCrud - processRowUpdate - 6 - newRow:', newRow);
@@ -81,7 +86,8 @@ const handleEditClick = (id) => {
   });
 };
 const handleSaveClick = (id) => {
-  console.log('useGridCrud - handleSaveClick - 1');
+  console.log('useGridCrud - handleSaveClick - 1 - id:', id);
+
   useGridCrud.setRowModesModel({
     ...useGridCrud.getRowModesModel,
     [id]: { mode: GridRowModes.View },

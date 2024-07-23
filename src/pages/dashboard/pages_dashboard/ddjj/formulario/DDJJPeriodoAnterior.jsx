@@ -70,7 +70,6 @@ export const DDJJPeriodoAnterior = ({ habiModif, handlerGrillaActualizar }) => {
             setPeriodoACopiar(null);
           }
         }}
-        disabled={!habiModif}
       >
         <FormControlLabel
           value="ultimoPeriodoPresentado"
@@ -81,7 +80,7 @@ export const DDJJPeriodoAnterior = ({ habiModif, handlerGrillaActualizar }) => {
           value="elegirOtro"
           control={<Radio />}
           label="Elegir otro"
-          disabled={!habiModif}
+          ///disabled={!habiModif}
         />
         <Box className="elegir_otro_container">
           {showCtrlPeriodo && habiModif && (
