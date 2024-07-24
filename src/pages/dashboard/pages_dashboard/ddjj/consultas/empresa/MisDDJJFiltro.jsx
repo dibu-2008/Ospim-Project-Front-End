@@ -33,6 +33,11 @@ export const MisDDJJFiltro = ({ handlerDDJJEditar }) => {
       const ddjjResponse = await axiosDDJJ.consultar(ID_EMPRESA, desde, hasta);
       console.log('handlerConsultar - ddjjResponse: ', ddjjResponse);
       setRows(ddjjResponse);
+
+      console.log('----------------');
+      console.log('MisDDJJFiltro - now: ', new Date());
+      console.log('MisDDJJFiltro -handlerConsultar - rows: ', rows);
+      console.log('----------------');
     } catch (error) {
       console.error('Error al buscar declaraciones juradas:', error);
     }
@@ -89,7 +94,11 @@ export const MisDDJJFiltro = ({ handlerDDJJEditar }) => {
         </Stack>
       </div>
       <Stack direction="row" justifyContent="center" alignItems="center">
-        <MisDDJJGrilla rows={rows} handlerDDJJEditar={handlerDDJJEditar} />
+        <MisDDJJGrilla
+          rows={rows}
+          setRows={setRows}
+          handlerDDJJEditar={handlerDDJJEditar}
+        />
       </Stack>
     </div>
   );

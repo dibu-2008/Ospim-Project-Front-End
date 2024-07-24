@@ -1361,6 +1361,7 @@ export const DDJJForm = ({ idDDJJ }) => {
         return formattedValue;
       },
       renderEditCell: (params) => {
+        console.log('renderEditCell - CurrencyInput!!');
         return (
           <CurrencyInput
             id={

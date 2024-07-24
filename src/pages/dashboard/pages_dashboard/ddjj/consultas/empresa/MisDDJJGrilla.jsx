@@ -22,8 +22,11 @@ import { DDJJCrossTbl } from '../DDJJCrossTbl';
 import { consultarAportesDDJJ } from '@/common/api/AportesApi';
 import localStorageService from '@/components/localStorage/localStorageService';
 
-export const MisDDJJGrilla = ({ rows, handlerDDJJEditar }) => {
-  //console.log('MisDDJJGrilla - rows: ', rows);
+export const MisDDJJGrilla = ({ rows, setRows, handlerDDJJEditar }) => {
+  console.log('----------------');
+  console.log('MisDDJJGrilla - now: ', new Date());
+  console.log('MisDDJJGrilla - rows: ', rows);
+  console.log('----------------');
   const [rowsGrilla, setRowsGrilla] = useState([]);
   const [colsGrilla, setColsGrilla] = useState([]);
 
@@ -61,18 +64,20 @@ export const MisDDJJGrilla = ({ rows, handlerDDJJEditar }) => {
     Swal.fire(minSettings).then(async (result) => {
       if (result.isConfirmed) {
         const data = await axiosDDJJ.presentar(ID_EMPRESA, rowNew.id);
-        console.log('data: ', data);
+        console.log('axiosDDJJ.presentar - data: ', data);
         if (data) {
-          rowNew.estado = data.estado || null;
-          rowNew.secuencia = data.secuencia || null;
-          setRowsGrilla(
-            rowsGrilla.map((row) => (row.id === rowNew.id ? rowNew : row)),
+          setRows(
+            rows.map((row) => {
+              if (row.id === rowNew.id) {
+                row.estado = data.estado || null;
+                row.secuencia = data.secuencia || null;
+              }
+              return row;
+            }),
           );
         }
-        return rowNew;
       }
     });
-    return rowNew;
   };
 
   const handlerDDJJEditarClick = (id) => async () => {
@@ -103,7 +108,7 @@ export const MisDDJJGrilla = ({ rows, handlerDDJJEditar }) => {
             const bRta = await axiosDDJJ.eliminar(ID_EMPRESA, id);
             console.log('bRta: ' + bRta);
             if (bRta) {
-              setRowsGrilla(rowsGrilla.filter((row) => row.id !== id));
+              setRows(rows.filter((row) => row.id !== id));
             }
           }
         });
@@ -281,7 +286,7 @@ export const MisDDJJGrilla = ({ rows, handlerDDJJEditar }) => {
   useEffect(() => {
     const getVecAportes = async () => {
       const data = await consultarAportesDDJJ();
-      console.log('ObtenerVecAportes - data:', data);
+      //console.log('ObtenerVecAportes - data:', data);
       setVecAportes(data);
     };
     const getColumnasGrilla = () => {
@@ -296,18 +301,18 @@ export const MisDDJJGrilla = ({ rows, handlerDDJJEditar }) => {
       return columnas;
     };
     const castConsulta = () => {
-      console.log('castConsulta - rows:', rows);
+      //console.log('castConsulta - rows:', rows);
       const rowsCrossTbl = DDJJCrossTbl.castRows(rows);
-      console.log('castConsulta - rowsCrossTbl:', rowsCrossTbl);
+      //console.log('castConsulta - rowsCrossTbl:', rowsCrossTbl);
       const rowsCTblId = rowsCrossTbl.map((item) => ({
         id: item.id,
         ...item,
       }));
       return rowsCTblId;
-      console.log('castConsulta - rowsCTblId:', rowsCTblId);
+      //console.log('castConsulta - rowsCTblId:', rowsCTblId);
     };
 
-    console.log('MisDDJJGrilla - useEffect ------------------');
+    //console.log('MisDDJJGrilla - useEffect ------------------');
     getVecAportes();
 
     const rowsCTblId = castConsulta();
@@ -316,7 +321,7 @@ export const MisDDJJGrilla = ({ rows, handlerDDJJEditar }) => {
     const columnas = getColumnasGrilla();
     setColsGrilla(columnas);
 
-    console.log('MisDDJJGrilla - useEffect ------------------');
+    //console.log('MisDDJJGrilla - useEffect ------------------');
   }, [rows]);
 
   //1ro seteo columans fijas
