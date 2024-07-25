@@ -613,12 +613,7 @@ export const DDJJForm = ({ idDDJJ }) => {
     setExpanded(true);
   };
 
-  const guardarDDJJConfirm = async () => {
-    //Armo mensaje de vcalidacion si hay Errores.-
-    console.log(
-      'guardarDeclaracionJurada - rowsValidaciones:',
-      rowsValidaciones,
-    );
+  const getMsgValidaciones = () => {
     if (useGridValidaciones.tieneErrores()) {
       const mensajesUnicos = new Set();
       console.log(rowsValidaciones.errores);
@@ -634,10 +629,21 @@ export const DDJJForm = ({ idDDJJ }) => {
         })
         .join('');
 
+      return mensajesFormateados;
+    }
+  };
+
+  const guardarDDJJConfirm = async () => {
+    //Armo mensaje de vcalidacion si hay Errores.-
+    console.log(
+      'guardarDeclaracionJurada - rowsValidaciones:',
+      rowsValidaciones,
+    );
+    if (useGridValidaciones.tieneErrores()) {
       Swal.fire({
         icon: 'error',
         title: 'Valiacion de Declaracion Jurada',
-        html: `${mensajesFormateados}<br>
+        html: `${getMsgValidaciones()}<br>
                       <label for="guardarErrores">Puede guardar la DDJJ y corregir los errores en otro momento antes de presentar</label>`,
         showConfirmButton: true,
         confirmButtonText: 'OK',
@@ -772,9 +778,15 @@ export const DDJJForm = ({ idDDJJ }) => {
         }
       });
     } else {
-      swal.showError(
-        'La declaracion jurada no se pudo presentar. Existen campos invalidos',
-      );
+      Swal.fire({
+        icon: 'error',
+        title: 'Valiacion de Declaracion Jurada',
+        html: `La DDJJ no se pudo presentar.<br>Existen campos invalidos:<br><br> ${getMsgValidaciones()}<br>Corrija la informacion antes de Presentar la DDJJ `,
+        showConfirmButton: true,
+        confirmButtonText: 'OK',
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar',
+      });
     }
   };
 
@@ -1421,6 +1433,13 @@ export const DDJJForm = ({ idDDJJ }) => {
                 field: 'uomaSocio',
                 value: event.target.value,
               });
+              if (event.target.value == false) {
+                params.api.setEditCellValue({
+                  id: params.id,
+                  field: 'amtimaSocio',
+                  value: false,
+                });
+              }
             }}
           >
             <MenuItem value={true}>Si</MenuItem>
@@ -1648,7 +1667,9 @@ export const DDJJForm = ({ idDDJJ }) => {
                   pageSizeOptions={pageSizeOptions}
                   apiRef={gridApiRef}
                   className="afiliados"
-                  columnVisibilityModel={{ errores: false }}
+                  columnVisibilityModel={{
+                    gErrores: false,
+                  }}
                   timezoneOffset={null}
                   sx={{
                     '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
