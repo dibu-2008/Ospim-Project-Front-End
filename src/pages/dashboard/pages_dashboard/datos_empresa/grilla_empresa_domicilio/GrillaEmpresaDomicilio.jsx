@@ -369,6 +369,9 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell',
+      valueParser: (value) => {
+        return value?.toUpperCase();
+      },
     },
     {
       field: 'calleNro',
@@ -396,6 +399,9 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell',
+      valueParser: (value) => {
+        return value?.toUpperCase();
+      },
     },
     {
       field: 'oficina',

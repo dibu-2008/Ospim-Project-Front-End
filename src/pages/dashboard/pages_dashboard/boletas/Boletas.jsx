@@ -201,7 +201,7 @@ export const Boletas = () => {
           >
             <Tabs value={tabState} onChange={handleChangeTabState}>
               <Tab
-                label={'Boletas Con Periodo'}
+                label={'Boletas Periodo'}
                 {...a11yProps(0)}
                 sx={{ fontSize: '1.2rem' }}
               />

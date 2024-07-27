@@ -217,7 +217,7 @@ const DashboardPage = () => {
                 {rolFuncionalidades.BOLETAS && (
                   <NavLink to="./boletas" className="icon-container">
                     <StyleIcon className="icon-link" />{' '}
-                    {open && <span className="icon-link">Boletas</span>}
+                    {open && <span className="icon-link">Mis Boletas</span>}
                   </NavLink>
                 )}
 

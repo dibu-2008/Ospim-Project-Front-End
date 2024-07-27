@@ -7,7 +7,6 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useFormLoginInternalUser } from '../../hooks/useFormLoginInternalUser.js';
-import { InputComponent } from '@components/InputComponent.jsx';
 import { ButtonComponent } from '@components/ButtonComponent.jsx';
 import { showSwalSuccess } from './LoginShowAlert.js';
 import Alert from '@mui/material/Alert';
@@ -24,7 +23,6 @@ import {
 } from '@mui/material';
 import { ThreeCircles } from 'react-loader-spinner';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import localStorageService from '@/components/localStorage/localStorageService.js';
 import NavBar from '@/components/navbar/NavBar.jsx';
 
 const VITE_WELCOME_PORTAL = import.meta.env.VITE_WELCOME_PORTAL;
@@ -136,7 +134,7 @@ export const LoginPage = () => {
           loginDto.tokenRefresco,
         );
 
-        showSwalSuccess(VITE_WELCOME_PORTAL);
+        //showSwalSuccess(VITE_WELCOME_PORTAL);
       }
     } else {
       console.log(loginDto);

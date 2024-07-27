@@ -19,6 +19,7 @@ import AddIcon from '@mui/icons-material/Add';
 import CancelIcon from '@mui/icons-material/Close';
 import CreateIcon from '@mui/icons-material/Create';
 import Switch from '@mui/material/Switch';
+
 import { DDJJArchivoImport } from '@/pages/dashboard/pages_dashboard/ddjj/formulario/DDJJArchivoImport';
 import { DDJJPeriodoAnterior } from '@/pages/dashboard/pages_dashboard/ddjj/formulario/DDJJPeriodoAnterior';
 import { DDJJCuilForm } from '@/pages/dashboard/pages_dashboard/ddjj/formulario/DDJJCuilForm';
@@ -200,7 +201,7 @@ function EditToolbar(props) {
 }
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-export const DDJJForm = ({ idDDJJ }) => {
+export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
   const ID_EMPRESA = localStorageService.getEmpresaId();
   const [ddjjCabe, setDdjjCabe] = useState({
     id: idDDJJ || null,
@@ -321,8 +322,8 @@ export const DDJJForm = ({ idDDJJ }) => {
         msg +=
           '<br><br>Debe completarla y Presentarla para poder dar de alta una nueva DDJJ.</div>';
         swal.showWarning(msg, true);
-        setPeriodo(null);
         setDdjjCabe({ ...ddjjCabe, periodo: null });
+        mostrarConsultaMissDDJJ();
       } else {
         msg += '.<br><br> Desea ingresar una nueva DDJJ ?<br><br>';
 
@@ -592,9 +593,9 @@ export const DDJJForm = ({ idDDJJ }) => {
     ddjjCabeNew.periodo = formatter.dateObject(ddjjResponse.periodo);
     ddjjCabeNew.secuencia = ddjjResponse.secuencia;
     ddjjCabeNew.estado = ddjjResponse.estado;
-    console.log('DDJJForm - getDDJJ() - ddjjCabeNew: ', ddjjCabeNew);
+    //console.log('DDJJForm - getDDJJ() - ddjjCabeNew: ', ddjjCabeNew);
     const newRowsValidaciones = await useGridValidaciones.validarDDJJ(
-      ddjjCabe,
+      ddjjCabeNew,
       ddjjResponse.afiliados,
     );
 
@@ -602,9 +603,7 @@ export const DDJJForm = ({ idDDJJ }) => {
       ddjjResponse.afiliados,
       newRowsValidaciones,
     );
-    console.log(
-      'DDJJForm - getDDJJ() -  useGridValidaciones.validarDDJJ - rowsNew: ',
-    );
+
     console.log(rowsNew);
     console.log('--------------');
 
@@ -616,7 +615,7 @@ export const DDJJForm = ({ idDDJJ }) => {
   const getMsgValidaciones = () => {
     if (useGridValidaciones.tieneErrores()) {
       const mensajesUnicos = new Set();
-      console.log(rowsValidaciones.errores);
+      console.log('rowsValidaciones:', rowsValidaciones.errores);
       rowsValidaciones.errores.forEach((error) => {
         if (!mensajesUnicos.has(error.descripcion)) {
           mensajesUnicos.add(error.descripcion);
@@ -625,12 +624,37 @@ export const DDJJForm = ({ idDDJJ }) => {
 
       const mensajesFormateados = Array.from(mensajesUnicos)
         .map((mensaje, index) => {
-          return `<p>${index + 1} - ${mensaje}</p>`;
+          return `<p>${index + 1} - ${mensaje} (${getColsMsgValidacion(mensaje)})</p>`;
         })
         .join('');
 
       return mensajesFormateados;
     }
+  };
+
+  const getColsMsgValidacion = (msgError) => {
+    const colUnicas = new Set();
+    rowsValidaciones.errores.forEach((error) => {
+      if (msgError == error.descripcion) {
+        if (!colUnicas.has(error.codigo)) {
+          colUnicas.add(error.codigo);
+        }
+      }
+    });
+
+    if (colUnicas.size > 0) {
+      const mensajesFormateados = Array.from(colUnicas)
+        .map((codigo, index) => {
+          const reg = columns.find((regloop) => {
+            return regloop.field === codigo;
+          });
+          if (reg) return reg.headerName;
+          return '';
+        })
+        .join(', ');
+      return mensajesFormateados;
+    }
+    return '';
   };
 
   const guardarDDJJConfirm = async () => {

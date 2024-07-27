@@ -31,7 +31,7 @@ const showSwalError = (descripcion) => {
     Swal.fire({
       icon: 'error',
       title: 'Error de Validación',
-      text: descripcion,
+      html: descripcion,
       showConfirmButton: true,
       confirmButtonText: 'Aceptar',
     });

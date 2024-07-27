@@ -84,13 +84,14 @@ export const eliminar = async (UrlApi, id) => {
 
 export const patch = async (UrlApi, oEntidad) => {
   try {
-    const response = await axiosCrud.patch(UrlApi, id);
+    const response = await axiosCrud.patch(UrlApi, oEntidad);
     if (response == true) {
       swal.showSuccess(HTTP_MSG_MODI);
       return true;
     }
     throw response;
   } catch (error) {
+    console.log('patch - error: ', error);
     swal.showErrorBackEnd(HTTP_MSG_MODI_ERROR, error);
     return false;
   }

@@ -11,6 +11,7 @@ export const GestionRoles = () => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await axiosGestionRoles.getFuncionalidadesByRol();
+      console.log('GestionRoles - response: ', response);
       setRoles(response);
       setRol(response[0]);
     };
@@ -21,10 +22,6 @@ export const GestionRoles = () => {
     const selectedRol = roles.find((r) => r.id === event.target.value);
     setRol(selectedRol || {});
   };
-
-  useEffect(() => {
-    console.log(roles);
-  }, []);
 
   return (
     <>
