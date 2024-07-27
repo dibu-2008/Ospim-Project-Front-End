@@ -24,6 +24,7 @@ import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 import swal from '@/components/swal/swal';
 import Swal from 'sweetalert2';
 import { UserContext } from '@/context/userContext';
+import '../DatosEmpresa.css';
 //const isNotNull = (value) => (value !== null && value !== '' ? value : '');
 
 let isOnEditMode = false;
@@ -368,6 +369,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
       editable: true,
       headerAlign: 'center',
       align: 'center',
+      cellClassName: 'cellClass',
       headerClassName: 'header--cell',
       valueParser: (value) => {
         return value?.toUpperCase();
