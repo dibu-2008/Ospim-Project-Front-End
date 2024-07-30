@@ -43,9 +43,12 @@ const deleteValidacionesCuil = (cuil) => {
   );
   if (newRowsValidaciones.errores && newRowsValidaciones.errores.filter) {
     newRowsValidaciones.errores = newRowsValidaciones.errores.filter((item) => {
-      if (item.cuil !== cuil) {
-        return item;
+      if (item.cuil != cuil) {
+        console.log('filter - DIF - item:', item);
+      } else {
+        console.log('filter - IGUAL - item:', item);
       }
+      return item.cuil != cuil;
     });
   }
   console.log(
@@ -85,10 +88,10 @@ const actualizarFiltroErrores = (rows, newRowsValidaciones) => {
   const newRows = rows.slice();
   //console.log('actualizarFiltroErrores - newRows: ', newRows);
   //console.log('actualizarFiltroErrores - typeof newRows: ', typeof newRows);
-  newRows.map((regCuil) => {
+  newRows?.map((regCuil) => {
     //console.log('validarDDJJGrillaErroresRefresh - updateRows - gridData.forEach - row:',row);
     regCuil.gErrores = false;
-    newRowsValidaciones.errores.forEach((regVal) => {
+    newRowsValidaciones?.errores?.forEach((regVal) => {
       if (regVal.cuil == regCuil.cuil) {
         //pongo en true el row
         regCuil.gErrores = true;

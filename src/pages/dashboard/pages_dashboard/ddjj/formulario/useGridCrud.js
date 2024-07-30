@@ -22,10 +22,9 @@ const processRowUpdate = async (ddjjCabe, newRow) => {
     if (val && val.errores && val.errores.length > 0) {
       //Si hay errores en el registro, los agrego a las validaciones existentes
       console.log('useGridCrud - processRowUpdate - 4');
-      //saco los viejos errores
-      console.log('remuevo errores y despues pongo nuevos ');
 
-      //Agrego errores NUEVOS
+      //errores: saco viejos y pongo NUEVOS:
+      console.log('remuevo errores y despues pongo nuevos (todo junto)');
       console.log('useGridCrud - processRowUpdate - val.errores:', val.errores);
       const newRowsValidaciones = useGridValidaciones.add(
         newRow.cuil,

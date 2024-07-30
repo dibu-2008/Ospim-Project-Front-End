@@ -526,6 +526,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     if (ddjjCabe.periodo == null)
       setDdjjCabe({ ...ddjjCabe, periodo: formatter.getPeriodoActual() });
     setDdjjModi(true);
+    setExpanded(true);
   };
 
   const handlerGrillaActualizarPeriodoAnterior = (vecDatos) => {
@@ -539,6 +540,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     if (ddjjCabe.periodo == null)
       setDdjjCabe({ ...ddjjCabe, periodo: formatter.getPeriodoActual() });
     setDdjjModi(true);
+    setExpanded(true);
   };
 
   const habiModifRefresh = () => {
@@ -1747,9 +1749,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
                     sx={{ padding: '6px 52px', marginLeft: '10px' }}
                     onClick={guardarDDJJConfirm}
                     disabled={
-                      someRowInEditMode ||
-                      !habiModif ||
-                      gridApiRef.current.getRowModels().size == 0
+                      someRowInEditMode || !habiModif || rows?.length == 0
                     }
                   >
                     Guardar
