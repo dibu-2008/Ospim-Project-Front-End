@@ -19,24 +19,33 @@ export const getRamo = async () => {
   }
 };
 
-export const registrarEmpresa = async (registro,redirectFunction) => {
+export const registrarEmpresa = async (registro, redirectFunction) => {
   const URL = '/usuario/empresa/public/';
 
   try {
     const data = await axiosCrud.crear(URL, registro);
     if (data && data.id) {
       console.log('Empresa registrada');
-      swal.showSuccesConfirmButton(`${HTTP_MSG_ALTA} Será redireccionado al login.`, redirectFunction);
+      swal.showSuccesConfirmButton(
+        `${HTTP_MSG_ALTA} Será redireccionado al login.`,
+        redirectFunction,
+      );
 
       return data;
     }
     throw data;
   } catch (error) {
     swal.showErrorBackEnd(HTTP_MSG_ALTA_ERROR, error);
-    return error.descripcion
-      .match(/\[(.*?)\]/)[1]
-      .replace(/^\{|\}$/g, '')
-      .split(', ')
-      .map((error) => error.split('=')[0]);
+    console.log('registrarEmpresa - error:', error);
+    try {
+      const aux = error.descripcion
+        .match(/\[(.*?)\]/)[1]
+        .replace(/^\{|\}$/g, '')
+        .split(', ')
+        .map((error) => error.split('=')[0]);
+      return aux;
+    } catch (e) {
+      return error.descripcion;
+    }
   }
 };

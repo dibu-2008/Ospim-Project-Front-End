@@ -201,7 +201,7 @@ export const Boletas = () => {
           >
             <Tabs value={tabState} onChange={handleChangeTabState}>
               <Tab
-                label={'Boletas Con Periodo'}
+                label={'Boletas Periodo'}
                 {...a11yProps(0)}
                 sx={{ fontSize: '1.2rem' }}
               />
@@ -214,7 +214,7 @@ export const Boletas = () => {
           </Box>
           <CustomTabPanel value={tabState} index={0}>
             <Box
-              style={{ height: 400, width: '100%' }}
+              style={{ height: 650, width: '100%' }}
               sx={{
                 width: '100%',
                 '& .MuiDataGrid-columnHeaders': {
@@ -277,8 +277,54 @@ export const Boletas = () => {
                     field: 'acciones',
                     headerName: 'Acciones',
                     flex: 1,
-                    renderCell: (params) =>
-                      params.row.requiereBep ? (
+                    renderCell: (params) => {
+                      if (params.row.baja !== null) {
+                        return (
+                          <>
+                            <IconButton
+                              size="small"
+                              onClick={() => handleViewClick(params.row)}
+                            >
+                              <VisibilityIcon />
+                            </IconButton>
+                          </>
+                        );
+                      }
+
+                      if (params.row.requiereBep) {
+                        return (
+                          <>
+                            <IconButton
+                              size="small"
+                              onClick={() => handleViewClick(params.row)}
+                            >
+                              <VisibilityIcon />
+                            </IconButton>
+                            <IconButton
+                              size="small"
+                              onClick={() => {
+                                boletaPdfDownload(ID_EMPRESA, params.row.id);
+                              }}
+                            >
+                              <PrintIcon />
+                            </IconButton>
+                            <IconButton
+                              size="small"
+                              onClick={() => handleViewClick(params.row)}
+                              disabled={!!params.row.fecha_de_pago}
+                            >
+                              <EditIcon />
+                            </IconButton>
+                            <IconButton
+                              size="small"
+                              onClick={() => handleGenerarBepClick(params.row)}
+                            >
+                              <RequestQuoteIcon />
+                            </IconButton>
+                          </>
+                        );
+                      }
+                      return (
                         <>
                           <IconButton
                             size="small"
@@ -301,38 +347,9 @@ export const Boletas = () => {
                           >
                             <EditIcon />
                           </IconButton>
-                          <IconButton
-                            size="small"
-                            onClick={() => handleGenerarBepClick(params.row)}
-                          >
-                            <RequestQuoteIcon />
-                          </IconButton>
                         </>
-                      ) : (
-                        <>
-                          <IconButton
-                            size="small"
-                            onClick={() => handleViewClick(params.row)}
-                          >
-                            <VisibilityIcon />
-                          </IconButton>
-                          <IconButton
-                            size="small"
-                            onClick={() => {
-                              boletaPdfDownload(ID_EMPRESA, params.row.id);
-                            }}
-                          >
-                            <PrintIcon />
-                          </IconButton>
-                          <IconButton
-                            size="small"
-                            onClick={() => handleViewClick(params.row)}
-                            disabled={!!params.row.fecha_de_pago}
-                          >
-                            <EditIcon />
-                          </IconButton>
-                        </>
-                      ),
+                      );
+                    },
                   },
                 ]}
                 getRowClassName={(params) =>
@@ -360,7 +377,7 @@ export const Boletas = () => {
           </CustomTabPanel>
           <CustomTabPanel value={tabState} index={1}>
             <Box
-              style={{ height: 400 }}
+              style={{ height: 650 }}
               sx={{
                 width: '100%',
                 '& .MuiDataGrid-columnHeaders': {
@@ -443,7 +460,9 @@ export const Boletas = () => {
           </CustomTabPanel>
         </Box>
       </ThemeProvider>
-      <p className="leyenda">La visualización de los pagos efectuados puede tener una demora</p>
+      <p className="leyenda">
+        La visualización de los pagos efectuados puede tener una demora
+      </p>
     </div>
   );
 };

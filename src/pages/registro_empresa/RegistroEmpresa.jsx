@@ -248,7 +248,6 @@ export const RegistroEmpresa = () => {
       <div className="registro_empresa_container">
         <form onSubmit={OnSubmitRegisterCompany} className="form">
           <div className="form_register_company">
-            <h1>Bienvenidos a OSPIM</h1>
             <h3>Formulario de registro</h3>
             <div className="input-group">
               <TextField
@@ -714,7 +713,7 @@ export const RegistroEmpresa = () => {
                 <span style={styContToolAst}>
                   <Tooltip
                     followCursor
-                    title="Ingrese el CUIT sin guiones ni espacios. Ejemplo: 30715478567"
+                    title="Ingrese 10 caracteres, 2 para cod area y 8 para numero de telefono"
                     sx={{ cursor: 'pointer' }}
                   >
                     <IconButton>

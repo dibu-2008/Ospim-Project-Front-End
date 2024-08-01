@@ -249,6 +249,7 @@ export const GenerarBoletas = () => {
       console.log('Este es el response ', data);
       if (data) {
         sethabilitaBoton(true);
+        navigate(`/dashboard/boletas`);
       }
     } catch (error) {
       console.error(error);
@@ -411,11 +412,11 @@ export const GenerarBoletas = () => {
                   <TableCell>{afiliado.cuil}</TableCell>
                   <TableCell>{afiliado.apellido}</TableCell>
                   <TableCell className="importes">
-                    {afiliado.remunerativo}
+                    {formatter.currency.format(afiliado.remunerativo)}
                   </TableCell>
                   {afiliado.boletas.map((boleta, boletaIndex) => (
                     <TableCell className="importes" key={boletaIndex}>
-                      {boleta}
+                      {formatter.currency.format(boleta)}
                     </TableCell>
                   ))}
                 </TableRow>
@@ -502,10 +503,11 @@ export const GenerarBoletas = () => {
                 <h3 style={{ color: '#1A76D2' }}>Ajustes aplicados</h3>
               )}
               <p>{boleta.descripcion}</p>
+
               <ul>
                 {boleta.ajustes.map((ajuste, index) => (
                   <li key={index}>
-                    {ajuste.descripcion}:{' '}
+                    {ajuste.descripcion} - Motivo: {ajuste.motivo} - Monto:
                     {formatter.currency.format(ajuste.monto)}
                   </li>
                 ))}

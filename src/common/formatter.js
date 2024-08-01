@@ -46,6 +46,21 @@ const dateObject = (strValue) => {
   }
 };
 
+const toBackendStr = (strValue) => {
+  //castea "YYYY-MM-DD" => Date object
+  try {
+    if (strValue) {
+      if (dayjs.isDayjs(strValue)) return strValue.format('YYYY-MM-DD');
+
+      return new dayjs(strValue).format('YYYY-MM-DD');
+    }
+    return null;
+  } catch (error) {
+    console.log('castDateString - error:', error);
+    return null;
+  }
+};
+
 const dateString = (strValue) => {
   //castea "YYYY-MM-DD" => "DD/MM/YYYY"
   try {
@@ -101,11 +116,54 @@ const formatPeriodo = (value, separador) => {
   }
 };
 
+const getPeriodoActual = () => {
+  const ahora = dayjs().startOf('month');
+  const ahoraMenosUnAnio = ahora.add(-1, 'month');
+  return ahoraMenosUnAnio;
+};
+
 const formatFechaGrilla = (value) => {
   try {
     return new Date(value).toISOString().split('T')[0];
   } catch (error) {
     return '';
+  }
+};
+
+const formatFechaImport = (fechaExcel) => {
+  // xlsx
+  if (typeof fechaExcel === 'number') {
+    const horas = Math.floor((fechaExcel % 1) * 24);
+    const minutos = Math.floor(((fechaExcel % 1) * 24 - horas) * 60);
+    const fechaFinal = new Date(
+      Date.UTC(0, 0, fechaExcel, horas - 17, minutos),
+    );
+
+    const fechaDaysJs = dayjs(fechaFinal)
+      .set('hour', 3)
+      .set('minute', 0)
+      .set('second', 0)
+      .set('millisecond', 0)
+      .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+
+    return fechaDaysJs;
+  }
+
+  // cvs
+  if (typeof fechaExcel === 'string') {
+    const partes = fechaExcel?.split('/');
+    const anio = partes[2]?.length === 2 ? '20' + partes[2] : partes[2];
+    const mes = partes[1].padStart(2, '0');
+    const dia = partes[0];
+
+    const fechaDaysJs = dayjs(`${anio}-${mes}-${dia}`)
+      .set('hour', 3)
+      .set('minute', 0)
+      .set('second', 0)
+      .set('millisecond', 0)
+      .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+
+    return fechaDaysJs;
   }
 };
 
@@ -139,12 +197,15 @@ const formatter = {
   currencyString: currencyString,
   dateObject: dateObject,
   dateString: dateString,
+  dateToStringBackend: toBackendStr,
   periodoString: periodoString,
   periodoISOString: periodoISOString,
+  getPeriodoActual: getPeriodoActual,
 
   date: formatDate,
   periodo: formatPeriodo,
   fechaGrilla: formatFechaGrilla,
+  fechaImport: formatFechaImport,
   toFechaValida,
 };
 

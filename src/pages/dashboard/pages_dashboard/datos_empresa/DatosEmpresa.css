@@ -9,6 +9,11 @@
   text-align: left !important;
 }
 
-.formC{
+.formC {
   width: 350px;
 }
+/*
+.cellClass {
+  border-width: 3px !important;
+}
+*/

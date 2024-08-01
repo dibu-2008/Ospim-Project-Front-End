@@ -19,6 +19,9 @@ export const axiosCrud = {
   eliminar: async function (UrlApi, id) {
     return axiosEliminar(UrlApi, id);
   },
+  patch: async function (UrlApi, oEntidad) {
+    return axiosPatch(UrlApi, oEntidad);
+  },
 };
 
 export const axiosConsultar = async (UrlApi) => {

@@ -313,7 +313,7 @@ export const InteresesAfip = () => {
   return (
     <Box className="intereses_container">
       <Typography variant="h2" gutterBottom>
-        Intereses Afip
+        Intereses
       </Typography>
       <ThemeProvider theme={themeWithLocale}>
         <StripedDataGrid

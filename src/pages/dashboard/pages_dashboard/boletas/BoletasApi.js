@@ -2,8 +2,6 @@ import oAxios from '@components/axios/axiosInstace';
 import { axiosCrud } from '@/components/axios/axiosCrud';
 import swal from '@/components/swal/swal';
 
-import formatter from '@/common/formatter';
-
 const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
 const HTTP_MSG_MODI = import.meta.env.VITE_HTTP_MSG_MODI;
 const HTTP_MSG_MODI_ERROR = import.meta.env.VITE_HTTP_MSG_MODI_ERROR;
@@ -53,6 +51,24 @@ export const getBoletaById = async (empresa_id, boleta_id) => {
   }
 };
 
+export const validarModificacion = async (empresa_id, boleta_id) => {
+  console.log(
+    `validarModificacion - empresa_id: ${empresa_id} - boleta_id: ${boleta_id}`,
+  );
+  try {
+    const URL = `/empresa/${empresa_id}/boletas/${boleta_id}/validar-modi`;
+    const rta = await axiosCrud.consultar(URL);
+    console.log('validarModificacion - rta: ', rta);
+    if (rta && rta.hasOwnProperty('reemplazar')) {
+      return rta;
+    }
+    throw rta;
+  } catch (error) {
+    swal.showErrorBackEnd(HTTP_MSG_CONSUL_ERROR, error);
+    return null;
+  }
+};
+
 export const modificarBoletaById = async (empresa_id, body) => {
   console.log('modificarBoletaById - body:', body);
   const URL = `/empresa/${empresa_id}/boletas`;
@@ -68,16 +84,14 @@ export const modificarBoletaById = async (empresa_id, body) => {
     console.log('bodyNew: ', bodyNew);
 
     const rta = await axiosCrud.actualizar(URL, bodyNew);
-    if (rta) {
+    console.log('modificarBoletaById - axiosCrud.actualizar() - rta: ', rta);
+    if (rta && rta == true) {
       swal.showSuccess(HTTP_MSG_MODI);
-    } else {
-      swal.showError(HTTP_MSG_MODI_ERROR);
+      return true;
     }
-    return rta;
+    throw rta;
   } catch (error) {
-    const HTTP_MSG =
-      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`;
-    swal.showErrorBackEnd(HTTP_MSG, error);
+    swal.showErrorBackEnd(HTTP_MSG_MODI_ERROR, error);
     return false;
   }
 };
@@ -117,4 +131,7 @@ export const axiosBoletas = {
   getBoletaById,
   modificarBoletaById,
   generarBep,
+  validarModificacion: async function (empresa_id, boleta_id) {
+    return await validarModificacion(empresa_id, boleta_id);
+  },
 };

@@ -1,13 +1,16 @@
 import Swal from 'sweetalert2';
 import { erroresFormat } from '../axios/erroresFormat';
 
-const showSwallSuccess = (MESSAGE_HTTP) => {
-  Swal.fire({
-    icon: 'success',
-    title: MESSAGE_HTTP,
-    showConfirmButton: false,
-    timer: 2000,
-  });
+const showSwallSuccess = (MESSAGE_HTTP, texto) => {
+  let minSetting = {
+    titulo: MESSAGE_HTTP,
+  };
+  if (texto) {
+    minSetting.texto = texto;
+  }
+
+  let settings = getSettingSuccess(minSetting);
+  Swal.fire(settings);
 };
 
 const showSwallSuccessWithConfirmButton = (MESSAGE_HTTP, redirectFunction) => {
@@ -28,7 +31,7 @@ const showSwalError = (descripcion) => {
     Swal.fire({
       icon: 'error',
       title: 'Error de Validación',
-      text: descripcion,
+      html: descripcion,
       showConfirmButton: true,
       confirmButtonText: 'Aceptar',
     });
@@ -92,18 +95,60 @@ const getSettingConfirm = (seteos) => {
   return settings;
 };
 
-const showErrorBackEnd = (HTTP_MSG, rta) => {
+const getSettingSuccess = (seteos) => {
+  console.log('getSettingSuccess - seteos: ', seteos);
+  let settings = null;
+  if (seteos && seteos.hasOwnProperty('titulo')) {
+    settings = {
+      icon: 'success',
+      showConfirmButton: false,
+      timer: 2000,
+      title: seteos.titulo,
+    };
+
+    if (seteos.hasOwnProperty('texto')) {
+      if (seteos.hasOwnProperty('esHtml') && seteos.esHtml == true) {
+        settings.html = seteos.texto;
+      } else {
+        settings.text = seteos.texto;
+      }
+    }
+  }
+  console.log('getSettingSuccess - settings: ', settings);
+  return settings;
+};
+
+const showErrorBackEnd = async (HTTP_MSG, rta) => {
   const ERROR_BUSINESS = import.meta.env.VITE_ERROR_BUSINESS;
   const ERROR_MESSAGE = import.meta.env.VITE_ERROR_MESSAGE;
 
   try {
     console.log('showErrorBackEnd - rta:', rta);
-    if (rta.response && rta.response.data) {
-      console.log(
-        'showErrorBackEnd - VA A EJECUTAR: rta = rta.response.data; ???',
-      );
-      rta = rta.response.data;
+
+    if (
+      rta.request &&
+      rta.request.responseType &&
+      rta.request.responseType === 'blob' &&
+      rta.response.data instanceof Blob &&
+      rta.response.data.type &&
+      rta.response.data.type.toLowerCase().indexOf('json') != -1
+    ) {
+      console.log('JSON.parse(await rta.response.data.text());.... ');
+      let errorResponse = await rta.response.data.text();
+      console.log('errorResponse: ', errorResponse);
+      rta = JSON.parse(errorResponse);
+    } else {
+      if (rta.response && rta.response.data) {
+        console.log(
+          'showErrorBackEnd - VA A EJECUTAR: rta = rta.response.data; ???',
+        );
+        rta = rta.response.data;
+      }
     }
+
+    console.log('showErrorBackEnd - rta: ', rta);
+    console.log('showErrorBackEnd - rta.data: ', rta.data);
+
     if (rta && rta.tipo && rta.descripcion && rta.ticket) {
       console.log('* showErrorBackEnd - con ticket');
       if (rta.tipo === ERROR_BUSINESS) {
@@ -119,12 +164,7 @@ const showErrorBackEnd = (HTTP_MSG, rta) => {
       showSwalError(HTTP_MSG);
     }
   } catch (error) {
-    console.log('* showErrorBackEnd - CATCH !!! ');
-    console.log('showErrorBackEnd - catch() - rta:' + JSON.stringify(rta));
-    console.log(
-      'showErrorBackEnd - catch() -  - error: ' + JSON.stringify(error),
-    );
-
+    console.log('showErrorBackEnd - catch() - error: ', error);
     showSwalError(HTTP_MSG);
   }
 };
@@ -138,8 +178,8 @@ const swal = {
     return showSwalErrorBusiness(descripcion);
   },
 
-  showSuccess: async function (descripcion) {
-    return showSwallSuccess(descripcion);
+  showSuccess: async function (descripcion, texto) {
+    return showSwallSuccess(descripcion, texto);
   },
 
   showSuccesConfirmButton: async function (descripcion, redirectFunction) {
@@ -155,6 +195,9 @@ const swal = {
 
   getSettingConfirm: function (seteos) {
     return getSettingConfirm(seteos);
+  },
+  getSettingSuccess: function (seteos) {
+    return getSettingSuccess(seteos);
   },
 };
 

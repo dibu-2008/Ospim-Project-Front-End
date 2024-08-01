@@ -4,7 +4,7 @@ import { axiosGestionRoles } from './GestionRolesApi';
 import './GestionRoles.css';
 
 export const DragAndDrop = ({ tareas }) => {
-  //console.log(tareas.funcionalidades)
+  console.log('DragAndDrop - tareas:', tareas);
 
   const funcionalidades_t = [
     {
@@ -32,7 +32,7 @@ export const DragAndDrop = ({ tareas }) => {
   const [descripcion, setDescripcion] = useState('');
   const [funcionalidades, setTasks] = useState(tareas || funcionalidades_t);
   useEffect(() => {
-    console.log(tareas);
+    console.log('DragAndDrop - tareas:', tareas);
     if (tareas) {
       setTasks(tareas.funcionalidades || funcionalidades_t);
       setRolId(tareas.id);

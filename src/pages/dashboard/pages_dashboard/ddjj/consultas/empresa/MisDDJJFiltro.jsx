@@ -3,57 +3,48 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import dayjs from 'dayjs';
-import './MisDDJJConsulta.css';
-import {
-  MisDDJJConsultaGrilla,
-  castearMisDDJJ,
-} from './grilla/MisDDJJConsultaGrilla';
-import { axiosDDJJ } from './grilla/MisDDJJConsultaGrillaApi';
+import './MisDDJJFiltro.css';
+import { MisDDJJGrilla } from './MisDDJJGrilla';
+import { axiosDDJJ } from './MisDDJJGrillaApi';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
 import localStorageService from '@/components/localStorage/localStorageService';
-export const MisDDJJConsulta = ({
-  setDDJJState,
-  setPeriodo,
-  rows_mis_ddjj,
-  setRowsMisDdjj,
-  setTabState,
-  setPeticion,
-  setTituloPrimerTab,
-}) => {
+
+export const MisDDJJFiltro = ({ handlerDDJJEditar }) => {
+  const ID_EMPRESA = localStorageService.getEmpresaId();
   const ahora = dayjs().startOf('month');
   const ahoraMenosUnAnio = ahora.add(-11, 'month');
-  const [fromDate, setFromDate] = useState(ahoraMenosUnAnio);
-  const [toDate, setToDate] = useState(ahora);
+  const [filtro, setFiltro] = useState({
+    desde: ahoraMenosUnAnio,
+    hasta: ahora,
+  });
+  const [rows, setRows] = useState([]);
 
-  const ID_EMPRESA = localStorageService.getEmpresaId();
-
-  const buscarDDJJ = async () => {
+  const handlerConsultar = async () => {
     try {
       let desde = null;
-      if (fromDate !== null) {
-        desde = fromDate.startOf('month').format('YYYY-MM-DD');
+      if (filtro.desde !== null) {
+        desde = filtro.desde.startOf('month').format('YYYY-MM-DD');
       }
       let hasta = null;
-      if (toDate !== null) {
-        hasta = toDate.startOf('month').format('YYYY-MM-DD');
+      if (filtro.hasta !== null) {
+        hasta = filtro.hasta.startOf('month').format('YYYY-MM-DD');
       }
 
       const ddjjResponse = await axiosDDJJ.consultar(ID_EMPRESA, desde, hasta);
+      console.log('handlerConsultar - ddjjResponse: ', ddjjResponse);
+      setRows(ddjjResponse);
 
-      setRowsMisDdjj(ddjjResponse);
-      //console.log('ddjjResponse', ddjjResponse);
-
-      const ddjjCasteadas = castearMisDDJJ(ddjjResponse);
-      //console.log('ddjjCasteadas', ddjjCasteadas);
-
-      //setRowsMisDdjj(declaracionesFiltradas);
+      console.log('----------------');
+      console.log('MisDDJJFiltro - now: ', new Date());
+      console.log('MisDDJJFiltro -handlerConsultar - rows: ', rows);
+      console.log('----------------');
     } catch (error) {
       console.error('Error al buscar declaraciones juradas:', error);
     }
   };
 
   useEffect(() => {
-    buscarDDJJ();
+    handlerConsultar();
   }, []);
 
   return (
@@ -71,8 +62,8 @@ export const MisDDJJConsulta = ({
               label={'Periodo desde'}
               views={['month', 'year']}
               closeOnSelect={true}
-              onChange={(oValue) => setFromDate(oValue)}
-              value={fromDate}
+              onChange={(oValue) => setFiltro({ ...filtro, desde: oValue })}
+              value={filtro.desde}
             />
           </DemoContainer>
 
@@ -81,8 +72,8 @@ export const MisDDJJConsulta = ({
               label={'Periodo hasta'}
               views={['month', 'year']}
               closeOnSelect={true}
-              onChange={(oValue) => setToDate(oValue)}
-              value={toDate}
+              onChange={(oValue) => setFiltro({ ...filtro, hasta: oValue })}
+              value={filtro.hasta}
             />
           </DemoContainer>
         </Stack>
@@ -94,7 +85,7 @@ export const MisDDJJConsulta = ({
           alignItems="center"
         >
           <Button
-            onClick={buscarDDJJ}
+            onClick={handlerConsultar}
             variant="contained"
             style={{ marginLeft: '2em' }}
           >
@@ -103,15 +94,10 @@ export const MisDDJJConsulta = ({
         </Stack>
       </div>
       <Stack direction="row" justifyContent="center" alignItems="center">
-        <MisDDJJConsultaGrilla
-          setDDJJState={setDDJJState}
-          setPeriodo={setPeriodo}
-          rows_mis_ddjj={rows_mis_ddjj}
-          setRowsMisDdjj={setRowsMisDdjj}
-          setTabState={setTabState}
-          // setRowsAltaDDJJ={setRowsAltaDDJJ}
-          setPeticion={setPeticion}
-          setTituloPrimerTab={setTituloPrimerTab}
+        <MisDDJJGrilla
+          rows={rows}
+          setRows={setRows}
+          handlerDDJJEditar={handlerDDJJEditar}
         />
       </Stack>
     </div>

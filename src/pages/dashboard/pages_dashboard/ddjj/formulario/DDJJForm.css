@@ -147,3 +147,15 @@ h5 {
   background-color: #1a76d2;
   color: #fff;
 }
+
+.input-currency {
+  width: 100%;
+  height: 100%;
+  border: none;
+  padding: 0 10px;
+  text-align: right;
+}
+
+.input-currency:focus {
+  outline: none;
+}

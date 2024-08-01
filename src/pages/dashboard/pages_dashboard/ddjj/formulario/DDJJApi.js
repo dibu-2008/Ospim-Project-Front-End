@@ -189,7 +189,10 @@ const actualizarNombreApellido = async (registro) => {
     console.log('actualizarNombreApellido - response:', response);
 
     if (response && response.id) {
-      swal.showSuccess(HTTP_MSG_MODI);
+      swal.showSuccess(
+        HTTP_MSG_MODI,
+        'El cambio queda pendiente de validación del area afiliaciones',
+      );
       return true;
     }
     throw response;
