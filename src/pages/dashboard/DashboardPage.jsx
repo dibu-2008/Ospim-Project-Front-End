@@ -278,6 +278,12 @@ const DashboardPage = () => {
                     {open && <span className="icon-link">Aportes</span>}
                   </NavLink>
                 )}
+                {/*rolFuncionalidades.DEUDA && (
+                  <NavLink to="./gestiondeuda" className="icon-container">
+                    <CalculateIcon className="icon-link" />{' '}
+                    {open && <span className="icon-link">Gestión Deuda</span>}
+                  </NavLink>
+                )*/}
               </ListItemIcon>
             </ListItemButton>
           </ListItem>

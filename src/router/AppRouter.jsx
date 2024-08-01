@@ -23,6 +23,7 @@ import { InteresesAfip } from '@/pages/dashboard/pages_dashboard/intereses_afip/
 import { Ajustes } from '@/pages/dashboard/pages_dashboard/ajustes/Ajustes';
 import { DDJJTabs } from '@/pages/dashboard/pages_dashboard/ddjj/DDJJTabs';
 import { GestionRoles } from '@/pages/dashboard/pages_dashboard/gestionRoles/GestionRoles';
+import { GestionDeudas } from '@/pages/dashboard/pages_dashboard/gestion_deudas/GestionDeudas'
 import { Aportes } from '@/pages/dashboard/pages_dashboard/aportes/Aportes';
 import { useState } from 'react';
 import { UserProvider } from '@/context/UserProvider';
@@ -79,6 +80,7 @@ const AppRouter = () => {
           <Route path="ajustes" element={<Ajustes />} />
           <Route path="gestion-roles" element={<GestionRoles />} />
           <Route path="aportes" element={<Aportes />} />
+         {/*<Route path="gestiondeuda" element={<GestionDeudas />} />*/} 
         </Route>
         <Route path="registercompany" element={<RegistroEmpresa />} />
         <Route index element={<Navigate to="/login" />} />
