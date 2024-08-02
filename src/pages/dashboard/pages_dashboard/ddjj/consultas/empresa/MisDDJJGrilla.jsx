@@ -49,7 +49,7 @@ export const MisDDJJGrilla = ({ rows, setRows, handlerDDJJEditar }) => {
 
   const handlePresentarDDJJ = async (rowNew) => {
     const confirm = {
-      titulo: 'Presentación de DDJJ en OSPIM',
+      titulo: 'Presentación de DDJJ',
       texto:
         'Confirma la Presentación de la Declaración Jurada para el Período <b>' +
         formatter.periodo(rowNew.periodo) +

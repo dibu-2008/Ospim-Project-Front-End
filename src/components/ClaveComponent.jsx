@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import Modal from '@mui/material/Modal';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+
 import Typography from '@mui/material/Typography';
 import {
   Box,
@@ -11,6 +13,7 @@ import {
   IconButton,
   alpha,
   Grid,
+  Tooltip,
   InputAdornment,
   OutlinedInput,
   FormControl,
@@ -29,7 +32,15 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-
+const styContToolAst = {
+  display: 'flex',
+  //alignItems: 'center',
+  //justifyContent: 'center',
+  //height: '100%',
+  //position: 'absolute',
+  //marginLeft: '500px',
+  fontSize: '20px',
+};
 export const ClaveComponent = ({ showModal, setShowModal }) => {
   const [clave, setClave] = useState('');
   const [claveNueva, setClaveNueva] = useState('');
@@ -78,6 +89,17 @@ export const ClaveComponent = ({ showModal, setShowModal }) => {
           >
             Gestion de Clave
           </Typography>
+          <span style={styContToolAst}>
+            <Tooltip
+              followCursor
+              title="Ingrese la contraseña de la empresa. Debe contener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un carácter especial. Ejemplo: Abc12345$"
+              sx={{ cursor: 'pointer' }}
+            >
+              <IconButton>
+                <HelpOutlineIcon />
+              </IconButton>
+            </Tooltip>
+          </span>
 
           <Grid container spacing={2}>
             <Grid item xs={4}>
