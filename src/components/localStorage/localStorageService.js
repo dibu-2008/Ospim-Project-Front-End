@@ -49,9 +49,9 @@ export const getEmpresaId = () => {
     auxStateLogin = JSON.parse(localStorage.getItem('stateLogin'));
     if (auxStateLogin.hasOwnProperty('usuarioLogueado')) {
       auxStateLogin = auxStateLogin.usuarioLogueado;
-      if (auxStateLogin.hasOwnProperty('empresa')) {
+      if (auxStateLogin?.hasOwnProperty('empresa')) {
         auxStateLogin = auxStateLogin.empresa;
-        if (auxStateLogin.hasOwnProperty('id')) {
+        if (auxStateLogin?.hasOwnProperty('id')) {
           return auxStateLogin.id;
         }
       }
@@ -74,6 +74,63 @@ export const getRol = () => {
   return {};
 };
 
+export const getUsuario = () => {
+  let auxStateLogin = localStorage.getItem('stateLogin');
+  let USUARIO = null;
+
+  if (auxStateLogin != null) {
+    auxStateLogin = JSON.parse(localStorage.getItem('stateLogin'));
+    if (auxStateLogin.hasOwnProperty('usuarioLogueado')) {
+      USUARIO = auxStateLogin.usuarioLogueado.usuario.nombre;
+      return USUARIO;
+    }
+  }
+
+  return null;
+};
+export const getApellido = () => {
+  let auxStateLogin = localStorage.getItem('stateLogin');
+  let USUARIO = null;
+
+  if (auxStateLogin != null) {
+    auxStateLogin = JSON.parse(localStorage.getItem('stateLogin'));
+    if (auxStateLogin.hasOwnProperty('usuarioLogueado')) {
+      USUARIO = auxStateLogin.usuarioLogueado.persona.apellido;
+      return USUARIO;
+    }
+  }
+
+  return null;
+};
+export const getNombre = () => {
+  let auxStateLogin = localStorage.getItem('stateLogin');
+  let USUARIO = null;
+
+  if (auxStateLogin != null) {
+    auxStateLogin = JSON.parse(localStorage.getItem('stateLogin'));
+    if (auxStateLogin.hasOwnProperty('usuarioLogueado')) {
+      USUARIO = auxStateLogin.usuarioLogueado.persona.nombre;
+      return USUARIO;
+    }
+  }
+
+  return null;
+};
+export const getMail = () => {
+  let auxStateLogin = localStorage.getItem('stateLogin');
+  let USUARIO = null;
+
+  if (auxStateLogin != null) {
+    auxStateLogin = JSON.parse(localStorage.getItem('stateLogin'));
+    if (auxStateLogin.hasOwnProperty('usuarioLogueado')) {
+      USUARIO = auxStateLogin.usuarioLogueado.persona.email;
+      return USUARIO;
+    }
+  }
+
+  return null;
+};
+
 export const isRolEmpleador = () => {
   let ROL = getRol();
   if (ROL == 'EMPLEADOR') return true;
@@ -89,6 +146,18 @@ const localStorageService = {
   },
   getRol: function () {
     return getRol();
+  },
+  getUsuario: function () {
+    return getUsuario();
+  },
+  getApellido: function () {
+    return getApellido();
+  },
+  getNombre: function () {
+    return getNombre();
+  },
+  getMail: function () {
+    return getMail();
   },
   isRolEmpleador: function () {
     return isRolEmpleador();

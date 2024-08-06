@@ -4,6 +4,7 @@ import PrivateRoute from './PrivateRoute';
 import { Inicio } from '../pages/dashboard/pages_dashboard/inicio/Inicio';
 import NavBar from '../components/navbar/NavBar';
 import { DatosEmpresa } from '../pages/dashboard/pages_dashboard/datos_empresa/DatosEmpresa';
+import { DatosPerfil } from '@/pages/dashboard/pages_dashboard/datosPerfil/DatosPerfil';
 import { Publicaciones } from '../pages/dashboard/pages_dashboard/publicaciones/Publicaciones';
 import { RecuperoPage } from '../pages/recupero/RecuperoPage';
 import DashboardPage from '../pages/dashboard/DashboardPage';
@@ -59,6 +60,8 @@ const AppRouter = () => {
           <Route path="boletas/nueva" element={<Boletas />} />
           <Route path="pagos" element={<PagosPage />} />
           <Route path="misdatos" element={<DatosEmpresa />} />
+          <Route path="datos/usuario" element={<DatosPerfil />} />
+
           <Route path="altausuariointerno" element={<AltaUsuarioInterno />} />
           <Route path="cuitsrestringidos" element={<CuitsRestringidos />} />
           <Route path="roles" element={<Roles />} />
