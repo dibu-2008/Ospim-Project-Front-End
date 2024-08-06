@@ -77,7 +77,6 @@ const crearNuevoRegistro = (props) => {
           nombre: '',
           descripcion: '',
           email: '',
-          clave: '',
           rolId: '',
           notificaciones: '',
           habilitado: null,
@@ -108,12 +107,16 @@ const crearNuevoRegistro = (props) => {
 };
 
 export const AltaUsuarioInterno = () => {
-  const [locale, setLocale] = useState('esES');
   const [rowModesModel, setRowModesModel] = useState({});
   const [rows, setRows] = useState([]);
   const [roles, setRoles] = useState([]);
-  const { paginationModel, setPaginationModel, pageSizeOptions } =
-    useContext(UserContext);
+
+  const {
+    paginationModel,
+    setPaginationModel,
+    pageSizeOptions,
+    themeWithLocale,
+  } = useContext(UserContext);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -126,11 +129,6 @@ export const AltaUsuarioInterno = () => {
   };
 
   const theme = useTheme();
-
-  const themeWithLocale = useMemo(
-    () => createTheme(theme, locales[locale]),
-    [locale, theme],
-  );
 
   useEffect(() => {
     const ObtenerUsuariosInternos = async () => {

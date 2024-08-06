@@ -49,7 +49,7 @@ export const crear = async (UrlApi, registro) => {
     }
     throw data;
   } catch (error) {
-    showErrorBackEnd(HTTP_MSG_ALTA_ERROR, error);
+    swal.showErrorBackEnd(HTTP_MSG_ALTA_ERROR, error);
     return {};
   }
 };
