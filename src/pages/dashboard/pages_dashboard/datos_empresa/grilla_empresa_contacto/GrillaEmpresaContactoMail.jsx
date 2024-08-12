@@ -310,6 +310,7 @@ export const GrillaEmpresaContactoMail = ({
         },
       }}
     >
+        <h2 className='subtitulo'>Emails</h2>
        <ThemeProvider theme={themeWithLocale}>
         <StripedDataGrid
           rows={rows}

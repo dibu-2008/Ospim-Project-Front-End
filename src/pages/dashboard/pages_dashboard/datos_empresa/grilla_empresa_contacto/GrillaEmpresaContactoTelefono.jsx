@@ -319,6 +319,7 @@ export const GrillaEmpresaContactoTelefono = ({
         },
       }}
     >
+      <h2 className='subtitulo'>Telefonos</h2>
       <ThemeProvider theme={themeWithLocale}>
         <StripedDataGrid
           rows={rows}
