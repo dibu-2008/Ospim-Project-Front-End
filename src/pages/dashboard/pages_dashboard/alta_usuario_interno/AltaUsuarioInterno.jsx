@@ -312,8 +312,8 @@ export const AltaUsuarioInterno = () => {
     const resp = await axiosUsuariosInternos.actualizar(usuario);
     if (resp) {
       swal.showSuccess('Clave actualizada correctamente !');
-      handleClose();
     }
+    handleClose();
   };
 
   const columns = [
