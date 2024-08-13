@@ -23,6 +23,7 @@ import { DDJJFiltro } from '@/pages/dashboard/pages_dashboard/ddjj/consultas/emp
 import { InteresesAfip } from '@/pages/dashboard/pages_dashboard/intereses_afip/InteresesAfip';
 import { Ajustes } from '@/pages/dashboard/pages_dashboard/ajustes/Ajustes';
 import { GestionRoles } from '@/pages/dashboard/pages_dashboard/gestionRoles/GestionRoles';
+import { GestionDeudas } from '@/pages/dashboard/pages_dashboard/gestion_deudas/GestionDeudas'
 import { Aportes } from '@/pages/dashboard/pages_dashboard/aportes/Aportes';
 import { DDJJForm } from '@/pages/dashboard/pages_dashboard/ddjj/formulario/DDJJForm';
 import { DDJJTabs } from '@/pages/dashboard/pages_dashboard/ddjj/DDJJTabs';
@@ -79,6 +80,7 @@ const AppRouter = () => {
           <Route path="ajustes" element={<Ajustes />} />
           <Route path="gestion-roles" element={<GestionRoles />} />
           <Route path="aportes" element={<Aportes />} />
+         {/*<Route path="gestiondeuda" element={<GestionDeudas />} />*/} 
         </Route>
         <Route path="registercompany" element={<RegistroEmpresa />} />
         <Route index element={<Navigate to="/login" />} />

@@ -61,7 +61,7 @@ export const DatosEmpresa = () => {
   const ID_EMPRESA = localStorageService.getEmpresaId();
   console.log('DatosEmpresa - INIT - ID_EMPRESA: ' + ID_EMPRESA);
   const [locale, setLocale] = useState('esES');
-  const [rowsContacto, setRowsContacto] = useState([]);
+  //const [rowsContacto, setRowsContacto] = useState([]);
   const [rowsDomicilio, setRowsDomicilio] = useState([]);
   const [idEmpresa, setIdEmpresa] = useState('');
   const [cuit, setCuit] = useState('');
@@ -194,8 +194,8 @@ export const DatosEmpresa = () => {
           <ThemeProvider theme={themeWithLocale}>
             <GrillaEmpresaContacto
               idEmpresa={ID_EMPRESA}
-              rows={rowsContacto}
-              setRows={setRowsContacto}
+              //rows={rowsContacto}
+              //setRows={setRowsContacto}
             />
           </ThemeProvider>
         </CustomTabPanel>

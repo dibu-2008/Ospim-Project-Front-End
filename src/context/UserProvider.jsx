@@ -5,7 +5,7 @@ import { useTheme } from '@mui/material/styles';
 import * as locales from '@mui/material/locale';
 
 export const UserProvider = ({ children }) => {
-  const pageSizeOptions = [10, 20, 50, 75, 100];
+  const pageSizeOptions = [ 50, 75, 100];
   const [paginationModel, setPaginationModel] = useState({
     pageSize: 50,
     page: 0,
