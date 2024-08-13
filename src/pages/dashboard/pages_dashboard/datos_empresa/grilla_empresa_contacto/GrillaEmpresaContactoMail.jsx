@@ -21,202 +21,204 @@ import { UserContext } from '@/context/userContext';
 import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 
 function EditToolbar(props) {
-    const {
-      setRows,
-      rows,
-      setRowModesModel,
-      volverPrimerPagina,
-      showQuickFilter,
-      themeWithLocale,
-    } = props;
-  
-    const handleClick = () => {
-      console.log(props);
-      if (rows) {
-        const editRow = rows.find((row) => !row.id);
-        if (typeof editRow === 'undefined' || editRow.id) {
-          const newReg = {
-            tipo: '',
-            prefijo: '',
-            valor: '',
-          };
-  
-          volverPrimerPagina();
-          setRows((oldRows) => [newReg, ...oldRows]);
-          setRowModesModel((oldModel) => ({
-            [0]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
-            ...oldModel,
-          }));
-        }
+  const {
+    setRows,
+    rows,
+    setRowModesModel,
+    volverPrimerPagina,
+    showQuickFilter,
+    themeWithLocale,
+  } = props;
+
+  const handleClick = () => {
+    console.log(props);
+    if (rows) {
+      const editRow = rows.find((row) => !row.id);
+      if (typeof editRow === 'undefined' || editRow.id) {
+        const newReg = {
+          tipo: '',
+          prefijo: '',
+          valor: '',
+        };
+
+        volverPrimerPagina();
+        setRows((oldRows) => [newReg, ...oldRows]);
+        setRowModesModel((oldModel) => ({
+          [0]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
+          ...oldModel,
+        }));
       }
-    };
-  
-    return (
-      <GridToolbarContainer
-        theme={themeWithLocale}
-        style={{ display: 'flex', justifyContent: 'space-between' }}
-      >
-        <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-          Nuevo Registro
-        </Button>
-        <GridToolbar showQuickFilter={showQuickFilter} />
-      </GridToolbarContainer>
-    );
-  }
+    }
+  };
+
+  return (
+    <GridToolbarContainer
+      theme={themeWithLocale}
+      style={{ display: 'flex', justifyContent: 'space-between' }}
+    >
+      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
+        Nuevo Registro
+      </Button>
+      <GridToolbar showQuickFilter={showQuickFilter} />
+    </GridToolbarContainer>
+  );
+}
 
 export const GrillaEmpresaContactoMail = ({
-    idEmpresa,
-    rows,
-    setRows,
-    tipoContacto,
-  }) => {
-    // rows, setRows }) => {
-    const [locale, setLocale] = useState('esES');
-    const [rowModesModel, setRowModesModel] = useState({});
-    const { paginationModel, setPaginationModel, pageSizeOptions } =
-      useContext(UserContext);
-  
-    const volverPrimerPagina = () => {
-      setPaginationModel((prevPaginationModel) => ({
-        ...prevPaginationModel,
-        page: 0,
-      }));
-    };
-  
-    const theme = useTheme();
-  
-    const themeWithLocale = useMemo(
-      () => createTheme(theme, locales[locale]),
-      [locale, theme],
-    );
-  
-    const handleRowEditStop = (params, event) => {
-      if (params.reason === GridRowEditStopReasons.rowFocusOut) {
-        event.defaultMuiPrevented = true;
+  idEmpresa,
+  rows,
+  setRows,
+  tipoContacto,
+}) => {
+  // rows, setRows }) => {
+  const [locale, setLocale] = useState('esES');
+  const [rowModesModel, setRowModesModel] = useState({});
+  const { paginationModel, setPaginationModel, pageSizeOptions } =
+    useContext(UserContext);
+
+  const volverPrimerPagina = () => {
+    setPaginationModel((prevPaginationModel) => ({
+      ...prevPaginationModel,
+      page: 0,
+    }));
+  };
+
+  const theme = useTheme();
+
+  const themeWithLocale = useMemo(
+    () => createTheme(theme, locales[locale]),
+    [locale, theme],
+  );
+
+  const handleRowEditStop = (params, event) => {
+    if (params.reason === GridRowEditStopReasons.rowFocusOut) {
+      event.defaultMuiPrevented = true;
+    }
+  };
+
+  const handleEditClickMail = (row) => () => {
+    setRowModesModel({
+      ...rowModesModel,
+      [rows.indexOf(row)]: { mode: GridRowModes.Edit },
+    });
+  };
+
+  const handleSaveClickMail = (row) => () => {
+    console.log(row);
+    setRowModesModel({
+      ...rowModesModel,
+      [rows.indexOf(row)]: { mode: GridRowModes.View },
+    });
+  };
+
+  const handleDeleteClick = (row) => async () => {
+    const showSwalConfirm = async () => {
+      try {
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: '¡No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#1A76D2',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: 'Si, bórralo!',
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            const bBajaOk = await axiosContacto.eliminar(idEmpresa, row.id);
+            if (bBajaOk) setRows(rows.filter((rowAux) => rowAux.id !== row.id));
+          }
+        });
+      } catch (error) {
+        console.error('Error al ejecutar eliminarContacto:', error);
       }
     };
-  
-    const handleEditClickMail = (row) => () => {
-      setRowModesModel({
-        ...rowModesModel,
-        [rows.indexOf(row)]: { mode: GridRowModes.Edit },
-      });
-    };
-  
-    const handleSaveClickMail = (row) => () => {
-        console.log(row)
-      setRowModesModel({
-        ...rowModesModel,
-        [rows.indexOf(row)]: { mode: GridRowModes.View },
-      });
-    };
-  
-    const handleDeleteClick = (row) => async () => {
-      const showSwalConfirm = async () => {
-        try {
-          Swal.fire({
-            title: '¿Estás seguro?',
-            text: '¡No podrás revertir esto!',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#1A76D2',
-            cancelButtonColor: '#6c757d',
-            confirmButtonText: 'Si, bórralo!',
-          }).then(async (result) => {
-            if (result.isConfirmed) {
-              const bBajaOk = await axiosContacto.eliminar(idEmpresa, row.id);
-              if (bBajaOk) setRows(rows.filter((rowAux) => rowAux.id !== row.id));
-            }
-          });
-        } catch (error) {
-          console.error('Error al ejecutar eliminarContacto:', error);
+
+    showSwalConfirm();
+  };
+
+  const handleCancelClick = (row) => () => {
+    setRowModesModel({
+      ...rowModesModel,
+      [rows.indexOf(row)]: {
+        mode: GridRowModes.View,
+        ignoreModifications: true,
+      },
+    });
+
+    const editedRow = rows.find((reg) => reg.id === row.id);
+    if (!editedRow.id) {
+      setRows(rows.filter((reg) => reg.id !== row.id));
+    }
+  };
+
+  const processRowUpdate = async (newRow, oldRow) => {
+    console.log(newRow);
+    console.log(oldRow);
+    let bOk = false;
+    if (!newRow.id) {
+      try {
+        const data = await axiosContacto.crear(idEmpresa, newRow);
+        if (data && data.id) {
+          newRow.id = data.id;
         }
-      };
-  
-      showSwalConfirm();
-    };
-  
-    const handleCancelClick = (row) => () => {
-      setRowModesModel({
-        ...rowModesModel,
-        [rows.indexOf(row)]: {
-          mode: GridRowModes.View,
-          ignoreModifications: true,
-        },
-      });
-  
-      const editedRow = rows.find((reg) => reg.id === row.id);
-      if (!editedRow.id) {
-        setRows(rows.filter((reg) => reg.id !== row.id));
+        bOk = true;
+        const newRows = rows.map((row) => (!row.id ? newRow : row));
+        setRows(newRows);
+
+        if (!(data && data.id)) {
+          setTimeout(() => {
+            setRowModesModel((oldModel) => ({
+              [0]: { mode: GridRowModes.Edit, fieldToFocus: 'fecha' },
+              ...oldModel,
+            }));
+          }, 100);
+        }
+      } catch (error) {
+        console.log(
+          'X - processRowUpdate - ALTA - ERROR: ' + JSON.stringify(error),
+        );
       }
-    };
-  
-    const processRowUpdate = async (newRow, oldRow) => {
-      console.log(newRow);
-      console.log(oldRow);
-      let bOk = false;
-      if (!newRow.id) {
-        try {
-          const data = await axiosContacto.crear(idEmpresa, newRow);
-          if (data && data.id) {
-            newRow.id = data.id;
-          }
-          bOk = true;
-          const newRows = rows.map((row) => (!row.id ? newRow : row));
-          setRows(newRows);
-  
-          if (!(data && data.id)) {
-            setTimeout(() => {
-              setRowModesModel((oldModel) => ({
-                [0]: { mode: GridRowModes.Edit, fieldToFocus: 'fecha' },
-                ...oldModel,
-              }));
-            }, 100);
-          }
-        } catch (error) {
-          console.log(
-            'X - processRowUpdate - ALTA - ERROR: ' + JSON.stringify(error),
+    } else {
+      try {
+        newRow.prefijo = newRow.prefijo ? newRow.prefijo : '';
+        console.log(newRow);
+        bOk = await axiosContacto.actualizar(idEmpresa, newRow);
+        console.log('4 - processRowUpdate - MODI - bOk: ' + bOk);
+        if (bOk) {
+          const rowsNew = rows.map((row) =>
+            row.id === newRow.id ? newRow : row,
           );
+          setRows(rowsNew);
         }
-      } else {
-        try {
-          newRow.prefijo = newRow.prefijo ? newRow.prefijo : '';
-          console.log(newRow);
-          bOk = await axiosContacto.actualizar(idEmpresa, newRow);
-          console.log('4 - processRowUpdate - MODI - bOk: ' + bOk);
-          if (bOk) {
-            const rowsNew = rows.map((row) => row.id === newRow.id ? newRow : row)
-            setRows(rowsNew);
-          }
-  
-          if (!bOk) {
-            const indice = rows.indexOf(oldRow);
-            setTimeout(() => {
-              setRowModesModel((oldModel) => ({
-                [indice]: { mode: GridRowModes.Edit, fieldToFocus: 'fecha' },
-                ...oldModel,
-              }));
-            }, 100);
-            return null;
-          }
-          bOk = true;
-        } catch (error) {
-          console.log(
-            'X - processRowUpdate - MODI - ERROR: ' + JSON.stringify(error),
-          );
+
+        if (!bOk) {
+          const indice = rows.indexOf(oldRow);
+          setTimeout(() => {
+            setRowModesModel((oldModel) => ({
+              [indice]: { mode: GridRowModes.Edit, fieldToFocus: 'fecha' },
+              ...oldModel,
+            }));
+          }, 100);
+          return null;
         }
+        bOk = true;
+      } catch (error) {
+        console.log(
+          'X - processRowUpdate - MODI - ERROR: ' + JSON.stringify(error),
+        );
       }
-  
-      if (bOk) {
-        return newRow;
-      } else {
-        return oldRow;
-      }
-    };
-  
-    const handleRowModesModelChange = (newRowModesModel) => {
-      setRowModesModel(newRowModesModel);
-    };
+    }
+
+    if (bOk) {
+      return newRow;
+    } else {
+      return oldRow;
+    }
+  };
+
+  const handleRowModesModelChange = (newRowModesModel) => {
+    setRowModesModel(newRowModesModel);
+  };
 
   const columnEmail = [
     {
@@ -237,7 +239,7 @@ export const GrillaEmpresaContactoMail = ({
     },
     {
       field: 'valor',
-      headerName: 'Valor de contacto',
+      headerName: 'Dirección',
       flex: 1,
       type: 'string',
       editable: true,
@@ -310,8 +312,8 @@ export const GrillaEmpresaContactoMail = ({
         },
       }}
     >
-        <h2 className='subtitulo'>Emails</h2>
-       <ThemeProvider theme={themeWithLocale}>
+      <h2 className="subtitulo">Emails</h2>
+      <ThemeProvider theme={themeWithLocale}>
         <StripedDataGrid
           rows={rows}
           columns={columnEmail}

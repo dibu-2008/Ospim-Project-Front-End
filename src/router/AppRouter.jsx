@@ -23,7 +23,7 @@ import { DDJJFiltro } from '@/pages/dashboard/pages_dashboard/ddjj/consultas/emp
 import { InteresesAfip } from '@/pages/dashboard/pages_dashboard/intereses_afip/InteresesAfip';
 import { Ajustes } from '@/pages/dashboard/pages_dashboard/ajustes/Ajustes';
 import { GestionRoles } from '@/pages/dashboard/pages_dashboard/gestionRoles/GestionRoles';
-import { GestionDeudas } from '@/pages/dashboard/pages_dashboard/gestion_deudas/GestionDeudas'
+import { GestionDeudas } from '@/pages/dashboard/pages_dashboard/gestion_deudas/GestionDeudas';
 import { Aportes } from '@/pages/dashboard/pages_dashboard/aportes/Aportes';
 import { DDJJForm } from '@/pages/dashboard/pages_dashboard/ddjj/formulario/DDJJForm';
 import { DDJJTabs } from '@/pages/dashboard/pages_dashboard/ddjj/DDJJTabs';
@@ -60,7 +60,7 @@ const AppRouter = () => {
           <Route path="boletas/Actas" element={<Boletas />} />
           <Route path="boletas/nueva" element={<Boletas />} />
           <Route path="pagos" element={<PagosPage />} />
-          <Route path="misdatos" element={<DatosEmpresa />} />
+          <Route path="misdatos" element={<DatosPerfil />} />
           <Route path="datos/usuario" element={<DatosPerfil />} />
 
           <Route path="altausuariointerno" element={<AltaUsuarioInterno />} />
@@ -80,7 +80,7 @@ const AppRouter = () => {
           <Route path="ajustes" element={<Ajustes />} />
           <Route path="gestion-roles" element={<GestionRoles />} />
           <Route path="aportes" element={<Aportes />} />
-         {/*<Route path="gestiondeuda" element={<GestionDeudas />} />*/} 
+          {/*<Route path="gestiondeuda" element={<GestionDeudas />} />*/}
         </Route>
         <Route path="registercompany" element={<RegistroEmpresa />} />
         <Route index element={<Navigate to="/login" />} />

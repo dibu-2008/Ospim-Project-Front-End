@@ -184,7 +184,9 @@ export const GrillaEmpresaContactoTelefono = ({
         bOk = await axiosContacto.actualizar(idEmpresa, newRow);
         console.log('4 - processRowUpdate - MODI - bOk: ' + bOk);
         if (bOk) {
-          const rowsNew = rows.map((row) => row.id === newRow.id ? newRow : row)
+          const rowsNew = rows.map((row) =>
+            row.id === newRow.id ? newRow : row,
+          );
           setRows(rowsNew);
         }
 
@@ -246,7 +248,7 @@ export const GrillaEmpresaContactoTelefono = ({
     },
     {
       field: 'valor',
-      headerName: 'Valor de contacto',
+      headerName: 'Número',
       flex: 1,
       type: 'string',
       editable: true,
@@ -319,7 +321,7 @@ export const GrillaEmpresaContactoTelefono = ({
         },
       }}
     >
-      <h2 className='subtitulo'>Telefonos</h2>
+      <h2 className="subtitulo">Telefonos</h2>
       <ThemeProvider theme={themeWithLocale}>
         <StripedDataGrid
           rows={rows}

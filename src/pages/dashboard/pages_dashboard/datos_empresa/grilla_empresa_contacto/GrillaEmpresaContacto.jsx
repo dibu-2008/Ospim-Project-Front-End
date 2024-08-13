@@ -16,12 +16,12 @@ export const GrillaEmpresaContacto = ({ idEmpresa }) => {
         (item) => item.codigo === 'MAIL' || item.codigo === 'MAIL2',
       );
       const tipoContactoTelefonoResponse = tipo.filter(
-        (item) => item.codio !== 'MAIL' || item.codigo !== 'MAIL2',
+        (item) => item.codigo !== 'MAIL' && item.codigo !== 'MAIL2',
       );
-      console.log(tipoContactoMail)
-      console.log(tipo)
+      console.log(tipoContactoMail);
+      console.log(tipo);
       setTipoContactoMail(tipoContactoMailResponse);
-      setTipoContactoTelefono(tipoContactoTelefonoResponse)
+      setTipoContactoTelefono(tipoContactoTelefonoResponse);
     };
     getTipoContacto();
   }, []);
