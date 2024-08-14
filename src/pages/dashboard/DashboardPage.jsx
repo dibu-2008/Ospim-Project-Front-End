@@ -94,6 +94,7 @@ const DashboardPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       const { funcionalidades } = await getFuncionalidadesByRol(rol);
+      //console.log('DashboardPage - funcionalidades:', funcionalidades);
       const roles = {};
       funcionalidades.forEach((funcionalidad) => {
         roles[funcionalidad.descripcion] = funcionalidad.activo;
@@ -259,7 +260,7 @@ const DashboardPage = () => {
                     {open && <span className="icon-link">Ajustes</span>}
                   </NavLink>
                 )}
-                {rolFuncionalidades.INTERESES_AFIP && (
+                {rolFuncionalidades.INTERESES && (
                   <NavLink
                     to="./interesesafip"
                     className="icon-container icon-container-afip"
