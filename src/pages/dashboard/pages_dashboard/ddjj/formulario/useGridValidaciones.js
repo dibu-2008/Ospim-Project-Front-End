@@ -70,7 +70,7 @@ const validarDDJJ = async (cabecera, rows) => {
   //1) Armar vector "RowsValidaciones" con los errores de CUIL y de Atributos del CUIL
   //y actualiza el useState.-
 
-  //console.log('validarDDJJ - rows:', rows);
+  console.log('validarDDJJ - rows:', rows);
   //console.log('validarDDJJ - typeof rows: ', typeof rows);
   const newRowsValidaciones = await getValidacionesBackend(cabecera, rows);
   //console.log('validarDDJJ - newRowsValidaciones: ', newRowsValidaciones);

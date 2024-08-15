@@ -147,8 +147,8 @@ function EditToolbar(props) {
       fechaIngreso: '',
       empresaDomicilioId: '',
       categoria: '',
-      remunerativo: '',
-      noRemunerativo: '',
+      remunerativo: null,
+      noRemunerativo: null,
       uomaSocio: '',
       amtimaSocio: '',
     };
@@ -661,6 +661,13 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
 
   const guardarDDJJConfirm = async () => {
     //Armo mensaje de vcalidacion si hay Errores.-
+    if (
+      gridApiRef.current.hasOwnProperty('getRowModels') &&
+      gridApiRef.current.getRowModels().size == 0
+    ) {
+      return false;
+    }
+
     console.log(
       'guardarDeclaracionJurada - rowsValidaciones:',
       rowsValidaciones,
@@ -833,6 +840,18 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     setRows([]); //Con esto lleno la grilla
     setRowsValidaciones([]); //Usado para "Pintar" errores en la grilla.-
   };
+
+  const desHabilitarGrabar = () => {
+    if (someRowInEditMode) return true;
+    if (!habiModif) return true;
+    if (
+      gridApiRef.current.hasOwnProperty('getRowModels') &&
+      gridApiRef.current.getRowModels().size == 0
+    )
+      return true;
+
+    return false;
+  };
   // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
   //            Hooks y Load de Datos
   // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -913,6 +932,15 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     //MOCK:...
     console.log('** formCuilShow: ', formCuilShow);
   }, [formCuilShow]);
+
+  useEffect(() => {
+    console.log('*useEffect - someRowInEditMode:', someRowInEditMode);
+    console.log('*useEffect - !habiModif:', !habiModif);
+    console.log(
+      'gridApiRef.current.getRowModels():',
+      gridApiRef.current.getRowModels(),
+    );
+  }, [someRowInEditMode]);
   // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
   // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
@@ -1748,9 +1776,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
                     variant="contained"
                     sx={{ padding: '6px 52px', marginLeft: '10px' }}
                     onClick={guardarDDJJConfirm}
-                    disabled={
-                      someRowInEditMode || !habiModif || rows?.length == 0
-                    }
+                    disabled={desHabilitarGrabar()}
                   >
                     Guardar
                   </Button>

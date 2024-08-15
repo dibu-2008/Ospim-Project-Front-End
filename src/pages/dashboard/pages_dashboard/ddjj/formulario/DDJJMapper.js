@@ -26,12 +26,14 @@ const castRowToBackendDto = (item) => {
       : item.empresaDomicilioId,
     camara: !item.camara ? null : item.camara,
     categoria: !item.categoria ? null : item.categoria,
-    remunerativo: !item.remunerativo
-      ? null
-      : parseFloat(String(item.remunerativo).replace(',', '.')),
-    noRemunerativo: !item.noRemunerativo
-      ? null
-      : parseFloat(String(item.noRemunerativo).replace(',', '.')),
+    remunerativo:
+      parseInt(item.remunerativo) >= 0
+        ? parseFloat(String(item.remunerativo).replace(',', '.'))
+        : null,
+    noRemunerativo:
+      parseInt(item.remunerativo) >= 0
+        ? parseFloat(String(item.noRemunerativo).replace(',', '.'))
+        : null,
     uomaSocio: item.uomaSocio === '' ? null : item.uomaSocio,
     amtimaSocio: item.amtimaSocio === '' ? null : item.amtimaSocio,
   };
