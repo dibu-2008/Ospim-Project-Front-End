@@ -291,7 +291,7 @@ export const Publicaciones = () => {
 
   return (
     <div className="publicaciones_container">
-      <h1>Administracion de Publicaciones</h1>
+      <h1>Administración de Publicaciones</h1>
       <Box
         sx={{
           height: '600px',
@@ -304,59 +304,57 @@ export const Publicaciones = () => {
           },
         }}
       >
-
-          <ThemeProvider theme={themeWithLocale}>
-            <StripedDataGrid
-              apiRef={gridApiRef}
-              rows={rows}
-              columns={columns}
-              editMode="row"
-              getRowId={(row) => rows.indexOf(row)}
-              getRowClassName={(params) =>
-                rows.indexOf(params.row) % 2 === 0 ? 'even' : 'odd'
-              }
-              rowModesModel={rowModesModel}
-              onRowModesModelChange={handleRowModesModelChange}
-              onRowEditStop={handleRowEditStop}
-              processRowUpdate={(updatedRow, originalRow) =>
-                processRowUpdate(updatedRow, originalRow)
-              }
-              onProcessRowUpdateError={(error, params) => {
-                handleProcessRowUpdateError(error, params);
-              }}
-              localeText={dataGridStyle.toolbarText}
-              slots={{
-                toolbar: EditarNuevaFila,
-              }}
-              slotProps={{
-                toolbar: {
-                  setRows,
-                  rows,
-                  setRowModesModel,
-                  volverPrimerPagina,
-                  showQuickFilter: true,
-                  showColumnMenu: true,
-                  themeWithLocale,
-                },
-              }}
-              sx={{
-                '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
-                  width: '8px',
-                  visibility: 'visible',
-                },
-                '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
-                  backgroundColor: '#ccc',
-                },
-                '& .css-1iyq7zh-MuiDataGrid-columnHeaders': {
-                  backgroundColor: '#1A76D2 !important',
-                },
-              }}
-              paginationModel={paginationModel}
-              onPaginationModelChange={setPaginationModel}
-              pageSizeOptions={pageSizeOptions}
-            />
-          </ThemeProvider>
-        
+        <ThemeProvider theme={themeWithLocale}>
+          <StripedDataGrid
+            apiRef={gridApiRef}
+            rows={rows}
+            columns={columns}
+            editMode="row"
+            getRowId={(row) => rows.indexOf(row)}
+            getRowClassName={(params) =>
+              rows.indexOf(params.row) % 2 === 0 ? 'even' : 'odd'
+            }
+            rowModesModel={rowModesModel}
+            onRowModesModelChange={handleRowModesModelChange}
+            onRowEditStop={handleRowEditStop}
+            processRowUpdate={(updatedRow, originalRow) =>
+              processRowUpdate(updatedRow, originalRow)
+            }
+            onProcessRowUpdateError={(error, params) => {
+              handleProcessRowUpdateError(error, params);
+            }}
+            localeText={dataGridStyle.toolbarText}
+            slots={{
+              toolbar: EditarNuevaFila,
+            }}
+            slotProps={{
+              toolbar: {
+                setRows,
+                rows,
+                setRowModesModel,
+                volverPrimerPagina,
+                showQuickFilter: true,
+                showColumnMenu: true,
+                themeWithLocale,
+              },
+            }}
+            sx={{
+              '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
+                width: '8px',
+                visibility: 'visible',
+              },
+              '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
+                backgroundColor: '#ccc',
+              },
+              '& .css-1iyq7zh-MuiDataGrid-columnHeaders': {
+                backgroundColor: '#1A76D2 !important',
+              },
+            }}
+            paginationModel={paginationModel}
+            onPaginationModelChange={setPaginationModel}
+            pageSizeOptions={pageSizeOptions}
+          />
+        </ThemeProvider>
       </Box>
     </div>
   );
