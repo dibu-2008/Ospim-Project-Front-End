@@ -100,6 +100,7 @@ const DashboardPage = () => {
         roles[funcionalidad.descripcion] = funcionalidad.activo;
       });
       setRolFuncionalidades(roles);
+      console.log('DashboardPage - roles: ', roles);
     };
     fetchData();
   }, []);
@@ -176,7 +177,7 @@ const DashboardPage = () => {
                   <HomeIcon className="icon-link" />{' '}
                   {open && <span className="icon-link">Inicio</span>}
                 </NavLink>
-                {rolFuncionalidades.DATOS_EMPRESA && (
+                {rolFuncionalidades.DATOS_PERFIL && (
                   <NavLink to="./misdatos" className="icon-container">
                     <PersonIcon className="icon-link" />{' '}
                     {open && <span className="icon-link">Datos de Perfil</span>}
@@ -194,13 +195,13 @@ const DashboardPage = () => {
                     {open && <span className="icon-link">Feriados</span>}
                   </NavLink>
                 )}
-                {rolFuncionalidades.DDJJ && (
+                {rolFuncionalidades.NUEVA_DDJJ && (
                   <NavLink to="./ddjj/alta" className="icon-container">
                     <LibraryBooksIcon className="icon-link" />{' '}
                     {open && <span className="icon-link">Nueva DDJJ</span>}
                   </NavLink>
                 )}
-                {rolFuncionalidades.DDJJ && (
+                {rolFuncionalidades.MIS_DDJJ && (
                   <NavLink to="./ddjj/consulta" className="icon-container">
                     <MenuBookIcon className="icon-link" />{' '}
                     {open && <span className="icon-link">Mis DDJJ</span>}
@@ -215,14 +216,14 @@ const DashboardPage = () => {
                     {open && <span className="icon-link">DDJJ Consulta</span>}
                   </NavLink>
                 )}
-                {rolFuncionalidades.BOLETAS && (
+                {rolFuncionalidades.MIS_BOLETAS && (
                   <NavLink to="./boletas" className="icon-container">
                     <StyleIcon className="icon-link" />{' '}
                     {open && <span className="icon-link">Mis Boletas</span>}
                   </NavLink>
                 )}
 
-                {rolFuncionalidades.BOLETA_BLANCA && (
+                {rolFuncionalidades.BOLETA_ACTAS && (
                   <NavLink to="./generarotrospagos" className="icon-container">
                     <ReceiptIcon className="icon-link" />{' '}
                     {open && <span className="icon-link">Boleta Actas</span>}

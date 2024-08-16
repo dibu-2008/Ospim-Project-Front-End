@@ -191,7 +191,7 @@ function EditToolbar(props) {
       </Button>
       <FormControlLabel
         control={<Switch color="primary" />}
-        label="Cuiles con Errores"
+        label="Filtrar líneas con errores"
         labelPlacement="start"
         onChange={filtrarGrilla}
       ></FormControlLabel>
@@ -890,6 +890,11 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
       setCategorias(data.map((item, index) => ({ id: index + 1, ...item })));
     };
     const ObtenerPlantaEmpresas = async () => {
+      if (!ID_EMPRESA) {
+        swal.showError('El sistema no tiene seteado un Id de Empresa.');
+        return false;
+      }
+
       const data = await axiosDDJJ.getPlantas(ID_EMPRESA);
       setPlantas(data.map((item) => ({ id: item, ...item })));
     };
@@ -949,7 +954,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
       field: 'id',
       type: 'number',
       headerName: 'Fila',
-      width: 150,
+      width: 80,
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell',
@@ -1019,7 +1024,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
       field: 'cuil',
       type: 'string',
       headerName: 'CUIL',
-      width: 284.4,
+      width: 150,
       editable: true,
       headerAlign: 'left',
       align: 'left',
@@ -1078,7 +1083,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
       field: 'apellido',
       type: 'string',
       headerName: 'Apellido',
-      width: 140,
+      width: 150,
       editable: true,
       headerAlign: 'left',
       align: 'left',
@@ -1148,7 +1153,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
       field: 'nombre',
       type: 'string',
       headerName: 'Nombre',
-      width: 140,
+      width: 150,
       editable: true,
       headerAlign: 'left',
       align: 'left',
@@ -1217,7 +1222,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     {
       field: 'camara',
       headerName: 'Cámara',
-      width: 100,
+      width: 80,
       editable: true,
       headerAlign: 'left',
       align: 'left',
@@ -1307,7 +1312,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
       field: 'fechaIngreso',
       type: 'date',
       headerName: 'Ingreso',
-      width: 150,
+      width: 100,
       editable: true,
       headerAlign: 'left',
       align: 'left',
@@ -1324,7 +1329,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
       field: 'empresaDomicilioId',
       type: 'singleSelect',
       headerName: 'Planta',
-      width: 100,
+      width: 170,
       editable: true,
       headerAlign: 'left',
       align: 'left',
@@ -1363,7 +1368,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
       field: 'remunerativo',
       type: 'string',
       headerName: 'Remunerativo',
-      width: 150,
+      width: 110,
       editable: true,
       headerAlign: 'left',
       align: 'right',
@@ -1410,7 +1415,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
           </span>
         </div>
       ),
-      width: 150,
+      width: 110,
       editable: true,
       headerAlign: 'left',
       align: 'right',

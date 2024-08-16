@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import './MisDDJJFiltro.css';
 import { MisDDJJGrilla } from './MisDDJJGrilla';
 import { axiosDDJJ } from './MisDDJJGrillaApi';
+import swal from '@/components/swal/swal';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
 import localStorageService from '@/components/localStorage/localStorageService';
 
@@ -20,6 +21,10 @@ export const MisDDJJFiltro = ({ handlerDDJJEditar }) => {
   const [rows, setRows] = useState([]);
 
   const handlerConsultar = async () => {
+    if (!ID_EMPRESA) {
+      swal.showError('El sistema no tiene seteado un Id de Empresa.');
+      return false;
+    }
     try {
       let desde = null;
       if (filtro.desde !== null) {
