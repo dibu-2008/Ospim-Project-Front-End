@@ -6,6 +6,7 @@ import {
   GridToolbar,
   GridToolbarContainer,
   GridActionsCellItem,
+  useGridApiRef,
   GridRowEditStopReasons,
 } from '@mui/x-data-grid';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
@@ -90,6 +91,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
   const [idRow, setIdRow] = useState(1);
   const { paginationModel, setPaginationModel, pageSizeOptions } =
     useContext(UserContext);
+  const gridApiRef = useGridApiRef();
 
   useEffect(() => {
     async function cargarDatos() {
@@ -140,11 +142,18 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
     () => createTheme(theme, locales[locale]),
     [locale, theme],
   );
+
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true;
+
+      gridApiRef.current?.stopRowEditMode({
+        id: params.id,
+        ignoreModifications: false,
+      });
     }
   };
+
   const handleDeleteClick = (row) => async () => {
     console.log('handleDeleteClick - row.id:', row.id);
     const showSwalConfirm = async () => {
@@ -215,21 +224,24 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
         if (idEmpresa !== 'PC') {
           //Condicion para la grilla de registrar empresa
           const data = await axiosDomicilio.crear(idEmpresa, newRow);
+          console.log('processRowUpdate - axiosDomicilio.crear - data:', data);
+
           if (data && data.id) {
             newRow.id = data.id;
-          }
-          bOk = true;
-          newRow = await adaptadorDomicilioGrilla(newRow);
-          const newRows = rows.map((row) => (!row.id ? newRow : row));
-          setRows(newRows);
 
-          if (!(data && data.id)) {
-            setTimeout(() => {
-              setRowModesModel((oldModel) => ({
-                [0]: { mode: GridRowModes.Edit, fieldToFocus: 'fecha' },
-                ...oldModel,
-              }));
-            }, 100);
+            bOk = true;
+            newRow = await adaptadorDomicilioGrilla(newRow);
+            const newRows = rows.map((row) => (!row.id ? newRow : row));
+            setRows(newRows);
+
+            if (!(data && data.id)) {
+              setTimeout(() => {
+                setRowModesModel((oldModel) => ({
+                  [0]: { mode: GridRowModes.Edit, fieldToFocus: 'fecha' },
+                  ...oldModel,
+                }));
+              }, 100);
+            }
           }
         } else {
           bOk = true;
@@ -498,6 +510,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
       >
         <ThemeProvider theme={themeWithLocale}>
           <StripedDataGrid
+            apiRef={gridApiRef}
             rows={rows}
             columns={columnas}
             getRowId={(row) => rows.indexOf(row)}

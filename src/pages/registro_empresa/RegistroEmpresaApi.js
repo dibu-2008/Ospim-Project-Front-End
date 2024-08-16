@@ -36,14 +36,22 @@ export const registrarEmpresa = async (registro, redirectFunction) => {
     throw data;
   } catch (error) {
     swal.showErrorBackEnd(HTTP_MSG_ALTA_ERROR, error);
-    console.log('registrarEmpresa - error:', error);
+
     try {
+      console.log('error.descripcion: ', error.descripcion);
+      console.log(
+        'error.descripcion.match(/[(.*?)]/): ',
+        error.descripcion.match(/\[(.*?)\]/),
+      );
       const aux = error.descripcion
         .match(/\[(.*?)\]/)[1]
         .replace(/^\{|\}$/g, '')
-        .split(', ')
-        .map((error) => error.split('=')[0]);
-      return aux;
+        .split(', ');
+
+      console.log('registrarEmpresa - aux:', aux);
+      const aux2 = aux.map((error) => error.split('=')[0]);
+
+      return aux2;
     } catch (e) {
       return error.descripcion;
     }

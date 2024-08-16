@@ -181,10 +181,11 @@ export const RegistroEmpresa = () => {
     }
 
     if (rows && rows.length > 0) {
+      console.log('rows: ', rows);
       usuarioEmpresa['domicilios'] = rows.map((row) => ({
         tipo: row.tipo,
-        provinciaId: row.provincia.id,
-        localidadId: row.localidad.id,
+        provinciaId: row.provincia?.id || null,
+        localidadId: row.localidad?.id || null,
         calle: row.calle,
         numeroDomicilio: row.numeroDomicilio,
         piso: row.piso,
@@ -195,7 +196,10 @@ export const RegistroEmpresa = () => {
       }));
     }
 
+    console.log('RegistroEmpresa - usuarioEmpresa:', usuarioEmpresa);
+
     const rta = await registrarEmpresa(usuarioEmpresa, navigate);
+    console.log('registrarEmpresa - rta:', rta);
 
     if (!rta && !rta.id) {
       if (rta.includes('cuit')) setErrorCuit(true);

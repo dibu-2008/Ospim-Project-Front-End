@@ -49,24 +49,26 @@ export const adaptadorDomicilioGrilla = async (domicilio) => {
 
 export const adaptadorRegistroCompanyGrilla = async (domicilio) => {
   try {
-    const provincias = await obtenerProvincias();
-    const provincia = provincias.find(
-      (element) => element.descripcion == domicilio.provincia,
-    );
-    console.log(domicilio.localidad);
-    const localidades = await obtenerLocalidades(provincia.id);
-    console.log(localidades);
-    const localidad = localidades.find(
-      (element) => element.descripcion == domicilio.localidad,
-    );
-    console.log(localidad);
+    if (domicilio && domicilio.provincia) {
+      const provincias = await obtenerProvincias();
+      const provincia = provincias.find(
+        (element) => element.descripcion == domicilio.provincia,
+      );
+      console.log(domicilio.localidad);
+      const localidades = await obtenerLocalidades(provincia.id);
+      console.log(localidades);
+      const localidad = localidades.find(
+        (element) => element.descripcion == domicilio.localidad,
+      );
+      console.log(localidad);
 
-    domicilio.provincia = provincia;
-    domicilio.localidad = localidad;
-    delete domicilio.provinciaId;
-    delete domicilio.localidadId;
-    //delete domicilio.isNew;
-    console.log(domicilio);
+      domicilio.provincia = provincia;
+      domicilio.localidad = localidad;
+      delete domicilio.provinciaId;
+      delete domicilio.localidadId;
+      //delete domicilio.isNew;
+      console.log(domicilio);
+    }
     return domicilio;
   } catch (error) {
     swal.showError(HTTP_MSG_ALTA_ERROR);
