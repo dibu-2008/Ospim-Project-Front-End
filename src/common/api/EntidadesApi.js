@@ -3,8 +3,8 @@ import swal from '@/components/swal/swal';
 
 const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
 
-export const consultarFormasPago = async () => {
-  const URL = '/formas-pago';
+export const consultar = async () => {
+  const URL = '/entidades';
   try {
     const data = await axiosCrud.consultar(URL);
     return data || [];
@@ -17,8 +17,8 @@ export const consultarFormasPago = async () => {
   }
 };
 
-export const axiosFormasPago = {
+export const axiosEntidades = {
   consultar: async function () {
-    return consultarFormasPago();
+    return consultar();
   },
 };

@@ -101,8 +101,12 @@ export const Boletas = () => {
         hasta = toDate.startOf('month').format('YYYY-MM-DD');
       }
 
-      const response = await axiosBoletas.getBoletas(ID_EMPRESA, desde, hasta);
-      console.log('axiosBoletas.getBoletas - response:', response);
+      const response = await axiosBoletas.getBoletasEmpresa(
+        ID_EMPRESA,
+        desde,
+        hasta,
+      );
+      console.log('axiosBoletas.getBoletasEmpresa - response:', response);
       setBoletas(response['con_ddjj']);
 
       //console.log('response.con_ddjj: ', response['con_ddjj']);

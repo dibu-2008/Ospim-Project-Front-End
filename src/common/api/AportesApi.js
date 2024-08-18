@@ -7,6 +7,7 @@ export const consultarAportes = async () => {
   const URL = '/aportes/';
   try {
     const data = await axiosCrud.consultar(URL);
+
     return data || [];
   } catch (error) {
     swal.showErrorBackEnd(
@@ -22,6 +23,7 @@ export const consultarAportesDDJJ = async () => {
 
   try {
     const data = await axiosCrud.consultar(URL);
+    console.log('consultarAportesDDJJ - data: ', data);
     return data || [];
   } catch (error) {
     swal.showErrorBackEnd(
@@ -30,4 +32,13 @@ export const consultarAportesDDJJ = async () => {
     );
     return [];
   }
+};
+
+export const axiosAportes = {
+  consultar: async function () {
+    return consultarAportes();
+  },
+  consultarAportesDDJJ: async function () {
+    return consultarAportesDDJJ();
+  },
 };

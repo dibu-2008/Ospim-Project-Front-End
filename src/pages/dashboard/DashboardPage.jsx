@@ -222,6 +222,17 @@ const DashboardPage = () => {
                     {open && <span className="icon-link">Mis Boletas</span>}
                   </NavLink>
                 )}
+                {rolFuncionalidades.BOLETAS_CONSULTA && (
+                  <NavLink
+                    to="./boletas/empleado/consulta"
+                    className="icon-container"
+                  >
+                    <StyleIcon className="icon-link" />{' '}
+                    {open && (
+                      <span className="icon-link">Boletas Consulta</span>
+                    )}
+                  </NavLink>
+                )}
 
                 {rolFuncionalidades.BOLETA_ACTAS && (
                   <NavLink to="./generarotrospagos" className="icon-container">

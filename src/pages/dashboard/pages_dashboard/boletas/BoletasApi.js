@@ -19,7 +19,7 @@ export const getBoletasByDDJJid = async (empresa_id, ddjj_id) => {
   }
 };
 
-export const getBoletas = async (empresa_id, desde, hasta) => {
+export const getBoletasEmpresa = async (empresa_id, desde, hasta) => {
   try {
     let queryString = '';
 
@@ -31,6 +31,39 @@ export const getBoletas = async (empresa_id, desde, hasta) => {
     }
 
     const URL = `/empresa/${empresa_id}/boletas/consulta-gral?${queryString}`;
+    const response = axiosCrud.consultar(URL);
+    return response;
+  } catch (error) {
+    const HTTP_MSG =
+      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`;
+    swal.showErrorBackEnd(HTTP_MSG, error);
+  }
+};
+
+export const getBoletasEmpleado = async (filtro) => {
+  try {
+    let queryString = '';
+
+    if (filtro.periodoDesde !== null) {
+      queryString += `&periodoDesde=${filtro.periodoDesde}`;
+    }
+    if (filtro.periodoHasta !== null) {
+      queryString += `&periodoHasta=${filtro.periodoHasta}`;
+    }
+    if (filtro.cuit !== null) {
+      queryString += `&cuit=${filtro.cuit}`;
+    }
+    if (filtro.concepto !== null) {
+      queryString += `&concepto=${filtro.concepto}`;
+    }
+    if (filtro.entidad !== null) {
+      queryString += `&entidad=${filtro.entidad}`;
+    }
+    if (filtro.formaPago !== null) {
+      queryString += `&formaPago=${filtro.formaPago}`;
+    }
+
+    const URL = `/boletas/consulta-gral?${queryString}`;
     const response = axiosCrud.consultar(URL);
     return response;
   } catch (error) {
@@ -127,7 +160,8 @@ export const generarBep = async (empresa_id, boletaId) => {
 
 export const axiosBoletas = {
   getBoletasByDDJJid,
-  getBoletas,
+  getBoletasEmpresa,
+  getBoletasEmpleado,
   getBoletaById,
   modificarBoletaById,
   generarBep,

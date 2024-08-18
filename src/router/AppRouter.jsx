@@ -14,6 +14,9 @@ import { AltaUsuarioInterno } from '../pages/dashboard/pages_dashboard/alta_usua
 import { RegistroEmpresa } from '../pages/registro_empresa/RegistroEmpresa';
 import { CuitsRestringidos } from '../pages/dashboard/pages_dashboard/cuits-restringidos/CuitsRestringidos';
 import { Boletas } from '../pages/dashboard/pages_dashboard/boletas/Boletas';
+
+import { BoletaEmpleadoFiltro } from '../pages/dashboard/pages_dashboard/boletas/consultas/empleado/BoletaEmpleadoFiltro';
+
 import { DetalleBoleta } from '@/pages/dashboard/pages_dashboard/boletas/DetalleBoleta';
 import { Roles } from '@/pages/dashboard/pages_dashboard/roles/Roles';
 import { GenerarBoletas } from '@/pages/dashboard/pages_dashboard/generar_boletas/GenerarBoletas';
@@ -55,6 +58,10 @@ const AppRouter = () => {
           <Route path="ddjj/alta" element={<DDJJTabs />} />
           <Route path="ddjj/consulta" element={<DDJJTabs />} />
           <Route path="ddjjconsultaempleado" element={<DDJJFiltro />} />
+          <Route
+            path="boletas/empleado/consulta"
+            element={<BoletaEmpleadoFiltro />}
+          />
           <Route path="boletas" element={<Boletas />} />
           <Route path="boletas/periodos" element={<Boletas />} />
           <Route path="boletas/Actas" element={<Boletas />} />

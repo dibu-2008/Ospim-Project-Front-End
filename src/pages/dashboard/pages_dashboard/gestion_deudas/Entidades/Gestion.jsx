@@ -42,7 +42,7 @@ CustomTabPanel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-export const Gestion = ({ID_EMPRESA, ENTIDAD}) => {
+export const Gestion = ({ ID_EMPRESA, ENTIDAD }) => {
   useContext(UserContext);
   const [actas, setActas] = useState([]); //Se usa para guardar las actas que vienen del backend
   const [selectedActas, setSelectedActas] = useState([]); //Se usa para guardar los ids de las actas seleccionadas
@@ -88,7 +88,7 @@ export const Gestion = ({ID_EMPRESA, ENTIDAD}) => {
 
   useEffect(() => {
     //
-  },[selectedActas, selectedBoletas,fechaIntencion,noUsar])
+  }, [selectedActas, selectedBoletas, fechaIntencion, noUsar]);
 
   useEffect(() => {
     const ATotal = actas
@@ -117,12 +117,15 @@ export const Gestion = ({ID_EMPRESA, ENTIDAD}) => {
 
   const fetchData = async () => {
     try {
-      console.log(ID_EMPRESA)
-      console.log(ENTIDAD)
-      const response = await axiosGestionDeudas.getBoletas(ID_EMPRESA, ENTIDAD);
+      console.log(ID_EMPRESA);
+      console.log(ENTIDAD);
+      const response = await axiosGestionDeudas.getBoletasEmpresa(
+        ID_EMPRESA,
+        ENTIDAD,
+      );
       calcularDetalle();
 
-      console.log('axiosBoletas.getBoletas - response:', response);
+      console.log('axiosBoletas.getBoletasEmpresa - response:', response);
 
       setBoletas(response['boletas']);
       setActas(response['actas']);
@@ -230,7 +233,7 @@ export const Gestion = ({ID_EMPRESA, ENTIDAD}) => {
             />
           </AccordionDetails>
         </Accordion>
-{/*
+        {/*
         <Accordion>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
