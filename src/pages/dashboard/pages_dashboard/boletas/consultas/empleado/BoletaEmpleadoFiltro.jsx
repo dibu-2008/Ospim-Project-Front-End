@@ -123,8 +123,8 @@ export const BoletaEmpleadoFiltro = () => {
             />
           </DemoContainer>
 
-          <FormControl>
-            <InputLabel id="demo-simple-select-label">Entidades</InputLabel>
+          <FormControl style={{ minWidth: 120 }}>
+            <InputLabel id="demo-simple-select-label">Entidad</InputLabel>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
@@ -143,7 +143,7 @@ export const BoletaEmpleadoFiltro = () => {
           </FormControl>
         </Stack>
         <Stack direction="row" spacing={3} sx={{ marginTop: '30px' }}>
-          <FormControl>
+          <FormControl style={{ minWidth: 150 }}>
             <InputLabel id="demo-simple-select-label">Concepto</InputLabel>
             <Select
               labelId="demo-simple-select-label"
@@ -162,8 +162,8 @@ export const BoletaEmpleadoFiltro = () => {
             </Select>
           </FormControl>
 
-          <FormControl>
-            <InputLabel id="demo-simple-select-label">Metodo</InputLabel>
+          <FormControl style={{ minWidth: 120 }}>
+            <InputLabel id="demo-simple-select-label">Método</InputLabel>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
