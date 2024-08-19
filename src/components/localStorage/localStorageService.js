@@ -74,6 +74,19 @@ export const getRol = () => {
   return {};
 };
 
+export const getNombre = () =>{
+  let auxStateLogin =localStorage.getItem('stateLogin')
+  let nombre
+  
+  if (auxStateLogin != null) {
+    auxStateLogin = JSON.parse(localStorage.getItem('stateLogin'));
+    if (auxStateLogin.hasOwnProperty('usuarioLogueado')) {
+      nombre = auxStateLogin.usuarioLogueado.usuario.nombre;
+      return nombre;
+    }
+  }
+}
+
 export const isRolEmpleador = () => {
   let ROL = getRol();
   if (ROL == 'EMPLEADOR') return true;
@@ -99,6 +112,9 @@ const localStorageService = {
   setLoguinRefresh: function (token, tokenRefresh) {
     setLoguinRefresh(token, tokenRefresh);
   },
+  getNombre: function() {
+    return getNombre();
+  }
 };
 
 export default localStorageService;

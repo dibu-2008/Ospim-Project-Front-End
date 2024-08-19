@@ -3,6 +3,7 @@ import { useFormRegisterCompany } from '../../hooks/useFormRegisterCompany';
 import { GrillaEmpresaDomicilio } from '../dashboard/pages_dashboard/datos_empresa/grilla_empresa_domicilio/GrillaEmpresaDomicilio';
 import { registrarEmpresa, getRamo } from './RegistroEmpresaApi';
 import TextField from '@mui/material/TextField';
+import Input from '@mui/material/Input';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/material/Box';
@@ -59,6 +60,8 @@ export const RegistroEmpresa = () => {
   const [errorPhoneSecond, setErrorPhoneSecond] = useState(false);
   const [errorWhatsapp, setErrorWhatsapp] = useState(false);
   const [errorWhatsappPrefijo, setErrorWhatsappPrefijo] = useState(false);
+  const [errorPassword, setErrorPassword] = useState(false);
+  const [errorRepeatPassword, setErrorRepeatPassword] = useState(false);
 
   const navigate = useNavigate();
 
@@ -237,6 +240,109 @@ export const RegistroEmpresa = () => {
     setAdditionalPhone(values);
   };
 
+  const handleChangeCuil = (event) => {
+    const inputValue = event.target.value;
+    if (inputValue === '' || Number(inputValue) <= 99999999999) {
+      OnInputChangeRegisterCompany(event);
+    }
+  };
+
+  const handleEmailChange = (event) => {
+    const inputEmail = event.target.value;
+    OnInputChangeRegisterCompany(event);
+    if (validateEmail(inputEmail)) {
+      setErrorEmail(false);
+    } else {
+      setErrorEmail(true);
+    }
+  };
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    console.log(emailRegex.test(email));
+    return emailRegex.test(email);
+  };
+
+  const handlePasswordChange = (event) => {
+    const inputPassword = event.target.value;
+    OnInputChangeRegisterCompany(event);
+
+    if (validatePassword(inputPassword)) {
+      setErrorPassword(false);
+      console.log(errorPassword);
+    } else {
+      setErrorPassword(true);
+      console.log(errorPassword);
+    }
+  };
+
+  const validatePassword = (password) => {
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+    return passwordRegex.test(password);
+  };
+
+  const handleRepeatPasswordChange = (event) => {
+    const inputPassword = event.target.value;
+    OnInputChangeRegisterCompany(event);
+
+    if (validateRepeatPassword(inputPassword)) {
+      setErrorRepeatPassword(false);
+      console.log(errorPassword);
+    } else {
+      setErrorRepeatPassword(true);
+      console.log(errorPassword);
+    }
+  };
+  const validateRepeatPassword = (Rpassword) => Rpassword === password;
+
+  const handleChangePhonePrefix = (event) => {
+    const inputValue = event.target.value;
+    const maxDigits = 10;
+
+    if (event.target.name === 'prefijo_first') {
+      if (inputValue.length <= maxDigits - phone_first.toString().length) {
+        OnInputChangeRegisterCompany(event);
+      }
+    }
+
+    if (event.target.name === 'prefijo_second') {
+      if (inputValue.length <= maxDigits - phone_second.toString().length) {
+        OnInputChangeRegisterCompany(event);
+      }
+    }
+
+    if (event.target.name === 'whatsapp_prefijo') {
+      if (inputValue.length <= maxDigits - whatsapp_prefijo.toString().length) {
+        OnInputChangeRegisterCompany(event);
+      }
+    }
+  };
+
+  const handleChangePhone = (event) => {
+    const inputValue = event.target.value;
+    const maxDigits = 10;
+    if (event.target.name === 'phone_first') {
+      const totalLength = inputValue.length + prefijo_first.toString().length;
+      if (totalLength <= maxDigits) {
+        OnInputChangeRegisterCompany(event);
+      }
+    }
+    if (event.target.name === 'phone_second') {
+      const totalLength = inputValue.length + prefijo_second.toString().length;
+      if (totalLength <= maxDigits) {
+        OnInputChangeRegisterCompany(event);
+      }
+    }
+
+    if (event.target.name === 'whatsapp') {
+      const totalLength =
+        inputValue.length + whatsapp_prefijo.toString().length;
+      if (totalLength <= maxDigits) {
+        OnInputChangeRegisterCompany(event);
+      }
+    }
+  };
+
   return (
     <main>
       <NavBar
@@ -252,12 +358,12 @@ export const RegistroEmpresa = () => {
             <div className="input-group">
               <TextField
                 error={errorCuit}
-                type="text"
+                type="number"
                 name="cuit"
                 value={cuit}
-                onChange={OnInputChangeRegisterCompany}
+                onChange={handleChangeCuil}
                 autoComplete="off"
-                label="CUIT / CUIL"
+                label="CUIT"
               />
               <span style={styContToolAst}>
                 <Tooltip
@@ -338,7 +444,7 @@ export const RegistroEmpresa = () => {
                 id="email_first"
                 name="email_first"
                 value={email_first}
-                onChange={OnInputChangeRegisterCompany}
+                onChange={handleEmailChange}
                 inputProps={{
                   autoComplete: 'new-password',
                 }}
@@ -369,7 +475,7 @@ export const RegistroEmpresa = () => {
                 id="email_second"
                 name="email_second"
                 value={email_second}
-                onChange={OnInputChangeRegisterCompany}
+                onChange={handleEmailChange}
                 inputProps={{
                   autoComplete: 'new-password',
                 }}
@@ -397,6 +503,7 @@ export const RegistroEmpresa = () => {
                 <TextField
                   type="email"
                   id={String(input.id)}
+                  error={errorEmail}
                   name={`additionalEmail_${input.id}`}
                   inputProps={{
                     autoComplete: 'new-password',
@@ -423,8 +530,9 @@ export const RegistroEmpresa = () => {
                 <OutlinedInput
                   type={showPassword ? 'text' : 'password'}
                   name="password"
+                  error={errorPassword}
                   value={password}
-                  onChange={OnInputChangeRegisterCompany}
+                  onChange={handlePasswordChange}
                   autoComplete="off"
                   endAdornment={
                     <InputAdornment position="end">
@@ -463,7 +571,8 @@ export const RegistroEmpresa = () => {
                   type={showPasswordRepeat ? 'text' : 'password'}
                   name="repeatPassword"
                   value={repeatPassword}
-                  onChange={OnInputChangeRegisterCompany}
+                  error={errorRepeatPassword}
+                  onChange={handleRepeatPasswordChange}
                   autoComplete="off"
                   endAdornment={
                     <InputAdornment position="end">
@@ -514,7 +623,7 @@ export const RegistroEmpresa = () => {
                     type="number"
                     name="prefijo_first"
                     value={prefijo_first}
-                    onChange={OnInputChangeRegisterCompany}
+                    onChange={handleChangePhonePrefix}
                     autoComplete="off"
                     label="Prefijo"
                   />
@@ -537,12 +646,13 @@ export const RegistroEmpresa = () => {
                 >
                   <TextField
                     error={errorPhoneFirst}
-                    type="number"
+                    type="text"
                     name="phone_first"
                     value={phone_first}
-                    onChange={OnInputChangeRegisterCompany}
+                    onChange={handleChangePhone}
                     autoComplete="off"
                     label="Teléfono principal N° 1"
+                    inputProps={{ maxLength: 8, pattern: '[0-9]*' }}
                     sx={{
                       width: '100%',
                     }}
@@ -568,7 +678,7 @@ export const RegistroEmpresa = () => {
                     type="number"
                     name="prefijo_second"
                     value={prefijo_second}
-                    onChange={OnInputChangeRegisterCompany}
+                    onChange={handleChangePhonePrefix}
                     autoComplete="off"
                     label="Prefijo"
                   />
@@ -580,15 +690,16 @@ export const RegistroEmpresa = () => {
                 >
                   <TextField
                     error={errorPhoneSecond}
-                    type="phone"
+                    type="text"
                     name="phone_second"
                     value={phone_second}
-                    onChange={OnInputChangeRegisterCompany}
+                    onChange={handleChangePhone}
                     autoComplete="off"
                     label="Teléfono Alternativo N° 1"
                     sx={{
                       width: '100%',
                     }}
+                    inputProps={{ maxLength: 8, pattern: '[0-9]*' }}
                   />
                   <Box sx={{ '& > :not(style)': { m: 1 } }}>
                     <Fab
@@ -624,7 +735,7 @@ export const RegistroEmpresa = () => {
                     }}
                   >
                     <TextField
-                      type="number"
+                      type="text"
                       name={`prefijoAdditional_${input.id}`}
                       value={input.prefijo}
                       onChange={(e) => {
@@ -636,6 +747,7 @@ export const RegistroEmpresa = () => {
                         });
                         setPhoneAlternativos(values);
                       }}
+                      inputProps={{ maxLength: 4, pattern: '[0-9]*' }}
                       autoComplete="off"
                       label="Prefijo"
                     />
@@ -661,6 +773,7 @@ export const RegistroEmpresa = () => {
                       }}
                       autoComplete="off"
                       label="Teléfono Alternativo"
+                      inputProps={{ maxLength: 8, pattern: '[0-9]*' }}
                       sx={{
                         width: '100%',
                       }}
@@ -687,7 +800,7 @@ export const RegistroEmpresa = () => {
                     type="number"
                     name="whatsapp_prefijo"
                     value={whatsapp_prefijo}
-                    onChange={OnInputChangeRegisterCompany}
+                    onChange={handleChangePhonePrefix}
                     autoComplete="off"
                     label="Prefijo"
                   />
@@ -702,7 +815,7 @@ export const RegistroEmpresa = () => {
                     type="number"
                     name="whatsapp"
                     value={whatsapp}
-                    onChange={OnInputChangeRegisterCompany}
+                    onChange={handleChangePhone}
                     autoComplete="off"
                     label="Whatsapp"
                     sx={{
@@ -713,7 +826,12 @@ export const RegistroEmpresa = () => {
                 <span style={styContToolAst}>
                   <Tooltip
                     followCursor
-                    title="Ingrese 10 caracteres, 2 para cod area y 8 para numero de telefono"
+                    title={
+                      <div style={{ whiteSpace: 'pre-wrap' }}>
+                        * Teléfono sin espacios ni guiones * Ejemplo (011)
+                        ingresar solo 11 * Ejemplo (15609999) ingresar 609999
+                      </div>
+                    }
                     sx={{ cursor: 'pointer' }}
                   >
                     <IconButton>

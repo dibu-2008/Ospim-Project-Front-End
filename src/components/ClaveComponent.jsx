@@ -166,16 +166,16 @@ export const ClaveComponent = ({ showModal, setShowModal }) => {
             <Button
               variant="contained"
               sx={{ marginTop: '20px' }}
-              type="submit"
+              onClick={() => setShowModal(!showModal)}
             >
-              Actualizar
+              Cancelar
             </Button>
             <Button
               variant="contained"
               sx={{ marginTop: '20px' }}
-              onClick={() => setShowModal(!showModal)}
+              type="submit"
             >
-              Cancelar
+              Actualizar
             </Button>
           </Box>
         </form>
