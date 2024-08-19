@@ -405,7 +405,7 @@ export const Boletas = () => {
                     valueFormatter: (params) =>
                       params.value ? params.value.replace('-', '/') : '',
                   },
-                  { field: 'nroActa', headerName: 'Nro. Acta', flex: 1 },
+                  { field: 'nroActa', headerName: 'Nro. Acta', flex: 1, align: 'right', },
                   {
                     field: 'importe',
                     headerName: 'Importe',

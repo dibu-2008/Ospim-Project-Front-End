@@ -493,12 +493,12 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
       },
     },
   ];
-
+// Cuando sea registro poner el height en 300
   return (
     <div style={{ width: idEmpresa === 'PC' ? '100%' : 'auto' }}>
       <Box
         sx={{
-          height: '600px',
+          height: idEmpresa === 'PC' ? '300px' :'600px',
           width: '100%',
           '& .actions': {
             color: 'text.secondary',

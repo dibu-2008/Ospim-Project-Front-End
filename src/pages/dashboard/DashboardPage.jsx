@@ -90,6 +90,7 @@ const DashboardPage = () => {
   const [rolFuncionalidades, setRolFuncionalidades] = useState({});
   const rol = localStorageService.getRol();
   const [showModal, setShowModal] = useState(false);
+  const nombre =localStorageService.getNombre();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -336,6 +337,10 @@ const DashboardPage = () => {
                   <DisabledByDefaultIcon className="icon-link" />{' '}
                   {open && <span className="icon-link">Salir</span>}
                 </NavLink>
+                <NavLink  className="icon-container">
+                    <PersonIcon className="icon-link" />{' '}
+                    {open && <span className="icon-link">{nombre}</span>}
+                  </NavLink>
               </ListItemIcon>
             </ListItemButton>
           </ListItem>

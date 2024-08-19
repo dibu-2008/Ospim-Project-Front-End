@@ -168,6 +168,9 @@ const localStorageService = {
   setLoguinRefresh: function (token, tokenRefresh) {
     setLoguinRefresh(token, tokenRefresh);
   },
+  getNombre: function () {
+    return getNombre();
+  },
 };
 
 export default localStorageService;
