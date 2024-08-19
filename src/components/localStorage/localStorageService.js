@@ -95,7 +95,7 @@ export const getApellido = () => {
   if (auxStateLogin != null) {
     auxStateLogin = JSON.parse(localStorage.getItem('stateLogin'));
     if (auxStateLogin.hasOwnProperty('usuarioLogueado')) {
-      USUARIO = auxStateLogin.usuarioLogueado.persona.apellido;
+      USUARIO = auxStateLogin.usuarioLogueado.persona?.apellido;
       return USUARIO;
     }
   }
@@ -104,18 +104,31 @@ export const getApellido = () => {
 };
 export const getNombre = () => {
   let auxStateLogin = localStorage.getItem('stateLogin');
-  let USUARIO = null;
 
   if (auxStateLogin != null) {
     auxStateLogin = JSON.parse(localStorage.getItem('stateLogin'));
+    console.log('auxStateLogin: ', auxStateLogin);
     if (auxStateLogin.hasOwnProperty('usuarioLogueado')) {
-      USUARIO = auxStateLogin.usuarioLogueado.persona.nombre;
-      return USUARIO;
+      if (
+        auxStateLogin.usuarioLogueado.persona &&
+        auxStateLogin.usuarioLogueado.persona.hasOwnProperty('nombre')
+      ) {
+        //if (auxStateLogin.usuarioLogueado.persona.hasOwnProperty('nombre')) {
+        return auxStateLogin.usuarioLogueado.persona.nombre;
+        //}
+      }
+
+      if (
+        auxStateLogin.usuarioLogueado.empresa &&
+        auxStateLogin.usuarioLogueado.empresa.hasOwnProperty('razonSocial')
+      ) {
+        return auxStateLogin.usuarioLogueado.empresa.razonSocial;
+      }
     }
   }
-
   return null;
 };
+
 export const getMail = () => {
   let auxStateLogin = localStorage.getItem('stateLogin');
   let USUARIO = null;
