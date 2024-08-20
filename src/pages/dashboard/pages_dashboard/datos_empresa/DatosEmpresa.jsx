@@ -13,6 +13,8 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { styled } from '@mui/material/styles';
 import InputLabel from '@mui/material/InputLabel';
+import EditIcon from '@mui/icons-material/Edit';
+import { CuitForm } from './CuitForm';
 
 const CustomSelect = styled(Select)({
   textAlign: 'left',
@@ -58,12 +60,13 @@ function a11yProps(index) {
 }
 
 export const DatosEmpresa = () => {
-  const ID_EMPRESA = localStorageService.getEmpresaId();
-  console.log('DatosEmpresa - INIT - ID_EMPRESA: ' + ID_EMPRESA);
+  const esEmpleador = localStorageService.isRolEmpleador();
+  console.log('DatosEmpresa - INIT - esEmpleador: ', esEmpleador);
+  const [formShow, setFormShow] = useState(false);
+
   const [locale, setLocale] = useState('esES');
-  //const [rowsContacto, setRowsContacto] = useState([]);
   const [rowsDomicilio, setRowsDomicilio] = useState([]);
-  const [idEmpresa, setIdEmpresa] = useState('');
+  const [idEmpresa, setIdEmpresa] = useState(null);
   const [cuit, setCuit] = useState('');
   const [razonSocial, setRazonSocial] = useState('');
   const [tabState, setTabState] = useState(0);
@@ -89,39 +92,40 @@ export const DatosEmpresa = () => {
           : false,
       );
     };
-    ObtenerEmpresa();
+    if (esEmpleador) ObtenerEmpresa();
   }, []);
+
+  const handlerCuitFormActualizarEmpresa = (regEmpresa) => {
+    console.log('DatosEmpresa - actualizarEmpresa - regEmpresa:', regEmpresa);
+    setCuit(regEmpresa.cuit);
+    setRazonSocial(regEmpresa.razonSocial);
+    setIdEmpresa(regEmpresa.id);
+    setActividadMolinera(regEmpresa.actividad_molinera);
+  };
 
   const handleChangeTabState = (event, newValue) => {
     setTabState(newValue);
-  };
-
-  const OnChangeCuit = (e) => {
-    setCuit(e.target.value);
   };
 
   const OnChangeRazonSocial = (e) => {
     setRazonSocial(e.target.value);
   };
 
-  const OnChangeRamos = (e) => {
-    setRamo(e.target.value);
-  };
-
   const onSubmitModificarEmpresa = async (e) => {
     e.preventDefault();
-    const empresa = {
-      razonSocial: razonSocial,
-      actividad_molinera: actividadMolinera,
-      id: idEmpresa,
-    };
-    await axiosDatosEmpre.actualizar(empresa);
+    if (idEmpresa != null) {
+      const empresa = {
+        razonSocial: razonSocial,
+        actividad_molinera: actividadMolinera,
+        id: idEmpresa,
+      };
+      await axiosDatosEmpre.actualizar(empresa);
+    }
   };
 
   return (
     <div className="datos_empresa_container">
       <h1>Mis Datos de Perfil</h1>
-
       <form
         style={{
           display: 'flex',
@@ -141,6 +145,8 @@ export const DatosEmpresa = () => {
           autoComplete="off"
           label="CUIT"
         />
+        {!esEmpleador && <EditIcon onClick={(e) => setFormShow(true)} />}
+
         <TextField
           type="text"
           name="razonSocial"
@@ -192,23 +198,25 @@ export const DatosEmpresa = () => {
         </Box>
         <CustomTabPanel value={tabState} index={0}>
           <ThemeProvider theme={themeWithLocale}>
-            <GrillaEmpresaContacto
-              idEmpresa={ID_EMPRESA}
-              //rows={rowsContacto}
-              //setRows={setRowsContacto}
-            />
+            <GrillaEmpresaContacto idEmpresa={idEmpresa} />
           </ThemeProvider>
         </CustomTabPanel>
         <CustomTabPanel value={tabState} index={1}>
           <ThemeProvider theme={themeWithLocale}>
             <GrillaEmpresaDomicilio
-              idEmpresa={ID_EMPRESA}
+              idEmpresa={idEmpresa}
               rows={rowsDomicilio}
               setRows={setRowsDomicilio}
             />
           </ThemeProvider>
         </CustomTabPanel>
       </Box>
+
+      <CuitForm
+        formShow={formShow}
+        setFormShow={setFormShow}
+        actualizarEmpresa={handlerCuitFormActualizarEmpresa}
+      ></CuitForm>
     </div>
   );
 };

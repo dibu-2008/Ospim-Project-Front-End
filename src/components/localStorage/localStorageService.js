@@ -57,21 +57,22 @@ export const getEmpresaId = () => {
       }
     }
   }
+  return null;
 };
 
 export const getRol = () => {
   let auxStateLogin = localStorage.getItem('stateLogin');
-  let ROL = null;
-
   if (auxStateLogin != null) {
     auxStateLogin = JSON.parse(localStorage.getItem('stateLogin'));
     if (auxStateLogin.hasOwnProperty('usuarioLogueado')) {
-      ROL = auxStateLogin.usuarioLogueado.usuario.rol[0].descripcion;
-      return ROL;
+      auxStateLogin = auxStateLogin.usuarioLogueado;
+      if (auxStateLogin.hasOwnProperty('usuario')) {
+        auxStateLogin = auxStateLogin.usuario;
+        return auxStateLogin.rol[0].descripcion;
+      }
     }
   }
-
-  return {};
+  return null;
 };
 
 export const getUsuario = () => {

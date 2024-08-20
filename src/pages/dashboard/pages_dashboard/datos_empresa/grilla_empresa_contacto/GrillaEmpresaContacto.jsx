@@ -39,8 +39,8 @@ export const GrillaEmpresaContacto = ({ idEmpresa }) => {
       setRowsTelefono(telefonoArray);
       setRowsMail(mailArray);
     };
-    getDatosEmpresa();
-  }, []);
+    if (idEmpresa != null) getDatosEmpresa();
+  }, [idEmpresa]);
 
   return (
     <>

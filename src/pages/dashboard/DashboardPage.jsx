@@ -90,7 +90,7 @@ const DashboardPage = () => {
   const [rolFuncionalidades, setRolFuncionalidades] = useState({});
   const rol = localStorageService.getRol();
   const [showModal, setShowModal] = useState(false);
-  const nombre =localStorageService.getNombre();
+  const nombre = localStorageService.getNombre();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -234,7 +234,6 @@ const DashboardPage = () => {
                     )}
                   </NavLink>
                 )}
-
                 {rolFuncionalidades.BOLETA_ACTAS && (
                   <NavLink to="./generarotrospagos" className="icon-container">
                     <ReceiptIcon className="icon-link" />{' '}
@@ -267,6 +266,16 @@ const DashboardPage = () => {
                     {open && <span className="icon-link">Usuario Interno</span>}
                   </NavLink>
                 )}
+
+                {rolFuncionalidades.CONSULTA_EMPRESA && (
+                  <NavLink to="./empresas" className="icon-container">
+                    <PersonAddIcon className="icon-link" />{' '}
+                    {open && (
+                      <span className="icon-link">Consulta Empresas</span>
+                    )}
+                  </NavLink>
+                )}
+
                 {rolFuncionalidades.AJUSTES && (
                   <NavLink to="./ajustes" className="icon-container">
                     <SettingsApplicationsIcon className="icon-link" />{' '}
@@ -337,10 +346,10 @@ const DashboardPage = () => {
                   <DisabledByDefaultIcon className="icon-link" />{' '}
                   {open && <span className="icon-link">Salir</span>}
                 </NavLink>
-                <NavLink  className="icon-container">
-                    <PersonIcon className="icon-link" />{' '}
-                    {open && <span className="icon-link">{nombre}</span>}
-                  </NavLink>
+                <NavLink className="icon-container">
+                  <PersonIcon className="icon-link" />{' '}
+                  {open && <span className="icon-link">{nombre}</span>}
+                </NavLink>
               </ListItemIcon>
             </ListItemButton>
           </ListItem>

@@ -70,6 +70,8 @@ const AppRouter = () => {
           <Route path="misdatos" element={<DatosPerfil />} />
           <Route path="datos/usuario" element={<DatosPerfil />} />
 
+          <Route path="empresas" element={<DatosEmpresa />} />
+
           <Route path="altausuariointerno" element={<AltaUsuarioInterno />} />
           <Route path="cuitsrestringidos" element={<CuitsRestringidos />} />
           <Route path="roles" element={<Roles />} />
