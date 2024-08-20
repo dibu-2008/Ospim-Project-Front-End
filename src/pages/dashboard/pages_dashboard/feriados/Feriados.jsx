@@ -349,7 +349,7 @@ export const Feriados = () => {
       >
         Administración de feriados
         <Tooltip
-          title="Pasar feriados años siguiente"
+          title="Duplicar feriados en el años en curso"
           sx={{ marginLeft: '10px', cursor: 'pointer' }}
         >
           <IconButton onClick={handleOpen}>
@@ -449,7 +449,7 @@ export const Feriados = () => {
                 color: theme.palette.primary.main,
               }}
             >
-              Duplicar feriados
+              Duplicar feriados <br></br>en año actual
             </Typography>
             <DemoContainer components={['DatePicker']}>
               <DatePicker

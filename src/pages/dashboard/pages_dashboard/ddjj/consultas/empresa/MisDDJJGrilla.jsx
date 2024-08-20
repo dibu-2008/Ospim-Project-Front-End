@@ -137,7 +137,7 @@ export const MisDDJJGrilla = ({ rows, setRows, handlerDDJJEditar }) => {
       },
       {
         field: 'secuencia',
-        headerName: 'Numero',
+        headerName: 'Número',
         flex: 1,
         editable: false,
         headerAlign: 'center',
