@@ -42,10 +42,10 @@ export const GenerarBoletas = () => {
   const [isUseEffect, setIsUseEffect] = useState(true);
   const [hasFetchedData, setHasFetchedData] = useState(false); // Nuevo estado para controlar la ejecución única
   const MOTIVOS_DESC = {
-    'DI': 'Devolución de Intereses',
-    'DPD': 'Devolución por pago duplicado',
-    'O': 'Otros'
-  }
+    DI: 'Devolución de Intereses',
+    DPD: 'Devolución por pago duplicado',
+    O: 'Otros',
+  };
 
   const navigate = useNavigate();
 
@@ -377,7 +377,8 @@ export const GenerarBoletas = () => {
                 }
               >
                 <Button onClick={() => toggleDetail(boletas.detalle_boletas)}>
-                  Mostrar detalle de afiliados
+                  {!showDetail && 'Mostrar detalle de afiliados'}
+                  {showDetail && 'Ocultar detalle de afiliados'}
                 </Button>
               </TableCell>
             </TableRow>
@@ -512,7 +513,8 @@ export const GenerarBoletas = () => {
               <ul>
                 {boleta.ajustes.map((ajuste, index) => (
                   <li key={index}>
-                    {ajuste.descripcion} - Motivo: {MOTIVOS_DESC[ajuste.motivo]} - Monto:
+                    {ajuste.descripcion} - Motivo: {MOTIVOS_DESC[ajuste.motivo]}{' '}
+                    - Monto:
                     {formatter.currency.format(ajuste.monto)}
                   </li>
                 ))}

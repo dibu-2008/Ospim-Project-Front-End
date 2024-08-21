@@ -181,9 +181,12 @@ export const DatosEmpresa = () => {
             <CustomMenuItem value={false}>No</CustomMenuItem>
           </CustomSelect>
         </FormControl>
-        <Button variant="contained" sx={{}} type="submit">
-          Guardar
-        </Button>
+
+        {!esEmpleador && (
+          <Button variant="contained" sx={{}} type="submit">
+            Guardar
+          </Button>
+        )}
       </form>
       <Box sx={{ width: '100%' }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>

@@ -26,7 +26,7 @@ export const GestionRoles = () => {
   return (
     <>
       <div className="container">
-        <h1>Gestion Roles</h1>
+        <h1>Gestión Roles</h1>
         <FormControl fullWidth>
           <InputLabel id="demo-simple-select-label">Nombre Rol</InputLabel>
           <Select

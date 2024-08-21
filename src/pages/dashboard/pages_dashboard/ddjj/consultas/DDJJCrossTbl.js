@@ -60,8 +60,17 @@ const addColumnsAportes = (rowsMisDDJJ, columns, vecAportes) => {
   // vecAportes: vector de aportes (codigo,descrip) para el titulo de la columna
   //OUTPUT: agrega en "columns" las columnas "Aporte" de la DDJJ
 
-  const colAportes = getColsAporte(rowsMisDDJJ);
-  //console.log('MisDDJJGrilla - 1 - misDDJJColumnaAporteGet - colAportes:', colAportes);
+  console.log('addColumnsAportes - vecAportes:', vecAportes);
+
+  let colAportes = getColsAporte(rowsMisDDJJ);
+  //console.log('MisDDJJGrilla - 1 - misDDJJColumnaAporteGet - colAportes:', colAportes,);
+
+  if (colAportes && vecAportes.filter) {
+    const intersection = vecAportes.filter((reg) =>
+      colAportes.includes(reg.codigo),
+    );
+    colAportes = intersection.map((reg) => reg.codigo);
+  }
 
   //Agrego Columna a la grilla.-
   colAportes.forEach((elem) => {

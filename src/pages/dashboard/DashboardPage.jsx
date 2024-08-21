@@ -174,6 +174,11 @@ const DashboardPage = () => {
                   marginLeft: '-18px',
                 }}
               >
+                <NavLink className="icon-container">
+                  <PersonIcon className="icon-link" />{' '}
+                  {open && <span className="icon-link">{nombre}</span>}
+                </NavLink>
+
                 <NavLink to="./inicio" className="icon-container">
                   <HomeIcon className="icon-link" />{' '}
                   {open && <span className="icon-link">Inicio</span>}
@@ -243,7 +248,7 @@ const DashboardPage = () => {
                 {rolFuncionalidades.GESTION_ROLES && (
                   <NavLink to="./gestion-roles" className="icon-container">
                     <DateRangeIcon className="icon-link" />{' '}
-                    {open && <span className="icon-link">Gestion Roles</span>}
+                    {open && <span className="icon-link">Gestión Roles</span>}
                   </NavLink>
                 )}
                 {rolFuncionalidades.CUITS_RESTRINGIDOS && (
@@ -345,10 +350,6 @@ const DashboardPage = () => {
                 <NavLink className="icon-container" onClick={onLogout}>
                   <DisabledByDefaultIcon className="icon-link" />{' '}
                   {open && <span className="icon-link">Salir</span>}
-                </NavLink>
-                <NavLink className="icon-container">
-                  <PersonIcon className="icon-link" />{' '}
-                  {open && <span className="icon-link">{nombre}</span>}
                 </NavLink>
               </ListItemIcon>
             </ListItemButton>
