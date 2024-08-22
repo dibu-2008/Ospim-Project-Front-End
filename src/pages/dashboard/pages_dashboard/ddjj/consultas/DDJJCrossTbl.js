@@ -71,7 +71,8 @@ const addColumnsAportes = (rowsMisDDJJ, columns, vecAportes) => {
       flex: 1,
       editable: false,
       headerAlign: 'center',
-      align: 'center',
+      //align: 'center',
+      align: 'right',
       headerClassName: 'header--cell',
       valueFormatter: (params) => formatter.currency.format(params.value || 0),
     });
