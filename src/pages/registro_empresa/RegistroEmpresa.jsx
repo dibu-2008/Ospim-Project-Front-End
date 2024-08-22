@@ -187,7 +187,7 @@ export const RegistroEmpresa = () => {
       console.log('rows: ', rows);
       usuarioEmpresa['domicilios'] = rows.map((row) => ({
         tipo: row.tipo,
-        provinciaId: row.provincia?.id || null,
+        provinciaId: row.provincia?.id, //|| null,
         localidadId: row.localidad?.id || null,
         calle: row.calle,
         numeroDomicilio: row.numeroDomicilio,
@@ -877,10 +877,12 @@ export const RegistroEmpresa = () => {
                 >
                   REGISTRARSE
                 </Button>
+
               </div>
             </Grid>
           </div>
         </form>
+
       </div>
     </main>
   );
