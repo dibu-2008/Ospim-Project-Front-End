@@ -14,7 +14,7 @@ export const MyDocument = ({ rows_mis_ddjj }) => (
         <View style={styles.section}>
           <Text>Periodo: {row.periodo}</Text>
           <Text>
-            Numero:{' '}
+            Número:{' '}
             {row.secuencia === 0
               ? 'Original'
               : `Rectificativa ${row.secuencia}`}

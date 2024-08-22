@@ -267,14 +267,14 @@ export const Boletas = () => {
                   },
                   {
                     field: 'intencionDePago',
-                    headerName: 'Intencion de Pago',
+                    headerName: 'Intención de Pago',
                     flex: 1,
                     valueFormatter: (params) =>
                       params.value ? formatter.dateString(params.value) : '',
                   },
                   {
                     field: 'formaDePago',
-                    headerName: 'Metodo de Pago',
+                    headerName: 'Método de Pago',
                     flex: 0.8,
                   },
                   {
@@ -405,7 +405,12 @@ export const Boletas = () => {
                     valueFormatter: (params) =>
                       params.value ? params.value.replace('-', '/') : '',
                   },
-                  { field: 'nroActa', headerName: 'Nro. Acta', flex: 1, align: 'right', },
+                  {
+                    field: 'nroActa',
+                    headerName: 'Nro. Acta',
+                    flex: 1,
+                    align: 'right',
+                  },
                   {
                     field: 'importe',
                     headerName: 'Importe',
@@ -418,7 +423,7 @@ export const Boletas = () => {
                   },
                   {
                     field: 'intencionDePago',
-                    headerName: 'Intencion de Pago',
+                    headerName: 'Intención de Pago',
                     flex: 1,
                     valueFormatter: (params) =>
                       params.value ? formatter.dateString(params.value) : '',

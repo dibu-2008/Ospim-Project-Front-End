@@ -251,7 +251,7 @@ export const InteresesAfip = () => {
     },
     {
       field: 'indice',
-      headerName: 'Indice',
+      headerName: 'Índice',
       flex: 1,
       type: 'number',
       editable: true,

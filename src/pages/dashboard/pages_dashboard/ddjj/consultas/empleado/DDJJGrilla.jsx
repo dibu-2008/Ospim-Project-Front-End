@@ -71,7 +71,7 @@ export const DDJJGrilla = ({ rows, showCuit }) => {
     }
     columns.push({
       field: 'secuencia',
-      headerName: 'Numero',
+      headerName: 'Número',
       flex: 1,
       editable: false,
       headerAlign: 'center',
