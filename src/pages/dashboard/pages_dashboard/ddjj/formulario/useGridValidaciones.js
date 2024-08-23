@@ -138,6 +138,10 @@ const validarDDJJCuiles = async (DDJJ) => {
 
 const tieneErrores = () => {
   console.log('useGridValidaciones. - tieneErrores - INIT');
+  console.log(
+    'useGridValidaciones.getRowsValidaciones:',
+    useGridValidaciones.getRowsValidaciones,
+  );
   if (
     useGridValidaciones.getRowsValidaciones &&
     useGridValidaciones.getRowsValidaciones.errores &&

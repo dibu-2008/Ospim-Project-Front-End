@@ -19,6 +19,19 @@ export const DDJJArchivoImport = ({
   console.log('DDJJArchivoImport - habiModif:', habiModif);
   const ID_EMPRESA = localStorageService.getEmpresaId();
   const IMPORTACION_OK = import.meta.env.VITE_IMPORTACION_OK;
+  const vecRowTitulos = [
+    'Cuil',
+    'Apellido',
+    'Nombre',
+    'Camara',
+    'Categoria',
+    'Fecha de ingreso',
+    'Planta',
+    'Remunerativo',
+    'No Remunerativo',
+    'Adherido al sindicato',
+    'Paga Mutual',
+  ];
 
   const [fileNameSelected, setFileNameSelected] = useState(''); // validar si eligieron un archivo
   const [fileVecCuiles, setFileVecCuiles] = useState([]);
@@ -77,14 +90,49 @@ export const DDJJArchivoImport = ({
     const sheetName = workbook.SheetNames[0];
     const sheet = workbook.Sheets[sheetName];
     const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-    return rows;
+
+    console.log('rows:', rows);
+    let rowUno = [];
+    if (rows && rows.length > 0) {
+      rowUno = rows[0]; //Guardo Row Titulo
+    }
+
+    const rowsClean = rows.filter((reg) => {
+      if (reg?.length > 0 && reg[0] != null && Number.isInteger(reg[0])) {
+        return true;
+      }
+    }); //Elimino rows en blanco y donde no hay un numerico en
+
+    if (rowsClean && rowsClean.length > 0) {
+      if (rowsClean[0].toString() != rowUno.toString()) {
+        //Devuelvo row Titulos
+        rowsClean.unshift(rowUno);
+      }
+    }
+    console.log('**rowsClean:', rowsClean);
+
+    return rowsClean;
   };
+
   const validarTitulos = (vecRows) => {
     if (vecRows[0].length === 11) {
-      return true;
+      //console.log('vecRows[0].toString(): ', vecRows[0].toString());
+      //console.log('vecRowTitulos.toString(): ', vecRowTitulos.toString());
+      try {
+        const vecTitTrim = vecRows[0].map((reg) => reg.trim());
+        if (vecTitTrim.toString() === vecRowTitulos.toString()) {
+          return true;
+        }
+      } catch (e) {
+        try {
+          console.log('vecRows[0].toString(): ', vecRows[0].toString());
+          console.log('vecRowTitulos.toString(): ', vecRowTitulos.toString());
+        } catch (e2) {}
+      }
     }
     return false;
   };
+
   const findCodigo = (vector, codigo) => {
     try {
       if (vector && vector.find) {

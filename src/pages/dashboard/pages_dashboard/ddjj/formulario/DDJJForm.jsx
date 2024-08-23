@@ -525,6 +525,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
 
     if (ddjjCabe.periodo == null)
       setDdjjCabe({ ...ddjjCabe, periodo: formatter.getPeriodoActual() });
+
     setDdjjModi(true);
     setExpanded(true);
   };
@@ -669,8 +670,12 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     }
 
     console.log(
-      'guardarDeclaracionJurada - rowsValidaciones:',
+      'xx guardarDeclaracionJurada - rowsValidaciones:',
       rowsValidaciones,
+    );
+    console.log(
+      'xx guardarDeclaracionJurada - useGridValidaciones.getRowsValidaciones:',
+      useGridValidaciones.getRowsValidaciones,
     );
     if (useGridValidaciones.tieneErrores()) {
       Swal.fire({
@@ -780,6 +785,10 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
   const presentarDDJJ = async () => {
     //const seguir = await guardarDDJJConfirm();
     console.log('presentarDDJJ - INIT');
+    console.log(
+      'presentarDDJJ - useGridValidaciones.getRowsValidaciones:',
+      useGridValidaciones.getRowsValidaciones,
+    );
 
     if (!useGridValidaciones.tieneErrores()) {
       const confirm = {
@@ -811,10 +820,11 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
         }
       });
     } else {
+      console.log();
       Swal.fire({
         icon: 'error',
-        title: 'Valiacion de Declaracion Jurada',
-        html: `La DDJJ no se pudo presentar.<br>Existen campos invalidos:<br><br> ${getMsgValidaciones()}<br>Corrija la informacion antes de Presentar la DDJJ `,
+        title: 'Valiación de Declaración Jurada',
+        html: `La DDJJ no se pudo presentar.<br>Existen campos inválidos:<br><br> ${getMsgValidaciones()}<br>Corrija la información antes de Presentar la DDJJ `,
         showConfirmButton: true,
         confirmButtonText: 'OK',
         showCancelButton: true,
