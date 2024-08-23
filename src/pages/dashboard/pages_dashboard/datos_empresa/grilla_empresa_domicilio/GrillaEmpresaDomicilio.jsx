@@ -151,6 +151,8 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
         id: params.id,
         ignoreModifications: false,
       });
+      isOnEditMode = false
+      
     }
   };
 

@@ -39,7 +39,8 @@ export const DDJJGrilla = ({ rows, showCuit }) => {
         editable: false,
         type: 'date',
         headerAlign: 'center',
-        align: 'center',
+        //align: 'center',
+        align: 'right',
         headerClassName: 'header--cell',
         valueFormatter: (params) => {
           return formatter.periodo(params.value);
@@ -55,7 +56,8 @@ export const DDJJGrilla = ({ rows, showCuit }) => {
           flex: 1.5,
           editable: false,
           headerAlign: 'center',
-          align: 'center',
+          //align: 'center',
+          align: 'right',
           headerClassName: 'header--cell',
         },
         {
@@ -64,7 +66,7 @@ export const DDJJGrilla = ({ rows, showCuit }) => {
           flex: 2,
           editable: false,
           headerAlign: 'center',
-          align: 'center',
+          align: 'left',
           headerClassName: 'header--cell',
         },
       );
@@ -75,7 +77,7 @@ export const DDJJGrilla = ({ rows, showCuit }) => {
       flex: 1,
       editable: false,
       headerAlign: 'center',
-      align: 'center',
+      align: 'left',
       headerClassName: 'header--cell',
       valueGetter: (params) => {
         // Si secuencia es 0 es "Original" sino es "Rectificativa"+secuencia

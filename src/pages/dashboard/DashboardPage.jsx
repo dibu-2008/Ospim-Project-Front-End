@@ -100,9 +100,11 @@ const DashboardPage = () => {
       funcionalidades.forEach((funcionalidad) => {
         roles[funcionalidad.descripcion] = funcionalidad.activo;
       });
+      console.log(roles);
       setRolFuncionalidades(roles);
       console.log('DashboardPage - roles: ', roles);
     };
+
     fetchData();
   }, []);
 
@@ -183,22 +185,10 @@ const DashboardPage = () => {
                   <HomeIcon className="icon-link" />{' '}
                   {open && <span className="icon-link">Inicio</span>}
                 </NavLink>
-                {rolFuncionalidades.DATOS_PERFIL && (
-                  <NavLink to="./misdatos" className="icon-container">
-                    <PersonIcon className="icon-link" />{' '}
-                    {open && <span className="icon-link">Datos de Perfil</span>}
-                  </NavLink>
-                )}
-                {rolFuncionalidades.PUBLICACIONES && (
-                  <NavLink to="./publicaciones" className="icon-container">
-                    <PreviewIcon className="icon-link" />{' '}
-                    {open && <span className="icon-link">Publicaciones</span>}
-                  </NavLink>
-                )}
-                {rolFuncionalidades.FERIADOS && (
-                  <NavLink to="./feriados" className="icon-container">
-                    <DateRangeIcon className="icon-link" />{' '}
-                    {open && <span className="icon-link">Feriados</span>}
+                {rolFuncionalidades.USUARIO_INTERNO && (
+                  <NavLink to="./altausuariointerno" className="icon-container">
+                    <PersonAddIcon className="icon-link" />{' '}
+                    {open && <span className="icon-link">Usuario Interno</span>}
                   </NavLink>
                 )}
                 {rolFuncionalidades.NUEVA_DDJJ && (
@@ -228,6 +218,12 @@ const DashboardPage = () => {
                     {open && <span className="icon-link">Mis Boletas</span>}
                   </NavLink>
                 )}
+                {rolFuncionalidades.BOLETA_ACTAS && (
+                  <NavLink to="./generarotrospagos" className="icon-container">
+                    <ReceiptIcon className="icon-link" />{' '}
+                    {open && <span className="icon-link">Boleta Actas</span>}
+                  </NavLink>
+                )}
                 {rolFuncionalidades.BOLETAS_CONSULTA && (
                   <NavLink
                     to="./boletas/empleado/consulta"
@@ -239,10 +235,16 @@ const DashboardPage = () => {
                     )}
                   </NavLink>
                 )}
-                {rolFuncionalidades.BOLETA_ACTAS && (
-                  <NavLink to="./generarotrospagos" className="icon-container">
-                    <ReceiptIcon className="icon-link" />{' '}
-                    {open && <span className="icon-link">Boleta Actas</span>}
+                {rolFuncionalidades.AJUSTES && (
+                  <NavLink to="./ajustes" className="icon-container">
+                    <SettingsApplicationsIcon className="icon-link" />{' '}
+                    {open && <span className="icon-link">Ajustes</span>}
+                  </NavLink>
+                )}
+                {rolFuncionalidades.ROLES && (
+                  <NavLink to="./roles" className="icon-container">
+                    <CoPresentIcon className="icon-link" />{' '}
+                    {open && <span className="icon-link">Roles</span>}
                   </NavLink>
                 )}
                 {rolFuncionalidades.GESTION_ROLES && (
@@ -259,34 +261,6 @@ const DashboardPage = () => {
                     )}
                   </NavLink>
                 )}
-                {rolFuncionalidades.ROLES && (
-                  <NavLink to="./roles" className="icon-container">
-                    <CoPresentIcon className="icon-link" />{' '}
-                    {open && <span className="icon-link">Roles</span>}
-                  </NavLink>
-                )}
-                {rolFuncionalidades.USUARIO_INTERNO && (
-                  <NavLink to="./altausuariointerno" className="icon-container">
-                    <PersonAddIcon className="icon-link" />{' '}
-                    {open && <span className="icon-link">Usuario Interno</span>}
-                  </NavLink>
-                )}
-
-                {rolFuncionalidades.CONSULTA_EMPRESA && (
-                  <NavLink to="./empresas" className="icon-container">
-                    <PersonAddIcon className="icon-link" />{' '}
-                    {open && (
-                      <span className="icon-link">Consulta Empresas</span>
-                    )}
-                  </NavLink>
-                )}
-
-                {rolFuncionalidades.AJUSTES && (
-                  <NavLink to="./ajustes" className="icon-container">
-                    <SettingsApplicationsIcon className="icon-link" />{' '}
-                    {open && <span className="icon-link">Ajustes</span>}
-                  </NavLink>
-                )}
                 {rolFuncionalidades.INTERESES && (
                   <NavLink
                     to="./interesesafip"
@@ -298,6 +272,24 @@ const DashboardPage = () => {
                       className="icon-link icono-afip"
                     />{' '}
                     {open && <span className="icon-link">Intereses</span>}
+                  </NavLink>
+                )}
+                {rolFuncionalidades.FERIADOS && (
+                  <NavLink to="./feriados" className="icon-container">
+                    <DateRangeIcon className="icon-link" />{' '}
+                    {open && <span className="icon-link">Feriados</span>}
+                  </NavLink>
+                )}
+                {rolFuncionalidades.DATOS_PERFIL && (
+                  <NavLink to="./misdatos" className="icon-container">
+                    <PersonIcon className="icon-link" />{' '}
+                    {open && <span className="icon-link">Datos de Perfil</span>}
+                  </NavLink>
+                )}
+                {rolFuncionalidades.PUBLICACIONES && (
+                  <NavLink to="./publicaciones" className="icon-container">
+                    <PreviewIcon className="icon-link" />{' '}
+                    {open && <span className="icon-link">Publicaciones</span>}
                   </NavLink>
                 )}
                 {rolFuncionalidades.APORTES && (
@@ -350,6 +342,10 @@ const DashboardPage = () => {
                 <NavLink className="icon-container" onClick={onLogout}>
                   <DisabledByDefaultIcon className="icon-link" />{' '}
                   {open && <span className="icon-link">Salir</span>}
+                </NavLink>
+                <NavLink className="icon-container">
+                  <PersonIcon className="icon-link" />{' '}
+                  {open && <span className="icon-link">{nombre}</span>}
                 </NavLink>
               </ListItemIcon>
             </ListItemButton>
