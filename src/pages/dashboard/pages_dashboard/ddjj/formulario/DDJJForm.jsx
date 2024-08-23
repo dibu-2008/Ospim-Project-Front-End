@@ -237,6 +237,8 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     themeWithLocale,
   } = useContext(UserContext);
 
+  const [deshabilitarGuardar, setDeshabilitarGuardar] = useState(true);
+
   const [habiModif, setHabiModif] = useState(false); //EX actualizacionHabilitada - SI estdo "PE" o ddjjCabe.id=null => puedo modificar.-
   const [tituloSec, setTituloSec] = useState('');
 
@@ -936,7 +938,11 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     }
   }, [ddjjCabe]);
 
+  useEffect(() => {
+    setDeshabilitarGuardar(desHabilitarGrabar());
+  }, [someRowInEditMode, habiModif, rows]);
   /*
+   
   useEffect(() => {
     console.log('** 2) useEffect[rows] - validarDDJJ() - rowsNew: ', rowsNew);
     validarDDJJ();
@@ -1791,7 +1797,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
                     variant="contained"
                     sx={{ padding: '6px 52px', marginLeft: '10px' }}
                     onClick={guardarDDJJConfirm}
-                    disabled={desHabilitarGrabar()}
+                    disabled={deshabilitarGuardar}
                   >
                     Guardar
                   </Button>
