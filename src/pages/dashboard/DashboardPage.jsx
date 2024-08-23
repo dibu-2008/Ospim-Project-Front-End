@@ -191,6 +191,15 @@ const DashboardPage = () => {
                     {open && <span className="icon-link">Usuario Interno</span>}
                   </NavLink>
                 )}
+                {rolFuncionalidades.CONSULTA_EMPRESA && (
+                  <NavLink to="./empresas" className="icon-container">
+                    <PersonAddIcon className="icon-link" />{' '}
+                    {open && (
+                      <span className="icon-link">Consulta Empresas</span>
+                    )}
+                  </NavLink>
+                )}
+
                 {rolFuncionalidades.NUEVA_DDJJ && (
                   <NavLink to="./ddjj/alta" className="icon-container">
                     <LibraryBooksIcon className="icon-link" />{' '}
