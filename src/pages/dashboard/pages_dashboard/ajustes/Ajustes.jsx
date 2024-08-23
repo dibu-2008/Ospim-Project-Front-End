@@ -254,7 +254,7 @@ export const Ajustes = () => {
       type: 'text',
       editable: true,
       headerAlign: 'center',
-      align: 'center',
+      align: 'right',
       headerClassName: 'header--cell',
     },
     {
@@ -263,7 +263,7 @@ export const Ajustes = () => {
       flex: 1,
       editable: true,
       headerAlign: 'center',
-      align: 'center',
+      align: 'right',
       valueFormatter: (params) => {
         return isNotNull(params.value) ? formatter.periodo(params.value) : '';
       },
@@ -277,7 +277,7 @@ export const Ajustes = () => {
       type: 'number',
       editable: true,
       headerAlign: 'center',
-      align: 'center',
+      align: 'right',
       headerClassName: 'header--cell',
     },
     {
@@ -296,7 +296,7 @@ export const Ajustes = () => {
         return motivo ? motivo.descripcion : '';
       },
       headerAlign: 'center',
-      align: 'center',
+      align: 'left',
       headerClassName: 'header--cell',
     },
     {
@@ -311,7 +311,7 @@ export const Ajustes = () => {
       }),
       valueGetter: (params) => params.row.aporte || null,
       headerAlign: 'center',
-      align: 'center',
+      align: 'left',
       headerClassName: 'header--cell',
     },
     {
@@ -321,7 +321,7 @@ export const Ajustes = () => {
       flex: 1,
       editable: true,
       headerAlign: 'center',
-      align: 'center',
+      align: 'right',
       type: 'date',
       valueFormatter: (params) => {
         return formatter.periodoString(params.value);
@@ -336,7 +336,7 @@ export const Ajustes = () => {
       editable: false,
       type: 'number',
       headerAlign: 'center',
-      align: 'center',
+      align: 'right',
       headerClassName: 'header--cell',
     },
     {
