@@ -46,7 +46,7 @@ export const DDJJArchivoImport = ({
   ];
 
   const [fileNameSelected, setFileNameSelected] = useState(''); // validar si eligieron un archivo
-  const [fileVecCuiles, setFileVecCuiles] = useState([]);
+  const [fileVecCuiles, setFileVecCuiles] = useState([]); //Vector que llena "handleFileChange"
   const [btnSubirHabilitado, setBtnSubirHabilitado] = useState(false); // No se para que sirve
   const [actualizacionHabilitada, setActualizacionHabilitada] = useState(false); //habilita Import solo cuando estado 'PE'
 
@@ -61,7 +61,7 @@ export const DDJJArchivoImport = ({
       reader.onload = (e) => {
         const rows = readFile(e);
 
-        console.log('readFile - rows:', rows);
+        //console.log('readFile - rows:', rows);
 
         if (!validarFileColCanti(rows)) {
           event.target.value = null;
@@ -73,18 +73,19 @@ export const DDJJArchivoImport = ({
           return false;
         }
         rows.shift(); //SACO 1er row: Row Titulo
-        console.log(`shift() - rows: `, rows);
+        //console.log(`shift() - rows: `, rows);
 
         castearTiposDato(rows);
+        //console.log(`handleFileChange - castearTiposDato() -return - rows: `, rows, );
 
         if (!validarCuilesVacios(rows)) {
           event.target.value = null;
           return false;
         }
 
-        console.log('rowsDatos:', rows);
+        //console.log('rowsDatos:', rows);
         const vecRowsGridDto = castFileRowsToGrid(rows);
-        console.log('vecRowsGridDto:', vecRowsGridDto);
+        //console.log('vecRowsGridDto:', vecRowsGridDto);
 
         setFileVecCuiles(vecRowsGridDto);
         //  console.log('handleFileChange - arrayTransformado', arrayTransformado);
@@ -341,7 +342,10 @@ export const DDJJArchivoImport = ({
   };
   const importarAfiliado = async () => {
     //fileVecCuiles: valida los cuiles y  actualiza  nombre y apellido del arcivo con lo que hay en "Afiliados"
-    //console.log('importarAfiliado - fileNameSelected:', fileNameSelected);
+    console.log(
+      'importarAfiliado - INIT - fileNameSelected:',
+      fileNameSelected,
+    );
     if (
       !fileNameSelected ||
       fileNameSelected == '' ||
@@ -351,6 +355,7 @@ export const DDJJArchivoImport = ({
       return false;
     }
 
+    console.log('importarAfiliado - INIT - fileVecCuiles:', fileVecCuiles);
     if (!fileVecCuiles || fileVecCuiles.length == 0) {
       //no hay registros
       console.log('importarAfiliado - fileVecCuiles:', fileVecCuiles);
@@ -360,22 +365,17 @@ export const DDJJArchivoImport = ({
 
     //console.log('importarAfiliado - 1 -  getCuilesValidados() ');
     const cuilesValidados = await getCuilesValidados();
-    //console.log('importarAfiliado - 1 -  cuilesValidados:', cuilesValidados);
+    console.log('importarAfiliado - 1 -  cuilesValidados:', cuilesValidados);
     //1) Si existe cuil y no tiene errores, piso nombre y apellido.-
     //2) Si no existe cuil y tiene error de cuil, seteo gError=true
 
-    //console.log('importarAfiliado - 2 -  fileVecCuilesNew - fileVecCuiles:',fileVecCuiles,);
+    console.log(
+      'importarAfiliado - 2 -  fileVecCuilesNew - fileVecCuiles:',
+      fileVecCuiles,
+    );
     const fileVecCuilesNew = fileVecCuiles.map((item, index) => {
       const val = cuilesValidados.find((regValidado) => {
-        //console.log('cuilesValidados.find - regValidado:', regValidado);
-        //console.log('cuilesValidados.find - item.cuil:', item.cuil);
-        if (!isNaN(parseInt(regValidado.cuil))) {
-          // console.log(            'cuilesValidados.find - TRUE - if (!isNaN(parseInt(regValidado.cuil))) {',          );
-          //console.log('parseInt(regValidado.cuil):',            parseInt(regValidado.cuil),          );
-          //console.log(            'parseInt(regValidado.cuil) == item.cuil:',            parseInt(regValidado.cuil) == item.cuil,          );
-          parseInt(regValidado.cuil) == item.cuil;
-        }
-        return false;
+        regValidado.cuil == item.cuil;
       });
       //console.log('fileVecCuiles.map - val:', val);
 

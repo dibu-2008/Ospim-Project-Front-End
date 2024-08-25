@@ -613,6 +613,8 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     console.log('--------------');
 
     setDdjjCabe(ddjjCabeNew);
+
+    console.log('DDJJForm - getDDJJ() - rowsNew: ', rowsNew);
     setRows(rowsNew);
     setExpanded(true);
   };
