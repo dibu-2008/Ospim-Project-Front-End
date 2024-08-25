@@ -70,7 +70,8 @@ export const GrillaEmpresaContactoTelefono = ({
   setRows,
   tipoContacto,
 }) => {
-  // rows, setRows }) => {
+  const [lengthValor, setLengthValor] = useState(5);
+  const [lengthPrefijo, setLengthPrefijo] = useState(5);
   const [locale, setLocale] = useState('esES');
   const [rowModesModel, setRowModesModel] = useState({});
   const { paginationModel, setPaginationModel, pageSizeOptions } =
@@ -179,7 +180,7 @@ export const GrillaEmpresaContactoTelefono = ({
       }
     } else {
       try {
-        newRow.prefijo = newRow.prefijo ? newRow.prefijo : '123';
+        newRow.prefijo = newRow.prefijo ? newRow.prefijo : '';
         console.log(newRow);
         bOk = await axiosContacto.actualizar(idEmpresa, newRow);
         console.log('4 - processRowUpdate - MODI - bOk: ' + bOk);
@@ -218,6 +219,31 @@ export const GrillaEmpresaContactoTelefono = ({
   const handleRowModesModelChange = (newRowModesModel) => {
     setRowModesModel(newRowModesModel);
   };
+  const handlePrefijoChange = (params, event) => {
+    const newPrefijoLength = event.target.value.length;
+    const newLengthValor = 10 - newPrefijoLength;
+
+    setLengthValor(newLengthValor);
+
+    params.api.setEditCellValue({
+      id: params.id,
+      field: 'prefijo',
+      value: event.target.value,
+    });
+  };
+
+  const handleValorChange = (params, event) => {
+    const newValorLength = event.target.value.length;
+    const newLengthPrefijo = 10 - newValorLength;
+
+    setLengthPrefijo(newLengthPrefijo);
+
+    params.api.setEditCellValue({
+      id: params.id,
+      field: 'valor',
+      value: event.target.value,
+    });
+  };
 
   const columnTelefono = [
     {
@@ -244,6 +270,17 @@ export const GrillaEmpresaContactoTelefono = ({
       editable: true,
       headerAlign: 'center',
       align: 'center',
+      renderEditCell: (params) => (
+        <TextField
+          fullWidth
+          value={params.value || ''}
+          onChange={(event) => handlePrefijoChange(params, event)}
+          inputProps={{
+            pattern: '[0-9]*',
+            maxLength: lengthPrefijo,
+          }}
+        />
+      ),
       headerClassName: 'header--cell',
     },
     {
@@ -254,6 +291,17 @@ export const GrillaEmpresaContactoTelefono = ({
       editable: true,
       headerAlign: 'center',
       align: 'center',
+      renderEditCell: (params) => (
+        <TextField
+          fullWidth
+          value={params.value || ''}
+          onChange={(event) => handleValorChange(params, event)}
+          inputProps={{
+            pattern: '[0-9]*',
+            maxLength: lengthValor,
+          }}
+        />
+      ),
       headerClassName: 'header--cell',
     },
     {

@@ -33,8 +33,7 @@ export const GenerarBoletas = () => {
   const DDJJ_ID = id;
   const ID_EMPRESA = getEmpresaId();
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10); // Número de filas por página
-  
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [boletas, setBoletas] = useState({});
   const [showDetail, setShowDetail] = useState(false);
   const [afiliados, setAfiliados] = useState([]);
