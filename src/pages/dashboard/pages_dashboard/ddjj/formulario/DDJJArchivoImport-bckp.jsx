@@ -5,7 +5,7 @@ import formatter from '@/common/formatter';
 import Swal from 'sweetalert2';
 import swal from '@/components/swal/swal';
 import { axiosDDJJ } from './DDJJApi';
-
+import dayjs from 'dayjs';
 import localStorageService from '@/components/localStorage/localStorageService';
 
 export const DDJJArchivoImport = ({
@@ -46,7 +46,7 @@ export const DDJJArchivoImport = ({
   ];
 
   const [fileNameSelected, setFileNameSelected] = useState(''); // validar si eligieron un archivo
-  const [fileVecCuiles, setFileVecCuiles] = useState([]);
+  const [fileVecCuiles, setFileVecCuiles] = useState([]); //Vector que llena "handleFileChange"
   const [btnSubirHabilitado, setBtnSubirHabilitado] = useState(false); // No se para que sirve
   const [actualizacionHabilitada, setActualizacionHabilitada] = useState(false); //habilita Import solo cuando estado 'PE'
 
@@ -61,6 +61,8 @@ export const DDJJArchivoImport = ({
       reader.onload = (e) => {
         const rows = readFile(e);
 
+        //console.log('readFile - rows:', rows);
+
         if (!validarFileColCanti(rows)) {
           event.target.value = null;
           return false;
@@ -71,17 +73,22 @@ export const DDJJArchivoImport = ({
           return false;
         }
         rows.shift(); //SACO 1er row: Row Titulo
+        console.log(`shift() - rows: `, rows);
 
         castearTiposDato(rows);
+        console.log(
+          `handleFileChange - castearTiposDato() -return - rows: `,
+          rows,
+        );
 
         if (!validarCuilesVacios(rows)) {
           event.target.value = null;
           return false;
         }
 
-        console.log('rows:', rows);
+        //console.log('rowsDatos:', rows);
         const vecRowsGridDto = castFileRowsToGrid(rows);
-        console.log('vecRowsGridDto:', vecRowsGridDto);
+        //console.log('vecRowsGridDto:', vecRowsGridDto);
 
         setFileVecCuiles(vecRowsGridDto);
         //  console.log('handleFileChange - arrayTransformado', arrayTransformado);
@@ -102,11 +109,21 @@ export const DDJJArchivoImport = ({
   };
 
   const readFile = (e) => {
+    console.log('e.target.result: ', e.target.result);
     const data = new Uint8Array(e.target.result);
-    const workbook = XLSX.read(data, { type: 'array' });
+    console.log('readFile - data:', data);
+    const workbook = XLSX.read(data, {
+      type: 'array',
+      cellText: false,
+      cellDates: true,
+    });
     const sheetName = workbook.SheetNames[0];
     const sheet = workbook.Sheets[sheetName];
-    const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+    const rows = XLSX.utils.sheet_to_json(sheet, {
+      header: 1,
+      raw: true,
+      dateNF: 'dd"/"mm"/"yyyy',
+    });
 
     //Elimino rows en blanco
     console.log('readFile - rows:', rows);
@@ -121,8 +138,7 @@ export const DDJJArchivoImport = ({
         return rta;
       }
     });
-
-    console.log('**rowsClean:', rowsClean);
+    console.log('readFile - rowsClean:', rowsClean);
 
     return rowsClean;
   };
@@ -177,7 +193,6 @@ export const DDJJArchivoImport = ({
     fileReset();
     return false;
   };
-
   const validarCuilesVacios = (vecRows) => {
     let rowError = false;
     let rowErrorNro = false;
@@ -202,6 +217,56 @@ export const DDJJArchivoImport = ({
     return !rowError;
   };
 
+  const castearBoolean = (valor) => {
+    if (valor == null || valor == undefined) {
+      return null;
+    }
+    if (typeof valor == 'boolean') return valor;
+
+    if (valor == 'true') {
+      return true;
+    }
+    if (valor == 'false') {
+      return false;
+    } // Returns boolean
+    return null;
+  };
+  const castearString = (valor) => {
+    if (valor == undefined || valor == '') return null;
+
+    if (typeof valor == 'number') return valor.toString();
+
+    return valor;
+  };
+
+  const castearDate = (valor) => {
+    if (valor == null || valor == undefined) {
+      return null;
+    }
+    if (typeof valor == 'string') {
+      if (dayjs(valor, 'DD/MM/YYYY', true).isValid()) {
+        return valor;
+      }
+      if (dayjs(valor, 'DD-MM-YYYY', true).isValid()) {
+        return valor;
+      }
+    }
+    return null;
+  };
+
+  const castearFloat = (valor) => {
+    if (valor == null || valor == undefined) {
+      return null;
+    }
+    if (typeof valor == 'number') return valor;
+    if (typeof valor == 'string') {
+      valor = valor.trim();
+      if (valor == '') return null;
+      if (isNaN(valor)) return null;
+      return parseFloat(valor);
+    }
+  };
+
   const castearTiposDato = (vecRows) => {
     console.log(`castearTiposDato - INIT - vecRows: ${vecRows}`);
     const vecErrores = [];
@@ -211,14 +276,12 @@ export const DDJJArchivoImport = ({
       let index2 = vecRowTitulos.indexOf(VC_CUIL);
       reg[index2] = castearString(reg[index2]);
 
-      /*
       index2 = vecRowTitulos.indexOf(VC_SINDICAL);
       reg[index2] = castearBoolean(reg[index2]);
 
       index2 = vecRowTitulos.indexOf(VC_MUTUAL);
       reg[index2] = castearBoolean(reg[index2]);
 
-      
       index2 = vecRowTitulos.indexOf(VC_FING);
       console.log('castearTiposDato - reg[index2]: ', reg[index2]);
       reg[index2] = castearDate(reg[index2]);
@@ -242,17 +305,8 @@ export const DDJJArchivoImport = ({
       reg[index2] = castearString(reg[index2]);
       index2 = vecRowTitulos.indexOf(VC_PLANTA);
       reg[index2] = castearString(reg[index2]);
-      */
     });
     console.log(`castearTiposDato - FIN - vecRows:`, vecRows);
-  };
-
-  const castearString = (valor) => {
-    if (valor == undefined || valor == '') return null;
-
-    if (typeof valor == 'number') return valor.toString();
-
-    return valor;
   };
 
   const findCodigo = (vector, codigo) => {
@@ -297,7 +351,10 @@ export const DDJJArchivoImport = ({
   };
   const importarAfiliado = async () => {
     //fileVecCuiles: valida los cuiles y  actualiza  nombre y apellido del arcivo con lo que hay en "Afiliados"
-    console.log('importarAfiliado - fileNameSelected:', fileNameSelected);
+    console.log(
+      'importarAfiliado - INIT - fileNameSelected:',
+      fileNameSelected,
+    );
     if (
       !fileNameSelected ||
       fileNameSelected == '' ||
@@ -307,22 +364,30 @@ export const DDJJArchivoImport = ({
       return false;
     }
 
+    console.log('importarAfiliado - INIT - fileVecCuiles:', fileVecCuiles);
     if (!fileVecCuiles || fileVecCuiles.length == 0) {
       //no hay registros
+      console.log('importarAfiliado - fileVecCuiles:', fileVecCuiles);
       swal.showWarning('El archivo seleccionado se encuentra vacío.');
       return false;
     }
 
-    console.log('importarAfiliado - 1 -  getCuilesValidados() ');
+    //console.log('importarAfiliado - 1 -  getCuilesValidados() ');
     const cuilesValidados = await getCuilesValidados();
+    console.log('importarAfiliado - 1 -  cuilesValidados:', cuilesValidados);
     //1) Si existe cuil y no tiene errores, piso nombre y apellido.-
     //2) Si no existe cuil y tiene error de cuil, seteo gError=true
 
-    console.log('importarAfiliado - 2 -  fileVecCuilesNew');
+    console.log(
+      'importarAfiliado - 2 -  fileVecCuilesNew - fileVecCuiles:',
+      fileVecCuiles,
+    );
     const fileVecCuilesNew = fileVecCuiles.map((item, index) => {
-      const val = cuilesValidados.find(
-        (regValidado) => regValidado.cuil === item.cuil,
-      );
+      const val = cuilesValidados.find((regValidado) => {
+        regValidado.cuil == item.cuil;
+      });
+      //console.log('fileVecCuiles.map - val:', val);
+
       if (val) {
         //{cuil; inte; apellido; nombre; cuilValido;}
         if (!val.cuilValido) {
@@ -334,6 +399,7 @@ export const DDJJArchivoImport = ({
       }
       return item;
     });
+    console.log('importarAfiliado - 2 -  fileVecCuilesNew:', fileVecCuilesNew);
 
     console.log('importarAfiliado - 3 -  fileVecCuilesNew - some() ');
     // Si alguno de los cuiles tiene ERROR
