@@ -190,7 +190,7 @@ export const RegistroEmpresa = () => {
         provinciaId: row.provincia?.id ?? null,
         localidadId: row.localidad?.id ?? null,
         calle: row.calle,
-        numeroDomicilio: row.numeroDomicilio,
+        numeroDomicilio: row.calleNro,
         piso: row.piso,
         depto: row.depto,
         oficina: row.oficina,
@@ -877,12 +877,10 @@ export const RegistroEmpresa = () => {
                 >
                   REGISTRARSE
                 </Button>
-
               </div>
             </Grid>
           </div>
         </form>
-
       </div>
     </main>
   );

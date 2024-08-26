@@ -61,6 +61,7 @@ export const DDJJArchivoImport = ({
       reader.onload = (e) => {
         const rows = readFile(e);
 
+        console.log('reader.onload - rows:', rows);
         if (!validarFileColCanti(rows)) {
           event.target.value = null;
           return false;
@@ -133,13 +134,14 @@ export const DDJJArchivoImport = ({
     let rowErrorNro = null;
     vecRows.forEach(function (row, index) {
       if (!Array.isArray(row) || row.length != colCanti) {
-        rowError = false;
+        rowError = true;
         rowErrorNro = index;
       }
     });
+    //console.log('validarFileColCanti');
     if (rowError) {
       swal.showWarning(
-        `<div><p>Registro Nro. ${rowErrorNro + 1} incompleto. Deb informar 11 columnas</p></div>`,
+        `<div><p>Registro Nro. ${rowErrorNro + 1} incompleto. Debe informar 11 columnas</p></div>`,
         true,
       );
       fileReset();
@@ -211,6 +213,12 @@ export const DDJJArchivoImport = ({
       let index2 = vecRowTitulos.indexOf(VC_CUIL);
       reg[index2] = castearString(reg[index2]);
 
+      index2 = vecRowTitulos.indexOf(VC_REMU);
+      reg[index2] = castearFloat(reg[index2]);
+
+      index2 = vecRowTitulos.indexOf(VC_NREMU);
+      reg[index2] = castearFloat(reg[index2]);
+
       /*
       index2 = vecRowTitulos.indexOf(VC_SINDICAL);
       reg[index2] = castearBoolean(reg[index2]);
@@ -224,11 +232,7 @@ export const DDJJArchivoImport = ({
       reg[index2] = castearDate(reg[index2]);
       console.log('castearTiposDato - reg[index2]: ', reg[index2]);
 
-      index2 = vecRowTitulos.indexOf(VC_REMU);
-      reg[index2] = castearFloat(reg[index2]);
-
-      index2 = vecRowTitulos.indexOf(VC_NREMU);
-      reg[index2] = castearFloat(reg[index2]);
+      
 
       index2 = vecRowTitulos.indexOf(VC_APE);
       reg[index2] = castearString(reg[index2]);
@@ -253,6 +257,19 @@ export const DDJJArchivoImport = ({
     if (typeof valor == 'number') return valor.toString();
 
     return valor;
+  };
+
+  const castearFloat = (valor) => {
+    if (valor == null || valor == undefined) {
+      return null;
+    }
+    if (typeof valor == 'number') return valor;
+    if (typeof valor == 'string') {
+      valor = valor.trim();
+      if (valor == '') return null;
+      if (isNaN(valor)) return null;
+      return parseFloat(valor);
+    }
   };
 
   const findCodigo = (vector, codigo) => {
@@ -335,7 +352,10 @@ export const DDJJArchivoImport = ({
       return item;
     });
 
-    console.log('importarAfiliado - 3 -  fileVecCuilesNew - some() ');
+    console.log(
+      'importarAfiliado - 3 -  fileVecCuilesNew - some() ',
+      fileVecCuilesNew,
+    );
     // Si alguno de los cuiles tiene ERROR
     if (fileVecCuilesNew.some((item) => item.gErrores === true)) {
       const mensajesFormateados2 = fileVecCuilesNew
@@ -379,35 +399,40 @@ export const DDJJArchivoImport = ({
     return validacionResponse; //{cuil; inte; apellido; nombre; cuilValido;}
   };
   const castFileRowsToGrid = (fileVecDatos) => {
-    const rowsGridDto = fileVecDatos
-      .map((item, index) => {
-        //if (item.length === 11 && item[0] !== undefined) {
-        const camaraCodigo = findCodigo(camaras, item[3]);
-        const categoriaCodigo = findCodigoCategoria(item[3], item[4]);
-        return {
-          regId: null,
-          gErrores: false,
+    console.log('castFileRowsToGrid - fileVecDatos:', fileVecDatos);
+    const rowsGridDto = fileVecDatos.map((item, index) => {
+      //if (item.length === 11 && item[0] !== undefined) {
+      const camaraCodigo = findCodigo(camaras, item[3]);
+      const categoriaCodigo = findCodigoCategoria(item[3], item[4]);
+      console.log('item:', item);
+      const aux = {
+        regId: null,
+        gErrores: false,
 
-          id: index,
-          cuil: item[0],
-          apellido: item[1]?.toUpperCase(),
-          nombre: item[2]?.toUpperCase(),
-          fechaIngreso: formatter.fechaImport(item[5]),
-          empresaDomicilioId: plantas.find(
-            (plantas) => plantas.planta === item[6],
-          )?.id,
-          camara: camaraCodigo || '',
-          categoria: categoriaCodigo || '',
-          remunerativo: item[7],
-          noRemunerativo: item[8],
-          uomaSocio: item[9]?.toUpperCase() === 'SI',
-          amtimaSocio: item[10]?.toUpperCase() === 'SI',
-        };
-        //} else {
-        //console.log('arrayTransformado - Descarte: index'+index+ ' - item:', item);
-        //}
-      })
-      .filter((item) => item !== undefined);
+        id: index,
+        cuil: item[0],
+        apellido: item[1]?.toUpperCase(),
+        nombre: item[2]?.toUpperCase(),
+        fechaIngreso: formatter.fechaImport(item[5]),
+        empresaDomicilioId: plantas.find(
+          (plantas) => plantas.planta === item[6],
+        )?.id,
+        camara: camaraCodigo || '',
+        categoria: categoriaCodigo || '',
+        remunerativo: item[7],
+        noRemunerativo: item[8],
+        uomaSocio: item[9]?.toUpperCase() === 'SI',
+        amtimaSocio: item[10]?.toUpperCase() === 'SI',
+      };
+      console.log('aux:', aux);
+
+      return aux;
+      //} else {
+      //console.log('arrayTransformado - Descarte: index'+index+ ' - item:', item);
+      //}
+    });
+
+    console.log('castFileRowsToGrid - rowsGridDto:', rowsGridDto);
     return rowsGridDto;
   };
 

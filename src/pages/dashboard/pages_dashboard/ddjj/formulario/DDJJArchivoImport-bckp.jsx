@@ -61,7 +61,7 @@ export const DDJJArchivoImport = ({
       reader.onload = (e) => {
         const rows = readFile(e);
 
-        //console.log('readFile - rows:', rows);
+        console.log('readFile - rows:', rows);
 
         if (!validarFileColCanti(rows)) {
           event.target.value = null;
