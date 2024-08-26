@@ -10,7 +10,7 @@ const addValidaciones = (cuil, errores) => {
     return false;
   }
 
-  let newRowsValidaciones = { ...useGridValidaciones.getRowsValidaciones };
+  let newRowsValidaciones = { ...useGridValidaciones.getRowsValidaciones() };
   if (!newRowsValidaciones.errores || !newRowsValidaciones.errores.push) {
     console.log(
       'addValidaciones - HAGO new [] - newRowsValidaciones.errores:',
@@ -27,8 +27,6 @@ const addValidaciones = (cuil, errores) => {
   });
   //console.log('newRowsValidaciones: ', rowsValidaciones);
 
-  useGridValidaciones.setRowsValidaciones(newRowsValidaciones);
-
   return newRowsValidaciones;
 };
 
@@ -36,12 +34,12 @@ const deleteValidacionesCuil = (cuil) => {
   console.log('deleteValidacionesCuil - cuil', cuil);
   console.log(
     'useGridValidaciones.getRowsValidaciones',
-    useGridValidaciones.getRowsValidaciones,
+    useGridValidaciones.getRowsValidaciones(),
   );
 
   //Si mando Vector , lo usa, sino lo toma del estado.-
   const newRowsValidaciones = {
-    ...useGridValidaciones.getRowsValidaciones,
+    ...useGridValidaciones.getRowsValidaciones(),
   };
   console.log(
     'deleteValidacionesCuil - newRowsValidaciones1:',
@@ -67,6 +65,7 @@ const deleteValidacionesCuil = (cuil) => {
     newRowsValidaciones,
   );
 
+  //useGridValidaciones.setRowsValidaciones(newRowsValidaciones);
   useGridValidaciones.setRowsValidaciones(newRowsValidaciones);
 
   return newRowsValidaciones;
@@ -145,17 +144,17 @@ const validarDDJJCuiles = async (DDJJ) => {
 const tieneErrores = () => {
   console.log('useGridValidaciones. - tieneErrores - INIT');
   console.log(
-    'useGridValidaciones.getRowsValidaciones:',
-    useGridValidaciones.getRowsValidaciones,
+    'useGridValidaciones.getRowsValidaciones():',
+    useGridValidaciones.getRowsValidaciones(),
   );
   if (
     useGridValidaciones.getRowsValidaciones &&
-    useGridValidaciones.getRowsValidaciones.errores &&
-    useGridValidaciones.getRowsValidaciones.errores.length > 0
+    useGridValidaciones.getRowsValidaciones().errores &&
+    useGridValidaciones.getRowsValidaciones().errores.length > 0
   ) {
     console.log(
       'useGridValidaciones.getRowsValidaciones:',
-      useGridValidaciones.getRowsValidaciones,
+      useGridValidaciones.getRowsValidaciones(),
     );
     return true;
   }

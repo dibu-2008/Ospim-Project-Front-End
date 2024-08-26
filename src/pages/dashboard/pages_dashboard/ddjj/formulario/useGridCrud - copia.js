@@ -1,6 +1,5 @@
 import { GridRowModes, GridRowEditStopReasons } from '@mui/x-data-grid';
 import { axiosDDJJ } from './DDJJApi';
-import { useGridValidaciones } from './useGridValidaciones';
 import { DDJJMapper } from './DDJJMapper';
 
 //gridApiRef=> parametrizado
@@ -26,17 +25,20 @@ const processRowUpdate = async (ddjjCabe, newRow) => {
       //errores: saco viejos y pongo NUEVOS:
       console.log('remuevo errores y despues pongo nuevos (todo junto)');
       console.log('useGridCrud - processRowUpdate - val.errores:', val.errores);
-      const newRowsValidaciones = useGridValidaciones.add(
-        newRow.cuil,
-        val.errores,
-      );
-      //useGridValidaciones.setRowsValidaciones(newRowsValidaciones);
+      const newRowsValidaciones = useGridCrud
+        .getUseGridValidaciones()
+        .add(newRow.cuil, val.errores);
+      useGridCrud
+        .getUseGridValidaciones()
+        .setRowsValidaciones(newRowsValidaciones);
       console.log('useGridCrud - processRowUpdate - 5');
       newRow.gErrores = true;
     } else {
       console.log('useGridCrud - processRowUpdate - 5.. REMOVE()');
-      const newRowsValidaciones = useGridValidaciones.remove(newRow.cuil);
-      //useGridValidaciones.setRowsValidaciones(newRowsValidaciones);
+      const newRowsValidaciones = useGridCrud
+        .getUseGridValidaciones()
+        .remove(newRow.cuil);
+      //useGridCrud.getUseGridValidaciones().setRowsValidaciones(newRowsValidaciones);
       newRow.gErrores = false;
     }
     console.log('useGridCrud - processRowUpdate - 6 - newRow:', newRow);
@@ -48,7 +50,7 @@ const processRowUpdate = async (ddjjCabe, newRow) => {
 const handleDeleteClick = (gridApiRef, row) => {
   console.log('useCridCrud - handleDeleteClick - HOLA');
   gridApiRef.current.updateRows([{ id: row.id, _action: 'delete' }]);
-  useGridValidaciones.remove(row.cuil);
+  useGridCrud.getUseGridValidaciones().remove(row.cuil);
 };
 const handleRowEditStop = (gridApiRef, params) => {
   console.log('useGridCrud - handleRowEditStop - 1');
@@ -98,6 +100,8 @@ const onProcessRowUpdateError = (error) => {
 };
 
 export const useGridCrud = {
+  getUseGridValidaciones: null,
+
   processRowUpdate: processRowUpdate,
   onProcessRowUpdateError: onProcessRowUpdateError,
   handleDeleteClick: handleDeleteClick,
