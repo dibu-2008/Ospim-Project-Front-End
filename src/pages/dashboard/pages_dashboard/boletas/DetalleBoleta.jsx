@@ -252,7 +252,7 @@ export const DetalleBoleta = () => {
                 <TableCell className="cw">Fecha de Pago</TableCell>
               )}
               <TableCell className="cw">Vencimiento</TableCell>
-              <TableCell className="cw">Intencion de Pago</TableCell>
+              <TableCell className="cw">Intención de Pago</TableCell>
               <TableCell className="cw">Método de Pago</TableCell>
             </TableRow>
           </TableHead>
