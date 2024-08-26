@@ -151,8 +151,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
         id: params.id,
         ignoreModifications: false,
       });
-      isOnEditMode = false
-      
+      isOnEditMode = false;
     }
   };
 
@@ -445,6 +444,9 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell',
+      valueParser: (value) => {
+        return value?.toUpperCase();
+      },
     },
     {
       field: 'actions',
