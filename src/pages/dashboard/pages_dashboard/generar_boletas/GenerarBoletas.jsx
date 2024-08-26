@@ -33,7 +33,7 @@ export const GenerarBoletas = () => {
   const DDJJ_ID = id;
   const ID_EMPRESA = getEmpresaId();
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(50);
   const [boletas, setBoletas] = useState({});
   const [showDetail, setShowDetail] = useState(false);
   const [afiliados, setAfiliados] = useState([]);
@@ -401,8 +401,12 @@ export const GenerarBoletas = () => {
       </TableContainer>
 
       {showDetail && (
-        <TableContainer component={Paper}>
-          <Table>
+        <TableContainer component={Paper} style={{
+          marginTop: 50,
+          height: 400,
+          width: '100%',
+        }}>
+          <Table stickyHeader>
             <TableHead>
               <TableRow>
                 <TableCell className="cwbcb" style={{ width: '5em' }}>
@@ -444,7 +448,7 @@ export const GenerarBoletas = () => {
             </TableBody>
           </Table>
           <TablePagination
-    rowsPerPageOptions={[5, 10, 25]}
+    rowsPerPageOptions={[50, 75, 100]}
     component="div"
     count={afiliados.length}
     rowsPerPage={rowsPerPage}
