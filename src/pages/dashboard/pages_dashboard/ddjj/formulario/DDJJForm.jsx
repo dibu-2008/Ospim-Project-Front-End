@@ -1346,12 +1346,17 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     {
       field: 'empresaDomicilioId',
       type: 'singleSelect',
-      headerName: 'Planta',
+      headerName: (
+        <Tooltip title="Para dar de alta una planta, debe ir a perfil y agregar nuevo registro en domicilios">
+          <span>Planta</span>
+        </Tooltip>
+      ),
       width: 170,
       editable: true,
       headerAlign: 'left',
       align: 'left',
       headerClassName: 'header--cell',
+      headerTooltip: 'Selecciona la planta de la empresa',
       valueOptions: plantas,
       valueFormatter: ({ value }) => {
         if (value === '') return '';
