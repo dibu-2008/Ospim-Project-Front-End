@@ -1,7 +1,8 @@
 import * as locales from '@mui/material/locale';
 import { useState, useEffect, useMemo, useContext } from 'react';
 import { Box, Button } from '@mui/material';
-
+import CurrencyInput from 'react-currency-input-field';
+import { formatValue } from 'react-currency-input-field';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
@@ -186,10 +187,17 @@ export const Ajustes = () => {
 
   const processRowUpdate = async (newRow, oldRow) => {
     let bOk = false;
-
+    console.log('processRowUpdate - newRow:', newRow);
     if (!newRow.id) {
       try {
-        const data = await axiosAjustes.crear(newRow);
+        const newRowCast = { ...newRow };
+        newRowCast.importe =
+          parseInt(newRowCast.importe) >= 0
+            ? parseFloat(String(newRowCast.importe).replace(',', '.'))
+            : null;
+
+        console.log('processRowUpdate - newRowCast  :', newRowCast);
+        const data = await axiosAjustes.crear(newRowCast);
         if (data && data.id) {
           newRow.id = data.id;
         }
@@ -211,7 +219,15 @@ export const Ajustes = () => {
       }
     } else {
       try {
-        bOk = await axiosAjustes.actualizar(newRow);
+        const newRowCast = { ...newRow };
+        newRowCast.importe =
+          parseInt(newRowCast.importe) >= 0
+            ? parseFloat(String(newRowCast.importe).replace(',', '.'))
+            : null;
+
+        console.log('processRowUpdate - newRowCast  :', newRowCast);
+
+        bOk = await axiosAjustes.actualizar(newRowCast);
         if (bOk) {
           const rowsNew = rows.map((row) =>
             row.id === newRow.id ? newRow : row,
@@ -272,13 +288,44 @@ export const Ajustes = () => {
     },
     {
       field: 'importe',
+      type: 'string',
       headerName: 'IMPORTE',
       flex: 1,
-      type: 'number',
       editable: true,
       headerAlign: 'center',
       align: 'right',
       headerClassName: 'header--cell',
+      valueFormatter: ({ value }) => {
+        //console.log(' ', value);
+        const formattedValue = formatValue({
+          value: value?.toString(),
+          groupSeparator: '.',
+          decimalSeparator: ',',
+          decimalScale: 2,
+        });
+        return formattedValue;
+      },
+      renderEditCell: (params) => {
+        //console.log('renderEditCell-params: ', params);
+        return (
+          <CurrencyInput
+            id={params.row.id ? 'importe' + params.row.id.toString() : ''}
+            className="input-currency"
+            decimalScale={2}
+            decimalSeparator=","
+            groupSeparator="."
+            value={params.value || ''}
+            onValueChange={(value, name, values) => {
+              console.log('onValueChange - values:', values);
+              params.api.setEditCellValue({
+                id: params.id,
+                field: 'importe',
+                value: values.value,
+              });
+            }}
+          />
+        );
+      },
     },
     {
       field: 'motivo',
