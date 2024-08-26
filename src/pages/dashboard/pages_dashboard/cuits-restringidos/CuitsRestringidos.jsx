@@ -226,7 +226,7 @@ export const CuitsRestringidos = () => {
     },
     {
       field: 'observacion',
-      headerName: 'Observacion',
+      headerName: 'Observación',
       flex: 1,
       editable: true,
       headerAlign: 'center',
