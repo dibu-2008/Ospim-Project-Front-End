@@ -31,6 +31,17 @@ export const BoletaEmpleadoFiltro = () => {
   const [formasPago, setFormasPago] = useState([]);
   const [entidades, setEntidades] = useState([]);
 
+  const handlerLimpiarFiltro = () => {
+    setFiltro({
+      periodoDesde: null,
+      periodoHasta: null,
+      cuit: null,
+      concepto: null,
+      entidad: null,
+      formaPago: null,
+    });
+  };
+
   const handlerConsultar = async () => {
     try {
       const filtroBack = { ...filtro };
@@ -179,6 +190,15 @@ export const BoletaEmpleadoFiltro = () => {
                 </MenuItem>
               ))}
             </Select>
+          </FormControl>
+          <FormControl>
+            <Button
+              onClick={handlerLimpiarFiltro}
+              variant="contained"
+              style={{ marginLeft: '2em' }}
+            >
+              Limpiar Filtro
+            </Button>
           </FormControl>
         </Stack>
       </Box>

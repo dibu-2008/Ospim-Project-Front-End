@@ -1,3 +1,6 @@
+const VITE_BACKEND_ID_EMPRESA_TEST = import.meta.env
+  .VITE_BACKEND_ID_EMPRESA_TEST;
+
 export const getToken = () => {
   let auxStateLogin = localStorage.getItem('stateLogin');
   let TOKEN = null;
@@ -57,6 +60,11 @@ export const getEmpresaId = () => {
       }
     }
   }
+
+  if (funcionHabilitada('ID_EMPRESA_TEST')) {
+    return VITE_BACKEND_ID_EMPRESA_TEST;
+  }
+
   return null;
 };
 
@@ -151,6 +159,40 @@ export const isRolEmpleador = () => {
   return false;
 };
 
+const getFuncionalidades = () => {
+  let auxStateLogin = localStorage.getItem('stateLogin');
+  if (auxStateLogin != null) {
+    auxStateLogin = JSON.parse(localStorage.getItem('stateLogin'));
+    if (auxStateLogin.hasOwnProperty('usuarioLogueado')) {
+      auxStateLogin = auxStateLogin.usuarioLogueado;
+      if (auxStateLogin.hasOwnProperty('usuario')) {
+        auxStateLogin = auxStateLogin.usuario;
+        if (auxStateLogin.hasOwnProperty('funcionalidad')) {
+          return auxStateLogin.funcionalidad;
+        }
+      }
+    }
+  }
+  return [];
+};
+
+export const funcionHabilitada = (codigo) => {
+  const vecFunc = getFuncionalidades();
+  if (vecFunc.length > 0) {
+    const aux = vecFunc.find((reg) => {
+      return reg.descripcion === codigo;
+    });
+    if (aux) {
+      return true;
+    }
+  }
+  return false;
+};
+
+export const funcionABMEmpresaHabilitada = () => {
+  return funcionHabilitada('CONSULTA_EMPRESA_ALTA_MODI');
+};
+
 const localStorageService = {
   getToken: function () {
     return getToken();
@@ -184,6 +226,12 @@ const localStorageService = {
   },
   getNombre: function () {
     return getNombre();
+  },
+  funcionHabilitada: function (codigo) {
+    return funcionHabilitada(codigo);
+  },
+  funcionABMEmpresaHabilitada: function () {
+    return funcionABMEmpresaHabilitada();
   },
 };
 

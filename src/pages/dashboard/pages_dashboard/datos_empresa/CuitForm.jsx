@@ -76,6 +76,13 @@ export const CuitForm = ({ formShow, setFormShow, actualizarEmpresa }) => {
           <Button
             variant="contained"
             sx={{ marginTop: '20px' }}
+            onClick={() => setFormShow(false)}
+          >
+            Cancelar
+          </Button>
+          <Button
+            variant="contained"
+            sx={{ marginTop: '20px' }}
             onClick={() => handleAceptar()}
           >
             Aceptar

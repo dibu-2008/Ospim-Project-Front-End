@@ -27,13 +27,19 @@ export const GestionRoles = () => {
     <>
       <div className="container">
         <h1>Gestión Roles</h1>
-        <FormControl fullWidth>
+        <FormControl
+          fullWidth
+          sx={{
+            marginRight: '100 ',
+            p: 4,
+          }}
+        >
           <InputLabel id="demo-simple-select-label">Nombre Rol</InputLabel>
+
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             value={rol.id || ''}
-            label="Rol"
             onChange={handleChange}
           >
             {roles.map((element) => (

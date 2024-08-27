@@ -26,7 +26,10 @@ import swal from '@/components/swal/swal';
 import Swal from 'sweetalert2';
 import { UserContext } from '@/context/userContext';
 import '../DatosEmpresa.css';
-//const isNotNull = (value) => (value !== null && value !== '' ? value : '');
+import localStorageService from '@components/localStorage/localStorageService';
+
+const crudHabi = localStorageService.funcionABMEmpresaHabilitada();
+console.log('xxx - crudHabi: ', crudHabi);
 
 let isOnEditMode = false;
 const crearNuevoRegistro = (props) => {
@@ -73,9 +76,15 @@ const crearNuevoRegistro = (props) => {
       theme={themeWithLocale}
       style={{ display: 'flex', justifyContent: 'space-between' }}
     >
-      <Button color="primary" startIcon={<AddIcon />} onClick={altaHandleClick}>
-        Nuevo Registro
-      </Button>
+      {crudHabi && (
+        <Button
+          color="primary"
+          startIcon={<AddIcon />}
+          onClick={altaHandleClick}
+        >
+          Nuevo Registro
+        </Button>
+      )}
       <GridToolbar showQuickFilter={showQuickFilter} />
     </GridToolbarContainer>
   );
@@ -459,6 +468,8 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
       getActions: ({ row }) => {
         const isInEditMode =
           rowModesModel[rows.indexOf(row)]?.mode === GridRowModes.Edit;
+
+        if (!crudHabi) return [];
 
         if (isInEditMode) {
           return [

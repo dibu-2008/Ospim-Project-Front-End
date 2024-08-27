@@ -61,7 +61,11 @@ function a11yProps(index) {
 
 export const DatosEmpresa = () => {
   const esEmpleador = localStorageService.isRolEmpleador();
+  const crudHabi = localStorageService.funcionABMEmpresaHabilitada();
+
   console.log('DatosEmpresa - INIT - esEmpleador: ', esEmpleador);
+  console.log('DatosEmpresa - INIT - crudHabi: ', crudHabi);
+
   const [formShow, setFormShow] = useState(false);
 
   const [locale, setLocale] = useState('esES');
@@ -125,7 +129,17 @@ export const DatosEmpresa = () => {
 
   return (
     <div className="datos_empresa_container">
-      <h1>Mis Datos de Perfil</h1>
+      <h1>
+        {esEmpleador && <h1>Mis Datos de Perfil</h1>}{' '}
+        {!esEmpleador && (
+          <h1>
+            Consulta Empresas{' '}
+            <Button variant="contained" onClick={(e) => setFormShow(true)}>
+              Buscar Empresa
+            </Button>
+          </h1>
+        )}
+      </h1>
       <form
         style={{
           display: 'flex',
@@ -144,16 +158,15 @@ export const DatosEmpresa = () => {
           /// onChange={OnChangeCuit}
           autoComplete="off"
           label="CUIT"
-          disabled={esEmpleador}
+          disabled
         />
-        {!esEmpleador && <EditIcon onClick={(e) => setFormShow(true)} />}
 
         <TextField
           type="text"
           name="razonSocial"
           value={razonSocial}
           onChange={OnChangeRazonSocial}
-          disabled={esEmpleador}
+          disabled={esEmpleador || !crudHabi}
           autoComplete="off"
           label="Razón Social"
           sx={{
@@ -166,7 +179,7 @@ export const DatosEmpresa = () => {
             width="350px"
             name="actividadMolinera"
             value={actividadMolinera}
-            disabled={esEmpleador}
+            disabled={esEmpleador || !crudHabi}
             label="Pertenece a actividad Molinera"
             onChange={(e) => setActividadMolinera(e.target.value)}
             MenuProps={{
@@ -185,7 +198,7 @@ export const DatosEmpresa = () => {
           </CustomSelect>
         </FormControl>
 
-        {!esEmpleador && (
+        {!esEmpleador && crudHabi && (
           <Button variant="contained" sx={{}} type="submit">
             Guardar
           </Button>
@@ -217,7 +230,6 @@ export const DatosEmpresa = () => {
           </ThemeProvider>
         </CustomTabPanel>
       </Box>
-
       <CuitForm
         formShow={formShow}
         setFormShow={setFormShow}

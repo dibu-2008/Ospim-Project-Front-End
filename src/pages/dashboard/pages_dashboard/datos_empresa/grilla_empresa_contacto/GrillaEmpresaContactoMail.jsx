@@ -19,7 +19,9 @@ import { axiosContacto } from './GrillaEmpresaContactoApi';
 import Swal from 'sweetalert2';
 import { UserContext } from '@/context/userContext';
 import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
+import localStorageService from '@components/localStorage/localStorageService';
 
+console.log('ddDdd - crudHabi:', crudHabi);
 function EditToolbar(props) {
   const {
     setRows,
@@ -29,6 +31,8 @@ function EditToolbar(props) {
     showQuickFilter,
     themeWithLocale,
   } = props;
+
+  const crudHabi = localStorageService.funcionABMEmpresaHabilitada();
 
   const handleClick = () => {
     console.log(props);
@@ -56,9 +60,13 @@ function EditToolbar(props) {
       theme={themeWithLocale}
       style={{ display: 'flex', justifyContent: 'space-between' }}
     >
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-        Nuevo Registro
-      </Button>
+      <h2 className="subtitulo">Emails</h2>
+
+      {crudHabi && (
+        <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
+          Nuevo Registro
+        </Button>
+      )}
       <GridToolbar showQuickFilter={showQuickFilter} />
     </GridToolbarContainer>
   );
@@ -70,7 +78,7 @@ export const GrillaEmpresaContactoMail = ({
   setRows,
   tipoContacto,
 }) => {
-  // rows, setRows }) => {
+  const crudHabi = localStorageService.funcionABMEmpresaHabilitada();
   const [locale, setLocale] = useState('esES');
   const [rowModesModel, setRowModesModel] = useState({});
   const { paginationModel, setPaginationModel, pageSizeOptions } =
@@ -259,6 +267,8 @@ export const GrillaEmpresaContactoMail = ({
         const isInEditMode =
           rowModesModel[rows.indexOf(row)]?.mode === GridRowModes.Edit;
 
+        if (!crudHabi) return [];
+
         if (isInEditMode) {
           return [
             <GridActionsCellItem
@@ -312,7 +322,6 @@ export const GrillaEmpresaContactoMail = ({
         },
       }}
     >
-      <h2 className="subtitulo">Emails</h2>
       <ThemeProvider theme={themeWithLocale}>
         <StripedDataGrid
           rows={rows}

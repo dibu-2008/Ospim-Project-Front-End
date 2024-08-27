@@ -820,6 +820,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
             };
             setDdjjCabe(ddjjCabeNew);
             setTituloSec(getTituloSec(data.secuencia));
+            mostrarConsultaMissDDJJ();
           }
         }
       });
