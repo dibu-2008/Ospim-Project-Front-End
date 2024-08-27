@@ -176,11 +176,6 @@ const DashboardPage = () => {
                   marginLeft: '-18px',
                 }}
               >
-                <NavLink className="icon-container">
-                  <PersonIcon className="icon-link" />{' '}
-                  {open && <span className="icon-link">{nombre}</span>}
-                </NavLink>
-
                 <NavLink to="./inicio" className="icon-container">
                   <HomeIcon className="icon-link" />{' '}
                   {open && <span className="icon-link">Inicio</span>}
@@ -351,10 +346,6 @@ const DashboardPage = () => {
                 <NavLink className="icon-container" onClick={onLogout}>
                   <DisabledByDefaultIcon className="icon-link" />{' '}
                   {open && <span className="icon-link">Salir</span>}
-                </NavLink>
-                <NavLink className="icon-container">
-                  <PersonIcon className="icon-link" />{' '}
-                  {open && <span className="icon-link">{nombre}</span>}
                 </NavLink>
               </ListItemIcon>
             </ListItemButton>
