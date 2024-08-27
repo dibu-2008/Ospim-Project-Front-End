@@ -5,8 +5,10 @@ import formatter from '@/common/formatter';
 import Swal from 'sweetalert2';
 import swal from '@/components/swal/swal';
 import { axiosDDJJ } from './DDJJApi';
-
+import DownloadForOffline from '@mui/icons-material/DownloadForOffline';
+import Icon from '@mui/material/Icon';
 import localStorageService from '@/components/localStorage/localStorageService';
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 export const DDJJArchivoImport = ({
   ddjjCabe,
@@ -17,6 +19,7 @@ export const DDJJArchivoImport = ({
   habiModif, //habilitacion de controles
 }) => {
   console.log('DDJJArchivoImport - habiModif:', habiModif);
+  const URL_PLANTILLA = BACKEND_URL + '/ddjj/public/plantilla_download';
   const ID_EMPRESA = localStorageService.getEmpresaId();
   const IMPORTACION_OK = import.meta.env.VITE_IMPORTACION_OK;
   const VC_CUIL = 'Cuil';
@@ -471,6 +474,10 @@ export const DDJJArchivoImport = ({
       >
         Importar
       </Button>
+      <a href={URL_PLANTILLA} download="proposed_file_name">
+        <DownloadForOffline fontSize="large" style={{ marginLeft: 100 }} />
+        Descarga Plantilla
+      </a>
     </Box>
   );
 };
