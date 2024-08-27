@@ -119,12 +119,10 @@ export const Feriados = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [fecha, setFecha] = useState(null);
+  const [anioDuplicacion, setAnioDuplicacion] = useState(null);
+  const [filtroAnio, setFiltroAnio] = useState(dayjs().startOf('year'));
 
-  const ahora = dayjs().startOf('year');
-  const [filtroAnio, setFiltroAnio] = useState(ahora);
-
-  const handleChangeFecha = (date) => setFecha(date);
+  const handleChangeAnioDuplicacion = (date) => setAnioDuplicacion(date);
 
   const consultar = async (anio) => {
     const response = await axiosFeriados.consultar(anio);
@@ -259,13 +257,13 @@ export const Feriados = () => {
     setRowModesModel(newRowModesModel);
   };
 
-  const obSubmitAnio = async (e) => {
+  const onSubmitDuplicarFeriados = async (e) => {
     e.preventDefault();
-    const anio = fecha.$y;
+    const anio = anioDuplicacion.$y;
     const response = await axiosFeriados.duplicar(anio);
 
     if (response) {
-      consultar();
+      setFiltroAnio(dayjs().startOf('year'));
     }
 
     handleClose();
@@ -375,6 +373,7 @@ export const Feriados = () => {
               views={['year']}
               closeOnSelect={true}
               onChange={(oValue) => {
+                console.log('DesktopDatePicker-oValue:', oValue);
                 setFiltroAnio(oValue);
               }}
               value={filtroAnio}
@@ -436,7 +435,7 @@ export const Feriados = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <form onSubmit={obSubmitAnio}>
+          <form onSubmit={onSubmitDuplicarFeriados}>
             <Typography
               variant="h4"
               component="h2"
@@ -455,8 +454,8 @@ export const Feriados = () => {
               <DatePicker
                 label={'Año'}
                 views={['year']}
-                onChange={handleChangeFecha}
-                value={fecha}
+                onChange={handleChangeAnioDuplicacion}
+                value={anioDuplicacion}
               />
             </DemoContainer>
             <Box
