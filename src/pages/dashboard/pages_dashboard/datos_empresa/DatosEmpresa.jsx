@@ -144,6 +144,7 @@ export const DatosEmpresa = () => {
           /// onChange={OnChangeCuit}
           autoComplete="off"
           label="CUIT"
+          disabled={esEmpleador}
         />
         {!esEmpleador && <EditIcon onClick={(e) => setFormShow(true)} />}
 
@@ -152,6 +153,7 @@ export const DatosEmpresa = () => {
           name="razonSocial"
           value={razonSocial}
           onChange={OnChangeRazonSocial}
+          disabled={esEmpleador}
           autoComplete="off"
           label="Razón Social"
           sx={{
@@ -164,6 +166,7 @@ export const DatosEmpresa = () => {
             width="350px"
             name="actividadMolinera"
             value={actividadMolinera}
+            disabled={esEmpleador}
             label="Pertenece a actividad Molinera"
             onChange={(e) => setActividadMolinera(e.target.value)}
             MenuProps={{

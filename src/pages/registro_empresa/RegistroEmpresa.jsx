@@ -372,7 +372,7 @@ export const RegistroEmpresa = () => {
               <span style={styContToolAst}>
                 <Tooltip
                   followCursor
-                  title="Ingrese el CUIT / CUIL sin guiones ni espacios. Ejemplo: 30715478567"
+                  title="Ingrese el CUIT sin guiones ni espacios. Ejemplo: 30715478567"
                   sx={{ cursor: 'pointer' }}
                 >
                   <IconButton>
