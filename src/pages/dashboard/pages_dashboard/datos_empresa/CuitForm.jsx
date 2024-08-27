@@ -53,9 +53,25 @@ export const CuitForm = ({ formShow, setFormShow, actualizarEmpresa }) => {
               console.log('value:', value);
               setRegEmpresa(value);
             }}
+            getOptionLabel={(reg) => reg.cuit}
+            sx={{ width: 200 }}
+            renderInput={(params) => <TextField {...params} label="CUIT" />}
+          />
+          -
+          <Autocomplete
+            disablePortal
+            id="combo-box-demo"
+            options={empresas}
+            key={(option) => option.id}
+            onChange={(event, value) => {
+              console.log('value:', value);
+              setRegEmpresa(value);
+            }}
             getOptionLabel={(reg) => reg.razonSocial}
             sx={{ width: 300 }}
-            renderInput={(params) => <TextField {...params} label="Empresa" />}
+            renderInput={(params) => (
+              <TextField {...params} label="Razón Social" />
+            )}
           />
           <Button
             variant="contained"
