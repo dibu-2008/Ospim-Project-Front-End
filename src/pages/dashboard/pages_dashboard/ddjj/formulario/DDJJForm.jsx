@@ -684,7 +684,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     if (useGridValidaciones.tieneErrores()) {
       Swal.fire({
         icon: 'error',
-        title: 'Valiacion de Declaracion Jurada',
+        title: 'Validación de Declaración Jurada',
         html: `${getMsgValidaciones()}<br>
                       <label for="guardarErrores">Puede guardar la DDJJ y corregir los errores en otro momento antes de presentar</label>`,
         showConfirmButton: true,
@@ -827,7 +827,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
       console.log();
       Swal.fire({
         icon: 'error',
-        title: 'Valiación de Declaración Jurada',
+        title: 'Validación de Declaración Jurada',
         html: `La DDJJ no se pudo presentar.<br>Existen campos inválidos:<br><br> ${getMsgValidaciones()}<br>Corrija la información antes de Presentar la DDJJ `,
         showConfirmButton: true,
         confirmButtonText: 'OK',
