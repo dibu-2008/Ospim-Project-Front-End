@@ -1725,10 +1725,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
                   onProcessRowUpdateError={(error) => {
                     useGridCrud.onProcessRowUpdateError(error);
                   }}
-                  getRowClassName={(params) => {
-                    if (rows && rows.indexOf)
-                      rows.indexOf(params.row) % 2 === 0 ? 'even' : 'odd';
-                  }}
+                  getRowClassName={(params) => rows?.indexOf(params.row) % 2 === 0 ? 'even' : 'odd'}
                   localeText={dataGridStyle.toolbarText}
                   slots={{
                     toolbar: EditToolbar,
