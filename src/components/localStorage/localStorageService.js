@@ -116,7 +116,7 @@ export const getNombre = () => {
 
   if (auxStateLogin != null) {
     auxStateLogin = JSON.parse(localStorage.getItem('stateLogin'));
-    console.log('auxStateLogin: ', auxStateLogin);
+    //console.log('auxStateLogin: ', auxStateLogin);
     if (auxStateLogin.hasOwnProperty('usuarioLogueado')) {
       if (
         auxStateLogin.usuarioLogueado.persona &&
