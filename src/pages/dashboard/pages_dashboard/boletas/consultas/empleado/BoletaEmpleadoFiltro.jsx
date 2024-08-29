@@ -8,6 +8,8 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import { Box } from '@mui/system';
 import Grid from '@mui/material/Grid';
+import Autocomplete from '@mui/material/Autocomplete';
+import { consultarEmpresas } from '@/common/api/EmpresasApi';
 
 import TextField from '@mui/material/TextField';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
@@ -18,6 +20,8 @@ import { BoletasEmpleadoGrilla } from './BoletasEmpleadoGrilla';
 export const BoletaEmpleadoFiltro = () => {
   const ahora = dayjs().startOf('month');
   const ahoraMenosUnAnio = ahora.add(-11, 'month');
+  const [empresa, setEmpresa] = useState({ cuit: '', razonSocial: '' });
+  const [empresas, setEmpresas] = useState([]);
   const [filtro, setFiltro] = useState({
     periodoDesde: ahoraMenosUnAnio,
     periodoHasta: ahora,
@@ -32,6 +36,7 @@ export const BoletaEmpleadoFiltro = () => {
   const [entidades, setEntidades] = useState([]);
 
   const handlerLimpiarFiltro = () => {
+    setEmpresa(null);
     setFiltro({
       periodoDesde: null,
       periodoHasta: null,
@@ -83,7 +88,13 @@ export const BoletaEmpleadoFiltro = () => {
       response.unshift({ codigo: null, descripcion: '< todos >' });
       setFormasPago(response);
     };
+    const ObtenerEmpresas = async () => {
+      const empresas = await consultarEmpresas();
+      console.log('** ObtenerEmpresa - empresas: ', empresas);
+      setEmpresas(empresas);
+    };
 
+    ObtenerEmpresas();
     consultarFormasPago();
     consultarEntidades();
     consultarAportes();
@@ -101,14 +112,39 @@ export const BoletaEmpleadoFiltro = () => {
       </h1>
       <Box sx={{ flexGrow: 1 }} style={{ marginLeft: '5%' }}>
         <Stack direction="row" spacing={3}>
-          <TextField
-            id="outlined-basic"
-            label={'Cuit'}
-            variant="outlined"
-            value={filtro.cuit || ''}
-            onChange={(oValue) =>
-              setFiltro({ ...filtro, cuit: oValue.target.value })
-            }
+          <Autocomplete
+            disablePortal
+            id="combo-box-demo"
+            options={empresas}
+            key={(option) => option.id}
+            onChange={(event, value) => {
+              console.log('** onChange-value:', value);
+              setEmpresa(value);
+
+              setFiltro({ ...filtro, cuit: value?.cuit || null });
+            }}
+            value={empresa}
+            getOptionLabel={(reg) => reg.cuit}
+            sx={{ width: 190 }}
+            renderInput={(params) => <TextField {...params} label="CUIT" />}
+          />
+          -
+          <Autocomplete
+            disablePortal
+            id="combo-box-demo"
+            options={empresas}
+            key={(option) => option.id}
+            onChange={(event, value) => {
+              console.log('value:', value);
+              setEmpresa(value);
+              setFiltro({ ...filtro, cuit: value?.cuit || null });
+            }}
+            value={empresa}
+            getOptionLabel={(reg) => reg.razonSocial}
+            sx={{ width: 300 }}
+            renderInput={(params) => (
+              <TextField {...params} label="Razón Social" />
+            )}
           />
           <DemoContainer components={['DatePicker']}>
             <DesktopDatePicker
@@ -121,7 +157,6 @@ export const BoletaEmpleadoFiltro = () => {
               value={filtro.periodoDesde || ''}
             />
           </DemoContainer>
-
           <DemoContainer components={['DatePicker']}>
             <DesktopDatePicker
               label={'Periodo hasta'}
@@ -133,7 +168,6 @@ export const BoletaEmpleadoFiltro = () => {
               value={filtro.periodoHasta || ''}
             />
           </DemoContainer>
-
           <FormControl style={{ minWidth: 120 }}>
             <InputLabel id="demo-simple-select-label">Entidad</InputLabel>
             <Select

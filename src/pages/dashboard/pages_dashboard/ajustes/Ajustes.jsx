@@ -274,6 +274,16 @@ export const Ajustes = () => {
       headerClassName: 'header--cell',
     },
     {
+      field: 'razonSocial',
+      headerName: 'Razón Social',
+      flex: 1,
+      type: 'text',
+      editable: true,
+      headerAlign: 'center',
+      align: 'right',
+      headerClassName: 'header--cell',
+    },
+    {
       field: 'periodo_original',
       headerName: 'PERIODO ORIGINAL',
       flex: 1,
