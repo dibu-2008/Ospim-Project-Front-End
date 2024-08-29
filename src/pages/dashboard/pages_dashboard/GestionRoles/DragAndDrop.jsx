@@ -31,6 +31,7 @@ export const DragAndDrop = ({ tareas }) => {
   const [id, setRolId] = useState('');
   const [descripcion, setDescripcion] = useState('');
   const [funcionalidades, setTasks] = useState(tareas || funcionalidades_t);
+
   useEffect(() => {
     console.log('DragAndDrop - tareas:', tareas);
     if (tareas) {
@@ -69,11 +70,12 @@ export const DragAndDrop = ({ tareas }) => {
   };
 
   const handleClick = () => {
-    axiosGestionRoles.putFuncionalidades({
+    const rta = axiosGestionRoles.putFuncionalidades({
       id,
       descripcion,
       funcionalidades,
     });
+    console.log('handleClick - rta:', rta);
   };
 
   return (

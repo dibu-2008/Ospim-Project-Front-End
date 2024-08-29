@@ -4,17 +4,24 @@ import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import { axiosDDJJ } from './DDJJApi';
 
-export const DDJJCuilForm = ({ regCuil, formShow, setFormShow }) => {
+export const DDJJCuilForm = ({ formCuilReg, formShow, setFormShow }) => {
+  console.log('DDJJCuilForm - formCuilReg: ', formCuilReg);
   const theme = useTheme();
   const [reg, setReg] = useState({});
   const regNew = {
-    cuil: regCuil.cuil,
-    apellido: regCuil.apellido,
-    nombre: regCuil.nombre,
+    cuil: formCuilReg.cuil,
+    apellido: formCuilReg.apellido,
+    nombre: formCuilReg.nombre,
   };
   useEffect(() => {
+    const regNew = {
+      cuil: formCuilReg.cuil,
+      apellido: formCuilReg.apellido,
+      nombre: formCuilReg.nombre,
+    };
+
     setReg(regNew);
-  }, []);
+  }, [formCuilReg]);
 
   useEffect(() => {
     console.log('-------------------------------------');
@@ -25,7 +32,7 @@ export const DDJJCuilForm = ({ regCuil, formShow, setFormShow }) => {
   const handleChangeReg = (event, field) => {
     setReg((prevDataModal) => ({
       ...prevDataModal,
-      [field]: event.target.value,
+      [field]: event.target.value?.toUpperCase(),
     }));
   };
 

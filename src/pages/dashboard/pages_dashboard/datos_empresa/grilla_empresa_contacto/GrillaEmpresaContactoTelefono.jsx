@@ -58,7 +58,7 @@ function EditToolbar(props) {
       theme={themeWithLocale}
       style={{ display: 'flex', justifyContent: 'space-between' }}
     >
-      <h2 className="subtitulo">Telefonos</h2>
+      <h2 className="subtitulo">Teléfonos</h2>
       {crudHabi && (
         <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
           Nuevo Registro

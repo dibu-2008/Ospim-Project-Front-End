@@ -242,7 +242,11 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
   const [habiModif, setHabiModif] = useState(false); //EX actualizacionHabilitada - SI estdo "PE" o ddjjCabe.id=null => puedo modificar.-
   const [tituloSec, setTituloSec] = useState('');
 
-  const [formCuilReg, setFormCuilReg] = useState({});
+  const [formCuilReg, setFormCuilReg] = useState({
+    cuil: null,
+    apellido: null,
+    nombre: null,
+  });
   const [formCuilShow, setFormCuilShow] = useState(false);
   const [camaras, setCamaras] = useState([]);
   const [categorias, setCategorias] = useState([]);
@@ -346,7 +350,8 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
 
   const handleFormCuilOpen = (row) => () => {
     //EX handleDataModal
-    console.log('handleFormCuilOpen - INIT');
+    console.log('handleFormCuilOpen - INIT - row:', row);
+
     setFormCuilReg({
       cuil: row.cuil,
       apellido: row.apellido,
@@ -567,20 +572,31 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     return false;
   };
 
-  const getTituloSec = () => {
-    console.log('getTituloSec - ddjjCabe:', ddjjCabe);
-    if (ddjjCabe) {
-      if (ddjjCabe.id && ddjjCabe.estado && ddjjCabe.estado == 'PE') {
+  const getTituloSec = (ddjjCabeNew) => {
+    if (!ddjjCabeNew || ddjjCabeNew == null) {
+      ddjjCabeNew = ddjjCabe;
+    }
+
+    if (ddjjCabeNew) {
+      if (ddjjCabeNew.estado && ddjjCabeNew.estado == 'PE') {
         return 'Pendiente';
       }
-      if (ddjjCabe.secuencia && ddjjCabe.secuencia != 0) {
-        return 'Rectificativa Nro: ' + ddjjCabe.secuencia;
+      if (
+        ddjjCabeNew.hasOwnProperty('secuencia') &&
+        ddjjCabeNew.secuencia != null &&
+        ddjjCabeNew.secuencia != 0
+      ) {
+        return 'Rectificativa Nro: ' + ddjjCabeNew.secuencia;
       }
-      if (ddjjCabe.secuencia && ddjjCabe.secuencia == 0) {
+      if (
+        ddjjCabeNew.hasOwnProperty('secuencia') &&
+        ddjjCabeNew.secuencia === 0
+      ) {
+        console.log('getTituloSec - FIN - ddjjCabeNew - 3');
         return 'Original';
       }
     }
-    return '...';
+    return ' Nueva';
   };
 
   const getDDJJ = async (idDDJJ) => {
@@ -741,7 +757,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
         });
 
         altaDDJJUpdateGrillaAfiliadosId(data);
-        setTituloSec(getTituloSec(data.secuencia));
+        setTituloSec(getTituloSec(data));
         setDdjjModi(false);
         return data.id;
       }
@@ -819,7 +835,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
               secuencia: data.secuencia,
             };
             setDdjjCabe(ddjjCabeNew);
-            setTituloSec(getTituloSec(data.secuencia));
+            setTituloSec(getTituloSec(data));
             mostrarConsultaMissDDJJ();
           }
         }
@@ -843,10 +859,14 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     const ddjjCabeNew = {
       ...ddjjCabe,
       id: null,
+      secuencia: null,
       periodo: null,
       estado: null,
     };
     setDdjjCabe(ddjjCabeNew);
+    console.log('*5* - ddjjCabeNew: ', ddjjCabeNew);
+    console.log('*5* - getTituloSec(ddjjCabeNew): ', getTituloSec(ddjjCabeNew));
+    setTituloSec(getTituloSec(ddjjCabeNew));
 
     limpiarEstadoDetalleForm();
   };
@@ -1585,6 +1605,9 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
   ];
 
   console.log('DDJJForm - habiModif: ', habiModif);
+
+  console.log('*x* DDJJForm - ddjjCabe: ', ddjjCabe);
+
   return (
     <div className="mis_alta_declaraciones_juradas_container">
       <div className="periodo_container">
@@ -1725,7 +1748,9 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
                   onProcessRowUpdateError={(error) => {
                     useGridCrud.onProcessRowUpdateError(error);
                   }}
-                  getRowClassName={(params) => rows?.indexOf(params.row) % 2 === 0 ? 'even' : 'odd'}
+                  getRowClassName={(params) =>
+                    rows?.indexOf(params.row) % 2 === 0 ? 'even' : 'odd'
+                  }
                   localeText={dataGridStyle.toolbarText}
                   slots={{
                     toolbar: EditToolbar,
@@ -1776,7 +1801,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
               ></div>
             </Box>
             <DDJJCuilForm
-              regCuil={formCuilReg}
+              formCuilReg={formCuilReg}
               formShow={formCuilShow}
               setFormShow={setFormCuilShow}
             ></DDJJCuilForm>
@@ -1816,6 +1841,15 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
                 disabled={!habiModif || !ddjjCabe.id}
               >
                 Presentar
+              </Button>
+
+              <Button
+                variant="contained"
+                sx={{ padding: '6px 52px', marginLeft: '10px' }}
+                onClick={limpiarEstadoForm}
+                disabled={!ddjjCabe || (!ddjjCabe.id && ddjjCabe.id == null)}
+              >
+                Limpiar Formulario
               </Button>
             </div>
           </AccordionDetails>

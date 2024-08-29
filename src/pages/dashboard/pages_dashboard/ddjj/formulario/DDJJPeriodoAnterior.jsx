@@ -39,7 +39,7 @@ export const DDJJPeriodoAnterior = ({ habiModif, handlerGrillaActualizar }) => {
         icon: 'error',
         title: 'Error',
         text: periodoDayjs
-          ? `No se encontró la DDJJ para el período seleccionado (${periodoACopiar}).`
+          ? `No se encontró la DDJJ para el período seleccionado (${formatter.periodoString(periodoACopiar)}).`
           : 'No se encontró un período anterior',
       });
       return;
