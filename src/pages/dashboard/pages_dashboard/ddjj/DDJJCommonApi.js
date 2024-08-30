@@ -10,11 +10,11 @@ export const presentar = async (empresaId, ddjjId) => {
     const response = await oAxios.patch(URL);
     if (response.status === 200 || response.status === 204) {
       swal.showSuccess(HTTP_MSG_MODI);
-      return response.data || {};
+      return response.data || null;
     }
     throw response;
   } catch (error) {
     swal.showErrorBackEnd(HTTP_MSG_MODI_ERROR, error);
   }
-  return {};
+  return null;
 };

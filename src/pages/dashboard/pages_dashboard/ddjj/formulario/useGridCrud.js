@@ -11,35 +11,45 @@ const processRowUpdate = async (ddjjCabe, newRow) => {
     //Actualiza Validaciones del registro nuevo.-
     console.log('useGridCrud - processRowUpdate - 1 - newRow:', newRow);
 
-    //Mapeo a dto Backend
-    const DDJJ = DDJJMapper.regToDDJJValDto(ddjjCabe, newRow);
-    console.log('useGridCrud - processRowUpdate - 2 - DDJJ:', DDJJ);
+    if (newRow && newRow.cuil) {
+      //Mapeo a dto Backend
+      const DDJJ = DDJJMapper.regToDDJJValDto(ddjjCabe, newRow);
+      console.log('useGridCrud - processRowUpdate - 2 - DDJJ:', DDJJ);
 
-    //Ejecuto validaciones Backend
-    const val = await axiosDDJJ.validar(ddjjCabe.empresaId, DDJJ);
-    console.log('useGridCrud - processRowUpdate - 3 - val:', val);
+      //Ejecuto validaciones Backend
+      const val = await axiosDDJJ.validar(ddjjCabe.empresaId, DDJJ);
+      console.log('useGridCrud - processRowUpdate - 3 - val:', val);
 
-    if (val && val.errores && val.errores.length > 0) {
-      //Si hay errores en el registro, los agrego a las validaciones existentes
-      console.log('useGridCrud - processRowUpdate - 4');
+      if (val && val.errores && val.errores.length > 0) {
+        //Si hay errores en el registro, los agrego a las validaciones existentes
+        console.log('useGridCrud - processRowUpdate - 4');
 
-      //errores: saco viejos y pongo NUEVOS:
-      console.log('remuevo errores y despues pongo nuevos (todo junto)');
-      console.log('useGridCrud - processRowUpdate - val.errores:', val.errores);
-      const newRowsValidaciones = useGridValidaciones.add(
-        newRow.cuil,
-        val.errores,
-      );
-      //useGridValidaciones.setRowsValidaciones(newRowsValidaciones);
-      console.log('useGridCrud - processRowUpdate - 5');
-      newRow.gErrores = true;
+        //errores: saco viejos y pongo NUEVOS:
+        console.log('remuevo errores y despues pongo nuevos (todo junto)');
+        console.log(
+          'useGridCrud - processRowUpdate - val.errores:',
+          val.errores,
+        );
+        const newRowsValidaciones = useGridValidaciones.add(
+          newRow.cuil,
+          val.errores,
+        );
+        //useGridValidaciones.setRowsValidaciones(newRowsValidaciones);
+        console.log('useGridCrud - processRowUpdate - 5');
+        newRow.gErrores = true;
+      } else {
+        console.log('useGridCrud - processRowUpdate - 5.. REMOVE()');
+        const newRowsValidaciones = useGridValidaciones.remove(newRow.cuil);
+        //useGridValidaciones.setRowsValidaciones(newRowsValidaciones);
+        newRow.gErrores = false;
+      }
+      console.log('useGridCrud - processRowUpdate - 6 - newRow:', newRow);
     } else {
-      console.log('useGridCrud - processRowUpdate - 5.. REMOVE()');
-      const newRowsValidaciones = useGridValidaciones.remove(newRow.cuil);
-      //useGridValidaciones.setRowsValidaciones(newRowsValidaciones);
-      newRow.gErrores = false;
+      console.log(
+        'useGridCrud - processRowUpdate - 7 - SIN VALIDAR - newRow:',
+        newRow,
+      );
     }
-    console.log('useGridCrud - processRowUpdate - 6 - newRow:', newRow);
     return newRow;
   } catch (error) {
     console.log(error);

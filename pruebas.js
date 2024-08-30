@@ -1,70 +1,34 @@
-const getFuncionalidades = () => {
-  return [
-    {
-      id: 1,
-      descripcion: 'PUBLICACIONES',
-    },
-    {
-      id: 2,
-      descripcion: 'FERIADOS',
-    },
-    {
-      id: 9,
-      descripcion: 'GESTION_ROLES',
-    },
-    {
-      id: 10,
-      descripcion: 'CUITS_RESTRINGIDOS',
-    },
-    {
-      id: 11,
-      descripcion: 'ROLES',
-    },
-    {
-      id: 12,
-      descripcion: 'USUARIO_INTERNO',
-    },
-    {
-      id: 14,
-      descripcion: 'AJUSTES',
-    },
-    {
-      id: 3,
-      descripcion: 'NUEVA_DDJJ',
-    },
-    {
-      id: 5,
-      descripcion: 'MIS_BOLETAS',
-    },
-    {
-      id: 8,
-      descripcion: 'BOLETA_ACTAS',
-    },
-    {
-      id: 7,
-      descripcion: 'DATOS_PERFIL',
-    },
-    {
-      id: 15,
-      descripcion: 'MIS_DDJJ',
-    },
-  ];
-};
-
-const funcionHabilitada = (codigo) => {
-  const vecFunc = getFuncionalidades();
-  if (vecFunc.length > 0) {
-    const aux = vecFunc.find((reg) => {
-      return reg.descripcion === codigo;
-    });
-    console.log('aux:', aux);
-    if (aux) {
-      return true;
-    }
+const prueba = (aux) => {
+  if (aux) {
+    console.log('1 - TRUE - aux:', aux);
+  } else {
+    console.log('2 - FALSE - aux:', aux);
   }
-  return false;
 };
 
-console.log('funcionHabilitada(): ', funcionHabilitada('NUEVA_sDDJJ'));
+let aux = null;
+prueba(aux);
 
+aux = 0;
+prueba(aux);
+
+prueba();
+
+aux = false;
+prueba(aux);
+
+aux = 1;
+prueba(aux);
+
+aux = true;
+prueba(aux);
+
+aux = 'plata';
+prueba(aux);
+
+aux = '';
+prueba(aux);
+
+aux = -1;
+prueba(aux);
 console.log('FIN');

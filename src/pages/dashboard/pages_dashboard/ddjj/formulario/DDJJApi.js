@@ -93,7 +93,7 @@ export const crearAltaDeclaracionJurada = async (empresaId, registro) => {
     throw data;
   } catch (error) {
     swal.showErrorBackEnd(HTTP_MSG_ALTA_ERROR, error);
-    return {};
+    return null;
   }
 };
 

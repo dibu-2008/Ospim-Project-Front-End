@@ -228,6 +228,9 @@ export const Roles = () => {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell',
+      valueParser: (value, row, column, apiRef) => {
+        return value?.toUpperCase();
+      },
     },
     {
       field: 'actions',

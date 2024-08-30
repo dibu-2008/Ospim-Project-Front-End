@@ -665,9 +665,13 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
       }
     });
 
+    console.log('getColsMsgValidacion - colUnicas:', colUnicas);
+
     if (colUnicas.size > 0) {
       const mensajesFormateados = Array.from(colUnicas)
         .map((codigo, index) => {
+          if (codigo == 'empresaDomicilioId') return 'Planta';
+          if (codigo == 'periodo') return 'Período';
           const reg = columns.find((regloop) => {
             return regloop.field === codigo;
           });
@@ -740,8 +744,11 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
         'guardarDeclaracionJurada - axiosDDJJ.actualizar(ID_EMPRESA, DDJJ); ',
       );
       const bOK = await axiosDDJJ.actualizar(ID_EMPRESA, DDJJ);
-      setDdjjModi(false);
-      return ddjjCabe.id;
+      if (bOK) {
+        setDdjjModi(false);
+        return ddjjCabe.id;
+      }
+      return false;
     } else {
       console.log(
         'guardarDeclaracionJurada - axiosDDJJ.crear(ID_EMPRESA, DDJJ); ',
@@ -821,22 +828,34 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
         textoBtnOK: 'Si, Presentar !',
       };
       Swal.fire(swal.getSettingConfirm(confirm)).then(async (result) => {
+        console.log('presentarDDJJ - result:', result);
         if (result.isConfirmed) {
           if (!ddjjCabe.id || ddjjModi) {
-            const idNew = await guardarDDJJ();
-            ddjjCabe.id = idNew;
+            const idNew = await guardarDDJJ(); //viene false o el id
+            if (idNew) {
+              ddjjCabe.id = idNew;
+              idNew = true;
+            } else {
+              result.isConfirmed = false;
+            }
           }
 
-          const data = await axiosDDJJ.presentar(ID_EMPRESA, ddjjCabe.id);
-          if (data) {
-            const ddjjCabeNew = {
-              ...ddjjCabe,
-              estado: data.estado,
-              secuencia: data.secuencia,
-            };
-            setDdjjCabe(ddjjCabeNew);
-            setTituloSec(getTituloSec(data));
-            mostrarConsultaMissDDJJ();
+          if (result.isConfirmed) {
+            const data = await axiosDDJJ.presentar(ID_EMPRESA, ddjjCabe.id);
+            if (data) {
+              const ddjjCabeNew = {
+                ...ddjjCabe,
+                estado: data.estado,
+                secuencia: data.secuencia,
+              };
+              setDdjjCabe(ddjjCabeNew);
+              setTituloSec(getTituloSec(data));
+              mostrarConsultaMissDDJJ();
+            }
+          } else {
+            console.log(
+              'presentarDDJJ - el guardarDDJJ() no andubo - result.isConfirmed: FALSE ',
+            );
           }
         }
       });
@@ -992,20 +1011,20 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     {
       field: 'id',
       type: 'number',
-      headerName: 'Fila',
       width: 80,
-      headerAlign: 'center',
       align: 'center',
+      headerName: 'Fila',
+      headerAlign: 'center',
       headerClassName: 'header--cell',
       renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
     },
     {
       field: 'actions',
       type: 'actions',
-      headerName: 'Acciones',
       width: 100,
-      headerAlign: 'center',
       align: 'center',
+      headerName: 'Acciones',
+      headerAlign: 'center',
       headerClassName: 'header--cell',
       getActions: ({ row }) => {
         const isInEditMode = rowModesModel[row.id]?.mode === GridRowModes.Edit;
@@ -1062,11 +1081,11 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     {
       field: 'cuil',
       type: 'string',
-      headerName: 'CUIL',
       width: 150,
-      editable: true,
-      headerAlign: 'left',
       align: 'left',
+      editable: true,
+      headerName: 'CUIL',
+      headerAlign: 'left',
       headerClassName: 'header--cell',
       renderEditCell: (params) => {
         return (
@@ -1121,11 +1140,11 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     {
       field: 'apellido',
       type: 'string',
-      headerName: 'Apellido',
       width: 150,
-      editable: true,
-      headerAlign: 'left',
       align: 'left',
+      editable: true,
+      headerName: 'Apellido',
+      headerAlign: 'left',
       headerClassName: 'header--cell',
       valueParser: (value, row, column, apiRef) => {
         return value?.toUpperCase();
@@ -1191,11 +1210,11 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     {
       field: 'nombre',
       type: 'string',
-      headerName: 'Nombre',
       width: 150,
-      editable: true,
-      headerAlign: 'left',
       align: 'left',
+      editable: true,
+      headerName: 'Nombre',
+      headerAlign: 'left',
       headerClassName: 'header--cell',
       valueParser: (value, row, column, apiRef) => {
         return value?.toUpperCase();
@@ -1260,17 +1279,17 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     },
     {
       field: 'camara',
-      headerName: 'Cámara',
-      width: 80,
-      editable: true,
-      headerAlign: 'left',
-      align: 'left',
       type: 'singleSelect',
+      width: 80,
+      align: 'left',
+      editable: true,
+      headerName: 'Cámara',
+      headerAlign: 'left',
+      headerClassName: 'header--cell',
       valueFormatter: ({ value }) => value || '',
       valueOptions: camaras.map(({ codigo, descripcion }) => {
         return { value: codigo, label: descripcion };
       }),
-      headerClassName: 'header--cell',
       renderEditCell: (params) => {
         return (
           <Select
@@ -1314,11 +1333,11 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     {
       field: 'categoria',
       type: 'singleSelect',
-      headerName: 'Categoría',
       width: 80,
-      editable: true,
-      headerAlign: 'left',
       align: 'left',
+      editable: true,
+      headerName: 'Categoría',
+      headerAlign: 'left',
       headerClassName: 'header--cell',
       valueFormatter: ({ value }) => value || '',
       renderEditCell: (params) => {
@@ -1350,13 +1369,12 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     {
       field: 'fechaIngreso',
       type: 'date',
-      headerName: 'Ingreso',
       width: 100,
-      editable: true,
-      headerAlign: 'left',
       align: 'left',
+      editable: true,
+      headerName: 'Ingreso',
+      headerAlign: 'left',
       headerClassName: 'header--cell',
-
       valueGetter: ({ value }) => {
         return formatter.dateObject(value);
       },
@@ -1367,18 +1385,18 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     {
       field: 'empresaDomicilioId',
       type: 'singleSelect',
+      width: 170,
+      align: 'left',
+      editable: true,
+      headerAlign: 'left',
+      headerClassName: 'header--cell',
+      headerTooltip: 'Selecciona la planta de la empresa',
+      valueOptions: plantas,
       headerName: (
         <Tooltip title="Para dar de alta una planta, debe ir a perfil y agregar nuevo registro en domicilios">
           <span>Planta</span>
         </Tooltip>
       ),
-      width: 170,
-      editable: true,
-      headerAlign: 'left',
-      align: 'left',
-      headerClassName: 'header--cell',
-      headerTooltip: 'Selecciona la planta de la empresa',
-      valueOptions: plantas,
       valueFormatter: ({ value }) => {
         if (value === '') return '';
         if (value === null) return '';
@@ -1411,11 +1429,11 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     {
       field: 'remunerativo',
       type: 'string',
-      headerName: 'Remunerativo',
       width: 110,
-      editable: true,
-      headerAlign: 'left',
       align: 'right',
+      editable: true,
+      headerName: 'Remunerativo',
+      headerAlign: 'left',
       headerClassName: 'header--cell',
       valueFormatter: ({ value }) => {
         const formattedValue = formatValue({
@@ -1450,6 +1468,12 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     {
       field: 'noRemunerativo',
       type: 'string',
+      width: 110,
+      align: 'right',
+      editable: true,
+      headerName: 'No Remunerativo',
+      headerAlign: 'left',
+      headerClassName: 'header--cell',
       renderHeader: () => (
         <div style={{ textAlign: 'left', color: '#fff', fontSize: '0.8rem' }}>
           <span role="img" aria-label="enjoy">
@@ -1459,11 +1483,6 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
           </span>
         </div>
       ),
-      width: 110,
-      editable: true,
-      headerAlign: 'left',
-      align: 'right',
-      headerClassName: 'header--cell',
       valueFormatter: ({ value }) => {
         if (value === '') return '';
         if (value === null) return '';
@@ -1502,6 +1521,16 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     {
       field: 'uomaSocio',
       type: 'singleSelect',
+      width: 100,
+      align: 'center',
+      editable: true,
+      headerName: 'Adherido Sindicato',
+      headerAlign: 'center',
+      headerClassName: 'header--cell',
+      valueOptions: [
+        { value: true, label: 'Si' },
+        { value: false, label: 'No' },
+      ],
       renderHeader: () => (
         <div style={{ textAlign: 'center', color: '#fff', fontSize: '0.8rem' }}>
           <span role="img" aria-label="enjoy">
@@ -1511,15 +1540,6 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
           </span>
         </div>
       ),
-      width: 100,
-      editable: true,
-      headerAlign: 'center',
-      align: 'center',
-      headerClassName: 'header--cell',
-      valueOptions: [
-        { value: true, label: 'Si' },
-        { value: false, label: 'No' },
-      ],
       valueFormatter: ({ value }) => {
         if (value === '') return '';
         if (value === null) return '';
@@ -1554,6 +1574,16 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     {
       field: 'amtimaSocio',
       type: 'singleSelect',
+      width: 100,
+      align: 'center',
+      editable: true,
+      headerName: 'Paga Mutual',
+      headerAlign: 'center',
+      headerClassName: 'header--cell',
+      valueOptions: [
+        { value: true, label: 'Si' },
+        { value: false, label: 'No' },
+      ],
       renderHeader: () => (
         <div style={{ textAlign: 'center', color: '#fff', fontSize: '0.8rem' }}>
           <span role="img" aria-label="enjoy">
@@ -1563,15 +1593,6 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
           </span>
         </div>
       ),
-      width: 100,
-      editable: true,
-      headerAlign: 'center',
-      align: 'center',
-      headerClassName: 'header--cell',
-      valueOptions: [
-        { value: true, label: 'Si' },
-        { value: false, label: 'No' },
-      ],
       valueFormatter: ({ value }) => {
         if (value === '') return '';
         if (value === null) return '';
