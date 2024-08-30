@@ -834,7 +834,6 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
             const idNew = await guardarDDJJ(); //viene false o el id
             if (idNew) {
               ddjjCabe.id = idNew;
-              idNew = true;
             } else {
               result.isConfirmed = false;
             }
