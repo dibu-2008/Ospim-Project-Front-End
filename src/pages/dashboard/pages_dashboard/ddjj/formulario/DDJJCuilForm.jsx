@@ -4,6 +4,20 @@ import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import { axiosDDJJ } from './DDJJApi';
 
+const validarApeNombre = (testo) => {
+  const patron = /[A-Za-z ]/;
+
+  for (let i = 0; i <= testo.length - 1; i++) {
+    let letra = testo[i];
+    if (!patron.test(letra)) {
+      //console.log(testo);
+      //console.log('patron.test(testo): FALSE - letra:', letra);
+      return false;
+    }
+  }
+  return true;
+};
+
 export const DDJJCuilForm = ({ formCuilReg, formShow, setFormShow }) => {
   console.log('DDJJCuilForm - formCuilReg: ', formCuilReg);
   const theme = useTheme();
@@ -91,7 +105,12 @@ export const DDJJCuilForm = ({ formCuilReg, formShow, setFormShow }) => {
             value={reg.apellido}
             variant="outlined"
             sx={{ marginBottom: '20px' }}
-            onChange={(e) => handleChangeReg(e, 'apellido')}
+            onChange={(e) => {
+              console.log('TextField.onChange - e:', e.target.value);
+              if (validarApeNombre(e.target.value)) {
+                handleChangeReg(e, 'apellido');
+              }
+            }}
           />
           <TextField
             fullWidth
@@ -99,7 +118,11 @@ export const DDJJCuilForm = ({ formCuilReg, formShow, setFormShow }) => {
             value={reg.nombre}
             variant="outlined"
             sx={{ marginBottom: '20px' }}
-            onChange={(e) => handleChangeReg(e, 'nombre')}
+            onChange={(e) => {
+              if (validarApeNombre(e.target.value)) {
+                handleChangeReg(e, 'nombre');
+              }
+            }}
           />
           <Box
             display="flex"

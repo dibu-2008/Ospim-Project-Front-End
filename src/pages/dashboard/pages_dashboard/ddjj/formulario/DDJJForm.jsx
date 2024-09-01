@@ -302,6 +302,20 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
 
   // Eventos
 
+  const validarApeNombre = (testo) => {
+    const patron = /[A-Za-z ]/;
+
+    for (let i = 0; i <= testo.length - 1; i++) {
+      let letra = testo[i];
+      if (!patron.test(letra)) {
+        //console.log(testo);
+        //console.log('patron.test(testo): FALSE - letra:', letra);
+        return false;
+      }
+    }
+    return true;
+  };
+
   const validarPeriodo = async (date) => {
     console.log('validarPeriodo - date:', date);
     if (ddjjCabe && ddjjCabe.id) {
@@ -1080,7 +1094,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     {
       field: 'cuil',
       type: 'string',
-      width: 150,
+      width: 160,
       align: 'left',
       editable: true,
       headerName: 'CUIL',
@@ -1139,7 +1153,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     {
       field: 'apellido',
       type: 'string',
-      width: 150,
+      width: 170,
       align: 'left',
       editable: true,
       headerName: 'Apellido',
@@ -1170,12 +1184,18 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
               },
             }}
             onChange={(event) => {
-              const newValue = event.target.value;
+              //console.log('onChange - event: ', event);
+              let newValue = event.target.value;
+              if (!validarApeNombre(newValue)) {
+                newValue = '';
+              }
               params.api.setEditCellValue({
                 id: params.id,
                 field: 'apellido',
-                value: newValue,
+                value: '',
               });
+              event.target.value = newValue;
+              return false;
             }}
             onBlur={async (event) => {
               const newValue = event.target.value;
@@ -1209,7 +1229,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     {
       field: 'nombre',
       type: 'string',
-      width: 150,
+      width: 170,
       align: 'left',
       editable: true,
       headerName: 'Nombre',
@@ -1240,7 +1260,10 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
               },
             }}
             onChange={(event) => {
-              const newValue = event.target.value;
+              let newValue = event.target.value;
+              if (!validarApeNombre(newValue)) {
+                newValue = '';
+              }
               params.api.setEditCellValue({
                 id: params.id,
                 field: 'nombre',
@@ -1384,7 +1407,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     {
       field: 'empresaDomicilioId',
       type: 'singleSelect',
-      width: 170,
+      width: 200,
       align: 'left',
       editable: true,
       headerAlign: 'left',

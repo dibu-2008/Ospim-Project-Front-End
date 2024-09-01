@@ -190,7 +190,15 @@ export const funcionHabilitada = (codigo) => {
 };
 
 export const funcionABMEmpresaHabilitada = () => {
-  return funcionHabilitada('CONSULTA_EMPRESA_ALTA_MODI');
+  let result = -1;
+  try {
+    result = window.location.href.toLowerCase().indexOf('/registercompany');
+  } catch (e) {
+    console.log('funcionABMEmpresaHabilitada - ERROR: ', e);
+  }
+
+  return funcionHabilitada('CONSULTA_EMPRESA_ALTA_MODI') || result > -1;
+  //return funcionHabilitada('CONSULTA_EMPRESA_ALTA_MODI');
 };
 
 const localStorageService = {

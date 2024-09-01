@@ -166,7 +166,7 @@ export const DatosEmpresa = () => {
           name="razonSocial"
           value={razonSocial}
           onChange={OnChangeRazonSocial}
-          disabled={esEmpleador || !crudHabi}
+          disabled={!crudHabi}
           autoComplete="off"
           label="Razón Social"
           sx={{
@@ -179,7 +179,7 @@ export const DatosEmpresa = () => {
             width="350px"
             name="actividadMolinera"
             value={actividadMolinera}
-            disabled={esEmpleador || !crudHabi}
+            disabled={!crudHabi}
             label="Pertenece a actividad Molinera"
             onChange={(e) => setActividadMolinera(e.target.value)}
             MenuProps={{
@@ -198,7 +198,7 @@ export const DatosEmpresa = () => {
           </CustomSelect>
         </FormControl>
 
-        {!esEmpleador && crudHabi && (
+        {crudHabi && (
           <Button variant="contained" sx={{}} type="submit">
             Guardar
           </Button>
