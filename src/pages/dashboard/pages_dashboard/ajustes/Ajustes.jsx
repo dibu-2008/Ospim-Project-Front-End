@@ -285,7 +285,7 @@ export const Ajustes = () => {
     },
     {
       field: 'periodo_original',
-      headerName: 'PERIODO ORIGINAL',
+      headerName: 'PERÍODO ORIGINAL',
       flex: 1,
       editable: true,
       headerAlign: 'center',

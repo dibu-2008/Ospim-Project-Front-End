@@ -302,20 +302,6 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
 
   // Eventos
 
-  const validarApeNombre = (testo) => {
-    const patron = /[A-Za-z ]/;
-
-    for (let i = 0; i <= testo.length - 1; i++) {
-      let letra = testo[i];
-      if (!patron.test(letra)) {
-        //console.log(testo);
-        //console.log('patron.test(testo): FALSE - letra:', letra);
-        return false;
-      }
-    }
-    return true;
-  };
-
   const validarPeriodo = async (date) => {
     console.log('validarPeriodo - date:', date);
     if (ddjjCabe && ddjjCabe.id) {
@@ -1168,6 +1154,9 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
             id={params.row.id ? 'apellido' + params.row.id.toString() : ''}
             fullWidth
             value={params.value || ''}
+            inputProps={{
+              pattern: '[a-zA-Z]*',
+            }}
             sx={{
               '& .MuiOutlinedInput-root': {
                 '& fieldset': {
@@ -1186,9 +1175,6 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
             onChange={(event) => {
               //console.log('onChange - event: ', event);
               let newValue = event.target.value;
-              if (!validarApeNombre(newValue)) {
-                newValue = '';
-              }
               params.api.setEditCellValue({
                 id: params.id,
                 field: 'apellido',
@@ -1244,6 +1230,9 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
             id={params.row.id ? 'nombre' + params.row.id.toString() : ''}
             fullWidth
             value={params.value || ''}
+            inputProps={{
+              pattern: '[a-zA-Z]*',
+            }}
             sx={{
               '& .MuiOutlinedInput-root': {
                 '& fieldset': {
@@ -1261,9 +1250,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
             }}
             onChange={(event) => {
               let newValue = event.target.value;
-              if (!validarApeNombre(newValue)) {
-                newValue = '';
-              }
+
               params.api.setEditCellValue({
                 id: params.id,
                 field: 'nombre',

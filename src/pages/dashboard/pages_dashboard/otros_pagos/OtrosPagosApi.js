@@ -39,6 +39,7 @@ export const generarBoletaSinDDJJ = async (empresa_id, body) => {
     console.log(body);
 
     const data = await crearBoleta(empresa_id, body);
+    console.log('generarBoletaSinDDJJ-data:', data);
     if (data && data.id) {
       boletaPdfDownload(empresa_id, data.id);
     }
