@@ -1192,7 +1192,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
               params.api.setEditCellValue({
                 id: params.id,
                 field: 'apellido',
-                value: '',
+                value: newValue,
               });
               event.target.value = newValue;
               return false;
