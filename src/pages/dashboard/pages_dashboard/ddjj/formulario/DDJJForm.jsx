@@ -301,6 +301,20 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
   // xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
   // Eventos
+  const limpiarApeNombre = (texto) => {
+    const patron = /[A-Za-z ]/;
+    let textoLimpio = '';
+    for (let i = 0; i <= texto.length - 1; i++) {
+      let letra = texto[i];
+      if (patron.test(letra)) {
+        textoLimpio = textoLimpio + letra;
+        //console.log(testo);
+        //console.log('patron.test(testo): FALSE - letra:', letra);
+        //return false;
+      }
+    }
+    return textoLimpio;
+  };
 
   const validarPeriodo = async (date) => {
     console.log('validarPeriodo - date:', date);
@@ -1154,9 +1168,6 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
             id={params.row.id ? 'apellido' + params.row.id.toString() : ''}
             fullWidth
             value={params.value || ''}
-            inputProps={{
-              pattern: '[a-zA-Z]*',
-            }}
             sx={{
               '& .MuiOutlinedInput-root': {
                 '& fieldset': {
@@ -1175,6 +1186,8 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
             onChange={(event) => {
               //console.log('onChange - event: ', event);
               let newValue = event.target.value;
+              newValue = limpiarApeNombre(newValue);
+
               params.api.setEditCellValue({
                 id: params.id,
                 field: 'apellido',
@@ -1230,9 +1243,6 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
             id={params.row.id ? 'nombre' + params.row.id.toString() : ''}
             fullWidth
             value={params.value || ''}
-            inputProps={{
-              pattern: '[a-zA-Z]*',
-            }}
             sx={{
               '& .MuiOutlinedInput-root': {
                 '& fieldset': {
@@ -1250,7 +1260,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
             }}
             onChange={(event) => {
               let newValue = event.target.value;
-
+              newValue = limpiarApeNombre(newValue);
               params.api.setEditCellValue({
                 id: params.id,
                 field: 'nombre',

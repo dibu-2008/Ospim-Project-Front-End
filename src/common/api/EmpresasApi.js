@@ -15,3 +15,17 @@ export const consultarEmpresas = async () => {
     return [];
   }
 };
+
+export const consultarEmpresa = async (cuit) => {
+  const URL = `/empresa/?cuit=${cuit}`;
+  try {
+    const data = await axiosCrud.consultar(URL);
+    return data || null;
+  } catch (error) {
+    swal.showErrorBackEnd(
+      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
+      error,
+    );
+    return null;
+  }
+};

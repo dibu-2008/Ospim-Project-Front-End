@@ -225,6 +225,7 @@ export const GrillaEmpresaContactoTelefono = ({
   const handleRowModesModelChange = (newRowModesModel) => {
     setRowModesModel(newRowModesModel);
   };
+
   const handlePrefijoChange = (params, event) => {
     const newPrefijoLength = event.target.value.length;
     const newLengthValor = 10 - newPrefijoLength;
@@ -283,7 +284,7 @@ export const GrillaEmpresaContactoTelefono = ({
           onChange={(event) => handlePrefijoChange(params, event)}
           inputProps={{
             pattern: '[0-9]*',
-            maxLength: lengthPrefijo,
+            //maxLength: lengthPrefijo,
           }}
         />
       ),
@@ -304,7 +305,7 @@ export const GrillaEmpresaContactoTelefono = ({
           onChange={(event) => handleValorChange(params, event)}
           inputProps={{
             pattern: '[0-9]*',
-            maxLength: lengthValor,
+            //maxLength: lengthValor,
           }}
         />
       ),
