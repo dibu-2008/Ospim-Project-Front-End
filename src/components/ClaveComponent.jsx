@@ -44,7 +44,7 @@ const styContToolAst = {
 export const ClaveComponent = ({ showModal, setShowModal }) => {
   const [clave, setClave] = useState('');
   const [claveNueva, setClaveNueva] = useState('');
-
+  const [errorPassword,setErrorPassword] = useState(false)
   const [claveNuevaRepe, setClaveNuevaRepe] = useState('');
   const [claveNuevaRepeError, setClaveNuevaRepeError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -64,6 +64,23 @@ export const ClaveComponent = ({ showModal, setShowModal }) => {
     e.preventDefault();
     const bRta = await patch(URL, { clave, claveNueva });
     setShowModal(!showModal);
+  };
+
+  const validatePassword = (password) => {
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+    return passwordRegex.test(password);
+  };
+
+  const handlePasswordChange = (event) => {
+    setClaveNueva(event.target.value)
+
+    if (validatePassword(event.target.value)) {
+      setErrorPassword(false);
+      //console.log(errorPassword);
+    } else {
+      setErrorPassword(true);
+      //console.log(errorPassword);
+    }
   };
 
   return (
@@ -131,7 +148,9 @@ export const ClaveComponent = ({ showModal, setShowModal }) => {
                 <OutlinedInput
                   id="clave-nueva"
                   value={claveNueva}
-                  onChange={(e) => setClaveNueva(e.target.value)}
+                  error={errorPassword}
+                  //onChange={(e) => setClaveNueva(e.target.value)}
+                  onChange={handlePasswordChange}
                   type={showPassword ? 'text' : 'password'}
                   endAdornment={
                     <InputAdornment position="end">
@@ -157,7 +176,7 @@ export const ClaveComponent = ({ showModal, setShowModal }) => {
               >
                 <InputLabel htmlFor="clave-nueva">Repetir Clave </InputLabel>
                 <OutlinedInput
-                  id="clave-nueva"
+                  id="clave-nueva-repe"
                   value={claveNuevaRepe}
                   onChange={(e) => {
                     setClaveNuevaRepe(e.target.value);
@@ -175,7 +194,7 @@ export const ClaveComponent = ({ showModal, setShowModal }) => {
                       </IconButton>
                     </InputAdornment>
                   }
-                  label="Clave Nueva"
+                  label="Clave Nueva Repe"
                 />
               </FormControl>
             </Grid>

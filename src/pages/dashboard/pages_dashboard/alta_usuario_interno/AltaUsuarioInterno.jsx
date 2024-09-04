@@ -10,6 +10,7 @@ import {
   Grid,
   InputAdornment,
   OutlinedInput,
+  InputLabel
 } from '@mui/material';
 
 import { Add, Edit, DeleteOutlined, Save, Close } from '@mui/icons-material';
@@ -274,6 +275,7 @@ export const AltaUsuarioInterno = () => {
   const [usuario, setUsuario] = useState('');
   const [email, setEmail] = useState('');
   const [clave, setClave] = useState('');
+  const [claveError, setClaveError] = useState(false)
   const [repetirClave, setRepetirClave] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [idUsuario, setIdUsuario] = useState(0);
@@ -284,7 +286,13 @@ export const AltaUsuarioInterno = () => {
     event.preventDefault();
   };
 
+  const validatePassword = (password) => {
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+    return passwordRegex.test(password);
+  };
+
   const handleClave = (e) => {
+    setClaveError(!validatePassword(e.target.value))
     setClave(e.target.value);
   };
 
@@ -604,11 +612,13 @@ export const AltaUsuarioInterno = () => {
               </Grid>
               <Grid container spacing={2}>
                 <Grid item xs={6}>
+                <InputLabel htmlFor="clave">Clave </InputLabel>
                   <OutlinedInput
                     value={clave}
                     label="Clave"
                     variant="outlined"
                     fullWidth
+                    error={claveError}
                     margin="dense"
                     type={showPassword ? 'text' : 'password'}
                     onChange={handleClave}
@@ -627,12 +637,14 @@ export const AltaUsuarioInterno = () => {
                   />
                 </Grid>
                 <Grid item xs={6}>
+                <InputLabel htmlFor="repetir-clave">Repetir Clave </InputLabel>
                   <OutlinedInput
                     value={repetirClave}
                     label="Repetir Clave"
                     variant="outlined"
                     fullWidth
                     margin="dense"
+                    error={clave !== repetirClave}
                     type={showPassword ? 'text' : 'password'}
                     onChange={handleRepetirClave}
                     endAdornment={

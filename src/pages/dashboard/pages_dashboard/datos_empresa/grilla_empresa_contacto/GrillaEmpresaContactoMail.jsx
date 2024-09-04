@@ -330,6 +330,9 @@ export const GrillaEmpresaContactoMail = ({
             rows.indexOf(params.row) % 2 === 0 ? 'even' : 'odd'
           }
           editMode="row"
+          isCellEditable={() => crudHabi}
+          disableColumnSelector
+          disableSelectionOnClick
           rowModesModel={rowModesModel}
           onRowModesModelChange={handleRowModesModelChange}
           onRowEditStop={handleRowEditStop}
