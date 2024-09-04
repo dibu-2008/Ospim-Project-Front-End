@@ -1685,7 +1685,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
             <Box
               sx={{
                 margin: '10px 0px -20px 0px',
-                height: '80%',
+                height: '600px',
                 width: '100%',
                 '& .actions': {
                   color: 'text.secondary',
