@@ -189,6 +189,10 @@ export const funcionHabilitada = (codigo) => {
   return false;
 };
 
+export const funcionEmpresaDatosModiHabilitada = () => {
+  return funcionHabilitada('EMPRESA_DATOS_MODI');
+};
+
 export const funcionABMEmpresaHabilitada = () => {
   let result = -1;
   try {
@@ -197,7 +201,7 @@ export const funcionABMEmpresaHabilitada = () => {
     console.log('funcionABMEmpresaHabilitada - ERROR: ', e);
   }
 
-  return funcionHabilitada('CONSULTA_EMPRESA_ALTA_MODI') || result > -1;
+  return funcionHabilitada('EMPRESA_CONTACTO_DOMICILIO_ABM') || result > -1;
   //return funcionHabilitada('CONSULTA_EMPRESA_ALTA_MODI');
 };
 
@@ -240,6 +244,9 @@ const localStorageService = {
   },
   funcionABMEmpresaHabilitada: function () {
     return funcionABMEmpresaHabilitada();
+  },
+  funcionEmpresaDatosModiHabilitada: function () {
+    return funcionEmpresaDatosModiHabilitada();
   },
 };
 

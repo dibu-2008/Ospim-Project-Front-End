@@ -28,8 +28,6 @@ import { UserContext } from '@/context/userContext';
 import '../DatosEmpresa.css';
 import localStorageService from '@components/localStorage/localStorageService';
 
-const crudHabi = localStorageService.funcionABMEmpresaHabilitada();
-
 let isOnEditMode = false;
 const crearNuevoRegistro = (props) => {
   const {
@@ -40,6 +38,8 @@ const crearNuevoRegistro = (props) => {
     themeWithLocale,
     idEmpresa,
   } = props;
+  const crudHabi = localStorageService.funcionABMEmpresaHabilitada();
+
   const altaHandleClick = () => {
     if (!isOnEditMode) {
       const newReg = {
@@ -90,6 +90,7 @@ const crearNuevoRegistro = (props) => {
 };
 
 export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
+  const crudHabi = localStorageService.funcionABMEmpresaHabilitada();
   const [locale, setLocale] = useState('esES');
   const [rowModesModel, setRowModesModel] = useState({});
   const [provincias, setProvincias] = useState([]);

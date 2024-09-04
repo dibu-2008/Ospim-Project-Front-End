@@ -62,9 +62,11 @@ function a11yProps(index) {
 export const DatosEmpresa = () => {
   const esEmpleador = localStorageService.isRolEmpleador();
   const crudHabi = localStorageService.funcionABMEmpresaHabilitada();
+  const empreModiHabi = localStorageService.funcionEmpresaDatosModiHabilitada();
 
   console.log('DatosEmpresa - INIT - esEmpleador: ', esEmpleador);
   console.log('DatosEmpresa - INIT - crudHabi: ', crudHabi);
+  console.log('DatosEmpresa - INIT - empreModiHabi: ', empreModiHabi);
 
   const [formShow, setFormShow] = useState(false);
 
@@ -166,7 +168,7 @@ export const DatosEmpresa = () => {
           name="razonSocial"
           value={razonSocial}
           onChange={OnChangeRazonSocial}
-          disabled={!crudHabi}
+          disabled={!empreModiHabi}
           autoComplete="off"
           label="Razón Social"
           sx={{
@@ -179,7 +181,7 @@ export const DatosEmpresa = () => {
             width="350px"
             name="actividadMolinera"
             value={actividadMolinera}
-            disabled={!crudHabi}
+            disabled={!empreModiHabi}
             label="Pertenece a actividad Molinera"
             onChange={(e) => setActividadMolinera(e.target.value)}
             MenuProps={{
@@ -198,7 +200,7 @@ export const DatosEmpresa = () => {
           </CustomSelect>
         </FormControl>
 
-        {crudHabi && (
+        {empreModiHabi && (
           <Button variant="contained" sx={{}} type="submit">
             Guardar
           </Button>
