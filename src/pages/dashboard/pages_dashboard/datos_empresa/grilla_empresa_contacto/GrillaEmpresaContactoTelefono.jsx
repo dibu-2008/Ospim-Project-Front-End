@@ -21,7 +21,6 @@ import { UserContext } from '@/context/userContext';
 import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 import localStorageService from '@components/localStorage/localStorageService';
 
-
 function EditToolbar(props) {
   const {
     setRows,
@@ -104,7 +103,16 @@ export const GrillaEmpresaContactoTelefono = ({
     }
   };
 
+  const initializeLengths = (row) => {
+    console.log(row);
+    const prefijoLength = row.prefijo ? row.prefijo.length : 0;
+    const valorLength = row.valor ? row.valor.length : 0;
+    setLengthPrefijo(10 - valorLength);
+    setLengthValor(10 - prefijoLength);
+  };
+
   const handleEditClickTelefono = (row) => () => {
+    initializeLengths(row);
     setRowModesModel({
       ...rowModesModel,
       [rows.indexOf(row)]: { mode: GridRowModes.Edit },
@@ -241,8 +249,8 @@ export const GrillaEmpresaContactoTelefono = ({
 
   const handleValorChange = (params, event) => {
     const newValorLength = event.target.value.length;
-    const newLengthPrefijo = 10 - newValorLength;
 
+    const newLengthPrefijo = 10 - newValorLength;
     setLengthPrefijo(newLengthPrefijo);
 
     params.api.setEditCellValue({
@@ -322,7 +330,7 @@ export const GrillaEmpresaContactoTelefono = ({
       getActions: ({ row }) => {
         const isInEditMode =
           rowModesModel[rows.indexOf(row)]?.mode === GridRowModes.Edit;
-
+        console.log(crudHabi);
         if (!crudHabi) return [];
 
         if (isInEditMode) {
@@ -387,6 +395,9 @@ export const GrillaEmpresaContactoTelefono = ({
             rows.indexOf(params.row) % 2 === 0 ? 'even' : 'odd'
           }
           editMode="row"
+          isCellEditable={() => crudHabi}
+          disableColumnSelector
+          disableSelectionOnClick
           rowModesModel={rowModesModel}
           onRowModesModelChange={handleRowModesModelChange}
           onRowEditStop={handleRowEditStop}
