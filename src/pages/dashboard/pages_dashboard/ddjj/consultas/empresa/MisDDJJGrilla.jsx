@@ -346,7 +346,7 @@ export const MisDDJJGrilla = ({ rows, setRows, handlerDDJJEditar }) => {
         sx={{
           margin: '0 auto',
           height: '600px',
-          width: '100%%',
+          width: '100%',
           '& .actions': {
             color: 'text.secondary',
           },
