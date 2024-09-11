@@ -165,6 +165,8 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
     }
   };
 
+  
+
   const handleDeleteClick = (row) => async () => {
     console.log('handleDeleteClick - row.id:', row.id);
     const showSwalConfirm = async () => {
@@ -229,6 +231,9 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
   };
   const processRowUpdate = async (newRow, oldRow) => {
     console.log('processRowUpdate - INIT - newRow:', newRow);
+    if (newRow.tipo === 'FISCAL') {
+      newRow.planta = 'FISCAL';  // Si es fiscal, la planta es siempre "FISCAL"
+    }
     let bOk = false;
     if (!newRow.id) {
       try {
@@ -332,6 +337,36 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
       valueOptions: tipoDomicilio.map(({ codigo, descripcion }) => {
         return { value: codigo, label: descripcion };
       }),
+      renderEditCell: (params) => (
+        <Select
+          value={params.value}
+          onChange={(e) => {
+            const newValue = e.target.value;
+
+            params.api.setEditCellValue({
+              id: params.id,
+              field: 'tipo',
+              value: newValue,
+            });
+
+            if (newValue === 'FISCAL') {
+              params.api.setEditCellValue({
+                id: params.id,
+                field: 'planta',
+                value: 'FISCAL',
+              });
+            }
+          }}
+          sx={{ width: 200 }}
+        >
+          {tipoDomicilio.map(({ codigo, descripcion }) => (
+            <MenuItem key={codigo} value={codigo}>
+              {descripcion}
+            </MenuItem>
+          ))}
+        </Select>
+      ),
+      
     },
     {
       field: 'provincia',
@@ -454,9 +489,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell',
-      valueParser: (value) => {
-        return value?.toUpperCase();
-      },
+      valueGetter: (params) =>  params.row.tipo === 'FISCAL' ? 'FISCAL' : params.row.planta?.toUpperCase(),
     },
     {
       field: 'actions',
@@ -555,6 +588,8 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
             paginationModel={paginationModel}
             onPaginationModelChange={setPaginationModel}
             pageSizeOptions={pageSizeOptions}
+
+
           />
         </ThemeProvider>
       </Box>
