@@ -396,8 +396,8 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     console.log('obtenerAfiliados - rta:', rta);
     if (rta.error != 'OK') {
       swal.showWarning(rta.error);
-      setAfiliadoGrilla(id, cuilNew, '', '');
-      return;
+      setAfiliadoGrilla(id, '', '', '');
+      return false;
     }
 
     console.log('obtenerAfiliados - (2)');
@@ -419,27 +419,33 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
   };
 
   const getAfiliadoEnNomina = async (cuil) => {
+    console.log('getAfiliadoEnNomina - cuil:', cuil);
     const rta = {};
     if (cuil === '') {
       rta.error = 'Debe ingresar un CUIL y presionar la lupa';
+      console.log('getAfiliadoEnNomina - 1 - rta:', rta);
       return rta;
     }
 
     if (cuil.length != 11) {
       rta.error = 'El CUIL ingresado es incorrecto, debe tener 11 dígitos.';
+      console.log('getAfiliadoEnNomina - 2 - rta:', rta);
       return rta;
     }
 
     const validoCuil = await axiosDDJJ.validarCuil(cuil);
     if (!validoCuil || !validoCuil.resultado) {
       rta.error = 'El CUIL ingresado no es válido.';
+      console.log('getAfiliadoEnNomina - 3 - rta:', rta);
+      console.log('getAfiliadoEnNomina - 3 - validoCuil:', validoCuil);
+
       return rta;
     }
 
     //const afiliados = await axiosDDJJ.getAfiliado(cuil);
     rta.error = 'OK';
     rta.afiliados = await axiosDDJJ.getAfiliado(cuil);
-    //console.log('validarAfiliado - OK !!!!');
+    console.log('getAfiliadoEnNomina - rta:', rta);
 
     return rta;
   };
