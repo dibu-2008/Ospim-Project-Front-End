@@ -11,6 +11,7 @@ import Fab from '@mui/material/Fab';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import './RegistroEmpresa.css';
 import NavBar from '@/components/navbar/NavBar';
@@ -136,8 +137,8 @@ export const RegistroEmpresa = () => {
 
     if (
       phoneAlternativos &&
-      phoneAlternativos.length > 0 &&
-      (prefijo_second || phone_second)
+      phoneAlternativos.length > 0
+      && (prefijo_second || phone_second)
     ) {
       usuarioEmpresa['telefonosAlternativos'] = [
         {
@@ -167,20 +168,17 @@ export const RegistroEmpresa = () => {
     }
 
     if (emailAlternativos && emailAlternativos.length > 0 && email_second) {
-      usuarioEmpresa[emailAlternativos] = [
-        {
-          email: email_second,
-        },
-        ...emailAlternativos.map((email) => ({
-          email: email.email,
-        })),
+      usuarioEmpresa.emailAlternativos = [
+          email_second,
+        ...emailAlternativos.map((email) => (
+          email.email
+        )),
       ];
     } else {
-      if (emailAlternativos && emailAlternativos.length > 0 && email_second) {
-        usuarioEmpresa[emailAlternativos] = [
-          {
-            email: email_second,
-          },
+      //if (emailAlternativos && emailAlternativos.length > 0 && email_second) {
+      if (email_second) {
+        usuarioEmpresa.emailAlternativos = [
+           email_second
         ];
       }
     }
@@ -232,6 +230,16 @@ export const RegistroEmpresa = () => {
     setAddionalEmail(values);
   };
 
+  const handleQuitEmail = (input) => {
+    console.log(input)
+    if (idEmailAlternativos > 2){
+    console.log(emailAlternativos)
+    setEmailAlternativos(emailAlternativos.filter(item => item.id !== input.id))
+    console.log(additionalEmail)
+    setAddionalEmail(additionalEmail.filter(item => item.id !== input.id));
+  }
+  };
+
   const handleAddPhone = () => {
     setIdPhoneAlternativos(idPhoneAlternativos + 1);
 
@@ -244,6 +252,17 @@ export const RegistroEmpresa = () => {
     values.push(newPhone);
     setPhoneAlternativos([...phoneAlternativos, newPhone]);
     setAdditionalPhone(values);
+  };
+
+  const handleQuitPhone = (input) => {
+    console.log(input)
+    console.log(phoneAlternativos)
+    if (phoneAlternativos.length > 0){
+      console.log(phoneAlternativos)
+      setPhoneAlternativos(phoneAlternativos.filter(item => item.id !== input.id))
+      console.log(additionalPhone)
+      setAdditionalPhone(additionalPhone.filter(item => item.id !== input.id));
+    }
   };
 
   const handleChangeCuil = (event) => {
@@ -322,6 +341,8 @@ export const RegistroEmpresa = () => {
         OnInputChangeRegisterCompany(event);
       }
     }
+    //Expresion prefijoAdditional
+
   };
 
   const handleChangePhone = (event) => {
@@ -526,6 +547,22 @@ export const RegistroEmpresa = () => {
                     setEmailAlternativos(values);
                   }}
                 />
+                <Box sx={{ '& > :not(style)': { m: 1 } }}>
+                <Fab
+                  size="small"
+                  color="primary"
+                  aria-label="add"
+                  style={{
+                    position: 'absolute',
+                    marginTop: '-48px',
+                    marginLeft: '255px',
+                    zIndex: '1',
+                  }}
+                  onClick={() => handleQuitEmail(input)}
+                >
+                  <RemoveIcon />
+                </Fab>
+              </Box>
               </div>
             ))}
             <div className="input-group">
@@ -745,12 +782,15 @@ export const RegistroEmpresa = () => {
                       name={`prefijoAdditional_${input.id}`}
                       value={input.prefijo}
                       onChange={(e) => {
+                        console.log(input)
+                        console.log(e.target.name)
                         const values = [...additionalPhone];
                         values.map((item) => {
                           if (item.id === input.id) {
                             item.prefijo = e.target.value;
                           }
                         });
+
                         setPhoneAlternativos(values);
                       }}
                       inputProps={{ maxLength: 4, pattern: '[0-9]*' }}
@@ -775,6 +815,7 @@ export const RegistroEmpresa = () => {
                             item.nro = e.target.value;
                           }
                         });
+                        console.log(values)
                         setPhoneAlternativos(values);
                       }}
                       autoComplete="off"
@@ -784,6 +825,22 @@ export const RegistroEmpresa = () => {
                         width: '100%',
                       }}
                     />
+              <Box sx={{ '& > :not(style)': { m: 1 } }}>
+                <Fab
+                  size="small"
+                  color="primary"
+                  aria-label="add"
+                  style={{
+                    position: 'absolute',
+                    marginTop: '-48px',
+                    marginLeft: '205px',
+                    zIndex: '1',
+                  }}
+                  onClick={()=>handleQuitPhone(input)}
+                >
+                  <RemoveIcon />
+                </Fab>
+              </Box>
                   </div>
                 </div>
               </div>

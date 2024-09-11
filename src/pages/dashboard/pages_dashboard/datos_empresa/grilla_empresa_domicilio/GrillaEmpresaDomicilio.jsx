@@ -75,7 +75,7 @@ const crearNuevoRegistro = (props) => {
       theme={themeWithLocale}
       style={{ display: 'flex', justifyContent: 'space-between' }}
     >
-      {crudHabi && (
+      {(crudHabi || idEmpresa == 'PC') && (
         <Button
           color="primary"
           startIcon={<AddIcon />}
@@ -83,7 +83,8 @@ const crearNuevoRegistro = (props) => {
         >
           Nuevo Registro
         </Button>
-      )}
+      )
+      }
       <GridToolbar showQuickFilter={showQuickFilter} />
     </GridToolbarContainer>
   );
@@ -475,7 +476,7 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
         const isInEditMode =
           rowModesModel[rows.indexOf(row)]?.mode === GridRowModes.Edit;
 
-        if (!crudHabi) return [];
+        if (!crudHabi && idEmpresa !== 'PC') return [];
 
         if (isInEditMode) {
           return [
