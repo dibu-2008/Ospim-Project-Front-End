@@ -568,7 +568,7 @@ export const AltaUsuarioInterno = () => {
                   color: theme.palette.primary.main,
                 }}
               >
-                Gestion de Clave
+                Gestión de Clave
               </Typography>
               <Grid container spacing={2}>
                 <Grid item xs={6}>

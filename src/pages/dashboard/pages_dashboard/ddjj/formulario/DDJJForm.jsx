@@ -428,14 +428,17 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     }
 
     if (cuil.length != 11) {
-      rta.error = 'El CUIL ingresado es incorrecto, debe tener 11 dígitos.';
+      rta.error =
+        'El CUIL ingresado (' +
+        cuil +
+        ') es incorrecto, debe tener 11 dígitos.';
       console.log('getAfiliadoEnNomina - 2 - rta:', rta);
       return rta;
     }
 
     const validoCuil = await axiosDDJJ.validarCuil(cuil);
     if (!validoCuil || !validoCuil.resultado) {
-      rta.error = 'El CUIL ingresado no es válido.';
+      rta.error = 'El CUIL ingresado (' + cuil + ') no es válido.';
       console.log('getAfiliadoEnNomina - 3 - rta:', rta);
       console.log('getAfiliadoEnNomina - 3 - validoCuil:', validoCuil);
 
