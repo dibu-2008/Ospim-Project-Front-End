@@ -114,7 +114,7 @@ export const DatosEmpresa = () => {
   };
 
   const OnChangeRazonSocial = (e) => {
-    setRazonSocial(e.target.value);
+    setRazonSocial(e.target.value.toUpperCase());
   };
 
   const onSubmitModificarEmpresa = async (e) => {
