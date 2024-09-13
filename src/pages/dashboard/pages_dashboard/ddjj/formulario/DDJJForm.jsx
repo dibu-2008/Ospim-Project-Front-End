@@ -260,6 +260,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
   const handleChange = (event, newValue) => {
     setTab(newValue);
   };
+
   function a11yProps(index) {
     return {
       id: `simple-tab-${index}`,
@@ -344,6 +345,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
         swal.showWarning(msg, true);
         setDdjjCabe({ ...ddjjCabe, periodo: null });
         mostrarConsultaMissDDJJ();
+        return false;
       } else {
         msg += '.<br><br> Desea ingresar una nueva DDJJ ?<br><br>';
 
@@ -356,9 +358,11 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
         Swal.fire(swal.getSettingConfirm(confirm)).then(async (result) => {
           if (result.isDismissed) {
             setDdjjCabe({ ...ddjjCabe, periodo: null });
+            return false;
           }
         });
       }
+      return true;
     }
   };
 
@@ -534,13 +538,15 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
 
   const handlerGrillaActualizarImportArchivo = async (vecDatos) => {
     //recibe vecDatos de Archivo para actualizar Grilla.-
-    console.log(
-      '** handlerGrillaActualizarImportArchivo - vecDatos: ',
-      vecDatos,
-    );
+    console.log('** DDJJForm.ImportArchivo - vecDatos: ', vecDatos);
+    console.log('** DDJJForm.ImportArchivo - ddjjCabe: ', ddjjCabe);
     const newRowsValidaciones = await useGridValidaciones.validarDDJJ(
       ddjjCabe,
       vecDatos,
+    );
+    console.log(
+      '** DDJJForm.ImportArchivo - newRowsValidaciones: ',
+      newRowsValidaciones,
     );
 
     const rowsNew = await useGridValidaciones.actualizarFiltroErrores(
@@ -638,6 +644,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     ddjjCabeNew.secuencia = ddjjResponse.secuencia;
     ddjjCabeNew.estado = ddjjResponse.estado;
     //console.log('DDJJForm - getDDJJ() - ddjjCabeNew: ', ddjjCabeNew);
+
     const newRowsValidaciones = await useGridValidaciones.validarDDJJ(
       ddjjCabeNew,
       ddjjResponse.afiliados,
@@ -661,8 +668,15 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
   const getMsgValidaciones = () => {
     if (useGridValidaciones.tieneErrores()) {
       const mensajesUnicos = new Set();
-      console.log('rowsValidaciones:', rowsValidaciones.errores);
-      rowsValidaciones.errores.forEach((error) => {
+      console.log(
+        'getMsgValidaciones - rowsValidaciones:',
+        rowsValidaciones.errores,
+      );
+      console.log(
+        'getMsgValidaciones - useGridValidaciones.getRowsValidaciones:',
+        useGridValidaciones.getRowsValidaciones,
+      );
+      useGridValidaciones.getRowsValidaciones.errores.forEach((error) => {
         if (!mensajesUnicos.has(error.descripcion)) {
           mensajesUnicos.add(error.descripcion);
         }
@@ -674,13 +688,17 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
         })
         .join('');
 
+      console.log(
+        'getMsgValidaciones - mensajesFormateados:',
+        mensajesFormateados,
+      );
       return mensajesFormateados;
     }
   };
 
   const getColsMsgValidacion = (msgError) => {
     const colUnicas = new Set();
-    rowsValidaciones.errores.forEach((error) => {
+    useGridValidaciones.getRowsValidaciones.errores.forEach((error) => {
       if (msgError == error.descripcion) {
         if (!colUnicas.has(error.codigo)) {
           colUnicas.add(error.codigo);
@@ -744,22 +762,47 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     }
   };
 
-  const guardarDDJJ = async () => {
-    console.log('guardarDDJJ - INIT');
-
+  const getVecFromGrilla = () => {
     //Tomo los reg de la Grilla y los valido.-
     const mapDatos = gridApiRef.current.getRowModels();
-    console.log('guardarDDJJ - mapDatos:', mapDatos);
-    console.log('guardarDDJJ - mapDatos.size:', mapDatos.size);
+    console.log('getVecFromGrilla - mapDatos:', mapDatos);
+    console.log('getVecFromGrilla - mapDatos.size:', mapDatos.size);
     const vecDatos = [];
     mapDatos.forEach((value, name) => vecDatos.push({ ...value }));
 
-    console.log('guardarDDJJ - vecDatos:', vecDatos);
+    console.log('getVecFromGrilla - vecDatos:', vecDatos);
+    return vecDatos;
+  };
 
-    //vecDatos.forEach((afiliado) => { delete afiliado.gErrores; });
+  const validarDDJJ = async () => {
+    console.log('DDJJForm.validarDDJJ - INIT');
+    //Tomo los reg de la Grilla y los valido.-
+    const vecDatos = getVecFromGrilla();
 
+    if (vecDatos && vecDatos.length > 0 && ddjjCabe.periodo) {
+      console.log('DDJJForm.validarDDJJ - VALIDAAAA');
+      const newRowsValidaciones = await useGridValidaciones.validarDDJJ(
+        ddjjCabe,
+        vecDatos,
+      );
+
+      const rowsNew = await useGridValidaciones.actualizarFiltroErrores(
+        vecDatos,
+        newRowsValidaciones,
+      );
+      setRows(rowsNew);
+      setDdjjModi(true);
+    }
+  };
+
+  const guardarDDJJ = async () => {
+    console.log('guardarDDJJ - INIT');
+
+    //Tomo los reg de la Grilla.-
+    const vecDatos = getVecFromGrilla();
+
+    //Casteo a Dto de backend.-
     const DDJJ = DDJJMapper.rowsToDDJJValDto(ddjjCabe, vecDatos);
-
     console.log('guardarDDJJ - DDJJ:', DDJJ);
 
     if (ddjjCabe.id) {
@@ -932,21 +975,6 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
   //            Hooks y Load de Datos
   // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-  //DataLoad del Componente
-  /*
-  const rowsNewValidar = async () => {
-    console.log('** NO HIZO getDDJJ() !!!');
-    const newRowsValidaciones = await useGridValidaciones.validarDDJJ(
-      ddjjCabe,
-      rowsNew,
-    );
-    const rowsNew2 = useGridValidaciones.actualizarFiltroErrores(
-      rowsNew,
-      newRowsValidaciones,
-    );
-    return rowsNew2;
-  };
-  */
   useEffect(() => {
     // Comprueba si hay alguna fila en modo edición
     const isSomeRowInEditMode = Object.values(rowModesModel).some(
@@ -1000,6 +1028,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
       console.log('useEffect - OK - setHabiModif(false); .....');
       setHabiModif(false);
     }
+    validarDDJJ();
   }, [ddjjCabe]);
 
   useEffect(() => {
@@ -1053,50 +1082,72 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
 
         if (isInEditMode) {
           return [
-            <GridActionsCellItem
-              icon={<SaveIcon />}
-              label="Save"
-              sx={{
-                color: 'primary.main',
-              }}
-              onClick={() => {
-                console.log('useGridCrud.handleSaveClick(row.id) - row:', row);
-                useGridCrud.handleSaveClick(row.id);
-              }}
-              disabled={!habiModif}
-            />,
-            <GridActionsCellItem
-              icon={<CancelIcon />}
-              label="Cancel"
-              className="textPrimary"
-              onClick={() => {
-                useGridCrud.handleCancelClick(gridApiRef, row);
-              }}
-              color="inherit"
-            />,
+            <Tooltip
+              key={Math.round(Math.random() * 100)}
+              title="Guardar modificaciones en la grilla"
+            >
+              <GridActionsCellItem
+                icon={<SaveIcon />}
+                sx={{
+                  color: 'primary.main',
+                }}
+                onClick={() => {
+                  console.log(
+                    'useGridCrud.handleSaveClick(row.id) - row:',
+                    row,
+                  );
+                  useGridCrud.handleSaveClick(row.id);
+                }}
+                disabled={!habiModif}
+              />
+            </Tooltip>,
+            <Tooltip
+              key={Math.round(Math.random() * 100)}
+              title="Cancelar modificaciones realizadas"
+            >
+              <GridActionsCellItem
+                icon={<CancelIcon />}
+                label="Cancelar Edición"
+                className="textPrimary"
+                onClick={() => {
+                  useGridCrud.handleCancelClick(gridApiRef, row);
+                }}
+                color="inherit"
+              />
+            </Tooltip>,
           ];
         }
 
         return [
-          <GridActionsCellItem
-            icon={<EditIcon />}
-            label="Edit"
-            className="textPrimary"
-            onClick={() => {
-              useGridCrud.handleEditClick(row.id);
-            }}
-            color="inherit"
-            disabled={!habiModif}
-          />,
-          <GridActionsCellItem
-            icon={<DeleteIcon />}
-            label="Delete"
-            onClick={() => {
-              useGridCrud.handleDeleteClick(gridApiRef, row);
-            }}
-            color="inherit"
-            disabled={!habiModif}
-          />,
+          <Tooltip
+            key={Math.round(Math.random() * 100)}
+            title="Editar Resgistro"
+          >
+            <GridActionsCellItem
+              icon={<EditIcon />}
+              label="Edit"
+              className="textPrimary"
+              onClick={() => {
+                useGridCrud.handleEditClick(row.id);
+              }}
+              color="inherit"
+              disabled={!habiModif}
+            />
+          </Tooltip>,
+          <Tooltip
+            key={Math.round(Math.random() * 100)}
+            title="Eliminar Resgistro"
+          >
+            <GridActionsCellItem
+              icon={<DeleteIcon />}
+              label="Delete"
+              onClick={() => {
+                useGridCrud.handleDeleteClick(gridApiRef, row);
+              }}
+              color="inherit"
+              disabled={!habiModif}
+            />
+          </Tooltip>,
         ];
       },
     },
@@ -1146,15 +1197,19 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
                 },
               }}
             />
-
-            <CreateIcon
-              sx={{
-                fontSize: '1.8rem',
-                color: '#1A76D2',
-                cursor: 'pointer',
-              }}
-              onClick={handleFormCuilOpen(params.row)}
-            />
+            <Tooltip
+              key={Math.round(Math.random() * 100)}
+              title="Registrar cambio de Nombre"
+            >
+              <CreateIcon
+                sx={{
+                  fontSize: '1.8rem',
+                  color: '#1A76D2',
+                  cursor: 'pointer',
+                }}
+                onClick={handleFormCuilOpen(params.row)}
+              />
+            </Tooltip>
           </div>
         );
       },
@@ -1677,11 +1732,14 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
                   views={['month', 'year']}
                   closeOnSelect={true}
                   //onChange={handleChangePeriodo}
+
                   onChange={(date) => {
-                    validarPeriodo(date);
-                    console.log('onChange - date', date);
-                    setDdjjCabe({ ...ddjjCabe, periodo: date });
-                    setDdjjModi(true);
+                    console.log('DesktopDatePicker.onChange-date:', date);
+                    if (validarPeriodo(date)) {
+                      console.log('onChange - date', date);
+                      setDdjjCabe({ ...ddjjCabe, periodo: date });
+                      setDdjjModi(true);
+                    }
                   }}
                   //value={ddjjCabe?.periodo || ''}
                   value={ddjjCabe?.periodo == null ? '' : ddjjCabe?.periodo}

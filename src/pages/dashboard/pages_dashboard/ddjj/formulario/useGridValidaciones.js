@@ -75,8 +75,9 @@ const deleteValidacionesCuil = (cuil) => {
 const validarDDJJ = async (cabecera, rows) => {
   //1) Armar vector "RowsValidaciones" con los errores de CUIL y de Atributos del CUIL
   //y actualiza el useState.-
+  console.log('useGridValidaciones.validarDDJJ - cabecera:', cabecera);
 
-  console.log('validarDDJJ - rows:', rows);
+  console.log('useGridValidaciones.validarDDJJ - rows:', rows);
   //console.log('validarDDJJ - typeof rows: ', typeof rows);
   const newRowsValidaciones = await getValidacionesBackend(cabecera, rows);
   //console.log('validarDDJJ - newRowsValidaciones: ', newRowsValidaciones);
@@ -161,6 +162,7 @@ const tieneErrores = () => {
   }
   return false;
 };
+
 export const useGridValidaciones = {
   getRowsValidaciones: null,
   setRowsValidaciones: null,

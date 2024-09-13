@@ -55,11 +55,13 @@ const processRowUpdate = async (ddjjCabe, newRow) => {
     console.log(error);
   }
 };
+
 const handleDeleteClick = (gridApiRef, row) => {
   console.log('useCridCrud - handleDeleteClick - HOLA');
   gridApiRef.current.updateRows([{ id: row.id, _action: 'delete' }]);
   useGridValidaciones.remove(row.cuil);
 };
+
 const handleRowEditStop = (gridApiRef, params) => {
   console.log('useGridCrud - handleRowEditStop - 1');
   if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -70,6 +72,7 @@ const handleRowEditStop = (gridApiRef, params) => {
   }
   console.log('useGridCrud - handleRowEditStop - 2');
 };
+
 const handleCancelClick = (gridApiRef, row) => {
   useGridCrud.setRowModesModel({
     ...useGridCrud.getRowModesModel,
@@ -80,11 +83,13 @@ const handleCancelClick = (gridApiRef, row) => {
     gridApiRef.current.updateRows([{ id: row.id, _action: 'delete' }]);
   }
 };
+
 const handleRowModesModelChange = (newRowModesModel) => {
   console.log('useGridCrud - handleRowModesModelChange - 1 ');
   useGridCrud.setRowModesModel(newRowModesModel);
   console.log('useGridCrud - handleRowModesModelChange - 2');
 };
+
 const handleEditClick = (id) => {
   console.log('handleEditClick - id: ' + id);
   //const editedRow = rows.find((row) => row.id === id);
@@ -94,6 +99,7 @@ const handleEditClick = (id) => {
     [id]: { mode: GridRowModes.Edit },
   });
 };
+
 const handleSaveClick = (id) => {
   console.log('useGridCrud - handleSaveClick - 1 - id:', id);
 
@@ -103,6 +109,7 @@ const handleSaveClick = (id) => {
   });
   console.log('useGridCrud - handleSaveClick - 2');
 };
+
 const onProcessRowUpdateError = (error) => {
   console.log(error);
 };

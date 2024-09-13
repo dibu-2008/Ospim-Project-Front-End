@@ -456,7 +456,7 @@ export const DDJJArchivoImport = ({
           name="src-file1"
           aria-label="Archivo"
           onChange={handleFileChange}
-          accept=".csv, .xlsx"
+          accept=".csv, .xlsx, .xls"
           title=""
           //disabled={!habiModif}
         />
