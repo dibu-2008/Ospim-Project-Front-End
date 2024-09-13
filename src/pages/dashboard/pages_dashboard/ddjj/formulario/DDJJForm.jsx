@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { useState, useEffect, useContext } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
@@ -201,7 +202,9 @@ function EditToolbar(props) {
 }
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
+export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ, initFormDDJJ }) => {
+  const navigate = useNavigate();
+
   const ID_EMPRESA = localStorageService.getEmpresaId();
   const [ddjjCabe, setDdjjCabe] = useState({
     id: idDDJJ || null,
@@ -939,7 +942,16 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
   };
 
   const limpiarEstadoForm = () => {
+    //navigate('/dashboard/ddjj/alta');
+    initFormDDJJ();
+
+    //if (1 == 2) {
     setDdjjModi(false); //Bandera para saber si se actualizo algun dato
+
+    console.log('limpiarEstadoForm - idDDJJ:', idDDJJ);
+
+    idDDJJ = null; //limpio var de consulta grilla Mis DDJJ
+    console.log('limpiarEstadoForm - idDDJJ:', idDDJJ);
     const ddjjCabeNew = {
       ...ddjjCabe,
       id: null,
@@ -953,6 +965,8 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     setTituloSec(getTituloSec(ddjjCabeNew));
 
     limpiarEstadoDetalleForm();
+    habiModifRefresh();
+    //}
   };
 
   const limpiarEstadoDetalleForm = () => {
@@ -1088,6 +1102,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
             >
               <GridActionsCellItem
                 icon={<SaveIcon />}
+                label=""
                 sx={{
                   color: 'primary.main',
                 }}
