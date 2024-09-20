@@ -1,9 +1,29 @@
 import dayjs from 'dayjs';
 
+const formatIntereses = new Intl.NumberFormat('es-CL', {
+  minimumFractionDigits: 6,
+  useGrouping: true,
+});
+
 const formatCurrency = new Intl.NumberFormat('es-CL', {
   minimumFractionDigits: 2,
   useGrouping: true,
 });
+
+const interesesString = (value) => {
+  try {
+    if (value == 0) {
+      return formatIntereses.format(0);
+    }
+    if (value && value !== '' && value !== null) {
+      return formatIntereses.format(value);
+    }
+    return '';
+  } catch (error) {
+    console.log('currencyString - error: ', error);
+    return '';
+  }
+};
 
 const currencyString = (value) => {
   try {
@@ -195,6 +215,8 @@ const toFechaValida = (value) => {
 const formatter = {
   currency: formatCurrency,
   currencyString: currencyString,
+  intereses: formatIntereses,
+  interesesString: interesesString,
   dateObject: dateObject,
   dateString: dateString,
   dateToStringBackend: toBackendStr,

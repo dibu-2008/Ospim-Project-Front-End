@@ -258,6 +258,9 @@ export const InteresesAfip = () => {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell',
+      valueFormatter: ({ value }) => {
+        return formatter.interesesString(value);
+      },
     },
     {
       field: 'actions',
