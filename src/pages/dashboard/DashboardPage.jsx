@@ -189,7 +189,7 @@ const DashboardPage = () => {
                 )}
 
                 {rolFuncionalidades.USUARIO_INTERNO && (
-                  <NavLink to="./altausuariointerno" className="icon-container">
+                  <NavLink to="./usuariointerno" className="icon-container">
                     <PersonAddIcon className="icon-link" />{' '}
                     {open && <span className="icon-link">Usuario Interno</span>}
                   </NavLink>

@@ -35,13 +35,13 @@ import {
   GridToolbar,
 } from '@mui/x-data-grid';
 
-import { axiosUsuariosInternos } from './AltaUsuarioInternoApi';
+import { axiosUsuariosInternos } from './usuarioInternoApi';
 import { axiosRoles } from '@pages/dashboard/pages_dashboard/roles/RolesApi';
 
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 
 import swal from '@/components/swal/swal';
-import './AltaUsuarioInterno.css';
+import './usuarioInterno.css';
 
 import { dataGridStyle } from '@/common/dataGridStyle';
 import { margin } from '@mui/system';
@@ -107,7 +107,7 @@ const crearNuevoRegistro = (props) => {
   );
 };
 
-export const AltaUsuarioInterno = () => {
+export const UsuarioInterno = () => {
   const [rowModesModel, setRowModesModel] = useState({});
   const [rows, setRows] = useState([]);
   const [roles, setRoles] = useState([]);
