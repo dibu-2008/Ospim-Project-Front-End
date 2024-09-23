@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import Autocomplete from '@mui/material/Autocomplete';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import { Box } from '@mui/system';
@@ -7,6 +8,7 @@ import TextField from '@mui/material/TextField';
 import dayjs from 'dayjs';
 import './DDJJFiltro.css';
 import { axiosDDJJEmpleado } from './DDJJConsultaEmpleadoApi';
+import { consultarEmpresas } from '@/common/api/EmpresasApi';
 
 import { DDJJGrilla } from './DDJJGrilla';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
@@ -19,6 +21,8 @@ export const DDJJFiltro = () => {
     hasta: ahora,
     cuit: null,
   });
+  const [empresa, setEmpresa] = useState({ cuit: '', razonSocial: '' });
+  const [empresas, setEmpresas] = useState([]);
   const [rows, setRows] = useState([]);
 
   const handlerConsultar = async () => {
@@ -49,6 +53,13 @@ export const DDJJFiltro = () => {
   };
 
   useEffect(() => {
+    const ObtenerEmpresas = async () => {
+      const empresas = await consultarEmpresas();
+      console.log('** ObtenerEmpresa - empresas: ', empresas);
+      setEmpresas(empresas);
+    };
+
+    ObtenerEmpresas();
     handlerConsultar();
   }, []);
 
@@ -96,21 +107,46 @@ export const DDJJFiltro = () => {
           <div
             style={{
               height: '100px',
-              width: '250px',
+              width: '550px',
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
               marginTop: '8px',
             }}
           >
-            <TextField
-              id="outlined-basic"
-              label="Cuit"
-              variant="outlined"
-              value={filtro.cuit || ''}
-              onChange={(oValue) =>
-                setFiltro({ ...filtro, cuit: oValue.target.value })
-              }
+            <Autocomplete
+              disablePortal
+              id="combo-box-demo"
+              options={empresas}
+              key={(option) => option.id}
+              onChange={(event, value) => {
+                console.log('** onChange-value:', value);
+                setEmpresa(value);
+
+                setFiltro({ ...filtro, cuit: value?.cuit || null });
+              }}
+              value={empresa}
+              getOptionLabel={(reg) => reg.cuit}
+              sx={{ width: 190 }}
+              renderInput={(params) => <TextField {...params} label="CUIT" />}
+            />
+            -
+            <Autocomplete
+              disablePortal
+              id="combo-box-demo"
+              options={empresas}
+              key={(option) => option.id}
+              onChange={(event, value) => {
+                console.log('value:', value);
+                setEmpresa(value);
+                setFiltro({ ...filtro, cuit: value?.cuit || null });
+              }}
+              value={empresa}
+              getOptionLabel={(reg) => reg.razonSocial}
+              sx={{ width: 300 }}
+              renderInput={(params) => (
+                <TextField {...params} label="Razón Social" />
+              )}
             />
           </div>
         </Stack>

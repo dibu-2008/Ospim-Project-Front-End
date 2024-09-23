@@ -1,4 +1,5 @@
 import { axiosCrud } from '@components/axios/axiosCrud';
+import { consultarEmpresas } from '@/common/api/EmpresasApi';
 import swal from '@components/swal/swal';
 
 const HTTP_MSG_ALTA = import.meta.env.VITE_HTTP_MSG_ALTA;
@@ -8,20 +9,6 @@ const HTTP_MSG_ALTA_ERROR = import.meta.env.VITE_HTTP_MSG_ALTA_ERROR;
 const HTTP_MSG_MODI_ERROR = import.meta.env.VITE_HTTP_MSG_MODI_ERROR;
 const HTTP_MSG_BAJA_ERROR = import.meta.env.VITE_HTTP_MSG_BAJA_ERROR;
 const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
-
-export const consultarEmpresas = async () => {
-  const URL = '/empresa';
-  try {
-    const data = await axiosCrud.consultar(URL);
-    return data || [];
-  } catch (error) {
-    swal.showErrorBackEnd(
-      HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
-      error,
-    );
-    return [];
-  }
-};
 
 export const consultarEmpresa = async () => {
   const URL = '/auth/login/usuario';

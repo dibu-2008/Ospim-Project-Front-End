@@ -85,6 +85,10 @@ export const DDJJTabs = () => {
     setTabSelected(1);
   };
 
+  const initFormDDJJ = () => {
+    setIdDDJJ(null);
+  };
+
   return (
     <div className="declaraciones_juradas_container">
       <h1>Administración de Declaraciones Juradas</h1>
@@ -110,6 +114,7 @@ export const DDJJTabs = () => {
             <DDJJForm
               idDDJJ={idDDJJ}
               mostrarConsultaMissDDJJ={mostrarConsultaMissDDJJ}
+              initFormDDJJ={initFormDDJJ}
             ></DDJJForm>
           </CustomTabPanel>
           <CustomTabPanel value={tabSelected} index={1}>

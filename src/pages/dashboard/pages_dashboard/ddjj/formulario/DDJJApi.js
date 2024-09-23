@@ -93,7 +93,7 @@ export const crearAltaDeclaracionJurada = async (empresaId, registro) => {
     throw data;
   } catch (error) {
     swal.showErrorBackEnd(HTTP_MSG_ALTA_ERROR, error);
-    return {};
+    return null;
   }
 };
 
@@ -168,13 +168,13 @@ const obtenerPeriodoAnterior = async (empresaId, periodo) => {
 
   try {
     const data = await axiosCrud.consultar(URL);
-    return data || [];
+    return data || null;
   } catch (error) {
     swal.showErrorBackEnd(
       HTTP_MSG_CONSUL_ERROR + ` (${URL} - status: ${error.status})`,
       error,
     );
-    return [];
+    return null;
   }
 };
 

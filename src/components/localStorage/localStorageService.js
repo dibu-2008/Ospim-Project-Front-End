@@ -189,8 +189,20 @@ export const funcionHabilitada = (codigo) => {
   return false;
 };
 
+export const funcionEmpresaDatosModiHabilitada = () => {
+  return funcionHabilitada('EMPRESA_DATOS_MODI');
+};
+
 export const funcionABMEmpresaHabilitada = () => {
-  return funcionHabilitada('CONSULTA_EMPRESA_ALTA_MODI');
+  let result = -1;
+  try {
+    result = window.location.href.toLowerCase().indexOf('/registercompany');
+  } catch (e) {
+    console.log('funcionABMEmpresaHabilitada - ERROR: ', e);
+  }
+
+  return funcionHabilitada('EMPRESA_CONTACTO_DOMICILIO_ABM') || result > -1;
+  //return funcionHabilitada('CONSULTA_EMPRESA_ALTA_MODI');
 };
 
 const localStorageService = {
@@ -232,6 +244,9 @@ const localStorageService = {
   },
   funcionABMEmpresaHabilitada: function () {
     return funcionABMEmpresaHabilitada();
+  },
+  funcionEmpresaDatosModiHabilitada: function () {
+    return funcionEmpresaDatosModiHabilitada();
   },
 };
 

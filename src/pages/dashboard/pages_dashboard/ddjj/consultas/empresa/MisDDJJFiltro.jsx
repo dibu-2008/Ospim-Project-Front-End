@@ -48,6 +48,14 @@ export const MisDDJJFiltro = ({ handlerDDJJEditar }) => {
     }
   };
 
+  const initFiltro = () => {
+    setFiltro({
+      desde: ahoraMenosUnAnio,
+      hasta: ahora,
+    });
+    handlerConsultar();
+  };
+
   useEffect(() => {
     handlerConsultar();
   }, []);
@@ -95,6 +103,13 @@ export const MisDDJJFiltro = ({ handlerDDJJEditar }) => {
             style={{ marginLeft: '2em' }}
           >
             Buscar
+          </Button>
+          <Button
+            onClick={initFiltro}
+            variant="contained"
+            style={{ marginLeft: '2em' }}
+          >
+            Limpiar Filtro
           </Button>
         </Stack>
       </div>

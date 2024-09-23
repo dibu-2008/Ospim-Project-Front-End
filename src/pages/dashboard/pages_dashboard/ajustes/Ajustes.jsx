@@ -1,6 +1,6 @@
 import * as locales from '@mui/material/locale';
 import { useState, useEffect, useMemo, useContext } from 'react';
-import { Box, Button } from '@mui/material';
+import { TextField, Box, Button } from '@mui/material';
 import CurrencyInput from 'react-currency-input-field';
 import { formatValue } from 'react-currency-input-field';
 import AddIcon from '@mui/icons-material/Add';
@@ -14,6 +14,7 @@ import {
   GridToolbarContainer,
   GridActionsCellItem,
   GridRowEditStopReasons,
+  useGridApiRef,
 } from '@mui/x-data-grid';
 import { axiosAjustes } from './AjustesApi';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
@@ -21,8 +22,8 @@ import './ajustes.css';
 import formatter from '@/common/formatter';
 import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 import { InputPeriodo } from '@/components/InputPeriodo';
-import swal from '@/components/swal/swal';
 import Swal from 'sweetalert2';
+import { consultarEmpresa } from '@/common/api/EmpresasApi';
 
 import { UserContext } from '@/context/userContext';
 
@@ -86,6 +87,8 @@ const crearNuevoRegistro = (props) => {
 };
 
 export const Ajustes = () => {
+  const gridApiRef = useGridApiRef();
+
   const [locale, setLocale] = useState('esES');
   const [rows, setRows] = useState([]);
   const [aportes, setAportes] = useState([]);
@@ -262,6 +265,37 @@ export const Ajustes = () => {
     setRowModesModel(newRowModesModel);
   };
 
+  const obtenerEmpresa = async (id, cuit) => {
+    //console.log('obtenerEmpresa- cuit:', cuit);
+    //console.log('obtenerEmpresa- id:', id);
+
+    let razonSocial = '';
+    const vecEmpre = await consultarEmpresa(cuit);
+    console.log('obtenerEmpresa- vecEmpre:', vecEmpre);
+    if (
+      vecEmpre &&
+      vecEmpre.length &&
+      vecEmpre.length > 0 &&
+      vecEmpre[0].razonSocial
+    ) {
+      //console.log('ENTROOO');
+      razonSocial = vecEmpre[0].razonSocial;
+    } else {
+      gridApiRef.current.setEditCellValue({
+        id: id,
+        field: 'cuit',
+        value: '',
+      });
+    }
+    //console.log('obtenerEmpresa- razonSocial:', razonSocial);
+
+    gridApiRef.current.setEditCellValue({
+      id: id,
+      field: 'razonSocial',
+      value: razonSocial,
+    });
+  };
+
   const columnas = [
     {
       field: 'cuit',
@@ -272,10 +306,62 @@ export const Ajustes = () => {
       headerAlign: 'center',
       align: 'right',
       headerClassName: 'header--cell',
+
+      //obtenerEmpresa = async (id, cuit)
+      renderEditCell: (params) => {
+        return (
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <TextField
+              id={params.row.id ? 'cuit' + params.row.id.toString() : ''}
+              fullWidth
+              value={params.value || ''}
+              onBlur={(event) => {
+                obtenerEmpresa(params.id, params.value);
+              }}
+              onChange={(event) => {
+                const newValue = event.target.value;
+
+                params.api.setEditCellValue({
+                  id: params.id,
+                  field: 'cuit',
+                  value: newValue,
+                });
+              }}
+              onFocus={(event) => {
+                const cuitActual = params.api.getCellValue(params.id, 'cuit');
+                console.log('onFocus - cuitActual:', cuitActual);
+              }}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                    borderColor: 'transparent',
+                  },
+                  '&:hover fieldset': {
+                    borderColor: 'transparent',
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: 'transparent',
+                  },
+                },
+              }}
+            />
+          </div>
+        );
+      },
+    },
+    {
+      field: 'razonSocial',
+      headerName: 'RAZÓN SOCIAL',
+      flex: 1,
+      type: 'text',
+      editable: true,
+      headerAlign: 'center',
+      align: 'right',
+      headerClassName: 'header--cell',
     },
     {
       field: 'periodo_original',
-      headerName: 'PERIODO ORIGINAL',
+      headerName: 'PERÍODO ORIGINAL',
       flex: 1,
       editable: true,
       headerAlign: 'center',
@@ -379,7 +465,7 @@ export const Ajustes = () => {
     {
       field: 'boleta',
       headerName: 'NRO BOLETA',
-      width: 150,
+      width: 100,
       editable: false,
       type: 'number',
       headerAlign: 'center',
@@ -462,6 +548,7 @@ export const Ajustes = () => {
       >
         <ThemeProvider theme={themeWithLocale}>
           <StripedDataGrid
+            apiRef={gridApiRef}
             rows={rows}
             columns={columnas}
             getRowId={(row) => rows.indexOf(row)}

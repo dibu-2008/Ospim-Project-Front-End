@@ -180,8 +180,16 @@ const DashboardPage = () => {
                   <HomeIcon className="icon-link" />{' '}
                   {open && <span className="icon-link">Inicio</span>}
                 </NavLink>
+
+                {rolFuncionalidades.DATOS_PERFIL && (
+                  <NavLink to="./misdatos" className="icon-container">
+                    <PersonIcon className="icon-link" />{' '}
+                    {open && <span className="icon-link">Datos de Perfil</span>}
+                  </NavLink>
+                )}
+
                 {rolFuncionalidades.USUARIO_INTERNO && (
-                  <NavLink to="./altausuariointerno" className="icon-container">
+                  <NavLink to="./usuariointerno" className="icon-container">
                     <PersonAddIcon className="icon-link" />{' '}
                     {open && <span className="icon-link">Usuario Interno</span>}
                   </NavLink>
@@ -284,12 +292,7 @@ const DashboardPage = () => {
                     {open && <span className="icon-link">Feriados</span>}
                   </NavLink>
                 )}
-                {rolFuncionalidades.DATOS_PERFIL && (
-                  <NavLink to="./misdatos" className="icon-container">
-                    <PersonIcon className="icon-link" />{' '}
-                    {open && <span className="icon-link">Datos de Perfil</span>}
-                  </NavLink>
-                )}
+
                 {rolFuncionalidades.PUBLICACIONES && (
                   <NavLink to="./publicaciones" className="icon-container">
                     <PreviewIcon className="icon-link" />{' '}

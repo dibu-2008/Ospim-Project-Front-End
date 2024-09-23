@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { useState, useEffect, useContext } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
@@ -201,7 +202,9 @@ function EditToolbar(props) {
 }
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
+export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ, initFormDDJJ }) => {
+  const navigate = useNavigate();
+
   const ID_EMPRESA = localStorageService.getEmpresaId();
   const [ddjjCabe, setDdjjCabe] = useState({
     id: idDDJJ || null,
@@ -242,7 +245,11 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
   const [habiModif, setHabiModif] = useState(false); //EX actualizacionHabilitada - SI estdo "PE" o ddjjCabe.id=null => puedo modificar.-
   const [tituloSec, setTituloSec] = useState('');
 
-  const [formCuilReg, setFormCuilReg] = useState({});
+  const [formCuilReg, setFormCuilReg] = useState({
+    cuil: null,
+    apellido: null,
+    nombre: null,
+  });
   const [formCuilShow, setFormCuilShow] = useState(false);
   const [camaras, setCamaras] = useState([]);
   const [categorias, setCategorias] = useState([]);
@@ -256,6 +263,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
   const handleChange = (event, newValue) => {
     setTab(newValue);
   };
+
   function a11yProps(index) {
     return {
       id: `simple-tab-${index}`,
@@ -297,6 +305,20 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
   // xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
   // Eventos
+  const limpiarApeNombre = (texto) => {
+    const patron = /[A-Za-z ]/;
+    let textoLimpio = '';
+    for (let i = 0; i <= texto.length - 1; i++) {
+      let letra = texto[i];
+      if (patron.test(letra)) {
+        textoLimpio = textoLimpio + letra;
+        //console.log(testo);
+        //console.log('patron.test(testo): FALSE - letra:', letra);
+        //return false;
+      }
+    }
+    return textoLimpio;
+  };
 
   const validarPeriodo = async (date) => {
     console.log('validarPeriodo - date:', date);
@@ -326,6 +348,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
         swal.showWarning(msg, true);
         setDdjjCabe({ ...ddjjCabe, periodo: null });
         mostrarConsultaMissDDJJ();
+        return false;
       } else {
         msg += '.<br><br> Desea ingresar una nueva DDJJ ?<br><br>';
 
@@ -338,15 +361,18 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
         Swal.fire(swal.getSettingConfirm(confirm)).then(async (result) => {
           if (result.isDismissed) {
             setDdjjCabe({ ...ddjjCabe, periodo: null });
+            return false;
           }
         });
       }
+      return true;
     }
   };
 
   const handleFormCuilOpen = (row) => () => {
     //EX handleDataModal
-    console.log('handleFormCuilOpen - INIT');
+    console.log('handleFormCuilOpen - INIT - row:', row);
+
     setFormCuilReg({
       cuil: row.cuil,
       apellido: row.apellido,
@@ -377,8 +403,8 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     console.log('obtenerAfiliados - rta:', rta);
     if (rta.error != 'OK') {
       swal.showWarning(rta.error);
-      setAfiliadoGrilla(id, cuilNew, '', '');
-      return;
+      setAfiliadoGrilla(id, '', '', '');
+      return false;
     }
 
     console.log('obtenerAfiliados - (2)');
@@ -400,27 +426,36 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
   };
 
   const getAfiliadoEnNomina = async (cuil) => {
+    console.log('getAfiliadoEnNomina - cuil:', cuil);
     const rta = {};
     if (cuil === '') {
       rta.error = 'Debe ingresar un CUIL y presionar la lupa';
+      console.log('getAfiliadoEnNomina - 1 - rta:', rta);
       return rta;
     }
 
     if (cuil.length != 11) {
-      rta.error = 'El CUIL ingresado es incorrecto, debe tener 11 dígitos.';
+      rta.error =
+        'El CUIL ingresado (' +
+        cuil +
+        ') es incorrecto, debe tener 11 dígitos.';
+      console.log('getAfiliadoEnNomina - 2 - rta:', rta);
       return rta;
     }
 
     const validoCuil = await axiosDDJJ.validarCuil(cuil);
     if (!validoCuil || !validoCuil.resultado) {
-      rta.error = 'El CUIL ingresado no es válido.';
+      rta.error = 'El CUIL ingresado (' + cuil + ') no es válido.';
+      console.log('getAfiliadoEnNomina - 3 - rta:', rta);
+      console.log('getAfiliadoEnNomina - 3 - validoCuil:', validoCuil);
+
       return rta;
     }
 
     //const afiliados = await axiosDDJJ.getAfiliado(cuil);
     rta.error = 'OK';
     rta.afiliados = await axiosDDJJ.getAfiliado(cuil);
-    //console.log('validarAfiliado - OK !!!!');
+    console.log('getAfiliadoEnNomina - rta:', rta);
 
     return rta;
   };
@@ -506,13 +541,15 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
 
   const handlerGrillaActualizarImportArchivo = async (vecDatos) => {
     //recibe vecDatos de Archivo para actualizar Grilla.-
-    console.log(
-      '** handlerGrillaActualizarImportArchivo - vecDatos: ',
-      vecDatos,
-    );
+    console.log('** DDJJForm.ImportArchivo - vecDatos: ', vecDatos);
+    console.log('** DDJJForm.ImportArchivo - ddjjCabe: ', ddjjCabe);
     const newRowsValidaciones = await useGridValidaciones.validarDDJJ(
       ddjjCabe,
       vecDatos,
+    );
+    console.log(
+      '** DDJJForm.ImportArchivo - newRowsValidaciones: ',
+      newRowsValidaciones,
     );
 
     const rowsNew = await useGridValidaciones.actualizarFiltroErrores(
@@ -567,20 +604,31 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     return false;
   };
 
-  const getTituloSec = () => {
-    console.log('getTituloSec - ddjjCabe:', ddjjCabe);
-    if (ddjjCabe) {
-      if (ddjjCabe.id && ddjjCabe.estado && ddjjCabe.estado == 'PE') {
+  const getTituloSec = (ddjjCabeNew) => {
+    if (!ddjjCabeNew || ddjjCabeNew == null) {
+      ddjjCabeNew = ddjjCabe;
+    }
+
+    if (ddjjCabeNew) {
+      if (ddjjCabeNew.estado && ddjjCabeNew.estado == 'PE') {
         return 'Pendiente';
       }
-      if (ddjjCabe.secuencia && ddjjCabe.secuencia != 0) {
-        return 'Rectificativa Nro: ' + ddjjCabe.secuencia;
+      if (
+        ddjjCabeNew.hasOwnProperty('secuencia') &&
+        ddjjCabeNew.secuencia != null &&
+        ddjjCabeNew.secuencia != 0
+      ) {
+        return 'Rectificativa Nro: ' + ddjjCabeNew.secuencia;
       }
-      if (ddjjCabe.secuencia && ddjjCabe.secuencia == 0) {
+      if (
+        ddjjCabeNew.hasOwnProperty('secuencia') &&
+        ddjjCabeNew.secuencia === 0
+      ) {
+        console.log('getTituloSec - FIN - ddjjCabeNew - 3');
         return 'Original';
       }
     }
-    return '...';
+    return ' Nueva';
   };
 
   const getDDJJ = async (idDDJJ) => {
@@ -599,6 +647,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     ddjjCabeNew.secuencia = ddjjResponse.secuencia;
     ddjjCabeNew.estado = ddjjResponse.estado;
     //console.log('DDJJForm - getDDJJ() - ddjjCabeNew: ', ddjjCabeNew);
+
     const newRowsValidaciones = await useGridValidaciones.validarDDJJ(
       ddjjCabeNew,
       ddjjResponse.afiliados,
@@ -622,8 +671,15 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
   const getMsgValidaciones = () => {
     if (useGridValidaciones.tieneErrores()) {
       const mensajesUnicos = new Set();
-      console.log('rowsValidaciones:', rowsValidaciones.errores);
-      rowsValidaciones.errores.forEach((error) => {
+      console.log(
+        'getMsgValidaciones - rowsValidaciones:',
+        rowsValidaciones.errores,
+      );
+      console.log(
+        'getMsgValidaciones - useGridValidaciones.getRowsValidaciones:',
+        useGridValidaciones.getRowsValidaciones,
+      );
+      useGridValidaciones.getRowsValidaciones.errores.forEach((error) => {
         if (!mensajesUnicos.has(error.descripcion)) {
           mensajesUnicos.add(error.descripcion);
         }
@@ -635,13 +691,17 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
         })
         .join('');
 
+      console.log(
+        'getMsgValidaciones - mensajesFormateados:',
+        mensajesFormateados,
+      );
       return mensajesFormateados;
     }
   };
 
   const getColsMsgValidacion = (msgError) => {
     const colUnicas = new Set();
-    rowsValidaciones.errores.forEach((error) => {
+    useGridValidaciones.getRowsValidaciones.errores.forEach((error) => {
       if (msgError == error.descripcion) {
         if (!colUnicas.has(error.codigo)) {
           colUnicas.add(error.codigo);
@@ -649,9 +709,13 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
       }
     });
 
+    console.log('getColsMsgValidacion - colUnicas:', colUnicas);
+
     if (colUnicas.size > 0) {
       const mensajesFormateados = Array.from(colUnicas)
         .map((codigo, index) => {
+          if (codigo == 'empresaDomicilioId') return 'Planta';
+          if (codigo == 'periodo') return 'Período';
           const reg = columns.find((regloop) => {
             return regloop.field === codigo;
           });
@@ -701,22 +765,47 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     }
   };
 
-  const guardarDDJJ = async () => {
-    console.log('guardarDDJJ - INIT');
-
+  const getVecFromGrilla = () => {
     //Tomo los reg de la Grilla y los valido.-
     const mapDatos = gridApiRef.current.getRowModels();
-    console.log('guardarDDJJ - mapDatos:', mapDatos);
-    console.log('guardarDDJJ - mapDatos.size:', mapDatos.size);
+    console.log('getVecFromGrilla - mapDatos:', mapDatos);
+    console.log('getVecFromGrilla - mapDatos.size:', mapDatos.size);
     const vecDatos = [];
     mapDatos.forEach((value, name) => vecDatos.push({ ...value }));
 
-    console.log('guardarDDJJ - vecDatos:', vecDatos);
+    console.log('getVecFromGrilla - vecDatos:', vecDatos);
+    return vecDatos;
+  };
 
-    //vecDatos.forEach((afiliado) => { delete afiliado.gErrores; });
+  const validarDDJJ = async () => {
+    console.log('DDJJForm.validarDDJJ - INIT');
+    //Tomo los reg de la Grilla y los valido.-
+    const vecDatos = getVecFromGrilla();
 
+    if (vecDatos && vecDatos.length > 0 && ddjjCabe.periodo) {
+      console.log('DDJJForm.validarDDJJ - VALIDAAAA');
+      const newRowsValidaciones = await useGridValidaciones.validarDDJJ(
+        ddjjCabe,
+        vecDatos,
+      );
+
+      const rowsNew = await useGridValidaciones.actualizarFiltroErrores(
+        vecDatos,
+        newRowsValidaciones,
+      );
+      setRows(rowsNew);
+      setDdjjModi(true);
+    }
+  };
+
+  const guardarDDJJ = async () => {
+    console.log('guardarDDJJ - INIT');
+
+    //Tomo los reg de la Grilla.-
+    const vecDatos = getVecFromGrilla();
+
+    //Casteo a Dto de backend.-
     const DDJJ = DDJJMapper.rowsToDDJJValDto(ddjjCabe, vecDatos);
-
     console.log('guardarDDJJ - DDJJ:', DDJJ);
 
     if (ddjjCabe.id) {
@@ -724,8 +813,11 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
         'guardarDeclaracionJurada - axiosDDJJ.actualizar(ID_EMPRESA, DDJJ); ',
       );
       const bOK = await axiosDDJJ.actualizar(ID_EMPRESA, DDJJ);
-      setDdjjModi(false);
-      return ddjjCabe.id;
+      if (bOK) {
+        setDdjjModi(false);
+        return ddjjCabe.id;
+      }
+      return false;
     } else {
       console.log(
         'guardarDeclaracionJurada - axiosDDJJ.crear(ID_EMPRESA, DDJJ); ',
@@ -741,7 +833,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
         });
 
         altaDDJJUpdateGrillaAfiliadosId(data);
-        setTituloSec(getTituloSec(data.secuencia));
+        setTituloSec(getTituloSec(data));
         setDdjjModi(false);
         return data.id;
       }
@@ -805,22 +897,33 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
         textoBtnOK: 'Si, Presentar !',
       };
       Swal.fire(swal.getSettingConfirm(confirm)).then(async (result) => {
+        console.log('presentarDDJJ - result:', result);
         if (result.isConfirmed) {
           if (!ddjjCabe.id || ddjjModi) {
-            const idNew = await guardarDDJJ();
-            ddjjCabe.id = idNew;
+            const idNew = await guardarDDJJ(); //viene false o el id
+            if (idNew) {
+              ddjjCabe.id = idNew;
+            } else {
+              result.isConfirmed = false;
+            }
           }
 
-          const data = await axiosDDJJ.presentar(ID_EMPRESA, ddjjCabe.id);
-          if (data) {
-            const ddjjCabeNew = {
-              ...ddjjCabe,
-              estado: data.estado,
-              secuencia: data.secuencia,
-            };
-            setDdjjCabe(ddjjCabeNew);
-            setTituloSec(getTituloSec(data.secuencia));
-            mostrarConsultaMissDDJJ();
+          if (result.isConfirmed) {
+            const data = await axiosDDJJ.presentar(ID_EMPRESA, ddjjCabe.id);
+            if (data) {
+              const ddjjCabeNew = {
+                ...ddjjCabe,
+                estado: data.estado,
+                secuencia: data.secuencia,
+              };
+              setDdjjCabe(ddjjCabeNew);
+              setTituloSec(getTituloSec(data));
+              mostrarConsultaMissDDJJ();
+            }
+          } else {
+            console.log(
+              'presentarDDJJ - el guardarDDJJ() no andubo - result.isConfirmed: FALSE ',
+            );
           }
         }
       });
@@ -839,16 +942,31 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
   };
 
   const limpiarEstadoForm = () => {
+    //navigate('/dashboard/ddjj/alta');
+    initFormDDJJ();
+
+    //if (1 == 2) {
     setDdjjModi(false); //Bandera para saber si se actualizo algun dato
+
+    console.log('limpiarEstadoForm - idDDJJ:', idDDJJ);
+
+    idDDJJ = null; //limpio var de consulta grilla Mis DDJJ
+    console.log('limpiarEstadoForm - idDDJJ:', idDDJJ);
     const ddjjCabeNew = {
       ...ddjjCabe,
       id: null,
+      secuencia: null,
       periodo: null,
       estado: null,
     };
     setDdjjCabe(ddjjCabeNew);
+    console.log('*5* - ddjjCabeNew: ', ddjjCabeNew);
+    console.log('*5* - getTituloSec(ddjjCabeNew): ', getTituloSec(ddjjCabeNew));
+    setTituloSec(getTituloSec(ddjjCabeNew));
 
     limpiarEstadoDetalleForm();
+    habiModifRefresh();
+    //}
   };
 
   const limpiarEstadoDetalleForm = () => {
@@ -871,21 +989,6 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
   //            Hooks y Load de Datos
   // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-  //DataLoad del Componente
-  /*
-  const rowsNewValidar = async () => {
-    console.log('** NO HIZO getDDJJ() !!!');
-    const newRowsValidaciones = await useGridValidaciones.validarDDJJ(
-      ddjjCabe,
-      rowsNew,
-    );
-    const rowsNew2 = useGridValidaciones.actualizarFiltroErrores(
-      rowsNew,
-      newRowsValidaciones,
-    );
-    return rowsNew2;
-  };
-  */
   useEffect(() => {
     // Comprueba si hay alguna fila en modo edición
     const isSomeRowInEditMode = Object.values(rowModesModel).some(
@@ -939,6 +1042,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
       console.log('useEffect - OK - setHabiModif(false); .....');
       setHabiModif(false);
     }
+    validarDDJJ();
   }, [ddjjCabe]);
 
   useEffect(() => {
@@ -972,81 +1076,104 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     {
       field: 'id',
       type: 'number',
-      headerName: 'Fila',
       width: 80,
-      headerAlign: 'center',
       align: 'center',
+      headerName: 'Fila',
+      headerAlign: 'center',
       headerClassName: 'header--cell',
       renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
     },
     {
       field: 'actions',
       type: 'actions',
-      headerName: 'Acciones',
       width: 100,
-      headerAlign: 'center',
       align: 'center',
+      headerName: 'Acciones',
+      headerAlign: 'center',
       headerClassName: 'header--cell',
       getActions: ({ row }) => {
         const isInEditMode = rowModesModel[row.id]?.mode === GridRowModes.Edit;
 
         if (isInEditMode) {
           return [
-            <GridActionsCellItem
-              icon={<SaveIcon />}
-              label="Save"
-              sx={{
-                color: 'primary.main',
-              }}
-              onClick={() => {
-                console.log('useGridCrud.handleSaveClick(row.id) - row:', row);
-                useGridCrud.handleSaveClick(row.id);
-              }}
-              disabled={!habiModif}
-            />,
-            <GridActionsCellItem
-              icon={<CancelIcon />}
-              label="Cancel"
-              className="textPrimary"
-              onClick={() => {
-                useGridCrud.handleCancelClick(gridApiRef, row);
-              }}
-              color="inherit"
-            />,
+            <Tooltip
+              key={Math.round(Math.random() * 100)}
+              title="Guardar modificaciones en la grilla"
+            >
+              <GridActionsCellItem
+                icon={<SaveIcon />}
+                label=""
+                sx={{
+                  color: 'primary.main',
+                }}
+                onClick={() => {
+                  console.log(
+                    'useGridCrud.handleSaveClick(row.id) - row:',
+                    row,
+                  );
+                  useGridCrud.handleSaveClick(row.id);
+                }}
+                disabled={!habiModif}
+              />
+            </Tooltip>,
+            <Tooltip
+              key={Math.round(Math.random() * 100)}
+              title="Cancelar modificaciones realizadas"
+            >
+              <GridActionsCellItem
+                icon={<CancelIcon />}
+                label="Cancelar Edición"
+                className="textPrimary"
+                onClick={() => {
+                  useGridCrud.handleCancelClick(gridApiRef, row);
+                }}
+                color="inherit"
+              />
+            </Tooltip>,
           ];
         }
 
         return [
-          <GridActionsCellItem
-            icon={<EditIcon />}
-            label="Edit"
-            className="textPrimary"
-            onClick={() => {
-              useGridCrud.handleEditClick(row.id);
-            }}
-            color="inherit"
-            disabled={!habiModif}
-          />,
-          <GridActionsCellItem
-            icon={<DeleteIcon />}
-            label="Delete"
-            onClick={() => {
-              useGridCrud.handleDeleteClick(gridApiRef, row);
-            }}
-            color="inherit"
-            disabled={!habiModif}
-          />,
+          <Tooltip
+            key={Math.round(Math.random() * 100)}
+            title="Editar Resgistro"
+          >
+            <GridActionsCellItem
+              icon={<EditIcon />}
+              label="Edit"
+              className="textPrimary"
+              onClick={() => {
+                useGridCrud.handleEditClick(row.id);
+              }}
+              color="inherit"
+              disabled={!habiModif}
+            />
+          </Tooltip>,
+          <Tooltip
+            key={Math.round(Math.random() * 100)}
+            title="Eliminar Resgistro"
+          >
+            <GridActionsCellItem
+              icon={<DeleteIcon />}
+              label="Delete"
+              onClick={() => {
+                useGridCrud.handleDeleteClick(gridApiRef, row);
+              }}
+              color="inherit"
+              disabled={!habiModif}
+            />
+          </Tooltip>,
         ];
       },
     },
     {
       field: 'cuil',
       type: 'string',
-      headerName: 'CUIL',
-      width: 150,
-      editable: true,
-      headerAlign: 'left',
+      width: 160,
       align: 'left',
+      editable: true,
+      headerName: 'CUIL',
+      headerAlign: 'left',
       headerClassName: 'header--cell',
       renderEditCell: (params) => {
         return (
@@ -1085,15 +1212,19 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
                 },
               }}
             />
-
-            <CreateIcon
-              sx={{
-                fontSize: '1.8rem',
-                color: '#1A76D2',
-                cursor: 'pointer',
-              }}
-              onClick={handleFormCuilOpen(params.row)}
-            />
+            <Tooltip
+              key={Math.round(Math.random() * 100)}
+              title="Registrar cambio de Nombre"
+            >
+              <CreateIcon
+                sx={{
+                  fontSize: '1.8rem',
+                  color: '#1A76D2',
+                  cursor: 'pointer',
+                }}
+                onClick={handleFormCuilOpen(params.row)}
+              />
+            </Tooltip>
           </div>
         );
       },
@@ -1101,11 +1232,11 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     {
       field: 'apellido',
       type: 'string',
-      headerName: 'Apellido',
-      width: 150,
-      editable: true,
-      headerAlign: 'left',
+      width: 170,
       align: 'left',
+      editable: true,
+      headerName: 'Apellido',
+      headerAlign: 'left',
       headerClassName: 'header--cell',
       valueParser: (value, row, column, apiRef) => {
         return value?.toUpperCase();
@@ -1132,12 +1263,17 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
               },
             }}
             onChange={(event) => {
-              const newValue = event.target.value;
+              //console.log('onChange - event: ', event);
+              let newValue = event.target.value;
+              newValue = limpiarApeNombre(newValue);
+
               params.api.setEditCellValue({
                 id: params.id,
                 field: 'apellido',
                 value: newValue,
               });
+              event.target.value = newValue;
+              return false;
             }}
             onBlur={async (event) => {
               const newValue = event.target.value;
@@ -1171,11 +1307,11 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     {
       field: 'nombre',
       type: 'string',
-      headerName: 'Nombre',
-      width: 150,
-      editable: true,
-      headerAlign: 'left',
+      width: 170,
       align: 'left',
+      editable: true,
+      headerName: 'Nombre',
+      headerAlign: 'left',
       headerClassName: 'header--cell',
       valueParser: (value, row, column, apiRef) => {
         return value?.toUpperCase();
@@ -1202,7 +1338,8 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
               },
             }}
             onChange={(event) => {
-              const newValue = event.target.value;
+              let newValue = event.target.value;
+              newValue = limpiarApeNombre(newValue);
               params.api.setEditCellValue({
                 id: params.id,
                 field: 'nombre',
@@ -1240,17 +1377,17 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     },
     {
       field: 'camara',
-      headerName: 'Cámara',
-      width: 80,
-      editable: true,
-      headerAlign: 'left',
-      align: 'left',
       type: 'singleSelect',
+      width: 80,
+      align: 'left',
+      editable: true,
+      headerName: 'Cámara',
+      headerAlign: 'left',
+      headerClassName: 'header--cell',
       valueFormatter: ({ value }) => value || '',
       valueOptions: camaras.map(({ codigo, descripcion }) => {
         return { value: codigo, label: descripcion };
       }),
-      headerClassName: 'header--cell',
       renderEditCell: (params) => {
         return (
           <Select
@@ -1294,11 +1431,11 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     {
       field: 'categoria',
       type: 'singleSelect',
-      headerName: 'Categoría',
       width: 80,
-      editable: true,
-      headerAlign: 'left',
       align: 'left',
+      editable: true,
+      headerName: 'Categoría',
+      headerAlign: 'left',
       headerClassName: 'header--cell',
       valueFormatter: ({ value }) => value || '',
       renderEditCell: (params) => {
@@ -1330,13 +1467,12 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     {
       field: 'fechaIngreso',
       type: 'date',
-      headerName: 'Ingreso',
       width: 100,
-      editable: true,
-      headerAlign: 'left',
       align: 'left',
+      editable: true,
+      headerName: 'Ingreso',
+      headerAlign: 'left',
       headerClassName: 'header--cell',
-
       valueGetter: ({ value }) => {
         return formatter.dateObject(value);
       },
@@ -1347,18 +1483,18 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     {
       field: 'empresaDomicilioId',
       type: 'singleSelect',
+      width: 200,
+      align: 'left',
+      editable: true,
+      headerAlign: 'left',
+      headerClassName: 'header--cell',
+      headerTooltip: 'Selecciona la planta de la empresa',
+      valueOptions: plantas,
       headerName: (
         <Tooltip title="Para dar de alta una planta, debe ir a perfil y agregar nuevo registro en domicilios">
           <span>Planta</span>
         </Tooltip>
       ),
-      width: 170,
-      editable: true,
-      headerAlign: 'left',
-      align: 'left',
-      headerClassName: 'header--cell',
-      headerTooltip: 'Selecciona la planta de la empresa',
-      valueOptions: plantas,
       valueFormatter: ({ value }) => {
         if (value === '') return '';
         if (value === null) return '';
@@ -1394,11 +1530,11 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     {
       field: 'remunerativo',
       type: 'string',
-      headerName: 'Remunerativo',
       width: 110,
-      editable: true,
-      headerAlign: 'left',
       align: 'right',
+      editable: true,
+      headerName: 'Remunerativo',
+      headerAlign: 'left',
       headerClassName: 'header--cell',
       valueFormatter: ({ value }) => {
         const formattedValue = formatValue({
@@ -1433,6 +1569,12 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     {
       field: 'noRemunerativo',
       type: 'string',
+      width: 110,
+      align: 'right',
+      editable: true,
+      headerName: 'No Remunerativo',
+      headerAlign: 'left',
+      headerClassName: 'header--cell',
       renderHeader: () => (
         <div style={{ textAlign: 'left', color: '#fff', fontSize: '0.8rem' }}>
           <span role="img" aria-label="enjoy">
@@ -1442,11 +1584,6 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
           </span>
         </div>
       ),
-      width: 110,
-      editable: true,
-      headerAlign: 'left',
-      align: 'right',
-      headerClassName: 'header--cell',
       valueFormatter: ({ value }) => {
         if (value === '') return '';
         if (value === null) return '';
@@ -1485,6 +1622,16 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     {
       field: 'uomaSocio',
       type: 'singleSelect',
+      width: 100,
+      align: 'center',
+      editable: true,
+      headerName: 'Adherido Sindicato',
+      headerAlign: 'center',
+      headerClassName: 'header--cell',
+      valueOptions: [
+        { value: true, label: 'Si' },
+        { value: false, label: 'No' },
+      ],
       renderHeader: () => (
         <div style={{ textAlign: 'center', color: '#fff', fontSize: '0.8rem' }}>
           <span role="img" aria-label="enjoy">
@@ -1494,15 +1641,6 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
           </span>
         </div>
       ),
-      width: 100,
-      editable: true,
-      headerAlign: 'center',
-      align: 'center',
-      headerClassName: 'header--cell',
-      valueOptions: [
-        { value: true, label: 'Si' },
-        { value: false, label: 'No' },
-      ],
       valueFormatter: ({ value }) => {
         if (value === '') return '';
         if (value === null) return '';
@@ -1537,6 +1675,16 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
     {
       field: 'amtimaSocio',
       type: 'singleSelect',
+      width: 100,
+      align: 'center',
+      editable: true,
+      headerName: 'Paga Mutual',
+      headerAlign: 'center',
+      headerClassName: 'header--cell',
+      valueOptions: [
+        { value: true, label: 'Si' },
+        { value: false, label: 'No' },
+      ],
       renderHeader: () => (
         <div style={{ textAlign: 'center', color: '#fff', fontSize: '0.8rem' }}>
           <span role="img" aria-label="enjoy">
@@ -1546,15 +1694,6 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
           </span>
         </div>
       ),
-      width: 100,
-      editable: true,
-      headerAlign: 'center',
-      align: 'center',
-      headerClassName: 'header--cell',
-      valueOptions: [
-        { value: true, label: 'Si' },
-        { value: false, label: 'No' },
-      ],
       valueFormatter: ({ value }) => {
         if (value === '') return '';
         if (value === null) return '';
@@ -1588,6 +1727,9 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
   ];
 
   console.log('DDJJForm - habiModif: ', habiModif);
+
+  console.log('*x* DDJJForm - ddjjCabe: ', ddjjCabe);
+
   return (
     <div className="mis_alta_declaraciones_juradas_container">
       <div className="periodo_container">
@@ -1608,11 +1750,14 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
                   views={['month', 'year']}
                   closeOnSelect={true}
                   //onChange={handleChangePeriodo}
+
                   onChange={(date) => {
-                    validarPeriodo(date);
-                    console.log('onChange - date', date);
-                    setDdjjCabe({ ...ddjjCabe, periodo: date });
-                    setDdjjModi(true);
+                    console.log('DesktopDatePicker.onChange-date:', date);
+                    if (validarPeriodo(date)) {
+                      console.log('onChange - date', date);
+                      setDdjjCabe({ ...ddjjCabe, periodo: date });
+                      setDdjjModi(true);
+                    }
                   }}
                   //value={ddjjCabe?.periodo || ''}
                   value={ddjjCabe?.periodo == null ? '' : ddjjCabe?.periodo}
@@ -1728,7 +1873,9 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
                   onProcessRowUpdateError={(error) => {
                     useGridCrud.onProcessRowUpdateError(error);
                   }}
-                  getRowClassName={(params) => rows?.indexOf(params.row) % 2 === 0 ? 'even' : 'odd'}
+                  getRowClassName={(params) =>
+                    rows?.indexOf(params.row) % 2 === 0 ? 'even' : 'odd'
+                  }
                   localeText={dataGridStyle.toolbarText}
                   slots={{
                     toolbar: EditToolbar,
@@ -1779,7 +1926,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
               ></div>
             </Box>
             <DDJJCuilForm
-              regCuil={formCuilReg}
+              formCuilReg={formCuilReg}
               formShow={formCuilShow}
               setFormShow={setFormCuilShow}
             ></DDJJCuilForm>
@@ -1819,6 +1966,15 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
                 disabled={!habiModif || !ddjjCabe.id}
               >
                 Presentar
+              </Button>
+
+              <Button
+                variant="contained"
+                sx={{ padding: '6px 52px', marginLeft: '10px' }}
+                onClick={limpiarEstadoForm}
+                disabled={!ddjjCabe || (!ddjjCabe.id && ddjjCabe.id == null)}
+              >
+                Limpiar Formulario
               </Button>
             </div>
           </AccordionDetails>

@@ -44,7 +44,7 @@ const styContToolAst = {
 export const ClaveComponent = ({ showModal, setShowModal }) => {
   const [clave, setClave] = useState('');
   const [claveNueva, setClaveNueva] = useState('');
-  const [errorPassword,setErrorPassword] = useState(false)
+  const [errorPassword, setErrorPassword] = useState(false);
   const [claveNuevaRepe, setClaveNuevaRepe] = useState('');
   const [claveNuevaRepeError, setClaveNuevaRepeError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -72,7 +72,7 @@ export const ClaveComponent = ({ showModal, setShowModal }) => {
   };
 
   const handlePasswordChange = (event) => {
-    setClaveNueva(event.target.value)
+    setClaveNueva(event.target.value);
 
     if (validatePassword(event.target.value)) {
       setErrorPassword(false);
@@ -104,7 +104,7 @@ export const ClaveComponent = ({ showModal, setShowModal }) => {
               color: theme.palette.primary.main,
             }}
           >
-            Gestion de Clave
+            Gestión de Clave
           </Typography>
           <span style={styContToolAst}>
             <Tooltip

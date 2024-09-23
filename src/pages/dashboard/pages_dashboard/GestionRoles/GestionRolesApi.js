@@ -46,8 +46,11 @@ const putFuncionalidades = async (body) => {
   try {
     const URL = `/funcionalidades/actualizar`;
     const response = await axiosCrud.actualizar(URL, body); // esto me tiene que devolver funcionales_activas, funcionalidades_inactivas
-    if (response) {
+    console.log('axiosGestionRoles.putFuncionalidades - response:', response);
+    if (response && response == true) {
       swal.showSuccess(HTTP_MSG_MODI);
+    } else {
+      swal.showError('La información no pudo ser actualizada.');
     }
     return response;
   } catch (error) {

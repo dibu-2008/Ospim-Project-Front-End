@@ -133,6 +133,8 @@ export const RegistroEmpresa = () => {
       whatsapp_prefijo: whatsapp_prefijo,
     };
 
+    console.log('** phoneAlternativos:', phoneAlternativos);
+
     if (
       phoneAlternativos &&
       phoneAlternativos.length > 0

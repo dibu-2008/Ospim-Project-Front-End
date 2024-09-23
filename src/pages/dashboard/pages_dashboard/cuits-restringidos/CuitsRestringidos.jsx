@@ -6,10 +6,10 @@ import {
   GridActionsCellItem,
   GridRowEditStopReasons,
   GridToolbar,
+  useGridApiRef,
 } from '@mui/x-data-grid';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
+import { TextField, Box, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
@@ -20,6 +20,7 @@ import Swal from 'sweetalert2';
 import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 import './CuitsRestringidos.css';
 import { UserContext } from '@/context/userContext';
+import { consultarEmpresa } from '@/common/api/EmpresasApi';
 
 function EditToolbar(props) {
   const {
@@ -60,6 +61,7 @@ function EditToolbar(props) {
 }
 
 export const CuitsRestringidos = () => {
+  const gridApiRef = useGridApiRef();
   const [rowModesModel, setRowModesModel] = useState({});
   const [locale, setLocale] = useState('esES');
   const [rows, setRows] = useState([]);
@@ -80,6 +82,37 @@ export const CuitsRestringidos = () => {
     () => createTheme(theme, locales[locale]),
     [locale, theme],
   );
+
+  const obtenerEmpresa = async (id, cuit) => {
+    //console.log('obtenerEmpresa- cuit:', cuit);
+    //console.log('obtenerEmpresa- id:', id);
+
+    let razonSocial = '';
+    const vecEmpre = await consultarEmpresa(cuit);
+    console.log('obtenerEmpresa- vecEmpre:', vecEmpre);
+    if (
+      vecEmpre &&
+      vecEmpre.length &&
+      vecEmpre.length > 0 &&
+      vecEmpre[0].razonSocial
+    ) {
+      //console.log('ENTROOO');
+      razonSocial = vecEmpre[0].razonSocial;
+    } else {
+      gridApiRef.current.setEditCellValue({
+        id: id,
+        field: 'cuit',
+        value: '',
+      });
+    }
+    //console.log('obtenerEmpresa- razonSocial:', razonSocial);
+
+    gridApiRef.current.setEditCellValue({
+      id: id,
+      field: 'razonSocial',
+      value: razonSocial,
+    });
+  };
 
   useEffect(() => {
     const ObtenerCuitsRestringidos = async () => {
@@ -223,6 +256,55 @@ export const CuitsRestringidos = () => {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell',
+      renderEditCell: (params) => {
+        return (
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <TextField
+              id={params.row.id ? 'cuit' + params.row.id.toString() : ''}
+              fullWidth
+              value={params.value || ''}
+              onBlur={(event) => {
+                obtenerEmpresa(params.id, params.value);
+              }}
+              onChange={(event) => {
+                const newValue = event.target.value;
+
+                params.api.setEditCellValue({
+                  id: params.id,
+                  field: 'cuit',
+                  value: newValue,
+                });
+              }}
+              onFocus={(event) => {
+                const cuitActual = params.api.getCellValue(params.id, 'cuit');
+                console.log('onFocus - cuitActual:', cuitActual);
+              }}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                    borderColor: 'transparent',
+                  },
+                  '&:hover fieldset': {
+                    borderColor: 'transparent',
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: 'transparent',
+                  },
+                },
+              }}
+            />
+          </div>
+        );
+      },
+    },
+    {
+      field: 'razonSocial',
+      headerName: 'RAZÓN SOCIAL',
+      flex: 1,
+      editable: true,
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'header--cell',
     },
     {
       field: 'observacion',
@@ -295,6 +377,7 @@ export const CuitsRestringidos = () => {
       >
         <ThemeProvider theme={themeWithLocale}>
           <StripedDataGrid
+            apiRef={gridApiRef}
             rows={rows}
             columns={columns}
             getRowId={(row) => rows.indexOf(row)}

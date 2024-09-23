@@ -113,7 +113,10 @@ export const axiosActualizar = async (UrlApi, oEntidad) => {
     }
     return true;
   } catch (error) {
-    console.log(`axiosCrud.actualizar() - UrlApi: ${UrlApi} - catch() - `);
+    console.log(
+      `axiosCrud.actualizar() - UrlApi: ${UrlApi} - catch() - error`,
+      error,
+    );
     if (error && error.response && error.response.data) {
       return error.response.data;
     } else {

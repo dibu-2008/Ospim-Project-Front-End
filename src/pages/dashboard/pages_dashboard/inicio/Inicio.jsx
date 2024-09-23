@@ -75,16 +75,6 @@ export const Inicio = () => {
               </Link>
               {datosContacto ? datosContacto?.telefono : ''}
             </div>
-            <div>
-              <Link
-                href={`https://wa.me/${telefonoWsp}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <WhatsAppIcon />
-              </Link>
-              {datosContacto ? datosContacto?.whasap : ''}
-            </div>
           </div>
 
           <h5>Días y horarios:</h5>

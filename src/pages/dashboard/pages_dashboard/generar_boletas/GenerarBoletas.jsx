@@ -59,7 +59,8 @@ export const GenerarBoletas = () => {
           DDJJ_ID,
         );
 
-        setDefaultFDP(data);
+        setBoletas(data);
+        //setDefaultFDP(data);
         setAfiliados(ordenarAfiliadosBoletas(data));
         setPrimeraSeleccion(true);
         setPrimeraSeleccionFDP(true);
@@ -109,15 +110,16 @@ export const GenerarBoletas = () => {
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
-  
+
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-  
 
-  const paginatedAfiliados = afiliados.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-
+  const paginatedAfiliados = afiliados.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage,
+  );
 
   const setDefaultFDP = (data) => {
     data.detalle_boletas.forEach(
@@ -321,7 +323,7 @@ export const GenerarBoletas = () => {
               <TableCell>Vencimiento</TableCell>
               {boletas.detalle_boletas &&
                 boletas.detalle_boletas.map((boleta) => (
-                  <TableCell className='importes' key={boleta.codigo}>
+                  <TableCell className="importes" key={boleta.codigo}>
                     {boleta.vencimiento !== null && boleta.vencimiento !== ''
                       ? formatter.date(boleta.vencimiento)
                       : ''}
@@ -332,7 +334,7 @@ export const GenerarBoletas = () => {
               <TableCell>Intención de Pago</TableCell>
               {boletas.detalle_boletas &&
                 boletas.detalle_boletas.map((boleta) => (
-                  <TableCell className='importes' key={boleta.codigo}>
+                  <TableCell className="importes" key={boleta.codigo}>
                     <TextField
                       type="date"
                       inputProps={{ min: hoy }}
@@ -360,7 +362,7 @@ export const GenerarBoletas = () => {
               <TableCell>Forma de Pago</TableCell>
               {boletas.detalle_boletas &&
                 boletas.detalle_boletas.map((boleta) => (
-                  <TableCell className='importes' key={boleta.codigo}>
+                  <TableCell className="importes" key={boleta.codigo}>
                     <Select
                       value={boleta.formaDePago || ''}
                       onChange={(event) =>
@@ -402,11 +404,14 @@ export const GenerarBoletas = () => {
       </TableContainer>
 
       {showDetail && (
-        <TableContainer component={Paper} style={{
-          marginTop: 50,
-          height: 400,
-          width: '100%',
-        }}>
+        <TableContainer
+          component={Paper}
+          style={{
+            marginTop: 50,
+            height: 400,
+            width: '100%',
+          }}
+        >
           <Table stickyHeader>
             <TableHead>
               <TableRow>
@@ -449,20 +454,20 @@ export const GenerarBoletas = () => {
             </TableBody>
           </Table>
           <TablePagination
-    rowsPerPageOptions={[50, 75, 100]}
-    component="div"
-    count={afiliados.length}
-    rowsPerPage={rowsPerPage}
-    page={page}
-    onPageChange={handleChangePage}
-    onRowsPerPageChange={handleChangeRowsPerPage}
-  />
+            rowsPerPageOptions={[50, 75, 100]}
+            component="div"
+            count={afiliados.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
         </TableContainer>
       )}
 
       <TableContainer component={Paper} style={{ marginTop: '3em' }}>
         <Table>
-        <TableHead>
+          <TableHead>
             <TableRow>
               <TableCell className="cwbcb"></TableCell>
               {boletas.detalle_boletas &&

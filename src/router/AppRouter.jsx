@@ -10,7 +10,7 @@ import { RecuperoPage } from '../pages/recupero/RecuperoPage';
 import DashboardPage from '../pages/dashboard/DashboardPage';
 import { LoginPage } from '../pages/login/LoginPage';
 import { Feriados } from '../pages/dashboard/pages_dashboard/feriados/Feriados';
-import { AltaUsuarioInterno } from '../pages/dashboard/pages_dashboard/alta_usuario_interno/AltaUsuarioInterno';
+import { UsuarioInterno } from '../pages/dashboard/pages_dashboard/usuarioInterno/UsuarioInterno';
 import { RegistroEmpresa } from '../pages/registro_empresa/RegistroEmpresa';
 import { CuitsRestringidos } from '../pages/dashboard/pages_dashboard/cuits-restringidos/CuitsRestringidos';
 import { Boletas } from '../pages/dashboard/pages_dashboard/boletas/Boletas';
@@ -26,11 +26,9 @@ import { DDJJFiltro } from '@/pages/dashboard/pages_dashboard/ddjj/consultas/emp
 import { InteresesAfip } from '@/pages/dashboard/pages_dashboard/intereses_afip/InteresesAfip';
 import { Ajustes } from '@/pages/dashboard/pages_dashboard/ajustes/Ajustes';
 import { GestionRoles } from '@/pages/dashboard/pages_dashboard/gestionRoles/GestionRoles';
-import { GestionDeudas } from '@/pages/dashboard/pages_dashboard/gestion_deudas/GestionDeudas';
+import { UsuaEmpreActivacion } from '@/pages/dashboard/pages_dashboard/usuarioEmpresa/UsuaEmpreActivacion';
 import { Aportes } from '@/pages/dashboard/pages_dashboard/aportes/Aportes';
-import { DDJJForm } from '@/pages/dashboard/pages_dashboard/ddjj/formulario/DDJJForm';
 import { DDJJTabs } from '@/pages/dashboard/pages_dashboard/ddjj/DDJJTabs';
-import { useState } from 'react';
 import { UserProvider } from '@/context/UserProvider';
 
 const PagosPage = () => (
@@ -43,6 +41,11 @@ const AppRouter = () => {
       <Routes>
         <Route path="login" element={<LoginPage />} />
         <Route path="recupero" element={<RecuperoPage />} />
+        <Route
+          path="usuario/empresa/activar/:token"
+          element={<UsuaEmpreActivacion />}
+        />
+
         <Route
           path="/dashboard"
           element={
@@ -72,7 +75,7 @@ const AppRouter = () => {
 
           <Route path="empresas" element={<DatosEmpresa />} />
 
-          <Route path="altausuariointerno" element={<AltaUsuarioInterno />} />
+          <Route path="usuariointerno" element={<UsuarioInterno />} />
           <Route path="cuitsrestringidos" element={<CuitsRestringidos />} />
           <Route path="roles" element={<Roles />} />
           <Route path="generarboletas/:id" element={<GenerarBoletas />} />

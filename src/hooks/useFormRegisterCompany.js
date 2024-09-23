@@ -5,10 +5,17 @@ export const useFormRegisterCompany = (initialState = {}) => {
 
   const OnInputChangeRegisterCompany = ({ target }) => {
     const { name, value } = target;
-
+    let valueNew = value;
+    if (name == 'razonSocial') {
+      try {
+        valueNew = value.toUpperCase();
+      } catch (error) {
+        console.log('OnInputChangeRegisterCompany - error:', error);
+      }
+    }
     setFormState({
       ...formState,
-      [name]: value,
+      [name]: valueNew,
     });
   };
 

@@ -28,9 +28,6 @@ import { UserContext } from '@/context/userContext';
 import '../DatosEmpresa.css';
 import localStorageService from '@components/localStorage/localStorageService';
 
-const crudHabi = localStorageService.funcionABMEmpresaHabilitada();
-console.log('xxx - crudHabi: ', crudHabi);
-
 let isOnEditMode = false;
 const crearNuevoRegistro = (props) => {
   const {
@@ -41,6 +38,8 @@ const crearNuevoRegistro = (props) => {
     themeWithLocale,
     idEmpresa,
   } = props;
+  const crudHabi = localStorageService.funcionABMEmpresaHabilitada();
+
   const altaHandleClick = () => {
     if (!isOnEditMode) {
       const newReg = {
@@ -92,6 +91,7 @@ const crearNuevoRegistro = (props) => {
 };
 
 export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
+  const crudHabi = localStorageService.funcionABMEmpresaHabilitada();
   const [locale, setLocale] = useState('esES');
   const [rowModesModel, setRowModesModel] = useState({});
   const [provincias, setProvincias] = useState([]);
@@ -102,6 +102,13 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
   const { paginationModel, setPaginationModel, pageSizeOptions } =
     useContext(UserContext);
   const gridApiRef = useGridApiRef();
+
+  console.log(
+    'GrillaEmpresaDomicilio - location.pathname: ',
+    window.location.pathname,
+  );
+
+  console.log('GrillaEmpresaDomicilio - location.href: ', window.location.href);
 
   useEffect(() => {
     async function cargarDatos() {
@@ -244,20 +251,19 @@ export const GrillaEmpresaDomicilio = ({ idEmpresa, rows, setRows }) => {
 
           if (data && data.id) {
             newRow.id = data.id;
+          }
+          bOk = true;
+          newRow = await adaptadorDomicilioGrilla(newRow);
+          const newRows = rows.map((row) => (!row.id ? newRow : row));
+          setRows(newRows);
 
-            bOk = true;
-            newRow = await adaptadorDomicilioGrilla(newRow);
-            const newRows = rows.map((row) => (!row.id ? newRow : row));
-            setRows(newRows);
-
-            if (!(data && data.id)) {
-              setTimeout(() => {
-                setRowModesModel((oldModel) => ({
-                  [0]: { mode: GridRowModes.Edit, fieldToFocus: 'fecha' },
-                  ...oldModel,
-                }));
-              }, 100);
-            }
+          if (!(data && data.id)) {
+            setTimeout(() => {
+              setRowModesModel((oldModel) => ({
+                [0]: { mode: GridRowModes.Edit, fieldToFocus: 'fecha' },
+                ...oldModel,
+              }));
+            }, 100);
           }
         } else {
           bOk = true;

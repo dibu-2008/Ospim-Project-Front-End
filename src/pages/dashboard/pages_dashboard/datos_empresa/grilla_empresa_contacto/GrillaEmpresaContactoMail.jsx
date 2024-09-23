@@ -21,7 +21,6 @@ import { UserContext } from '@/context/userContext';
 import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 import localStorageService from '@components/localStorage/localStorageService';
 
-
 function EditToolbar(props) {
   const {
     setRows,

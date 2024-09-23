@@ -19,6 +19,7 @@ export const DDJJArchivoImport = ({
   habiModif, //habilitacion de controles
 }) => {
   console.log('DDJJArchivoImport - habiModif:', habiModif);
+  //const URL_PLANTILLA =  BACKEND_URL + '/ddjj/public/plantilla_download/DDJJCarga-Plantilla.xlsx';
   const URL_PLANTILLA = BACKEND_URL + '/ddjj/public/plantilla_download';
   const ID_EMPRESA = localStorageService.getEmpresaId();
   const IMPORTACION_OK = import.meta.env.VITE_IMPORTACION_OK;
@@ -455,7 +456,7 @@ export const DDJJArchivoImport = ({
           name="src-file1"
           aria-label="Archivo"
           onChange={handleFileChange}
-          accept=".csv, .xlsx"
+          accept=".csv, .xlsx, .xls"
           title=""
           //disabled={!habiModif}
         />
