@@ -3,6 +3,7 @@ import NavBar from '@/components/navbar/NavBar';
 import './RecuperoPage.css';
 import { Button, TextField } from '@mui/material';
 import { useState } from 'react';
+import { recuperoClave } from './RecuperoPageApi';
 
 export const RecuperoPage = () => {
   const [email, setEmail] = useState('');
@@ -23,6 +24,8 @@ export const RecuperoPage = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (validateEmail(email)) {
+      const tokenDto = recuperoClave(email);
+
       setEmail('');
       setSubmitted(true);
     } else {
