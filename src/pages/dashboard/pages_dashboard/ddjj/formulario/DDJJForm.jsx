@@ -1501,28 +1501,31 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ, initFormDDJJ }) => {
         return plantas.find((planta) => planta.id === value)?.planta || '';
       },
       renderEditCell: (params) => {
-        return (
-          <Select
-            fullWidth
-            value={params.value || ''}
-            onChange={(event) => {
-              params.api.setEditCellValue({
-                id: params.id,
-                field: 'empresaDomicilioId',
-                value: event.target.value,
-              });
-            }}
-          >
-            {plantas.map((planta) => {
-              return (
-                <MenuItem key={planta.id} value={planta.id}>
-                  {planta.planta}
-                </MenuItem>
-              );
-            })}
-          </Select>
-        );
-      },
+        const filteredPlantas = plantas.filter((planta) => planta.planta !== 'FISCAL')
+        console.log(filteredPlantas)
+         return (
+           <Select
+             fullWidth
+             value={params.value || ''}
+             onChange={(event) => {
+               params.api.setEditCellValue({
+                 id: params.id,
+                 field: 'empresaDomicilioId',
+                 value: event.target.value,
+               });
+             }}
+           >
+             {filteredPlantas.map((planta) => {
+               return (
+                 <MenuItem key={planta.id} value={planta.id}>
+                   {planta.planta}
+                 </MenuItem>
+               );
+             })}
+           </Select>
+         );
+       },
+     
     },
     {
       field: 'remunerativo',
