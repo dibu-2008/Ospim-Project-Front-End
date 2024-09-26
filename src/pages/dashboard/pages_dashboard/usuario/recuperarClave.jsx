@@ -1,9 +1,9 @@
 import { useParams } from 'react-router-dom';
 import { useState, useEffect, useMemo, useContext } from 'react';
 
-import { axiosUsuaEmpreActivacion } from './usuaEmpreActivacionApi';
+import { axiosUsuaEmpreActivacion } from './recuperarClaveApi';
 
-export const UsuaEmpreActivacion = () => {
+export const recuperarClave = () => {
   const { token } = useParams();
   const [activacion, setActivacion] = useState('');
 

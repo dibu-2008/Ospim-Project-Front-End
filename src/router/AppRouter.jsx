@@ -1,8 +1,7 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { Navigate } from 'react-router';
 import PrivateRoute from './PrivateRoute';
 import { Inicio } from '../pages/dashboard/pages_dashboard/inicio/Inicio';
-import NavBar from '../components/navbar/NavBar';
 import { DatosEmpresa } from '../pages/dashboard/pages_dashboard/datos_empresa/DatosEmpresa';
 import { DatosPerfil } from '@/pages/dashboard/pages_dashboard/datosPerfil/DatosPerfil';
 import { Publicaciones } from '../pages/dashboard/pages_dashboard/publicaciones/Publicaciones';
@@ -14,9 +13,7 @@ import { UsuarioInterno } from '../pages/dashboard/pages_dashboard/usuarioIntern
 import { RegistroEmpresa } from '../pages/registro_empresa/RegistroEmpresa';
 import { CuitsRestringidos } from '../pages/dashboard/pages_dashboard/cuits-restringidos/CuitsRestringidos';
 import { Boletas } from '../pages/dashboard/pages_dashboard/boletas/Boletas';
-
 import { BoletaEmpleadoFiltro } from '../pages/dashboard/pages_dashboard/boletas/consultas/empleado/BoletaEmpleadoFiltro';
-
 import { DetalleBoleta } from '@/pages/dashboard/pages_dashboard/boletas/DetalleBoleta';
 import { Roles } from '@/pages/dashboard/pages_dashboard/roles/Roles';
 import { GenerarBoletas } from '@/pages/dashboard/pages_dashboard/generar_boletas/GenerarBoletas';
@@ -30,6 +27,7 @@ import { UsuaEmpreActivacion } from '@/pages/dashboard/pages_dashboard/usuarioEm
 import { Aportes } from '@/pages/dashboard/pages_dashboard/aportes/Aportes';
 import { DDJJTabs } from '@/pages/dashboard/pages_dashboard/ddjj/DDJJTabs';
 import { UserProvider } from '@/context/UserProvider';
+import { RecuperarClave } from '@/pages/dashboard/pages_dashboard/usuario/recuperarClave';
 
 const PagosPage = () => (
   <div className="otros_pagos_container">Contenido de la página de pagos</div>
@@ -41,9 +39,11 @@ const AppRouter = () => {
       <Routes>
         <Route path="login" element={<LoginPage />} />
         <Route path="recupero" element={<RecuperoPage />} />
+        <Route path="auth/usuario/activar/:token" element={<LoginPage />} />
+
         <Route
-          path="usuario/empresa/activar/:token"
-          element={<UsuaEmpreActivacion />}
+          path="usuario/recuperar-clave/:token"
+          element={<RecuperarClave />}
         />
 
         <Route
