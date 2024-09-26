@@ -7,7 +7,7 @@ import { Box, Typography, Button } from '@mui/material';
 
 import { axiosUsuaEmpreActivacion } from './recuperarClaveApi';
 
-export const recuperarClave = () => {
+export const RecuperarClave = () => {
   const { token } = useParams();
   const [activacion, setActivacion] = useState('');
   const [icon, setIcon] = useState('');
@@ -66,8 +66,8 @@ export const recuperarClave = () => {
               <Typography variant="h1">{activacion}</Typography>
             </Box>
             <Box display="flex" justifyContent="center" alignItems="center">
-            <a href="http://localhost:5173/">
-              <Button variant="contained"> Ir al loguin </Button>
+              <a href="http://localhost:5173/">
+                <Button variant="contained"> Ir al loguin </Button>
               </a>
             </Box>
           </div>

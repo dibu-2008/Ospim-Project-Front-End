@@ -23,7 +23,6 @@ import { DDJJFiltro } from '@/pages/dashboard/pages_dashboard/ddjj/consultas/emp
 import { InteresesAfip } from '@/pages/dashboard/pages_dashboard/intereses_afip/InteresesAfip';
 import { Ajustes } from '@/pages/dashboard/pages_dashboard/ajustes/Ajustes';
 import { GestionRoles } from '@/pages/dashboard/pages_dashboard/gestionRoles/GestionRoles';
-import { UsuaEmpreActivacion } from '@/pages/dashboard/pages_dashboard/usuarioEmpresa/UsuaEmpreActivacion';
 import { Aportes } from '@/pages/dashboard/pages_dashboard/aportes/Aportes';
 import { DDJJTabs } from '@/pages/dashboard/pages_dashboard/ddjj/DDJJTabs';
 import { UserProvider } from '@/context/UserProvider';
