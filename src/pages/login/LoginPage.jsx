@@ -3,8 +3,9 @@ import {
   logon,
   logonDFA,
   usuarioLogueadoHabilitadoDFA,
+  activarCuentaEmpresa,
 } from './LoginApi.js';
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useFormLoginInternalUser } from '../../hooks/useFormLoginInternalUser.js';
 import { ButtonComponent } from '@components/ButtonComponent.jsx';
@@ -24,11 +25,13 @@ import {
 import { ThreeCircles } from 'react-loader-spinner';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import NavBar from '@/components/navbar/NavBar.jsx';
+import swal from '@/components/swal/swal';
 
 const VITE_WELCOME_PORTAL = import.meta.env.VITE_WELCOME_PORTAL;
 
 export const LoginPage = () => {
   const navigate = useNavigate();
+  const { tokenActivacion } = useParams();
   const [showSpinner, setShowSpinner] = useState(true);
   const [showInternalUserForm, setShowInternalUserForm] = useState(true);
   const [showVerificationForm, setShowVerificationForm] = useState(false);
@@ -65,6 +68,25 @@ export const LoginPage = () => {
     setTimeout(() => {
       setShowSpinner(false);
     }, 1000);
+  }, []);
+
+  useEffect(() => {
+    const activar = async () => {
+      console.log('INIT ...');
+      if (tokenActivacion) {
+        console.log('INIT - HAY que ACTIVAR !!!!', tokenActivacion);
+        const data = await activarCuentaEmpresa(tokenActivacion);
+        if (data && data.usuario) {
+          //user = data.usuario;
+          swal.showWarning(
+            'Su cuenta de Usuario fue activada con exito. Para conectarse utilice el usuario ' +
+              data.usuario +
+              ' y clave que ingresó en el Formulario de Alta de Empresa',
+          );
+        }
+      }
+    };
+    activar();
   }, []);
 
   //Link a Registrar Compania

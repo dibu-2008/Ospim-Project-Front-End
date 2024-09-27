@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import NavBar from '@/components/navbar/NavBar';
-import './RecuperoPage.css';
+import './RecuperarClave.css';
 import { Button, TextField } from '@mui/material';
 import { useState } from 'react';
-import { recuperoClave } from './RecuperoPageApi';
+import { recuperarClave } from './RecuperarClaveApi';
 
-export const RecuperoPage = () => {
+export const RecuperarClave = () => {
   const [email, setEmail] = useState('');
   const [error, setError] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -21,13 +21,14 @@ export const RecuperoPage = () => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     if (validateEmail(email)) {
-      const tokenDto = recuperoClave(email);
-
-      setEmail('');
-      setSubmitted(true);
+      const OK = await recuperarClave(email);
+      if (OK) {
+        setEmail('');
+        setSubmitted(true);
+      }
     } else {
       console.log('Email incorrecto');
     }

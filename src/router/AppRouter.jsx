@@ -5,7 +5,6 @@ import { Inicio } from '../pages/dashboard/pages_dashboard/inicio/Inicio';
 import { DatosEmpresa } from '../pages/dashboard/pages_dashboard/datos_empresa/DatosEmpresa';
 import { DatosPerfil } from '@/pages/dashboard/pages_dashboard/datosPerfil/DatosPerfil';
 import { Publicaciones } from '../pages/dashboard/pages_dashboard/publicaciones/Publicaciones';
-import { RecuperoPage } from '../pages/recupero/RecuperoPage';
 import DashboardPage from '../pages/dashboard/DashboardPage';
 import { LoginPage } from '../pages/login/LoginPage';
 import { Feriados } from '../pages/dashboard/pages_dashboard/feriados/Feriados';
@@ -26,7 +25,8 @@ import { GestionRoles } from '@/pages/dashboard/pages_dashboard/gestionRoles/Ges
 import { Aportes } from '@/pages/dashboard/pages_dashboard/aportes/Aportes';
 import { DDJJTabs } from '@/pages/dashboard/pages_dashboard/ddjj/DDJJTabs';
 import { UserProvider } from '@/context/UserProvider';
-import { RecuperarClave } from '@/pages/dashboard/pages_dashboard/usuario/recuperarClave';
+import { RecuperarClave } from '@/pages/login/recuperarClave/RecuperarClave';
+import { RecuperarClaveForm } from '@/pages/login/recuperarClave/RecuperarClaveForm';
 
 const PagosPage = () => (
   <div className="otros_pagos_container">Contenido de la página de pagos</div>
@@ -37,12 +37,15 @@ const AppRouter = () => {
     <UserProvider>
       <Routes>
         <Route path="login" element={<LoginPage />} />
-        <Route path="recupero" element={<RecuperoPage />} />
-        <Route path="auth/usuario/activar/:token" element={<LoginPage />} />
+        <Route path="recupero" element={<RecuperarClave />} />
+        <Route
+          path="usuario/empresa/activar/:tokenActivacion"
+          element={<LoginPage />}
+        />
 
         <Route
           path="usuario/recuperar-clave/:token"
-          element={<RecuperarClave />}
+          element={<RecuperarClaveForm />}
         />
 
         <Route

@@ -8,7 +8,7 @@
   align-items: center;
   justify-content: center;
   height: 85vh;
-  background-image: url('../../assets/fondoLogin.png');
+  background-image: url('../../../assets/fondoLogin.png');
   background-repeat: no-repeat;
   background-size: cover;
 }
