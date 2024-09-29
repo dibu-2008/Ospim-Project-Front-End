@@ -338,7 +338,9 @@ export const RegistroEmpresa = () => {
 
     if (event.target.name === 'whatsapp_prefijo') {
       if (inputValue.length <= maxDigits - whatsapp_prefijo.toString().length) {
-        OnInputChangeRegisterCompany(event);
+        if (inputValue[0] != '0'){
+          OnInputChangeRegisterCompany(event);
+        }
       }
     }
     //Expresion prefijoAdditional
@@ -366,6 +368,11 @@ export const RegistroEmpresa = () => {
         inputValue.length + whatsapp_prefijo.toString().length;
       if (totalLength <= maxDigits) {
         OnInputChangeRegisterCompany(event);
+      }
+      if (inputValue[0] + inputValue[1] === '15'){
+        setErrorWhatsapp(true)
+      } else {
+        setErrorWhatsapp(false)
       }
     }
   };
