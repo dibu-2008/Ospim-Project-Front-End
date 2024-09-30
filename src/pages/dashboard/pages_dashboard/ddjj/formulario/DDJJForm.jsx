@@ -20,6 +20,8 @@ import AddIcon from '@mui/icons-material/Add';
 import CancelIcon from '@mui/icons-material/Close';
 import CreateIcon from '@mui/icons-material/Create';
 import Switch from '@mui/material/Switch';
+import { CircularProgress } from '@mui/material';
+
 
 import { DDJJArchivoImport } from '@/pages/dashboard/pages_dashboard/ddjj/formulario/DDJJArchivoImport';
 import { DDJJPeriodoAnterior } from '@/pages/dashboard/pages_dashboard/ddjj/formulario/DDJJPeriodoAnterior';
@@ -263,6 +265,8 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ, initFormDDJJ }) => {
   const handleChange = (event, newValue) => {
     setTab(newValue);
   };
+
+  const [loading, setLoading] = useState(false);
 
   function a11yProps(index) {
     return {
@@ -540,6 +544,12 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ, initFormDDJJ }) => {
   };
 
   const handlerGrillaActualizarImportArchivo = async (vecDatos) => {
+    setExpanded(true);
+    setLoading(true)
+    console.log(
+      '** handlerGrillaActualizarImportArchivo - vecDatos: ',
+      vecDatos,
+    );
     //recibe vecDatos de Archivo para actualizar Grilla.-
     console.log('** DDJJForm.ImportArchivo - vecDatos: ', vecDatos);
     console.log('** DDJJForm.ImportArchivo - ddjjCabe: ', ddjjCabe);
@@ -556,6 +566,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ, initFormDDJJ }) => {
       vecDatos,
       newRowsValidaciones,
     );
+    setLoading(false)
     console.log(
       '** handlerGrillaActualizarImportArchivo - validarDDJJ() - rowsNew: ',
       rowsNew,
@@ -567,6 +578,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ, initFormDDJJ }) => {
 
     setDdjjModi(true);
     setExpanded(true);
+
   };
 
   const handlerGrillaActualizarPeriodoAnterior = (vecDatos) => {
@@ -1829,6 +1841,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ, initFormDDJJ }) => {
           >
             Paso 3 - Grilla de afiliado
           </AccordionSummary>
+          
           <AccordionDetails>
             <Box
               sx={{
@@ -1851,6 +1864,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ, initFormDDJJ }) => {
                 },
               }}
             >
+              {loading ? <Box display="flex" justifyContent="center" alignItems="center" ><CircularProgress /> </Box>: 
               <ThemeProvider theme={themeWithLocale}>
                 <StripedDataGrid
                   rows={rows || []}
@@ -1919,11 +1933,13 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ, initFormDDJJ }) => {
                   getCellClassName={getCellClassName}
                 />
               </ThemeProvider>
+               }
               <div
                 style={{
                   marginTop: '20px',
                 }}
               ></div>
+              
             </Box>
             <DDJJCuilForm
               formCuilReg={formCuilReg}
@@ -1978,6 +1994,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ, initFormDDJJ }) => {
               </Button>
             </div>
           </AccordionDetails>
+         
         </Accordion>
       </div>
     </div>
