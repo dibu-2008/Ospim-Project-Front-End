@@ -7,6 +7,7 @@ const formatIntereses = new Intl.NumberFormat('es-CL', {
 
 const formatCurrency = new Intl.NumberFormat('es-CL', {
   minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
   useGrouping: true,
 });
 

@@ -34,20 +34,7 @@ export const UsuaEmpreActivacion = () => {
 
     activarToken();
   }, []);
-  /*
-  return (
-    <div>
-      USUARIO EMPRESA ACTIVACION - INIT - token: {token}
-      <br></br>
-      <br></br>
-      <b>{activacion}</b>
-      <br></br>
-      <br></br>
-      <br></br>
-      <a href="http://127.0.0.1:5173/#/">Ir al liguin</a>
-    </div>
-  );
-*/
+
   return (
     <div className="container_login_page">
       <NavBar
