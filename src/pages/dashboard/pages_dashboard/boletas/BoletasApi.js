@@ -119,7 +119,7 @@ export const modificarBoletaById = async (empresa_id, body) => {
     const rta = await axiosCrud.actualizar(URL, bodyNew);
     console.log('modificarBoletaById - axiosCrud.actualizar() - rta: ', rta);
     if (rta && rta == true) {
-      swal.showSuccess(HTTP_MSG_MODI);
+      //swal.showSuccess(HTTP_MSG_MODI);
       return true;
     }
     throw rta;

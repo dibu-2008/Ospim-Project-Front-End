@@ -103,7 +103,7 @@ export const DetalleBoleta = () => {
   }, []);
 
   const guardarBoletaValidar = async () => {
-    console.log(`guardarBoletaValidar - id: ${boletaDetalle.id}`);
+    //console.log(`guardarBoletaValidar - id: ${boletaDetalle.id}`);
     const val = await axiosBoletas.validarModificacion(
       ID_EMPRESA,
       boletaDetalle.id,
@@ -113,38 +113,57 @@ export const DetalleBoleta = () => {
     if (val && val.hasOwnProperty('reemplazar')) {
       if (val.reemplazar == false) {
         guardarBoleta();
-        return true;
-      }
+        //return true;
+      } else {
+        Swal.fire({
+          title: 'Confirmación',
+          text: 'Esta modificación reemplazará la actual Boleta de Pago por una "Nueva". Confirma la acción?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#1A76D2',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: 'Reemplazar',
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            guardarBoleta();
 
-      Swal.fire({
-        title: 'Confirmación',
-        text: 'Esta modificación reemplazará la actual Boleta de Pago por una "Nueva". Confirma la acción?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#1A76D2',
-        cancelButtonColor: '#6c757d',
-        confirmButtonText: 'Reemplazar',
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          guardarBoleta();
-          return true;
-        }
-      });
+            //return true;
+          }
+        });
+      }
     }
     return false;
   };
 
-  const guardarBoleta = () => {
-    console.log('guardarBoleta - guardarBoleta: ', boletaDetalle);
-    const rta = axiosBoletas.modificarBoletaById(ID_EMPRESA, boletaDetalle);
+  const guardarBoleta = async () => {
+    //console.log('guardarBoleta - guardarBoleta: ', boletaDetalle);
+    const rta = await axiosBoletas.modificarBoletaById(
+      ID_EMPRESA,
+      boletaDetalle,
+    );
+    console.log(rta);
     if (rta == true) {
       respaldoBoleta.intencionDePago = boletaDetalle.intencionDePago;
       respaldoBoleta.formaDePago = boletaDetalle.formaDePago;
-      console.log(
-        'guardarBoleta - respaldoBoleta ACTUALIZADA: ',
-        respaldoBoleta,
-      );
+      // console.log(
+      //   'guardarBoleta - respaldoBoleta ACTUALIZADA: ',
+      //   respaldoBoleta,
+      // );
       setMetodoPago(boletaDetalle.formaDePago);
+      console.log('estoy llegando al swal');
+      Swal.fire({
+        title: 'Modificado',
+        text: 'Registro modificado con éxito. ¿Desea ver sus boletas?',
+        icon: 'success',
+        showCancelButton: true,
+        confirmButtonColor: '#1A76D2',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Ir a Mis Boletas',
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          navigate('/dashboard/boletas');
+        }
+      });
     }
   };
 
@@ -169,19 +188,20 @@ export const DetalleBoleta = () => {
   };
 
   const handleSetMetodoPago = async (value) => {
-    console.log('handleSetMetodoPago - value:', value);
+    //console.log('handleSetMetodoPago - value:', value);
     setMetodoPago(value);
     const nuevaBoleta = JSON.parse(JSON.stringify(boletaDetalle));
     nuevaBoleta.formaDePago = value;
     setBoletaDetalle(nuevaBoleta);
-    console.log('handleSetMetodoPago - nuevaBoleta:', nuevaBoleta);
+    //console.log('handleSetMetodoPago - nuevaBoleta:', nuevaBoleta);
   };
 
   const handleGuardar = () => {
     guardarBoletaValidar();
     //guardarBoleta();
-    console.log('handleGuardar - setModoEdicion() ..');
+    //console.log('handleGuardar - setModoEdicion() ..');
     setModoEdicion(!modoEdicion);
+    //navigate(`/dashboard/boletas`);
   };
 
   const handleCancelar = () => {
@@ -193,21 +213,21 @@ export const DetalleBoleta = () => {
 
   const existeDato = (value) => (value !== null && value !== '' ? value : '');
 
-  console.log('DetalleBoleta - metodoPago: ', metodoPago);
-  console.error();
+  //console.log('DetalleBoleta - metodoPago: ', metodoPago);
+  //console.error();
 
   return (
     <div className="boletas_container">
       <h1>
-        Boleta de Pago Nro. {boletaDetalle.numero_boleta}
+        Boleta de Pago Nro. {boletaDetalle?.numero_boleta}
         <br></br>
         <br></br>
         <h3 style={{ color: '#1A76D2' }}>
-          Concepto: {boletaDetalle.descripcion}
+          Concepto: {boletaDetalle?.descripcion}
         </h3>
         {boletaDetalle.baja != null && (
           <h3 style={{ color: '#1A76D2' }}>
-            Fecha Baja: {formatter.date(boletaDetalle.baja)}
+            Fecha Baja: {formatter.date(boletaDetalle?.baja)}
           </h3>
         )}
       </h1>
