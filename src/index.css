@@ -22,7 +22,7 @@ body {
 .link_animado {
   position: relative;
   text-decoration: none;
-  color: #1a76d2;
+  color: #1d0a83;
 }
 
 .link_animado::after {
@@ -32,7 +32,7 @@ body {
   bottom: 0;
   width: 0;
   height: 2px;
-  background-color: #1a76d2;
+  background-color: #1d0a83;
   transition: width 0.3s ease;
 }
 
@@ -40,6 +40,14 @@ body {
   top: 25px;
   width: 100%;
 }
+
+.MuiButtonBase-root{
+	color:#1d0a83!important;
+  }
+
+ .MuiAccordionSummary-contentGutters{
+	color: aliceblue!important;
+ }
 
 /* LOGIN STYLES */
 
@@ -49,7 +57,7 @@ body {
 	font-weight: 400;
 	font-size: 32px;
 	height: 35.5px;
-	color: #1a76d2;
+	color: #1d0a83;
 	margin-bottom: 10px;
 	width: 100%;
 	text-align: center;
@@ -63,9 +71,9 @@ body {
 	text-align: center;
 } */
 .header--cell {
-  background-color: #1a76d2;
+  background-color: #1d0a83;
   color: white;
-  border: 1px solid #1a76d2;
+  border: 1px solid #1d0a83;
   border: none;
   display: flex;
   flex-direction: column;

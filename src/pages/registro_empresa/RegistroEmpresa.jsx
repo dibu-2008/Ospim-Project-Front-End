@@ -381,7 +381,7 @@ export const RegistroEmpresa = () => {
     <main>
       <NavBar
         estilos={{
-          backgroundColor: '#1a76d2',
+          backgroundColor: '#1d0a83',
         }}
         mostrarBtn={true}
       />

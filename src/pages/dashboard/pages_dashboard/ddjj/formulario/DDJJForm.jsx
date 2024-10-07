@@ -1231,7 +1231,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ, initFormDDJJ }) => {
               <CreateIcon
                 sx={{
                   fontSize: '1.8rem',
-                  color: '#1A76D2',
+                  color: '#1d0a83',
                   cursor: 'pointer',
                 }}
                 onClick={handleFormCuilOpen(params.row)}
@@ -1904,8 +1904,16 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ, initFormDDJJ }) => {
                       filtrarGrilla,
                       gridApiRef,
                       setSortModel,
+                      toolbar: {
+                        sx: {
+                          color: 'yellow', // Cambiar el color de las letras del toolbar
+                          fontWeight: 'bold', // Hacer el texto negrita
+                        },
+                      },
                     },
                   }}
+                  
+            
                   paginationModel={paginationModel}
                   onPaginationModelChange={setPaginationModel}
                   pageSizeOptions={pageSizeOptions}
@@ -1924,7 +1932,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ, initFormDDJJ }) => {
                       backgroundColor: '#ccc',
                     },
                     '& .css-1iyq7zh-MuiDataGrid-columnHeaders': {
-                      backgroundColor: '#1A76D2 !important',
+                      backgroundColor: '#1d0a83 !important',
                     },
                     '& .art46--cell': {
                       backgroundColor: '#ccc',
