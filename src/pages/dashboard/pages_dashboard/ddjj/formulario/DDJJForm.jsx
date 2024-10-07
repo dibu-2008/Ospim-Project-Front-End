@@ -1872,7 +1872,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ, initFormDDJJ }) => {
                   columns={columns}
                   editMode="row"
                   filterModel={filterModel}
-                  sortModel={sortModel}
+                  //sortModel={sortModel}
                   rowModesModel={rowModesModel}
                   onRowModesModelChange={(newRowModesModel) => {
                     useGridCrud.handleRowModesModelChange(newRowModesModel);
