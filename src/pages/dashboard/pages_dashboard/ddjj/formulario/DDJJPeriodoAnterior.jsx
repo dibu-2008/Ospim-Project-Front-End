@@ -111,6 +111,7 @@ export const DDJJPeriodoAnterior = ({ habiModif, handlerGrillaActualizar }) => {
         }}
         onClick={handlerBuscarPeriodo}
         disabled={!habiModif}
+        className={habiModif?'button-primary':''}
       >
         Buscar
       </Button>

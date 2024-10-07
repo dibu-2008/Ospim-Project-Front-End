@@ -1970,6 +1970,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ, initFormDDJJ }) => {
                     sx={{ padding: '6px 52px', marginLeft: '10px' }}
                     onClick={guardarDDJJConfirm}
                     disabled={deshabilitarGuardar}
+                    className={!deshabilitarGuardar?'button-primary':''}
                   >
                     Guardar
                   </Button>
@@ -1981,6 +1982,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ, initFormDDJJ }) => {
                 sx={{ padding: '6px 52px', marginLeft: '10px' }}
                 onClick={presentarDDJJ}
                 disabled={!habiModif || !ddjjCabe.id}
+                className={!habiModif || !ddjjCabe.id?'':'button-primary'}
               >
                 Presentar
               </Button>
@@ -1990,6 +1992,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ, initFormDDJJ }) => {
                 sx={{ padding: '6px 52px', marginLeft: '10px' }}
                 onClick={limpiarEstadoForm}
                 disabled={!ddjjCabe || (!ddjjCabe.id && ddjjCabe.id == null)}
+                className={!ddjjCabe || (!ddjjCabe.id && ddjjCabe.id == null)?'':'button-primary'}
               >
                 Limpiar Formulario
               </Button>
