@@ -302,13 +302,13 @@ export const Feriados = () => {
         if (isInEditMode) {
           return [
             <GridActionsCellItem
-              icon={<SaveIcon />}
+              icon={<SaveIcon className='icono-azul' />}
               label="Guardar"
               sx={{ color: 'primary.main' }}
               onClick={handleSaveClick(row)}
             />,
             <GridActionsCellItem
-              icon={<CancelIcon />}
+              icon={<CancelIcon className='icono-azul' />}
               label="Cancelar"
               className="textPrimary"
               onClick={handleCancelClick(row)}
@@ -319,14 +319,14 @@ export const Feriados = () => {
 
         return [
           <GridActionsCellItem
-            icon={<EditIcon />}
+            icon={<EditIcon className='icono-azul'/>}
             label="Editar"
             className="textPrimary"
             onClick={handleEditClick(row)}
             color="inherit"
           />,
           <GridActionsCellItem
-            icon={<DeleteIcon />}
+            icon={<DeleteIcon className='icono-azul'/>}
             label="Eliminar"
             className="textPrimary"
             onClick={handleDeleteClick(row)}

@@ -105,7 +105,7 @@ export const DDJJGrilla = ({ rows, showCuit }) => {
       getActions: ({ row }) => {
         return [
           <GridActionsCellItem
-            icon={<LocalPrintshopIcon />}
+            icon={<LocalPrintshopIcon className='icono-azul'/>}
             label="Print"
             color="inherit"
             onClick={() => {

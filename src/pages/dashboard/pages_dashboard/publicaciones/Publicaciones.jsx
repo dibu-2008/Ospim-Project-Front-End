@@ -254,7 +254,7 @@ export const Publicaciones = () => {
         if (isInEditMode) {
           return [
             <GridActionsCellItem
-              icon={<SaveIcon />}
+              icon={<SaveIcon className='icono-azul' />}
               label="Save"
               sx={{
                 color: 'primary.main',
@@ -262,7 +262,7 @@ export const Publicaciones = () => {
               onClick={handleSaveClick(row)}
             />,
             <GridActionsCellItem
-              icon={<CancelIcon />}
+              icon={<CancelIcon className='icono-azul' />}
               label="Cancel"
               className="textPrimary"
               onClick={handleCancelClick(row)}
@@ -272,14 +272,14 @@ export const Publicaciones = () => {
         }
         return [
           <GridActionsCellItem
-            icon={<EditIcon />}
+            icon={<EditIcon className='icono-azul' />}
             label="Edit"
             className="textPrimary"
             onClick={handleEditClick(row)}
             color="inherit"
           />,
           <GridActionsCellItem
-            icon={<DeleteIcon />}
+            icon={<DeleteIcon className='icono-azul' />}
             label="Delete"
             onClick={handleDeleteClick(row)}
             color="inherit"

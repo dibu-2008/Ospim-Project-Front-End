@@ -45,9 +45,26 @@ body {
 	color:#1d0a83!important;
   }
 
- .MuiAccordionSummary-contentGutters{
+  .MuiAccordionSummary-contentGutters{
 	color: aliceblue!important;
  }
+
+ .EditIcon{
+	color:black
+ }
+
+ .DeleteOutlinedIcon{
+	color: black;
+ }
+
+ .MuiSvgIcon-root{
+	color: white;
+ }
+
+ .icono-azul{
+	color: #1d0a83!important;
+ }
+
 
 /* LOGIN STYLES */
 
@@ -82,6 +99,11 @@ body {
   white-space: nowrap;
   line-height: 1.2rem;
   font-size: 0.8rem;
+}
+
+.button-primary {
+	background-color: #1d0a83!important;
+	color: aliceblue!important;
 }
 
 /* 

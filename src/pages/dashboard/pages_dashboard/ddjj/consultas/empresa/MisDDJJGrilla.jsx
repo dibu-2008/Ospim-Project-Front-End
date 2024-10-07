@@ -184,14 +184,14 @@ export const MisDDJJGrilla = ({ rows, setRows, handlerDDJJEditar }) => {
         if (row.estado === 'PE') {
           return [
             <GridActionsCellItem
-              icon={<EditIcon />}
+              icon={<EditIcon className='icono-azul'/>}
               label="Edit"
               className="textPrimary"
               onClick={handlerDDJJEditarClick(id)}
               color="inherit"
             />,
             <GridActionsCellItem
-              icon={<LocalPrintshopIcon />}
+              icon={<LocalPrintshopIcon className='icono-azul'/>}
               label="Print"
               color="inherit"
               onClick={() => handleImprimirDDJJ(id)}
@@ -206,14 +206,14 @@ export const MisDDJJGrilla = ({ rows, setRows, handlerDDJJEditar }) => {
         } else if (row.estado == 'PR') {
           return [
             <GridActionsCellItem
-              icon={<VisibilityIcon />}
+              icon={<VisibilityIcon className='icono-azul'/>}
               label="Edit"
               className="textPrimary"
               onClick={handlerDDJJEditarClick(id)}
               color="inherit"
             />,
             <GridActionsCellItem
-              icon={<LocalPrintshopIcon />}
+              icon={<LocalPrintshopIcon className='icono-azul'/>}
               label="Print"
               color="inherit"
               onClick={() => handleImprimirDDJJ(id)}
@@ -222,14 +222,14 @@ export const MisDDJJGrilla = ({ rows, setRows, handlerDDJJEditar }) => {
         } else {
           return [
             <GridActionsCellItem
-              icon={<VisibilityIcon />}
+              icon={<VisibilityIcon className='icono-azul'/>}
               label="Edit"
               className="textPrimary"
               onClick={handlerDDJJEditarClick(id)}
               color="inherit"
             />,
             <GridActionsCellItem
-              icon={<LocalPrintshopIcon />}
+              icon={<LocalPrintshopIcon className='icono-azul'/>}
               label="Print"
               color="inherit"
               onClick={() => handleImprimirDDJJ(id)}

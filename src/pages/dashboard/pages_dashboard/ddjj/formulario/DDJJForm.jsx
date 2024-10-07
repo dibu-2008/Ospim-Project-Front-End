@@ -1113,7 +1113,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ, initFormDDJJ }) => {
               title="Guardar modificaciones en la grilla"
             >
               <GridActionsCellItem
-                icon={<SaveIcon />}
+                icon={<SaveIcon className='icono-azul'/>}
                 label=""
                 sx={{
                   color: 'primary.main',
@@ -1133,7 +1133,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ, initFormDDJJ }) => {
               title="Cancelar modificaciones realizadas"
             >
               <GridActionsCellItem
-                icon={<CancelIcon />}
+                icon={<CancelIcon className='icono-azul'/>}
                 label="Cancelar Edición"
                 className="textPrimary"
                 onClick={() => {
@@ -1151,7 +1151,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ, initFormDDJJ }) => {
             title="Editar Resgistro"
           >
             <GridActionsCellItem
-              icon={<EditIcon />}
+              icon={<EditIcon className='icono-azul' />}
               label="Edit"
               className="textPrimary"
               onClick={() => {
@@ -1166,12 +1166,13 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ, initFormDDJJ }) => {
             title="Eliminar Resgistro"
           >
             <GridActionsCellItem
-              icon={<DeleteIcon />}
+              icon={<DeleteIcon className='icono-azul'/>}
               label="Delete"
               onClick={() => {
                 useGridCrud.handleDeleteClick(gridApiRef, row);
               }}
-              color="inherit"
+              //color="inherit"
+ 
               disabled={!habiModif}
             />
           </Tooltip>,
@@ -1904,16 +1905,8 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ, initFormDDJJ }) => {
                       filtrarGrilla,
                       gridApiRef,
                       setSortModel,
-                      toolbar: {
-                        sx: {
-                          color: 'yellow', // Cambiar el color de las letras del toolbar
-                          fontWeight: 'bold', // Hacer el texto negrita
-                        },
-                      },
                     },
                   }}
-                  
-            
                   paginationModel={paginationModel}
                   onPaginationModelChange={setPaginationModel}
                   pageSizeOptions={pageSizeOptions}

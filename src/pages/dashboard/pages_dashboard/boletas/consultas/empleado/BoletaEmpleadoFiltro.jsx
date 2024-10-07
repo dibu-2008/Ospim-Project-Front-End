@@ -230,6 +230,7 @@ export const BoletaEmpleadoFiltro = () => {
               onClick={handlerLimpiarFiltro}
               variant="contained"
               style={{ marginLeft: '2em' }}
+              className='button-primary'
             >
               Limpiar Filtro
             </Button>
@@ -247,6 +248,7 @@ export const BoletaEmpleadoFiltro = () => {
           onClick={handlerConsultar}
           variant="contained"
           style={{ marginLeft: '2em' }}
+          className='button-primary'
         >
           Buscar
         </Button>

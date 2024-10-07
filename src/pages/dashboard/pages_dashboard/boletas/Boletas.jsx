@@ -193,6 +193,7 @@ export const Boletas = () => {
             variant="contained"
             onClick={fetchData}
             style={{ marginLeft: '2em' }}
+            className='button-primary'
           >
             Buscar
           </Button>
@@ -289,7 +290,7 @@ export const Boletas = () => {
                               size="small"
                               onClick={() => handleViewClick(params.row)}
                             >
-                              <VisibilityIcon />
+                              <VisibilityIcon  className='icono-azul'/>
                             </IconButton>
                           </>
                         );
@@ -302,7 +303,7 @@ export const Boletas = () => {
                               size="small"
                               onClick={() => handleViewClick(params.row)}
                             >
-                              <VisibilityIcon />
+                              <VisibilityIcon  className='icono-azul'/>
                             </IconButton>
                             <IconButton
                               size="small"
@@ -310,20 +311,20 @@ export const Boletas = () => {
                                 boletaPdfDownload(ID_EMPRESA, params.row.id);
                               }}
                             >
-                              <PrintIcon />
+                              <PrintIcon className='icono-azul'/>
                             </IconButton>
                             <IconButton
                               size="small"
                               onClick={() => handleViewClick(params.row)}
                               disabled={!!params.row.fecha_de_pago}
                             >
-                              <EditIcon />
+                              <EditIcon className='icono-azul' />
                             </IconButton>
                             <IconButton
                               size="small"
                               onClick={() => handleGenerarBepClick(params.row)}
                             >
-                              <RequestQuoteIcon />
+                              <RequestQuoteIcon className='icono-azul' />
                             </IconButton>
                           </>
                         );
@@ -334,7 +335,7 @@ export const Boletas = () => {
                             size="small"
                             onClick={() => handleViewClick(params.row)}
                           >
-                            <VisibilityIcon />
+                            <VisibilityIcon className='icono-azul' />
                           </IconButton>
                           <IconButton
                             size="small"
@@ -342,14 +343,14 @@ export const Boletas = () => {
                               boletaPdfDownload(ID_EMPRESA, params.row.id);
                             }}
                           >
-                            <PrintIcon />
+                            <PrintIcon className='icono-azul'/>
                           </IconButton>
                           <IconButton
                             size="small"
                             onClick={() => handleViewClick(params.row)}
                             disabled={!!params.row.fecha_de_pago}
                           >
-                            <EditIcon />
+                            <EditIcon  className='icono-azul'/>
                           </IconButton>
                         </>
                       );
@@ -443,7 +444,7 @@ export const Boletas = () => {
                             boletaPdfDownload(ID_EMPRESA, params.row.id);
                           }}
                         >
-                          <PrintIcon />
+                          <PrintIcon className='icono-azul'/>
                         </IconButton>
                       </>
                     ),

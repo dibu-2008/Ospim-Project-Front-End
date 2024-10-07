@@ -160,6 +160,7 @@ export const DDJJFiltro = () => {
             onClick={handlerConsultar}
             variant="contained"
             style={{ marginLeft: '2em' }}
+            className='button-primary'
           >
             Buscar
           </Button>

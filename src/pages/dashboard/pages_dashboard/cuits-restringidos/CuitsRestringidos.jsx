@@ -330,7 +330,7 @@ export const CuitsRestringidos = () => {
         if (isInEditMode) {
           return [
             <GridActionsCellItem
-              icon={<SaveIcon />}
+              icon={<SaveIcon className='icono-azul'/>}
               label="Guardar"
               sx={{
                 color: 'primary.main',
@@ -338,7 +338,7 @@ export const CuitsRestringidos = () => {
               onClick={handleSaveClick(row)}
             />,
             <GridActionsCellItem
-              icon={<CancelIcon />}
+              icon={<CancelIcon className='icono-azul'/>}
               label="Cancelar"
               className="textPrimary"
               onClick={handleCancelClick(row)}
@@ -349,14 +349,14 @@ export const CuitsRestringidos = () => {
 
         return [
           <GridActionsCellItem
-            icon={<EditIcon />}
+            icon={<EditIcon className='icono-azul'/>}
             label="Edit"
-            className="textPrimary"
+            //className="textPrimary"
             onClick={handleEditClick(row)}
             color="inherit"
           />,
           <GridActionsCellItem
-            icon={<DeleteIcon />}
+            icon={<DeleteIcon className='icono-azul' />}
             label="Delete"
             onClick={handleDeleteClick(row)}
             color="inherit"
