@@ -252,6 +252,7 @@ export const LoginPage = () => {
                             onClick={handleClickShowPassword}
                             onMouseDown={handleMouseDownPassword}
                             edge="end"
+                            style={{backgroundColor:'#1d0a83'}}
                           >
                             {showPassword ? <Visibility /> : <VisibilityOff />}
                           </IconButton>
@@ -273,7 +274,7 @@ export const LoginPage = () => {
                       showAlertUser && showAlertPassword ? '50px' : '120px',
                   }}
                   type="submit"
-                  className="siguiente"
+                  className="button-primary"
                 >
                   SIGUIENTE
                 </Button>
