@@ -85,7 +85,7 @@ const getSettingConfirm = (seteos) => {
     title: seteos.titulo,
     icon: 'warning',
     showCancelButton: true,
-    confirmButtonColor: '#1A76D2',
+    confirmButtonColor: '#1d0a83',
     cancelButtonColor: '#6c757d',
     confirmButtonText: seteos.textoBtnOK,
   };

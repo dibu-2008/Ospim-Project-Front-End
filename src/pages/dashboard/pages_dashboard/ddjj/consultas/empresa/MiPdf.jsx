@@ -2,7 +2,7 @@ import React from 'react';
 import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 
 const styles = StyleSheet.create({
-  page: { backgroundColor: '#1A76D2' },
+  page: { backgroundColor: '#1d0a83' },
   section: { color: 'white', textAlign: 'center', margin: 30 },
 });
 

@@ -225,7 +225,7 @@ export const LoginPage = () => {
     <div className="container_login_page">
       <NavBar
         estilos={{
-          backgroundColor: '#1a76d2',
+          backgroundColor: '#1d0a83',
         }}
         estilosLogo={{
           width: '100px',
@@ -322,7 +322,7 @@ export const LoginPage = () => {
                     visible={showLoading}
                     height="100"
                     width="100"
-                    color="#1A76D2"
+                    color="#1d0a83"
                     ariaLabel="three-circles-loading"
                     wrapperStyle={{
                       margin: '0 auto',

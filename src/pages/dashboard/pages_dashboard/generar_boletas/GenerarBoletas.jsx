@@ -287,7 +287,7 @@ export const GenerarBoletas = () => {
   return (
     <div className="generador_boletas_container">
       <h1>Boleta de Pago</h1>
-      <h3 style={{ color: '#1A76D2' }}>
+      <h3 style={{ color: '#1d0a83' }}>
         DDJJ:{' '}
         {boletas &&
         boletas.periodo &&
@@ -550,7 +550,7 @@ export const GenerarBoletas = () => {
           .map((boleta, index) => (
             <div key={index}>
               {index === 0 && (
-                <h3 style={{ color: '#1A76D2' }}>Ajustes aplicados</h3>
+                <h3 style={{ color: '#1d0a83' }}>Ajustes aplicados</h3>
               )}
               <p>{boleta.descripcion}</p>
 

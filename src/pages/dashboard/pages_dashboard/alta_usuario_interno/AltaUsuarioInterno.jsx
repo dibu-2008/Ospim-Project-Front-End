@@ -10,7 +10,7 @@ import {
   Grid,
   InputAdornment,
   OutlinedInput,
-  InputLabel,
+  InputLabel
 } from '@mui/material';
 
 import { Add, Edit, DeleteOutlined, Save, Close } from '@mui/icons-material';
@@ -35,13 +35,13 @@ import {
   GridToolbar,
 } from '@mui/x-data-grid';
 
-import { axiosUsuariosInternos } from './usuarioInternoApi';
+import { axiosUsuariosInternos } from './AltaUsuarioInternoApi';
 import { axiosRoles } from '@pages/dashboard/pages_dashboard/roles/RolesApi';
 
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 
 import swal from '@/components/swal/swal';
-import './usuarioInterno.css';
+import './AltaUsuarioInterno.css';
 
 import { dataGridStyle } from '@/common/dataGridStyle';
 import { margin } from '@mui/system';
@@ -54,7 +54,7 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: 700,
   bgcolor: 'background.paper',
-  border: '2px solid #1d0a83',
+  border: '2px solid #1A76D2',
   boxShadow: 24,
   p: 4,
 };
@@ -107,7 +107,7 @@ const crearNuevoRegistro = (props) => {
   );
 };
 
-export const UsuarioInterno = () => {
+export const AltaUsuarioInterno = () => {
   const [rowModesModel, setRowModesModel] = useState({});
   const [rows, setRows] = useState([]);
   const [roles, setRoles] = useState([]);
@@ -275,7 +275,7 @@ export const UsuarioInterno = () => {
   const [usuario, setUsuario] = useState('');
   const [email, setEmail] = useState('');
   const [clave, setClave] = useState('');
-  const [claveError, setClaveError] = useState(false);
+  const [claveError, setClaveError] = useState(false)
   const [repetirClave, setRepetirClave] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [idUsuario, setIdUsuario] = useState(0);
@@ -292,7 +292,7 @@ export const UsuarioInterno = () => {
   };
 
   const handleClave = (e) => {
-    setClaveError(!validatePassword(e.target.value));
+    setClaveError(!validatePassword(e.target.value))
     setClave(e.target.value);
   };
 
@@ -305,8 +305,7 @@ export const UsuarioInterno = () => {
 
     e.preventDefault();
     if (clave !== repetirClave) {
-      swal.showError('Las claves no coinciden !');
-      handleClose();
+      swal.ShowError('Las claves no coinciden !');
       return; // Para salir de la función sin continuar
     }
 
@@ -325,6 +324,17 @@ export const UsuarioInterno = () => {
     handleClose();
   };
 
+  const handleKeyDown = (params, event) => {
+    if (event.key === 'Tab') {
+      event.preventDefault();
+      // Navega a la siguiente celda editable usando el tab
+      const isShift = event.shiftKey;
+      params.apiRef.current.publishEvent('cellNavigationKeyDown', params, {
+        key: isShift ? 'ArrowLeft' : 'ArrowRight',
+      });
+    }
+  }
+
   const columns = [
     {
       field: 'apellido',
@@ -335,9 +345,6 @@ export const UsuarioInterno = () => {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell',
-      valueParser: (value, row, column, apiRef) => {
-        return value?.toUpperCase();
-      },
     },
     {
       field: 'nombre',
@@ -348,9 +355,6 @@ export const UsuarioInterno = () => {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell',
-      valueParser: (value, row, column, apiRef) => {
-        return value?.toUpperCase();
-      },
     },
     {
       field: 'descripcion',
@@ -514,6 +518,7 @@ export const UsuarioInterno = () => {
             getRowId={(row) => rows.indexOf(row)}
             editMode="row"
             rowModesModel={rowModesModel}
+            onCellKeyDown={handleKeyDown}
             onRowModesModelChange={handleRowModesModelChange}
             onRowEditStop={handleRowEditStop}
             processRowUpdate={(updatedRow, originalRow) =>
@@ -540,7 +545,7 @@ export const UsuarioInterno = () => {
                 backgroundColor: '#ccc',
               },
               '& .css-1iyq7zh-MuiDataGrid-columnHeaders': {
-                backgroundColor: '#1d0a83 !important',
+                backgroundColor: '#1A76D2 !important',
               },
             }}
             paginationModel={paginationModel}
@@ -568,7 +573,7 @@ export const UsuarioInterno = () => {
                   color: theme.palette.primary.main,
                 }}
               >
-                Gestión de Clave
+                Gestion de Clave
               </Typography>
               <Grid container spacing={2}>
                 <Grid item xs={6}>
@@ -613,7 +618,7 @@ export const UsuarioInterno = () => {
               </Grid>
               <Grid container spacing={2}>
                 <Grid item xs={6}>
-                  <InputLabel htmlFor="clave">Clave </InputLabel>
+                <InputLabel htmlFor="clave">Clave </InputLabel>
                   <OutlinedInput
                     value={clave}
                     label="Clave"
@@ -638,9 +643,7 @@ export const UsuarioInterno = () => {
                   />
                 </Grid>
                 <Grid item xs={6}>
-                  <InputLabel htmlFor="repetir-clave">
-                    Repetir Clave{' '}
-                  </InputLabel>
+                <InputLabel htmlFor="repetir-clave">Repetir Clave </InputLabel>
                   <OutlinedInput
                     value={repetirClave}
                     label="Repetir Clave"

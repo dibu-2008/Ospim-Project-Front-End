@@ -50,7 +50,7 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: 500,
   bgcolor: 'background.paper',
-  border: '2px solid #1A76D2',
+  border: '2px solid #1d0a83',
   boxShadow: 24,
   p: 4,
 };
@@ -161,7 +161,7 @@ export const Feriados = () => {
           text: '¡No podrás revertir esto!',
           icon: 'warning',
           showCancelButton: true,
-          confirmButtonColor: '#1A76D2',
+          confirmButtonColor: '#1d0a83',
           cancelButtonColor: '#6c757d',
           confirmButtonText: 'Si, bórralo!',
         }).then(async (result) => {
@@ -354,7 +354,7 @@ export const Feriados = () => {
             <DateRangeIcon
               sx={{
                 fontSize: '2.5rem',
-                color: '#1A76D2',
+                color: '#1d0a83',
               }}
             />
           </IconButton>

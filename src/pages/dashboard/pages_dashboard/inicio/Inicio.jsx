@@ -61,7 +61,7 @@ export const Inicio = () => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <EmailIcon />
+                <EmailIcon sx={{ color: '#1d0a83' }} />
               </Link>
               {datosContacto ? datosContacto?.email : ''}
             </div>
@@ -71,7 +71,7 @@ export const Inicio = () => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <LocalPhoneIcon />
+                <LocalPhoneIcon sx={{ color: '#1d0a83' }} />
               </Link>
               {datosContacto ? datosContacto?.telefono : ''}
             </div>

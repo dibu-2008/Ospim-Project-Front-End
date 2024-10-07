@@ -41,7 +41,7 @@ export const CuitForm = ({ formShow, setFormShow, actualizarEmpresa }) => {
             transform: 'translate(-50%, -50%)',
             width: 700,
             bgcolor: 'background.paper',
-            border: '2px solid #1A76D2',
+            border: '2px solid #1d0a83',
             boxShadow: 24,
             p: 4,
           }}

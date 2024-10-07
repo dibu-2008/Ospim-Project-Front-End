@@ -38,7 +38,7 @@ export const RecuperarClave = () => {
     <div className="container_recupero_page">
       <NavBar
         estilos={{
-          backgroundColor: '#1a76d2',
+          backgroundColor: '#1d0a83',
         }}
         estilosLogo={{
           width: '100px',

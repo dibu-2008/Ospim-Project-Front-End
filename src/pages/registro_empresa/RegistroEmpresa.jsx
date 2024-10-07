@@ -338,7 +338,9 @@ export const RegistroEmpresa = () => {
 
     if (event.target.name === 'whatsapp_prefijo') {
       if (inputValue.length <= maxDigits - whatsapp_prefijo.toString().length) {
-        OnInputChangeRegisterCompany(event);
+        if (inputValue[0] != '0'){
+          OnInputChangeRegisterCompany(event);
+        }
       }
     }
     //Expresion prefijoAdditional
@@ -367,6 +369,11 @@ export const RegistroEmpresa = () => {
       if (totalLength <= maxDigits) {
         OnInputChangeRegisterCompany(event);
       }
+      if (inputValue[0] + inputValue[1] === '15'){
+        setErrorWhatsapp(true)
+      } else {
+        setErrorWhatsapp(false)
+      }
     }
   };
 
@@ -374,7 +381,7 @@ export const RegistroEmpresa = () => {
     <main>
       <NavBar
         estilos={{
-          backgroundColor: '#1a76d2',
+          backgroundColor: '#1d0a83',
         }}
         mostrarBtn={true}
       />
