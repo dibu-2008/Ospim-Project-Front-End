@@ -37,7 +37,7 @@ export const LoginPage = () => {
   const [showVerificationForm, setShowVerificationForm] = useState(false);
   const [showAlertUser, setShowAlertUser] = useState(false);
   const [showAlertPassword, setShowAlertPassword] = useState(false);
-  const [verificationCode, setVerificationCode] = useState('310279');
+  const [verificationCode, setVerificationCode] = useState(''); //310279
   const [token, setToken] = useState(null);
   const [refreshToken, setRefreshToken] = useState(null);
   const [showLoading, setShowLoading] = useState(true);
@@ -129,13 +129,18 @@ export const LoginPage = () => {
     if (loginDto && loginDto.token) {
       console.log('EXISTE loginDto.token');
       setToken(loginDto.token);
-      const usuarioConDFA = await usuarioLogueadoHabilitadoDFA(loginDto.token);
-      console.log('usuarioConDFA: ', usuarioConDFA); // TRUE O FALSE
       let bUsuarioConDFA = false;
-      if (usuarioConDFA && usuarioConDFA.valor) {
+      if (!loginDto.tokenRefresco) {
         bUsuarioConDFA = true;
       }
-      console.log(bUsuarioConDFA);
+      //const usuarioConDFA = await usuarioLogueadoHabilitadoDFA(loginDto.token);
+      //console.log('usuarioConDFA: ', usuarioConDFA); // TRUE O FALSE
+
+      //if (usuarioConDFA && usuarioConDFA.valor) {
+      //bUsuarioConDFA = true;
+      //}
+      console.log('bUsuarioConDFA:', bUsuarioConDFA);
+
       if (bUsuarioConDFA) {
         console.log('usuarioHabilitadoDFA: TRUE !!!');
         setShowInternalUserForm(false); // Esconde el form de usuario y clave
