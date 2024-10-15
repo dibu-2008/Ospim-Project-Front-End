@@ -125,7 +125,7 @@ export const DragAndDrop = ({ tareas }) => {
 
         <Button
           variant="contained"
-          className="button_act"
+          className="button_act button-primary"
           onClick={handleClick}
         >
           Actualizar

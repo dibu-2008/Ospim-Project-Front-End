@@ -19,7 +19,7 @@ export const GrillaConvenio = ({ convenios,  }) => {
       sx={{
         width: '100%',
         '& .MuiDataGrid-columnHeaders': {
-          backgroundColor: '#1A76D2',
+          backgroundColor: '#1d0a83',
           color: 'white',
         },
       }}

@@ -50,7 +50,7 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: 500,
   bgcolor: 'background.paper',
-  border: '2px solid #1A76D2',
+  border: '2px solid #1d0a83',
   boxShadow: 24,
   p: 4,
 };
@@ -161,7 +161,7 @@ export const Feriados = () => {
           text: '¡No podrás revertir esto!',
           icon: 'warning',
           showCancelButton: true,
-          confirmButtonColor: '#1A76D2',
+          confirmButtonColor: '#1d0a83',
           cancelButtonColor: '#6c757d',
           confirmButtonText: 'Si, bórralo!',
         }).then(async (result) => {
@@ -302,13 +302,13 @@ export const Feriados = () => {
         if (isInEditMode) {
           return [
             <GridActionsCellItem
-              icon={<SaveIcon />}
+              icon={<SaveIcon className='icono-azul' />}
               label="Guardar"
               sx={{ color: 'primary.main' }}
               onClick={handleSaveClick(row)}
             />,
             <GridActionsCellItem
-              icon={<CancelIcon />}
+              icon={<CancelIcon className='icono-azul' />}
               label="Cancelar"
               className="textPrimary"
               onClick={handleCancelClick(row)}
@@ -319,14 +319,14 @@ export const Feriados = () => {
 
         return [
           <GridActionsCellItem
-            icon={<EditIcon />}
+            icon={<EditIcon className='icono-azul'/>}
             label="Editar"
             className="textPrimary"
             onClick={handleEditClick(row)}
             color="inherit"
           />,
           <GridActionsCellItem
-            icon={<DeleteIcon />}
+            icon={<DeleteIcon className='icono-azul'/>}
             label="Eliminar"
             className="textPrimary"
             onClick={handleDeleteClick(row)}
@@ -354,7 +354,7 @@ export const Feriados = () => {
             <DateRangeIcon
               sx={{
                 fontSize: '2.5rem',
-                color: '#1A76D2',
+                color: '#1d0a83',
               }}
             />
           </IconButton>

@@ -35,7 +35,7 @@ export const CarouselText = ({ contenido }) => {
               borderRadius: '10px',
               width: '100%',
               paddingTop: '10px',
-              boxShadow: '0px 0px 10px 0px #1A76D2',
+              boxShadow: '0px 0px 10px 0px #1d0a83',
             }}
           >
             <h2
@@ -58,7 +58,7 @@ export const CarouselText = ({ contenido }) => {
             >
               <h2
                 style={{
-                  color: '#1A76D2',
+                  color: '#1d0a83',
                   marginBottom: '20px',
                 }}
               >
@@ -94,7 +94,7 @@ export const CarouselText = ({ contenido }) => {
               <ArrowBackIosNewIcon
                 sx={{
                   fontSize: '50px',
-                  color: '#1A76D2',
+                  color: '#1d0a83',
                 }}
               />
             </span>
@@ -112,7 +112,7 @@ export const CarouselText = ({ contenido }) => {
                     cursor: 'pointer',
                     margin: '0 5px',
                     fontSize: '30px',
-                    color: index === currentIndex ? '#1A76D2' : '#ccc',
+                    color: index === currentIndex ? '#1d0a83' : '#ccc',
                   }}
                 >
                   &bull;
@@ -130,7 +130,7 @@ export const CarouselText = ({ contenido }) => {
               <ArrowForwardIosIcon
                 sx={{
                   fontSize: '50px',
-                  color: '#1A76D2',
+                  color: '#1d0a83',
                 }}
               />
             </span>

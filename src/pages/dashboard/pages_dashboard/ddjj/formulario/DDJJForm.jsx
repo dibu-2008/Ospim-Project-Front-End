@@ -1113,7 +1113,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ, initFormDDJJ }) => {
               title="Guardar modificaciones en la grilla"
             >
               <GridActionsCellItem
-                icon={<SaveIcon />}
+                icon={<SaveIcon className='icono-azul'/>}
                 label=""
                 sx={{
                   color: 'primary.main',
@@ -1133,7 +1133,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ, initFormDDJJ }) => {
               title="Cancelar modificaciones realizadas"
             >
               <GridActionsCellItem
-                icon={<CancelIcon />}
+                icon={<CancelIcon className='icono-azul'/>}
                 label="Cancelar Edición"
                 className="textPrimary"
                 onClick={() => {
@@ -1151,7 +1151,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ, initFormDDJJ }) => {
             title="Editar Resgistro"
           >
             <GridActionsCellItem
-              icon={<EditIcon />}
+              icon={<EditIcon className='icono-azul' />}
               label="Edit"
               className="textPrimary"
               onClick={() => {
@@ -1166,12 +1166,13 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ, initFormDDJJ }) => {
             title="Eliminar Resgistro"
           >
             <GridActionsCellItem
-              icon={<DeleteIcon />}
+              icon={<DeleteIcon className='icono-azul'/>}
               label="Delete"
               onClick={() => {
                 useGridCrud.handleDeleteClick(gridApiRef, row);
               }}
-              color="inherit"
+              //color="inherit"
+ 
               disabled={!habiModif}
             />
           </Tooltip>,
@@ -1231,7 +1232,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ, initFormDDJJ }) => {
               <CreateIcon
                 sx={{
                   fontSize: '1.8rem',
-                  color: '#1A76D2',
+                  color: '#1d0a83',
                   cursor: 'pointer',
                 }}
                 onClick={handleFormCuilOpen(params.row)}
@@ -1924,7 +1925,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ, initFormDDJJ }) => {
                       backgroundColor: '#ccc',
                     },
                     '& .css-1iyq7zh-MuiDataGrid-columnHeaders': {
-                      backgroundColor: '#1A76D2 !important',
+                      backgroundColor: '#1d0a83 !important',
                     },
                     '& .art46--cell': {
                       backgroundColor: '#ccc',
@@ -1969,6 +1970,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ, initFormDDJJ }) => {
                     sx={{ padding: '6px 52px', marginLeft: '10px' }}
                     onClick={guardarDDJJConfirm}
                     disabled={deshabilitarGuardar}
+                    className={!deshabilitarGuardar?'button-primary':''}
                   >
                     Guardar
                   </Button>
@@ -1980,6 +1982,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ, initFormDDJJ }) => {
                 sx={{ padding: '6px 52px', marginLeft: '10px' }}
                 onClick={presentarDDJJ}
                 disabled={!habiModif || !ddjjCabe.id}
+                className={!habiModif || !ddjjCabe.id?'':'button-primary'}
               >
                 Presentar
               </Button>
@@ -1989,6 +1992,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ, initFormDDJJ }) => {
                 sx={{ padding: '6px 52px', marginLeft: '10px' }}
                 onClick={limpiarEstadoForm}
                 disabled={!ddjjCabe || (!ddjjCabe.id && ddjjCabe.id == null)}
+                className={!ddjjCabe || (!ddjjCabe.id && ddjjCabe.id == null)?'':'button-primary'}
               >
                 Limpiar Formulario
               </Button>

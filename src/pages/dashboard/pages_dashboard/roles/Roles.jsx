@@ -119,7 +119,7 @@ export const Roles = () => {
           text: '¡No podrás revertir esto!',
           icon: 'warning',
           showCancelButton: true,
-          confirmButtonColor: '#1A76D2',
+          confirmButtonColor: '#1d0a83',
           cancelButtonColor: '#6c757d',
           confirmButtonText: 'Si, bórralo!',
         }).then(async (result) => {
@@ -248,13 +248,13 @@ export const Roles = () => {
         if (isInEditMode) {
           return [
             <GridActionsCellItem
-              icon={<SaveIcon />}
+              icon={<SaveIcon className='icono-azul'/>}
               label="Guardar"
               sx={{ color: 'primary.main' }}
               onClick={handleSaveClick(row)}
             />,
             <GridActionsCellItem
-              icon={<CancelIcon />}
+              icon={<CancelIcon className='icono-azul'/>}
               label="Cancelar"
               className="textPrimary"
               onClick={handleCancelClick(row)}
@@ -265,13 +265,13 @@ export const Roles = () => {
 
         return [
           <GridActionsCellItem
-            icon={<EditIcon />}
+            icon={<EditIcon className='icono-azul'/>}
             label="Editar"
             className="textPrimary"
             onClick={handleEditClick(row)}
           />,
           <GridActionsCellItem
-            icon={<DeleteIcon />}
+            icon={<DeleteIcon className='icono-azul'/>}
             label="Eliminar"
             className="textPrimary"
             onClick={handleDeleteClick(row)}
@@ -332,7 +332,7 @@ export const Roles = () => {
                 backgroundColor: '#ccc',
               },
               '& .css-1iyq7zh-MuiDataGrid-columnHeaders': {
-                backgroundColor: '#1A76D2 !important',
+                backgroundColor: '#1d0a83 !important',
               },
             }}
             paginationModel={paginationModel}

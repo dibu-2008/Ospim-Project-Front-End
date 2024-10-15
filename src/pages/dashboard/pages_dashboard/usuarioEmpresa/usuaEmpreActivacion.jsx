@@ -39,7 +39,7 @@ export const UsuaEmpreActivacion = () => {
     <div className="container_login_page">
       <NavBar
         estilos={{
-          backgroundColor: '#1a76d2',
+          backgroundColor: '#1d0a83',
         }}
         estilosLogo={{
           width: '100px',
