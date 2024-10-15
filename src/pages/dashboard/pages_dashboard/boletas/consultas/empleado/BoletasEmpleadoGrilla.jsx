@@ -75,7 +75,7 @@ export const BoletasEmpleadoGrilla = ({ rowsGrilla }) => {
                   boletaPdfDownload(params.row.empresaId, params.row.id);
                 }}
               >
-                <PrintIcon className='icono-azul' />
+                <PrintIcon />
               </IconButton>
             </>
           );

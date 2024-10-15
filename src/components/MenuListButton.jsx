@@ -41,7 +41,7 @@ export const MenuListButton = ({
         expandIcon={
           <ExpandMoreIcon
             sx={{
-              color: '#1d0a83',
+              color: '#1a76d2',
             }}
           />
         }
@@ -58,7 +58,7 @@ export const MenuListButton = ({
       >
         <Typography
           sx={{
-            color: '#1d0a83',
+            color: '#1a76d2',
           }}
         >
           <LibraryBooksIcon />
@@ -82,7 +82,7 @@ export const MenuListButton = ({
             <Box
               sx={{
                 marginLeft: '10px',
-                color: '#1d0a83',
+                color: '#1a76d2',
               }}
               key={i}
             >
@@ -98,7 +98,7 @@ export const MenuListButton = ({
                 <span
                   style={{
                     marginLeft: 10,
-                    color: '#1d0a83',
+                    color: '#1a76d2',
                   }}
                 >
                   {' '}

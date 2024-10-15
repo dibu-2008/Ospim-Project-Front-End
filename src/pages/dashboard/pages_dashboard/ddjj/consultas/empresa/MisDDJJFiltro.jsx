@@ -101,14 +101,12 @@ export const MisDDJJFiltro = ({ handlerDDJJEditar }) => {
             onClick={handlerConsultar}
             variant="contained"
             style={{ marginLeft: '2em' }}
-            className='button-primary'
           >
             Buscar
           </Button>
           <Button
             onClick={initFiltro}
             variant="contained"
-            className='button-primary'
             style={{ marginLeft: '2em' }}
           >
             Limpiar Filtro

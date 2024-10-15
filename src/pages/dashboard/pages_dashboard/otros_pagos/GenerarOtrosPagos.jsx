@@ -145,15 +145,6 @@ export const GenerarOtrosPagos = () => {
                 !nroActa ||
                 deshabilitar
               }
-              className={
-                !intencionDePago ||
-                !entidad ||
-                !importe ||
-                !nroActa ||
-                deshabilitar
-                  ? ''
-                  : 'button-primary'
-              }
               onClick={handleImprimir}
             >
               Imprimir

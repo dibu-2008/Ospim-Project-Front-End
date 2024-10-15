@@ -1,5 +1,5 @@
 .icon-toggle {
-  color: #1d0a83 !important;
+  color: #1a76d2 !important;
 }
 .icon-container {
   display: flex;
@@ -42,12 +42,12 @@
   display: flex; /* Asegura que el texto esté alineado verticalmente */
   align-items: center; /* Centra verticalmente el texto */
   margin-left: 10px;
-  color: #1d0a83 !important;
+  color: #1a76d2 !important;
 }
 
 .nombre {
   display: flex; /* Asegura que el texto esté alineado verticalmente */
   align-items: center; /* Centra verticalmente el texto */
   margin-left: 10px;
-  color: #1d0a83 !important;
+  color: #1a76d2 !important;
 }

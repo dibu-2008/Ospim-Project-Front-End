@@ -466,7 +466,6 @@ export const DDJJArchivoImport = ({
       </Box>
       <Button
         variant="contained"
-        className='button-primary'
         sx={{
           padding: '6px 52px',
           width: '150px',

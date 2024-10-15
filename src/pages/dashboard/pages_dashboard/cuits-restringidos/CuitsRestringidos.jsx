@@ -150,7 +150,7 @@ export const CuitsRestringidos = () => {
           text: '¡No podrás revertir esto!',
           icon: 'warning',
           showCancelButton: true,
-          confirmButtonColor: '#1d0a83',
+          confirmButtonColor: '#1A76D2',
           cancelButtonColor: '#6c757d',
           confirmButtonText: 'Si, bórralo!',
         }).then(async (result) => {
@@ -330,7 +330,7 @@ export const CuitsRestringidos = () => {
         if (isInEditMode) {
           return [
             <GridActionsCellItem
-              icon={<SaveIcon className='icono-azul'/>}
+              icon={<SaveIcon />}
               label="Guardar"
               sx={{
                 color: 'primary.main',
@@ -338,7 +338,7 @@ export const CuitsRestringidos = () => {
               onClick={handleSaveClick(row)}
             />,
             <GridActionsCellItem
-              icon={<CancelIcon className='icono-azul'/>}
+              icon={<CancelIcon />}
               label="Cancelar"
               className="textPrimary"
               onClick={handleCancelClick(row)}
@@ -349,14 +349,14 @@ export const CuitsRestringidos = () => {
 
         return [
           <GridActionsCellItem
-            icon={<EditIcon className='icono-azul'/>}
+            icon={<EditIcon />}
             label="Edit"
-            //className="textPrimary"
+            className="textPrimary"
             onClick={handleEditClick(row)}
             color="inherit"
           />,
           <GridActionsCellItem
-            icon={<DeleteIcon className='icono-azul' />}
+            icon={<DeleteIcon />}
             label="Delete"
             onClick={handleDeleteClick(row)}
             color="inherit"
@@ -414,7 +414,7 @@ export const CuitsRestringidos = () => {
                 backgroundColor: '#ccc',
               },
               '& .css-1iyq7zh-MuiDataGrid-columnHeaders': {
-                backgroundColor: '#1d0a83 !important',
+                backgroundColor: '#1A76D2 !important',
               },
             }}
             paginationModel={paginationModel}

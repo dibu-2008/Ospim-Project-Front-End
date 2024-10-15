@@ -81,7 +81,7 @@ export const Publicaciones = () => {
           text: '¡No podrás revertir esto!',
           icon: 'warning',
           showCancelButton: true,
-          confirmButtonColor: '#1d0a83',
+          confirmButtonColor: '#1A76D2',
           cancelButtonColor: '#6c757d',
           confirmButtonText: 'Si, bórralo!',
         }).then(async (result) => {
@@ -254,7 +254,7 @@ export const Publicaciones = () => {
         if (isInEditMode) {
           return [
             <GridActionsCellItem
-              icon={<SaveIcon className='icono-azul' />}
+              icon={<SaveIcon />}
               label="Save"
               sx={{
                 color: 'primary.main',
@@ -262,7 +262,7 @@ export const Publicaciones = () => {
               onClick={handleSaveClick(row)}
             />,
             <GridActionsCellItem
-              icon={<CancelIcon className='icono-azul' />}
+              icon={<CancelIcon />}
               label="Cancel"
               className="textPrimary"
               onClick={handleCancelClick(row)}
@@ -272,14 +272,14 @@ export const Publicaciones = () => {
         }
         return [
           <GridActionsCellItem
-            icon={<EditIcon className='icono-azul' />}
+            icon={<EditIcon />}
             label="Edit"
             className="textPrimary"
             onClick={handleEditClick(row)}
             color="inherit"
           />,
           <GridActionsCellItem
-            icon={<DeleteIcon className='icono-azul' />}
+            icon={<DeleteIcon />}
             label="Delete"
             onClick={handleDeleteClick(row)}
             color="inherit"
@@ -347,7 +347,7 @@ export const Publicaciones = () => {
                 backgroundColor: '#ccc',
               },
               '& .css-1iyq7zh-MuiDataGrid-columnHeaders': {
-                backgroundColor: '#1d0a83 !important',
+                backgroundColor: '#1A76D2 !important',
               },
             }}
             paginationModel={paginationModel}

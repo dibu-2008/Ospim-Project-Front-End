@@ -97,7 +97,7 @@ export const MisDDJJGrilla = ({ rows, setRows, handlerDDJJEditar }) => {
           text: '¡No podrás revertir esto!',
           icon: 'warning',
           showCancelButton: true,
-          confirmButtonColor: '#1d0a83',
+          confirmButtonColor: '#1A76D2',
           cancelButtonColor: '#6c757d',
           confirmButtonText: 'Si, bórralo!',
         }).then(async (result) => {
@@ -184,14 +184,14 @@ export const MisDDJJGrilla = ({ rows, setRows, handlerDDJJEditar }) => {
         if (row.estado === 'PE') {
           return [
             <GridActionsCellItem
-              icon={<EditIcon className='icono-azul'/>}
+              icon={<EditIcon />}
               label="Edit"
               className="textPrimary"
               onClick={handlerDDJJEditarClick(id)}
               color="inherit"
             />,
             <GridActionsCellItem
-              icon={<LocalPrintshopIcon className='icono-azul'/>}
+              icon={<LocalPrintshopIcon />}
               label="Print"
               color="inherit"
               onClick={() => handleImprimirDDJJ(id)}
@@ -206,14 +206,14 @@ export const MisDDJJGrilla = ({ rows, setRows, handlerDDJJEditar }) => {
         } else if (row.estado == 'PR') {
           return [
             <GridActionsCellItem
-              icon={<VisibilityIcon className='icono-azul'/>}
+              icon={<VisibilityIcon />}
               label="Edit"
               className="textPrimary"
               onClick={handlerDDJJEditarClick(id)}
               color="inherit"
             />,
             <GridActionsCellItem
-              icon={<LocalPrintshopIcon className='icono-azul'/>}
+              icon={<LocalPrintshopIcon />}
               label="Print"
               color="inherit"
               onClick={() => handleImprimirDDJJ(id)}
@@ -222,14 +222,14 @@ export const MisDDJJGrilla = ({ rows, setRows, handlerDDJJEditar }) => {
         } else {
           return [
             <GridActionsCellItem
-              icon={<VisibilityIcon className='icono-azul'/>}
+              icon={<VisibilityIcon />}
               label="Edit"
               className="textPrimary"
               onClick={handlerDDJJEditarClick(id)}
               color="inherit"
             />,
             <GridActionsCellItem
-              icon={<LocalPrintshopIcon className='icono-azul'/>}
+              icon={<LocalPrintshopIcon />}
               label="Print"
               color="inherit"
               onClick={() => handleImprimirDDJJ(id)}

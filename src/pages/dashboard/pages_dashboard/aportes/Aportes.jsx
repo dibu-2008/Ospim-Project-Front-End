@@ -779,7 +779,7 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: '70%',
   bgcolor: 'background.paper',
-  border: '2px solid #1d0a83',
+  border: '2px solid #1A76D2',
   boxShadow: 24,
   p: 4,
   display: 'flex',

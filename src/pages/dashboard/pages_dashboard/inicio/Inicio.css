@@ -9,7 +9,7 @@
 }
 
 .bienvenidos h1 {
-  color: #1d0a83;
+  color: #1a76d2;
   margin-bottom: 10px;
   text-align: left !important;
 }
@@ -17,10 +17,10 @@
 .contacto {
   width: 90%;
   margin: 60px auto;
-  /*  border: 2px solid #1d0a83; */
+  /*  border: 2px solid #1A76D2; */
   /* padding: 15px; */
   /* border-radius: 10px;
-    box-shadow: 0px 0px 10px 0px #1d0a83; */
+    box-shadow: 0px 0px 10px 0px #1A76D2; */
 }
 
 .contacto .contacto_child {
@@ -28,12 +28,12 @@
 }
 
 .contacto h2 {
-  color: #1d0a83;
+  color: #1a76d2;
   margin-bottom: 10px;
 }
 
 .contacto h5 {
-  color: #1d0a83;
+  color: #1a76d2;
   margin: 10px 0px;
 }
 
@@ -46,7 +46,7 @@
 .medios span {
   font-size: 20px;
   font-weight: bold;
-  color: #1d0a83;
+  color: #1a76d2;
   margin-right: 5px;
 }
 
@@ -57,7 +57,7 @@
 }
 
 .novedades h2 {
-  color: #1d0a83;
+  color: #1a76d2;
 }
 
 .novedades img {

@@ -34,7 +34,7 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: 500,
   bgcolor: 'background.paper',
-  border: '2px solid #1d0a83',
+  border: '2px solid #1A76D2',
   boxShadow: 24,
   p: 4,
 };
@@ -77,9 +77,8 @@ const crearNuevoRegistro = (props) => {
     <GridToolbarContainer
       theme={themeWithLocale}
       style={{ display: 'flex', justifyContent: 'space-between' }}
-      
     >
-      <Button sx={{ color: '#1d0a83' }} startIcon={<AddIcon />} onClick={altaHandleClick}>
+      <Button color="primary" startIcon={<AddIcon />} onClick={altaHandleClick}>
         Nuevo Registro
       </Button>
       <GridToolbar showQuickFilter={showQuickFilter} />
@@ -157,7 +156,7 @@ export const Ajustes = () => {
           text: '¡No podrás revertir esto!',
           icon: 'warning',
           showCancelButton: true,
-          confirmButtonColor: '#1d0a83',
+          confirmButtonColor: '#1A76D2',
           cancelButtonColor: '#6c757d',
           confirmButtonText: 'Si, bórralo!',
         }).then(async (result) => {
@@ -489,13 +488,13 @@ export const Ajustes = () => {
         if (isInEditMode) {
           return [
             <GridActionsCellItem
-              icon={<SaveIcon className='icono-azul' />}
+              icon={<SaveIcon />}
               label="Guardar"
               sx={{ color: 'primary.main' }}
               onClick={handleSaveClick(row)}
             />,
             <GridActionsCellItem
-              icon={<CancelIcon className='icono-azul' />}
+              icon={<CancelIcon />}
               label="Cancelar"
               className="textPrimary"
               onClick={handleCancelClick(row)}
@@ -506,14 +505,14 @@ export const Ajustes = () => {
 
         return [
           <GridActionsCellItem
-            icon={<EditIcon className='icono-azul'/>}
+            icon={<EditIcon />}
             label="Editar"
             className="textPrimary"
             onClick={handleEditClick(row)}
             color="inherit"
           />,
           <GridActionsCellItem
-            icon={<DeleteIcon className='icono-azul'/>}
+            icon={<DeleteIcon />}
             label="Eliminar"
             className="textPrimary"
             onClick={handleDeleteClick(row)}

@@ -193,7 +193,6 @@ export const Boletas = () => {
             variant="contained"
             onClick={fetchData}
             style={{ marginLeft: '2em' }}
-            className='button-primary'
           >
             Buscar
           </Button>
@@ -223,7 +222,7 @@ export const Boletas = () => {
               sx={{
                 width: '100%',
                 '& .MuiDataGrid-columnHeaders': {
-                  backgroundColor: '#1d0a83',
+                  backgroundColor: '#1A76D2',
                   color: 'white',
                 },
               }}
@@ -290,7 +289,7 @@ export const Boletas = () => {
                               size="small"
                               onClick={() => handleViewClick(params.row)}
                             >
-                              <VisibilityIcon  className='icono-azul'/>
+                              <VisibilityIcon />
                             </IconButton>
                           </>
                         );
@@ -303,7 +302,7 @@ export const Boletas = () => {
                               size="small"
                               onClick={() => handleViewClick(params.row)}
                             >
-                              <VisibilityIcon  className='icono-azul'/>
+                              <VisibilityIcon />
                             </IconButton>
                             <IconButton
                               size="small"
@@ -311,20 +310,20 @@ export const Boletas = () => {
                                 boletaPdfDownload(ID_EMPRESA, params.row.id);
                               }}
                             >
-                              <PrintIcon className='icono-azul'/>
+                              <PrintIcon />
                             </IconButton>
                             <IconButton
                               size="small"
                               onClick={() => handleViewClick(params.row)}
                               disabled={!!params.row.fecha_de_pago}
                             >
-                              <EditIcon className='icono-azul' />
+                              <EditIcon />
                             </IconButton>
                             <IconButton
                               size="small"
                               onClick={() => handleGenerarBepClick(params.row)}
                             >
-                              <RequestQuoteIcon className='icono-azul' />
+                              <RequestQuoteIcon />
                             </IconButton>
                           </>
                         );
@@ -335,7 +334,7 @@ export const Boletas = () => {
                             size="small"
                             onClick={() => handleViewClick(params.row)}
                           >
-                            <VisibilityIcon className='icono-azul' />
+                            <VisibilityIcon />
                           </IconButton>
                           <IconButton
                             size="small"
@@ -343,14 +342,14 @@ export const Boletas = () => {
                               boletaPdfDownload(ID_EMPRESA, params.row.id);
                             }}
                           >
-                            <PrintIcon className='icono-azul'/>
+                            <PrintIcon />
                           </IconButton>
                           <IconButton
                             size="small"
                             onClick={() => handleViewClick(params.row)}
                             disabled={!!params.row.fecha_de_pago}
                           >
-                            <EditIcon  className='icono-azul'/>
+                            <EditIcon />
                           </IconButton>
                         </>
                       );
@@ -364,9 +363,7 @@ export const Boletas = () => {
                 onPaginationModelChange={setPaginationModel}
                 pageSizeOptions={pageSizeOptions}
                 components={{
-
                   Toolbar: () => (
-                    
                     <GridToolbarContainer>
                       <GridToolbarColumnsButton />
                       <GridToolbarFilterButton />
@@ -388,7 +385,7 @@ export const Boletas = () => {
               sx={{
                 width: '100%',
                 '& .MuiDataGrid-columnHeaders': {
-                  backgroundColor: '#1d0a83',
+                  backgroundColor: '#1A76D2',
                   color: 'white',
                 },
               }}
@@ -444,7 +441,7 @@ export const Boletas = () => {
                             boletaPdfDownload(ID_EMPRESA, params.row.id);
                           }}
                         >
-                          <PrintIcon className='icono-azul'/>
+                          <PrintIcon />
                         </IconButton>
                       </>
                     ),

@@ -361,7 +361,7 @@ const DashboardPage = () => {
           style={{
             display: 'flex',
             justifyContent: 'space-between',
-            backgroundColor: '#1d0a83',
+            backgroundColor: '#1a76d2',
             height: 110,
             position: 'fixed',
             top: 0,

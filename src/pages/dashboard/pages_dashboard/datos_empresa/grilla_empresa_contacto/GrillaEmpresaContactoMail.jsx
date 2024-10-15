@@ -126,7 +126,7 @@ export const GrillaEmpresaContactoMail = ({
           text: '¡No podrás revertir esto!',
           icon: 'warning',
           showCancelButton: true,
-          confirmButtonColor: '#1d0a83',
+          confirmButtonColor: '#1A76D2',
           cancelButtonColor: '#6c757d',
           confirmButtonText: 'Si, bórralo!',
         }).then(async (result) => {
@@ -271,7 +271,7 @@ export const GrillaEmpresaContactoMail = ({
         if (isInEditMode) {
           return [
             <GridActionsCellItem
-              icon={<SaveIcon className='icono-azul'/>}
+              icon={<SaveIcon />}
               label="Save"
               sx={{
                 color: 'primary.main',
@@ -279,7 +279,7 @@ export const GrillaEmpresaContactoMail = ({
               onClick={handleSaveClickMail(row)}
             />,
             <GridActionsCellItem
-              icon={<CancelIcon className='icono-azul'/>}
+              icon={<CancelIcon />}
               label="Cancel"
               className="textPrimary"
               onClick={handleCancelClick(row)}
@@ -290,14 +290,14 @@ export const GrillaEmpresaContactoMail = ({
 
         return [
           <GridActionsCellItem
-            icon={<EditIcon className='icono-azul'/>}
+            icon={<EditIcon />}
             label="Edit"
             className="textPrimary"
             onClick={handleEditClickMail(row)}
             color="inherit"
           />,
           <GridActionsCellItem
-            icon={<DeleteIcon className='icono-azul'/>}
+            icon={<DeleteIcon />}
             label="Delete"
             onClick={handleDeleteClick(row)}
             color="inherit"
@@ -362,7 +362,7 @@ export const GrillaEmpresaContactoMail = ({
               backgroundColor: '#ccc',
             },
             '& .css-1iyq7zh-MuiDataGrid-columnHeaders': {
-              backgroundColor: '#1d0a83 !important',
+              backgroundColor: '#1A76D2 !important',
             },
           }}
           paginationModel={paginationModel}
