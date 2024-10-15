@@ -103,24 +103,19 @@ export const BoletaEmpleadoFiltro = () => {
 
   return (
     <div className="declaraciones_juradas_container">
-      <h1
-        style={{
-          marginBottom: '50px',
-        }}
-      >
-        Consulta de Boletas de Pago
-      </h1>
+      <h1 style={{ marginBottom: '50px' }}>Consulta de Boletas de Pago</h1>
+
       <Box sx={{ flexGrow: 1 }} style={{ marginLeft: '5%' }}>
         <Stack direction="row" spacing={3}>
+          {/* CUIT */}
           <Autocomplete
             disablePortal
-            id="combo-box-demo"
+            id="cuit-autocomplete"
             options={empresas}
             key={(option) => option.id}
             onChange={(event, value) => {
               console.log('** onChange-value:', value);
               setEmpresa(value);
-
               setFiltro({ ...filtro, cuit: value?.cuit || null });
             }}
             value={empresa}
@@ -128,10 +123,9 @@ export const BoletaEmpleadoFiltro = () => {
             sx={{ width: 190 }}
             renderInput={(params) => <TextField {...params} label="CUIT" />}
           />
-          -
           <Autocomplete
             disablePortal
-            id="combo-box-demo"
+            id="razon-social-autocomplete"
             options={empresas}
             key={(option) => option.id}
             onChange={(event, value) => {
@@ -146,35 +140,14 @@ export const BoletaEmpleadoFiltro = () => {
               <TextField {...params} label="Razón Social" />
             )}
           />
-          <DemoContainer components={['DatePicker']}>
-            <DesktopDatePicker
-              label={'Periodo desde'}
-              views={['month', 'year']}
-              closeOnSelect={true}
-              onChange={(oValue) =>
-                setFiltro({ ...filtro, periodoDesde: oValue })
-              }
-              value={filtro.periodoDesde || ''}
-            />
-          </DemoContainer>
-          <DemoContainer components={['DatePicker']}>
-            <DesktopDatePicker
-              label={'Periodo hasta'}
-              views={['month', 'year']}
-              closeOnSelect={true}
-              onChange={(oValue) =>
-                setFiltro({ ...filtro, periodoHasta: oValue })
-              }
-              value={filtro.periodoHasta || ''}
-            />
-          </DemoContainer>
+
           <FormControl style={{ minWidth: 120 }}>
-            <InputLabel id="demo-simple-select-label">Entidad</InputLabel>
+            <InputLabel id="entidad-select-label">Entidad</InputLabel>
             <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
+              labelId="entidad-select-label"
+              id="entidad-select"
               value={filtro.entidad || ''}
-              label={'Entidades'}
+              label="Entidad"
               onChange={(oValue) =>
                 setFiltro({ ...filtro, entidad: oValue.target.value })
               }
@@ -186,15 +159,14 @@ export const BoletaEmpleadoFiltro = () => {
               ))}
             </Select>
           </FormControl>
-        </Stack>
-        <Stack direction="row" spacing={3} sx={{ marginTop: '30px' }}>
+
           <FormControl style={{ minWidth: 150 }}>
-            <InputLabel id="demo-simple-select-label">Concepto</InputLabel>
+            <InputLabel id="concepto-select-label">Concepto</InputLabel>
             <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
+              labelId="concepto-select-label"
+              id="concepto-select"
               value={filtro.concepto || ''}
-              label={'Aportes'}
+              label="Concepto"
               onChange={(oValue) =>
                 setFiltro({ ...filtro, concepto: oValue.target.value })
               }
@@ -206,14 +178,13 @@ export const BoletaEmpleadoFiltro = () => {
               ))}
             </Select>
           </FormControl>
-
           <FormControl style={{ minWidth: 120 }}>
-            <InputLabel id="demo-simple-select-label">Método</InputLabel>
+            <InputLabel id="metodo-select-label">Método</InputLabel>
             <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
+              labelId="metodo-select-label"
+              id="metodo-select"
               value={filtro.formaPago || ''}
-              label={'Aportes'}
+              label="Método"
               onChange={(oValue) =>
                 setFiltro({ ...filtro, formaPago: oValue.target.value })
               }
@@ -225,32 +196,47 @@ export const BoletaEmpleadoFiltro = () => {
               ))}
             </Select>
           </FormControl>
-          <FormControl>
-            <Button
-              onClick={handlerLimpiarFiltro}
-              variant="contained"
-              style={{ marginLeft: '2em' }}
-            >
-              Limpiar Filtro
-            </Button>
-          </FormControl>
+        </Stack>
+        <Stack direction="row" spacing={3} sx={{ marginTop: '30px' }}>
+          <DemoContainer components={['DatePicker']}>
+            <DesktopDatePicker
+              label="Periodo desde"
+              views={['month', 'year']}
+              closeOnSelect
+              onChange={(oValue) =>
+                setFiltro({ ...filtro, periodoDesde: oValue })
+              }
+              value={filtro.periodoDesde || ''}
+            />
+          </DemoContainer>
+
+          <DemoContainer components={['DatePicker']}>
+            <DesktopDatePicker
+              label="Periodo hasta"
+              views={['month', 'year']}
+              closeOnSelect
+              onChange={(oValue) =>
+                setFiltro({ ...filtro, periodoHasta: oValue })
+              }
+              value={filtro.periodoHasta || ''}
+            />
+          </DemoContainer>
+          <Button
+            onClick={handlerLimpiarFiltro}
+            variant="contained"
+            style={{ marginLeft: '2em' }}
+          >
+            Limpiar Filtro
+          </Button>
+          <Button
+            onClick={handlerConsultar}
+            variant="contained"
+            style={{ marginLeft: '2em' }}
+          >
+            Buscar
+          </Button>
         </Stack>
       </Box>
-
-      <Stack
-        spacing={4}
-        direction="row"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <Button
-          onClick={handlerConsultar}
-          variant="contained"
-          style={{ marginLeft: '2em' }}
-        >
-          Buscar
-        </Button>
-      </Stack>
 
       <Stack direction="row" justifyContent="center" alignItems="center">
         <Box

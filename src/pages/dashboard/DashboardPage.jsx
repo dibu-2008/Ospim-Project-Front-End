@@ -35,15 +35,11 @@ import { getFuncionalidadesByRol } from './DashboardPageApi';
 import logo2 from '../../assets/logo_2.svg';
 import { styled } from '@mui/material/styles';
 import { ClaveComponent } from '@/components/ClaveComponent';
-import AMTIMA from '../../assets/Logos_PNG_azul/AMTIMA_AZUL.png'
-import OSPIM from '../../assets/Logos_PNG_azul/OSPIM_AZUL.png'
-import UOMA from '../../assets/Logos_PNG_azul/UOMA_AZUL.png'
+import AMTIMA from '../../assets/Logos_PNG_azul/AMTIMA_AZUL.png';
+import OSPIM from '../../assets/Logos_PNG_azul/OSPIM_AZUL.png';
+import UOMA from '../../assets/Logos_PNG_azul/UOMA_AZUL.png';
 import { width } from '@mui/system';
 import Hidden from '@mui/material/Hidden';
-
-
-
-
 
 const drawerWidth = 250;
 
@@ -382,8 +378,8 @@ const DashboardPage = () => {
           }}
         >
           <Hidden smDown>
-            <h1 className='title'>Portal empleadores de UOMA</h1>
-            </Hidden>
+            <h1 className="title">Portal empleadores de UOMA</h1>
+          </Hidden>
           <div
             style={{
               display: 'flex',
@@ -392,18 +388,18 @@ const DashboardPage = () => {
               marginRight: 80,
             }}
           >
-                <img width={100} src={UOMA} alt="imglogo" />
-                <img width={100} src={OSPIM} alt="imglogo" />
-                <img width={100} src={AMTIMA} alt="imglogo" />
+            <img width={100} src={UOMA} alt="imglogo" />
+            <img width={100} src={OSPIM} alt="imglogo" />
+            <img width={100} src={AMTIMA} alt="imglogo" />
           </div>
         </div>
       </Box>
       <div
-      style={{
-        marginLeft: '4rem',
-      }}
-    >
-      <Outlet />
+        style={{
+          marginLeft: '4rem',
+        }}
+      >
+        <Outlet />
       </div>
     </Box>
   );
