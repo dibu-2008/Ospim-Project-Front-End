@@ -78,11 +78,7 @@ export const LoginPage = () => {
         const data = await activarCuentaEmpresa(tokenActivacion);
         if (data && data.usuario) {
           //user = data.usuario;
-          swal.showWarning(
-            'Su cuenta de Usuario fue activada con exito. Para conectarse utilice el usuario ' +
-              data.usuario +
-              ' y clave que ingresó en el Formulario de Alta de Empresa',
-          );
+          swal.showSuccess('ACTIVADA', 'Cuenta de Usuario:' + data.usuario);
         }
       }
     };
@@ -306,7 +302,7 @@ export const LoginPage = () => {
                 </Button>
                 <div className="container_btn_pass_firts">
                   <a className="link_animado" onClick={redirectToRecupero}>
-                    Recupero de Contraseña
+                    Recupero Contraseña/Token
                   </a>
                   <a className="link_animado" onClick={redirectToRegister}>
                     Ingreso por primera vez
