@@ -1098,7 +1098,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
             <CreateIcon
               sx={{
                 fontSize: '1.8rem',
-                color: '#1d0a83',
+                color: '#1A76D2',
                 cursor: 'pointer',
               }}
               onClick={handleFormCuilOpen(params.row)}
@@ -1772,7 +1772,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ }) => {
                       backgroundColor: '#ccc',
                     },
                     '& .css-1iyq7zh-MuiDataGrid-columnHeaders': {
-                      backgroundColor: '#1d0a83 !important',
+                      backgroundColor: '#1A76D2 !important',
                     },
                     '& .art46--cell': {
                       backgroundColor: '#ccc',

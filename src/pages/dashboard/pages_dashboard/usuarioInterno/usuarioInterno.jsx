@@ -54,7 +54,7 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: 700,
   bgcolor: 'background.paper',
-  border: '2px solid #1d0a83',
+  border: '2px solid #1A76D2',
   boxShadow: 24,
   p: 4,
 };
@@ -540,7 +540,7 @@ export const UsuarioInterno = () => {
                 backgroundColor: '#ccc',
               },
               '& .css-1iyq7zh-MuiDataGrid-columnHeaders': {
-                backgroundColor: '#1d0a83 !important',
+                backgroundColor: '#1A76D2 !important',
               },
             }}
             paginationModel={paginationModel}

@@ -33,7 +33,7 @@ export const GrillaActas = ({ actas, selectedActas, setSelectedActas }) => {
       sx={{
         width: '100%',
         '& .MuiDataGrid-columnHeaders': {
-          backgroundColor: '#1d0a83',
+          backgroundColor: '#1A76D2',
           color: 'white',
         },
       }}

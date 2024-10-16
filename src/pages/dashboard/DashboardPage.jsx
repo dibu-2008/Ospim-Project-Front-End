@@ -35,6 +35,11 @@ import { getFuncionalidadesByRol } from './DashboardPageApi';
 import logo2 from '../../assets/logo_2.svg';
 import { styled } from '@mui/material/styles';
 import { ClaveComponent } from '@/components/ClaveComponent';
+import AMTIMA from '../../assets/Logos_PNG_azul/AMTIMA_AZUL.png';
+import OSPIM from '../../assets/Logos_PNG_azul/OSPIM_AZUL.png';
+import UOMA from '../../assets/Logos_PNG_azul/UOMA_AZUL.png';
+import { width } from '@mui/system';
+import Hidden from '@mui/material/Hidden';
 
 const drawerWidth = 250;
 
@@ -361,7 +366,7 @@ const DashboardPage = () => {
           style={{
             display: 'flex',
             justifyContent: 'space-between',
-            backgroundColor: '#1d0a83',
+            backgroundColor: '#1a76d2',
             height: 110,
             position: 'fixed',
             top: 0,
@@ -372,14 +377,9 @@ const DashboardPage = () => {
             paddingRight: 80,
           }}
         >
-          <img
-            style={{
-              marginLeft: 120,
-              width: 75,
-            }}
-            src={logo2}
-            alt="imglogo"
-          />
+          <Hidden smDown>
+            <h1 className="title">Portal empleadores de UOMA</h1>
+          </Hidden>
           <div
             style={{
               display: 'flex',
@@ -388,37 +388,19 @@ const DashboardPage = () => {
               marginRight: 80,
             }}
           >
-            <h4
-              style={{
-                marginLeft: 30,
-                color: '#fff',
-                fontSize: '2rem',
-              }}
-            >
-              UOMA
-            </h4>
-            <h4
-              style={{
-                marginLeft: 30,
-                color: '#fff',
-                fontSize: '2rem',
-              }}
-            >
-              OSPIM
-            </h4>
-            <h4
-              style={{
-                marginLeft: 30,
-                color: '#fff',
-                fontSize: '2rem',
-              }}
-            >
-              AMTIMA
-            </h4>
+            <img width={100} src={UOMA} alt="imglogo" />
+            <img width={100} src={OSPIM} alt="imglogo" />
+            <img width={100} src={AMTIMA} alt="imglogo" />
           </div>
         </div>
       </Box>
-      <Outlet />
+      <div
+        style={{
+          marginLeft: '4rem',
+        }}
+      >
+        <Outlet />
+      </div>
     </Box>
   );
 };

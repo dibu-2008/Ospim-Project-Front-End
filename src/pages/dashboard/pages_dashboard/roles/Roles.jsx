@@ -119,7 +119,7 @@ export const Roles = () => {
           text: '¡No podrás revertir esto!',
           icon: 'warning',
           showCancelButton: true,
-          confirmButtonColor: '#1d0a83',
+          confirmButtonColor: '#1A76D2',
           cancelButtonColor: '#6c757d',
           confirmButtonText: 'Si, bórralo!',
         }).then(async (result) => {
@@ -332,7 +332,7 @@ export const Roles = () => {
                 backgroundColor: '#ccc',
               },
               '& .css-1iyq7zh-MuiDataGrid-columnHeaders': {
-                backgroundColor: '#1d0a83 !important',
+                backgroundColor: '#1A76D2 !important',
               },
             }}
             paginationModel={paginationModel}

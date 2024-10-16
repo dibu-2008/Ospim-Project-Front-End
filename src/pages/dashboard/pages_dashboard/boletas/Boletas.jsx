@@ -222,7 +222,7 @@ export const Boletas = () => {
               sx={{
                 width: '100%',
                 '& .MuiDataGrid-columnHeaders': {
-                  backgroundColor: '#1d0a83',
+                  backgroundColor: '#1A76D2',
                   color: 'white',
                 },
               }}
@@ -363,9 +363,7 @@ export const Boletas = () => {
                 onPaginationModelChange={setPaginationModel}
                 pageSizeOptions={pageSizeOptions}
                 components={{
-
                   Toolbar: () => (
-                    
                     <GridToolbarContainer>
                       <GridToolbarColumnsButton />
                       <GridToolbarFilterButton />
@@ -387,7 +385,7 @@ export const Boletas = () => {
               sx={{
                 width: '100%',
                 '& .MuiDataGrid-columnHeaders': {
-                  backgroundColor: '#1d0a83',
+                  backgroundColor: '#1A76D2',
                   color: 'white',
                 },
               }}

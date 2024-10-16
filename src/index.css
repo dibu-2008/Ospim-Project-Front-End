@@ -1,13 +1,17 @@
+/* src/index.css */
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;700&display=swap');
+
+
 * {
   margin: 0;
   padding: 0;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Raleway', sans-serif;
   box-sizing: border-box;
 }
 
 @font-face {
-  font-family: 'rockwell';
-  src: url('./assets/fonts/Roboto-Bold.ttf');
+	font-family: 'Raleway', sans-serif;
+  src: url('./assets/fonts/Raleway-Bold.ttf');
 }
 
 html {
@@ -17,12 +21,13 @@ html {
 
 body {
   margin: 0 auto;
+  font-family: 'Raleway', sans-serif;
 }
 
 .link_animado {
   position: relative;
   text-decoration: none;
-  color: #1d0a83;
+  color: #1a76d2;
 }
 
 .link_animado::after {
@@ -32,7 +37,7 @@ body {
   bottom: 0;
   width: 0;
   height: 2px;
-  background-color: #1d0a83;
+  background-color: #1a76d2;
   transition: width 0.3s ease;
 }
 
@@ -40,14 +45,6 @@ body {
   top: 25px;
   width: 100%;
 }
-
-.MuiButtonBase-root{
-	color:#1d0a83!important;
-  }
-
- .MuiAccordionSummary-contentGutters{
-	color: aliceblue!important;
- }
 
 /* LOGIN STYLES */
 
@@ -57,7 +54,7 @@ body {
 	font-weight: 400;
 	font-size: 32px;
 	height: 35.5px;
-	color: #1d0a83;
+	color: #1a76d2;
 	margin-bottom: 10px;
 	width: 100%;
 	text-align: center;
@@ -71,9 +68,9 @@ body {
 	text-align: center;
 } */
 .header--cell {
-  background-color: #1d0a83;
+  background-color: #1a76d2;
   color: white;
-  border: 1px solid #1d0a83;
+  border: 1px solid #1a76d2;
   border: none;
   display: flex;
   flex-direction: column;

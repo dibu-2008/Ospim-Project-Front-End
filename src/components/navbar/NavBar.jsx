@@ -2,6 +2,11 @@ import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { ButtonOutlinedComponent } from '../ButtonOutlinedComponent';
 // importar una imagen de assets
 import logo from '../../assets/logo_2.svg';
+import AMTIMA from '../../assets/Logos_PNG_azul/AMTIMA_AZUL.png'
+import OSPIM from '../../assets/Logos_PNG_azul/OSPIM_AZUL.png'
+import UOMA from '../../assets/Logos_PNG_azul/UOMA_AZUL.png'
+import Hidden from '@mui/material/Hidden';
+
 import './NavBar.css';
 
 const NavBar = ({ estilos, estilosLogo, mostrarBtn }) => {
@@ -17,26 +22,18 @@ const NavBar = ({ estilos, estilosLogo, mostrarBtn }) => {
   return (
     <div style={estilos}>
       <header>
-        <Link to="/login">
           <div>
-            <img style={estilosLogo} src={logo} alt="imglogo" />
-            {mostrarBtn && (
-              <div className="entidades">
-                <h4>UOMA</h4>
-                <h4>OSPIM</h4>
-                <h4>AMTIMA</h4>
-              </div>
-            )}
+            <Hidden smDown>
+            <h1>Portal empleadores de UOMA</h1>
+            </Hidden>
           </div>
-        </Link>
-
         {mostrarBtn ? (
           <ButtonOutlinedComponent name={'Iniciar Sesión'} onClick={login} />
         ) : (
           <div className="entidadesL">
-            <h4>UOMA</h4>
-            <h4>OSPIM</h4>
-            <h4>AMTIMA</h4>
+            <img style={estilosLogo}  src={UOMA} alt="imglogo" />
+            <img style={estilosLogo} src={OSPIM} alt="imglogo" />
+            <img style={estilosLogo} src={AMTIMA} alt="imglogo" />
           </div>
         )}
       </header>
