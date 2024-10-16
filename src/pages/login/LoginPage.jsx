@@ -26,6 +26,7 @@ import { ThreeCircles } from 'react-loader-spinner';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import NavBar from '@/components/navbar/NavBar.jsx';
 import swal from '@/components/swal/swal';
+import Swal from 'sweetalert2';
 
 const VITE_WELCOME_PORTAL = import.meta.env.VITE_WELCOME_PORTAL;
 
@@ -78,7 +79,15 @@ export const LoginPage = () => {
         const data = await activarCuentaEmpresa(tokenActivacion);
         if (data && data.usuario) {
           //user = data.usuario;
-          swal.showSuccess('ACTIVADA', 'Cuenta de Usuario:' + data.usuario);
+          Swal.fire({
+            icon: 'success',
+            title: 'ACTIVADA',
+            showConfirmButton: true,
+            text: 'Cuenta de Usuario:' + data.usuario,
+          }).then((result) => {
+            if (result.isConfirmed || result.isDismissed) {
+            }
+          });
         }
       }
     };
