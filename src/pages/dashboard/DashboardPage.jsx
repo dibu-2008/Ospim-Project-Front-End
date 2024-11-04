@@ -41,6 +41,7 @@ import UOMA from '../../assets/Logos_PNG_azul/UOMA_AZUL.png';
 import { width } from '@mui/system';
 import Hidden from '@mui/material/Hidden';
 
+
 const drawerWidth = 250;
 
 const openedMixin = (theme) => ({
@@ -388,9 +389,9 @@ const DashboardPage = () => {
               marginRight: 80,
             }}
           >
-            <img width={100} src={UOMA} alt="imglogo" />
-            <img width={100} src={OSPIM} alt="imglogo" />
-            <img width={100} src={AMTIMA} alt="imglogo" />
+            <img width={100} src={UOMA} alt="UOMA" />
+            <img width={100} src={OSPIM} alt="OSPIM" />
+            <img width={100} src={AMTIMA} alt="AMTIMA" />
           </div>
         </div>
       </Box>

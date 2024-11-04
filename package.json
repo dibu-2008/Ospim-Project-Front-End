@@ -3,6 +3,8 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": ".",
+
   "scripts": {
     "lh": "vite --mode localhost",
     "format": "prettier --write \"src/**/*.js\" \"src/**/*.jsx\"",
