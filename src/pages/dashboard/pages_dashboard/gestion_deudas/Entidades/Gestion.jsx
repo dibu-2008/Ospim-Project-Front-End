@@ -119,7 +119,7 @@ export const Gestion = ({ ID_EMPRESA, ENTIDAD }) => {
     try {
       console.log(ID_EMPRESA);
       console.log(ENTIDAD);
-      const response = await axiosGestionDeudas.getBoletasEmpresa(
+      const response = await axiosGestionDeudas.getBoletas(
         ID_EMPRESA,
         ENTIDAD,
       );

@@ -9,6 +9,7 @@ import {
 } from './InicioApi';
 import { useState, useEffect } from 'react';
 import Link from '@mui/material/Link';
+import { CarouselImg } from '@/components/carousel/CarouselImg';
 
 export const Inicio = () => {
   const [datosContacto, setDatosContacto] = useState([]);
@@ -36,6 +37,14 @@ export const Inicio = () => {
     };
     getPublicacionesVigentes();
   }, []);
+
+  //Cambiar cuando se tenga el endpoint para cargar las imagenes
+  const images = [
+    'https://via.placeholder.com/600x300?text=Image+1',
+    'https://via.placeholder.com/600x300?text=Image+2',
+    'https://via.placeholder.com/600x300?text=Image+3',
+  ];
+
 
   return (
     <div className="bienvenidos_container">
@@ -82,7 +91,8 @@ export const Inicio = () => {
         </div>
       </div>
       <div className="novedades">
-        <CarouselText contenido={contenido} />
+       {/* <CarouselText contenido={contenido} /> */}
+       {<CarouselImg images={images} />}
       </div>
     </div>
   );

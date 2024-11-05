@@ -44,6 +44,7 @@ body{
 
 .column--1 .title {
   color: rgb(26, 118, 210);
+  font-size: 1rem;
 }
 
 .column--2 {
@@ -52,6 +53,7 @@ body{
 
 .column--2 .title {
   color: rgb(26, 118, 210);
+  font-size: 1rem;
 }
 
 .drag-and-drop {

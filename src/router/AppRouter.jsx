@@ -25,6 +25,9 @@ import { GestionRoles } from '@/pages/dashboard/pages_dashboard/gestionRoles/Ges
 import { Aportes } from '@/pages/dashboard/pages_dashboard/aportes/Aportes';
 import { DDJJTabs } from '@/pages/dashboard/pages_dashboard/ddjj/DDJJTabs';
 import { UserProvider } from '@/context/UserProvider';
+import { GestionDeudas } from '@/pages/dashboard/pages_dashboard/gestion_deudas/GestionDeudas';
+import { Convenios } from '@/pages/dashboard/pages_dashboard/convenios/Convenios';
+
 import { RecuperarClave } from '@/pages/login/recuperarClave/RecuperarClave';
 import { RecuperarClaveForm } from '@/pages/login/recuperarClave/RecuperarClaveForm';
 
@@ -94,7 +97,8 @@ const AppRouter = () => {
           <Route path="ajustes" element={<Ajustes />} />
           <Route path="gestion-roles" element={<GestionRoles />} />
           <Route path="aportes" element={<Aportes />} />
-          {/*<Route path="gestiondeuda" element={<GestionDeudas />} />*/}
+          <Route path="gestiondeuda" element={<GestionDeudas />} />
+          <Route path="convenios" element={<Convenios />} />
         </Route>
         <Route path="registercompany" element={<RegistroEmpresa />} />
         <Route index element={<Navigate to="/login" />} />
