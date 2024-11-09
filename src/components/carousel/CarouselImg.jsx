@@ -3,20 +3,33 @@ import React, { useState, useEffect } from 'react';
 import { IconButton, Box } from '@mui/material';
 import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
 
-//import { useSwipeable } from 'react-swipeable';
-
 export const CarouselImg = ({ images }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [imgagesUrl, setImagesUrl] = useState([])
+
+  useEffect(()=>{
+    const arrImg  = []
+    images.forEach(element => {
+      arrImg.push(URL.createObjectURL(element))
+    });
+    setImagesUrl(arrImg)
+
+    console.log(imgagesUrl)
+    console.log(imgagesUrl[0])
+  },[images])
 
   useEffect(() => {
+    
     const intervalId = setInterval(() => {
       goToNextSlide();
     }, 3000);
-
     return () => {
       clearInterval(intervalId);
     };
   }, [currentIndex, images.length]);
+
+
+  
 
   const goToNextSlide = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
@@ -40,9 +53,10 @@ export const CarouselImg = ({ images }) => {
         boxShadow: 3,
       }}
     >
+
       <Box
         component="img"
-        src={images[currentIndex]}
+        src={imgagesUrl[currentIndex]}
         alt={`slide-${currentIndex}`}
         sx={{
           width: '100%',
