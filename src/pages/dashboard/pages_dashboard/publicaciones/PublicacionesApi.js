@@ -8,7 +8,7 @@ const HTTP_MSG_ALTA_ERROR = import.meta.env.VITE_HTTP_MSG_ALTA_ERROR;
 const HTTP_MSG_MODI_ERROR = import.meta.env.VITE_HTTP_MSG_MODI_ERROR;
 const HTTP_MSG_BAJA_ERROR = import.meta.env.VITE_HTTP_MSG_BAJA_ERROR;
 const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
-
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const URL_ENTITY = '/publicaciones';
 
 export const axiosPublicaciones = {
@@ -98,4 +98,39 @@ export const eliminar = async (id) => {
     );
     return false;
   }
+};
+
+export const cargarImagen = async (formData, id) => {
+  try {
+    const URL_IMG = `/${id}/archivo`;
+
+    const response = await axiosCrud.crearFormData(
+      `${URL_ENTITY}${URL_IMG}`,
+      formData,
+    );
+
+    if ((response.status = 200)) {
+      swal.showSuccess(HTTP_MSG_ALTA);
+      return true;
+    } else {
+      swal.showErrorBackEnd(HTTP_MSG_ALTA_ERROR, response);
+      return false;
+    }
+  } catch (error) {
+    console.log(`cargarImagen() - ERROR 1 - error: ${JSON.stringify(error)}`);
+    return false;
+  }
+};
+
+export const tieneImagenCargada = async (ID) => {
+  if (ID) {
+    try {
+      const response = await fetch(`${BACKEND_URL}${URL_ENTITY}/${ID}/archivo`);
+      return response.status === 200;
+    } catch (error) {
+      console.error("Error al verificar si la imagen está cargada:", error);
+      return false;
+    }
+  }
+  return false;
 };

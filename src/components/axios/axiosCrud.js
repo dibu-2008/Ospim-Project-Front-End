@@ -12,6 +12,11 @@ export const axiosCrud = {
   crearN: async function (UrlApi, oEntidad) {
     return axiosCrearN(UrlApi, oEntidad);
   },
+
+  crearFormData: async function (UrlApi, oEntidad) {
+    return axiosCrearFormData(UrlApi, oEntidad)
+  },
+
   actualizar: async function (UrlApi, oEntidad) {
     return axiosActualizar(UrlApi, oEntidad);
   },
@@ -48,6 +53,34 @@ export const axiosCrear = async (UrlApi, oEntidad) => {
         )}`,
       );
       return {};
+    }
+    return response.data || {};
+  } catch (error) {
+    console.log('axiosCrud.crear() - catch() - ');
+    if (error && error.response && error.response.data) {
+      console.log('Este es el error : ', error);
+      return error.response.data;
+    } else {
+      console.log(
+        'axiosCrud.crear() - catch() - error: ' + JSON.stringify(error),
+      );
+      return {};
+    }
+  }
+};
+
+export const axiosCrearFormData = async (UrlApi, oEntidad) => {
+  try {
+    const response = await oAxios.post(UrlApi, oEntidad, {headers: {
+      'Content-Type': 'multipart/form-data'
+    }});
+    if (response.status !== 201 && response.status !== 200) {
+      console.log(
+        `axiosCrud.crear() - ERROR 2 - UrlApi: ${UrlApi} - response.status !== 201 - response: ${JSON.stringify(
+          response,
+        )}`,
+      );
+      return response;
     }
     return response.data || {};
   } catch (error) {

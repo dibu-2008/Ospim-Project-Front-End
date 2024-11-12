@@ -2,7 +2,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import './Inicio.css';
-import { CarouselText } from '../../../../components/carousel/CarouselText';
+import { getImages } from '@/components/carousel/CarouselImgApi';
 import {
   ObtenerDatosDeContacto,
   ObtenerPublicacionesVigentes,
@@ -16,11 +16,12 @@ export const Inicio = () => {
   const [contenido, setContenido] = useState([]);
   const [telefonoWsp, setTelefonoWsp] = useState([]);
   const [telefonoLlamada, setTelefonoLlamada] = useState([]);
-
+  const IDimages =[]
+  const [images, setImages] = useState([])
+  //let images = []
   useEffect(() => {
     const getDatosContacto = async () => {
       const datosContacto = await ObtenerDatosDeContacto();
-      //console.log('getDatosContacto() - ', datosContacto);
       setDatosContacto(datosContacto);
       setTelefonoWsp(datosContacto.whasap.replace(/-/g, ''));
       setTelefonoLlamada(datosContacto.telefono.replace(/-/g, ''));
@@ -31,20 +32,17 @@ export const Inicio = () => {
   useEffect(() => {
     const getPublicacionesVigentes = async () => {
       const consContenidos = await ObtenerPublicacionesVigentes();
-      //console.log('getPublicacionesVigentes() - consContenidos');
-      //console.log(consContenidos);
+      consContenidos.forEach(element => {
+        IDimages.push(element.id)
+      });
+
+      const images = await getImages(IDimages)
+      console.log(images)
+      setImages(images)
       setContenido(consContenidos);
     };
     getPublicacionesVigentes();
   }, []);
-
-  //Cambiar cuando se tenga el endpoint para cargar las imagenes
-  const images = [
-    'https://via.placeholder.com/600x300?text=Image+1',
-    'https://via.placeholder.com/600x300?text=Image+2',
-    'https://via.placeholder.com/600x300?text=Image+3',
-  ];
-
 
   return (
     <div className="bienvenidos_container">
@@ -92,8 +90,8 @@ export const Inicio = () => {
       </div>
       <div className="novedades">
        {/* <CarouselText contenido={contenido} /> */}
-       {<CarouselImg images={images} />}
-      </div>
+       {images && images.length > 0 && <CarouselImg images={images} />}
+       </div>
     </div>
   );
 };

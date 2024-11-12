@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useContext } from 'react';
-import { axiosPublicaciones } from './PublicacionesApi';
+import { axiosPublicaciones, cargarImagen, tieneImagenCargada } from './PublicacionesApi';
 import { EditarNuevaFila } from './PublicacionNueva';
 import {
   GridRowModes,
@@ -20,11 +20,17 @@ import './Publicaciones.css';
 import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 import formatter from '@/common/formatter';
 import { UserContext } from '@/context/userContext';
+import { CloudUploadOutlined } from '@mui/icons-material';
+import { CloudUploadTwoTone } from '@mui/icons-material';
+
+
 
 export const Publicaciones = () => {
   const [locale, setLocale] = useState('esES');
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
+  const [imagenesCargadas, setImagenesCargadas] = useState({});
+
 
   const { paginationModel, setPaginationModel, pageSizeOptions } =
     useContext(UserContext);
@@ -41,8 +47,14 @@ export const Publicaciones = () => {
     const obtenerPublicaciones = async () => {
       const response = await axiosPublicaciones.consultar();
       setRows(response);
-    };
 
+      // Verificar si cada fila tiene una imagen cargada
+      const imagenesEstado = {};
+      for (const row of response) {
+        imagenesEstado[row.id] = await tieneImagenCargada(row.id);
+      }
+      setImagenesCargadas(imagenesEstado);
+    };
     obtenerPublicaciones();
   }, []);
 
@@ -115,6 +127,25 @@ export const Publicaciones = () => {
       setRows(rows.filter((reg) => reg.id !== row.id));
     }
   };
+
+  const handleImageUpload = async (row) => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+
+    input.onchange = async (event) => {
+      const file = event.target.files[0];
+      const formData = new FormData();
+      formData.append('archivo', file);
+
+      await cargarImagen(formData, row.id);
+      // Actualizar estado de imagen cargada después de la subida
+      setImagenesCargadas((prev) => ({ ...prev, [row.id]: true }));
+    };
+
+    input.click();
+  };
+
 
   const processRowUpdate = async (newRow, oldRow) => {
     let bOk = false;
@@ -237,6 +268,37 @@ export const Publicaciones = () => {
       },
       valueFormatter: ({ value }) => {
         return formatter.dateString(value);
+      },
+    },
+    {
+      field: 'imagen',
+      headerName: 'Imagen',
+      flex: 1,
+      type: 'actions',
+      headerAlign: 'center',
+      headerClassName: 'header--cell header--cell-left',
+      getActions: ({ row }) => {
+        if (!row.id) return [];
+
+        const imagenCargada = imagenesCargadas[row.id];
+        if (imagenCargada) {
+          return [
+            <GridActionsCellItem
+              icon={<CloudUploadTwoTone />}
+              label="Imagen Cargada"
+              onClick={() => handleImageUpload(row)}
+              color="inherit"
+            />,
+          ];
+        }
+        return [
+          <GridActionsCellItem
+            icon={<CloudUploadOutlined />}
+            label="Cargar Imagen"
+            onClick={() => handleImageUpload(row)}
+            color="inherit"
+          />,
+        ];
       },
     },
     {
