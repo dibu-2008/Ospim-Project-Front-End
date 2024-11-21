@@ -11,7 +11,7 @@ const HTTP_MSG_MODI_ERROR = import.meta.env.VITE_HTTP_MSG_MODI_ERROR;
 const HTTP_MSG_BAJA_ERROR = import.meta.env.VITE_HTTP_MSG_BAJA_ERROR;
 const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
 
-const URL_ENTITY = '/ajustes';
+const URL_ENTITY = '/aportes';
 
 export const axiosAportes = {
   consultar: async function (UrlApi) {
@@ -37,7 +37,7 @@ export const axiosAportes = {
 
 export const consultar = async () => {
   try {
-    const data = await axiosCrud.consultar(URL_ENTITY);
+    const data = await axiosCrud.consultar(`${URL_ENTITY}/seteos/vigentes`);
     return data || [];
   } catch (error) {
     swal.showErrorBackEnd(
@@ -49,6 +49,8 @@ export const consultar = async () => {
 };
 
 export const crear = async (registro) => {
+  registro.camara = registro.camara == '' ? null : registro.camara;
+  registro.categoria = registro.categoria == '' ? null : registro.categoria;
   try {
     registro.periodo_original = formatter.toFechaValida(
       registro.periodo_original,
@@ -69,6 +71,8 @@ export const crear = async (registro) => {
 };
 
 export const actualizar = async (registro) => {
+  registro.camara = registro.camara == '' ? null : registro.camara;
+  registro.categoria = registro.categoria == '' ? null : registro.categoria;
   try {
     console.log(registro);
     console.log(registro.periodo_original);
@@ -77,7 +81,7 @@ export const actualizar = async (registro) => {
     );
     registro.vigencia = formatter.toFechaValida(registro.vigencia);
 
-    const response = await axiosCrud.actualizar(URL_ENTITY, registro);
+    const response = await axiosCrud.actualizar(`${URL_ENTITY}/seteos`, registro);
     if (response == true) {
       swal.showSuccess(HTTP_MSG_MODI);
       return true;
@@ -91,7 +95,7 @@ export const actualizar = async (registro) => {
 
 export const eliminar = async (id) => {
   try {
-    const response = await axiosCrud.eliminar(URL_ENTITY, id);
+    const response = await axiosCrud.eliminar(`${URL_ENTITY}/seteos`, id);
     if (response == true) {
       swal.showSuccess(HTTP_MSG_BAJA);
       return true;
@@ -100,5 +104,35 @@ export const eliminar = async (id) => {
   } catch (error) {
     swal.showErrorBackEnd(HTTP_MSG_BAJA_ERROR, error);
     return false;
+  }
+};
+
+export const consultaCategoria = async () => {
+  const URL = '/camara/categoria/'
+  try{
+    const response = await axiosCrud.consultar(URL);
+    if (response) {
+      return response
+    } else {
+      return false
+    }
+  } catch (error) {
+    swal.showErrorBackEnd('Ocurrio un problema al querer obtener las camaras y sus categorias', error);
+    return []
+  }
+};
+
+export const consultaEntidades = async () => {
+  const URL = '/aportes/'
+  try{
+    const response = await axiosCrud.consultar(URL);
+    if (response) {
+      return response
+    } else {
+      return false
+    }
+  } catch (error) {
+    swal.showErrorBackEnd('Ocurrio un problema al querer obtener los tipos de aporte', error);
+    return []
   }
 };

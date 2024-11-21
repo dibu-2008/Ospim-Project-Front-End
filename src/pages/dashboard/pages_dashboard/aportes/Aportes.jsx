@@ -1,297 +1,223 @@
-import { useState, useEffect, useMemo, useRef } from 'react';
-import {
-  Autocomplete,
-  Box,
-  Button,
-  FormControl,
-  Grid,
-  IconButton,
-  InputLabel,
-  MenuItem,
-  Modal,
-  Select,
-  TextField,
-  Tooltip,
-  alpha,
-  styled,
-} from '@mui/material';
-import { Typography } from '@mui/material';
+import { useState, useEffect, useMemo, useRef, useContext } from 'react';
+import { EditarNuevaFila } from './AporteNuevo';
+import Swal from 'sweetalert2';
+import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Close';
+import { Box } from '@mui/material';
+
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import * as locales from '@mui/material/locale';
 import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
 import './Aportes.css';
-import { axiosAportes } from './AportesApi';
+import { axiosAportes, consultaCategoria, consultaEntidades } from './AportesApi';
 import {
   GridRowModes,
-  GridToolbar,
-  GridToolbarContainer,
   GridActionsCellItem,
   GridRowEditStopReasons,
+  useGridApiRef,
 } from '@mui/x-data-grid';
-import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import dayjs from 'dayjs';
-import CurrencyInput from 'react-currency-input-field';
-import { DesktopDatePicker } from '@mui/x-date-pickers';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import formatter from '@/common/formatter';
 
-const crearNuevoRegistro = ({
-  setRows,
-  setRowModesModel,
-  showQuickFilter,
-  themeWithLocale,
-  handleOpen,
-  setPeticionTitulo,
-}) => {
-  const altaHandleClick = () => {
-    handleOpen();
-    setPeticionTitulo('Alta de Aportes');
-  };
-  return (
-    <GridToolbarContainer
-      theme={themeWithLocale}
-      style={{ display: 'flex', justifyContent: 'space-between' }}
-    >
-      <Button color="primary" startIcon={<AddIcon />} onClick={altaHandleClick}>
-        Nuevo Registro
-      </Button>
-      <GridToolbar showQuickFilter={showQuickFilter} />
-    </GridToolbarContainer>
-  );
-};
+import { UserContext } from '@/context/userContext';
 
 export const Aportes = () => {
   const [locale, setLocale] = useState('esES');
+  const [categorias, setCategorias] = useState([]);
+  
+  const [camaras, setCamaras] = useState([]);
   const [rows, setRows] = useState([]);
+  const [aportes, setAportes] = useState([])
+  const [entidades, setEntidades] = useState(['UOMA','AMTIMA','OSPIM']);
   const [rowModesModel, setRowModesModel] = useState({});
-  const [paginationModel, setPaginationModel] = useState({
-    pageSize: 50,
-    page: 0,
-  });
-  const [open, setOpen] = useState(false);
-  const [peticionTitulo, setPeticionTitulo] = useState('');
-  const [entidades, setEntidades] = useState([]);
-  const [aportes, setAportes] = useState([]);
-  const [tipo, setTipo] = useState([]);
-  const [valor, setValor] = useState(0);
-  const [base, setBase] = useState([]);
-  const [camara, setCamara] = useState([]);
-  const [categoria, setCategoria] = useState([]);
-  const [antiguedad, setAntiguedad] = useState([]);
-  const [dataModal, setDataModal] = useState({
-    id: null,
-    entidad: null,
-    aporte: null,
-    socio: '',
-    calculoTipo: '',
-    calculoValor: '',
-    calculoBase: '',
-    camara: '',
-    camaraCategoria: '',
-    antiguedad: '',
-    desde: null,
-    hasta: null,
-  });
+  const { paginationModel, setPaginationModel, pageSizeOptions } =
+    useContext(UserContext);
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const gridApiRef = useGridApiRef();
 
   const theme = useTheme();
-
   const themeWithLocale = useMemo(
     () => createTheme(theme, locales[locale]),
     [locale, theme],
   );
 
+  useEffect(() => {
+    consultaAportesRows();
+    getCategorias();
+    getEntidades()
+    console.log(categorias);
+    console.log(camaras);
+    console.log(entidades)
+    console.log(aportes)
+  }, []);
+
+  useEffect(() => console.log(camaras), [camaras]); //sacar
+
   const consultaAportesRows = async () => {
     const response = await axiosAportes.consultar();
-    console.log(response);
     setRows(response);
   };
 
-  const consultaEntidades = async () => {
-    const response = await axiosAportes.consultarEntidades();
-    setEntidades(response);
+  const getEntidades = async () => {
+    const response = await consultaEntidades();
+    const entidades = [...new Set(response.map(item => item.entidad))]
+
+    setEntidades(entidades)
+    setAportes(response)
+  }
+
+  const getCategorias = async () => {
+    const response = await consultaCategoria();
+    const camaras = [...new Set(response.map((item) => item.camara))];
+    //camaras.push(null)
+    camaras.push('');
+    setCamaras(camaras);
+    setCategorias(response);
   };
 
-  const consultaAportes = async () => {
-    const response = await axiosAportes.consultarAportes();
-    setAportes(response);
+  const handleDeleteClick = (row) => async () => {
+    const showSwalConfirm = async () => {
+      try {
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: '¡No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#1A76D2',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: 'Si, bórralo!',
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            const bBajaOk = await axiosAportes.eliminar(row.id);
+            if (bBajaOk) {
+              setRows(rows.filter((reg) => reg.id !== row.id));
+            } else {
+              setRows(rows);
+            }
+          }
+        });
+      } catch (error) {
+        console.error('Error al ejecutar eliminar:', error);
+      }
+    };
+    showSwalConfirm();
   };
 
-  const consultaTipo = async () => {
-    const response = await axiosAportes.consultarTipo();
-    setTipo(response);
+  const handleRowModesModelChange = (newRowModesModel) => {
+    setRowModesModel(newRowModesModel);
   };
 
-  const consultaBase = async () => {
-    const response = await axiosAportes.consultarBase();
-    setBase(response);
-  };
-
-  const consultaCamara = async () => {
-    const response = await axiosAportes.consultarCamara();
-    setCamara(response);
-  };
-
-  const consultaCategoria = async (camara) => {
-    const response = await axiosAportes.consultarCategoria(camara);
-    setCategoria(response);
-  };
-
-  const consultaAntiguedad = async (categoria) => {
-    const response = await axiosAportes.consultarAntiguedad(categoria);
-    console.log('Años de antiguedad');
-    console.log(response);
-    console.log(response[0].antiguedad);
-    setAntiguedad(response[0].antiguedad);
-  };
-
-  const editarAporte = (row) => () => {
-    handleOpen();
-    setPeticionTitulo('Edición de Aportes');
-
-    setDataModal({
-      id: row.id,
-      entidad: entidades.find((e) => e.codigo === row.entidad) || null,
-      aporte: aportes.find((a) => a.codigo === row.aporte) || null,
-      socio: row?.socio || '',
-      calculoTipo: row?.calculoTipo || '',
-      calculoValor: row?.calculoValor || 0,
-      calculoBase: row?.calculoBase ? row.calculoBase : '',
-      camara: row?.camara ? row.camara : '',
-      camaraCategoria: row?.camaraCategoria ? row.camaraCategoria : '',
-      antiguedad: row?.antiguedad ? row.antiguedad : '',
-      desde: row.desde === null ? null : dayjs(row.desde),
-      hasta: row.hasta === null ? null : dayjs(row.hasta),
-    });
-  };
-
-  const eliminarAportes = (row) => async () => {
-    const data = await axiosAportes.eliminar(row.id);
-    if (data) {
-      setRows(rows.filter((rowAux) => rowAux.id !== row.id));
+  const handleRowEditStop = (params, event) => {
+    if (params.reason === GridRowEditStopReasons.rowFocusOut) {
+      event.defaultMuiPrevented = true;
     }
   };
 
-  const handleChangeDataModal = (newValue, field) => {
-    setDataModal((prevDataModal) => ({
-      ...prevDataModal,
-      [field]: newValue,
+  const volverPrimerPagina = () => {
+    setPaginationModel((prevPaginationModel) => ({
+      ...prevPaginationModel,
+      page: 0,
     }));
   };
 
-  const cancelarEdicion = () => {
-    handleClose();
-    setDataModal({
-      id: null,
-      entidad: null,
-      aporte: null,
-      socio: '',
-      calculoTipo: '',
-      calculoValor: 0,
-      calculoBase: '',
-      camara: '',
-      camaraCategoria: '',
-      antiguedad: '',
-      desde: null,
-      hasta: null,
+  const handleEditClick = (row) => () => {
+    setRowModesModel({
+      ...rowModesModel,
+      [row.id]: { mode: GridRowModes.Edit },
     });
   };
 
-  useEffect(() => {
-    consultaAportesRows();
-    consultaEntidades();
-    consultaAportes();
-    consultaTipo();
-    consultaBase();
-    consultaCamara();
-  }, []);
+  const handleSaveClick = (row) => () => {
+    setRowModesModel({
+      ...rowModesModel,
+      [row.id]: { mode: GridRowModes.View },
+    });
+  };
 
-  useEffect(() => {
-    if (dataModal.camara) {
-      consultaCategoria(dataModal.camara);
-    }
-  }, [dataModal.camara]);
+  const handleCancelClick = (row) => () => {
+    setRowModesModel({
+      ...rowModesModel,
+      [row.id]: {
+        mode: GridRowModes.View,
+        ignoreModifications: true,
+      },
+    });
 
-  useEffect(() => {
-    if (dataModal.camaraCategoria) {
-      consultaAntiguedad(dataModal.camaraCategoria);
-    }
-  }, [dataModal.camaraCategoria]);
-
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
-
-    const str = dataModal.calculoValor;
-    const num = parseFloat(str);
-    const valorFloat = parseFloat(num.toFixed(2));
-
-    const desdeDayjs = dayjs(dataModal.desde)
-      .set('hour', 3)
-      .set('minute', 0)
-      .set('second', 0)
-      .set('millisecond', 0)
-      .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
-
-    const hastaDayjs = dayjs(dataModal.hasta)
-      .set('hour', 3)
-      .set('minute', 0)
-      .set('second', 0)
-      .set('millisecond', 0)
-      .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
-
-    const aporteFinal = {
-      id: dataModal.id,
-      entidad: dataModal?.entidad?.codigo || null,
-      aporte: dataModal?.aporte?.codigo || null,
-      socio: dataModal?.socio || null,
-      calculoTipo: dataModal?.calculoTipo || null,
-      calculoValor: valorFloat ? valorFloat : 0,
-      calculoBase: dataModal?.calculoBase ? dataModal.calculoBase : null,
-      camara: dataModal?.camara ? dataModal.camara : null,
-      camaraCategoria: dataModal?.camaraCategoria || null,
-      antiguedad: dataModal.antiguedad ? dataModal.antiguedad : null,
-      desde: desdeDayjs === 'Invalid Date' ? null : desdeDayjs,
-      hasta: hastaDayjs === 'Invalid Date' ? null : hastaDayjs,
-    };
-
-    if (!aporteFinal.id) {
-      console.log('alta');
-      const data = await axiosAportes.crear(aporteFinal);
-      if (data && data.id) {
-        setRows((prevRows) => [data, ...prevRows]);
-        setDataModal({
-          id: null,
-          entidad: null,
-          aporte: null,
-          socio: '',
-          calculoTipo: '',
-          calculoValor: 0,
-          calculoBase: '',
-          camara: '',
-          camaraCategoria: '',
-          antiguedad: '',
-          desde: null,
-          hasta: null,
-        });
-        handleClose();
-      }
-    } else {
-      console.log('modificacion');
-      const data = await axiosAportes.actualizar(aporteFinal);
-      if (data) {
-        const newRows = rows.map((row) =>
-          row.id === aporteFinal.id ? aporteFinal : row,
-        );
-        setRows(newRows);
-      }
+    const editedRow = rows.find((reg) => reg.id === row.id);
+    if (!editedRow.id) {
+      setRows(rows.filter((reg) => reg.id !== row.id));
     }
   };
 
-  const columnas = [
+  const processRowUpdate = async (newRow, oldRow) => {
+    let bOk = false;
+    console.log(`estoy entrando`);
+    if (!newRow.id) {
+      try {
+        const data = await axiosAportes.crear(newRow);
+        if (data && data.id) {
+          newRow.id = data.id;
+        }
+        bOk = true;
+        const newRows = rows.map((row) => (!row.id ? newRow : row));
+        setRows(newRows);
+
+        if (!(data && data.id)) {
+          setTimeout(() => {
+            setRowModesModel((oldModel) => ({
+              [0]: { mode: GridRowModes.Edit, fieldToFocus: 'fecha' },
+              ...oldModel,
+            }));
+          }, 100);
+        }
+      } catch (error) {
+        console.log(
+          'X - processRowUpdate - MODI - ERROR: ' + JSON.stringify(error),
+        );
+      }
+    } else {
+      try {
+        bOk = await axiosAportes.actualizar(newRow);
+        if (bOk) {
+          const rowsNew = rows.map((row) =>
+            row.id === newRow.id ? newRow : row,
+          );
+          setRows(rowsNew);
+        }
+
+        if (!bOk) {
+          const indice = rows.indexOf(oldRow);
+          console.log('rows.indexOf(oldRow) => indice: ', indice);
+          setTimeout(() => {
+            setRowModesModel((oldModel) => ({
+              [indice]: { mode: GridRowModes.Edit, fieldToFocus: 'titulo' },
+              ...oldModel,
+            }));
+          }, 100);
+          return null;
+        }
+        bOk = true;
+      } catch (error) {
+        console.log(
+          'X - processRowUpdate - MODI - ERROR: ' + JSON.stringify(error),
+        );
+      }
+    }
+
+    if (bOk) {
+      return newRow;
+    } else {
+      return oldRow;
+    }
+  };
+
+  const handleProcessRowUpdateError = (error) => {
+    console.error('Error al actualizar la fila:', error);
+  };
+
+  const columns = [
     {
       field: 'actions',
       type: 'actions',
@@ -301,34 +227,73 @@ export const Aportes = () => {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'header--cell',
-      getActions: ({ row }) => [
-        <GridActionsCellItem
-          icon={<EditIcon />}
-          label="Editar"
-          className="textPrimary"
-          onClick={editarAporte(row)}
-          color="inherit"
-        />,
-        <GridActionsCellItem
-          icon={<DeleteIcon />}
-          label="Eliminar"
-          className="textPrimary"
-          onClick={eliminarAportes(row)}
-          color="inherit"
-        />,
-      ],
+      getActions: ({ row }) => {
+        const isInEditMode =
+          rowModesModel[row.id]?.mode === GridRowModes.Edit;
+
+        if (isInEditMode) {
+          return [
+            <GridActionsCellItem
+              icon={<SaveIcon />}
+              label="Save"
+              sx={{
+                color: 'primary.main',
+              }}
+              onClick={handleSaveClick(row)}
+            />,
+            <GridActionsCellItem
+              icon={<CancelIcon />}
+              label="Cancel"
+              className="textPrimary"
+              onClick={handleCancelClick(row)}
+              color="inherit"
+            />,
+          ];
+        }
+        return [
+          <GridActionsCellItem
+            icon={<EditIcon />}
+            label="Edit"
+            className="textPrimary"
+            onClick={handleEditClick(row)}
+            color="inherit"
+          />,
+          <GridActionsCellItem
+            icon={<DeleteIcon />}
+            label="Delete"
+            onClick={handleDeleteClick(row)}
+            color="inherit"
+          />,
+        ];
+      },
     },
     {
       field: 'entidad',
       headerName: 'Entidad',
+      type: 'singleSelect',
+      valueOptions: entidades,
       flex: 1,
       headerAlign: 'left',
+      editable: true,
       align: 'left',
       headerClassName: 'header--cell',
     },
     {
       field: 'aporte',
       headerName: 'Aporte',
+      type: 'singleSelect',
+      valueOptions: (params) => {
+        if (aportes) {
+          const filteredCategories = aportes
+            .filter((item) => item?.entidad === params.row?.entidad)
+            .map((item) => item.codigo);
+          filteredCategories.push('');
+          return [...new Set(filteredCategories)];
+        }
+        return [];
+      },
+      valueGetter: (params) => params.row.aporte || '',
+      editable: true,
       flex: 1,
       headerAlign: 'left',
       align: 'left',
@@ -337,27 +302,29 @@ export const Aportes = () => {
     {
       field: 'socio',
       headerName: 'Socio',
+      type: 'singleSelect',
+      valueOptions: [
+        { value: true, label: 'Si' },
+        { value: false, label: 'No' },
+      ],
+      editable: true,
       flex: 1,
       headerAlign: 'left',
-      align: 'left',
       headerClassName: 'header--cell',
+      align: 'left',
       valueFormatter: ({ value }) => {
-        if (value === '') return '';
-        if (value === null) return '';
         return value ? 'Si' : 'No';
       },
     },
-    /* {
-      field: 'nroCuenta',
-      headerName: 'Número de Cuenta',
-      flex: 1,
-      headerAlign: 'left',
-      align: 'left',
-      headerClassName: 'header--cell',
-    }, */
     {
       field: 'calculoTipo',
       headerName: 'Cálculo Tipo',
+      editable: true,
+      type: 'singleSelect',
+      valueOptions: [
+        { value: 'PO', label: 'PO' },
+        { value: 'EN', label: 'EN' },
+      ],
       flex: 1,
       headerAlign: 'left',
       align: 'left',
@@ -366,6 +333,7 @@ export const Aportes = () => {
     {
       field: 'calculoValor',
       headerName: 'Cálculo Valor',
+      editable: true,
       flex: 1,
       headerAlign: 'right',
       align: 'right',
@@ -380,6 +348,7 @@ export const Aportes = () => {
       field: 'calculoBase',
       headerName: 'Cálculo Base',
       flex: 1,
+      editable: true,
       headerAlign: 'left',
       align: 'left',
       headerClassName: 'header--cell',
@@ -388,7 +357,11 @@ export const Aportes = () => {
       field: 'camara',
       headerName: 'Cámara',
       flex: 1,
+      type: 'singleSelect',
+      valueOptions: camaras,
+      editable: true,
       headerAlign: 'left',
+      valueGetter: (params) => params.row.camara || '',
       align: 'left',
       headerClassName: 'header--cell',
     },
@@ -396,6 +369,19 @@ export const Aportes = () => {
       field: 'camaraCategoria',
       headerName: 'Categoría',
       flex: 1,
+      editable: true,
+      type: 'singleSelect',
+      valueOptions: (params) => {
+        if (categorias) {
+          const filteredCategories = categorias
+            .filter((item) => item?.camara === params.row?.camara)
+            .map((item) => item.categoria);
+          filteredCategories.push('');
+          return [...new Set(filteredCategories)];
+        }
+        return [];
+      },
+      valueGetter: (params) => params.row.camaraCategoria || 'A',
       headerAlign: 'left',
       align: 'left',
       headerClassName: 'header--cell',
@@ -404,6 +390,7 @@ export const Aportes = () => {
       field: 'antiguedad',
       headerName: 'Antigüedad',
       flex: 1,
+      editable: true,
       headerAlign: 'left',
       align: 'left',
       headerClassName: 'header--cell',
@@ -412,32 +399,33 @@ export const Aportes = () => {
       field: 'desde',
       headerName: 'Desde',
       flex: 1,
+      editable: true,
+      type: 'date',
       headerAlign: 'left',
       align: 'left',
       headerClassName: 'header--cell',
-      valueFormatter: ({ value }) => {
-        if (!value) return '';
-        return dayjs(value).format('DD/MM/YYYY');
+      valueFormatter: (params) => {
+        return formatter.dateString(params.value);
       },
     },
     {
       field: 'hasta',
       headerName: 'Hasta',
+      editable: true,
       flex: 1,
+      type: 'date',
       headerAlign: 'left',
       align: 'left',
       headerClassName: 'header--cell',
-      valueFormatter: ({ value }) => {
-        if (!value) return '';
-        return dayjs(value).format('DD/MM/YYYY');
+      valueFormatter: (params) => {
+        return formatter.dateString(params.value);
       },
     },
   ];
 
   return (
-    <Box className="aportes_container">
-      <Typography variant="h2">Aportes</Typography>
-
+    <div className="publicaciones_container">
+      <h1>Aportes</h1>
       <Box
         sx={{
           height: '600px',
@@ -452,338 +440,56 @@ export const Aportes = () => {
       >
         <ThemeProvider theme={themeWithLocale}>
           <StripedDataGrid
+            apiRef={gridApiRef}
             rows={rows}
-            columns={columnas}
-            getRowId={(row) => rows.indexOf(row)}
+            columns={columns}
+            editMode="row"
+            getRowId={(row) => row.id}
             getRowClassName={(params) =>
               rows.indexOf(params.row) % 2 === 0 ? 'even' : 'odd'
             }
+            rowModesModel={rowModesModel}
+            onRowModesModelChange={handleRowModesModelChange}
+            onRowEditStop={handleRowEditStop}
+            processRowUpdate={(updatedRow, originalRow) =>
+              processRowUpdate(updatedRow, originalRow)
+            }
+            onProcessRowUpdateError={(error, params) => {
+              handleProcessRowUpdateError(error, params);
+            }}
             localeText={dataGridStyle.toolbarText}
-            slots={{ toolbar: crearNuevoRegistro }}
+            slots={{
+              toolbar: EditarNuevaFila,
+            }}
             slotProps={{
               toolbar: {
                 setRows,
+                rows,
                 setRowModesModel,
+                volverPrimerPagina,
                 showQuickFilter: true,
                 showColumnMenu: true,
                 themeWithLocale,
-                handleOpen,
-                setPeticionTitulo,
+              },
+            }}
+            sx={{
+              '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
+                width: '8px',
+                visibility: 'visible',
+              },
+              '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
+                backgroundColor: '#ccc',
+              },
+              '& .css-1iyq7zh-MuiDataGrid-columnHeaders': {
+                backgroundColor: '#1A76D2 !important',
               },
             }}
             paginationModel={paginationModel}
             onPaginationModelChange={setPaginationModel}
-            pageSizeOptions={[50, 75, 100]}
+            pageSizeOptions={pageSizeOptions}
           />
         </ThemeProvider>
       </Box>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <Typography
-            variant="h4"
-            component="h2"
-            sx={{
-              textAlign: 'center',
-              backgroundColor: alpha(theme.palette.primary.main, 0.1),
-              borderRadius: '5px',
-              width: '400px',
-              marginBottom: '20px',
-              color: theme.palette.primary.main,
-            }}
-          >
-            {peticionTitulo}
-          </Typography>
-
-          <form onSubmit={handleFormSubmit} style={{ width: '100%' }}>
-            <Grid container spacing={2} sx={{ marginBottom: '20px' }}>
-              <Grid item xs={4}>
-                <Autocomplete
-                  options={entidades}
-                  getOptionLabel={(option) => option.codigo}
-                  isOptionEqualToValue={(option, value) =>
-                    option.codigo === value.codigo
-                  }
-                  value={dataModal.entidad}
-                  onChange={(e, newValue) => {
-                    handleChangeDataModal(newValue, 'entidad');
-                  }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Buscar por entidad"
-                      variant="outlined"
-                    />
-                  )}
-                />
-              </Grid>
-              <Grid item xs={4}>
-                <Autocomplete
-                  options={aportes}
-                  getOptionLabel={(option) => option.descripcion}
-                  isOptionEqualToValue={(option, value) =>
-                    option.codigo === value.codigo
-                  }
-                  value={dataModal.aporte}
-                  onChange={(e, newValue) => {
-                    handleChangeDataModal(newValue, 'aporte');
-                  }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Buscar por aporte"
-                      variant="outlined"
-                    />
-                  )}
-                />
-              </Grid>
-              <Grid item xs={4}>
-                <FormControl fullWidth>
-                  <InputLabel id="socio-label">Socio</InputLabel>
-                  <Select
-                    labelId="socio-label"
-                    id="socio"
-                    value={dataModal.socio || ''}
-                    onChange={(e) =>
-                      handleChangeDataModal(e.target.value, 'socio')
-                    }
-                  >
-                    <MenuItem value={true}>Si</MenuItem>
-                    <MenuItem value={false}>No</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-            </Grid>
-            <Grid container spacing={2} sx={{ marginBottom: '20px' }}>
-              <Grid item xs={4}>
-                <FormControl fullWidth>
-                  <InputLabel id="calculoTipo-label">Cálculo Tipo</InputLabel>
-                  <Select
-                    labelId="calculoTipo-label"
-                    id="calculoTipo"
-                    value={dataModal.calculoTipo || ''}
-                    onChange={(e) =>
-                      handleChangeDataModal(e.target.value, 'calculoTipo')
-                    }
-                  >
-                    {tipo.map((t) => (
-                      <MenuItem key={t.codigo} value={t.codigo}>
-                        {t.descripcion}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={4}>
-                <CurrencyInput
-                  id="input-example"
-                  className="aportes_currency"
-                  name="input-name"
-                  placeholder="Please enter a number"
-                  defaultValue={dataModal.calculoValor || 0}
-                  decimalsLimit={2}
-                  onValueChange={(value, name, values) =>
-                    handleChangeDataModal(value, 'calculoValor')
-                  }
-                />
-              </Grid>
-              <Grid item xs={4}>
-                <FormControl fullWidth>
-                  <InputLabel id="calculoBase-label">Cálculo Base</InputLabel>
-                  <Select
-                    labelId="calculoBase-label"
-                    id="calculoBase"
-                    value={dataModal.calculoBase || ''}
-                    onChange={(e) =>
-                      handleChangeDataModal(e.target.value, 'calculoBase')
-                    }
-                  >
-                    {base.map((cb) => (
-                      <MenuItem key={cb.codigo} value={cb.codigo}>
-                        {cb.descripcion}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-            </Grid>
-            <Grid container spacing={2} sx={{ marginBottom: '12px' }}>
-              <Grid item xs={4}>
-                <FormControl fullWidth>
-                  <InputLabel id="camara-label">Cámara</InputLabel>
-                  <Select
-                    labelId="camara-label"
-                    id="camara"
-                    value={dataModal.camara || ''}
-                    onChange={(e) => {
-                      handleChangeDataModal('', 'camaraCategoria');
-                      handleChangeDataModal('', 'antiguedad');
-                      handleChangeDataModal(e.target.value, 'camara');
-                    }}
-                  >
-                    {camara.map((c) => (
-                      <MenuItem key={c.codigo} value={c.codigo}>
-                        {c.descripcion}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-
-              <Grid item xs={4}>
-                <Tooltip
-                  title={!dataModal.camara ? 'Seleccione una cámara' : ''}
-                >
-                  <FormControl fullWidth>
-                    <InputLabel id="camaraCategoria-label">
-                      Categoría
-                    </InputLabel>
-                    <Select
-                      defaultValue=""
-                      labelId="camaraCategoria-label"
-                      id="camaraCategoria"
-                      value={
-                        categoria.length > 0 ? dataModal.camaraCategoria : ''
-                      }
-                      onChange={(e) => {
-                        handleChangeDataModal('', 'antiguedad');
-                        handleChangeDataModal(
-                          e.target.value,
-                          'camaraCategoria',
-                        );
-                      }}
-                      disabled={!dataModal.camara}
-                    >
-                      {categoria.map((c) => (
-                        <MenuItem key={c.categoria} value={c.categoria}>
-                          {c.categoria}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Tooltip>
-              </Grid>
-              <Grid item xs={4}>
-                <Tooltip
-                  title={
-                    !dataModal.camaraCategoria ? 'Seleccione una categoría' : ''
-                  }
-                >
-                  <FormControl fullWidth>
-                    <InputLabel id="antiguedad-label">Antigüedad</InputLabel>
-                    <Select
-                      labelId="antiguedad-label"
-                      id="antiguedad"
-                      value={antiguedad.length > 0 ? dataModal.antiguedad : ''}
-                      onChange={(e) =>
-                        handleChangeDataModal(e.target.value, 'antiguedad')
-                      }
-                      disabled={!dataModal.camaraCategoria}
-                    >
-                      {antiguedad.map((a) => (
-                        <MenuItem key={a.antDesde} value={a.antDesde}>
-                          {a.antDesde}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Tooltip>
-              </Grid>
-            </Grid>
-            <Grid container spacing={2} sx={{ marginBottom: '20px' }}>
-              <Grid item xs={6}>
-                <DemoContainer
-                  components={['DatePicker']}
-                  sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'end',
-                  }}
-                >
-                  <DesktopDatePicker
-                    label={'Desde'}
-                    views={['day', 'month', 'year']}
-                    closeOnSelect={true}
-                    onChange={(date) => handleChangeDataModal(date, 'desde')}
-                    value={dataModal.desde || null}
-                    sx={{
-                      width: '60%',
-                    }}
-                  />
-                </DemoContainer>
-              </Grid>
-              <Grid item xs={6}>
-                <DemoContainer
-                  components={['DatePicker']}
-                  sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'start',
-                  }}
-                >
-                  <DesktopDatePicker
-                    label={'Hasta'}
-                    views={['day', 'month', 'year']}
-                    closeOnSelect={true}
-                    onChange={(date) => handleChangeDataModal(date, 'hasta')}
-                    value={dataModal.hasta || null}
-                    sx={{
-                      width: '60%',
-                    }}
-                  />
-                </DemoContainer>
-              </Grid>
-            </Grid>
-            <Grid
-              container
-              spacing={2}
-              sx={{
-                marginBottom: '20px',
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center',
-                gap: '20px',
-              }}
-            >
-              <Button
-                variant="contained"
-                sx={{ marginTop: '20px', width: '40%' }}
-                onClick={cancelarEdicion}
-              >
-                cancelar
-              </Button>
-
-              <Button
-                variant="contained"
-                sx={{ marginTop: '20px', width: '40%' }}
-                type="submit"
-              >
-                Enviar
-              </Button>
-            </Grid>
-          </form>
-        </Box>
-      </Modal>
-    </Box>
+    </div>
   );
-};
-
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: '70%',
-  bgcolor: 'background.paper',
-  border: '2px solid #1A76D2',
-  boxShadow: 24,
-  p: 4,
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
 };
