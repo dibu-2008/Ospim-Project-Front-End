@@ -194,10 +194,10 @@ export const Ajustes = () => {
     if (!newRow.id) {
       try {
         const newRowCast = { ...newRow };
-        newRowCast.importe =
-          parseInt(newRowCast.importe) >= 0
-            ? parseFloat(String(newRowCast.importe).replace(',', '.'))
-            : null;
+        newRowCast.importe = parseFloat(String(newRowCast.importe).replace(',', '.'))
+         //parseInt(newRowCast.importe) >= 0
+          //  ? parseFloat(String(newRowCast.importe).replace(',', '.'))
+          //  : null;
 
         console.log('processRowUpdate - newRowCast  :', newRowCast);
         const data = await axiosAjustes.crear(newRowCast);
@@ -223,10 +223,10 @@ export const Ajustes = () => {
     } else {
       try {
         const newRowCast = { ...newRow };
-        newRowCast.importe =
-          parseInt(newRowCast.importe) >= 0
-            ? parseFloat(String(newRowCast.importe).replace(',', '.'))
-            : null;
+        newRowCast.importe = parseFloat(String(newRowCast.importe).replace(',', '.'))
+          //parseInt(newRowCast.importe) >= 0
+          //  ? parseFloat(String(newRowCast.importe).replace(',', '.'))
+          //  : null;
 
         console.log('processRowUpdate - newRowCast  :', newRowCast);
 

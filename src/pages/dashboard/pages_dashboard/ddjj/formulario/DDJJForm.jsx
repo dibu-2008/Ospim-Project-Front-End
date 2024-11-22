@@ -1990,7 +1990,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ, initFormDDJJ }) => {
                 onClick={limpiarEstadoForm}
                 disabled={!ddjjCabe || (!ddjjCabe.id && ddjjCabe.id == null)}
               >
-                Limpiar Formulario
+                Comenzar nueva DDJJ
               </Button>
             </div>
           </AccordionDetails>
