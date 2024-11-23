@@ -14,6 +14,7 @@ const HTTP_MSG_CONSUL_ERROR = import.meta.env.VITE_HTTP_MSG_CONSUL_ERROR;
 const URL_ENTITY = '/ajustes';
 
 export const axiosAjustes = {
+  //Consulta todo menos IPF-Interes Pago Fuera termino
   consultar: async function (UrlApi) {
     return consultar(UrlApi);
   },
@@ -37,7 +38,8 @@ export const axiosAjustes = {
 
 export const consultar = async () => {
   try {
-    const data = await axiosCrud.consultar(URL_ENTITY);
+    const URL = URL_ENTITY + '/crud';
+    const data = await axiosCrud.consultar(URL);
     return data || [];
   } catch (error) {
     swal.showErrorBackEnd(
