@@ -47,6 +47,11 @@ const MOTIVOS = [
   { codigo: 'O', descripcion: 'Otros' },
 ];
 
+
+const handleClearFilters = (apiRef) => {
+  apiRef.current.setFilterModel({ items: [] });
+};
+
 const crearNuevoRegistro = (props) => {
   const {
     setRows,
@@ -55,22 +60,48 @@ const crearNuevoRegistro = (props) => {
     volverPrimerPagina,
     showQuickFilter,
     themeWithLocale,
+    gridApiRef
   } = props;
-
+  
   const altaHandleClick = () => {
-    //Validar si hay un registro en Edicion
-    if (rows) {
-      const editRow = rows.find((row) => !row.id);
-      if (typeof editRow === 'undefined' || editRow.id) {
-        const newReg = {};
-        volverPrimerPagina();
-        setRows((oldRows) => [newReg, ...oldRows]);
-        setRowModesModel((oldModel) => ({
-          [0]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
-          ...oldModel,
-        }));
+    //borro los filtros para que no genere un error
+    handleClearFilters(gridApiRef)
+  //Validar si hay un registro en Edicion
+    try{
+      if (rows) {
+        const editRow = rows.find((row) => !row.id);
+        if (typeof editRow === 'undefined' || editRow.id) {
+          //console.log(editRow.id)
+          const newReg =     {
+            //"id": rows.indexOf(editRow),
+            "cuit": "",
+            "razonSocial": "",
+            //"periodo_original": "2024-06-01",
+            "periodo_original": "",
+            "importe": 0.00,
+            "aporte": "ART46",
+            "motivo": "O",
+            "vigencia": "",
+            "boleta": null
+        };
+          //newReg.id = Date.now()
+          console.log(newReg)
+          volverPrimerPagina();
+  
+          setRows((oldRows) => [newReg, ...oldRows]);
+          //console.log(rows)
+          //console.log(oldModel)
+          setRowModesModel((oldModel) => ({
+            [0]: { mode: GridRowModes.Edit},//, fieldToFocus: 'name' },
+            ...oldModel,
+          }));
+          //setRowModesModel((oldModel) => console.log(oldModel))
+        }
       }
+    } catch(e) {
+      console.log(error)
     }
+
   };
 
   return (
@@ -89,6 +120,7 @@ const crearNuevoRegistro = (props) => {
 export const Ajustes = () => {
   const gridApiRef = useGridApiRef();
 
+  console.log(gridApiRef)
   const [locale, setLocale] = useState('esES');
   const [rows, setRows] = useState([]);
   const [aportes, setAportes] = useState([]);
@@ -573,6 +605,7 @@ export const Ajustes = () => {
                 showQuickFilter: true,
                 showColumnMenu: true,
                 themeWithLocale,
+                gridApiRef
               },
             }}
             paginationModel={paginationModel}

@@ -16,29 +16,56 @@ import {
       showQuickFilter,
       showColumnMenu,
       themeWithLocale,
+      gridApiRef
     } = props;
-  
+  console.log(gridApiRef)
+
+    const handleClearFilters = () => {
+      gridApiRef.current.setFilterModel({ items: [] });
+    };
+
     const handleClick = () => {
+      handleClearFilters()
       if (rows) {
         const editRow = rows.find((row) => !row.id);
+        console.log(editRow)
         if (typeof editRow === 'undefined' || editRow.id) {
           const newReg = {
-            entidad: '',
-            aporte: '',
-            socio: '',
-            calculoTipo: '',
-            calculoValor: '',
-            calculoBase: '',
-            camara: '',
-            camaraCategoria: '',
-            desde: '',
-            hasta: ''
+            //'id':0,
+            //'id': rows.length + 1,
+            'entidad': '',
+            'aporte': '',
+            'socio': '',
+            'calculoTipo': '',
+            'calculoValor': '',
+            'calculoBase': '',
+            'camara': '',
+            'camaraCategoria': '',
+            'desde': '',
+            'hasta': '',
+            'camaraAntiguedad':''
           };
+
+          //const newReg = {
+          //  //id:Date.now(),
+          //  'id': Date.now(),
+          //  'entidad': '',
+          //  'aporte': '',
+          //  'socio': '',
+          //  'calculoTipo': '',
+          //  'calculoValor': '',
+          //  'calculoBase': '',
+          //  'camara': '',
+          //  'camaraCategoria': '',
+          //  'desde': '',
+          //  'hasta': '',
+          //  'camaraAntiguedad':''
+          //};
   
           volverPrimerPagina();
           setRows((oldRows) => [newReg, ...oldRows]);
           setRowModesModel((oldModel) => ({
-            [0]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
+            [0]: { mode: GridRowModes.Edit },
             ...oldModel,
           }));
         }

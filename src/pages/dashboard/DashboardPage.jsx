@@ -40,6 +40,7 @@ import OSPIM from '../../assets/Logos_PNG_azul/OSPIM_AZUL.png';
 import UOMA from '../../assets/Logos_PNG_azul/UOMA_AZUL.png';
 import { width } from '@mui/system';
 import Hidden from '@mui/material/Hidden';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 
 
 const drawerWidth = 250;
@@ -284,11 +285,7 @@ const DashboardPage = () => {
                     to="./interesesafip"
                     className="icon-container icon-container-afip"
                   >
-                    <img
-                      src={afipIcon}
-                      alt="afip"
-                      className="icon-link icono-afip"
-                    />{' '}
+                    <TrendingUpIcon className="icon-link"/>{' '}
                     {open && <span className="icon-link">Intereses</span>}
                   </NavLink>
                 )}
