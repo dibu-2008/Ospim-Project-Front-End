@@ -57,7 +57,7 @@ export const crear = async (registro) => {
     );
     registro.vigencia = formatter.toFechaValida(registro.vigencia);
 
-    const data = await axiosCrud.crear(URL_ENTITY, registro);
+    const data = await axiosCrud.crear(`${URL_ENTITY}/seteos`, registro);
     if (data && data.id) {
       swal.showSuccess(HTTP_MSG_ALTA);
       return data;

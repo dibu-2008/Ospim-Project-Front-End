@@ -36,7 +36,7 @@ export const Aportes = () => {
     useContext(UserContext);
 
   const gridApiRef = useGridApiRef();
-
+  console.log(gridApiRef)
   const theme = useTheme();
   const themeWithLocale = useMemo(
     () => createTheme(theme, locales[locale]),
@@ -125,21 +125,21 @@ export const Aportes = () => {
   const handleEditClick = (row) => () => {
     setRowModesModel({
       ...rowModesModel,
-      [row.id]: { mode: GridRowModes.Edit },
+      [rows.indexOf(row)]: { mode: GridRowModes.Edit },
     });
   };
 
   const handleSaveClick = (row) => () => {
     setRowModesModel({
       ...rowModesModel,
-      [row.id]: { mode: GridRowModes.View },
+      [rows.indexOf(row)]: { mode: GridRowModes.View },
     });
   };
 
   const handleCancelClick = (row) => () => {
     setRowModesModel({
       ...rowModesModel,
-      [row.id]: {
+      [rows.indexOf(row)]: {
         mode: GridRowModes.View,
         ignoreModifications: true,
       },
@@ -229,7 +229,7 @@ export const Aportes = () => {
       headerClassName: 'header--cell',
       getActions: ({ row }) => {
         const isInEditMode =
-          rowModesModel[row.id]?.mode === GridRowModes.Edit;
+          rowModesModel[rows.indexOf(row)]?.mode === GridRowModes.Edit;
 
         if (isInEditMode) {
           return [
@@ -322,8 +322,8 @@ export const Aportes = () => {
       editable: true,
       type: 'singleSelect',
       valueOptions: [
-        { value: 'PO', label: 'PO' },
-        { value: 'EN', label: 'EN' },
+        { value: 'PO', label: 'Porcentaje' },
+        { value: 'EN', label: 'Entero' },
       ],
       flex: 1,
       headerAlign: 'left',
@@ -350,8 +350,16 @@ export const Aportes = () => {
       flex: 1,
       editable: true,
       headerAlign: 'left',
+      type: 'singleSelect',
       align: 'left',
       headerClassName: 'header--cell',
+      valueOptions: [
+        { value: 'PJ', label: 'Paritaria Jornal' },
+        { value: 'PS', label: 'Paritaria Salarial' },
+        { value: 'RE', label: 'Remunerativo' },
+        { value: '', label: '' },
+
+      ],
     },
     {
       field: 'camara',
@@ -444,7 +452,8 @@ export const Aportes = () => {
             rows={rows}
             columns={columns}
             editMode="row"
-            getRowId={(row) => row.id}
+            //getRowId={(row) => row.id}
+            getRowId={(row) => rows.indexOf(row)}
             getRowClassName={(params) =>
               rows.indexOf(params.row) % 2 === 0 ? 'even' : 'odd'
             }
@@ -470,6 +479,7 @@ export const Aportes = () => {
                 showQuickFilter: true,
                 showColumnMenu: true,
                 themeWithLocale,
+                gridApiRef
               },
             }}
             sx={{
