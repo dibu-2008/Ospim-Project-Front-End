@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useContext } from 'react';
-import { UserContext } from '@/context/userContext';
+import { UserContext } from '@/context/UserContext';
 import { Box } from '@mui/material';
 import formatter from '@/common/formatter';
 import {

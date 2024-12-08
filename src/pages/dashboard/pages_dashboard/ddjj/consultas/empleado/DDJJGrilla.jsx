@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { UserContext } from '@/context/userContext';
+import { UserContext } from '@/context/UserContext';
 import Box from '@mui/material/Box';
 import {
   GridRowModes,

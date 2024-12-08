@@ -25,7 +25,7 @@ import { InputPeriodo } from '@/components/InputPeriodo';
 import Swal from 'sweetalert2';
 import { consultarEmpresa } from '@/common/api/EmpresasApi';
 
-import { UserContext } from '@/context/userContext';
+import { UserContext } from '@/context/UserContext';
 
 const style = {
   position: 'absolute',

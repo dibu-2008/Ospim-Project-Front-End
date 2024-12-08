@@ -8,7 +8,7 @@ import { Publicaciones } from '../pages/dashboard/pages_dashboard/publicaciones/
 import DashboardPage from '../pages/dashboard/DashboardPage';
 import { LoginPage } from '../pages/login/LoginPage';
 import { Feriados } from '../pages/dashboard/pages_dashboard/feriados/Feriados';
-import { UsuarioInterno } from '../pages/dashboard/pages_dashboard/usuarioInterno/UsuarioInterno';
+import { UsuarioInterno } from '../pages/dashboard/pages_dashboard/usuarioInterno/usuarioInterno';
 import { RegistroEmpresa } from '../pages/registro_empresa/RegistroEmpresa';
 import { CuitsRestringidos } from '../pages/dashboard/pages_dashboard/cuits-restringidos/CuitsRestringidos';
 import { Boletas } from '../pages/dashboard/pages_dashboard/boletas/Boletas';
@@ -21,7 +21,7 @@ import { DetalleOtrosPagos } from '@/pages/dashboard/pages_dashboard/otros_pagos
 import { DDJJFiltro } from '@/pages/dashboard/pages_dashboard/ddjj/consultas/empleado/DDJJFiltro';
 import { InteresesAfip } from '@/pages/dashboard/pages_dashboard/intereses_afip/InteresesAfip';
 import { Ajustes } from '@/pages/dashboard/pages_dashboard/ajustes/Ajustes';
-import { GestionRoles } from '@/pages/dashboard/pages_dashboard/gestionRoles/GestionRoles';
+import { GestionRoles } from '@/pages/dashboard/pages_dashboard/GestionRoles/GestionRoles';
 import { Aportes } from '@/pages/dashboard/pages_dashboard/aportes/Aportes';
 import { DDJJTabs } from '@/pages/dashboard/pages_dashboard/ddjj/DDJJTabs';
 import { UserProvider } from '@/context/UserProvider';

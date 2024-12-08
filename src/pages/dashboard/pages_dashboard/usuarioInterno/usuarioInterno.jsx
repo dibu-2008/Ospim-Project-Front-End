@@ -45,7 +45,7 @@ import './usuarioInterno.css';
 
 import { dataGridStyle } from '@/common/dataGridStyle';
 import { margin } from '@mui/system';
-import { UserContext } from '@/context/userContext';
+import { UserContext } from '@/context/UserContext';
 
 const style = {
   position: 'absolute',
