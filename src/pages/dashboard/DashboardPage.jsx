@@ -32,16 +32,18 @@ import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import localStorageService from '@/components/localStorage/localStorageService';
 import { getFuncionalidadesByRol } from './DashboardPageApi';
-import logo2 from '../../assets/logo_2.svg';
 import { styled } from '@mui/material/styles';
 import { ClaveComponent } from '@/components/ClaveComponent';
+import {
+  AMTIMA_AZUL_PNG,
+  UOMA_AZUL_PNG,
+  OSPIM_AZUL_PNG,
+} from '../../assets/imagesBase64';
 import AMTIMA from '../../assets/Logos_PNG_azul/AMTIMA_AZUL.png';
 import OSPIM from '../../assets/Logos_PNG_azul/OSPIM_AZUL.png';
 import UOMA from '../../assets/Logos_PNG_azul/UOMA_AZUL.png';
-import { width } from '@mui/system';
 import Hidden from '@mui/material/Hidden';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
-
 
 const drawerWidth = 250;
 
@@ -285,7 +287,7 @@ const DashboardPage = () => {
                     to="./interesesafip"
                     className="icon-container icon-container-afip"
                   >
-                    <TrendingUpIcon className="icon-link"/>{' '}
+                    <TrendingUpIcon className="icon-link" />{' '}
                     {open && <span className="icon-link">Intereses</span>}
                   </NavLink>
                 )}
@@ -386,9 +388,21 @@ const DashboardPage = () => {
               marginRight: 80,
             }}
           >
-            <img width={100} src={UOMA} alt="UOMA" />
-            <img width={100} src={OSPIM} alt="OSPIM" />
-            <img width={100} src={AMTIMA} alt="AMTIMA" />
+            <img
+              width={100}
+              src={`data:image/png;base64,${UOMA_AZUL_PNG}`}
+              alt="UOMA"
+            />
+            <img
+              width={100}
+              src={`data:image/png;base64,${OSPIM_AZUL_PNG}`}
+              alt="OSPIM"
+            />
+            <img
+              width={100}
+              src={`data:image/png;base64,${AMTIMA_AZUL_PNG}`}
+              alt="AMTIMA"
+            />
           </div>
         </div>
       </Box>
