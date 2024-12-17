@@ -12,6 +12,7 @@ import { consultarEmpresas } from '@/common/api/EmpresasApi';
 
 import { DDJJGrilla } from './DDJJGrilla';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
+import { ThreeCircles } from 'react-loader-spinner';
 
 export const DDJJFiltro = () => {
   const ahora = dayjs().startOf('month');
@@ -24,8 +25,10 @@ export const DDJJFiltro = () => {
   const [empresa, setEmpresa] = useState({ cuit: '', razonSocial: '' });
   const [empresas, setEmpresas] = useState([]);
   const [rows, setRows] = useState([]);
+  const [showLoading, setShowLoading] = useState(true);
 
   const handlerConsultar = async () => {
+    setShowLoading(true)
     try {
       let desde = null;
       if (filtro.desde !== null) {
@@ -47,6 +50,7 @@ export const DDJJFiltro = () => {
       );
       console.log('handlerConsultar - ddjjResponse: ', ddjjResponse);
       setRows(ddjjResponse);
+      setShowLoading(false)
     } catch (error) {
       console.error('Error al buscar declaraciones juradas:', error);
     }
@@ -61,6 +65,7 @@ export const DDJJFiltro = () => {
 
     ObtenerEmpresas();
     handlerConsultar();
+    setShowLoading(false)
   }, []);
 
   return (
@@ -179,10 +184,23 @@ export const DDJJFiltro = () => {
             },
           }}
         >
-          <DDJJGrilla
+          <ThreeCircles
+            visible={showLoading}
+            height="100"
+            width="100"
+            color="#1A76D2"
+            ariaLabel="three-circles-loading"
+            wrapperStyle={{
+              margin: '15%',
+              marginLeft: '50%'
+            }}
+            wrapperClass=""
+          />
+          {!showLoading && (<DDJJGrilla
             rows={rows}
             showCuit={filtro.cuit == null || filtro.cuit == ''}
-          />
+          />)}
+          
         </Box>
       </Stack>
     </div>

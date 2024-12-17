@@ -21,7 +21,7 @@ import CancelIcon from '@mui/icons-material/Close';
 import CreateIcon from '@mui/icons-material/Create';
 import Switch from '@mui/material/Switch';
 import { CircularProgress } from '@mui/material';
-
+import { ThreeCircles } from 'react-loader-spinner';
 
 import { DDJJArchivoImport } from '@/pages/dashboard/pages_dashboard/ddjj/formulario/DDJJArchivoImport';
 import { DDJJPeriodoAnterior } from '@/pages/dashboard/pages_dashboard/ddjj/formulario/DDJJPeriodoAnterior';
@@ -171,13 +171,15 @@ function EditToolbar(props) {
       [newReg.id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
     }));
 
-    setSortModel([
+    
+    gridApiRef.current.setPage(0);
+
+    gridApiRef.current.setSortModel([
       {
         field: 'id',
         sort: 'desc',
       },
-    ]);
-    gridApiRef.current.setPage(0);
+    ])
   };
 
   return (
@@ -1864,6 +1866,7 @@ export const DDJJForm = ({ idDDJJ, mostrarConsultaMissDDJJ, initFormDDJJ }) => {
                 },
               }}
             >
+
               {loading ? <Box display="flex" justifyContent="center" alignItems="center" ><CircularProgress /> </Box>: 
               <ThemeProvider theme={themeWithLocale}>
                 <StripedDataGrid
