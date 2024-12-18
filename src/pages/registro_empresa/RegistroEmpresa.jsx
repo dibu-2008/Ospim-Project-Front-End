@@ -940,12 +940,12 @@ export const RegistroEmpresa = () => {
               }}
               wrapperClass=""
             />
-            { !showLoading &&
+            { !showLoading &&<>
             <GrillaEmpresaDomicilio
               idEmpresa="PC"
               rows={rows}
               setRows={setRows}
-            />}
+            />
             <Grid item xs={12}>
               <div className="box">
                 <Button
@@ -962,6 +962,8 @@ export const RegistroEmpresa = () => {
                 </Button>
               </div>
             </Grid>
+            </>
+            }
           </div>
         </form>
       </div>
