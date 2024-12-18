@@ -65,7 +65,7 @@ export const GestionDeudas = () => {
           display: 'flex',
           
         }}
-      >Gestion de Deuda</h1>
+      >Gestión de Deuda</h1>
       <div
 
         className="flex_properties"
