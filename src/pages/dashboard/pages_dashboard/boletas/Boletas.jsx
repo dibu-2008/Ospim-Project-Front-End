@@ -30,6 +30,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import * as locales from '@mui/material/locale';
 import PropTypes from 'prop-types';
+import { ThreeCircles } from 'react-loader-spinner';
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -75,6 +76,7 @@ export const Boletas = () => {
   const [boletasSinAfiliados, setBoletasSinAfiliados] = useState([]); //Esta la necesito para generar el csv
   const [boletasSinDDJJ, setBoletasSinDDJJ] = useState([]);
   const [tabState, setTabState] = useState(0);
+  const [showLoading, setShowLoading] = useState([])
   const theme = useTheme();
   const [locale, setLocale] = useState('esES');
   const { paginationModel, setPaginationModel, pageSizeOptions } =
@@ -123,8 +125,10 @@ export const Boletas = () => {
           return { ...rest };
         }),
       );
+      setShowLoading(false)
     } catch (error) {
       console.error('Error al obtener las boletas:', error);
+      setShowLoading(false)
     }
   };
 
@@ -227,6 +231,18 @@ export const Boletas = () => {
                 },
               }}
             >
+              <ThreeCircles
+                visible={showLoading}
+                height="100"
+                width="100"
+                color="#1A76D2"
+                ariaLabel="three-circles-loading"
+                wrapperStyle={{
+                  margin: '15%',
+                  marginLeft: '50%',
+                }}
+                wrapperClass=""
+              />
               <DataGrid
                 rows={boletasVisibles}
                 columns={[
@@ -390,6 +406,18 @@ export const Boletas = () => {
                 },
               }}
             >
+              <ThreeCircles
+                visible={showLoading}
+                height="100"
+                width="100"
+                color="#1A76D2"
+                ariaLabel="three-circles-loading"
+                wrapperStyle={{
+                  margin: '15%',
+                  marginLeft: '50%',
+                }}
+                wrapperClass=""
+              />
               <DataGrid
                 rows={boletasSinDDJJ}
                 columns={[

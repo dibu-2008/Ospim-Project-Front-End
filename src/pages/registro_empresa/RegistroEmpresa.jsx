@@ -28,6 +28,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { textAlign } from '@mui/system';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
+import { ThreeCircles } from 'react-loader-spinner';
 
 const CustomSelect = styled(Select)({
   textAlign: 'left',
@@ -63,6 +64,7 @@ export const RegistroEmpresa = () => {
   const [errorWhatsappPrefijo, setErrorWhatsappPrefijo] = useState(false);
   const [errorPassword, setErrorPassword] = useState(false);
   const [errorRepeatPassword, setErrorRepeatPassword] = useState(false);
+  const [showLoading, setShowLoading] = useState(false)
 
   const navigate = useNavigate();
 
@@ -137,8 +139,8 @@ export const RegistroEmpresa = () => {
 
     if (
       phoneAlternativos &&
-      phoneAlternativos.length > 0
-      && (prefijo_second || phone_second)
+      phoneAlternativos.length > 0 &&
+      (prefijo_second || phone_second)
     ) {
       usuarioEmpresa['telefonosAlternativos'] = [
         {
@@ -169,17 +171,13 @@ export const RegistroEmpresa = () => {
 
     if (emailAlternativos && emailAlternativos.length > 0 && email_second) {
       usuarioEmpresa.emailAlternativos = [
-          email_second,
-        ...emailAlternativos.map((email) => (
-          email.email
-        )),
+        email_second,
+        ...emailAlternativos.map((email) => email.email),
       ];
     } else {
       //if (emailAlternativos && emailAlternativos.length > 0 && email_second) {
       if (email_second) {
-        usuarioEmpresa.emailAlternativos = [
-           email_second
-        ];
+        usuarioEmpresa.emailAlternativos = [email_second];
       }
     }
 
@@ -200,10 +198,11 @@ export const RegistroEmpresa = () => {
     }
 
     console.log('RegistroEmpresa - usuarioEmpresa:', usuarioEmpresa);
-
+    setShowLoading(true)
     const rta = await registrarEmpresa(usuarioEmpresa, navigate);
     console.log('registrarEmpresa - rta:', rta);
-
+    //ACA
+    setShowLoading(false)
     if (!rta && !rta.id) {
       if (rta.includes('cuit')) setErrorCuit(true);
       if (rta.includes('razonSocial')) setErrorRazonSocial(true);
@@ -231,13 +230,15 @@ export const RegistroEmpresa = () => {
   };
 
   const handleQuitEmail = (input) => {
-    console.log(input)
-    if (idEmailAlternativos > 2){
-    console.log(emailAlternativos)
-    setEmailAlternativos(emailAlternativos.filter(item => item.id !== input.id))
-    console.log(additionalEmail)
-    setAddionalEmail(additionalEmail.filter(item => item.id !== input.id));
-  }
+    console.log(input);
+    if (idEmailAlternativos > 2) {
+      console.log(emailAlternativos);
+      setEmailAlternativos(
+        emailAlternativos.filter((item) => item.id !== input.id),
+      );
+      console.log(additionalEmail);
+      setAddionalEmail(additionalEmail.filter((item) => item.id !== input.id));
+    }
   };
 
   const handleAddPhone = () => {
@@ -255,13 +256,17 @@ export const RegistroEmpresa = () => {
   };
 
   const handleQuitPhone = (input) => {
-    console.log(input)
-    console.log(phoneAlternativos)
-    if (phoneAlternativos.length > 0){
-      console.log(phoneAlternativos)
-      setPhoneAlternativos(phoneAlternativos.filter(item => item.id !== input.id))
-      console.log(additionalPhone)
-      setAdditionalPhone(additionalPhone.filter(item => item.id !== input.id));
+    console.log(input);
+    console.log(phoneAlternativos);
+    if (phoneAlternativos.length > 0) {
+      console.log(phoneAlternativos);
+      setPhoneAlternativos(
+        phoneAlternativos.filter((item) => item.id !== input.id),
+      );
+      console.log(additionalPhone);
+      setAdditionalPhone(
+        additionalPhone.filter((item) => item.id !== input.id),
+      );
     }
   };
 
@@ -338,13 +343,12 @@ export const RegistroEmpresa = () => {
 
     if (event.target.name === 'whatsapp_prefijo') {
       if (inputValue.length <= maxDigits - whatsapp_prefijo.toString().length) {
-        if (inputValue[0] != '0'){
+        if (inputValue[0] != '0') {
           OnInputChangeRegisterCompany(event);
         }
       }
     }
     //Expresion prefijoAdditional
-
   };
 
   const handleChangePhone = (event) => {
@@ -369,10 +373,10 @@ export const RegistroEmpresa = () => {
       if (totalLength <= maxDigits) {
         OnInputChangeRegisterCompany(event);
       }
-      if (inputValue[0] + inputValue[1] === '15'){
-        setErrorWhatsapp(true)
+      if (inputValue[0] + inputValue[1] === '15') {
+        setErrorWhatsapp(true);
       } else {
-        setErrorWhatsapp(false)
+        setErrorWhatsapp(false);
       }
     }
   };
@@ -555,21 +559,21 @@ export const RegistroEmpresa = () => {
                   }}
                 />
                 <Box sx={{ '& > :not(style)': { m: 1 } }}>
-                <Fab
-                  size="small"
-                  color="primary"
-                  aria-label="add"
-                  style={{
-                    position: 'absolute',
-                    marginTop: '-48px',
-                    marginLeft: '255px',
-                    zIndex: '1',
-                  }}
-                  onClick={() => handleQuitEmail(input)}
-                >
-                  <RemoveIcon />
-                </Fab>
-              </Box>
+                  <Fab
+                    size="small"
+                    color="primary"
+                    aria-label="add"
+                    style={{
+                      position: 'absolute',
+                      marginTop: '-48px',
+                      marginLeft: '255px',
+                      zIndex: '1',
+                    }}
+                    onClick={() => handleQuitEmail(input)}
+                  >
+                    <RemoveIcon />
+                  </Fab>
+                </Box>
               </div>
             ))}
             <div className="input-group">
@@ -789,8 +793,8 @@ export const RegistroEmpresa = () => {
                       name={`prefijoAdditional_${input.id}`}
                       value={input.prefijo}
                       onChange={(e) => {
-                        console.log(input)
-                        console.log(e.target.name)
+                        console.log(input);
+                        console.log(e.target.name);
                         const values = [...additionalPhone];
                         values.map((item) => {
                           if (item.id === input.id) {
@@ -822,7 +826,7 @@ export const RegistroEmpresa = () => {
                             item.nro = e.target.value;
                           }
                         });
-                        console.log(values)
+                        console.log(values);
                         setPhoneAlternativos(values);
                       }}
                       autoComplete="off"
@@ -832,22 +836,22 @@ export const RegistroEmpresa = () => {
                         width: '100%',
                       }}
                     />
-              <Box sx={{ '& > :not(style)': { m: 1 } }}>
-                <Fab
-                  size="small"
-                  color="primary"
-                  aria-label="add"
-                  style={{
-                    position: 'absolute',
-                    marginTop: '-48px',
-                    marginLeft: '205px',
-                    zIndex: '1',
-                  }}
-                  onClick={()=>handleQuitPhone(input)}
-                >
-                  <RemoveIcon />
-                </Fab>
-              </Box>
+                    <Box sx={{ '& > :not(style)': { m: 1 } }}>
+                      <Fab
+                        size="small"
+                        color="primary"
+                        aria-label="add"
+                        style={{
+                          position: 'absolute',
+                          marginTop: '-48px',
+                          marginLeft: '205px',
+                          zIndex: '1',
+                        }}
+                        onClick={() => handleQuitPhone(input)}
+                      >
+                        <RemoveIcon />
+                      </Fab>
+                    </Box>
                   </div>
                 </div>
               </div>
@@ -924,6 +928,19 @@ export const RegistroEmpresa = () => {
               Domicilios declarados: (Para completar el registro, deberá agregar
               por lo menos el Domicilio Fiscal)
             </p>
+            <ThreeCircles
+              visible={showLoading}
+              height="100"
+              width="100"
+              color="#1A76D2"
+              ariaLabel="three-circles-loading"
+              wrapperStyle={{
+                margin: '15%',
+                marginLeft: '50%',
+              }}
+              wrapperClass=""
+            />
+            { !showLoading &&<>
             <GrillaEmpresaDomicilio
               idEmpresa="PC"
               rows={rows}
@@ -945,6 +962,8 @@ export const RegistroEmpresa = () => {
                 </Button>
               </div>
             </Grid>
+            </>
+            }
           </div>
         </form>
       </div>
