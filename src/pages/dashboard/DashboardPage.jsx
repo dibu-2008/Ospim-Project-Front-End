@@ -39,9 +39,6 @@ import {
   UOMA_AZUL_PNG,
   OSPIM_AZUL_PNG,
 } from '../../assets/imagesBase64';
-import AMTIMA from '../../assets/Logos_PNG_azul/AMTIMA_AZUL.png';
-import OSPIM from '../../assets/Logos_PNG_azul/OSPIM_AZUL.png';
-import UOMA from '../../assets/Logos_PNG_azul/UOMA_AZUL.png';
 import Hidden from '@mui/material/Hidden';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 
