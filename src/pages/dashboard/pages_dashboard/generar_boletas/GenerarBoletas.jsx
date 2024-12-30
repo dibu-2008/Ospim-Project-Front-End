@@ -46,6 +46,8 @@ export const GenerarBoletas = () => {
   const MOTIVOS_DESC = {
     DI: 'Devolución de Intereses',
     DPD: 'Devolución por pago duplicado',
+    AJ: 'Ajuste Retroactivo',
+    IPF: 'Intereses por Pago Fuera de Término',
     O: 'Otros',
   };
 
@@ -552,13 +554,15 @@ export const GenerarBoletas = () => {
               {index === 0 && (
                 <h3 style={{ color: '#1A76D2' }}>Ajustes aplicados</h3>
               )}
-              <p>{boleta.descripcion}</p>
+              <p>
+                <b>{boleta.descripcion}</b>
+              </p>
 
               <ul>
                 {boleta.ajustes.map((ajuste, index) => (
                   <li key={index}>
-                    {ajuste.descripcion} - Motivo: {MOTIVOS_DESC[ajuste.motivo]}{' '}
-                    - Monto:
+                    {ajuste.descripcion} - <b>Motivo:</b>{' '}
+                    {MOTIVOS_DESC[ajuste.motivo]} - <b>Monto:</b>{' '}
                     {formatter.currency.format(ajuste.monto)}
                   </li>
                 ))}

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Box, Typography } from '@mui/material';
-import { UserContext } from '@/context/userContext';
+import { UserContext } from '@/context/UserContext';
 import PropTypes from 'prop-types';
 import { GrillaActas } from '../Grillas/GrillaActas';
 import { GrillaConvenio } from '../Grillas/GrillaConvenio';

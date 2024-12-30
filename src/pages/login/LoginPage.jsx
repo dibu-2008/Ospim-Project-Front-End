@@ -3,8 +3,9 @@ import {
   logon,
   logonDFA,
   usuarioLogueadoHabilitadoDFA,
+  activarCuentaEmpresa,
 } from './LoginApi.js';
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useFormLoginInternalUser } from '../../hooks/useFormLoginInternalUser.js';
 import { ButtonComponent } from '@components/ButtonComponent.jsx';
@@ -24,17 +25,20 @@ import {
 import { ThreeCircles } from 'react-loader-spinner';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import NavBar from '@/components/navbar/NavBar.jsx';
+import swal from '@/components/swal/swal';
+import Swal from 'sweetalert2';
 
 const VITE_WELCOME_PORTAL = import.meta.env.VITE_WELCOME_PORTAL;
 
 export const LoginPage = () => {
   const navigate = useNavigate();
+  const { tokenActivacion } = useParams();
   const [showSpinner, setShowSpinner] = useState(true);
   const [showInternalUserForm, setShowInternalUserForm] = useState(true);
   const [showVerificationForm, setShowVerificationForm] = useState(false);
   const [showAlertUser, setShowAlertUser] = useState(false);
   const [showAlertPassword, setShowAlertPassword] = useState(false);
-  const [verificationCode, setVerificationCode] = useState('310279');
+  const [verificationCode, setVerificationCode] = useState(''); //310279
   const [token, setToken] = useState(null);
   const [refreshToken, setRefreshToken] = useState(null);
   const [showLoading, setShowLoading] = useState(true);
@@ -65,6 +69,29 @@ export const LoginPage = () => {
     setTimeout(() => {
       setShowSpinner(false);
     }, 1000);
+  }, []);
+
+  useEffect(() => {
+    const activar = async () => {
+      console.log('INIT ...');
+      if (tokenActivacion) {
+        console.log('INIT - HAY que ACTIVAR !!!!', tokenActivacion);
+        const data = await activarCuentaEmpresa(tokenActivacion);
+        if (data && data.usuario) {
+          //user = data.usuario;
+          Swal.fire({
+            icon: 'success',
+            title: 'ACTIVADA',
+            showConfirmButton: true,
+            text: 'Cuenta de Usuario:' + data.usuario,
+          }).then((result) => {
+            if (result.isConfirmed || result.isDismissed) {
+            }
+          });
+        }
+      }
+    };
+    activar();
   }, []);
 
   //Link a Registrar Compania
@@ -107,13 +134,18 @@ export const LoginPage = () => {
     if (loginDto && loginDto.token) {
       console.log('EXISTE loginDto.token');
       setToken(loginDto.token);
-      const usuarioConDFA = await usuarioLogueadoHabilitadoDFA(loginDto.token);
-      console.log('usuarioConDFA: ', usuarioConDFA); // TRUE O FALSE
       let bUsuarioConDFA = false;
-      if (usuarioConDFA && usuarioConDFA.valor) {
+      if (!loginDto.tokenRefresco) {
         bUsuarioConDFA = true;
       }
-      console.log(bUsuarioConDFA);
+      //const usuarioConDFA = await usuarioLogueadoHabilitadoDFA(loginDto.token);
+      //console.log('usuarioConDFA: ', usuarioConDFA); // TRUE O FALSE
+
+      //if (usuarioConDFA && usuarioConDFA.valor) {
+      //bUsuarioConDFA = true;
+      //}
+      console.log('bUsuarioConDFA:', bUsuarioConDFA);
+
       if (bUsuarioConDFA) {
         console.log('usuarioHabilitadoDFA: TRUE !!!');
         setShowInternalUserForm(false); // Esconde el form de usuario y clave
@@ -279,7 +311,7 @@ export const LoginPage = () => {
                 </Button>
                 <div className="container_btn_pass_firts">
                   <a className="link_animado" onClick={redirectToRecupero}>
-                    Recupero de Contraseña
+                    Recupero Contraseña/Token
                   </a>
                   <a className="link_animado" onClick={redirectToRegister}>
                     Ingreso por primera vez

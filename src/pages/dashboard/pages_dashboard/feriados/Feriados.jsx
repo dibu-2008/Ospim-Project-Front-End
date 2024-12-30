@@ -41,7 +41,7 @@ import { DesktopDatePicker } from '@mui/x-date-pickers';
 import Stack from '@mui/material/Stack';
 import formatter from '@/common/formatter';
 import { StripedDataGrid, dataGridStyle } from '@/common/dataGridStyle';
-import { UserContext } from '@/context/userContext';
+import { UserContext } from '@/context/UserContext';
 
 const style = {
   position: 'absolute',

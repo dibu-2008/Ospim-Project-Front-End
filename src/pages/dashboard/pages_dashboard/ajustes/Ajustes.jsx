@@ -25,7 +25,7 @@ import { InputPeriodo } from '@/components/InputPeriodo';
 import Swal from 'sweetalert2';
 import { consultarEmpresa } from '@/common/api/EmpresasApi';
 
-import { UserContext } from '@/context/userContext';
+import { UserContext } from '@/context/UserContext';
 
 const style = {
   position: 'absolute',
@@ -42,6 +42,7 @@ const isNotNull = (value) => (value !== null && value !== '' ? value : '');
 // Traerme las etiquetas del dom que tengas la clase .MuiDataGrid-cell--editable
 
 const MOTIVOS = [
+  { codigo: 'AJ', descripcion: 'Ajuste Retroactivo' },
   { codigo: 'DI', descripcion: 'Devolución de Intereses' },
   { codigo: 'DPD', descripcion: 'Devolución por pago duplicado' },
   { codigo: 'O', descripcion: 'Otros' },
@@ -226,10 +227,12 @@ export const Ajustes = () => {
     if (!newRow.id) {
       try {
         const newRowCast = { ...newRow };
-        newRowCast.importe = parseFloat(String(newRowCast.importe).replace(',', '.'))
-         //parseInt(newRowCast.importe) >= 0
-          //  ? parseFloat(String(newRowCast.importe).replace(',', '.'))
-          //  : null;
+        newRowCast.importe = parseFloat(
+          String(newRowCast.importe).replace(',', '.'),
+        );
+        //parseInt(newRowCast.importe) >= 0
+        //  ? parseFloat(String(newRowCast.importe).replace(',', '.'))
+        //  : null;
 
         console.log('processRowUpdate - newRowCast  :', newRowCast);
         const data = await axiosAjustes.crear(newRowCast);
@@ -255,10 +258,12 @@ export const Ajustes = () => {
     } else {
       try {
         const newRowCast = { ...newRow };
-        newRowCast.importe = parseFloat(String(newRowCast.importe).replace(',', '.'))
-          //parseInt(newRowCast.importe) >= 0
-          //  ? parseFloat(String(newRowCast.importe).replace(',', '.'))
-          //  : null;
+        newRowCast.importe = parseFloat(
+          String(newRowCast.importe).replace(',', '.'),
+        );
+        //parseInt(newRowCast.importe) >= 0
+        //  ? parseFloat(String(newRowCast.importe).replace(',', '.'))
+        //  : null;
 
         console.log('processRowUpdate - newRowCast  :', newRowCast);
 
