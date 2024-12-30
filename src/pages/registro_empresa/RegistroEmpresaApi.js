@@ -26,8 +26,9 @@ export const registrarEmpresa = async (registro, redirectFunction) => {
     const data = await axiosCrud.crear(URL, registro);
     if (data && data.id) {
       console.log('Empresa registrada');
+      const MENSAJE = "El formulario se completó correctamente, para terminar el registro, deberá validar su dirección de correo electónico haciendo click en el link que le enviamos"
       swal.showSuccesConfirmButton(
-        `${HTTP_MSG_ALTA} Será redireccionado al login.`,
+        `${MENSAJE}`,
         redirectFunction,
       );
 
