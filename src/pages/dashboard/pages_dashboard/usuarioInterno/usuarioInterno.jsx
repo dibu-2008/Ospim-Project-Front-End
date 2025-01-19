@@ -134,7 +134,7 @@ export const UsuarioInterno = () => {
   useEffect(() => {
     const ObtenerUsuariosInternos = async () => {
       const response = await axiosUsuariosInternos.consultar();
-      console.log('response: ', response);
+      console.log('** response: ', response);
       setRows(response.map((item) => ({ id: item.id, ...item })));
     };
     ObtenerUsuariosInternos();
