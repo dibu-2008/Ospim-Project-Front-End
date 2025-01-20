@@ -25,6 +25,14 @@ const showSwallSuccessWithConfirmButton = (MESSAGE_HTTP, redirectFunction) => {
   });
 };
 
+const showSwallSuccessWithGenericConfirmButton = (MESSAGE_HTTP) => {
+  Swal.fire({
+    icon: 'success',
+    title: MESSAGE_HTTP,
+    showConfirmButton: true,
+  })
+};
+
 const showSwalError = (descripcion) => {
   try {
     console.log('showSwalError - descripcion:' + descripcion);
@@ -184,6 +192,10 @@ const swal = {
 
   showSuccesConfirmButton: async function (descripcion, redirectFunction) {
     return showSwallSuccessWithConfirmButton(descripcion, redirectFunction);
+  },
+  
+  showSuccesGenericConfirmButton: async function(descripcion) {
+    return showSwallSuccessWithGenericConfirmButton(descripcion)
   },
 
   showWarning: async function (descripcion, esHtml) {
